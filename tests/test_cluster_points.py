@@ -28,40 +28,45 @@ class TestProcessData(unittest.TestCase):
 
 class TestClusterPoints(unittest.TestCase):
     def setUp(self):
-        self.c0_cov = np.array([[3, 0.5], [0.5, 4]])
-        self.c1_cov = np.array([[7, -0.5], [-0.5, 5]])
-        self.c0_loc = np.array([12, 15])
-        self.c1_loc = np.array([20, 25])
-        self.c0_count = 15
-        self.c1_count = 8
+        c0_cov = np.array([[3, 0.5], [0.5, 4]])
+        c1_cov = np.array([[7, -0.5], [-0.5, 5]])
+        c0_loc = np.array([12, 15])
+        c1_loc = np.array([20, 25])
+        c0_count = 15
+        c1_count = 8
         np.random.seed(5000)
         self.data_by_tool = {
             'tool1': np.vstack([
-                np.random.multivariate_normal(self.c0_loc, self.c0_cov, size=self.c0_count),
-                np.random.multivariate_normal(self.c1_loc, self.c1_cov, size=self.c1_count)
+                np.random.multivariate_normal(c0_loc, c0_cov, size=c0_count),
+                np.random.multivariate_normal(c1_loc, c1_cov, size=c1_count)
             ])
         }
         self.result = cp.cluster_points(self.data_by_tool)
+        self.expected = {
+            'tool1_cluster0_count': c0_count,
+            'tool1_cluster0_x': c0_loc[0],
+            'tool1_cluster0_y': c0_loc[1],
+            'tool1_cluster0_var_x': c0_cov[0, 0],
+            'tool1_cluster0_var_y': c0_cov[1, 1],
+            'tool1_cluster0_var_x_y': c0_cov[0, 1],
+            'tool1_cluster1_count': c1_count,
+            'tool1_cluster1_x': c1_loc[0],
+            'tool1_cluster1_y': c1_loc[1],
+            'tool1_cluster1_var_x': c1_cov[0, 0],
+            'tool1_cluster1_var_y': c1_cov[1, 1],
+            'tool1_cluster1_var_x_y': c1_cov[0, 1]
+        }
 
-    def test_number_clusters(self):
-        self.assertEqual(len(self.result), 12)
+    def test_keys(self):
+        for i in self.expected.keys():
+            with self.subTest(i=i):
+                self.assertIn(i, self.result)
 
-    def test_cluster_count(self):
-        self.assertEqual(self.result['tool1_cluster0_count'], self.c0_count)
-        self.assertEqual(self.result['tool1_cluster1_count'], self.c1_count)
+    def test_cluster_values(self):
+        for i in self.result.keys():
+            with self.subTest(i=i):
+                self.assertAlmostEqual(self.result[i], self.expected[i], delta=2)
 
-    def test_cluster_loc(self):
-        # since we are dealing with small numbers of data points atol is large
-        np.testing.assert_allclose(self.result['tool1_cluster0_x'], self.c0_loc[0], atol=2)
-        np.testing.assert_allclose(self.result['tool1_cluster0_y'], self.c0_loc[1], atol=2)
-        np.testing.assert_allclose(self.result['tool1_cluster1_x'], self.c1_loc[0], atol=2)
-        np.testing.assert_allclose(self.result['tool1_cluster1_y'], self.c1_loc[1], atol=2)
 
-    def test_cluster_cov(self):
-        # since we are dealing with small numbers of data points atol is large
-        np.testing.assert_allclose(self.result['tool1_cluster0_var_x'], self.c0_cov[0, 0], atol=2)
-        np.testing.assert_allclose(self.result['tool1_cluster0_var_y'], self.c0_cov[1, 1], atol=2)
-        np.testing.assert_allclose(self.result['tool1_cluster0_var_x_y'], self.c0_cov[0, 1], atol=2)
-        np.testing.assert_allclose(self.result['tool1_cluster1_var_x'], self.c1_cov[0, 0], atol=2)
-        np.testing.assert_allclose(self.result['tool1_cluster1_var_y'], self.c1_cov[1, 1], atol=2)
-        np.testing.assert_allclose(self.result['tool1_cluster1_var_x_y'], self.c1_cov[0, 1], atol=2)
+if __name__ == '__main__':
+    unittest.main()
