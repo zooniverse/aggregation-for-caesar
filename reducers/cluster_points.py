@@ -15,16 +15,15 @@ def process_data(data):
             y_key = '{0}_y'.format(tool)
             if (x_key in d) and (y_key in d):
                 tool_loc.append([d[x_key], d[y_key]])
-        data_by_tool[tool] = np.array(tool_loc)
+        data_by_tool[tool] = tool_loc
     return data_by_tool
 
 
-def cluster_points(data, esp=5, min_samples=3):
-    data_by_tool = process_data(data)
+def cluster_points(data_by_tool, eps=5, min_samples=3):
     clusters = {}
     for tool, loc in data_by_tool.items():
         if loc.shape[0] > min_samples:
-            db = DBSCAN(esp=esp, min_samples=min_samples).fit(X)
+            db = DBSCAN(eps=eps, min_samples=min_samples).fit(np.array(loc))
             for k in set(db.labels_):
                 if k > -1:
                     idx = db.labels_ == k
