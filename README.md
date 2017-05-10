@@ -18,8 +18,9 @@ To run the tests use:
 
 ## API
 Clustering points:
-  - endpoint: `/cluster_points/<float:esp>/<int:min_samples>`
-  - This uses [scikitlearn's DBSCAN](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html#sklearn.cluster.DBSCAN) to cluster the data points. (NOTE: `esp` is in "pixels")
+  - endpoint: `/cluster_points/?eps=5&min_samples=3`
+  - This uses [scikitlearn's DBSCAN](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html#sklearn.cluster.DBSCAN) to cluster the data points. (NOTE: `eps` is in "pixels")
+  - URL args can be set for any of DBSCAN's keywords
   - response contains the number of cluster points, x and y position (in pixels) of the cluster center, and values of the covariance matrix for clustered data points for each tool and cluster:
     ```js
     {

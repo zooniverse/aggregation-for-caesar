@@ -1,6 +1,7 @@
 import unittest
 import numpy as np
 import reducers.cluster_points as cp
+from werkzeug.datastructures import MultiDict
 
 
 class TestProcessData(unittest.TestCase):
@@ -41,7 +42,7 @@ class TestClusterPoints(unittest.TestCase):
                 np.random.multivariate_normal(c1_loc, c1_cov, size=c1_count)
             ])
         }
-        self.result = cp.cluster_points(self.data_by_tool)
+        self.result = cp.cluster_points(self.data_by_tool, eps=5, min_samples=3)
         self.expected = {
             'tool1_cluster0_count': c0_count,
             'tool1_cluster0_x': c0_loc[0],
@@ -66,6 +67,59 @@ class TestClusterPoints(unittest.TestCase):
         for i in self.result.keys():
             with self.subTest(i=i):
                 self.assertAlmostEqual(self.result[i], self.expected[i], delta=2)
+
+
+class TestProcessKwargs(unittest.TestCase):
+    def test_defaults(self):
+        kwargs = MultiDict()
+        expected = {
+            'algorithm': 'auto',
+            'eps': 5.0,
+            'min_samples': 3,
+            'metric': 'euclidean',
+            'p': None,
+            'leaf_size': 30
+        }
+        self.assertDictEqual(cp.process_kwargs(kwargs), expected)
+
+    def test_setting_value(self):
+        # make sure value sets as correct type
+        kwargs = MultiDict([('eps', '10')])
+        expected = {
+            'algorithm': 'auto',
+            'eps': 10.0,
+            'min_samples': 3,
+            'metric': 'euclidean',
+            'p': None,
+            'leaf_size': 30
+        }
+        self.assertDictEqual(cp.process_kwargs(kwargs), expected)
+
+    def test_wrong_type(self):
+        # make sure default is used with bad keywords are passed in
+        kwargs = MultiDict([('min_samples', '10.5')])
+        expected = {
+            'algorithm': 'auto',
+            'eps': 5.0,
+            'min_samples': 3,
+            'metric': 'euclidean',
+            'p': None,
+            'leaf_size': 30
+        }
+        self.assertDictEqual(cp.process_kwargs(kwargs), expected)
+
+    def test_wrong_key(self):
+        # make sure invalid keywords are not passed in
+        kwargs = MultiDict([('random', 'set')])
+        expected = {
+            'algorithm': 'auto',
+            'eps': 5.0,
+            'min_samples': 3,
+            'metric': 'euclidean',
+            'p': None,
+            'leaf_size': 30
+        }
+        self.assertDictEqual(cp.process_kwargs(kwargs), expected)
 
 
 if __name__ == '__main__':

@@ -2,6 +2,23 @@ import numpy as np
 from sklearn.cluster import DBSCAN
 
 
+DEFAULTS = {
+    'eps': {'default': 5.0, 'type': float},
+    'min_samples': {'default': 3, 'type': int},
+    'metric': {'default': 'euclidean', 'type': str},
+    'algorithm': {'default': 'auto', 'type': str},
+    'leaf_size': {'default': 30, 'type': int},
+    'p': {'default': None, 'type': float}
+}
+
+
+def process_kwargs(kwargs):
+    kwargs_out = {}
+    for k, v in DEFAULTS.items():
+        kwargs_out[k] = kwargs.get(k, **v)
+    return kwargs_out
+
+
 def process_data(data):
     # this will take the extracted data dumps and format them into an
     # array that DBSCAN can use
@@ -19,11 +36,11 @@ def process_data(data):
     return data_by_tool
 
 
-def cluster_points(data_by_tool, eps=5, min_samples=3):
+def cluster_points(data_by_tool, **kwargs):
     clusters = {}
     for tool, loc in data_by_tool.items():
-        if loc.shape[0] > min_samples:
-            db = DBSCAN(eps=eps, min_samples=min_samples).fit(np.array(loc))
+        if loc.shape[0] > kwargs['min_samples']:
+            db = DBSCAN(**kwargs).fit(np.array(loc))
             for k in set(db.labels_):
                 if k > -1:
                     idx = db.labels_ == k

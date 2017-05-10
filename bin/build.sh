@@ -1,1 +1,1 @@
-docker build -t caesar_reducers_web ..
+docker build -t caesar_python_reducers_web .
