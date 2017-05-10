@@ -10,6 +10,12 @@ To run a local version use:
 ```
 and listen on `localhost:8000`.
 
+## run tests
+To run the tests use:
+```bash
+./bin/test.sh
+```
+
 ## API
 Clustering points:
   - endpoint: `/cluster_points/<float:esp>/<int:min_samples>`
