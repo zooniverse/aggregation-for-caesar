@@ -1,7 +1,8 @@
 import unittest
 import numpy as np
+import flask
+import json
 import reducers.cluster_points as cp
-from werkzeug.datastructures import MultiDict
 
 
 class TestProcessData(unittest.TestCase):
@@ -69,57 +70,29 @@ class TestClusterPoints(unittest.TestCase):
                 self.assertAlmostEqual(self.result[i], self.expected[i], delta=2)
 
 
-class TestProcessKwargs(unittest.TestCase):
-    def test_defaults(self):
-        kwargs = MultiDict()
-        expected = {
-            'algorithm': 'auto',
-            'eps': 5.0,
-            'min_samples': 3,
-            'metric': 'euclidean',
-            'p': None,
-            'leaf_size': 30
+class TestProcessRequest(unittest.TestCase):
+    def setUp(self):
+        self.app = flask.Flask(__name__)
+        request_data = json.dumps([
+            {
+                'tool1_x': 1,
+                'tool1_y': 2,
+                'tool2_x': 3,
+                'tool2_y': 4
+            },
+            {
+                'tool1_x': 5,
+                'tool1_y': 6
+            }
+        ])
+        self.request_kwargs = {
+            'data': request_data,
+            'content_type': 'application/json'
         }
-        self.assertDictEqual(cp.process_kwargs(kwargs), expected)
 
-    def test_setting_value(self):
-        # make sure value sets as correct type
-        kwargs = MultiDict([('eps', '10')])
-        expected = {
-            'algorithm': 'auto',
-            'eps': 10.0,
-            'min_samples': 3,
-            'metric': 'euclidean',
-            'p': None,
-            'leaf_size': 30
-        }
-        self.assertDictEqual(cp.process_kwargs(kwargs), expected)
-
-    def test_wrong_type(self):
-        # make sure default is used with bad keywords are passed in
-        kwargs = MultiDict([('min_samples', '10.5')])
-        expected = {
-            'algorithm': 'auto',
-            'eps': 5.0,
-            'min_samples': 3,
-            'metric': 'euclidean',
-            'p': None,
-            'leaf_size': 30
-        }
-        self.assertDictEqual(cp.process_kwargs(kwargs), expected)
-
-    def test_wrong_key(self):
-        # make sure invalid keywords are not passed in
-        kwargs = MultiDict([('random', 'set')])
-        expected = {
-            'algorithm': 'auto',
-            'eps': 5.0,
-            'min_samples': 3,
-            'metric': 'euclidean',
-            'p': None,
-            'leaf_size': 30
-        }
-        self.assertDictEqual(cp.process_kwargs(kwargs), expected)
+    def test_process_request(self):
+        with self.app.test_request_context('/?eps=2', **self.request_kwargs):
+            self.assertDictEqual(cp.process_request(flask.request), {})
 
 
 if __name__ == '__main__':

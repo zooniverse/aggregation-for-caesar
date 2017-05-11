@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.cluster import DBSCAN
+from .process_kwargs import process_kwargs
 
 
 DEFAULTS = {
@@ -10,13 +11,6 @@ DEFAULTS = {
     'leaf_size': {'default': 30, 'type': int},
     'p': {'default': None, 'type': float}
 }
-
-
-def process_kwargs(kwargs):
-    kwargs_out = {}
-    for k, v in DEFAULTS.items():
-        kwargs_out[k] = kwargs.get(k, **v)
-    return kwargs_out
 
 
 def process_data(data):
@@ -38,7 +32,8 @@ def process_data(data):
 
 def cluster_points(data_by_tool, **kwargs):
     clusters = {}
-    for tool, loc in data_by_tool.items():
+    for tool, loc_list in data_by_tool.items():
+        loc = np.array(loc_list)
         if loc.shape[0] > kwargs['min_samples']:
             db = DBSCAN(**kwargs).fit(np.array(loc))
             for k in set(db.labels_):
@@ -56,3 +51,9 @@ def cluster_points(data_by_tool, **kwargs):
                     clusters['{0}_cluster{1}_var_y'.format(tool, k)] = k_cov[1, 1]
                     clusters['{0}_cluster{1}_var_x_y'.format(tool, k)] = k_cov[0, 1]
     return clusters
+
+
+def process_request(request):
+    data = process_data(request.get_json())
+    kwargs = process_kwargs(request.args, DEFAULTS)
+    return cluster_points(data, **kwargs)

@@ -6,15 +6,12 @@ application = Flask(__name__, instance_relative_config=True)
 
 @application.route('/')
 def index():
-    return 'It works!'
+    return 'Python reducers for panoptes aggregation.'
 
 
 @application.route('/cluster_points', methods=['POST'])
 def cluster_points():
-    data = cp.process_data(request.body)
-    kwargs = cp.process_kwargs(request.args)
-    clusters = cp.cluster_points(data, **kwargs)
-    resp = jsonify(clusters)
+    resp = jsonify(cp.process_request(request))
     resp.status_code = 200
     return resp
 
