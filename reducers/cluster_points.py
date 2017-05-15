@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.cluster import DBSCAN
 from .process_kwargs import process_kwargs
+from flask import jsonify, request
 
 
 DEFAULTS = {
