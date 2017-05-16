@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 import flask
 import json
-import reducers.cluster_points as cp
+import reducers
 
 
 class TestProcessData(unittest.TestCase):
@@ -25,7 +25,7 @@ class TestProcessData(unittest.TestCase):
             'tool1': [[1, 2], [1, 2]],
             'tool2': [[3, 4]]
         }
-        self.assertEqual(cp.process_data(self.extracted_data), expected_result)
+        self.assertEqual(reducers.cluster_points.process_data(self.extracted_data), expected_result)
 
 
 class TestClusterPoints(unittest.TestCase):
@@ -43,7 +43,7 @@ class TestClusterPoints(unittest.TestCase):
                 np.random.multivariate_normal(c1_loc, c1_cov, size=c1_count)
             ])
         }
-        self.result = cp.cluster_points(self.data_by_tool, eps=5, min_samples=3)
+        self.result = reducers.cluster_points.cluster_points(self.data_by_tool, eps=5, min_samples=3)
         self.expected = {
             'tool1_cluster0_count': c0_count,
             'tool1_cluster0_x': c0_loc[0],
@@ -70,7 +70,7 @@ class TestClusterPoints(unittest.TestCase):
                 self.assertAlmostEqual(self.result[i], self.expected[i], delta=2)
 
 
-class TestProcessRequest(unittest.TestCase):
+class TestReducerRequest(unittest.TestCase):
     def setUp(self):
         self.app = flask.Flask(__name__)
         request_data = json.dumps([
@@ -92,7 +92,7 @@ class TestProcessRequest(unittest.TestCase):
 
     def test_process_request(self):
         with self.app.test_request_context('/?eps=2', **self.request_kwargs):
-            self.assertDictEqual(cp.process_request(flask.request), {})
+            self.assertDictEqual(reducers.cluster_points.reducer_request(flask.request), {})
 
 
 if __name__ == '__main__':

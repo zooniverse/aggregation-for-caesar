@@ -54,7 +54,7 @@ def cluster_points(data_by_tool, **kwargs):
     return clusters
 
 
-def process_request(request):
+def reducer_request(request):
     data = process_data(request.get_json())
     kwargs = process_kwargs(request.args, DEFAULTS)
     return cluster_points(data, **kwargs)
