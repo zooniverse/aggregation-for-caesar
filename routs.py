@@ -35,7 +35,7 @@ application.route('/path', methods=['POST', 'GET'])(process_wrapper('string retu
 
 @application.route('/')
 def index():
-    return 'Python reducers for panoptes aggregation.'
+    return 'Python extractors and reducers for panoptes aggregation.'
 
 
 for route, route_function in reducers.reducers.items():
