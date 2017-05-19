@@ -9,23 +9,23 @@ class TestProcessData(unittest.TestCase):
     def setUp(self):
         self.extracted_data = [
             {
-                'tool1_x': 1,
-                'tool1_y': 2,
-                'tool2_x': 3,
-                'tool2_y': 4
+                'T0_tool1_x': [1, 4],
+                'T0_tool1_y': [2, 7],
+                'T0_tool2_x': [3],
+                'T0_tool2_y': [4]
             },
             {
-                'tool1_x': 1,
-                'tool1_y': 2
+                'T0_tool1_x': [1],
+                'T0_tool1_y': [2]
             }
         ]
 
     def test_process_data(self):
         expected_result = {
-            'tool1': [[1, 2], [1, 2]],
-            'tool2': [[3, 4]]
+            'T0_tool1': [(1, 2), (4, 7), (1, 2)],
+            'T0_tool2': [(3, 4)]
         }
-        self.assertEqual(reducers.cluster_points.process_data(self.extracted_data), expected_result)
+        self.assertDictEqual(reducers.cluster_points.process_data(self.extracted_data), expected_result)
 
 
 class TestClusterPoints(unittest.TestCase):
@@ -45,18 +45,13 @@ class TestClusterPoints(unittest.TestCase):
         }
         self.result = reducers.cluster_points.cluster_points(self.data_by_tool, eps=5, min_samples=3)
         self.expected = {
-            'tool1_cluster0_count': c0_count,
-            'tool1_cluster0_x': c0_loc[0],
-            'tool1_cluster0_y': c0_loc[1],
-            'tool1_cluster0_var_x': c0_cov[0, 0],
-            'tool1_cluster0_var_y': c0_cov[1, 1],
-            'tool1_cluster0_var_x_y': c0_cov[0, 1],
-            'tool1_cluster1_count': c1_count,
-            'tool1_cluster1_x': c1_loc[0],
-            'tool1_cluster1_y': c1_loc[1],
-            'tool1_cluster1_var_x': c1_cov[0, 0],
-            'tool1_cluster1_var_y': c1_cov[1, 1],
-            'tool1_cluster1_var_x_y': c1_cov[0, 1]
+            'tool1_cluster_labels': [0] * c0_count + [1] * c1_count,
+            'tool1_clusters_count': [c0_count, c1_count],
+            'tool1_clusters_x': [c0_loc[0], c1_loc[0]],
+            'tool1_clusters_y': [c0_loc[1], c1_loc[1]],
+            'tool1_clusters_var_x': [c0_cov[0, 0], c1_cov[0, 0]],
+            'tool1_clusters_var_y': [c0_cov[1, 1], c1_cov[1, 1]],
+            'tool1_clusters_var_x_y': [c0_cov[0, 1], c1_cov[0, 1]],
         }
 
     def test_keys(self):
@@ -67,23 +62,23 @@ class TestClusterPoints(unittest.TestCase):
     def test_cluster_values(self):
         for i in self.result.keys():
             with self.subTest(i=i):
-                self.assertAlmostEqual(self.result[i], self.expected[i], delta=2)
+                np.testing.assert_allclose(self.result[i], self.expected[i], atol=2)
 
 
 class TestReducerRequest(unittest.TestCase):
     def setUp(self):
         self.app = flask.Flask(__name__)
         request_data = json.dumps([
-            {
-                'tool1_x': 1,
-                'tool1_y': 2,
-                'tool2_x': 3,
-                'tool2_y': 4
-            },
-            {
-                'tool1_x': 5,
-                'tool1_y': 6
-            }
+            {'data': {
+                'T0_tool1_x': [1, 4],
+                'T0_tool1_y': [2, 7],
+                'T0_tool2_x': [3],
+                'T0_tool2_y': [4]
+            }},
+            {'data': {
+                'T0_tool1_x': [1],
+                'T0_tool1_y': [2]
+            }}
         ])
         self.request_kwargs = {
             'data': request_data,

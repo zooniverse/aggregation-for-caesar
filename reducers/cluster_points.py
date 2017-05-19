@@ -15,19 +15,13 @@ DEFAULTS = {
 
 
 def process_data(data):
-    # this will take the extracted data dumps and format them into an
-    # array that DBSCAN can use
-    # data comes in as [{tool1_x: 1, tool1_y: 2, tool2_x: 3, tool2_y: 4}, {tool1_x: 1, tool1_y: 2}, ...]
-    unique_tools = set(sum([[k.split('_')[0] for k in d.keys()] for d in data], []))
+    unique_tools = set(sum([['_'.join(k.split('_')[:-1]) for k in d.keys()] for d in data], []))
     data_by_tool = {}
     for tool in unique_tools:
-        tool_loc = []
         for d in data:
-            x_key = '{0}_x'.format(tool)
-            y_key = '{0}_y'.format(tool)
-            if (x_key in d) and (y_key in d):
-                tool_loc.append([d[x_key], d[y_key]])
-        data_by_tool[tool] = tool_loc
+            data_by_tool.setdefault(tool, [])
+            if ('{0}_x'.format(tool) in d) and ('{0}_y'.format(tool) in d):
+                data_by_tool[tool] += list(zip(d['{0}_x'.format(tool)], d['{0}_y'.format(tool)]))
     return data_by_tool
 
 
@@ -37,24 +31,25 @@ def cluster_points(data_by_tool, **kwargs):
         loc = np.array(loc_list)
         if loc.shape[0] > kwargs['min_samples']:
             db = DBSCAN(**kwargs).fit(np.array(loc))
+            clusters['{0}_cluster_labels'.format(tool)] = db.labels_
             for k in set(db.labels_):
                 if k > -1:
                     idx = db.labels_ == k
                     # number of points in the cluster
-                    clusters['{0}_cluster{1}_count'.format(tool, k)] = idx.sum()
+                    clusters.setdefault('{0}_clusters_count'.format(tool), []).append(int(idx.sum()))
                     # mean of the cluster
                     k_loc = loc[idx].mean(axis=0)
-                    clusters['{0}_cluster{1}_x'.format(tool, k)] = k_loc[0]
-                    clusters['{0}_cluster{1}_y'.format(tool, k)] = k_loc[1]
+                    clusters.setdefault('{0}_clusters_x'.format(tool), []).append(float(k_loc[0]))
+                    clusters.setdefault('{0}_clusters_y'.format(tool), []).append(float(k_loc[1]))
                     # cov matrix of the cluster
                     k_cov = np.cov(loc[idx].T)
-                    clusters['{0}_cluster{1}_var_x'.format(tool, k)] = k_cov[0, 0]
-                    clusters['{0}_cluster{1}_var_y'.format(tool, k)] = k_cov[1, 1]
-                    clusters['{0}_cluster{1}_var_x_y'.format(tool, k)] = k_cov[0, 1]
+                    clusters.setdefault('{0}_clusters_var_x'.format(tool), []).append(float(k_cov[0, 0]))
+                    clusters.setdefault('{0}_clusters_var_y'.format(tool), []).append(float(k_cov[1, 1]))
+                    clusters.setdefault('{0}_clusters_var_x_y'.format(tool), []).append(float(k_cov[0, 1]))
     return clusters
 
 
 def reducer_request(request):
-    data = process_data(request.get_json())
+    data = process_data([d['data'] for d in request.get_json()])
     kwargs = process_kwargs(request.args, DEFAULTS)
     return cluster_points(data, **kwargs)

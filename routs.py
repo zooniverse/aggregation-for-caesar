@@ -14,6 +14,7 @@ def request_wrapper(name):
             if request.method == 'GET':
                 return name
             else:
+                print(name)
                 resp = jsonify(func(request))
                 resp.status_code = 200
                 return resp

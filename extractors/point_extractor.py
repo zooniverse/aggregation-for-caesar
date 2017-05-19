@@ -1,10 +1,12 @@
 def classification_to_extract(classification):
     extract = {}
-    for annotation in classification['data']['annotations']:
+    for annotation in classification['annotations']:
         for idx, value in enumerate(annotation['value']):
-            key_prefix = '{0}_tool{1}_{2}'.format(annotation['task'], value['tool'], idx)
-            extract['{0}_x'.format(key_prefix)] = value['x']
-            extract['{0}_y'.format(key_prefix)] = value['y']
+            key = '{0}_tool{1}'.format(annotation['task'], value['tool'])
+            extract.setdefault('{0}_x'.format(key), [])
+            extract['{0}_x'.format(key)].append(value['x'])
+            extract.setdefault('{0}_y'.format(key), [])
+            extract['{0}_y'.format(key)].append(value['y'])
     return extract
 
 
