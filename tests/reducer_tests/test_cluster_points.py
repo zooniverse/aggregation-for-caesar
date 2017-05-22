@@ -45,6 +45,8 @@ class TestClusterPoints(unittest.TestCase):
         }
         self.result = reducers.cluster_points.cluster_points(self.data_by_tool, eps=5, min_samples=3)
         self.expected = {
+            'tool1_points_x': list(self.data_by_tool['tool1'][:, 0]),
+            'tool1_points_y': list(self.data_by_tool['tool1'][:, 1]),
             'tool1_cluster_labels': [0] * c0_count + [1] * c1_count,
             'tool1_clusters_count': [c0_count, c1_count],
             'tool1_clusters_x': [c0_loc[0], c1_loc[0]],
@@ -86,8 +88,16 @@ class TestReducerRequest(unittest.TestCase):
         }
 
     def test_process_request(self):
+        expected = {
+            'T0_tool1_points_x': [1, 4, 1],
+            'T0_tool1_points_y': [2, 7, 2],
+            'T0_tool1_cluster_labels': [-1, -1, -1],
+            'T0_tool2_points_x': [3],
+            'T0_tool2_points_y': [4],
+            'T0_tool2_cluster_labels': [-1]
+        }
         with self.app.test_request_context('/?eps=2', **self.request_kwargs):
-            self.assertDictEqual(reducers.cluster_points.reducer_request(flask.request), {})
+            self.assertDictEqual(reducers.cluster_points.reducer_request(flask.request), expected)
 
 
 if __name__ == '__main__':

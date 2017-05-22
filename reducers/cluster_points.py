@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.cluster import DBSCAN
 from .process_kwargs import process_kwargs
 from flask import jsonify, request
+from collections import OrderedDict
 
 
 DEFAULTS = {
@@ -26,11 +27,17 @@ def process_data(data):
 
 
 def cluster_points(data_by_tool, **kwargs):
-    clusters = {}
+    clusters = OrderedDict()
     for tool, loc_list in data_by_tool.items():
         loc = np.array(loc_list)
+        # orignal data points in order used by cluster code
+        clusters['{0}_points_x'.format(tool)] = list(loc[:, 0])
+        clusters['{0}_points_y'.format(tool)] = list(loc[:, 1])
+        # default each point in no cluster
+        clusters['{0}_cluster_labels'.format(tool)] = [-1] * loc.shape[0]
         if loc.shape[0] > kwargs['min_samples']:
             db = DBSCAN(**kwargs).fit(np.array(loc))
+            # what cluster each point belongs to
             clusters['{0}_cluster_labels'.format(tool)] = db.labels_
             for k in set(db.labels_):
                 if k > -1:
