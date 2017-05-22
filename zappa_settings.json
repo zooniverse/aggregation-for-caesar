@@ -1,0 +1,8 @@
+{
+    "dev": {
+        "app_function": "routs.application",
+        "aws_region": "us-east-1",
+        "profile_name": "default",
+        "s3_bucket": "zappa-aggregation"
+    }
+}
