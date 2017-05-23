@@ -10,7 +10,7 @@ docker-compose up
 ```
 and listen on `localhost:5000`.
 
-## run zappa commands
+## run [zappa](https://github.com/Miserlou/Zappa) commands
 ```bash
 docker-compose run aggregation /bin/bash -lc "zappa <cmd>"
 ```
@@ -25,8 +25,6 @@ To update after the first deploy:
 ```bash
 docker-compose run aggregation /bin/bash -lc "zappa update dev"
 ```
-
-TODO: use a docker container to handle the virtual environment automatically
 
 ## run tests
 To run the tests use:
