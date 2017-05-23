@@ -8,25 +8,22 @@ To run a local version use:
 docker-compose build
 docker-compose up
 ```
-and listen on `localhost:8000`.
+and listen on `localhost:5000`.
 
-## run the app in a virtual environment (needed for zappa)
-Create a virtual environment to use with [pyenv](https://github.com/pyenv/pyenv) and [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv):
+## run zappa commands
 ```bash
-pyenv install 3.6.1
-pyenv virtualenv 3.6.1 zappa-3.6.1
-pyenv activate zappa-3.6.1
-pip install -r requirements.txt
+docker-compose run aggregation /bin/bash -lc "zappa <cmd>"
 ```
 
 To deploy to AWS-lambda first update `zappa_settings.json`'s `profile_name` with your `~/.aws/config` profile name and run:
 ```bash
-zappa deploy dev
+docker-compose run aggregation /bin/bash -lc "zappa deploy dev"
 ```
+NOTE: the docker container will add your `~/.aws` forlder as a volume.
 
 To update after the first deploy:
 ```bash
-zappa update dev
+docker-compose run aggregation /bin/bash -lc "zappa update dev"
 ```
 
 TODO: use a docker container to handle the virtual environment automatically
@@ -34,7 +31,7 @@ TODO: use a docker container to handle the virtual environment automatically
 ## run tests
 To run the tests use:
 ```bash
-./bin/test.sh
+docker-compose run aggregation /bin/bash -lc ./bin/test.sh
 ```
 
 ## API

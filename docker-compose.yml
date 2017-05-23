@@ -2,8 +2,9 @@ version: '2'
 services:
   aggregation:
     build:
-      context: ../python-reducers-for-caesar
+      context: ./
     volumes:
-      - ../python-reducers-for-caesar:/app
+      - ./:/usr/src/aggregation
+      - ~/.aws:/root/.aws
     ports:
-      - "8000:80"
+      - "5000:5000"
