@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 import flask
 import json
-import reducers
+from panoptes_aggregation import reducers
 
 
 class TestProcessData(unittest.TestCase):

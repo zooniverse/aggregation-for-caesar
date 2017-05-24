@@ -1,12 +1,12 @@
 import unittest
 import json
 import flask
-import extractors
+from panoptes_aggregation import extractors
 
 
 class TestPointExtractor(unittest.TestCase):
     def setUp(self):
-        with open('tests/extractor_tests/kenisis_points.json', 'r') as f:
+        with open('panoptes_aggregation/tests/extractor_tests/kenisis_points.json', 'r') as f:
             self.kenisis_data = json.load(f)
         self.expected_result = {
             'T0_tool0_x': [

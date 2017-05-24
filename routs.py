@@ -1,8 +1,7 @@
 from flask import Flask, jsonify, request
 from functools import wraps
-import reducers.cluster_points as cp
-import reducers
-import extractors
+from panoptes_aggregation import reducers
+from panoptes_aggregation import extractors
 
 application = Flask(__name__, instance_relative_config=True)
 

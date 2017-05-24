@@ -6,8 +6,9 @@ def classification_to_extract(classification):
     for annotation in classification['annotations']:
         for idx, value in enumerate(annotation['value']):
             key = '{0}_tool{1}'.format(annotation['task'], value['tool'])
-            extract.setdefault('{0}_x'.format(key), []).append(value['x'])
-            extract.setdefault('{0}_y'.format(key), []).append(value['y'])
+            if ('x' in value) and ('y' in value):
+                extract.setdefault('{0}_x'.format(key), []).append(value['x'])
+                extract.setdefault('{0}_y'.format(key), []).append(value['y'])
     return extract
 
 

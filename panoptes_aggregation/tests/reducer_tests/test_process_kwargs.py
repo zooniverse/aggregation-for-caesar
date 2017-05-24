@@ -1,6 +1,7 @@
 import unittest
 from werkzeug.datastructures import MultiDict
-from reducers.process_kwargs import process_kwargs
+from panoptes_aggregation import reducers
+process_kwargs = reducers.process_kwargs.process_kwargs
 
 
 class TestProcessKwargs(unittest.TestCase):
