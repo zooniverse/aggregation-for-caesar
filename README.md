@@ -29,7 +29,7 @@ docker-compose run aggregation /bin/bash -lc "zappa update dev"
 ## run tests
 To run the tests use:
 ```bash
-docker-compose run aggregation /bin/bash -lc ./bin/test.sh
+docker-compose run aggregation /bin/bash -lc "nosetests -v"
 ```
 
 ## API

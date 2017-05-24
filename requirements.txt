@@ -1,4 +1,5 @@
 Flask
+nose
 numpy
 scikit-image
 scikit-learn
