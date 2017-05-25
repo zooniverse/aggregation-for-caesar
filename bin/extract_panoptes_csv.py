@@ -3,6 +3,7 @@
 import argparse
 from panoptes_aggregation import extractors
 import json
+import math
 import pandas
 import progressbar
 
@@ -23,6 +24,7 @@ if wdx.sum() > 1:
 workflow = workflows[wdx].iloc[0]
 workflow_tasks = json.loads(workflow.tasks)
 
+# place this in its own file w/ tests
 extractor_config = {}
 for task_key, task in workflow_tasks.items():
     # only extracts drawing at the moment
@@ -34,6 +36,7 @@ for task_key, task in workflow_tasks.items():
         extractor_config[task_key] = tools_config
 
 
+# place this in its own file w/ tests
 def filter_annotations(annotations, config):
     # this is specific to drawing tasks at the moment
     # each tool can use a different extractor
@@ -72,6 +75,9 @@ widgets = [
 pbar = progressbar.ProgressBar(widgets=widgets, max_value=len(classifications))
 pbar.start()
 for cdx, classification in classifications.iterrows():
+    if (classification.workflow_id != args.workflow_id) or (math.floor(classification.workflow_version) != args.version):
+        pbar.update(cdx + 1)
+        continue
     annotations_by_extractor = filter_annotations(json.loads(classification.annotations), extractor_config)
     for extractor_name, annotations in annotations_by_extractor.items():
         extract = extractors.extractors_base[extractor_name]({'annotations': [annotations]})
