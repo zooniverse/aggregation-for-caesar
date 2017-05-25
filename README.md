@@ -17,7 +17,7 @@ You will need two files for offline use:
 
 ## Extracting data
 Note: this only works for the drawing tool's point data at the moment
-Use the command line tool to extract your data into a `csv` file:
+Use the command line tool to extract your data into one flat `csv` file for each extractor used:
 ```bash
 extract_panoptes_csv.py [-h] [-v VERSION] [-o OUTPUT] classification_csv workflow_csv workflow_id
 
