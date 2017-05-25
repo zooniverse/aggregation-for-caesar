@@ -1,5 +1,5 @@
 from . import cluster_points
 
 reducers = {
-    'cluster_points': cluster_points.reducer_request
+    'point_reducer': cluster_points.reducer_request
 }
