@@ -38,7 +38,7 @@ optional arguments:
 
 example usage:
 ```bash
-extract_panoptes_csv.py ./classification_dump.csv ./workflow_dump.csv 3513 -v 1 -o ./point_tool_extracts.csv
+extract_panoptes_csv.py mark-galaxy-centers-and-foreground-stars-classifications.csv galaxy-zoo-3d-workflows.csv 3513 -v 1 -o galaxy_center_and_star_mpl5.csv
 ```
 This will extract the user drawn data points from workflow `3513` with a major version of `1`.
 
