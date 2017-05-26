@@ -19,12 +19,14 @@ You will need two files for offline use:
 Note: this only works for the drawing tool's point data at the moment
 Use the command line tool to extract your data into one flat `csv` file for each extractor used:
 ```bash
-extract_panoptes_csv.py [-h] [-v VERSION] [-o OUTPUT] classification_csv workflow_csv workflow_id
+usage: extract_panoptes_csv.py [-h] [-v VERSION] [-H] [-o OUTPUT]
+                               classification_csv workflow_csv workflow_id
 
 extract data from panoptes classifications based on the workflow
 
 positional arguments:
-  classification_csv    the classificaiton csv file containing the panoptes data dump
+  classification_csv    the classificaiton csv file containing the panoptes
+                        data dump
   workflow_csv          the csv file containing the workflow data
   workflow_id           the workflow ID you would like to extract
 
@@ -32,8 +34,12 @@ optional arguments:
   -h, --help            show this help message and exit
   -v VERSION, --version VERSION
                         the workflow version to extract
+  -H, --human           switch to make the data column labels use the task and
+                        question labels instead of generic labels
   -o OUTPUT, --output OUTPUT
-                        the output csv file to store the annotation extractions
+                        the base name for output csv file to store the
+                        annotation extractions (one file will be created for
+                        each extractor used)
 ```
 
 example usage:
@@ -41,6 +47,40 @@ example usage:
 extract_panoptes_csv.py mark-galaxy-centers-and-foreground-stars-classifications.csv galaxy-zoo-3d-workflows.csv 3513 -v 1 -o galaxy_center_and_star_mpl5.csv
 ```
 This will extract the user drawn data points from workflow `3513` with a major version of `1` and place them in a `csv` file named `point_extractor_galaxy_center_and_star_mpl5.csv`.
+
+## Reducing data
+Note: this only works for the drawing tool's point data at the moment
+```bash
+usage: reduce_panoptes_csv.py [-h] [-F {first,last,all}] [-k KEYWORDS]
+                              [-o OUTPUT]
+                              extracted_csv
+
+reduce data from panoptes classifications based on the extracted data (see
+extract_panoptes_csv)
+
+positional arguments:
+  extracted_csv         the extracted csv file output from
+                        extract_panoptes_csv
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -F {first,last,all}, --filter {first,last,all}
+                        how to filter a user makeing multiple classifications
+                        for one subject
+  -k KEYWORDS, --keywords KEYWORDS
+                        keywords to be passed into the reducer in the form of
+                        a json string, e.g. '{"eps": 5.5, "min_samples": 3}'
+                        (note: double quotes must be used inside the brackets)
+  -o OUTPUT, --output OUTPUT
+                        the base name for output csv file to store the
+                        reductions
+```
+
+example usage:
+```bash
+reduce_panoptes_csv.py point_extractor_galaxy_center_and_star_mpl5.csv -F first -k '{"eps": 5, "min_sample": 3}' -o 'galaxy_and_star_mpl5.csv'
+```
+This will produce a reduced `csv` file named `point_reducer_galaxy_and_star_mpl5.csv`.  If a user classified an image more than once only the first one is kept.
 
 # Caesar
 
