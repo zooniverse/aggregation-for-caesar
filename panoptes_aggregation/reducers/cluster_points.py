@@ -60,3 +60,9 @@ def reducer_request(request):
     data = process_data([d['data'] for d in request.get_json()])
     kwargs = process_kwargs(request.args, DEFAULTS)
     return cluster_points(data, **kwargs)
+
+
+def reducer_base(data_in, **kwargs):
+    data = process_data(data_in)
+    kwargs_parse = process_kwargs(kwargs, DEFAULTS)
+    return cluster_points(data, **kwargs_parse)
