@@ -4,6 +4,7 @@ import argparse
 from collections import OrderedDict
 import copy
 from panoptes_aggregation import extractors
+from panoptes_aggregation.flatten_data import flatten_data
 import json
 import math
 import pandas
@@ -14,6 +15,7 @@ parser.add_argument("classification_csv", help="the classificaiton csv file cont
 parser.add_argument("workflow_csv", help="the csv file containing the workflow data", type=str)
 parser.add_argument("workflow_id", help="the workflow ID you would like to extract", type=int)
 parser.add_argument("-v", "--version", help="the workflow version to extract", type=int, default=1)
+parser.add_argument("-H", "--human", help="switch to make the data column labels use the task and question labels instead of generic labels", action="store_true")
 parser.add_argument("-o", "--output", help="the base name for output csv file to store the annotation extractions (one file will be created for each extractor used)", type=str, default="extractions.csv")
 args = parser.parse_args()
 
@@ -54,7 +56,7 @@ for cdx, classification in classifications.iterrows():
     if (classification.workflow_id != args.workflow_id) or (math.floor(classification.workflow_version) != args.version):
         pbar.update(cdx + 1)
         continue
-    annotations_by_extractor = extractors.filter_annotations(json.loads(classification.annotations), extractor_config)
+    annotations_by_extractor = extractors.filter_annotations(json.loads(classification.annotations), extractor_config, human=args.human)
     for extractor_name, annotations in annotations_by_extractor.items():
         if extractor_name in extractors.extractors_base:
             extract = extractors.extractors_base[extractor_name]({'annotations': [annotations]})
@@ -72,10 +74,5 @@ pbar.finish()
 
 # create one flat csv file for each extractor used
 for extractor_name, data in extracted_data.items():
-    # flatten the json data
-    json_data = data.pop('data')
-    flat_data = pandas.io.json.json_normalize(json_data)
-    # rename the columns so they can be un-flattened later
-    flat_data.columns = ['data.{0}'.format(i) for i in flat_data.columns.values]
-    other_data = pandas.DataFrame(data)
-    pandas.concat([other_data, flat_data], axis=1).to_csv('{0}_{1}'.format(extractor_name, args.output), index=False)
+    flat_extract = flatten_data(data)
+    flat_extract.to_csv('{0}_{1}'.format(extractor_name, args.output), index=False)

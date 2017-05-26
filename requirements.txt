@@ -1,6 +1,7 @@
 Flask
 nose
 numpy
+python-slugify
 scikit-image
 scikit-learn
 scipy
