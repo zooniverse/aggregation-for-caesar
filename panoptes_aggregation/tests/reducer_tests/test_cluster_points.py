@@ -66,6 +66,11 @@ class TestClusterPoints(unittest.TestCase):
             with self.subTest(i=i):
                 np.testing.assert_allclose(self.result[i], self.expected[i], atol=2)
 
+    def test_type(self):
+        for i in self.result.values():
+            with self.subTest(i=i):
+                self.assertIsInstance(i, list)
+
 
 class TestReducerRequest(unittest.TestCase):
     def setUp(self):

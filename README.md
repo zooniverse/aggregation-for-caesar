@@ -91,7 +91,7 @@ from panoptes_aggregation.csv_utils import unjson_dataframe
 # the `data.*` columns are read in as strings instead of arrays
 data = pandas.read_csv('point_reducer_galaxy_and_star_mpl5.csv')
 
-# use unjson_dataframe to convert them the lists
+# use unjson_dataframe to convert them to lists
 # all values are updated in place leaving null values untouched
 unjson_dataframe(data)
 ```
