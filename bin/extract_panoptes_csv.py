@@ -4,7 +4,7 @@ import argparse
 from collections import OrderedDict
 import copy
 from panoptes_aggregation import extractors
-from panoptes_aggregation.flatten_data import flatten_data
+from panoptes_aggregation.csv_utils import flatten_data
 import json
 import math
 import os

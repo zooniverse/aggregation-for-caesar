@@ -82,6 +82,20 @@ reduce_panoptes_csv.py point_extractor_galaxy_center_and_star_mpl5.csv -F first 
 ```
 This will produce a reduced `csv` file named `point_reducer_galaxy_and_star_mpl5.csv`.  If a user classified an image more than once only the first one is kept.
 
+## reading csv files in python
+The resulting csv files typically contain arrays as values.  These arrays are typically read in as strings by most csv readers.  To make it easier to read these files in a "science ready" way a utility function for `pandas.read_csv` is provided in `panoptes_aggregation.csv_utils`:
+```python
+import pandas
+from panoptes_aggregation.csv_utils import unjson_dataframe
+
+# the `data.*` columns are read in as strings instead of arrays
+data = pandas.read_csv('point_reducer_galaxy_and_star_mpl5.csv')
+
+# use unjson_dataframe to convert them the lists
+# all values are updated in place leaving null values untouched
+unjson_dataframe(data)
+```
+
 # Caesar
 
 ## Build/run the app in docker

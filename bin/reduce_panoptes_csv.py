@@ -4,9 +4,10 @@ import argparse
 from collections import OrderedDict
 import copy
 from panoptes_aggregation import reducers
-from panoptes_aggregation.flatten_data import flatten_data, unflatten_data
+from panoptes_aggregation.csv_utils import flatten_data, unflatten_data
 import json
 import math
+import os
 import pandas
 import progressbar
 
@@ -58,6 +59,6 @@ pbar.finish()
 
 output_path, output_base = os.path.split(args.output)
 ouput_base_name, output_ext = os.path.splitext(output_base)
-output_name = os.path.join(output_path, '{0}_{1}.csv'.format(reducer_name, args.output))
+output_name = os.path.join(output_path, '{0}_{1}.csv'.format(reducer_name, ouput_base_name))
 flat_reduced_data = flatten_data(reduced_data)
 flat_reduced_data.to_csv(output_name, index=False)
