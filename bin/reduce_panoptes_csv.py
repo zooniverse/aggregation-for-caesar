@@ -11,14 +11,15 @@ import pandas
 import progressbar
 
 parser = argparse.ArgumentParser(description="reduce data from panoptes classifications based on the extracted data (see extract_panoptes_csv)")
-parser.add_argument("extracted_csv", help="the extracted csv file output from extract_panoptes_csv", type=str)
+parser.add_argument("extracted_csv", help="the extracted csv file output from extract_panoptes_csv", type=argparse.FileType('r'))
 parser.add_argument("-F", "--filter", help="how to filter a user makeing multiple classifications for one subject", type=str, choices=['first', 'last', 'all'], default='fisrt')
 parser.add_argument("-k", "--keywords", help="keywords to be passed into the reducer in the form of a json string, e.g. \'{\"eps\": 5.5, \"min_samples\": 3}\'  (note: double quotes must be used inside the brackets)", type=json.loads)
 parser.add_argument("-o", "--output", help="the base name for output csv file to store the reductions", type=str, default="reductions.csv")
 args = parser.parse_args()
 
-extracted = pandas.read_csv(args.extracted_csv)
-extracted.created_at = pandas.to_datetime(extracted.created_at)
+with args.extracted_csv as extracted_csv:
+    extracted = pandas.read_csv(extracted_csv, infer_datetime_format=True, parse_dates=['created_at'])
+
 extracted.sort_values(['subject_id', 'created_at'], inplace=True)
 
 subjects = set(extracted.subject_id)
@@ -55,5 +56,7 @@ for sdx, subject in enumerate(subjects):
     pbar.update(sdx + 1)
 pbar.finish()
 
+output_path, output_base_name = os.path.split(args.output)
+output_name = os.path.join(output_path, '{0}_{1}'.format(reducer_name, args.output))
 flat_reduced_data = flatten_data(reduced_data)
-flat_reduced_data.to_csv('{0}_{1}'.format(reducer_name, args.output), index=False)
+flat_reduced_data.to_csv(output_name, index=False)

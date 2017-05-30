@@ -7,19 +7,22 @@ from panoptes_aggregation import extractors
 from panoptes_aggregation.flatten_data import flatten_data
 import json
 import math
+import os
 import pandas
 import progressbar
 
 parser = argparse.ArgumentParser(description="extract data from panoptes classifications based on the workflow")
-parser.add_argument("classification_csv", help="the classificaiton csv file containing the panoptes data dump", type=str)
-parser.add_argument("workflow_csv", help="the csv file containing the workflow data", type=str)
+parser.add_argument("classification_csv", help="the classificaiton csv file containing the panoptes data dump", type=argparse.FileType('r'))
+parser.add_argument("workflow_csv", help="the csv file containing the workflow data", type=argparse.FileType('r'))
 parser.add_argument("workflow_id", help="the workflow ID you would like to extract", type=int)
 parser.add_argument("-v", "--version", help="the workflow version to extract", type=int, default=1)
 parser.add_argument("-H", "--human", help="switch to make the data column labels use the task and question labels instead of generic labels", action="store_true")
 parser.add_argument("-o", "--output", help="the base name for output csv file to store the annotation extractions (one file will be created for each extractor used)", type=str, default="extractions.csv")
 args = parser.parse_args()
 
-workflows = pandas.read_csv(args.workflow_csv)
+with args.workflow_csv as workflow_csv:
+    workflows = pandas.read_csv(workflow_csv)
+
 wdx = (workflows.workflow_id == args.workflow_id) & (workflows.version == args.version)
 if wdx.sum() == 0:
     raise IndexError('workflow ID and workflow version combination does not exist')
@@ -42,7 +45,8 @@ blank_extracted_data = OrderedDict([
 
 extracted_data = {}
 
-classifications = pandas.read_csv(args.classification_csv)
+with args.classification_csv as classification_csv:
+    classifications = pandas.read_csv(classification_csv)
 
 widgets = [
     'Extracting: ',
@@ -73,6 +77,8 @@ for cdx, classification in classifications.iterrows():
 pbar.finish()
 
 # create one flat csv file for each extractor used
+output_path, output_base_name = os.path.split(args.output)
 for extractor_name, data in extracted_data.items():
+    output_name = os.path.join(output_path, '{0}_{1}'.format(extractor_name, args.output))
     flat_extract = flatten_data(data)
-    flat_extract.to_csv('{0}_{1}'.format(extractor_name, args.output), index=False)
+    flat_extract.to_csv(output_name, index=False)
