@@ -77,8 +77,9 @@ for cdx, classification in classifications.iterrows():
 pbar.finish()
 
 # create one flat csv file for each extractor used
-output_path, output_base_name = os.path.split(args.output)
+output_path, output_base = os.path.split(args.output)
+ouput_base_name, output_ext = os.path.splitext(output_base)
 for extractor_name, data in extracted_data.items():
-    output_name = os.path.join(output_path, '{0}_{1}'.format(extractor_name, args.output))
+    output_name = os.path.join(output_path, '{0}_{1}.csv'.format(extractor_name, args.output))
     flat_extract = flatten_data(data)
     flat_extract.to_csv(output_name, index=False)

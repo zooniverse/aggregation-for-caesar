@@ -56,7 +56,8 @@ for sdx, subject in enumerate(subjects):
     pbar.update(sdx + 1)
 pbar.finish()
 
-output_path, output_base_name = os.path.split(args.output)
-output_name = os.path.join(output_path, '{0}_{1}'.format(reducer_name, args.output))
+output_path, output_base = os.path.split(args.output)
+ouput_base_name, output_ext = os.path.splitext(output_base)
+output_name = os.path.join(output_path, '{0}_{1}.csv'.format(reducer_name, args.output))
 flat_reduced_data = flatten_data(reduced_data)
 flat_reduced_data.to_csv(output_name, index=False)
