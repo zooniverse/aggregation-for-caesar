@@ -38,7 +38,7 @@ def cluster_points(data_by_tool, **kwargs):
         if loc.shape[0] > kwargs['min_samples']:
             db = DBSCAN(**kwargs).fit(np.array(loc))
             # what cluster each point belongs to
-            clusters['{0}_cluster_labels'.format(tool)] = db.labels_
+            clusters['{0}_cluster_labels'.format(tool)] = list(db.labels_)
             for k in set(db.labels_):
                 if k > -1:
                     idx = db.labels_ == k
