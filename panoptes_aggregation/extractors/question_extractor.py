@@ -1,4 +1,4 @@
-from collections import OrderedDict, Counter
+from collections import Counter
 from slugify import slugify
 
 
@@ -12,7 +12,7 @@ def classification_to_extract(classification):
             answers[slugify(answer, separator='-')] += 1
     else:
         answers[slugify(annotation['value'], separator='-')] += 1
-    return answers
+    return dict(answers)
 
 
 def extractor_request(request):
