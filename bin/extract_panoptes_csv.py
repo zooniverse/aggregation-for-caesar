@@ -37,6 +37,7 @@ blank_extracted_data = OrderedDict([
     ('user_name', []),
     ('user_id', []),
     ('workflow_id', []),
+    ('task', []),
     ('created_at', []),
     ('subject_id', []),
     ('extractor', []),
@@ -61,18 +62,20 @@ for cdx, classification in classifications.iterrows():
         pbar.update(cdx + 1)
         continue
     annotations_by_extractor = extractors.filter_annotations(json.loads(classification.annotations), extractor_config, human=args.human)
-    for extractor_name, annotations in annotations_by_extractor.items():
-        if extractor_name in extractors.extractors_base:
-            extract = extractors.extractors_base[extractor_name]({'annotations': [annotations]})
-            extracted_data.setdefault(extractor_name, copy.deepcopy(blank_extracted_data))
-            extracted_data[extractor_name]['classification_id'].append(classification.classification_id)
-            extracted_data[extractor_name]['user_name'].append(classification.user_name)
-            extracted_data[extractor_name]['user_id'].append(classification.user_id)
-            extracted_data[extractor_name]['workflow_id'].append(classification.workflow_id)
-            extracted_data[extractor_name]['created_at'].append(classification.created_at)
-            extracted_data[extractor_name]['subject_id'].append(classification.subject_ids)
-            extracted_data[extractor_name]['extractor'].append(extractor_name)
-            extracted_data[extractor_name]['data'].append(extract)
+    for extractor_name, annotations_list in annotations_by_extractor.items():
+        for annotations in annotations_list:
+            if extractor_name in extractors.extractors_base:
+                extract = extractors.extractors_base[extractor_name]({'annotations': [annotations]})
+                extracted_data.setdefault(extractor_name, copy.deepcopy(blank_extracted_data))
+                extracted_data[extractor_name]['classification_id'].append(classification.classification_id)
+                extracted_data[extractor_name]['user_name'].append(classification.user_name)
+                extracted_data[extractor_name]['user_id'].append(classification.user_id)
+                extracted_data[extractor_name]['workflow_id'].append(classification.workflow_id)
+                extracted_data[extractor_name]['task'].append(annotations['task'])
+                extracted_data[extractor_name]['created_at'].append(classification.created_at)
+                extracted_data[extractor_name]['subject_id'].append(classification.subject_ids)
+                extracted_data[extractor_name]['extractor'].append(extractor_name)
+                extracted_data[extractor_name]['data'].append(extract)
     pbar.update(cdx + 1)
 pbar.finish()
 

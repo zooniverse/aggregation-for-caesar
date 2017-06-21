@@ -5,16 +5,27 @@ def filter_annotations(annotations, config, human=False):
     annotations_by_extractor = {}
     for annotation in annotations:
         if annotation['task'] in config:
-            for extractor_name, tool_idx in config[annotation['task']].items():
-                annotations_by_extractor[extractor_name] = {
+            if isinstance(config[annotation['task']], dict):
+                for extractor_name, tool_idx in config[annotation['task']].items():
+                    annotations_by_extractor.setdefault(extractor_name, [])
+                    annotations_by_extractor[extractor_name].append({
+                        'task': annotation['task'],
+                        'value': []
+                    })
+                    if human:
+                        annotations_by_extractor[extractor_name][-1]['task_label'] = annotation['task_label']
+                    for value in annotation['value']:
+                        if value['tool'] in tool_idx:
+                            if not human:
+                                value.pop('tool_label')
+                            annotations_by_extractor[extractor_name][-1]['value'].append(value)
+            else:
+                extractor_name = config[annotation['task']]
+                annotations_by_extractor.setdefault(extractor_name, [])
+                annotations_by_extractor[extractor_name].append({
                     'task': annotation['task'],
-                    'value': []
-                }
+                    'value': annotation['value']
+                })
                 if human:
-                    annotations_by_extractor[extractor_name]['task_label'] = annotation['task_label']
-                for value in annotation['value']:
-                    if value['tool'] in tool_idx:
-                        if not human:
-                            value.pop('tool_label')
-                        annotations_by_extractor[extractor_name]['value'].append(value)
+                    annotations_by_extractor[extractor_name][-1]['task_label'] = annotation['task_label']
     return annotations_by_extractor

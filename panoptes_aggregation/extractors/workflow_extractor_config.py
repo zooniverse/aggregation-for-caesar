@@ -8,4 +8,6 @@ def workflow_extractor_config(tasks):
             for tdx, tool in enumerate(task['tools']):
                 tools_config.setdefault('{0}_extractor'.format(tool['type']), []).append(tdx)
             extractor_config[task_key] = tools_config
+        elif task['type'] in ['single', 'multiple']:
+            extractor_config[task_key] = 'question_extractor'
     return extractor_config

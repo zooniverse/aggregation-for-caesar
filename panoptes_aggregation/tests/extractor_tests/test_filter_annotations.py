@@ -32,12 +32,27 @@ class TestFilterAnnotations(unittest.TestCase):
                 'x2': 446.35,
                 'y2': 278.33
             }]
+        }, {
+            'task': 'T1',
+            'task_label': 'A single question',
+            'value': 'Yes'
+        }, {
+            'task': 'T2',
+            'task_label': 'A multi question',
+            'value': ['Blue', 'Green']
         }]
-        self.config = {'T0': {'line_extractor': [1], 'point_extractor': [0, 2]}}
+        self.config = {
+            'T0': {
+                'line_extractor': [1],
+                'point_extractor': [0, 2]
+            },
+            'T1': 'question_extractor',
+            'T2': 'question_extractor'
+        }
 
     def test_filter(self):
         expected_result = {
-            'line_extractor': {
+            'line_extractor': [{
                 'task': 'T0',
                 'value': [{
                     'details': [],
@@ -48,8 +63,8 @@ class TestFilterAnnotations(unittest.TestCase):
                     'x2': 446.35,
                     'y2': 278.33
                 }]
-            },
-            'point_extractor': {
+            }],
+            'point_extractor': [{
                 'task': 'T0',
                 'value': [{
                     'details': [],
@@ -64,14 +79,21 @@ class TestFilterAnnotations(unittest.TestCase):
                     'x': 270,
                     'y': 341
                 }]
-            }
+            }],
+            'question_extractor': [{
+                'task': 'T1',
+                'value': 'Yes'
+            }, {
+                'task': 'T2',
+                'value': ['Blue', 'Green']
+            }]
         }
         result = filter_annotations(self.annotation, self.config)
         self.assertDictEqual(result, expected_result)
 
     def test_filter_human(self):
         expected_result = {
-            'line_extractor': {
+            'line_extractor': [{
                 'task': 'T0',
                 'task_label': 'Please mark the galaxy centre(s) and any foreground stars you see.',
                 'value': [{
@@ -84,8 +106,8 @@ class TestFilterAnnotations(unittest.TestCase):
                     'x2': 446.35,
                     'y2': 278.33
                 }]
-            },
-            'point_extractor': {
+            }],
+            'point_extractor': [{
                 'task': 'T0',
                 'task_label': 'Please mark the galaxy centre(s) and any foreground stars you see.',
                 'value': [{
@@ -103,7 +125,16 @@ class TestFilterAnnotations(unittest.TestCase):
                     'x': 270,
                     'y': 341
                 }]
-            }
+            }],
+            'question_extractor': [{
+                'task': 'T1',
+                'task_label': 'A single question',
+                'value': 'Yes'
+            }, {
+                'task': 'T2',
+                'task_label': 'A multi question',
+                'value': ['Blue', 'Green']
+            }]
         }
         result = filter_annotations(self.annotation, self.config, human=True)
         self.assertDictEqual(result, expected_result)

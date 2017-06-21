@@ -16,13 +16,19 @@ def unflatten_data(data, json_column='data'):
     for name, value in data.iteritems():
         if ('{0}.'.format(json_column) in name) and (pandas.notnull(value)):
             key = name.split('{0}.'.format(json_column))[1]
-            data_dict[key] = json.loads(value)
+            try:
+                data_dict[key] = json.loads(value)
+            except TypeError:
+                data_dict[key] = value
     return data_dict
 
 
 def json_non_null(value):
     if pandas.notnull(value):
-        return json.loads(value)
+        try:
+            return json.loads(value)
+        except TypeError:
+            return value
     else:
         return value
 

@@ -26,13 +26,36 @@ class TestWorkflowExtractorConfig(unittest.TestCase):
                            'size': 'small',
                            'type': 'point'}],
                 'type': 'drawing'
+            },
+            'T1': {
+                'help': 'T1.help',
+                'type': 'single',
+                'answers': [
+                    {'next': 'T2', 'label': 'T1.answers.0.label'},
+                    {'next': 'T2', 'label': 'T1.answers.1.label'},
+                    {'label': 'T1.answers.2.label'}
+                ],
+                'question': 'T1.question',
+                'required': True
+            },
+            'T2': {
+                'help': 'T2.help',
+                'type': 'multiple',
+                'answers': [
+                    {'label': 'T2.answers.0.label'},
+                    {'label': 'T2.answers.1.label'},
+                    {'label': 'T2.answers.2.label'}
+                ],
+                'question': 'T2.question'
             }
         }
         self.expected_result = {
             'T0': {
                 'point_extractor': [0, 2],
                 'line_extractor': [1]
-            }
+            },
+            'T1': 'question_extractor',
+            'T2': 'question_extractor'
         }
 
     def test_config(self):
