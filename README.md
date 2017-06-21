@@ -16,7 +16,8 @@ You will need two files for offline use:
  - The workflow dump: The `Request new workflow export` button from the lab's `Data Export` tab
 
 ## Extracting data
-Note: this only works for the drawing tool's point data at the moment
+Note: this only works for question tasks and the drawing tool's point data at the moment
+
 Use the command line tool to extract your data into one flat `csv` file for each extractor used:
 ```bash
 usage: extract_panoptes_csv.py [-h] [-v VERSION] [-H] [-o OUTPUT]
@@ -49,7 +50,8 @@ extract_panoptes_csv.py mark-galaxy-centers-and-foreground-stars-classifications
 This will extract the user drawn data points from workflow `3513` with a major version of `1` and place them in a `csv` file named `point_extractor_galaxy_center_and_star_mpl5.csv`.
 
 ## Reducing data
-Note: this only works for the drawing tool's point data at the moment
+Note: this only works for question tasks and the drawing tool's point data at the moment
+
 ```bash
 usage: reduce_panoptes_csv.py [-h] [-F {first,last,all}] [-k KEYWORDS]
                               [-o OUTPUT]
