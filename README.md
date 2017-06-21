@@ -131,6 +131,14 @@ docker-compose run aggregation /bin/bash -lc "nosetests -v"
 ## API
 
 ### Extractors
+Question:
+  - endpoint: `extractros/question_extractor`
+  - This extracts the answers to single and multiple choice questions
+  - response contains a dictionary containing the choice counts exampole output:
+  ```js
+  {'a': 1, 'b': 1}
+  ```
+
 Drawn points:
   - endpoint: `extractros/point_extractor`
   - This extracts the data for drawn data points into a form that the `reducers/point_reducer` endpoint can use
@@ -167,6 +175,17 @@ Drawn points:
     ```
 
 ### Reducers
+Counting question votes:
+  - endpoint: `reducers/question_reducer/`
+  - the response is a dictionary containing the counts for each choice:
+  ```js
+  {'a': 5, 'b': 15}
+  ```
+  - if the `?pairs=1` keyword is used it will group together multiple choice answers:
+  ```js
+  {'a': 1, 'a+b': 4, 'b': 11}
+  ```
+
 Clustering points:
   - endpoint: `reducers/point_reducer/?eps=5&min_samples=3`
   - This uses [scikitlearn's DBSCAN](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html#sklearn.cluster.DBSCAN) to cluster the data points. (NOTE: `eps` is in "pixels")
