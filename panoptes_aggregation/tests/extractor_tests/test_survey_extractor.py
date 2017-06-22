@@ -40,7 +40,7 @@ class TestSurveyExtractor(unittest.TestCase):
         }
         app = flask.Flask(__name__)
         with app.test_request_context(**request_kwargs):
-            self.assertDictEqual(extractors.survey_extractor.extractor_request(flask.request), self.expected)
+            self.assertDictEqual(extractors.survey_extractor.survey_extractor_request(flask.request), self.expected)
 
 
 if __name__ == '__main__':

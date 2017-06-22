@@ -102,7 +102,7 @@ class TestReducerRequest(unittest.TestCase):
             'T0_tool2_cluster_labels': [-1]
         }
         with self.app.test_request_context('/?eps=2', **self.request_kwargs):
-            self.assertDictEqual(reducers.cluster_points.reducer_request(flask.request), expected)
+            self.assertDictEqual(reducers.cluster_points.point_reducer_request(flask.request), expected)
 
 
 if __name__ == '__main__':

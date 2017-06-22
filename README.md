@@ -134,7 +134,7 @@ docker-compose run aggregation /bin/bash -lc "nosetests -v"
 
 ### Extractors
 Question:
-  - endpoint: `extractros/question_extractor`
+  - endpoint: `extractors/question_extractor`
   - This extracts the answers to single and multiple choice questions
   - response contains a dictionary containing the choice counts exampole output:
   ```js
@@ -142,7 +142,7 @@ Question:
   ```
 
 Drawn points:
-  - endpoint: `extractros/point_extractor`
+  - endpoint: `extractors/point_extractor`
   - This extracts the data for drawn data points into a form that the `reducers/point_reducer` endpoint can use
   - response contains the original data points into a list for `x` and `y` values of a single classification for each point tool on a workflow.  Example output:
     ```js

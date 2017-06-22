@@ -77,12 +77,12 @@ class TestReducerRequest(unittest.TestCase):
     def test_process_request(self):
         expected = {'a': 3, 'b': 3, 'c': 1}
         with self.app.test_request_context(**self.request_kwargs):
-            self.assertDictEqual(reducers.question_reducer.reducer_request(flask.request), expected)
+            self.assertDictEqual(reducers.question_reducer.question_reducer_request(flask.request), expected)
 
     def test_process_request_pairs(self):
         expected = {'a+b': 2, 'a': 1, 'b+c': 1}
         with self.app.test_request_context('/?pairs=True', **self.request_kwargs):
-            self.assertDictEqual(reducers.question_reducer.reducer_request(flask.request), expected)
+            self.assertDictEqual(reducers.question_reducer.question_reducer_request(flask.request), expected)
 
 
 if __name__ == '__main__':

@@ -22,7 +22,7 @@ def count_votes(votes_list):
     return dict(counter_total)
 
 
-def reducer_request(request):
+def question_reducer_request(request):
     kwargs = process_kwargs(request.args, DEFAULTS)
     data = process_data([d['data'] for d in request.get_json()], **kwargs)
     return count_votes(data)

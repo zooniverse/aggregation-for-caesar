@@ -18,6 +18,6 @@ def classification_to_extract(classification):
     return extract
 
 
-def extractor_request(request):
+def survey_extractor_request(request):
     data = request.get_json()
     return classification_to_extract(data)
