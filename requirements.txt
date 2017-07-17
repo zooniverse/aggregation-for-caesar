@@ -1,6 +1,4 @@
 Flask
 nose
-numpy
-scipy
 python-slugify
 zappa

@@ -6,7 +6,10 @@
         "s3_bucket": "zappa-aggregation-dev",
         "manage_roles": false,
         "role_name": "caesar-lambda-aggregator",
-        "slim_handler": true,
-        "runtime": "python3.6"
+        "slim_handler": false,
+        "runtime": "python3.6",
+        "use_precompiled_packages": false,
+        "keep_warm": false,
+        "lambda_handler": "sklearn_handler.handler"
     }
 }

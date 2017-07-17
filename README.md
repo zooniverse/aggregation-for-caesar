@@ -109,6 +109,13 @@ docker-compose up
 and listen on `localhost:5000`.
 
 ## run [zappa](https://github.com/Miserlou/Zappa) commands
+Drop into docker's bash shell and run commands from there:
+```bash
+docker-compose run aggregation /bin/bash -l
+```
+Note: running command in this way will cache downloaded packages, so if you are actively debugging this is the way to go.
+
+Or if you have a one-off command:
 ```bash
 docker-compose run aggregation /bin/bash -lc "zappa <cmd>"
 ```
