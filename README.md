@@ -5,7 +5,7 @@ This is a collection of external reducers written for [caesar](https://github.co
 # Offline use
 To install (python 3 only):
 ```bash
-git clone git@github.com:CKrawczyk/python-reducers-for-caesar.git
+git clone https://github.com/CKrawczyk/python-reducers-for-caesar.git
 cd python-reducers-for-caesar
 pip install .
 ```
@@ -109,6 +109,13 @@ docker-compose up
 and listen on `localhost:5000`.
 
 ## run [zappa](https://github.com/Miserlou/Zappa) commands
+Drop into docker's bash shell and run commands from there:
+```bash
+docker-compose run aggregation /bin/bash -l
+```
+Note: running command in this way will cache downloaded packages, so if you are actively debugging this is the way to go.
+
+Or if you have a one-off command:
 ```bash
 docker-compose run aggregation /bin/bash -lc "zappa <cmd>"
 ```
@@ -134,7 +141,7 @@ docker-compose run aggregation /bin/bash -lc "nosetests -v"
 
 ### Extractors
 Question:
-  - endpoint: `extractros/question_extractor`
+  - endpoint: `extractors/question_extractor`
   - This extracts the answers to single and multiple choice questions
   - response contains a dictionary containing the choice counts exampole output:
   ```js
@@ -142,7 +149,7 @@ Question:
   ```
 
 Drawn points:
-  - endpoint: `extractros/point_extractor`
+  - endpoint: `extractors/point_extractor`
   - This extracts the data for drawn data points into a form that the `reducers/point_reducer` endpoint can use
   - response contains the original data points into a list for `x` and `y` values of a single classification for each point tool on a workflow.  Example output:
     ```js

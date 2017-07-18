@@ -3,8 +3,8 @@ from . import question_reducer
 from .process_kwargs import process_kwargs
 
 reducers = {
-    'point_reducer': cluster_points.reducer_request,
-    'question_reducer': question_reducer.reducer_request
+    'point_reducer': cluster_points.point_reducer_request,
+    'question_reducer': question_reducer.question_reducer_request
 }
 
 reducer_base = {

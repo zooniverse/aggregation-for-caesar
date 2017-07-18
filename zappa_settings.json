@@ -3,6 +3,14 @@
         "app_function": "routs.application",
         "aws_region": "us-east-1",
         "profile_name": "default",
-        "s3_bucket": "zappa-aggregation-dev"
+        "s3_bucket": "zappa-aggregation-dev",
+        "manage_roles": false,
+        "role_name": "caesar-lambda-aggregator",
+        "slim_handler": false,
+        "runtime": "python3.6",
+        "use_precompiled_packages": false,
+        "keep_warm": false,
+        "lambda_handler": "sklearn_handler.handler",
+        "timeout_seconds": 60
     }
 }

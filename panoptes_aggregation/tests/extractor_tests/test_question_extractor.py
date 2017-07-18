@@ -34,7 +34,7 @@ class TestQuestionExtractor(unittest.TestCase):
         }
         app = flask.Flask(__name__)
         with app.test_request_context(**request_kwargs):
-            self.assertDictEqual(extractors.question_extractor.extractor_request(flask.request), self.expected_single)
+            self.assertDictEqual(extractors.question_extractor.question_extractor_request(flask.request), self.expected_single)
 
     def test_multiple(self):
         result = extractors.question_extractor.classification_to_extract(self.multiple_classification)
@@ -47,7 +47,7 @@ class TestQuestionExtractor(unittest.TestCase):
         }
         app = flask.Flask(__name__)
         with app.test_request_context(**request_kwargs):
-            self.assertDictEqual(extractors.question_extractor.extractor_request(flask.request), self.expected_multiple)
+            self.assertDictEqual(extractors.question_extractor.question_extractor_request(flask.request), self.expected_multiple)
 
 
 if __name__ == '__main__':

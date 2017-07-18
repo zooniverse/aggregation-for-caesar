@@ -15,6 +15,6 @@ def classification_to_extract(classification):
     return dict(answers)
 
 
-def extractor_request(request):
+def question_extractor_request(request):
     data = request.get_json()
     return classification_to_extract(data)

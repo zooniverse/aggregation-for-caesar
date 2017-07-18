@@ -48,7 +48,7 @@ class TestPointExtractor(unittest.TestCase):
         }
         app = flask.Flask(__name__)
         with app.test_request_context(**request_kwargs):
-            self.assertDictEqual(extractors.point_extractor.extractor_request(flask.request), self.expected_result)
+            self.assertDictEqual(extractors.point_extractor.point_extractor_request(flask.request), self.expected_result)
 
 
 if __name__ == '__main__':
