@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, Flask
 from functools import wraps
 from panoptes_aggregation import reducers
 from panoptes_aggregation import extractors
@@ -11,7 +11,7 @@ def request_wrapper(name):
         @wraps(func)
         def wrapper():
             if request.method == 'GET':
-                return name
+                return jonsify(name)
             else:
                 print(name)
                 resp = jsonify(func(request))
@@ -35,7 +35,7 @@ application.route('/path', methods=['POST', 'GET'])(process_wrapper('string retu
 
 @application.route('/')
 def index():
-    return 'Python extractors and reducers for panoptes aggregation.'
+    return jonsify('Python extractors and reducers for panoptes aggregation.')
 
 
 for route, route_function in reducers.reducers.items():
