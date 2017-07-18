@@ -10,6 +10,7 @@
         "runtime": "python3.6",
         "use_precompiled_packages": false,
         "keep_warm": false,
-        "lambda_handler": "sklearn_handler.handler"
+        "lambda_handler": "sklearn_handler.handler",
+        "timeout_seconds": 60
     }
 }
