@@ -10,4 +10,6 @@ def workflow_extractor_config(tasks):
             extractor_config[task_key] = tools_config
         elif task['type'] in ['single', 'multiple']:
             extractor_config[task_key] = 'question_extractor'
+        elif task['type'] == 'survey':
+            extractor_config[task_key] = 'survey_extractor'
     return extractor_config

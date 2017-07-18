@@ -47,6 +47,10 @@ class TestWorkflowExtractorConfig(unittest.TestCase):
                     {'label': 'T2.answers.2.label'}
                 ],
                 'question': 'T2.question'
+            },
+            'T3': {
+                'type': 'survey',
+                'help': 'T3.help'
             }
         }
         self.expected_result = {
@@ -55,7 +59,8 @@ class TestWorkflowExtractorConfig(unittest.TestCase):
                 'line_extractor': [1]
             },
             'T1': 'question_extractor',
-            'T2': 'question_extractor'
+            'T2': 'question_extractor',
+            'T3': 'survey_extractor'
         }
 
     def test_config(self):
