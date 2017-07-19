@@ -18,15 +18,17 @@ class TestSurveyExtractor(unittest.TestCase):
                         'choice': 'PECCARYCOLLARED',
                         'answers': {'HOWMANY': '3'},
                         'filters': {}
+                    }, {
+                        'choice': 'NOTHINGHERE',
+                        'answers': {},
+                        'filters': {}
                     }
                 ]
             }]
         }
         self.expected = {
-            'choice': ['agouti', 'peccarycollared'],
-            'answers': {
-                'howmany': ['1', '3']
-            }
+            'choice': ['agouti', 'peccarycollared', 'nothinghere'],
+            'answers.HOWMANY': ['1', '3', 'null']
         }
 
     def test_extract(self):
