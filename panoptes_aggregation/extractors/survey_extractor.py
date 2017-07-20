@@ -5,23 +5,22 @@ import itertools
 
 
 def classification_to_extract(classification):
-    extract = OrderedDict()
+    extract_list = []
     annotation = classification['annotations'][0]
-    extract.setdefault('choice', [])
-    flat_value = [flatten(v, '.') for v in annotation['value']]
-    flat_keys = [list(v.keys()) for v in flat_value]
-    keys = set(itertools.chain(*flat_keys))
-    answer_keys = [k for k in keys if 'answer' in k]
-    for value in flat_value:
+    for value in annotation['value']:
+        extract = OrderedDict()
         choice = slugify(value['choice'], separator='-')
-        extract['choice'].append(choice)
-        for answer_key in answer_keys:
-            extract.setdefault(answer_key, [])
-            if answer_key in value:
-                extract[answer_key].append(value[answer_key])
-            else:
-                extract[answer_key].append('null')
-    return extract
+        extract['choice'] = choice
+        if 'answers' in value:
+            for question, answer in value['answers'].items():
+                k = slugify(question, separator='-')
+                if isinstance(answer, list):
+                    v = [slugify(a, separator='-') for a in answer]
+                else:
+                    v = slugify(answer, separator='-')
+                extract['answers.{0}'.format(k)] = v
+        extract_list.append(extract)
+    return extract_list
 
 
 def survey_extractor_request(request):
