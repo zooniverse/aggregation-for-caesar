@@ -17,8 +17,8 @@ def unflatten_data(data, json_column='data'):
         if ('{0}.'.format(json_column) in name) and (pandas.notnull(value)):
             key = name.split('{0}.'.format(json_column))[1]
             try:
-                data_dict[key] = json.loads(value)
-            except TypeError:
+                data_dict[key] = json.loads(value.replace('\'', '\"'))
+            except:
                 data_dict[key] = value
     return data_dict
 
