@@ -29,11 +29,11 @@ class TestSurveyExtractor(unittest.TestCase):
         self.expected = [
             {
                 'choice': 'agouti',
-                'answers.howmany': '1'
+                'answers.howmany': {'1': 1}
             },
             {
                 'choice': 'peccarycollared',
-                'answers.howmany': '3'
+                'answers.howmany': {'3': 1}
             },
             {
                 'choice': 'nothinghere',
