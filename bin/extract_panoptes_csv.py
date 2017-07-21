@@ -12,7 +12,7 @@ import pandas
 import progressbar
 
 
-def extract_csv(classification_csv, workflow_csv, workflow_id, version=1, human=False, output='extractions'):
+def extract_csv(classification_csv, workflow_csv, workflow_id, version=1, human=False, output='extractions', order=False):
     if not isinstance(workflow_csv, io.IOBase):
         workflow_csv = open(workflow_csv, 'r')
 
@@ -94,6 +94,17 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=1, human=
     for extractor_name, data in extracted_data.items():
         output_name = os.path.join(output_path, '{0}_{1}.csv'.format(extractor_name, output))
         flat_extract = flatten_data(data)
+        if order:
+            # alphabetically order the data columns
+            cols = flat_extract.columns.tolist()
+            d_cols = [c for c in cols if 'data.' in c]
+            d_cols.sort()
+            # make sure `data.choices` is at the front of the list for survey tasks
+            if 'data.choice' in d_cols:
+                d_cols.remove('data.choice')
+                d_cols = ['data.choice'] + d_cols
+            ordered_cols = cols[:-len(d_cols)] + d_cols
+            flat_extract = flat_extract[ordered_cols]
         flat_extract.to_csv(output_name, index=False)
 
 
@@ -105,7 +116,8 @@ if __name__ == "__main__":
     parser.add_argument("workflow_id", help="the workflow ID you would like to extract", type=int)
     parser.add_argument("-v", "--version", help="the workflow version to extract", type=int, default=1)
     parser.add_argument("-H", "--human", help="switch to make the data column labels use the task and question labels instead of generic labels", action="store_true")
+    parser.add_argument("-O", "--order", help="arrange the data columns in alphabetical order before saving", action="store_ture")
     parser.add_argument("-o", "--output", help="the base name for output csv file to store the annotation extractions (one file will be created for each extractor used)", type=str, default="extractions")
     args = parser.parse_args()
 
-    extract_csv(args.classification_csv, args.workflow_csv, args.workflow_id, version=args.version, human=args.human, output=args.output)
+    extract_csv(args.classification_csv, args.workflow_csv, args.workflow_id, version=args.version, human=args.human, output=args.output, order=args.order)
