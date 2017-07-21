@@ -12,12 +12,24 @@ import pandas
 import progressbar
 
 
+def first_filter(data):
+    first_time = data.created_at.min()
+    fdx = data.created_at == first_time
+    return data[fdx]
+
+
+def last_filter(data):
+    last_time = data.created_at.max()
+    ldx = data.created_at == last_time
+    return data[ldx]
+
+
 def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions'):
     if not isinstance(extracted_csv, io.IOBase):
-        workflow_csv = open(workflow_csv, 'r')
+        extracted_csv = open(extracted_csv, 'r')
 
-    with extracted_csv as extracted_csv:
-        extracted = pandas.read_csv(extracted_csv, infer_datetime_format=True, parse_dates=['created_at'])
+    with extracted_csv as extracted_csv_in:
+        extracted = pandas.read_csv(extracted_csv_in, infer_datetime_format=True, parse_dates=['created_at'])
 
     extracted.sort_values(['subject_id', 'created_at'], inplace=True)
 
@@ -49,8 +61,11 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions'):
         for task in tasks:
             jdx = extracted.task == task
             classifications = extracted[idx & jdx]
-            if filter in ['frist', 'last']:
-                classifications.drop_duplicates(['user_name'], keep=filter, inplace=True)
+            if filter == 'first':
+                classifications = classifications.groupby(['user_name'], group_keys=False).apply(first_filter)
+            elif filter == 'last':
+                classifications = classifications.groupby(['user_name'], group_keys=False).apply(last_filter)
+            classifications.drop_duplicates(inplace=True)
             data = [unflatten_data(c) for cdx, c in classifications.iterrows()]
             reduced_data['subject_id'].append(subject)
             reduced_data['workflow_id'].append(workflow_id)
