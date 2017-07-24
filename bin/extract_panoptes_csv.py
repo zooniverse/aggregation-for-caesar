@@ -3,7 +3,7 @@
 from collections import OrderedDict
 import copy
 from panoptes_aggregation import extractors
-from panoptes_aggregation.csv_utils import flatten_data
+from panoptes_aggregation.csv_utils import flatten_data, order_columns
 import json
 import math
 import io
@@ -95,16 +95,7 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=1, human=
         output_name = os.path.join(output_path, '{0}_{1}.csv'.format(extractor_name, output))
         flat_extract = flatten_data(data)
         if order:
-            # alphabetically order the data columns
-            cols = flat_extract.columns.tolist()
-            d_cols = [c for c in cols if 'data.' in c]
-            d_cols.sort()
-            # make sure `data.choices` is at the front of the list for survey tasks
-            if 'data.choice' in d_cols:
-                d_cols.remove('data.choice')
-                d_cols = ['data.choice'] + d_cols
-            ordered_cols = cols[:-len(d_cols)] + d_cols
-            flat_extract = flat_extract[ordered_cols]
+            flat_extract = order_columns(flat_extract, front=['choice'])
         flat_extract.to_csv(output_name, index=False)
 
 
