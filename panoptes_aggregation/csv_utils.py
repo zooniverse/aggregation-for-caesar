@@ -1,10 +1,12 @@
 import pandas
+from pandas.io.json.normalize import nested_to_record
 import json
 
 
 def flatten_data(data, json_column='data'):
     json_data = data.pop(json_column)
-    flat_data = pandas.io.json.json_normalize(json_data)
+    # this gets at any nested dicts as well
+    flat_data = pandas.DataFrame(nested_to_record(json_data))
     # rename the columns so they can be un-flattened later
     flat_data.columns = ['{0}.{1}'.format(json_column, i) for i in flat_data.columns.values]
     other_data = pandas.DataFrame(data)
