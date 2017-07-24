@@ -28,6 +28,10 @@ def count_votes(data, vote_count=0):
             for key, value in answer.items():
                 reduction.setdefault(key, Counter())
                 reduction[key] += value
+        # cast back to dict before returning
+        for key, value in reduction.items():
+            if isinstance(value, Counter):
+                reduction[key] = dict(value)
         reduction_list.append(reduction)
     return reduction_list
 

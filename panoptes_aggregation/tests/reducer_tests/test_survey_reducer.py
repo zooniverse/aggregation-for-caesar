@@ -115,7 +115,7 @@ class TestCountVote(unittest.TestCase):
         result = reducers.survey_reducer.count_votes(self.processed_data, vote_count=len(extracted_data))
         for rdx, r in enumerate(result):
             with self.subTest(i=rdx):
-                self.assertDictEqual(r, self.expected[rdx])
+                self.assertDictEqual(dict(r), self.expected[rdx])
 
 
 class TestReducerRequest(unittest.TestCase):
@@ -136,7 +136,7 @@ class TestReducerRequest(unittest.TestCase):
             result = reducers.survey_reducer.survey_reducer_request(flask.request)
             for rdx, r in enumerate(result):
                 with self.subTest(i=rdx):
-                    self.assertDictEqual(r, self.expected[rdx])
+                    self.assertDictEqual(dict(r), self.expected[rdx])
 
 
 if __name__ == '__main__':
