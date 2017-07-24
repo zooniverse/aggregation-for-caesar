@@ -3,7 +3,7 @@
 from collections import OrderedDict
 import copy
 from panoptes_aggregation import reducers
-from panoptes_aggregation.csv_utils import flatten_data, unflatten_data
+from panoptes_aggregation.csv_utils import flatten_data, unflatten_data, order_columns
 import json
 import math
 import io
@@ -24,7 +24,7 @@ def last_filter(data):
     return data[ldx]
 
 
-def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions'):
+def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', order=False):
     if not isinstance(extracted_csv, io.IOBase):
         extracted_csv = open(extracted_csv, 'r')
 
@@ -61,17 +61,26 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions'):
         for task in tasks:
             jdx = extracted.task == task
             classifications = extracted[idx & jdx]
+            classifications = classifications.drop_duplicates()
             if filter == 'first':
                 classifications = classifications.groupby(['user_name'], group_keys=False).apply(first_filter)
             elif filter == 'last':
                 classifications = classifications.groupby(['user_name'], group_keys=False).apply(last_filter)
-            classifications.drop_duplicates(inplace=True)
             data = [unflatten_data(c) for cdx, c in classifications.iterrows()]
-            reduced_data['subject_id'].append(subject)
-            reduced_data['workflow_id'].append(workflow_id)
-            reduced_data['task'].append(task)
-            reduced_data['reducer'].append(reducer_name)
-            reduced_data['data'].append(reducers.reducer_base[reducer_name](data, **keywords))
+            reduction = reducers.reducer_base[reducer_name](data, **keywords)
+            if isinstance(reduction, list):
+                for r in reduction:
+                    reduced_data['subject_id'].append(subject)
+                    reduced_data['workflow_id'].append(workflow_id)
+                    reduced_data['task'].append(task)
+                    reduced_data['reducer'].append(reducer_name)
+                    reduced_data['data'].append(r)
+            else:
+                reduced_data['subject_id'].append(subject)
+                reduced_data['workflow_id'].append(workflow_id)
+                reduced_data['task'].append(task)
+                reduced_data['reducer'].append(reducer_name)
+                reduced_data['data'].append(reduction)
         pbar.update(sdx + 1)
     pbar.finish()
 
@@ -79,6 +88,8 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions'):
     ouput_base_name, output_ext = os.path.splitext(output_base)
     output_name = os.path.join(output_path, '{0}_{1}.csv'.format(reducer_name, ouput_base_name))
     flat_reduced_data = flatten_data(reduced_data)
+    if order:
+        flat_reduced_data = order_columns(flat_reduced_data, front=['choice', 'total_vote_count', 'choice_count'])
     flat_reduced_data.to_csv(output_name, index=False)
 
 
@@ -88,7 +99,8 @@ if __name__ == "__main__":
     parser.add_argument("extracted_csv", help="the extracted csv file output from extract_panoptes_csv", type=argparse.FileType('r'))
     parser.add_argument("-F", "--filter", help="how to filter a user makeing multiple classifications for one subject", type=str, choices=['first', 'last', 'all'], default='fisrt')
     parser.add_argument("-k", "--keywords", help="keywords to be passed into the reducer in the form of a json string, e.g. \'{\"eps\": 5.5, \"min_samples\": 3}\'  (note: double quotes must be used inside the brackets)", type=json.loads, default={})
+    parser.add_argument("-O", "--order", help="arrange the data columns in alphabetical order before saving", action="store_true")
     parser.add_argument("-o", "--output", help="the base name for output csv file to store the reductions", type=str, default="reductions")
     args = parser.parse_args()
 
-    reduce_csv(args.extracted_csv, filter=args.filter, keywords=args.keywords, output=args.output)
+    reduce_csv(args.extracted_csv, filter=args.filter, keywords=args.keywords, output=args.output, order=args.order)

@@ -107,7 +107,7 @@ if __name__ == "__main__":
     parser.add_argument("workflow_id", help="the workflow ID you would like to extract", type=int)
     parser.add_argument("-v", "--version", help="the workflow version to extract", type=int, default=1)
     parser.add_argument("-H", "--human", help="switch to make the data column labels use the task and question labels instead of generic labels", action="store_true")
-    parser.add_argument("-O", "--order", help="arrange the data columns in alphabetical order before saving", action="store_ture")
+    parser.add_argument("-O", "--order", help="arrange the data columns in alphabetical order before saving", action="store_true")
     parser.add_argument("-o", "--output", help="the base name for output csv file to store the annotation extractions (one file will be created for each extractor used)", type=str, default="extractions")
     args = parser.parse_args()
 

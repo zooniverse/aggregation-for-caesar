@@ -51,7 +51,7 @@ def order_columns(data_frame, json_column='data', front=['choice']):
     cols = data_frame.columns.tolist()
     d_cols = [c for c in cols if '{0}.'.format(json_column) in c]
     d_cols.sort()
-    for f in front:
+    for f in front[::-1]:
         d_cols = move_to_front(d_cols, '{0}.{1}'.format(json_column, f))
     order_columns = cols[:-len(d_cols)] + d_cols
     return data_frame[order_columns]
