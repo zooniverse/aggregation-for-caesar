@@ -1,6 +1,5 @@
 from collections import OrderedDict
 from slugify import slugify
-from flatten_json import flatten
 import itertools
 from . import question_extractor
 
