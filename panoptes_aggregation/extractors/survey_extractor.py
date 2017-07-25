@@ -15,12 +15,6 @@ def classification_to_extract(classification):
         if 'answers' in value:
             for question, answer in value['answers'].items():
                 k = slugify(question, separator='-')
-                '''
-                if isinstance(answer, list):
-                    v = [slugify(a, separator='-') for a in answer]
-                else:
-                    v = slugify(answer, separator='-')
-                '''
                 question_classification = {
                     'annotations': [
                         {'value': answer}
