@@ -5,7 +5,6 @@ from slugify import slugify
 def classification_to_extract(classification):
     # assumes only one task is filtered into the extractor
     annotation = classification['annotations'][0]
-    task_key = annotation['task']
     answers = Counter()
     if isinstance(annotation['value'], list):
         for answer in annotation['value']:

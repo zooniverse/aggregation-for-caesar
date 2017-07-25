@@ -13,6 +13,7 @@ setup(name='panoptes_aggregation',
            packages=find_packages(),
            include_package_data=True,
            install_requires=[
+               'flatten_json',
                'numpy',
                'pandas',
                'progressbar2',

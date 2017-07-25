@@ -1,4 +1,5 @@
 Flask
+flatten_json
 nose
 python-slugify
 zappa

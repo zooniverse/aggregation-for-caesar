@@ -3,7 +3,7 @@
 from collections import OrderedDict
 import copy
 from panoptes_aggregation import extractors
-from panoptes_aggregation.csv_utils import flatten_data
+from panoptes_aggregation.csv_utils import flatten_data, order_columns
 import json
 import math
 import io
@@ -12,7 +12,7 @@ import pandas
 import progressbar
 
 
-def extract_csv(classification_csv, workflow_csv, workflow_id, version=1, human=False, output='extractions'):
+def extract_csv(classification_csv, workflow_csv, workflow_id, version=1, human=False, output='extractions', order=False):
     if not isinstance(workflow_csv, io.IOBase):
         workflow_csv = open(workflow_csv, 'r')
 
@@ -62,26 +62,44 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=1, human=
             for annotations in annotations_list:
                 if extractor_name in extractors.extractors_base:
                     extract = extractors.extractors_base[extractor_name]({'annotations': [annotations]})
-                    extracted_data.setdefault(extractor_name, copy.deepcopy(blank_extracted_data))
-                    extracted_data[extractor_name]['classification_id'].append(classification.classification_id)
-                    extracted_data[extractor_name]['user_name'].append(classification.user_name)
-                    extracted_data[extractor_name]['user_id'].append(classification.user_id)
-                    extracted_data[extractor_name]['workflow_id'].append(classification.workflow_id)
-                    extracted_data[extractor_name]['task'].append(annotations['task'])
-                    extracted_data[extractor_name]['created_at'].append(classification.created_at)
-                    extracted_data[extractor_name]['subject_id'].append(classification.subject_ids)
-                    extracted_data[extractor_name]['extractor'].append(extractor_name)
-                    extracted_data[extractor_name]['data'].append(extract)
+                    if isinstance(extract, list):
+                        for e in extract:
+                            extracted_data.setdefault(extractor_name, copy.deepcopy(blank_extracted_data))
+                            extracted_data[extractor_name]['classification_id'].append(classification.classification_id)
+                            extracted_data[extractor_name]['user_name'].append(classification.user_name)
+                            extracted_data[extractor_name]['user_id'].append(classification.user_id)
+                            extracted_data[extractor_name]['workflow_id'].append(classification.workflow_id)
+                            extracted_data[extractor_name]['task'].append(annotations['task'])
+                            extracted_data[extractor_name]['created_at'].append(classification.created_at)
+                            extracted_data[extractor_name]['subject_id'].append(classification.subject_ids)
+                            extracted_data[extractor_name]['extractor'].append(extractor_name)
+                            extracted_data[extractor_name]['data'].append(e)
+                    else:
+                        extracted_data.setdefault(extractor_name, copy.deepcopy(blank_extracted_data))
+                        extracted_data[extractor_name]['classification_id'].append(classification.classification_id)
+                        extracted_data[extractor_name]['user_name'].append(classification.user_name)
+                        extracted_data[extractor_name]['user_id'].append(classification.user_id)
+                        extracted_data[extractor_name]['workflow_id'].append(classification.workflow_id)
+                        extracted_data[extractor_name]['task'].append(annotations['task'])
+                        extracted_data[extractor_name]['created_at'].append(classification.created_at)
+                        extracted_data[extractor_name]['subject_id'].append(classification.subject_ids)
+                        extracted_data[extractor_name]['extractor'].append(extractor_name)
+                        extracted_data[extractor_name]['data'].append(extract)
         pbar.update(cdx + 1)
     pbar.finish()
 
     # create one flat csv file for each extractor used
     output_path, output_base = os.path.split(output)
-    ouput_base_name, output_ext = os.path.splitext(output_base)
+    output_base_name, output_ext = os.path.splitext(output_base)
+    output_files = []
     for extractor_name, data in extracted_data.items():
-        output_name = os.path.join(output_path, '{0}_{1}.csv'.format(extractor_name, output))
+        output_name = os.path.join(output_path, '{0}_{1}.csv'.format(extractor_name, output_base_name))
+        output_files.append(output_name)
         flat_extract = flatten_data(data)
+        if order:
+            flat_extract = order_columns(flat_extract, front=['choice'])
         flat_extract.to_csv(output_name, index=False)
+    return output_files
 
 
 if __name__ == "__main__":
@@ -92,7 +110,8 @@ if __name__ == "__main__":
     parser.add_argument("workflow_id", help="the workflow ID you would like to extract", type=int)
     parser.add_argument("-v", "--version", help="the workflow version to extract", type=int, default=1)
     parser.add_argument("-H", "--human", help="switch to make the data column labels use the task and question labels instead of generic labels", action="store_true")
+    parser.add_argument("-O", "--order", help="arrange the data columns in alphabetical order before saving", action="store_true")
     parser.add_argument("-o", "--output", help="the base name for output csv file to store the annotation extractions (one file will be created for each extractor used)", type=str, default="extractions")
     args = parser.parse_args()
 
-    extract_csv(args.classification_csv, args.workflow_csv, args.workflow_id, version=args.version, human=args.human, output=args.output)
+    extract_csv(args.classification_csv, args.workflow_csv, args.workflow_id, version=args.version, human=args.human, output=args.output, order=args.order)

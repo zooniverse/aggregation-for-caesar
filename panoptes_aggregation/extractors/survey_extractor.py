@@ -1,21 +1,35 @@
 from collections import OrderedDict
 from slugify import slugify
+from flatten_json import flatten
+import itertools
+from . import question_extractor
 
 
 def classification_to_extract(classification):
-    extract = OrderedDict()
+    extract_list = []
     annotation = classification['annotations'][0]
-    extract.setdefault('choice', [])
     for value in annotation['value']:
+        extract = OrderedDict()
         choice = slugify(value['choice'], separator='-')
-        extract['choice'].append(choice)
+        extract['choice'] = choice
         if 'answers' in value:
-            extract.setdefault('answers', {})
             for question, answer in value['answers'].items():
                 k = slugify(question, separator='-')
-                v = slugify(answer, separator='-')
-                extract['answers'].setdefault(k, []).append(v)
-    return extract
+                '''
+                if isinstance(answer, list):
+                    v = [slugify(a, separator='-') for a in answer]
+                else:
+                    v = slugify(answer, separator='-')
+                '''
+                question_classification = {
+                    'annotations': [
+                        {'value': answer}
+                    ]
+                }
+                v = question_extractor.classification_to_extract(question_classification)
+                extract['answers.{0}'.format(k)] = v
+        extract_list.append(extract)
+    return extract_list
 
 
 def survey_extractor_request(request):
