@@ -85,12 +85,13 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
     pbar.finish()
 
     output_path, output_base = os.path.split(output)
-    ouput_base_name, output_ext = os.path.splitext(output_base)
-    output_name = os.path.join(output_path, '{0}_{1}.csv'.format(reducer_name, ouput_base_name))
+    output_base_name, output_ext = os.path.splitext(output_base)
+    output_name = os.path.join(output_path, '{0}_{1}.csv'.format(reducer_name, output_base_name))
     flat_reduced_data = flatten_data(reduced_data)
     if order:
         flat_reduced_data = order_columns(flat_reduced_data, front=['choice', 'total_vote_count', 'choice_count'])
     flat_reduced_data.to_csv(output_name, index=False)
+    return output_name
 
 
 if __name__ == "__main__":

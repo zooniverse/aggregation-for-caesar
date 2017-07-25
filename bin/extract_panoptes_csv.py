@@ -90,13 +90,16 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=1, human=
 
     # create one flat csv file for each extractor used
     output_path, output_base = os.path.split(output)
-    ouput_base_name, output_ext = os.path.splitext(output_base)
+    output_base_name, output_ext = os.path.splitext(output_base)
+    output_files = []
     for extractor_name, data in extracted_data.items():
-        output_name = os.path.join(output_path, '{0}_{1}.csv'.format(extractor_name, output))
+        output_name = os.path.join(output_path, '{0}_{1}.csv'.format(extractor_name, output_base_name))
+        output_files.append(output_name)
         flat_extract = flatten_data(data)
         if order:
             flat_extract = order_columns(flat_extract, front=['choice'])
         flat_extract.to_csv(output_name, index=False)
+    return output_files
 
 
 if __name__ == "__main__":
