@@ -60,6 +60,21 @@ processed_data = {
 
 reduced_data = [
     {
+        'choice': 'raccoon',
+        'total_vote_count': 8,
+        'choice_count': 4,
+        'answers.howmanyanimalsdoyousee': {
+            '1': 4
+        },
+        'answers.whatistheanimalsdoing': {
+            'standing': 3,
+            'grooming': 1
+        },
+        'answers.clickwowifthisasanespeciallyawesomephoto': {
+            'wow': 1
+        }
+    },
+    {
         'choice': 'blackbear',
         'total_vote_count': 8,
         'choice_count': 4,
@@ -73,21 +88,6 @@ reduced_data = [
         },
         'answers.clickwowifthisasanespeciallyawesomephoto': {
             'wow': 2
-        }
-    },
-    {
-        'choice': 'raccoon',
-        'total_vote_count': 8,
-        'choice_count': 4,
-        'answers.howmanyanimalsdoyousee': {
-            '1': 4
-        },
-        'answers.whatistheanimalsdoing': {
-            'standing': 3,
-            'grooming': 1
-        },
-        'answers.clickwowifthisasanespeciallyawesomephoto': {
-            'wow': 1
         }
     }
 ]
@@ -113,9 +113,7 @@ class TestCountVote(unittest.TestCase):
 
     def test_count_vote(self):
         result = reducers.survey_reducer.count_votes(self.processed_data, vote_count=len(extracted_data))
-        for rdx, r in enumerate(result):
-            with self.subTest(i=rdx):
-                self.assertDictEqual(dict(r), self.expected[rdx])
+        self.assertCountEqual(result, self.expected)
 
 
 class TestReducerRequest(unittest.TestCase):
@@ -134,9 +132,7 @@ class TestReducerRequest(unittest.TestCase):
     def test_process_request(self):
         with self.app.test_request_context(**self.request_kwargs):
             result = reducers.survey_reducer.survey_reducer_request(flask.request)
-            for rdx, r in enumerate(result):
-                with self.subTest(i=rdx):
-                    self.assertDictEqual(dict(r), self.expected[rdx])
+            self.assertCountEqual(result, self.expected)
 
 
 if __name__ == '__main__':
