@@ -10,6 +10,7 @@ import io
 import os
 import pandas
 import progressbar
+import warnings
 
 
 def first_filter(data):
@@ -84,6 +85,8 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
         pbar.update(sdx + 1)
     pbar.finish()
 
+    if len(reduced_data['data']) == 0:
+        warnings.warn('No data reduced with {0}'.format(reducer_name))
     output_path, output_base = os.path.split(output)
     output_base_name, output_ext = os.path.splitext(output_base)
     output_name = os.path.join(output_path, '{0}_{1}.csv'.format(reducer_name, output_base_name))
