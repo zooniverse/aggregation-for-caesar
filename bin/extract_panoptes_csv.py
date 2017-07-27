@@ -98,6 +98,8 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, hum
     output_base_name, output_ext = os.path.splitext(output_base)
     output_files = []
     for extractor_name, data in extracted_data.items():
+        if len(data['data']) == 0:
+            warnings.warn('No data extracted with {0}'.format(extractor_name))
         output_name = os.path.join(output_path, '{0}_{1}.csv'.format(extractor_name, output_base_name))
         output_files.append(output_name)
         flat_extract = flatten_data(data)
