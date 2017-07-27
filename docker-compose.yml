@@ -6,5 +6,12 @@ services:
     volumes:
       - ./:/usr/src/aggregation
       - ~/.aws:/root/.aws
+    environment:
+      - AWS_REGION=${AWS_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+      - AWS_SECURITY_TOKEN=${AWS_SECURITY_TOKEN}
+      - SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
     ports:
       - "5000:5000"
