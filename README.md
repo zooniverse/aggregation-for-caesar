@@ -5,8 +5,8 @@ This is a collection of external reducers written for [caesar](https://github.co
 # Offline use
 To install (python 3 only):
 ```bash
-git clone https://github.com/CKrawczyk/python-reducers-for-caesar.git
-cd python-reducers-for-caesar
+git clone https://github.com/zooniverse/aggregation-for-caesar.git
+cd aggregation-for-caesar
 pip install .
 ```
 
