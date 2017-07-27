@@ -10,14 +10,19 @@ import io
 import os
 import pandas
 import progressbar
+import warnings
 
 
-def extract_csv(classification_csv, workflow_csv, workflow_id, version=1, human=False, output='extractions', order=False):
+def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, human=False, output='extractions', order=False):
     if not isinstance(workflow_csv, io.IOBase):
         workflow_csv = open(workflow_csv, 'r')
 
     with workflow_csv as workflow_csv_in:
         workflows = pandas.read_csv(workflow_csv_in)
+
+    if version is None:
+        version = workflow.version.max()
+        warnings.warn('No workflow version was specified, defaulting to version {0}'.format(version))
 
     wdx = (workflows.workflow_id == workflow_id) & (workflows.version == version)
     if wdx.sum() == 0:
@@ -108,7 +113,7 @@ if __name__ == "__main__":
     parser.add_argument("classification_csv", help="the classificaiton csv file containing the panoptes data dump", type=argparse.FileType('r'))
     parser.add_argument("workflow_csv", help="the csv file containing the workflow data", type=argparse.FileType('r'))
     parser.add_argument("workflow_id", help="the workflow ID you would like to extract", type=int)
-    parser.add_argument("-v", "--version", help="the workflow version to extract", type=int, default=1)
+    parser.add_argument("-v", "--version", help="the workflow version to extract", type=int)
     parser.add_argument("-H", "--human", help="switch to make the data column labels use the task and question labels instead of generic labels", action="store_true")
     parser.add_argument("-O", "--order", help="arrange the data columns in alphabetical order before saving", action="store_true")
     parser.add_argument("-o", "--output", help="the base name for output csv file to store the annotation extractions (one file will be created for each extractor used)", type=str, default="extractions")
