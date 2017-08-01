@@ -11,6 +11,9 @@ def classification_to_extract(classification):
     for value in annotation['value']:
         text = value['details'][0]['value']
         words = text.split(' ')
+        # NOTE: if `words` and `points` are differnt lengths
+        # the extract will only contain the *shorter* of the
+        # two lists (assuming they match from the front)
         for word, point in zip(words, value['points']):
             extract['frame'].append(value['frame'])
             extract['text'].append(word)
