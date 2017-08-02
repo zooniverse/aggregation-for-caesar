@@ -48,10 +48,15 @@ def cluster_points(data_by_tool, **kwargs):
                     clusters.setdefault('{0}_clusters_x'.format(tool), []).append(float(k_loc[0]))
                     clusters.setdefault('{0}_clusters_y'.format(tool), []).append(float(k_loc[1]))
                     # cov matrix of the cluster
-                    k_cov = np.cov(loc[idx].T)
-                    clusters.setdefault('{0}_clusters_var_x'.format(tool), []).append(float(k_cov[0, 0]))
-                    clusters.setdefault('{0}_clusters_var_y'.format(tool), []).append(float(k_cov[1, 1]))
-                    clusters.setdefault('{0}_clusters_var_x_y'.format(tool), []).append(float(k_cov[0, 1]))
+                    if idx.sum() > 1:
+                        k_cov = np.cov(loc[idx].T)
+                        clusters.setdefault('{0}_clusters_var_x'.format(tool), []).append(float(k_cov[0, 0]))
+                        clusters.setdefault('{0}_clusters_var_y'.format(tool), []).append(float(k_cov[1, 1]))
+                        clusters.setdefault('{0}_clusters_var_x_y'.format(tool), []).append(float(k_cov[0, 1]))
+                    else:
+                        clusters.setdefault('{0}_clusters_var_x'.format(tool), []).append(None)
+                        clusters.setdefault('{0}_clusters_var_y'.format(tool), []).append(None)
+                        clusters.setdefault('{0}_clusters_var_x_y'.format(tool), []).append(None)
     return clusters
 
 
