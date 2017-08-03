@@ -20,7 +20,7 @@ def classification_to_extract(classification):
                     ]
                 }
                 v = question_extractor.classification_to_extract(question_classification)
-                extract['answers.{0}'.format(k)] = v
+                extract['answers_{0}'.format(k)] = v
         extract_list.append(extract)
     return extract_list
 

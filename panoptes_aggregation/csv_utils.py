@@ -13,7 +13,7 @@ def flatten_data(data, json_column='data'):
     return pandas.concat([other_data, flat_data], axis=1)
 
 
-def unflatten_data(data, json_column='data'):
+def unflatten_data(data, json_column='data', renest=True):
     data_dict = {}
     for name, value in data.iteritems():
         if ('{0}.'.format(json_column) in name) and (pandas.notnull(value)):
@@ -22,13 +22,30 @@ def unflatten_data(data, json_column='data'):
                 data_dict[key] = json.loads(value.replace('\'', '\"'))
             except:
                 data_dict[key] = value
-    return data_dict
+    if renest:
+        return renest_dict(data_dict)
+    else:
+        return data_dict
+
+
+def nested_set(dic, keys, value):
+    for key in keys[:-1]:
+        dic = dic.setdefault(key, {})
+    dic[keys[-1]] = value
+
+
+def renest_dict(data, seporator='.'):
+    output = {}
+    for key, value in data.items():
+        key_expand = key.split(seporator)
+        nested_set(output, key_expand, value)
+    return output
 
 
 def json_non_null(value):
     if pandas.notnull(value):
         try:
-            return json.loads(value)
+            return json.loads(value.replace('\'', '\"'))
         except TypeError:
             return value
     else:

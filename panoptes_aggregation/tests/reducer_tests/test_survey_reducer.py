@@ -6,54 +6,54 @@ import json
 from panoptes_aggregation import reducers
 
 extracted_data = [
-    {'answers.howmanyanimalsdoyousee.1': 1.0, 'answers.whatistheanimalsdoing.grooming': 1.0, 'choice': 'raccoon'},
-    {'answers.howmanyanimalsdoyousee.1': 1.0, 'answers.whatistheanimalsdoing.standing': 1.0, 'choice': 'raccoon'},
-    {'answers.howmanyanimalsdoyousee.1': 1.0, 'answers.whatistheanimalsdoing.standing': 1.0, 'answers.clickwowifthisasanespeciallyawesomephoto.wow': 1.0, 'choice': 'raccoon'},
-    {'answers.howmanyanimalsdoyousee.1': 1.0, 'answers.whatistheanimalsdoing.standing': 1.0, 'choice': 'raccoon'},
-    {'answers.howmanyanimalsdoyousee.1': 1.0, 'answers.whatistheanimalsdoing.interacting': 1.0, 'answers.whatistheanimalsdoing.grooming': 1.0, 'answers.clickwowifthisasanespeciallyawesomephoto.wow': 1.0, 'choice': 'blackbear'},
-    {'answers.howmanyanimalsdoyousee.1': 1.0, 'answers.whatistheanimalsdoing.standing': 1.0, 'choice': 'blackbear'},
-    {'answers.howmanyanimalsdoyousee.1': 1.0, 'answers.whatistheanimalsdoing.standing': 1.0, 'answers.clickwowifthisasanespeciallyawesomephoto.wow': 1.0, 'choice': 'blackbear'},
-    {'answers.howmanyanimalsdoyousee.1': 1.0, 'answers.whatistheanimalsdoing.grooming': 1.0, 'choice': 'blackbear'}
+    {'answers_howmanyanimalsdoyousee': {'1': 1.0}, 'answers_whatistheanimalsdoing': {'grooming': 1.0}, 'choice': 'raccoon'},
+    {'answers_howmanyanimalsdoyousee': {'1': 1.0}, 'answers_whatistheanimalsdoing': {'standing': 1.0}, 'choice': 'raccoon'},
+    {'answers_howmanyanimalsdoyousee': {'1': 1.0}, 'answers_whatistheanimalsdoing': {'standing': 1.0}, 'answers_clickwowifthisasanespeciallyawesomephoto': {'wow': 1.0}, 'choice': 'raccoon'},
+    {'answers_howmanyanimalsdoyousee': {'1': 1.0}, 'answers_whatistheanimalsdoing': {'standing': 1.0}, 'choice': 'raccoon'},
+    {'answers_howmanyanimalsdoyousee': {'1': 1.0}, 'answers_whatistheanimalsdoing': {'interacting': 1.0, 'grooming': 1.0}, 'answers_clickwowifthisasanespeciallyawesomephoto': {'wow': 1.0}, 'choice': 'blackbear'},
+    {'answers_howmanyanimalsdoyousee': {'1': 1.0}, 'answers_whatistheanimalsdoing': {'standing': 1.0}, 'choice': 'blackbear'},
+    {'answers_howmanyanimalsdoyousee': {'1': 1.0}, 'answers_whatistheanimalsdoing': {'standing': 1.0}, 'answers_clickwowifthisasanespeciallyawesomephoto': {'wow': 1.0}, 'choice': 'blackbear'},
+    {'answers_howmanyanimalsdoyousee': {'1': 1.0}, 'answers_whatistheanimalsdoing': {'grooming': 1.0}, 'choice': 'blackbear'}
 ]
 
 processed_data = {
     'blackbear': [
         {
-            'answers.clickwowifthisasanespeciallyawesomephoto': Counter({'wow': 1}),
-            'answers.howmanyanimalsdoyousee': Counter({'1': 1}),
-            'answers.whatistheanimalsdoing': Counter({'interacting': 1, 'grooming': 1})
+            'answers_clickwowifthisasanespeciallyawesomephoto': Counter({'wow': 1}),
+            'answers_howmanyanimalsdoyousee': Counter({'1': 1}),
+            'answers_whatistheanimalsdoing': Counter({'interacting': 1, 'grooming': 1})
         },
         {
-            'answers.howmanyanimalsdoyousee': Counter({'1': 1}),
-            'answers.whatistheanimalsdoing': Counter({'standing': 1})
+            'answers_howmanyanimalsdoyousee': Counter({'1': 1}),
+            'answers_whatistheanimalsdoing': Counter({'standing': 1})
         },
         {
-            'answers.clickwowifthisasanespeciallyawesomephoto': Counter({'wow': 1}),
-            'answers.howmanyanimalsdoyousee': Counter({'1': 1}),
-            'answers.whatistheanimalsdoing': Counter({'standing': 1})
+            'answers_clickwowifthisasanespeciallyawesomephoto': Counter({'wow': 1}),
+            'answers_howmanyanimalsdoyousee': Counter({'1': 1}),
+            'answers_whatistheanimalsdoing': Counter({'standing': 1})
         },
         {
-            'answers.howmanyanimalsdoyousee': Counter({'1': 1}),
-            'answers.whatistheanimalsdoing': Counter({'grooming': 1})
+            'answers_howmanyanimalsdoyousee': Counter({'1': 1}),
+            'answers_whatistheanimalsdoing': Counter({'grooming': 1})
         }
     ],
     'raccoon': [
         {
-            'answers.howmanyanimalsdoyousee': Counter({'1': 1}),
-            'answers.whatistheanimalsdoing': Counter({'grooming': 1})
+            'answers_howmanyanimalsdoyousee': Counter({'1': 1}),
+            'answers_whatistheanimalsdoing': Counter({'grooming': 1})
         },
         {
-            'answers.howmanyanimalsdoyousee': Counter({'1': 1}),
-            'answers.whatistheanimalsdoing': Counter({'standing': 1})
+            'answers_howmanyanimalsdoyousee': Counter({'1': 1}),
+            'answers_whatistheanimalsdoing': Counter({'standing': 1})
         },
         {
-            'answers.clickwowifthisasanespeciallyawesomephoto': Counter({'wow': 1}),
-            'answers.howmanyanimalsdoyousee': Counter({'1': 1}),
-            'answers.whatistheanimalsdoing': Counter({'standing': 1})
+            'answers_clickwowifthisasanespeciallyawesomephoto': Counter({'wow': 1}),
+            'answers_howmanyanimalsdoyousee': Counter({'1': 1}),
+            'answers_whatistheanimalsdoing': Counter({'standing': 1})
         },
         {
-            'answers.howmanyanimalsdoyousee': Counter({'1': 1}),
-            'answers.whatistheanimalsdoing': Counter({'standing': 1})
+            'answers_howmanyanimalsdoyousee': Counter({'1': 1}),
+            'answers_whatistheanimalsdoing': Counter({'standing': 1})
         }
     ]
 }
@@ -63,14 +63,14 @@ reduced_data = [
         'choice': 'raccoon',
         'total_vote_count': 8,
         'choice_count': 4,
-        'answers.howmanyanimalsdoyousee': {
+        'answers_howmanyanimalsdoyousee': {
             '1': 4
         },
-        'answers.whatistheanimalsdoing': {
+        'answers_whatistheanimalsdoing': {
             'standing': 3,
             'grooming': 1
         },
-        'answers.clickwowifthisasanespeciallyawesomephoto': {
+        'answers_clickwowifthisasanespeciallyawesomephoto': {
             'wow': 1
         }
     },
@@ -78,15 +78,15 @@ reduced_data = [
         'choice': 'blackbear',
         'total_vote_count': 8,
         'choice_count': 4,
-        'answers.howmanyanimalsdoyousee': {
+        'answers_howmanyanimalsdoyousee': {
             '1': 4
         },
-        'answers.whatistheanimalsdoing': {
+        'answers_whatistheanimalsdoing': {
             'standing': 2,
             'grooming': 2,
             'interacting': 1
         },
-        'answers.clickwowifthisasanespeciallyawesomephoto': {
+        'answers_clickwowifthisasanespeciallyawesomephoto': {
             'wow': 2
         }
     }

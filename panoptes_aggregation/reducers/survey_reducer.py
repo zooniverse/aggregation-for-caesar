@@ -8,9 +8,7 @@ def process_data(data):
         choice = d.pop('choice')
         outer = {}
         for key, value in d.items():
-            key_split = key.split('.')
-            outer_key = '.'.join(key_split[:-1])
-            outer.setdefault(outer_key, Counter())[key_split[-1]] = int(value)
+            outer[key] = Counter(value)
         data_out.setdefault(choice, []).append(outer)
     return data_out, vote_count
 
