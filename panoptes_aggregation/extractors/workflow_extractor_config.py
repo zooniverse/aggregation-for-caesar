@@ -5,7 +5,7 @@ def workflow_extractor_config(tasks):
             tools_config = {}
             for tdx, tool in enumerate(task['tools']):
                 if ((tool['type'] == 'polygon') and
-                   (len(tool['details']) > 0) and
+                   (len(tool['details']) == 1) and
                    (tool['details'][0]['type'] == 'text')):
                     # this is very ugly but I can't think of a better way to auto detect this
                     tools_config.setdefault('poly_line_text_extractor'.format(tool['type']), []).append(tdx)
