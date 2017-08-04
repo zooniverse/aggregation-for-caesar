@@ -16,7 +16,7 @@ class TestSurveyExtractor(unittest.TestCase):
                         'filters': {}
                     }, {
                         'choice': 'PECCARYCOLLARED',
-                        'answers': {'HOWMANY': '3'},
+                        'answers': {'HOWMANY': '3', 'WHATDOING': ['standing', 'sleeping']},
                         'filters': {}
                     }, {
                         'choice': 'NOTHINGHERE',
@@ -29,11 +29,12 @@ class TestSurveyExtractor(unittest.TestCase):
         self.expected = [
             {
                 'choice': 'agouti',
-                'answers.howmany': {'1': 1}
+                'answers_howmany': {'1': 1}
             },
             {
                 'choice': 'peccarycollared',
-                'answers.howmany': {'3': 1}
+                'answers_howmany': {'3': 1},
+                'answers_whatdoing': {'standing': 1, 'sleeping': 1}
             },
             {
                 'choice': 'nothinghere',
