@@ -1,14 +1,13 @@
 import unittest
+import copy
 from panoptes_aggregation.extractors import filter_annotations
 
-
-class TestFilterAnnotations(unittest.TestCase):
-    def setUp(self):
-        self.maxDiff = None
-        self.annotation = [{
-            'task': 'T0',
-            'task_label': 'Please mark the galaxy centre(s) and any foreground stars you see.',
-            'value': [{
+annotation = [
+    {
+        'task': 'T0',
+        'task_label': 'Please mark the galaxy centre(s) and any foreground stars you see.',
+        'value': [
+            {
                 'details': [],
                 'frame': 0,
                 'tool': 0,
@@ -31,24 +30,33 @@ class TestFilterAnnotations(unittest.TestCase):
                 'y1': 184.78,
                 'x2': 446.35,
                 'y2': 278.33
-            }]
-        }, {
-            'task': 'T1',
-            'task_label': 'A single question',
-            'value': 'Yes'
-        }, {
-            'task': 'T2',
-            'task_label': 'A multi question',
-            'value': ['Blue', 'Green']
-        }]
-        self.config = {
-            'T0': {
-                'line_extractor': [1],
-                'point_extractor': [0, 2]
-            },
-            'T1': 'question_extractor',
-            'T2': 'question_extractor'
-        }
+            }
+        ]
+    }, {
+        'task': 'T1',
+        'task_label': 'A single question',
+        'value': 'Yes'
+    }, {
+        'task': 'T2',
+        'task_label': 'A multi question',
+        'value': ['Blue', 'Green']
+    }
+]
+
+config = {
+    'T0': {
+        'line_extractor': [1],
+        'point_extractor': [0, 2]
+    },
+    'T1': 'question_extractor',
+    'T2': 'question_extractor'
+}
+
+
+class TestFilterAnnotations(unittest.TestCase):
+    def setUp(self):
+        self.annotation = copy.deepcopy(annotation)
+        self.maxDiff = None
 
     def test_filter(self):
         expected_result = {
@@ -88,7 +96,7 @@ class TestFilterAnnotations(unittest.TestCase):
                 'value': ['Blue', 'Green']
             }]
         }
-        result = filter_annotations(self.annotation, self.config)
+        result = filter_annotations(self.annotation, config)
         self.assertDictEqual(result, expected_result)
 
     def test_filter_human(self):
@@ -136,7 +144,7 @@ class TestFilterAnnotations(unittest.TestCase):
                 'value': ['Blue', 'Green']
             }]
         }
-        result = filter_annotations(self.annotation, self.config, human=True)
+        result = filter_annotations(self.annotation, config, human=True)
         self.assertDictEqual(result, expected_result)
 
 
