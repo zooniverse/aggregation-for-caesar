@@ -4,22 +4,24 @@ import flask
 import json
 from panoptes_aggregation import reducers
 
+extracted_data = [
+    {'a': 1, 'b': 1},
+    {'a': 1},
+    {'b': 1, 'c': 1},
+    {'b': 1, 'a': 1}
+]
+
 
 class TestProcessData(unittest.TestCase):
-    def setUp(self):
-        self.extracted_data = [
-            {'a': 1, 'b': 1},
-            {'a': 1},
-            {'b': 1, 'c': 1},
-            {'b': 1, 'a': 1}
-        ]
-
     def test_process_data(self):
-        result = reducers.question_reducer.process_data(self.extracted_data)
-        for r, e in zip(result, self.extracted_data):
+        result = reducers.question_reducer.process_data(extracted_data)
+        self.assertCountEqual(result, extracted_data)
+        '''
+        for r, e in zip(result, extracted_data):
             with self.subTest(i=e):
                 # note: Counter is a sub-class of dict, so a DictEqual will work here
                 self.assertDictEqual(r, e)
+        '''
 
     def test_process_data_pairs(self):
         expected = [
@@ -28,7 +30,7 @@ class TestProcessData(unittest.TestCase):
             {'b+c': 1},
             {'a+b': 1}
         ]
-        result = reducers.question_reducer.process_data(self.extracted_data, pairs=True)
+        result = reducers.question_reducer.process_data(extracted_data, pairs=True)
         for r, e in zip(result, expected):
             with self.subTest(i=e):
                 self.assertDictEqual(r, e)

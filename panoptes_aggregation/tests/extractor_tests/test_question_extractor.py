@@ -3,51 +3,55 @@ import json
 import flask
 from panoptes_aggregation import extractors
 
+single_classification = {
+    'annotations': [{
+        "task": "T0",
+        "task_label": "A single question",
+        "value": "Yes"
+    }]
+}
+
+multiple_classification = {
+    'annotations': [{
+        "task": "T1",
+        "task_label": "A multi question",
+        "value": ["Blue", "Green"]
+    }]
+}
+
+single_expected = {'yes': 1}
+
+multiple_expected = {'blue': 1, 'green': 1}
+
 
 class TestQuestionExtractor(unittest.TestCase):
-    def setUp(self):
-        self.single_classification = {
-            'annotations': [{
-                "task": "T0",
-                "task_label": "A single question",
-                "value": "Yes"
-            }]
-        }
-        self.multiple_classification = {
-            'annotations': [{
-                "task": "T1",
-                "task_label": "A multi question",
-                "value": ["Blue", "Green"]
-            }]
-        }
-        self.expected_single = {'yes': 1}
-        self.expected_multiple = {'blue': 1, 'green': 1}
-
     def test_single(self):
-        result = extractors.question_extractor.classification_to_extract(self.single_classification)
-        self.assertDictEqual(result, self.expected_single)
+        result = extractors.question_extractor.classification_to_extract(single_classification)
+        self.assertDictEqual(result, single_expected)
 
     def test_single_request(self):
         request_kwargs = {
-            'data': json.dumps(self.single_classification),
+            'data': json.dumps(single_classification),
             'content_type': 'application/json'
         }
         app = flask.Flask(__name__)
         with app.test_request_context(**request_kwargs):
-            self.assertDictEqual(extractors.question_extractor.question_extractor_request(flask.request), self.expected_single)
+            result = extractors.question_extractor.question_extractor_request(flask.request)
+            self.assertDictEqual(result, single_expected)
 
     def test_multiple(self):
-        result = extractors.question_extractor.classification_to_extract(self.multiple_classification)
-        self.assertDictEqual(result, self.expected_multiple)
+        result = extractors.question_extractor.classification_to_extract(multiple_classification)
+        self.assertDictEqual(result, multiple_expected)
 
     def test_multiple_request(self):
         request_kwargs = {
-            'data': json.dumps(self.multiple_classification),
+            'data': json.dumps(multiple_classification),
             'content_type': 'application/json'
         }
         app = flask.Flask(__name__)
         with app.test_request_context(**request_kwargs):
-            self.assertDictEqual(extractors.question_extractor.question_extractor_request(flask.request), self.expected_multiple)
+            result = extractors.question_extractor.question_extractor_request(flask.request)
+            self.assertDictEqual(result, multiple_expected)
 
 
 if __name__ == '__main__':
