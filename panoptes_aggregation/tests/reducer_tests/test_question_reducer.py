@@ -11,58 +11,34 @@ extracted_data = [
     {'b': 1, 'a': 1}
 ]
 
+processed_data = [
+    Counter({'a': 1, 'b': 1}),
+    Counter({'a': 1}),
+    Counter({'b': 1, 'c': 1}),
+    Counter({'b': 1, 'a': 1})
+]
 
-class TestProcessData(unittest.TestCase):
-    def test_process_data(self):
-        result = reducers.question_reducer.process_data(extracted_data)
-        self.assertCountEqual(result, extracted_data)
-        '''
-        for r, e in zip(result, extracted_data):
-            with self.subTest(i=e):
-                # note: Counter is a sub-class of dict, so a DictEqual will work here
-                self.assertDictEqual(r, e)
-        '''
+processed_data_pairs = [
+    Counter({'a+b': 1}),
+    Counter({'a': 1}),
+    Counter({'b+c': 1}),
+    Counter({'a+b': 1})
+]
 
-    def test_process_data_pairs(self):
-        expected = [
-            {'a+b': 1},
-            {'a': 1},
-            {'b+c': 1},
-            {'a+b': 1}
-        ]
-        result = reducers.question_reducer.process_data(extracted_data, pairs=True)
-        for r, e in zip(result, expected):
-            with self.subTest(i=e):
-                self.assertDictEqual(r, e)
+reduced_data = {
+    'a': 3,
+    'b': 3,
+    'c': 1
+}
 
-
-class TestCountVote(unittest.TestCase):
-    def setUp(self):
-        self.processed_data = [
-            Counter({'a': 1, 'b': 1}),
-            Counter({'a': 1}),
-            Counter({'b': 1, 'c': 1}),
-            Counter({'b': 1, 'a': 1})
-        ]
-        self.expected = {'a': 3, 'b': 3, 'c': 1}
-        self.processed_data_pairs = [
-            Counter({'a+b': 1}),
-            Counter({'a': 1}),
-            Counter({'b+c': 1}),
-            Counter({'a+b': 1})
-        ]
-        self.expected_pairs = {'a+b': 2, 'a': 1, 'b+c': 1}
-
-    def test_count_vote(self):
-        reuslt = reducers.question_reducer.count_votes(self.processed_data)
-        self.assertDictEqual(reuslt, self.expected)
-
-    def test_count_vote_pairs(self):
-        reuslt = reducers.question_reducer.count_votes(self.processed_data_pairs)
-        self.assertDictEqual(reuslt, self.expected_pairs)
+reduced_data_pairs = {
+    'a+b': 2,
+    'a': 1,
+    'b+c': 1
+}
 
 
-class TestReducerRequest(unittest.TestCase):
+class TestCountQuestions(unittest.TestCase):
     def setUp(self):
         self.app = flask.Flask(__name__)
         request_data = json.dumps([
@@ -76,15 +52,31 @@ class TestReducerRequest(unittest.TestCase):
             'content_type': 'application/json'
         }
 
+    def test_process_data(self):
+        result = reducers.question_reducer.process_data(extracted_data)
+        self.assertCountEqual(result, processed_data)
+
+    def test_process_data_pairs(self):
+        result = reducers.question_reducer.process_data(extracted_data, pairs=True)
+        self.assertCountEqual(result, processed_data_pairs)
+
+    def test_count_vote(self):
+        reuslt = reducers.question_reducer.count_votes(processed_data)
+        self.assertDictEqual(reuslt, reduced_data)
+
+    def test_count_vote_pairs(self):
+        reuslt = reducers.question_reducer.count_votes(processed_data_pairs)
+        self.assertDictEqual(reuslt, reduced_data_pairs)
+
     def test_process_request(self):
-        expected = {'a': 3, 'b': 3, 'c': 1}
         with self.app.test_request_context(**self.request_kwargs):
-            self.assertDictEqual(reducers.question_reducer.question_reducer_request(flask.request), expected)
+            result = reducers.question_reducer.question_reducer_request(flask.request)
+            self.assertDictEqual(result, reduced_data)
 
     def test_process_request_pairs(self):
-        expected = {'a+b': 2, 'a': 1, 'b+c': 1}
         with self.app.test_request_context('/?pairs=True', **self.request_kwargs):
-            self.assertDictEqual(reducers.question_reducer.question_reducer_request(flask.request), expected)
+            result = reducers.question_reducer.question_reducer_request(flask.request)
+            self.assertDictEqual(result, reduced_data_pairs)
 
 
 if __name__ == '__main__':
