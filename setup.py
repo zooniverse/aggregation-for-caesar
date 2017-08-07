@@ -14,7 +14,11 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     extra_require={
-        'online': ['flask']
+        'online': [
+            'flask',
+            'sphinx',
+            'numpydoc'
+        ]
     },
     install_requires=[
         'numpy',
