@@ -17,6 +17,7 @@ setup(
         'online': [
             'flask',
             'sphinx',
+            'sphinxcontrib-httpdomain',
             'numpydoc'
         ]
     },

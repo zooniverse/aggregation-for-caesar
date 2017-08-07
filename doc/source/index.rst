@@ -10,6 +10,9 @@ Welcome to panoptes_aggregation's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+.. autoflask:: routs:application
+  :endpoints:
+
 .. automodule:: panoptes_aggregation
   :members: extractors, reducers
 
