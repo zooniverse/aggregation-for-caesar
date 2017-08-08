@@ -14,7 +14,7 @@ def unpack_annotations(annotations):
 def extractor_wrapper(func):
     @wraps(func)
     def wrapper(argument):
-        #: check if arugment is a flask request
+        #: check if argument is a flask request
         if hasattr(argument, 'get_json'):
             data = argument.get_json()
             annotations = data['annotations']

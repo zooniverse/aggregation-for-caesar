@@ -1,4 +1,5 @@
 from collections import Counter, OrderedDict
+from .reducer_wrapper import reducer_wrapper
 
 
 def process_data(data):
@@ -13,7 +14,9 @@ def process_data(data):
     return data_out, vote_count
 
 
-def count_votes(data, vote_count=0):
+@reducer_wrapper(process_data=process_data)
+def survey_reducer(data_in):
+    data, vote_count = data_in
     reduction_list = []
     for choice, answers in data.items():
         reduction = OrderedDict()
@@ -32,13 +35,3 @@ def count_votes(data, vote_count=0):
                 reduction[key] = dict(value)
         reduction_list.append(reduction)
     return reduction_list
-
-
-def survey_reducer_request(request):
-    data, vote_count = process_data([d['data'] for d in request.get_json()])
-    return count_votes(data, vote_count=vote_count)
-
-
-def reducer_base(data_in):
-    data, vote_count = process_data(data_in)
-    return count_votes(data, vote_count=vote_count)

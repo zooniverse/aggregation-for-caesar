@@ -2,7 +2,8 @@ import unittest
 import numpy as np
 import flask
 import json
-from panoptes_aggregation import reducers
+from panoptes_aggregation.reducers.cluster_points import process_data, point_reducer
+from panoptes_aggregation.reducers.test_utils import extract_in_data
 
 c0_cov = np.array([[3, 0.5], [0.5, 4]])
 c1_cov = np.array([[7, -0.5], [-0.5, 5]])
@@ -49,38 +50,41 @@ reduced_data = {
 
 class TestClusterPoints(unittest.TestCase):
     def test_process_data(self):
-        result = reducers.cluster_points.process_data(extracted_data)
+        result = process_data(extracted_data)
         self.assertDictEqual(result, processed_data)
 
     def test_keys(self):
-        result = reducers.cluster_points.cluster_points(processed_data, eps=5, min_samples=3)
+        result = point_reducer(extracted_data, eps=5, min_samples=3)
         for i in reduced_data.keys():
             with self.subTest(i=i):
                 self.assertIn(i, result)
 
     def test_cluster_values(self):
-        result = reducers.cluster_points.cluster_points(processed_data, eps=5, min_samples=3)
+        result = point_reducer._original(processed_data, eps=5, min_samples=3)
         for i in result.keys():
             with self.subTest(i=i):
                 np.testing.assert_allclose(result[i], reduced_data[i], atol=2)
 
     def test_type(self):
-        result = reducers.cluster_points.cluster_points(processed_data, eps=5, min_samples=3)
+        result = point_reducer._original(processed_data, eps=5, min_samples=3)
         for i in result.values():
             with self.subTest(i=i):
                 self.assertIsInstance(i, list)
 
+    def test_point_reducer(self):
+        result = point_reducer(extracted_data, eps=5, min_samples=3)
+        for i in result.keys():
+            with self.subTest(i=i):
+                np.testing.assert_allclose(result[i], reduced_data[i], atol=2)
+
     def test_process_request(self):
         app = flask.Flask(__name__)
-        extracted_request_data = []
-        for data in extracted_data:
-            extracted_request_data.append({'data': data})
         request_kwargs = {
-            'data': json.dumps(extracted_request_data),
+            'data': json.dumps(extract_in_data(extracted_data)),
             'content_type': 'application/json'
         }
         with app.test_request_context('/?eps=5&min_samples=3', **request_kwargs):
-            result = reducers.cluster_points.point_reducer_request(flask.request)
+            result = point_reducer(flask.request)
             for i in result.keys():
                 with self.subTest(i=i):
                     np.testing.assert_allclose(result[i], reduced_data[i], atol=2)

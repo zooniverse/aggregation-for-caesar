@@ -1,8 +1,7 @@
 import numpy as np
-from sklearn.cluster import DBSCAN
-from .process_kwargs import process_kwargs
-from .cluster_points import cluster_points, DEFAULTS
+from .cluster_points import point_reducer, DEFAULTS
 from collections import OrderedDict
+from .reducer_wrapper import reducer_wrapper
 
 
 def process_data(data_list):
@@ -18,12 +17,13 @@ def process_data(data_list):
     return data_by_frame
 
 
-def cluster_poly_lines(data_by_frame, **kwargs):
+@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
+def poly_line_text_reducer(data_by_frame, **kwargs):
     reduced_data = OrderedDict()
     data_by_frame_locs = {}
     for frame, value in data_by_frame.items():
         data_by_frame_locs[frame] = value['loc']
-    full_cluster_data = cluster_points(data_by_frame_locs, **kwargs)
+    full_cluster_data = point_reducer._original(data_by_frame_locs, **kwargs)
     for frame in sorted(data_by_frame.keys()):
         reduced_data[frame] = OrderedDict()
         reduced_data[frame]['clusters_x'] = full_cluster_data['{0}_clusters_x'.format(frame)]
@@ -35,15 +35,3 @@ def cluster_poly_lines(data_by_frame, **kwargs):
             text_list = list(np.array(data_by_frame[frame]['text'])[kdx])
             reduced_data[frame]['clusters_text'].append(text_list)
     return reduced_data
-
-
-def poly_line_text_reducer_request(request):
-    data = process_data([d['data'] for d in request.get_json()])
-    kwargs = process_kwargs(request.args, DEFAULTS)
-    return cluster_poly_lines(data, **kwargs)
-
-
-def reducer_base(data_in, **kwargs):
-    data = process_data(data_in)
-    kwargs_parse = process_kwargs(kwargs, DEFAULTS)
-    return cluster_poly_lines(data, **kwargs_parse)

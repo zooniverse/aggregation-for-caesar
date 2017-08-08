@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.cluster import DBSCAN
-from .process_kwargs import process_kwargs
 from collections import OrderedDict
+from .reducer_wrapper import reducer_wrapper
 
 
 DEFAULTS = {
@@ -25,7 +25,8 @@ def process_data(data):
     return data_by_tool
 
 
-def cluster_points(data_by_tool, **kwargs):
+@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
+def point_reducer(data_by_tool, **kwargs):
     clusters = OrderedDict()
     for tool, loc_list in data_by_tool.items():
         loc = np.array(loc_list)
@@ -58,15 +59,3 @@ def cluster_points(data_by_tool, **kwargs):
                         clusters.setdefault('{0}_clusters_var_y'.format(tool), []).append(None)
                         clusters.setdefault('{0}_clusters_var_x_y'.format(tool), []).append(None)
     return clusters
-
-
-def point_reducer_request(request):
-    data = process_data([d['data'] for d in request.get_json()])
-    kwargs = process_kwargs(request.args, DEFAULTS)
-    return cluster_points(data, **kwargs)
-
-
-def reducer_base(data_in, **kwargs):
-    data = process_data(data_in)
-    kwargs_parse = process_kwargs(kwargs, DEFAULTS)
-    return cluster_points(data, **kwargs_parse)
