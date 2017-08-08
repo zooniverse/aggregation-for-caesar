@@ -23,4 +23,5 @@ def extractor_wrapper(func):
             return func(data)
         else:
             return func(argument)
+    wrapper._original = func
     return wrapper
