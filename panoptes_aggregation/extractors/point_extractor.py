@@ -1,8 +1,10 @@
 from collections import OrderedDict
 from slugify import slugify
+from .extractor_wrapper import extractor_wrapper
 
 
-def classification_to_extract(classification):
+@extractor_wrapper
+def point_extractor(classification):
     extract = OrderedDict()
     for annotation in classification['annotations']:
         if 'task_label' in annotation:
@@ -20,8 +22,3 @@ def classification_to_extract(classification):
                 extract.setdefault('{0}_x'.format(key), []).append(value['x'])
                 extract.setdefault('{0}_y'.format(key), []).append(value['y'])
     return extract
-
-
-def point_extractor_request(request):
-    data = request.get_json()
-    return classification_to_extract(data)

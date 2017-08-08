@@ -1,8 +1,10 @@
 from collections import OrderedDict
 import copy
+from .extractor_wrapper import extractor_wrapper
 
 
-def classification_to_extract(classification):
+@extractor_wrapper
+def poly_line_text_extractor(classification):
     blank_frame = OrderedDict([
         ('points', OrderedDict([('x', []), ('y', [])])),
         ('text', [])
@@ -22,8 +24,3 @@ def classification_to_extract(classification):
             extract[frame]['points']['x'].append(point['x'])
             extract[frame]['points']['y'].append(point['y'])
     return extract
-
-
-def poly_line_text_extractor_request(request):
-    data = request.get_json()
-    return classification_to_extract(data)
