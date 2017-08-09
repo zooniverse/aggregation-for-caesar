@@ -196,5 +196,5 @@ Clustering points:
 
 1. Use [PEP8](https://www.python.org/dev/peps/pep-0008/) syntax
 2. Automatic documentation will be created using [sphinx](http://www.sphinx-doc.org/en/stable/) so add doc strings to any function written
-3. A guide for writing [extractors](extractors/README.md)
-4. A guide for writing [reducers](reducers/README.md)
+3. A guide for writing [extractors](panoptes_aggregation/extractors/README.md)
+4. A guide for writing [reducers](panoptes_aggregation/reducers/README.md)
