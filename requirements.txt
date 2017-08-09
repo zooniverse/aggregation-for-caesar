@@ -1,4 +1,8 @@
 Flask
 nose
+numpy
 python-slugify
-zappa
+scipy
+scikit-learn
+scikit-image
+werkzeug
