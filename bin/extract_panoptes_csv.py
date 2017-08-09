@@ -65,8 +65,8 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, hum
         annotations_by_extractor = extractors.filter_annotations(json.loads(classification.annotations), extractor_config, human=human)
         for extractor_name, annotations_list in annotations_by_extractor.items():
             for annotations in annotations_list:
-                if extractor_name in extractors.extractors_base:
-                    extract = extractors.extractors_base[extractor_name]({'annotations': [annotations]})
+                if extractor_name in extractors.extractors:
+                    extract = extractors.extractors[extractor_name]({'annotations': [annotations]})
                     if isinstance(extract, list):
                         for e in extract:
                             extracted_data.setdefault(extractor_name, copy.deepcopy(blank_extracted_data))

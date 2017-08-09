@@ -2,6 +2,7 @@ import unittest
 import json
 import flask
 from panoptes_aggregation import extractors
+from panoptes_aggregation.extractors.test_utils import annotation_by_task
 
 classification = {
     "annotations": [
@@ -111,17 +112,17 @@ class TestPolyLineTextExtractor(unittest.TestCase):
         self.maxDiff = None
 
     def test_extract(self):
-        result = extractors.poly_line_text_extractor.classification_to_extract(classification)
+        result = extractors.poly_line_text_extractor(classification)
         self.assertDictEqual(result, expected)
 
     def test_request(self):
         request_kwargs = {
-            'data': json.dumps(classification),
+            'data': json.dumps(annotation_by_task(classification)),
             'content_type': 'application/json'
         }
         app = flask.Flask(__name__)
         with app.test_request_context(**request_kwargs):
-            result = extractors.poly_line_text_extractor.poly_line_text_extractor_request(flask.request)
+            result = extractors.poly_line_text_extractor(flask.request)
             self.assertDictEqual(result, expected)
 
 

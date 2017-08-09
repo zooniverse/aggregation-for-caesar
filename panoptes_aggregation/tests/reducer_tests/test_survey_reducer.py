@@ -3,7 +3,8 @@ from collections import Counter
 import copy
 import flask
 import json
-from panoptes_aggregation import reducers
+from panoptes_aggregation.reducers.survey_reducer import process_data, survey_reducer
+from panoptes_aggregation.reducers.test_utils import extract_in_data
 
 extracted_data = [
     {'answers_howmanyanimalsdoyousee': {'1': 1.0}, 'answers_whatistheanimalsdoing': {'grooming': 1.0}, 'choice': 'raccoon'},
@@ -101,25 +102,26 @@ class TestCountSurvey(unittest.TestCase):
         self.reduced_data = copy.deepcopy(reduced_data)
 
     def test_process_data(self):
-        result_data, result_count = reducers.survey_reducer.process_data(self.extracted_data)
+        result_data, result_count = process_data(self.extracted_data)
         self.assertEqual(result_count, len(self.extracted_data))
         self.assertDictEqual(result_data, self.processed_data)
 
     def test_count_vote(self):
-        result = reducers.survey_reducer.count_votes(self.processed_data, vote_count=len(self.extracted_data))
+        result = survey_reducer._original((self.processed_data, len(self.extracted_data)))
         self.assertCountEqual(result, self.reduced_data)
 
-    def test_process_request(self):
+    def test_survey_reducer(self):
+        result = survey_reducer(self.extracted_data)
+        self.assertCountEqual(result, self.reduced_data)
+
+    def test_survey_reducer_request(self):
         app = flask.Flask(__name__)
-        extracted_request_data = []
-        for data in self.extracted_data:
-            extracted_request_data.append({'data': data})
         request_kwargs = {
-            'data': json.dumps(copy.deepcopy(extracted_request_data)),
+            'data': json.dumps(extract_in_data(self.extracted_data)),
             'content_type': 'application/json'
         }
         with app.test_request_context(**request_kwargs):
-            result = reducers.survey_reducer.survey_reducer_request(flask.request)
+            result = survey_reducer(flask.request)
             self.assertCountEqual(result, self.reduced_data)
 
 

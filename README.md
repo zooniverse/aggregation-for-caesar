@@ -108,29 +108,6 @@ docker-compose up
 ```
 and listen on `localhost:5000`.
 
-## run [zappa](https://github.com/Miserlou/Zappa) commands
-Drop into docker's bash shell and run commands from there:
-```bash
-docker-compose run aggregation /bin/bash -l
-```
-Note: running command in this way will cache downloaded packages, so if you are actively debugging this is the way to go.
-
-Or if you have a one-off command:
-```bash
-docker-compose run aggregation /bin/bash -lc "zappa <cmd>"
-```
-
-To deploy to AWS-lambda first update `zappa_settings.json`'s `profile_name` with your `~/.aws/config` profile name and run:
-```bash
-docker-compose run aggregation /bin/bash -lc "zappa deploy dev"
-```
-NOTE: the docker container will add your `~/.aws` forlder as a volume.
-
-To update after the first deploy:
-```bash
-docker-compose run aggregation /bin/bash -lc "zappa update dev"
-```
-
 ## run tests
 To run the tests use:
 ```bash
@@ -214,3 +191,10 @@ Clustering points:
       T0_tool1_points...
     }
     ```
+
+# Contributing
+
+1. Use [PEP8](https://www.python.org/dev/peps/pep-0008/) syntax
+2. Automatic documentation will be created using [sphinx](http://www.sphinx-doc.org/en/stable/) so add doc strings to any function written
+3. A guide for writing [extractors](extractors/README.md)
+4. A guide for writing [reducers](reducers/README.md)

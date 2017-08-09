@@ -1,8 +1,10 @@
 from collections import Counter
 from slugify import slugify
+from .extractor_wrapper import extractor_wrapper
 
 
-def classification_to_extract(classification):
+@extractor_wrapper
+def question_extractor(classification):
     # assumes only one task is filtered into the extractor
     annotation = classification['annotations'][0]
     answers = Counter()
@@ -12,8 +14,3 @@ def classification_to_extract(classification):
     else:
         answers[slugify(annotation['value'], separator='-')] += 1
     return dict(answers)
-
-
-def question_extractor_request(request):
-    data = request.get_json()
-    return classification_to_extract(data)

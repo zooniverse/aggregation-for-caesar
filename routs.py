@@ -11,9 +11,8 @@ def request_wrapper(name):
         @wraps(func)
         def wrapper():
             if request.method == 'GET':
-                return jonsify(name)
+                return jsonify(name)
             else:
-                print(name)
                 resp = jsonify(func(request))
                 resp.status_code = 200
                 return resp
@@ -35,7 +34,7 @@ application.route('/path', methods=['POST', 'GET'])(process_wrapper('string retu
 
 @application.route('/')
 def index():
-    return jonsify('Python extractors and reducers for panoptes aggregation.')
+    return jsonify('Python extractors and reducers for panoptes aggregation.')
 
 
 for route, route_function in reducers.reducers.items():

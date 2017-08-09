@@ -1,18 +1,45 @@
 # How to add a new extractor
 
-## Make new functions for the extractor
-At least two function must be defined for the extractor:
+## Make a new function for the extractor
 
-1. `classification_to_extract` takes in the raw classification json and returns the extracted data as a `dict`-like object
-2. `*_extractor_request` takes in a Flask request and passes the payload to the above function
-3. Write tests for both functions and place them in the `test/extractor_test/` folder
+1. Create a new file for the function in the `extractors` folder
+2. Define a new function `*_extractor` that takes in the raw classification json (as it appears in the classification dump `csv` from Panoptes) and returns a `dict`-like object of the extracted data.
+3. Use the `@extractor_wrapper` decorator on the function (can be imported with `from .extractor_wrapper import extractor_wrapper`).
+4. Write tests for the extractor and place it in the `tests/extractor_tests` folder, there should be at least two tests, on for a raw classification being passed into the function and the other for a API `request` being passed in (see existing tests for formatting the request framework correctly).
+
+### The `@extractor_wrapper` decorator
+
+This decorator removes the boiler plate code that goes along with making a extractor function that works with both the classification dump `csv` files (offline) and API request from caesar (online).  If A `request` is passed into the function it will pull the data out as json and pass it into the extractor, if anything else is passed in the function will be called directly.  Additionally caesar passes the classification in with a slightly different syntax, this wrapper will unpack it back into the raw classification format before passing it into the extractor.  For reference the two syntax are:
+
+Raw classification format
+```json
+{
+  "annotations": [{
+      "task": "T0",
+      "task_label": "A single question",
+      "value": "Yes"
+  }]
+}
+```
+
+Caesar classification format
+```json
+{
+  "annotations": [{
+      "T0": [{
+        "task": "T0",
+        "task_label": "A single question",
+        "value": "Yes"
+      }]
+  }]
+}
+```
 
 ## Create the route to the extractor
 The routes are automatically constructed using the `extractors` dictionary in the `__init__.py` file:
 
-1. import the new extractor
-2. Add the `*_extractor_request` function to the `extractors` dictionary with a sensible route name as the `key`
-3. Add the `classification_to_extract` function to the `extractors_base` dictionary with the same `key` (this is used in the offline version of the code)
+1. import the new extractor into the `__init__.py` file with the following format `from .*_extractor import *_extractor`
+2. Add the `*_extractor` function to the `extractors` dictionary with a sensible route name as the `key` (typically the `key` should be the same as the extractor name)
 
 ## Allow the offline version of the code automatically detect this extractor type from a workflow object
 

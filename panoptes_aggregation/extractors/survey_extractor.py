@@ -1,10 +1,12 @@
 from collections import OrderedDict
 from slugify import slugify
 import itertools
-from . import question_extractor
+from .question_extractor import question_extractor
+from .extractor_wrapper import extractor_wrapper
 
 
-def classification_to_extract(classification):
+@extractor_wrapper
+def survey_extractor(classification):
     extract_list = []
     annotation = classification['annotations'][0]
     for value in annotation['value']:
@@ -19,12 +21,7 @@ def classification_to_extract(classification):
                         {'value': answer}
                     ]
                 }
-                v = question_extractor.classification_to_extract(question_classification)
+                v = question_extractor(question_classification)
                 extract['answers_{0}'.format(k)] = v
         extract_list.append(extract)
     return extract_list
-
-
-def survey_extractor_request(request):
-    data = request.get_json()
-    return classification_to_extract(data)

@@ -1,5 +1,5 @@
 from collections import Counter
-from .process_kwargs import process_kwargs
+from .reducer_wrapper import reducer_wrapper
 
 DEFAULTS = {
     'pairs': {'default': False, 'type': bool}
@@ -17,18 +17,7 @@ def process_data(data, pairs=False):
     return data_out
 
 
-def count_votes(votes_list):
+@reducer_wrapper(process_data=process_data, defaults_process=DEFAULTS)
+def question_reducer(votes_list):
     counter_total = sum(votes_list, Counter())
     return dict(counter_total)
-
-
-def question_reducer_request(request):
-    kwargs = process_kwargs(request.args, DEFAULTS)
-    data = process_data([d['data'] for d in request.get_json()], **kwargs)
-    return count_votes(data)
-
-
-def reducer_base(data_in, **kwargs):
-    kwargs_parse = process_kwargs(kwargs, DEFAULTS)
-    data = process_data(data_in, **kwargs_parse)
-    return count_votes(data)

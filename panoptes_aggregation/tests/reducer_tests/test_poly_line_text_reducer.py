@@ -1,7 +1,8 @@
 import unittest
 import flask
 import json
-from panoptes_aggregation import reducers
+from panoptes_aggregation.reducers.poly_line_text_reducer import process_data, poly_line_text_reducer
+from panoptes_aggregation.reducers.test_utils import extract_in_data
 
 extracted_data = [
     {
@@ -162,24 +163,25 @@ class TestClusterLines(unittest.TestCase):
         self.maxDiff = None
 
     def test_process_data(self):
-        result = reducers.poly_line_text_reducer.process_data(extracted_data)
+        result = process_data(extracted_data)
         self.assertDictEqual(result, processed_data)
 
     def test_cluster_lines(self):
-        result = reducers.poly_line_text_reducer.cluster_poly_lines(processed_data, eps=3, min_samples=1)
+        result = poly_line_text_reducer._original(processed_data, eps=3, min_samples=1)
         self.assertDictEqual(result, reduced_data)
 
-    def test_process_request(self):
+    def test_poly_line_text_reducer(self):
+        result = poly_line_text_reducer(extracted_data, eps=3, min_samples=1)
+        self.assertDictEqual(result, reduced_data)
+
+    def test_poly_line_text_reducer_request(self):
         app = flask.Flask(__name__)
-        extracted_request_data = []
-        for data in extracted_data:
-            extracted_request_data.append({'data': data})
         request_kwargs = {
-            'data': json.dumps(extracted_request_data),
+            'data': json.dumps(extract_in_data(extracted_data)),
             'content_type': 'application/json'
         }
         with app.test_request_context('/?eps=3&min_samples=1', **request_kwargs):
-            result = reducers.poly_line_text_reducer.poly_line_text_reducer_request(flask.request)
+            result = poly_line_text_reducer(flask.request)
             self.assertDictEqual(result, reduced_data)
 
 

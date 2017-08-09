@@ -68,7 +68,7 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
             elif filter == 'last':
                 classifications = classifications.groupby(['user_name'], group_keys=False).apply(last_filter)
             data = [unflatten_data(c) for cdx, c in classifications.iterrows()]
-            reduction = reducers.reducer_base[reducer_name](data, **keywords)
+            reduction = reducers.reducer[reducer_name](data, **keywords)
             if isinstance(reduction, list):
                 for r in reduction:
                     reduced_data['subject_id'].append(subject)
