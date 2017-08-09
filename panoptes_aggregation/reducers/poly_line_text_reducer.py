@@ -1,5 +1,5 @@
 import numpy as np
-from .cluster_points import point_reducer, DEFAULTS
+from .point_reducer import point_reducer, DEFAULTS
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 

@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 import flask
 import json
-from panoptes_aggregation.reducers.cluster_points import process_data, point_reducer
+from panoptes_aggregation.reducers.point_reducer import process_data, point_reducer
 from panoptes_aggregation.reducers.test_utils import extract_in_data
 
 c0_cov = np.array([[3, 0.5], [0.5, 4]])

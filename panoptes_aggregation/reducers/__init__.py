@@ -1,4 +1,4 @@
-from .cluster_points import point_reducer
+from .point_reducer import point_reducer
 from .question_reducer import question_reducer
 from .survey_reducer import survey_reducer
 from .poly_line_text_reducer import poly_line_text_reducer
