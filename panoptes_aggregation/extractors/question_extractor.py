@@ -8,30 +8,37 @@ from .extractor_wrapper import extractor_wrapper
 
 @extractor_wrapper
 def question_extractor(classification):
-    r'''Extact annotations from a question task into a Counter object
+    '''Extract annotations from a question task into a Counter object
 
     Parameters
     ----------
     classification : dict
-                    A dictionary containing a `annotations` key that is a list of
-                    panoptes annotations
+        A dictionary containing an `annotations` key that is a list of
+        panoptes annotations
 
     Returns
     -------
-    dict
-        A dictionary in the formation of a counter indicating what annotations were
+    extraction : dict
+        A dictionary (formated like a counter) indicating what annotations were
         made
 
     Examples
     --------
-    >>> classification_multiple = {'annotations': [{'vlaue': ['Blue', 'Green']}]}
-    >>> classification_to_extract(classification_multiple)
+    >>> classification_multiple = {'annotations': [
+        {
+            'vlaue': ['Blue', 'Green']
+        }
+    ]}
+    >>> question_extractor(classification_multiple)
     {'blue': 1, 'green': 1}
-    >>> classification_single = {'annotations': [{'vlaue': 'Yes'}]}
-    >>> classification_to_extract(classification_single)
+
+    >>> classification_single = {'annotations': [
+        {'vlaue': 'Yes'}
+    ]}
+    >>> question_extractor(classification_single)
     {'yes': 1}
     '''
-    # assumes only one task is filtered into the extractor
+    #: assumes only one task is filtered into the extractor
     annotation = classification['annotations'][0]
     answers = Counter()
     if isinstance(annotation['value'], list):

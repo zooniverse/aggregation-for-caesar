@@ -10,13 +10,23 @@ Welcome to panoptes_aggregation's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-.. autoflask:: routs:application
-  :endpoints:
-
-.. automodule:: panoptes_aggregation
-  :members: extractors, reducers
-
+Extractors
+==========
 .. automodule:: panoptes_aggregation.extractors.question_extractor
+  :members:
+
+.. automodule:: panoptes_aggregation.extractors.point_extractor
+  :members:
+
+.. automodule:: panoptes_aggregation.extractors.survey_extractor
+  :members:
+
+.. automodule:: panoptes_aggregation.extractors.poly_line_text_extractor
+  :members:
+
+Reducers
+========
+.. automodule:: panoptes_aggregation.reducers.question_reducer
   :members:
 
 Indices and tables

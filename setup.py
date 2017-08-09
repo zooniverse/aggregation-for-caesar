@@ -17,8 +17,7 @@ setup(
         'online': [
             'flask',
             'sphinx',
-            'sphinxcontrib-httpdomain',
-            'numpydoc'
+            'sphinxcontrib-httpdomain'
         ]
     },
     install_requires=[
