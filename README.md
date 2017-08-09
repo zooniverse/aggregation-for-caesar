@@ -111,7 +111,7 @@ and listen on `localhost:5000`.
 ## run tests
 To run the tests use:
 ```bash
-docker-compose run aggregation /bin/bash -lc "nosetests -v"
+docker-compose run aggregation /bin/bash -lc "nosetests"
 ```
 
 ## API
