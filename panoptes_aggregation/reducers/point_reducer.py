@@ -1,3 +1,9 @@
+'''
+Point Reducer
+-------------
+This module provides functions to cluster points extracted with
+:mod:panoptes_aggregation.extractors.point_extractor.
+'''
 import numpy as np
 from sklearn.cluster import DBSCAN
 from collections import OrderedDict
@@ -15,6 +21,20 @@ DEFAULTS = {
 
 
 def process_data(data):
+    '''Process a list of extractions into lists of `x` and `y` sorted by `tool`
+
+    Parameters
+    ----------
+    data : list
+        A list of extractions crated by
+        :meth:`panoptes_aggregation.extractors.point_extractor.point_extractor`
+
+    Returns
+    -------
+    processed_data : dict
+        A dictionary with each key being a `tool` with a list of (`x`, `y`)
+        tuples as a vlaue
+    '''
     unique_tools = set(sum([['_'.join(k.split('_')[:-1]) for k in d.keys()] for d in data], []))
     data_by_tool = {}
     for tool in unique_tools:
@@ -27,6 +47,31 @@ def process_data(data):
 
 @reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
 def point_reducer(data_by_tool, **kwargs):
+    '''Cluster a list of points by tool
+
+    Parameters
+    ----------
+    data_by_tool : dict
+        A dictionary returned by :meth:`process_data`
+    kwrgs :
+        `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
+
+    Returns
+    -------
+    reduction : dict
+        A dictinary with the following keys
+
+        * `tool*_points_x` : A list of `x` positions for **all** points drawn with `tool*`
+        * `tool*_points_x` : A list of `y` positions for **all** points drawn with `tool*`
+        * `tool*_cluster_labels` : A list of cluster labels for **all** points drawn with `tool*`
+        * `tool*_clusters_count` : The number of points in each **cluster** found
+        * `tool*_clusters_x` : The `x` position for each **cluster** found
+        * `tool*_clusters_y` : The `y` position for each **cluster** found
+        * `tool*_clusters_var_x` : The `x` varaince of points in each **cluster** found
+        * `tool*_clusters_var_y` : The `y` varaince of points in each **cluster** found
+        * `tool*_clusters_var_x_y` : The `x-y` covaraince of points in each **cluster** found
+
+    '''
     clusters = OrderedDict()
     for tool, loc_list in data_by_tool.items():
         loc = np.array(loc_list)

@@ -1,3 +1,9 @@
+'''
+Survey Extractor
+----------------
+This module provides a function to extract choices and sub-questions from
+panoptes survey tasks.
+'''
 from collections import OrderedDict
 from slugify import slugify
 import itertools

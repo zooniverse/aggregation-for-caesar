@@ -12,6 +12,7 @@ Welcome to panoptes_aggregation's documentation!
 
 Extractors
 ==========
+
 .. automodule:: panoptes_aggregation.extractors.question_extractor
   :members:
 
@@ -26,7 +27,17 @@ Extractors
 
 Reducers
 ========
+
 .. automodule:: panoptes_aggregation.reducers.question_reducer
+  :members:
+
+.. automodule:: panoptes_aggregation.reducers.point_reducer
+  :members:
+
+.. automodule:: panoptes_aggregation.reducers.survey_reducer
+  :members:
+
+.. automodule:: panoptes_aggregation.reducers.poly_line_text_reducer
   :members:
 
 Indices and tables

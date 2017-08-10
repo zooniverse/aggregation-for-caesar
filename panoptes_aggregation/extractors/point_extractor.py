@@ -1,3 +1,8 @@
+'''
+Point Extractor
+---------------
+This module provides a function to extract drawn points from panoptes annotations.
+'''
 from collections import OrderedDict
 from slugify import slugify
 from .extractor_wrapper import extractor_wrapper

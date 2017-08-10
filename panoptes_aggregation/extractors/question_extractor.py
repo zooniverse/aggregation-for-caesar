@@ -1,4 +1,7 @@
-'''This module provides function to extract question tasks (single and multiple)
+'''
+Question Extractor
+------------------
+This module provides a function to extract question tasks (single and multiple)
 from panoptes annotations.
 '''
 from collections import Counter

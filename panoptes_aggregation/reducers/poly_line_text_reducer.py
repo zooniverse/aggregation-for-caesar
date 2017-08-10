@@ -1,3 +1,9 @@
+'''
+Polygon As Line Tool for Text Reducer
+-------------------------------------
+This module provides functions to reduce the polygon-text extractions from
+:mod:`panoptes_aggregation.extractors.poly_line_text_extractor`.
+'''
 import numpy as np
 from .point_reducer import point_reducer, DEFAULTS
 from collections import OrderedDict
@@ -5,6 +11,21 @@ from .reducer_wrapper import reducer_wrapper
 
 
 def process_data(data_list):
+    '''Process a list of extractions into a dictionary of `loc` and `text`
+    organized by `frame`
+
+    Parameters
+    ----------
+    data_list : list
+        A list of extractions created by
+        :meth:`panoptes_aggregation.extractors.poly_line_text_extractor.poly_line_text_extractor`
+
+    Returns
+    -------
+    processed_data : dict
+        A dictionary with keys for each `frame` of the subject and values being dictionaries
+        with `loc` (a list of (`x`, `y`) tuples) and `text` (a list of strings) keys.
+    '''
     data_by_frame = {}
     for data in data_list:
         for frame, value in data.items():
@@ -19,6 +40,24 @@ def process_data(data_list):
 
 @reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
 def poly_line_text_reducer(data_by_frame, **kwargs):
+    '''
+    Parameters
+    ----------
+    data_by_frame : dict
+        A dictionary returned by :meth:`process_data`
+    kwargs :
+        `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
+
+    Returns
+    -------
+    reduction : dict
+        A dictionary with on key for each `frame` of the subject that have dictionaries as values.
+        Those dictionaries have three keys:
+
+        * `clusters_x` : the `x` position of each identified cluster
+        * `clusters_y` : the `y` position of each identified cluster
+        * `clusters_text` : A list of text as ecah clster position
+    '''
     reduced_data = OrderedDict()
     data_by_frame_locs = {}
     for frame, value in data_by_frame.items():
