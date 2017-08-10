@@ -10,35 +10,8 @@ Welcome to panoptes_aggregation's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-Extractors
-==========
-
-.. automodule:: panoptes_aggregation.extractors.question_extractor
-  :members:
-
-.. automodule:: panoptes_aggregation.extractors.point_extractor
-  :members:
-
-.. automodule:: panoptes_aggregation.extractors.survey_extractor
-  :members:
-
-.. automodule:: panoptes_aggregation.extractors.poly_line_text_extractor
-  :members:
-
-Reducers
-========
-
-.. automodule:: panoptes_aggregation.reducers.question_reducer
-  :members:
-
-.. automodule:: panoptes_aggregation.reducers.point_reducer
-  :members:
-
-.. automodule:: panoptes_aggregation.reducers.survey_reducer
-  :members:
-
-.. automodule:: panoptes_aggregation.reducers.poly_line_text_reducer
-  :members:
+   extractros
+   reducers
 
 Indices and tables
 ==================
