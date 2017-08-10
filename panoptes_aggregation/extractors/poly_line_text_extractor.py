@@ -1,3 +1,10 @@
+'''
+Polygon As Line Tool for Text Extractor
+---------------------------------------
+This module provides a fuction of eaxtract panoptes annotations
+from porjects using a polygon tool to mark word in a transcribed
+document and provide the transcribed text as a sub-task.
+'''
 from collections import OrderedDict
 import copy
 from .extractor_wrapper import extractor_wrapper
@@ -5,6 +12,41 @@ from .extractor_wrapper import extractor_wrapper
 
 @extractor_wrapper
 def poly_line_text_extractor(classification):
+    '''Extract annotations from a polygon tool with a text sub-task
+
+    Parameters
+    ----------
+    classification : dict
+        A dictionary containing an `annotations` key that is a list of
+        panoptes annotations
+
+    Returns
+    -------
+    extraction : dict
+        A dictionary with one key for each `frame`. The value for each frame
+        is a dict with `text`,a list of transcribe words, and `points`, a
+        dict with the list of `x` and `y` postions of each word.
+
+    Examples
+    --------
+    >>> classification = {'annotations': [
+        'value': [
+            {
+                'frame': 0,
+                'points': [
+                    {'x': 756, 'y': 197}
+                ],
+                'details': [
+                    {'value': '[unclear]Cipher[/unclear]'}
+                ],
+            }
+    ]}
+    >>> poly_line_text_extractor(classification)
+    {'frame0': {
+        'points': {'x': [756], 'y': [197]},
+        'text': ['[unclear]Cipher[/unclear]']
+    }}
+    '''
     blank_frame = OrderedDict([
         ('points', OrderedDict([('x', []), ('y', [])])),
         ('text', [])

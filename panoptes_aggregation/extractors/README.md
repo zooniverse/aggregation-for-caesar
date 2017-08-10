@@ -46,5 +46,12 @@ The routes are automatically constructed using the `extractors` dictionary in th
 1. Update the `workflow_extractor_config.py` function with the new task type.  The value used for the type should be the same `key` used in the `__init__.py` file
 2. Update the `tests/extractor_tests/test_workflow_extractor_config.py` class with this new task type
 
+## Add to documentation
+The code is auto-documented using [sphinx](http://www.sphinx-doc.org/en/stable/index.html).
+
+1. Add a doc string to every function written and a "heading" doc string at the top of any new files created (follow the [numpy doc string convention](https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt))
+2. Add a reference to the new file to `doc/source/extractors.rst`
+3. Build the docs with `cd doc && make html`
+
 ## Make sure everything still works
 1. run `nosetests` and ensure all tests still pass

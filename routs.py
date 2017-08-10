@@ -1,9 +1,13 @@
-from flask import jsonify, request, Flask
+from flask import jsonify, request, Flask, send_from_directory
 from functools import wraps
+import os
 from panoptes_aggregation import reducers
 from panoptes_aggregation import extractors
 
-application = Flask(__name__, instance_relative_config=True)
+application = Flask(__name__,
+                    instance_relative_config=True,
+                    static_url_path='',
+                    static_folder='doc/build/html')
 
 
 def request_wrapper(name):
@@ -43,6 +47,11 @@ for route, route_function in reducers.reducers.items():
 
 for route, route_function in extractors.extractors.items():
     application.route('/extractors/{0}'.format(route), methods=['POST', 'GET'])(request_wrapper(route)(route_function))
+
+
+@application.route('/docs')
+def web_docs():
+    return application.send_static_file('index.html')
 
 
 if __name__ == "__main__":
