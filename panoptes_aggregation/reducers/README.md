@@ -45,5 +45,12 @@ The routes are automatically constructed using the `reducers` dictionary in the 
 1. import the new reducer into the `__init__.py` file with the following format `from .q*_reducer import *_reducer`
 2. Add the `*_reducer` function to the `reducer` dictionary with a sensible route name as the `key` (typically the `key` should be the same as the reducer name)
 
+## Add to documentation
+The code is auto-documented using [sphinx](http://www.sphinx-doc.org/en/stable/index.html).
+
+1. Add a doc string to every function written and a "heading" doc string at the top of any new files created (follow the [numpy doc string convention](https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt))
+2. Add a reference to the new file to `doc/source/reducers.rst`
+3. Build the docs with `cd doc && make html`
+
 ## Make sure everything still works
 1. run `nosetests` and ensure all tests still pass

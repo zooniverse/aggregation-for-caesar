@@ -106,7 +106,7 @@ To run a local version use:
 docker-compose build
 docker-compose up
 ```
-and listen on `localhost:5000`.
+and listen on `localhost:5000`.  The documentation will automatically be created and added to the '/docs' route.
 
 ## run tests
 To run the tests use:
@@ -114,87 +114,9 @@ To run the tests use:
 docker-compose run aggregation /bin/bash -lc "nosetests"
 ```
 
-## API
-
-### Extractors
-Question:
-  - endpoint: `extractors/question_extractor`
-  - This extracts the answers to single and multiple choice questions
-  - response contains a dictionary containing the choice counts exampole output:
-  ```js
-  {'a': 1, 'b': 1}
-  ```
-
-Drawn points:
-  - endpoint: `extractors/point_extractor`
-  - This extracts the data for drawn data points into a form that the `reducers/point_reducer` endpoint can use
-  - response contains the original data points into a list for `x` and `y` values of a single classification for each point tool on a workflow.  Example output:
-    ```js
-    {
-      'T0_tool0_x': [
-          452.18341064453125,
-          190.54489135742188,
-          408.8101806640625,
-          411.60845947265625,
-          482.96441650390625
-      ],
-      'T0_tool0_y': [
-          202.87478637695312,
-          306.410888671875,
-          235.054931640625,
-          158.1024169921875,
-          180.4886016845703
-      ],
-      'T0_tool1_x': [
-          404.61279296875,
-          422.8015441894531,
-          435.3937683105469,
-          371.03350830078125
-      ],
-      'T0_tool1_y': [
-          583.4398803710938,
-          568.0493774414062,
-          612.82177734375,
-          617.0191650390625
-      ]
-    }
-    ```
-
-### Reducers
-Counting question votes:
-  - endpoint: `reducers/question_reducer/`
-  - the response is a dictionary containing the counts for each choice:
-  ```js
-  {'a': 5, 'b': 15}
-  ```
-  - if the `?pairs=1` keyword is used it will group together multiple choice answers:
-  ```js
-  {'a': 1, 'a+b': 4, 'b': 11}
-  ```
-
-Clustering points:
-  - endpoint: `reducers/point_reducer/?eps=5&min_samples=3`
-  - This uses [scikitlearn's DBSCAN](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html#sklearn.cluster.DBSCAN) to cluster the data points. (NOTE: `eps` is in "pixels")
-  - URL args can be set for any of DBSCAN's keywords
-  - response contains the original data points, cluster labels, number of clustered points for each label, x and y position (in pixels) of the cluster centers, and values of the covariance matrix for clustered data points for each tool:
-    ```js
-    {
-      T0_tool0_points_x: [1, 2, 3, ...],
-      T0_tool0_points_y: [4, 5, 6, ...],
-      T0_tool0_cluster_labels: [0, 0, 0, 0, 0, -1, 1, 1, 1, 1, 1, ...],
-      T0_tool0_clusters_count: [5, 5, ...],
-      T0_tool0_clusters_x: [20, 5, ...],
-      T0_tool0_clusters_y: [10, 35, ...],
-      T0_tool0_clusters_var_x: [2, 1.5, ...],
-      T0_tool0_clusters_var_y: [1.5, 2, ...],
-      T0_tool0_clusters_var_x_y: [0.5, -0.5, ...],
-      T0_tool1_points...
-    }
-    ```
-
 # Contributing
 
 1. Use [PEP8](https://www.python.org/dev/peps/pep-0008/) syntax
-2. Automatic documentation will be created using [sphinx](http://www.sphinx-doc.org/en/stable/) so add doc strings to any function written
+2. Automatic documentation will be created using [sphinx](http://www.sphinx-doc.org/en/stable/) so add doc strings to any files created and functions written
 3. A guide for writing [extractors](panoptes_aggregation/extractors/README.md)
 4. A guide for writing [reducers](panoptes_aggregation/reducers/README.md)
