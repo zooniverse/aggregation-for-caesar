@@ -7,7 +7,7 @@ from panoptes_aggregation import extractors
 application = Flask(__name__,
                     instance_relative_config=True,
                     static_url_path='',
-                    static_folder='docs/build/html')
+                    static_folder='docs')
 
 
 def request_wrapper(name):
