@@ -1,5 +1,9 @@
 language: "python"
 python:
   - "3.6"
-install: pip install -U '.[online]'
+install:
+  - pip install -r requirements.txt
+  - pip install -U .
 script: nosetests
+notifications:
+  email: false
