@@ -11,6 +11,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . ./
 
 # make documentation
-RUN cd doc && make html && cd ..
+RUN /bin/bash -lc ./make_docs.sh
 
 CMD python routs.py

@@ -51,7 +51,7 @@ The code is auto-documented using [sphinx](http://www.sphinx-doc.org/en/stable/i
 
 1. Add a doc string to every function written and a "heading" doc string at the top of any new files created (follow the [numpy doc string convention](https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt))
 2. Add a reference to the new file to `doc/source/extractors.rst`
-3. Build the docs with `cd doc && make html`
+3. Build the docs with `./make_docs.sh`
 
 ## Make sure everything still works
 1. run `nosetests` and ensure all tests still pass

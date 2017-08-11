@@ -1,0 +1,335 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Reducers &#8212; panoptes_aggregation 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Extractors" href="extractros.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="extractros.html" title="Extractors"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">panoptes_aggregation 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Reducers</a><ul>
+<li><a class="reference internal" href="#question-reducer">Question Reducer</a></li>
+<li><a class="reference internal" href="#point-reducer">Point Reducer</a></li>
+<li><a class="reference internal" href="#survey-reducer">Survey Reducer</a></li>
+<li><a class="reference internal" href="#polygon-as-line-tool-for-text-reducer">Polygon As Line Tool for Text Reducer</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="extractros.html"
+                        title="previous chapter">Extractors</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/reducers.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-panoptes_aggregation.reducers.question_reducer">
+<span id="reducers"></span><h1>Reducers<a class="headerlink" href="#module-panoptes_aggregation.reducers.question_reducer" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="question-reducer">
+<h2>Question Reducer<a class="headerlink" href="#question-reducer" title="Permalink to this headline">¶</a></h2>
+<p>This module porvides functions to reduce the question task extracts from
+<a class="reference internal" href="extractros.html#module-panoptes_aggregation.extractors.question_extractor" title="panoptes_aggregation.extractors.question_extractor"><code class="xref py py-mod docutils literal"><span class="pre">panoptes_aggregation.extractors.question_extractor</span></code></a>.</p>
+<dl class="function">
+<dt id="panoptes_aggregation.reducers.question_reducer.process_data">
+<code class="descclassname">panoptes_aggregation.reducers.question_reducer.</code><code class="descname">process_data</code><span class="sig-paren">(</span><em>data</em>, <em>pairs=False</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.question_reducer.process_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a list of extracted questions into <cite>Counter</cite> objects</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>list</em>) &#8211; A list of extractions created by
+<a class="reference internal" href="extractros.html#panoptes_aggregation.extractors.question_extractor.question_extractor" title="panoptes_aggregation.extractors.question_extractor.question_extractor"><code class="xref py py-meth docutils literal"><span class="pre">panoptes_aggregation.extractors.question_extractor.question_extractor()</span></code></a></li>
+<li><strong>pairs</strong> (<em>bool, optional</em>) &#8211; Default <cite>False</cite>. How multiple choice questions are treated.
+When <cite>True</cite> the set of all choices is treated as a single answer</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>processed_data</strong> &#8211; A list of <cite>Counter</cite> objects, one for each extraction</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="panoptes_aggregation.reducers.question_reducer.question_reducer">
+<code class="descclassname">panoptes_aggregation.reducers.question_reducer.</code><code class="descname">question_reducer</code><span class="sig-paren">(</span><em>votes_list</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.question_reducer.question_reducer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce a list of <cite>Counter</cite> objects into a single dict</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>votes_list</strong> (<em>list</em>) &#8211; A list of <cite>Counter</cite> objects from <a class="reference internal" href="#panoptes_aggregation.reducers.question_reducer.process_data" title="panoptes_aggregation.reducers.question_reducer.process_data"><code class="xref py py-meth docutils literal"><span class="pre">process_data()</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>reduction</strong> &#8211; A dictionary (formated as a <cite>Counter</cite>) giving the vote count for each
+<cite>key</cite></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-panoptes_aggregation.reducers.point_reducer"></span><div class="section" id="point-reducer">
+<h2>Point Reducer<a class="headerlink" href="#point-reducer" title="Permalink to this headline">¶</a></h2>
+<p>This module provides functions to cluster points extracted with
+:mod:panoptes_aggregation.extractors.point_extractor.</p>
+<dl class="function">
+<dt id="panoptes_aggregation.reducers.point_reducer.point_reducer">
+<code class="descclassname">panoptes_aggregation.reducers.point_reducer.</code><code class="descname">point_reducer</code><span class="sig-paren">(</span><em>data_by_tool</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.point_reducer.point_reducer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cluster a list of points by tool</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data_by_tool</strong> (<em>dict</em>) &#8211; A dictionary returned by <a class="reference internal" href="#panoptes_aggregation.reducers.point_reducer.process_data" title="panoptes_aggregation.reducers.point_reducer.process_data"><code class="xref py py-meth docutils literal"><span class="pre">process_data()</span></code></a></li>
+<li><strong>kwrgs</strong> &#8211; <a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html">See DBSCAN</a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p><strong>reduction</strong> &#8211; A dictinary with the following keys</p>
+<ul class="simple">
+<li><cite>tool*_points_x</cite> : A list of <cite>x</cite> positions for <strong>all</strong> points drawn with <cite>tool*</cite></li>
+<li><cite>tool*_points_x</cite> : A list of <cite>y</cite> positions for <strong>all</strong> points drawn with <cite>tool*</cite></li>
+<li><cite>tool*_cluster_labels</cite> : A list of cluster labels for <strong>all</strong> points drawn with <cite>tool*</cite></li>
+<li><cite>tool*_clusters_count</cite> : The number of points in each <strong>cluster</strong> found</li>
+<li><cite>tool*_clusters_x</cite> : The <cite>x</cite> position for each <strong>cluster</strong> found</li>
+<li><cite>tool*_clusters_y</cite> : The <cite>y</cite> position for each <strong>cluster</strong> found</li>
+<li><cite>tool*_clusters_var_x</cite> : The <cite>x</cite> varaince of points in each <strong>cluster</strong> found</li>
+<li><cite>tool*_clusters_var_y</cite> : The <cite>y</cite> varaince of points in each <strong>cluster</strong> found</li>
+<li><cite>tool*_clusters_var_x_y</cite> : The <cite>x-y</cite> covaraince of points in each <strong>cluster</strong> found</li>
+</ul>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="panoptes_aggregation.reducers.point_reducer.process_data">
+<code class="descclassname">panoptes_aggregation.reducers.point_reducer.</code><code class="descname">process_data</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.point_reducer.process_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a list of extractions into lists of <cite>x</cite> and <cite>y</cite> sorted by <cite>tool</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>list</em>) &#8211; A list of extractions crated by
+<a class="reference internal" href="extractros.html#panoptes_aggregation.extractors.point_extractor.point_extractor" title="panoptes_aggregation.extractors.point_extractor.point_extractor"><code class="xref py py-meth docutils literal"><span class="pre">panoptes_aggregation.extractors.point_extractor.point_extractor()</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>processed_data</strong> &#8211; A dictionary with each key being a <cite>tool</cite> with a list of (<cite>x</cite>, <cite>y</cite>)
+tuples as a vlaue</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-panoptes_aggregation.reducers.survey_reducer"></span><div class="section" id="survey-reducer">
+<h2>Survey Reducer<a class="headerlink" href="#survey-reducer" title="Permalink to this headline">¶</a></h2>
+<p>This module provides functions to reduce survey task extracts from
+<a class="reference internal" href="extractros.html#module-panoptes_aggregation.extractors.survey_extractor" title="panoptes_aggregation.extractors.survey_extractor"><code class="xref py py-mod docutils literal"><span class="pre">panoptes_aggregation.extractors.survey_extractor</span></code></a>.</p>
+<dl class="function">
+<dt id="panoptes_aggregation.reducers.survey_reducer.process_data">
+<code class="descclassname">panoptes_aggregation.reducers.survey_reducer.</code><code class="descname">process_data</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.survey_reducer.process_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a list of extracted survey data into a dictionary of sub-question
+answers sorted organized by <cite>choice</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>list</em>) &#8211; A list of extractions created by
+<a class="reference internal" href="extractros.html#panoptes_aggregation.extractors.survey_extractor.survey_extractor" title="panoptes_aggregation.extractors.survey_extractor.survey_extractor"><code class="xref py py-meth docutils literal"><span class="pre">panoptes_aggregation.extractors.survey_extractor.survey_extractor()</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>processed_data</strong> &#8211; A dictionary where the keys are the <cite>choice</cite> made and the values are a list
+of dicts containing <cite>Counters</cite> for each sub-question asked.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="panoptes_aggregation.reducers.survey_reducer.survey_reducer">
+<code class="descclassname">panoptes_aggregation.reducers.survey_reducer.</code><code class="descname">survey_reducer</code><span class="sig-paren">(</span><em>data_in</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.survey_reducer.survey_reducer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce the survey task answers as a list of dicts (one for each <cite>choice</cite> marked)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data_in</strong> (<em>dict</em>) &#8211; A dictionary created by <a class="reference internal" href="#panoptes_aggregation.reducers.survey_reducer.process_data" title="panoptes_aggregation.reducers.survey_reducer.process_data"><code class="xref py py-meth docutils literal"><span class="pre">process_data()</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>reduction</strong> &#8211; A list that has one element for <cite>choice</cite> marked.  Each element is a dict of the form<ul class="simple">
+<li><cite>choice</cite> : The choice made</li>
+<li><cite>total_vote_count</cite> : The number of users that classified the subject</li>
+<li><cite>choice_count</cite> : The number of users that made this <cite>choice</cite></li>
+<li><cite>answers_*</cite> : Counters for each answer to sub-question <cite>*</cite></li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-panoptes_aggregation.reducers.poly_line_text_reducer"></span><div class="section" id="polygon-as-line-tool-for-text-reducer">
+<h2>Polygon As Line Tool for Text Reducer<a class="headerlink" href="#polygon-as-line-tool-for-text-reducer" title="Permalink to this headline">¶</a></h2>
+<p>This module provides functions to reduce the polygon-text extractions from
+<a class="reference internal" href="extractros.html#module-panoptes_aggregation.extractors.poly_line_text_extractor" title="panoptes_aggregation.extractors.poly_line_text_extractor"><code class="xref py py-mod docutils literal"><span class="pre">panoptes_aggregation.extractors.poly_line_text_extractor</span></code></a>.</p>
+<dl class="function">
+<dt id="panoptes_aggregation.reducers.poly_line_text_reducer.poly_line_text_reducer">
+<code class="descclassname">panoptes_aggregation.reducers.poly_line_text_reducer.</code><code class="descname">poly_line_text_reducer</code><span class="sig-paren">(</span><em>data_by_frame</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.poly_line_text_reducer.poly_line_text_reducer" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data_by_frame</strong> (<em>dict</em>) &#8211; A dictionary returned by <a class="reference internal" href="#panoptes_aggregation.reducers.poly_line_text_reducer.process_data" title="panoptes_aggregation.reducers.poly_line_text_reducer.process_data"><code class="xref py py-meth docutils literal"><span class="pre">process_data()</span></code></a></li>
+<li><strong>kwargs</strong> &#8211; <a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html">See DBSCAN</a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p><strong>reduction</strong> &#8211; A dictionary with on key for each <cite>frame</cite> of the subject that have dictionaries as values.
+Those dictionaries have three keys:</p>
+<ul class="simple">
+<li><cite>clusters_x</cite> : the <cite>x</cite> position of each identified cluster</li>
+<li><cite>clusters_y</cite> : the <cite>y</cite> position of each identified cluster</li>
+<li><cite>clusters_text</cite> : A list of text as ecah clster position</li>
+</ul>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="panoptes_aggregation.reducers.poly_line_text_reducer.process_data">
+<code class="descclassname">panoptes_aggregation.reducers.poly_line_text_reducer.</code><code class="descname">process_data</code><span class="sig-paren">(</span><em>data_list</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.poly_line_text_reducer.process_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a list of extractions into a dictionary of <cite>loc</cite> and <cite>text</cite>
+organized by <cite>frame</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data_list</strong> (<em>list</em>) &#8211; A list of extractions created by
+<a class="reference internal" href="extractros.html#panoptes_aggregation.extractors.poly_line_text_extractor.poly_line_text_extractor" title="panoptes_aggregation.extractors.poly_line_text_extractor.poly_line_text_extractor"><code class="xref py py-meth docutils literal"><span class="pre">panoptes_aggregation.extractors.poly_line_text_extractor.poly_line_text_extractor()</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>processed_data</strong> &#8211; A dictionary with keys for each <cite>frame</cite> of the subject and values being dictionaries
+with <cite>loc</cite> (a list of (<cite>x</cite>, <cite>y</cite>) tuples) and <cite>text</cite> (a list of strings) keys.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="extractros.html" title="Extractors"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">panoptes_aggregation 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Coleman Krawczyk.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.4.
+    </div>
+  </body>
+</html>
