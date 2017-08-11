@@ -5,3 +5,5 @@ install:
   - pip install -r requirements.txt
   - pip install -U .
 script: nosetests
+notifications:
+  email: false
