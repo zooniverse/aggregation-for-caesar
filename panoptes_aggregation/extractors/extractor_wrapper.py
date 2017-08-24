@@ -3,7 +3,7 @@ from functools import wraps
 
 def unpack_annotations(annotations):
     annotations_list = []
-    for value in annotations.values():
+    for value in annotations:
         if isinstance(value, list):
             annotations_list += value
         else:
