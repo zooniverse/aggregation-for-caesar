@@ -5,4 +5,6 @@ python-slugify
 scipy
 scikit-learn
 scikit-image
+sphinx
+sphinxcontrib-httpdomain
 werkzeug

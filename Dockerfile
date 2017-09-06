@@ -13,4 +13,4 @@ COPY . ./
 # make documentation
 RUN /bin/bash -lc ./make_docs.sh
 
-CMD python routs.py
+CMD python routes.py
