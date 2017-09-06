@@ -19,6 +19,9 @@
 #
 import os
 import sys
+from docutils.parsers.rst.directives.admonitions import BaseAdmonition
+from sphinx.util import compat
+compat.make_admonition = BaseAdmonition
 sys.path.insert(0, os.path.abspath('../../panoptes_aggregation'))
 sys.path.insert(0, os.path.abspath('../..'))
 
@@ -35,8 +38,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.githubpages',
-    'sphinx.ext.napoleon',
-    'sphinxcontrib.autohttp.flask'
+    'sphinx.ext.napoleon'
 ]
 napoleon_google_docstring = False
 napoleon_use_param = False
