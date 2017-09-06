@@ -8,5 +8,5 @@ def annotation_by_task(classification_in):
     ann_by_task = {}
     for annotation in annotations:
         ann_by_task.setdefault(annotation['task'], []).append(annotation)
-    classification['annotations'] = ann_by_task
+    classification['annotations'] = list(ann_by_task.values())
     return classification
