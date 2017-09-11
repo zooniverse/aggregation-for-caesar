@@ -148,12 +148,12 @@ def poly_line_text_reducer(data_by_frame, **kwargs):
                 db_lines = DBSCAN(eps=eps_line, metric=metric, **kwargs).fit(lines)
                 for line_label in set(db_lines.labels_):
                     if line_label > -1:
-                        line_dict = OrderedDict([
-                            ('clusters_x', []),
-                            ('clusters_y', []),
-                            ('clusters_text', []),
-                            ('line_slope', avg_slope)
-                        ])
+                        line_dict = {
+                            'clusters_x': [],
+                            'clusters_y': [],
+                            'clusters_text': [],
+                            'line_slope': avg_slope
+                        }
                         ldx = db_lines.labels_ == line_label
                         text_line = text_slope[ldx]
                         xy_line = xy_slope[ldx]
