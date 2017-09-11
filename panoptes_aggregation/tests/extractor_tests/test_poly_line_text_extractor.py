@@ -1,6 +1,7 @@
 import unittest
 import json
 import flask
+import numpy as np
 from panoptes_aggregation import extractors
 from panoptes_aggregation.extractors.test_utils import annotation_by_task
 
@@ -142,7 +143,16 @@ class TestPolyLineTextExtractor(unittest.TestCase):
 
     def test_extract(self):
         result = extractors.poly_line_text_extractor(classification)
-        self.assertDictEqual(result, expected)
+        for i in expected.keys():
+            with self.subTest(i=i):
+                self.assertIn(i, result)
+                for j in expected[i].keys():
+                    with self.subTest(i=j):
+                        self.assertIn(j, result[i])
+                        if j == 'slope':
+                            np.testing.assert_allclose(result[i][j], expected[i][j], atol=1e-5)
+                        else:
+                            self.assertEqual(result[i][j], expected[i][j])
 
     def test_request(self):
         request_kwargs = {
@@ -152,7 +162,16 @@ class TestPolyLineTextExtractor(unittest.TestCase):
         app = flask.Flask(__name__)
         with app.test_request_context(**request_kwargs):
             result = extractors.poly_line_text_extractor(flask.request)
-            self.assertDictEqual(result, expected)
+            for i in expected.keys():
+                with self.subTest(i=i):
+                    self.assertIn(i, result)
+                    for j in expected[i].keys():
+                        with self.subTest(i=j):
+                            self.assertIn(j, result[i])
+                            if j == 'slope':
+                                np.testing.assert_allclose(result[i][j], expected[i][j], atol=1e-5)
+                            else:
+                                self.assertEqual(result[i][j], expected[i][j])
 
 
 if __name__ == '__main__':
