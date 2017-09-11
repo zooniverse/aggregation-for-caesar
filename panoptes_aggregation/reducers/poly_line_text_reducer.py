@@ -22,6 +22,20 @@ DEFAULTS = {
 
 
 def angle_metric(t1, t2):
+    '''A metric for the distance between angles in the [-180, 180] range
+
+    Parameters
+    ----------
+    t1 : float
+        Theta one in degrees
+    t2 : float
+        Theta two in degrees
+
+    Returns
+    -------
+    distance : float
+        The distance between the two input angles in degrees
+    '''
     d = abs(t1 - t2)
     if d > 180:
         d = 360 - d
@@ -29,6 +43,19 @@ def angle_metric(t1, t2):
 
 
 def avg_angle(theta):
+    '''A function that finds the avage of an array of angles that are
+    in the range [-180, 180].
+
+    Parameters
+    ----------
+    theta : array
+        An array of angles that are in the range [-180, 180] degrees
+
+    Returns
+    -------
+    average : float
+        The average angle
+    '''
     if theta.max() - theta.min() > 180:
         theta[theta < 0] += 360
     return theta.mean()
@@ -49,7 +76,7 @@ def process_data(data_list):
     processed_data : dict
         A dictionary with keys for each `frame` of the subject and values being dictionaries
         with `x`, `y`, `text`, and `slope` keys. `x`, `y`, and `text` are list-of-lists, each inner
-        list is from a single annotaiton, `slpoe` is the list of slopes (in deg) for each of these
+        list is from a single annotaiton, `slope` is the list of slopes (in deg) for each of these
         inner lists.
     '''
     data_by_frame = {}
@@ -71,6 +98,8 @@ def process_data(data_list):
 @reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
 def poly_line_text_reducer(data_by_frame, **kwargs):
     '''
+    Reduce the polygon-text answers as a list of lines of text.
+
     Parameters
     ----------
     data_by_frame : dict
@@ -87,10 +116,10 @@ def poly_line_text_reducer(data_by_frame, **kwargs):
 
         * `clusters_x` : the `x` position of each identified word
         * `clusters_y` : the `y` position of each identified word
-        * `clusters_text` : A list of text as ecah cluster position
+        * `clusters_text` : A list of text at each cluster position
         * `line_slope`: The slope of the line of text in degrees
 
-        Note: the image coordiate system is left handed with y increasing downward
+        Note: the image coordiate system is left handed with y increasing downward.
     '''
     reduced_data = OrderedDict()
     eps_slope = kwargs.pop('eps_slope')

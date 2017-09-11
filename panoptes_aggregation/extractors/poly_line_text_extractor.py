@@ -59,7 +59,7 @@ def poly_line_text_extractor(classification):
     {'frame0': {
         'points': {'x': [[756], [756, 856]], 'y': [[197], [97, 97]]},
         'text': [['[unclear]Cipher[/unclear]'], ['A', 'word']]
-        'slpoe': [0, 0]
+        'slope': [0, 0]
     }}
     '''
     blank_frame = OrderedDict([
