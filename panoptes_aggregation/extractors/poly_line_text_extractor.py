@@ -77,7 +77,11 @@ def poly_line_text_extractor(classification):
         x = [point['x'] for point in value['points']]
         y = [point['y'] for point in value['points']]
         if len(x) > 1:
-            slope = np.rad2deg(np.arctan(np.polyfit(x, y, 1)[0]))
+            fit = np.polyfit(x, y, 1)
+            y_fit = np.polyval(fit, [x[0], x[-1]])
+            dx = x[-1] - x[0]
+            dy = y_fit[-1] - y_fit[0]
+            slope = np.rad2deg(np.arctan2(dy, dx))
         else:
             # default the slope to 0 if only one point was drawn
             slope = 0
