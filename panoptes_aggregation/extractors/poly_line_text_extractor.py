@@ -86,11 +86,10 @@ def poly_line_text_extractor(classification):
             # default the slope to 0 if only one point was drawn
             slope = 0
         # NOTE: if `words` and `points` are differnt lengths
-        # the extract will only contain the *shorter* of the
-        # two lists (assuming they match from the front)
-        idx_max = min(len(words), len(x))
-        extract[frame]['text'].append(words[:idx_max])
-        extract[frame]['points']['x'].append(x[:idx_max])
-        extract[frame]['points']['y'].append(y[:idx_max])
-        extract[frame]['slope'].append(slope)
+        # the extract is not used
+        if len(words) == len(x):
+            extract[frame]['text'].append(words)
+            extract[frame]['points']['x'].append(x)
+            extract[frame]['points']['y'].append(y)
+            extract[frame]['slope'].append(slope)
     return extract
