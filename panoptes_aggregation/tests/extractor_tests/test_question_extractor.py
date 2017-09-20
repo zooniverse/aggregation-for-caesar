@@ -20,9 +20,19 @@ multiple_classification = {
     }]
 }
 
+null_classification = {
+    'annotations': [{
+        "task": "T0",
+        "task_label": "A single question",
+        "value": None
+    }]
+}
+
 single_expected = {'yes': 1}
 
 multiple_expected = {'blue': 1, 'green': 1}
+
+null_expected = {'None': 1}
 
 
 class TestQuestionExtractor(unittest.TestCase):
@@ -53,6 +63,20 @@ class TestQuestionExtractor(unittest.TestCase):
         with app.test_request_context(**request_kwargs):
             result = extractors.question_extractor(flask.request)
             self.assertDictEqual(result, multiple_expected)
+
+    def test_null(self):
+        result = extractors.question_extractor(null_classification)
+        self.assertDictEqual(result, null_expected)
+
+    def test_null_request(self):
+        request_kwargs = {
+            'data': json.dumps(annotation_by_task(null_classification)),
+            'content_type': 'application/json'
+        }
+        app = flask.Flask(__name__)
+        with app.test_request_context(**request_kwargs):
+            result = extractors.question_extractor(flask.request)
+            self.assertDictEqual(result, null_expected)
 
 
 if __name__ == '__main__':
