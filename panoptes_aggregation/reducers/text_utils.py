@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def overlap(x, y):
     '''Check if two line segments overlap
 
