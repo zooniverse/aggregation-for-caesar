@@ -9,6 +9,14 @@ from slugify import slugify
 from .extractor_wrapper import extractor_wrapper
 
 
+def slugify_or_null(s):
+    '''Slugify value while casting `null` as a string fisrt'''
+    if s is None:
+        return str(s)
+    else:
+        return slugify(s, separator='-')
+
+
 @extractor_wrapper
 def question_extractor(classification):
     '''Extract annotations from a question task into a Counter object
@@ -46,7 +54,7 @@ def question_extractor(classification):
     answers = Counter()
     if isinstance(annotation['value'], list):
         for answer in annotation['value']:
-            answers[slugify(answer, separator='-')] += 1
+            answers[slugify_or_null(answer)] += 1
     else:
-        answers[slugify(annotation['value'], separator='-')] += 1
+        answers[slugify_or_null(annotation['value'])] += 1
     return dict(answers)
