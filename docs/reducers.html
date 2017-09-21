@@ -293,6 +293,51 @@ in the range [-180, 180].</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="panoptes_aggregation.reducers.poly_line_text_reducer.gutter">
+<code class="descclassname">panoptes_aggregation.reducers.poly_line_text_reducer.</code><code class="descname">gutter</code><span class="sig-paren">(</span><em>lines_in</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.poly_line_text_reducer.gutter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cluster list of input line segments by what side of
+the page gutter they are on.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lines_in</strong> (<em>list</em>) – A list-of-lists containing one line segment per item. Each line
+segment should contain only the x-coordinate of each point on the line.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>gutter_index</strong> – A numpy array containing the cluster label for each input line. This label
+idicates what side of the gutter(s) the input line segment is on.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/array.html#module-array" title="(in Python v2.7)">array</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="panoptes_aggregation.reducers.poly_line_text_reducer.overlap">
+<code class="descclassname">panoptes_aggregation.reducers.poly_line_text_reducer.</code><code class="descname">overlap</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.poly_line_text_reducer.overlap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if two line segments overlap</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>list</em>) – A list with the start and end point of the first line segment</li>
+<li><strong>y</strong> (<em>lits</em>) – A list with the start and end point of the second line segment</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>overlap</strong> – True if the two line segments overlap, False otherwise</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="panoptes_aggregation.reducers.poly_line_text_reducer.poly_line_text_reducer">
 <code class="descclassname">panoptes_aggregation.reducers.poly_line_text_reducer.</code><code class="descname">poly_line_text_reducer</code><span class="sig-paren">(</span><em>data_by_frame</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.poly_line_text_reducer.poly_line_text_reducer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reduce the polygon-text answers as a list of lines of text.</p>
