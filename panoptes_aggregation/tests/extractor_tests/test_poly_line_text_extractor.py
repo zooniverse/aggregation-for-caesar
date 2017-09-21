@@ -1,6 +1,7 @@
 import unittest
 import json
 import flask
+import numpy as np
 from panoptes_aggregation import extractors
 from panoptes_aggregation.extractors.test_utils import annotation_by_task
 
@@ -59,49 +60,78 @@ classification = {
 expected = {
     'frame0': {
         'points': {
-            'x': [
-                756.9894409179688,
-                565.92919921875,
-                872.2321166992188,
-                1020.8345947265625,
-                1151.2408447265625
-            ],
-            'y': [
-                197.12567138671875,
-                324.4991760253906,
-                321.46649169921875,
-                318.43377685546875,
-                318.43377685546875
-            ]
+            'x':
+                [
+                    [
+                        756.9894409179688
+                    ],
+                    [
+                        565.92919921875,
+                        872.2321166992188,
+                        1020.8345947265625,
+                        1151.2408447265625
+                    ]
+                ],
+            'y':
+                [
+                    [
+                        197.12567138671875
+                    ],
+                    [
+                        324.4991760253906,
+                        321.46649169921875,
+                        318.43377685546875,
+                        318.43377685546875
+                    ]
+                ]
         },
         'text': [
-            "[unclear]Cipher[/unclear]",
-            "Recd",
-            "Feb",
-            "2",
-            "1862"
+            [
+                "[unclear]Cipher[/unclear]"
+            ],
+            [
+                "Recd",
+                "Feb",
+                "2",
+                "1862"
+            ]
+        ],
+        'slope': [
+            0,
+            -0.6431845183798341
         ]
     },
     'frame1': {
         'points': {
-            'x': [
-                402.1632385253906,
-                587.1580810546875,
-                832.8070068359375,
-                1045.09619140625
-            ],
-            'y': [
-                488.26513671875,
-                488.26513671875,
-                488.26513671875,
-                482.1997375488281
-            ]
+            'x':
+                [
+                    [
+                        402.1632385253906,
+                        587.1580810546875,
+                        832.8070068359375,
+                        1045.09619140625
+                    ]
+                ],
+            'y':
+                [
+                    [
+                        488.26513671875,
+                        488.26513671875,
+                        488.26513671875,
+                        482.1997375488281
+                    ]
+                ]
         },
         'text': [
-            "to",
-            "July",
-            "30th",
-            "1862"
+            [
+                "to",
+                "July",
+                "30th",
+                "1862"
+            ]
+        ],
+        'slope': [
+            -0.48129253221574736
         ]
     }
 }
@@ -113,7 +143,16 @@ class TestPolyLineTextExtractor(unittest.TestCase):
 
     def test_extract(self):
         result = extractors.poly_line_text_extractor(classification)
-        self.assertDictEqual(result, expected)
+        for i in expected.keys():
+            with self.subTest(i=i):
+                self.assertIn(i, result)
+                for j in expected[i].keys():
+                    with self.subTest(i=j):
+                        self.assertIn(j, result[i])
+                        if j == 'slope':
+                            np.testing.assert_allclose(result[i][j], expected[i][j], atol=1e-5)
+                        else:
+                            self.assertEqual(result[i][j], expected[i][j])
 
     def test_request(self):
         request_kwargs = {
@@ -123,7 +162,16 @@ class TestPolyLineTextExtractor(unittest.TestCase):
         app = flask.Flask(__name__)
         with app.test_request_context(**request_kwargs):
             result = extractors.poly_line_text_extractor(flask.request)
-            self.assertDictEqual(result, expected)
+            for i in expected.keys():
+                with self.subTest(i=i):
+                    self.assertIn(i, result)
+                    for j in expected[i].keys():
+                        with self.subTest(i=j):
+                            self.assertIn(j, result[i])
+                            if j == 'slope':
+                                np.testing.assert_allclose(result[i][j], expected[i][j], atol=1e-5)
+                            else:
+                                self.assertEqual(result[i][j], expected[i][j])
 
 
 if __name__ == '__main__':
