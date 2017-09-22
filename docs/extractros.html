@@ -228,8 +228,8 @@ panoptes annotations</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>extraction</strong> – A dictionary with one key for each <cite>frame</cite>. The value for each frame
 is a dict with <cite>text</cite>, a list-of-lists of transcribe words, <cite>points</cite>, a
-dict with the list-of-lists of <cite>x</cite> and <cite>y</cite> postions of each word, and
-<cite>slope</cite>, a list of the slopes (in deg) of each line drawn.
+dict with the list-of-lists of <cite>x</cite> and <cite>y</cite> postions of each space between words,
+and <cite>slope</cite>, a list of the slopes (in deg) of each line drawn.
 For <cite>points</cite> and <cite>text</cite> there is one inner list for each annotaiton made
 on the frame.</td>
 </tr>
@@ -243,7 +243,8 @@ on the frame.</td>
 <span class="go">        {</span>
 <span class="go">            &#39;frame&#39;: 0,</span>
 <span class="go">            &#39;points&#39;: [</span>
-<span class="go">                {&#39;x&#39;: 756, &#39;y&#39;: 197}</span>
+<span class="go">                {&#39;x&#39;: 756, &#39;y&#39;: 197},</span>
+<span class="go">                {&#39;x&#39;: 856&#39;, y&#39;: 197}</span>
 <span class="go">            ],</span>
 <span class="go">            &#39;details&#39;: [</span>
 <span class="go">                {&#39;value&#39;: &#39;[unclear]Cipher[/unclear]&#39;}</span>
@@ -253,7 +254,8 @@ on the frame.</td>
 <span class="go">            &#39;frame&#39;: 0,</span>
 <span class="go">            &#39;points&#39;: [</span>
 <span class="go">                {&#39;x&#39;: 756, &#39;y&#39;: 97},</span>
-<span class="go">                {&#39;x&#39;: 856, &#39;y&#39;: 97}</span>
+<span class="go">                {&#39;x&#39;: 856, &#39;y&#39;: 97},</span>
+<span class="go">                {&#39;x&#39;: 956, &#39;y&#39;: 97}</span>
 <span class="go">            ],</span>
 <span class="go">            &#39;details&#39;: [</span>
 <span class="go">                {&#39;value&#39;: &#39;A word&#39;}</span>
@@ -262,7 +264,7 @@ on the frame.</td>
 <span class="go">]}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">poly_line_text_extractor</span><span class="p">(</span><span class="n">classification</span><span class="p">)</span>
 <span class="go">{&#39;frame0&#39;: {</span>
-<span class="go">    &#39;points&#39;: {&#39;x&#39;: [[756], [756, 856]], &#39;y&#39;: [[197], [97, 97]]},</span>
+<span class="go">    &#39;points&#39;: {&#39;x&#39;: [[756, 856], [756, 856, 956]], &#39;y&#39;: [[197, 197], [97, 97, 97]]},</span>
 <span class="go">    &#39;text&#39;: [[&#39;[unclear]Cipher[/unclear]&#39;], [&#39;A&#39;, &#39;word&#39;]]</span>
 <span class="go">    &#39;slope&#39;: [0, 0]</span>
 <span class="go">}}</span>
