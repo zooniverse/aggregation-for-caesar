@@ -21,14 +21,15 @@ setup(
         ]
     },
     install_requires=[
+        'collatex',
         'numpy',
         'pandas',
         'progressbar2',
+        'python-levenshtein',
         'python-slugify',
         'scikit-image',
         'scikit-learn',
         'scipy',
-        'slugify',
         'werkzeug'
     ]
 )
