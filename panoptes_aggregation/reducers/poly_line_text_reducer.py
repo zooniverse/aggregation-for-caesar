@@ -23,6 +23,15 @@ DEFAULTS = {
 }
 
 
+def sort_labels(db_labels, data, reducer=np.mean, decending=False):
+    labels = np.array(list(set(db_labels)))
+    avg = [reducer(data[db_labels == l]) for l in labels]
+    sdx = np.argsort(avg)
+    if decending:
+        sdx = sdx[::-1]
+    return labels[sdx]
+
+
 def process_data(data_list):
     '''Process a list of extractions into a dictionary of `loc` and `text`
     organized by `frame`
@@ -101,16 +110,16 @@ def poly_line_text_reducer(data_by_frame, **kwargs):
             t.append('')
         text_frame = np.array(text_frame)
         gutter_labels = gutter(x_frame)
-        for gutter_label in set(gutter_labels):
+        gutter_labels_sorted = sort_labels(np.array(gutter_labels), np.array([np.mean(x) for x in x_frame]))
+        for gutter_label in gutter_labels_sorted:
             gdx = gutter_labels == gutter_label
             x = x_frame[gdx]
             y = y_frame[gdx]
             text = text_frame[gdx]
             slope = slope_frame[gdx]
             db_slope = DBSCAN(eps=eps_slope, metric=angle_metric, **kwargs).fit(slope)
-            slope_labels = np.array(list(set(db_slope.labels_)))
-            avg_slopes = [avg_angle(slope[db_slope.labels_ == s]) for s in slope_labels]
-            for slope_label in slope_labels[np.argsort(avg_slopes)[::-1]]:
+            slope_labels = sort_labels(db_slope.labels_, slope, reducer=avg_angle, decending=True)
+            for slope_label in slope_labels:
                 if slope_label > -1:
                     sdx = db_slope.labels_ == slope_label
                     xy_slope = np.array(list(zip(np.hstack(x[sdx]), np.hstack(y[sdx]))))
@@ -123,9 +132,8 @@ def poly_line_text_reducer(data_by_frame, **kwargs):
                     lines = xy_rotate[:, 1].reshape(-1, 1)
                     words = xy_rotate[:, 0].reshape(-1, 1)
                     db_lines = DBSCAN(eps=eps_line, metric=metric, **kwargs).fit(lines)
-                    line_labels = np.array(list(set(db_lines.labels_)))
-                    avg_y = [lines[db_lines.labels_ == l].mean() for l in line_labels]
-                    for line_label in line_labels[np.argsort(avg_y)]:
+                    line_labels = sort_labels(db_lines.labels_, lines)
+                    for line_label in line_labels:
                         if line_label > -1:
                             line_dict = {
                                 'clusters_x': [],
@@ -140,9 +148,8 @@ def poly_line_text_reducer(data_by_frame, **kwargs):
                             xy_line = xy_slope[ldx]
                             words_line = words[ldx]
                             db_words = DBSCAN(eps=eps_word, metric=metric, **kwargs).fit(words_line)
-                            word_labels = np.array(list(set(db_words.labels_)))
-                            avg_x = [words_line[db_words.labels_ == w].mean() for w in word_labels]
-                            for word_label in word_labels[np.argsort(avg_x)]:
+                            word_labels = sort_labels(db_words.labels_, words_line)
+                            for word_label in word_labels:
                                 if word_label > -1:
                                     wdx = db_words.labels_ == word_label
                                     word_x, word_y = xy_line[wdx].mean(axis=0)
