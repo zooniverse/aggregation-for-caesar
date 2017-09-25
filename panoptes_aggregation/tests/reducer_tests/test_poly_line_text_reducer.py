@@ -688,7 +688,7 @@ class TestClusterLines(unittest.TestCase):
         self.assertDictEqual(result, processed_data)
 
     def test_cluster_lines(self):
-        result = poly_line_text_reducer._original(processed_data, metric='euclidean', **self.kwargs)
+        result = poly_line_text_reducer._original(processed_data, metric='euclidean', dot_freq='word', **self.kwargs)
         self.assertDictEqual(result, reduced_data)
 
     def test_poly_line_text_reducer(self):
