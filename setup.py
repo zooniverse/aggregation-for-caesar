@@ -21,6 +21,7 @@ setup(
         ]
     },
     install_requires=[
+        'beautifulsoup4',
         'collatex',
         'numpy',
         'pandas',

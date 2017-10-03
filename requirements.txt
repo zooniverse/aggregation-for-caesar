@@ -1,4 +1,5 @@
 collatex
+beautifulsoup4
 Flask
 nose
 numpy
