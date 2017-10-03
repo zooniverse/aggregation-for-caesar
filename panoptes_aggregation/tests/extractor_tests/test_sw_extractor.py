@@ -111,15 +111,15 @@ expected = {
             ]
         },
         'text': [
-            ['It sets <brev-y>th</brev-y><sl>e</sl> bodie all ina sweat present=<br>'],
-            ['ly, and must bee vsed twice as it was<br>'],
-            ['with Mr. Combes: hee observd this <brev-y>th</brev-y><sw-ex>a</sw-ex><sl>t</sl><br>'],
-            ['afterword <brev-y>th</brev-y><sl>e</sl> skin: peeld off both vppon<br>'],
-            ['<brev-y>th</brev-y><sl>e</sl> oot and sole.<br>'],
-            ['and it left <brev-y>th</brev-y><sl>e</sl> foot weak euer<br>'],
-            ['since now its remoud into <brev-y>th</brev-y><sl>e</sl> other:<br>'],
-            ['hee had rather deal with a fixt <brev-y>th</brev-y><sw-ex>e</sw-ex><sl>n</sl> <br>'],
-            ['with a runing gout:<br>'],
+            ['It sets <brev-y>th</brev-y><sl>e</sl> bodie all ina sweat present='],
+            ['ly, and must bee vsed twice as it was'],
+            ['with Mr. Combes: hee observd this <brev-y>th</brev-y><sw-ex>a</sw-ex><sl>t</sl>'],
+            ['afterword <brev-y>th</brev-y><sl>e</sl> skin: peeld off both vppon'],
+            ['<brev-y>th</brev-y><sl>e</sl> oot and sole.'],
+            ['and it left <brev-y>th</brev-y><sl>e</sl> foot weak euer'],
+            ['since now its remoud into <brev-y>th</brev-y><sl>e</sl> other:'],
+            ['hee had rather deal with a fixt <brev-y>th</brev-y><sw-ex>e</sw-ex><sl>n</sl> '],
+            ['with a runing gout:'],
             ['Gout:']
         ],
         'slope': [
