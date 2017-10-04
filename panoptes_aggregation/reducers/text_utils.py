@@ -1,5 +1,5 @@
 import collatex as col
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 import copy
 import numpy as np
 from sklearn.cluster import DBSCAN
@@ -141,7 +141,26 @@ def sort_labels(db_labels, data, reducer=np.mean, descending=False):
     return labels[sdx]
 
 
-def cluster_by_word(word_line, xy_line, text_line, kwargs_cluster, kwargs_dbscan):
+def consensus_score(clusters_text):
+    '''A function to take clustered text data and return the consensus score
+
+    Parameters
+    ----------
+    clusters_text : list
+        A list-of-lists with length equal to the number of words in a line of text and each
+        inner list contains the transcriptions for each word.
+
+    Returns
+    -------
+    consensus_score : float
+        A value indicating the average number of users that agree on the line of text.
+    '''
+    text_filter = [list(filter(('').__ne__, text)) for text in clusters_text if text]
+    max_counts = [Counter(text).most_common(1)[0][1] for text in text_filter if text]
+    return sum(max_counts) / len(max_counts)
+
+
+def cluster_by_word(word_line, xy_line, text_line, annotation_labels, kwargs_cluster, kwargs_dbscan):
     '''A function to take the annotations for one line of text and cluster them
     based on the words in the line.
 
@@ -153,6 +172,8 @@ def cluster_by_word(word_line, xy_line, text_line, kwargs_cluster, kwargs_dbscan
         An nx2 array with the non-rotated (x, y) positions of each dot.
     text_line : np.array
         An nx1 array with the text for each dot.
+    annotation_labels : np.array
+        An nx1 array with a lable indicating what annotaiton each word belongs to.
     kwargs_cluster : dict
         A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
     kwargs_dbscan : dict
@@ -173,14 +194,19 @@ def cluster_by_word(word_line, xy_line, text_line, kwargs_cluster, kwargs_dbscan
     word_labels = sort_labels(db_words.labels_, word_line)
     clusters_x = []
     clusters_y = []
-    clusters_text = []
-    for word_label in word_labels:
+    unique_annotations = np.unique(annotation_labels)
+    lower_annotaiton_labels = np.zeros(len(annotation_labels), dtype=int)
+    for idx, i in enumerate(unique_annotations):
+        jdx = annotation_labels == i
+        lower_annotaiton_labels[jdx] = idx
+    clusters_text = [['' for i in range(len(unique_annotations))] for j in range(len(word_labels))]
+    for cdx, word_label in enumerate(word_labels):
         wdx = db_words.labels_ == word_label
         word_x, word_y = xy_line[wdx].mean(axis=0)
-        word_list = [w for w in text_line[wdx] if w]
+        for word, a_label in zip(text_line[wdx], lower_annotaiton_labels[wdx]):
+            clusters_text[cdx][a_label] = word
         clusters_x.append(float(word_x))
         clusters_y.append(float(word_y))
-        clusters_text.append(word_list)
     return clusters_x, clusters_y, clusters_text
 
 
@@ -229,14 +255,19 @@ def align_words(word_line, xy_line, text_line, kwargs_cluster, kwargs_dbscan):
             clusters_x.append(float(word_x))
             clusters_y.append(float(word_y))
         collation = col.Collation()
+        witness_key = []
         for tdx, t in enumerate(text_line):
             if t != '':
-                collation.add_plain_witness(str(tdx), t)
+                key = str(tdx)
+                collation.add_plain_witness(key, t)
+                witness_key.append(key)
         if len(collation.witnesses) > 0:
             alignment_table = col.collate(collation, near_match=True, segmentation=False)
             for cols in alignment_table.columns:
                 word_dict = cols.tokens_per_witness
-                word_list = [str(word_dict[k][0]) for k in sorted(word_dict.keys())]
+                word_list = []
+                for key in witness_key:
+                    word_list.append(word_dict.get(key, [''])[0])
                 clusters_text.append(word_list)
     return clusters_x, clusters_y, clusters_text
 
@@ -286,7 +317,7 @@ def cluster_by_line(xy_slope, text_slope, annotation_labels, kwargs_cluster, kwa
         for a_label in a_lables[ldx]:
             adx |= annotation_labels == a_label
         if kwargs_cluster['dot_freq'] == 'word':
-            clusters_x, clusters_y, clusters_text = cluster_by_word(words[adx], xy_slope[adx], text_slope[adx], kwargs_cluster, kwargs_dbscan)
+            clusters_x, clusters_y, clusters_text = cluster_by_word(words[adx], xy_slope[adx], text_slope[adx], annotation_labels[adx], kwargs_cluster, kwargs_dbscan)
         elif kwargs_cluster['dot_freq'] == 'line':
             clusters_x, clusters_y, clusters_text = align_words(words[adx], xy_slope[adx], text_slope[adx], kwargs_cluster, kwargs_dbscan)
         else:
@@ -295,6 +326,8 @@ def cluster_by_line(xy_slope, text_slope, annotation_labels, kwargs_cluster, kwa
             'clusters_x': clusters_x,
             'clusters_y': clusters_y,
             'clusters_text': clusters_text,
+            'number_views': ldx.sum(),
+            'consensus_score': consensus_score(clusters_text),
             'line_slope': float(kwargs_cluster['avg_slope']),
             'slope_label': int(kwargs_cluster['slope_label']),
             'gutter_label': int(kwargs_cluster['gutter_label'])
