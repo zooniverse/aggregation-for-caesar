@@ -267,7 +267,7 @@ def align_words(word_line, xy_line, text_line, kwargs_cluster, kwargs_dbscan):
                 word_dict = cols.tokens_per_witness
                 word_list = []
                 for key in witness_key:
-                    word_list.append(word_dict.get(key, [''])[0])
+                    word_list.append(str(word_dict.get(key, [''])[0]))
                 clusters_text.append(word_list)
     return clusters_x, clusters_y, clusters_text
 
