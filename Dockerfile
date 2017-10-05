@@ -1,6 +1,6 @@
 FROM python:3
 
-ENV LANG=en_US.UTF-8
+ENV LANG=C.UTF-8
 
 WORKDIR /usr/src/aggregation
 
