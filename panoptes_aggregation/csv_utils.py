@@ -1,3 +1,4 @@
+import ast
 import pandas
 from pandas.io.json.normalize import nested_to_record
 import json
@@ -19,7 +20,7 @@ def unflatten_data(data, json_column='data', renest=True):
         if ('{0}.'.format(json_column) in name) and (pandas.notnull(value)):
             key = name.split('{0}.'.format(json_column))[1]
             try:
-                data_dict[key] = json.loads(value.replace('\'', '\"'))
+                data_dict[key] = ast.literal_eval(value)
             except:
                 data_dict[key] = value
     if renest:
@@ -45,7 +46,7 @@ def renest_dict(data, seporator='.'):
 def json_non_null(value):
     if pandas.notnull(value):
         try:
-            return json.loads(value.replace('\'', '\"'))
+            return ast.literal_eval(value)
         except TypeError:
             return value
     else:

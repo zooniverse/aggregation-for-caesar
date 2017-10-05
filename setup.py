@@ -21,14 +21,16 @@ setup(
         ]
     },
     install_requires=[
+        'beautifulsoup4',
+        'collatex',
         'numpy',
         'pandas',
         'progressbar2',
+        'python-levenshtein',
         'python-slugify',
         'scikit-image',
         'scikit-learn',
         'scipy',
-        'slugify',
         'werkzeug'
     ]
 )

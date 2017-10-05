@@ -473,12 +473,14 @@ reduced_data = {
                 276.76075744628906
             ],
             'clusters_text': [
-                ['Here', 'Here', 'Here'],
-                ['are', 'are', 'are', 'are', 'are'],
-                ['some', 'some', 'some', 'some'],
-                ['test', 'test', 'test', 'test'],
-                []
+                ['Here', 'Here', '', '', 'Here', '', ''],
+                ['are', 'are', 'are', '', 'are', '', 'are'],
+                ['some', 'some', '', '', 'some', 'some', ''],
+                ['test', 'test', '', 'test', 'test', '', ''],
+                ['', '', '', '', '', '', '']
             ],
+            'number_views': 7,
+            'consensus_score': 4.0,
             'gutter_label': 0,
             'line_slope': -2.0348953116170234,
             'slope_label': 0
@@ -500,11 +502,13 @@ reduced_data = {
             ],
             'clusters_text': [
                 ['words', 'words', 'words', 'words', 'words'],
-                ['on', 'on', 'on'],
-                ['a', 'a', 'a'],
-                ['page.', 'page.', 'page.'],
-                []
+                ['on', 'on', '', 'on', ''],
+                ['a', 'a', '', 'a', ''],
+                ['page.', 'page.', '', 'page.', ''],
+                ['', '', '', '', '']
             ],
+            'number_views': 5,
+            'consensus_score': 3.5,
             'gutter_label': 0,
             'line_slope': -2.0348953116170234,
             'slope_label': 0
@@ -523,11 +527,13 @@ reduced_data = {
                 133.79429626464844
             ],
             'clusters_text': [
-                ['There', 'There', 'There'],
+                ['There', 'There', '', 'There', ''],
                 ['is', 'is', 'is', 'is', 'is'],
-                ['this', 'this', 'this', 'this'],
-                []
+                ['this', 'this', 'this', 'this', ''],
+                ['', '', '', '', '']
             ],
+            'number_views': 5,
+            'consensus_score': 4.0,
             'gutter_label': 0,
             'line_slope': -40.150929458965543,
             'slope_label': 1
@@ -546,11 +552,13 @@ reduced_data = {
                 126.4166971842448
             ],
             'clusters_text': [
-                ['text', 'test', 'text'],
+                ['text', 'test', 'text', ''],
                 ['as', 'as', 'as', 'as'],
-                ['well', 'well', 'well'],
-                []
+                ['well', 'well', 'well', ''],
+                ['', '', '', '']
             ],
+            'number_views': 4,
+            'consensus_score': 3.0,
             'gutter_label': 0,
             'line_slope': -40.150929458965543,
             'slope_label': 1
@@ -571,12 +579,14 @@ reduced_data = {
                 270.77890014648438
             ],
             'clusters_text': [
-                ['There', 'There', 'There', 'There'],
-                ['are', 'are', 'are', 'are', 'are'],
-                ['two', 'two', 'two', 'two'],
-                ['columns', 'columns', 'columns', 'columns'],
-                []
+                ['There', 'There', 'There', 'There', '', ''],
+                ['are', 'are', 'are', 'are', 'are', ''],
+                ['two', 'two', 'two', 'two', '', ''],
+                ['columns', 'columns', '', 'columns', '', 'columns'],
+                ['', '', '', '', '', '']
             ],
+            'number_views': 6,
+            'consensus_score': 4.25,
             'gutter_label': 1,
             'line_slope': -1.0113944075943084,
             'slope_label': 0
@@ -593,10 +603,12 @@ reduced_data = {
                 377.25601196289062
             ],
             'clusters_text': [
-                ['of', 'of', 'of'],
+                ['of', 'of', '', 'of'],
                 ['text.', 'text.', 'text.', 'text.'],
-                []
+                ['', '', '', '']
             ],
+            'number_views': 4,
+            'consensus_score': 3.5,
             'gutter_label': 1,
             'line_slope': -1.0113944075943084,
             'slope_label': 0
@@ -615,11 +627,13 @@ reduced_data = {
                 60.81561279296875
             ],
             'clusters_text': [
-                ['This', 'This', 'This'],
+                ['This', 'This', '', 'This', ''],
                 ['looks', 'looks', 'looks', 'looks', 'looks'],
-                ['like', 'like', 'like', 'like'],
-                []
+                ['like', 'like', 'like', 'like', ''],
+                ['', '', '', '', '']
             ],
+            'number_views': 5,
+            'consensus_score': 4.0,
             'gutter_label': 1,
             'line_slope': -39.912957341303802,
             'slope_label': 1
@@ -638,11 +652,13 @@ reduced_data = {
                 155.32899475097656
             ],
             'clusters_text': [
-                ['a', 'a', 'a', 'a', 'a'],
-                ['big', 'big', 'big', 'big'],
-                ['mess', 'mess', 'mess', 'mess'],
-                []
+                ['a', 'a', 'a', 'a', 'a', ''],
+                ['big', 'big', 'big', 'big', '', ''],
+                ['mess', 'mess', '', 'mess', '', 'mess'],
+                ['', '', '', '', '', '']
             ],
+            'number_views': 6,
+            'consensus_score': 4.333333333333333,
             'gutter_label': 1,
             'line_slope': -39.912957341303802,
             'slope_label': 1
@@ -663,8 +679,10 @@ reduced_data = {
             'clusters_text': [
                 ['page', 'page'],
                 ['2', '2'],
-                []
+                ['', '']
             ],
+            'number_views': 2,
+            'consensus_score': 2.0,
             'gutter_label': 0,
             'line_slope': 0.0,
             'slope_label': 0
