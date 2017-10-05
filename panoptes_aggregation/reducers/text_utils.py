@@ -48,25 +48,28 @@ def gutter(lines_in):
         A numpy array containing the cluster label for each input line. This label
         idicates what side of the gutter(s) the input line segment is on.
     '''
-    lines = [[min(l), max(l)] for l in lines_in]
-    overlap_lines = []
-    for ldx, l in enumerate(lines):
-        if ldx == 0:
-            overlap_lines = np.array([l])
-        else:
-            o_lines = np.array([overlap(o, l) for o in overlap_lines])
-            if o_lines.any():
-                comp = np.vstack([overlap_lines[o_lines], l])
-                overlap_lines[o_lines] = [comp.min(), comp.max()]
-                overlap_lines = np.unique(overlap_lines).reshape(-1, 2)
+    if len(lines_in) > 0:
+        lines = [[min(l), max(l)] for l in lines_in]
+        overlap_lines = []
+        for ldx, l in enumerate(lines):
+            if ldx == 0:
+                overlap_lines = np.array([l])
             else:
-                overlap_lines = np.vstack([overlap_lines, l])
-    overlap_lines.sort(axis=0)
-    gutter_label = -np.ones(len(lines), dtype=int)
-    for odx, o in enumerate(overlap_lines):
-        gdx = np.array([overlap(o, l) for l in lines])
-        gutter_label[gdx] = odx
-    return gutter_label
+                o_lines = np.array([overlap(o, l) for o in overlap_lines])
+                if o_lines.any():
+                    comp = np.vstack([overlap_lines[o_lines], l])
+                    overlap_lines[o_lines] = [comp.min(), comp.max()]
+                    overlap_lines = np.vstack({tuple(row) for row in overlap_lines})
+                else:
+                    overlap_lines = np.vstack([overlap_lines, l])
+        overlap_lines.sort(axis=0)
+        gutter_label = -np.ones(len(lines), dtype=int)
+        for odx, o in enumerate(overlap_lines):
+            gdx = np.array([overlap(o, l) for l in lines])
+            gutter_label[gdx] = odx
+        return gutter_label
+    else:
+        return np.array([])
 
 
 def angle_metric(t1, t2):
@@ -157,7 +160,10 @@ def consensus_score(clusters_text):
     '''
     text_filter = [list(filter(('').__ne__, text)) for text in clusters_text if text]
     max_counts = [Counter(text).most_common(1)[0][1] for text in text_filter if text]
-    return sum(max_counts) / len(max_counts)
+    if len(max_counts) == 0:
+        return 0.0
+    else:
+        return sum(max_counts) / len(max_counts)
 
 
 def cluster_by_word(word_line, xy_line, text_line, annotation_labels, kwargs_cluster, kwargs_dbscan):
