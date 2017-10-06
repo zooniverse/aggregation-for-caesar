@@ -1,13 +1,29 @@
 from flask import jsonify, request, Flask, send_from_directory
+from flask.json import JSONEncoder
 from functools import wraps
 import os
 from panoptes_aggregation import reducers
 from panoptes_aggregation import extractors
+import numpy as np
+
+
+class MyEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            return super(MyEncoder, self).default(obj)
+
 
 application = Flask(__name__,
                     instance_relative_config=True,
                     static_url_path='',
                     static_folder='docs')
+application.json_encoder = MyEncoder
 
 
 def request_wrapper(name):
