@@ -6,14 +6,15 @@ This module provides functions to reduce the polygon-text extractions from
 '''
 import numpy as np
 from sklearn.cluster import DBSCAN
-from collections import OrderedDict
-from .text_utils import gutter, angle_metric, avg_angle
+import copy
+from .text_utils import cluster_by_frame
 from .reducer_wrapper import reducer_wrapper
 
 DEFAULTS = {
     'eps_slope': {'default': 25.0, 'type': float},
-    'eps_line': {'default': 30.0, 'type': float},
-    'eps_word': {'default': 25.0, 'type': float},
+    'eps_line': {'default': 40.0, 'type': float},
+    'eps_word': {'default': 40.0, 'type': float},
+    'dot_freq': {'default': 'word', 'type': str},
     'min_samples': {'default': 1, 'type': int},
     'metric': {'default': 'euclidean', 'type': str},
     'algorithm': {'default': 'auto', 'type': str},
@@ -57,7 +58,7 @@ def process_data(data_list):
 
 
 @reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
-def poly_line_text_reducer(data_by_frame, **kwargs):
+def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
     '''
     Reduce the polygon-text answers as a list of lines of text.
 
@@ -78,61 +79,19 @@ def poly_line_text_reducer(data_by_frame, **kwargs):
         * `clusters_x` : the `x` position of each identified word
         * `clusters_y` : the `y` position of each identified word
         * `clusters_text` : A list of text at each cluster position
+        * `gutter_label` : A label indicating what "gutter" cluster the line is from
         * `line_slope`: The slope of the line of text in degrees
+        * `slope_label` : A label indicating what slope cluster the line is from
+        * `number_views` : The number of users that transcribed the line of text
+        * `consensus_score` : The average number of users who's text agreed for the line
+            Note, if `consensus_score` is the same a `number_views` every user agreed with each other
 
         Note: the image coordiate system is left handed with y increasing downward.
     '''
-    reduced_data = OrderedDict()
-    eps_slope = kwargs.pop('eps_slope')
-    eps_line = kwargs.pop('eps_line')
-    eps_word = kwargs.pop('eps_word')
-    metric = kwargs.pop('metric')
-    for frame, value in data_by_frame.items():
-        reduced_data[frame] = []
-        slope_frame = np.array(value['slope']).reshape(-1, 1)
-        x_frame = np.array(value['x'])
-        y_frame = np.array(value['y'])
-        text_frame = np.array(value['text'])
-        gutter_labels = gutter(x_frame)
-        for gutter_label in set(gutter_labels):
-            gdx = gutter_labels == gutter_label
-            x = x_frame[gdx]
-            y = y_frame[gdx]
-            text = text_frame[gdx]
-            slope = slope_frame[gdx]
-            db_slope = DBSCAN(eps=eps_slope, metric=angle_metric, **kwargs).fit(slope)
-            for slope_label in set(db_slope.labels_):
-                if slope_label > -1:
-                    sdx = db_slope.labels_ == slope_label
-                    xy_slope = np.array(list(zip(np.hstack(x[sdx]), np.hstack(y[sdx]))))
-                    text_slope = np.hstack(text[sdx])
-                    avg_slope = avg_angle(slope[sdx])
-                    c = np.cos(np.deg2rad(-avg_slope))
-                    s = np.sin(np.deg2rad(-avg_slope))
-                    R = np.array([[c, -s], [s, c]])
-                    xy_rotate = np.dot(xy_slope, R.T)
-                    lines = xy_rotate[:, 1].reshape(-1, 1)
-                    words = xy_rotate[:, 0].reshape(-1, 1)
-                    db_lines = DBSCAN(eps=eps_line, metric=metric, **kwargs).fit(lines)
-                    for line_label in set(db_lines.labels_):
-                        if line_label > -1:
-                            line_dict = {
-                                'clusters_x': [],
-                                'clusters_y': [],
-                                'clusters_text': [],
-                                'line_slope': avg_slope
-                            }
-                            ldx = db_lines.labels_ == line_label
-                            text_line = text_slope[ldx]
-                            xy_line = xy_slope[ldx]
-                            words_line = words[ldx]
-                            db_words = DBSCAN(eps=eps_word, metric=metric, **kwargs).fit(words_line)
-                            for word_label in set(db_words.labels_):
-                                if word_label > -1:
-                                    wdx = db_words.labels_ == word_label
-                                    word_x, word_y = xy_line[wdx].mean(axis=0)
-                                    line_dict['clusters_x'].append(word_x)
-                                    line_dict['clusters_y'].append(word_y)
-                                    line_dict['clusters_text'].append(list(text_line[wdx]))
-                            reduced_data[frame].append(line_dict)
-    return reduced_data
+    kwargs_cluster = {}
+    kwargs_cluster['eps_slope'] = kwargs_dbscan.pop('eps_slope')
+    kwargs_cluster['eps_line'] = kwargs_dbscan.pop('eps_line')
+    kwargs_cluster['eps_word'] = kwargs_dbscan.pop('eps_word')
+    kwargs_cluster['dot_freq'] = kwargs_dbscan.pop('dot_freq')
+    kwargs_cluster['metric'] = kwargs_dbscan.pop('metric')
+    return cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan)

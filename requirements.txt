@@ -1,6 +1,9 @@
+collatex
+beautifulsoup4
 Flask
 nose
 numpy
+python-levenshtein
 python-slugify
 scipy
 scikit-learn

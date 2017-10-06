@@ -12,3 +12,6 @@ Reducers
 
 .. automodule:: panoptes_aggregation.reducers.poly_line_text_reducer
   :members:
+
+.. automodule:: panoptes_aggregation.reducers.text_utils
+  :members:

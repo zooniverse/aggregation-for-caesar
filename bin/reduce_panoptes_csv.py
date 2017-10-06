@@ -39,6 +39,8 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
     workflow_id = extracted.workflow_id.iloc[0]
     extractor_name = extracted.extractor.iloc[0]
     reducer_name = extractor_name.replace('extractor', 'reducer')
+    if reducer_name == 'sw_reducer':
+        reducer_name = 'poly_line_text_reducer'
 
     reduced_data = OrderedDict([
         ('subject_id', []),

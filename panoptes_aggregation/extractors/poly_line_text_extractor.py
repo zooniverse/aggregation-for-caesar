@@ -26,8 +26,8 @@ def poly_line_text_extractor(classification):
     extraction : dict
         A dictionary with one key for each `frame`. The value for each frame
         is a dict with `text`, a list-of-lists of transcribe words, `points`, a
-        dict with the list-of-lists of `x` and `y` postions of each word, and
-        `slope`, a list of the slopes (in deg) of each line drawn.
+        dict with the list-of-lists of `x` and `y` postions of each space between words,
+        and `slope`, a list of the slopes (in deg) of each line drawn.
         For `points` and `text` there is one inner list for each annotaiton made
         on the frame.
 
@@ -38,7 +38,8 @@ def poly_line_text_extractor(classification):
             {
                 'frame': 0,
                 'points': [
-                    {'x': 756, 'y': 197}
+                    {'x': 756, 'y': 197},
+                    {'x': 856', y': 197}
                 ],
                 'details': [
                     {'value': '[unclear]Cipher[/unclear]'}
@@ -48,7 +49,8 @@ def poly_line_text_extractor(classification):
                 'frame': 0,
                 'points': [
                     {'x': 756, 'y': 97},
-                    {'x': 856, 'y': 97}
+                    {'x': 856, 'y': 97},
+                    {'x': 956, 'y': 97}
                 ],
                 'details': [
                     {'value': 'A word'}
@@ -57,7 +59,7 @@ def poly_line_text_extractor(classification):
     ]}
     >>> poly_line_text_extractor(classification)
     {'frame0': {
-        'points': {'x': [[756], [756, 856]], 'y': [[197], [97, 97]]},
+        'points': {'x': [[756, 856], [756, 856, 956]], 'y': [[197, 197], [97, 97, 97]]},
         'text': [['[unclear]Cipher[/unclear]'], ['A', 'word']]
         'slope': [0, 0]
     }}
@@ -85,9 +87,9 @@ def poly_line_text_extractor(classification):
         else:
             # default the slope to 0 if only one point was drawn
             slope = 0
-        # NOTE: if `words` and `points` are differnt lengths
+        # NOTE: if `words` + 1 and `points` are differnt lengths
         # the extract is not used
-        if len(words) == len(x):
+        if len(words) + 1 == len(x):
             extract[frame]['text'].append(words)
             extract[frame]['points']['x'].append(x)
             extract[frame]['points']['y'].append(y)
