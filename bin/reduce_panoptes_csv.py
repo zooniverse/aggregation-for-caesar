@@ -25,7 +25,10 @@ def last_filter(data):
     return data[ldx]
 
 
-def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', order=False):
+tracemalloc.start()
+
+
+def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', order=False, stream=False):
     if not isinstance(extracted_csv, io.IOBase):
         extracted_csv = open(extracted_csv, 'r')
 
@@ -42,13 +45,19 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
     if reducer_name == 'sw_reducer':
         reducer_name = 'poly_line_text_reducer'
 
-    reduced_data = OrderedDict([
+    output_path, output_base = os.path.split(output)
+    output_base_name, output_ext = os.path.splitext(output_base)
+    output_name = os.path.join(output_path, '{0}_{1}.csv'.format(reducer_name, output_base_name))
+
+    blank_reduced_data = OrderedDict([
         ('subject_id', []),
         ('workflow_id', []),
         ('task', []),
         ('reducer', []),
         ('data', [])
     ])
+
+    reduced_data = copy.deepcopy(blank_reduced_data)
 
     widgets = [
         'Reducing: ',
@@ -84,15 +93,23 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
                 reduced_data['task'].append(task)
                 reduced_data['reducer'].append(reducer_name)
                 reduced_data['data'].append(reduction)
+        if stream:
+            if (sdx + 1) % 50 == 0:
+                trace_print()
+            if sdx == 0:
+                pandas.DataFrame(reduced_data).to_csv(output_name, mode='w', index=False)
+            else:
+                pandas.DataFrame(reduced_data).to_csv(output_name, mode='a', index=False, header=False)
+            reduced_data = copy.deepcopy(blank_reduced_data)
         pbar.update(sdx + 1)
     pbar.finish()
 
-    if len(reduced_data['data']) == 0:
-        warnings.warn('No data reduced with {0}'.format(reducer_name))
-    output_path, output_base = os.path.split(output)
-    output_base_name, output_ext = os.path.splitext(output_base)
-    output_name = os.path.join(output_path, '{0}_{1}.csv'.format(reducer_name, output_base_name))
-    flat_reduced_data = flatten_data(reduced_data)
+    if stream:
+        reduced_csv = pandas.read_csv(output_name)
+        reduced_csv.data = reduced_csv.data.apply(eval)
+        flat_reduced_data = flatten_data(reduced_csv)
+    else:
+        flat_reduced_data = flatten_data(reduced_data)
     if order:
         flat_reduced_data = order_columns(flat_reduced_data, front=['choice', 'total_vote_count', 'choice_count'])
     flat_reduced_data.to_csv(output_name, index=False)
@@ -107,6 +124,7 @@ if __name__ == "__main__":
     parser.add_argument("-k", "--keywords", help="keywords to be passed into the reducer in the form of a json string, e.g. \'{\"eps\": 5.5, \"min_samples\": 3}\'  (note: double quotes must be used inside the brackets)", type=json.loads, default={})
     parser.add_argument("-O", "--order", help="arrange the data columns in alphabetical order before saving", action="store_true")
     parser.add_argument("-o", "--output", help="the base name for output csv file to store the reductions", type=str, default="reductions")
+    parser.add_argument("-s", "--stream", help="stream output to csv after each redcution (this is slower but is resumable)", action="store_true")
     args = parser.parse_args()
 
-    reduce_csv(args.extracted_csv, filter=args.filter, keywords=args.keywords, output=args.output, order=args.order)
+    reduce_csv(args.extracted_csv, filter=args.filter, keywords=args.keywords, output=args.output, order=args.order, stream=args.stream)
