@@ -263,7 +263,7 @@ def align_words(word_line, xy_line, text_line, kwargs_cluster, kwargs_dbscan):
         collation = col.Collation()
         witness_key = []
         for tdx, t in enumerate(text_line):
-            if t != '':
+            if t.strip() != '':
                 key = str(tdx)
                 collation.add_plain_witness(key, t)
                 witness_key.append(key)
