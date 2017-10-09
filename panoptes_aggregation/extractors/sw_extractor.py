@@ -24,8 +24,13 @@ tag_whitelist = [
 def clean_text(s):
     # remove unicode chars
     s_out = s.encode('ascii', 'ignore').decode('ascii')
-    # remove span tags (these should never have been in the text to begin with)
-    if '<' in s_out:
+    if '<xml>' in s_out:
+        # the user copy and pasted in from micorsoft office
+        # these classifications are a mess, just strip all tags
+        soup = bs4.BeautifulSoup(s_out, 'lxml')
+        s_out = soup.get_text().replace('\n', '')
+    elif '<' in s_out:
+        # remove html tags (these should never have been in the text to begin with)
         soup = bs4.BeautifulSoup(s_out, 'html.parser')
         for match in soup.findAll():
             if (match.text.strip() == '') or (match.name not in tag_whitelist):
