@@ -79,6 +79,8 @@ optional arguments:
   -o OUTPUT, --output OUTPUT
                         the base name for output csv file to store the
                         reductions
+  -s, --stream          stream output to csv after each redcution (this is
+                        slower but is resumable)
 ```
 
 example usage:
