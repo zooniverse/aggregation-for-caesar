@@ -268,13 +268,17 @@ def align_words(word_line, xy_line, text_line, kwargs_cluster, kwargs_dbscan):
                 collation.add_plain_witness(key, t)
                 witness_key.append(key)
         if len(collation.witnesses) > 0:
-            alignment_table = col.collate(collation, near_match=True, segmentation=False)
+            scheduler = col.near_matching.Scheduler()
+            alignment_table = col.collate(collation, near_match=True, segmentation=False, scheduler=scheduler)
             for cols in alignment_table.columns:
                 word_dict = cols.tokens_per_witness
                 word_list = []
                 for key in witness_key:
                     word_list.append(str(word_dict.get(key, [''])[0]))
                 clusters_text.append(word_list)
+            # fix memory leak by deleting these
+            del scheduler
+            del alignment_table
     return clusters_x, clusters_y, clusters_text
 
 
