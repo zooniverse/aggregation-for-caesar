@@ -6,6 +6,7 @@ from panoptes_aggregation import reducers
 from panoptes_aggregation.csv_utils import flatten_data, unflatten_data, order_columns
 import json
 import math
+import numpy as np
 import io
 import os
 import pandas
@@ -25,9 +26,6 @@ def last_filter(data):
     return data[ldx]
 
 
-tracemalloc.start()
-
-
 def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', order=False, stream=False):
     if not isinstance(extracted_csv, io.IOBase):
         extracted_csv = open(extracted_csv, 'r')
@@ -37,6 +35,7 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
 
     extracted.sort_values(['subject_id', 'created_at'], inplace=True)
 
+    resume = False
     subjects = extracted.subject_id.unique()
     tasks = extracted.task.unique()
     workflow_id = extracted.workflow_id.iloc[0]
@@ -48,6 +47,14 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
     output_path, output_base = os.path.split(output)
     output_base_name, output_ext = os.path.splitext(output_base)
     output_name = os.path.join(output_path, '{0}_{1}.csv'.format(reducer_name, output_base_name))
+
+    if stream:
+        if os.path.isfile(output_name):
+            print('resuming from last run')
+            resume = True
+            with open(output_name, 'r') as reduced_file:
+                reduced_csv = pandas.read_csv(reduced_file)
+                subjects = np.setdiff1d(subjects, reduced_csv.subject_id)
 
     blank_reduced_data = OrderedDict([
         ('subject_id', []),
@@ -94,9 +101,7 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
                 reduced_data['reducer'].append(reducer_name)
                 reduced_data['data'].append(reduction)
         if stream:
-            if (sdx + 1) % 50 == 0:
-                trace_print()
-            if sdx == 0:
+            if (sdx == 0) and (not resume):
                 pandas.DataFrame(reduced_data).to_csv(output_name, mode='w', index=False)
             else:
                 pandas.DataFrame(reduced_data).to_csv(output_name, mode='a', index=False, header=False)
@@ -106,8 +111,11 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
 
     if stream:
         reduced_csv = pandas.read_csv(output_name)
-        reduced_csv.data = reduced_csv.data.apply(eval)
-        flat_reduced_data = flatten_data(reduced_csv)
+        if 'data' in reduced_csv:
+            reduced_csv.data = reduced_csv.data.apply(eval)
+            flat_reduced_data = flatten_data(reduced_csv)
+        else:
+            return output_name
     else:
         flat_reduced_data = flatten_data(reduced_data)
     if order:
