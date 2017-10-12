@@ -702,7 +702,7 @@ reduced_data = {
             'clusters_y': [127.12, 139.355],
             'consensus_score': 4.0,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 4,
             'slope_label': 0
         },
@@ -717,7 +717,7 @@ reduced_data = {
             'clusters_y': [273.3075, 274.9225],
             'consensus_score': 4.0,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 4,
             'slope_label': 0
         },
@@ -732,7 +732,7 @@ reduced_data = {
             'clusters_y': [340.52799999999996, 338.09],
             'consensus_score': 4.75,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 5,
             'slope_label': 0
         },
@@ -747,7 +747,7 @@ reduced_data = {
             'clusters_y': [395.975, 384.53999999999996],
             'consensus_score': 3.75,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 4,
             'slope_label': 0
         },
@@ -762,7 +762,7 @@ reduced_data = {
             'clusters_y': [461.305, 448.28499999999997],
             'consensus_score': 3.0,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 6,
             'slope_label': 0
         },
@@ -778,7 +778,7 @@ reduced_data = {
             'clusters_y': [508.83666666666664, 500.505],
             'consensus_score': 2.0,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 3,
             'slope_label': 0
         },
@@ -794,7 +794,7 @@ reduced_data = {
             'clusters_y': [566.2200000000001, 552.72],
             'consensus_score': 2.8,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 4,
             'slope_label': 0
         },
@@ -809,7 +809,7 @@ reduced_data = {
             'clusters_y': [630.3525, 611.5733333333334],
             'consensus_score': 3.25,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 4,
             'slope_label': 0
         },
@@ -824,7 +824,7 @@ reduced_data = {
             'clusters_y': [683.7599999999999, 680.4133333333334],
             'consensus_score': 2.75,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 5,
             'slope_label': 0
         },
@@ -838,7 +838,7 @@ reduced_data = {
             'clusters_y': [739.5300000000001, 747.7033333333334],
             'consensus_score': 3.0,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 3,
             'slope_label': 0
         },
@@ -854,7 +854,7 @@ reduced_data = {
             'clusters_y': [800.1466666666666, 826.4449999999999],
             'consensus_score': 2.8,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 3,
             'slope_label': 0
         },
@@ -869,7 +869,7 @@ reduced_data = {
             'clusters_y': [850.88, 850.7],
             'consensus_score': 1.75,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 3,
             'slope_label': 0},
         {
@@ -883,7 +883,7 @@ reduced_data = {
             'clusters_y': [909.73, 934.2650000000001],
             'consensus_score': 2.0,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 3,
             'slope_label': 0},
         {
@@ -895,7 +895,7 @@ reduced_data = {
             'clusters_y': [963.015, 956.645],
             'consensus_score': 2.0,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 2,
             'slope_label': 0},
         {
@@ -909,7 +909,7 @@ reduced_data = {
             'clusters_y': [1015.4, 1020.78],
             'consensus_score': 1.5,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 2,
             'slope_label': 0},
         {
@@ -924,7 +924,7 @@ reduced_data = {
             'clusters_y': [1088.7925, 1088.0325],
             'consensus_score': 4.0,
             'gutter_label': 1,
-            'line_slope': 0.05346843624842927,
+            'line_slope': 0.09112619119034585,
             'number_views': 4,
             'slope_label': 0
         }
@@ -945,15 +945,15 @@ class TestSWClusterLines(unittest.TestCase):
 
     def test_process_data(self):
         result = process_data(extracted_data)
-        self.assertDictEqual(result, processed_data)
+        self.assertDictEqual(dict(result), processed_data)
 
     def test_cluster_lines(self):
-        result = poly_line_text_reducer._original(processed_data, metric='euclidean', **self.kwargs)
-        self.assertDictEqual(result, reduced_data)
+        result = poly_line_text_reducer._original(processed_data, metric='euclidean', gutter_tol=0, **self.kwargs)
+        self.assertDictEqual(dict(result), reduced_data)
 
     def test_poly_line_text_reducer(self):
         result = poly_line_text_reducer(extracted_data, **self.kwargs)
-        self.assertDictEqual(result, reduced_data)
+        self.assertDictEqual(dict(result), reduced_data)
 
     def test_poly_line_text_reducer_request(self):
         app = flask.Flask(__name__)
@@ -964,7 +964,7 @@ class TestSWClusterLines(unittest.TestCase):
         url_params = '?{0}'.format(urllib.parse.urlencode(self.kwargs))
         with app.test_request_context(url_params, **request_kwargs):
             result = poly_line_text_reducer(flask.request)
-            self.assertDictEqual(result, reduced_data)
+            self.assertDictEqual(dict(result), reduced_data)
 
 
 if __name__ == '__main__':
