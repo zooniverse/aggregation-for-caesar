@@ -14,7 +14,7 @@ def tokenize(self, contents):
 col.core_classes.WordPunctuationTokenizer.tokenize = tokenize
 
 
-def overlap(x, y):
+def overlap(x, y, tol=0):
     '''Check if two line segments overlap
 
     Parameters
@@ -23,16 +23,26 @@ def overlap(x, y):
         A list with the start and end point of the first line segment
     y : lits
         A list with the start and end point of the second line segment
-
+    tol : float
+        The tolerance to consider lines overlapping. Default 0, positive
+        value indicate small overlaps are not considered, negitive values
+        idicate small gaps are not considered.
     Returns
     -------
     overlap : bool
         True if the two line segments overlap, False otherwise
     '''
-    return x[1] >= y[0] and y[1] >= x[0]
+    return (x[1] - tol) >= (y[0] + tol) and (y[1] - tol) >= (x[0] + tol)
 
 
-def gutter(lines_in):
+def false_in_middle(a):
+    a = np.array(a)
+    first = np.nonzero(np.cumsum(a) == 1)[0][0]
+    last = np.nonzero(np.cumsum(a[::-1])[::-1] == 1)[0][0]
+    return not a[first:last + 1].all()
+
+
+def gutter(lines_in, tol=0):
     '''Cluster list of input line segments by what side of
     the page gutter they are on.
 
@@ -49,13 +59,17 @@ def gutter(lines_in):
         idicates what side of the gutter(s) the input line segment is on.
     '''
     if len(lines_in) > 0:
-        lines = [[min(l), max(l)] for l in lines_in]
+        lines = np.array([[min(l), max(l)] for l in lines_in])
+        # x_line = np.arange(lines.min(), lines.max() + 0.1, 0.1).round(1)
+        # num_overlap = np.array([sum([overlap(l, [x, x]) for l in lines]) for x in x_line])
+        # min_overlap = num_overlap >= min_samples
+        # mask_out = np.array([false_in_middle(min_overlap[np.array([overlap(l, [x, x]) for x in x_line])]) for l in lines])
         overlap_lines = []
         for ldx, l in enumerate(lines):
             if ldx == 0:
                 overlap_lines = np.array([l])
             else:
-                o_lines = np.array([overlap(o, l) for o in overlap_lines])
+                o_lines = np.array([overlap(o, l, tol=tol) for o in overlap_lines])
                 if o_lines.any():
                     comp = np.vstack([overlap_lines[o_lines], l])
                     overlap_lines[o_lines] = [comp.min(), comp.max()]
@@ -65,8 +79,9 @@ def gutter(lines_in):
         overlap_lines.sort(axis=0)
         gutter_label = -np.ones(len(lines), dtype=int)
         for odx, o in enumerate(overlap_lines):
-            gdx = np.array([overlap(o, l) for l in lines])
+            gdx = np.array([overlap(o, l, tol=tol) for l in lines])
             gutter_label[gdx] = odx
+        # gutter_label[mask_out] = -1
         return gutter_label
     else:
         return np.array([])
@@ -274,7 +289,10 @@ def align_words(word_line, xy_line, text_line, kwargs_cluster, kwargs_dbscan):
                 word_dict = cols.tokens_per_witness
                 word_list = []
                 for key in witness_key:
-                    word_list.append(str(word_dict.get(key, [''])[0]))
+                    if len(word_dict) >= kwargs_cluster['min_word_count']:
+                        word_list.append(str(word_dict.get(key, [''])[0]))
+                    else:
+                        word_list.append('')
                 clusters_text.append(word_list)
             # fix memory leak by deleting these
             del scheduler
@@ -282,15 +300,18 @@ def align_words(word_line, xy_line, text_line, kwargs_cluster, kwargs_dbscan):
     return clusters_x, clusters_y, clusters_text
 
 
-def cluster_by_line(xy_slope, text_slope, annotation_labels, kwargs_cluster, kwargs_dbscan):
+def cluster_by_line(xy_rotate, xy_gutter, text_gutter, annotation_labels, kwargs_cluster, kwargs_dbscan):
     '''A function to take the annotations for one `slope_label` and cluster them
     based on perpendicular distance (e.g. lines of text).
 
     Parameters
     ----------
-    xy_slope : np.array
+    xy_rotate : np.array
+        An array of shape nx2 containing the (x, y) positions of *each* dot drawn in the
+        rotate coordiate frame.
+    xy_gutter : np.array
         An array of shape nx2 containing the (x, y) positions for *each* dot drawn.
-    text_slope : np.array
+    text_gutter : np.array
         An array of shape nx1 containing the text for *each* dot drawn. Note: each
         annotation has an empty string added to the end so this array has the same
         shape as `xy_slope`.
@@ -309,10 +330,6 @@ def cluster_by_line(xy_slope, text_slope, annotation_labels, kwargs_cluster, kwa
         A list of reductions, one for each line. Each reduction is a dictionary
         containing the information for the line.
     '''
-    c = np.cos(np.deg2rad(-kwargs_cluster['avg_slope']))
-    s = np.sin(np.deg2rad(-kwargs_cluster['avg_slope']))
-    R = np.array([[c, -s], [s, c]])
-    xy_rotate = np.dot(xy_slope, R.T)
     lines = xy_rotate[:, 1].reshape(-1, 1)
     words = xy_rotate[:, 0].reshape(-1, 1)
     a_lables = np.unique(annotation_labels)
@@ -327,9 +344,9 @@ def cluster_by_line(xy_slope, text_slope, annotation_labels, kwargs_cluster, kwa
         for a_label in a_lables[ldx]:
             adx |= annotation_labels == a_label
         if kwargs_cluster['dot_freq'] == 'word':
-            clusters_x, clusters_y, clusters_text = cluster_by_word(words[adx], xy_slope[adx], text_slope[adx], annotation_labels[adx], kwargs_cluster, kwargs_dbscan)
+            clusters_x, clusters_y, clusters_text = cluster_by_word(words[adx], xy_gutter[adx], text_gutter[adx], annotation_labels[adx], kwargs_cluster, kwargs_dbscan)
         elif kwargs_cluster['dot_freq'] == 'line':
-            clusters_x, clusters_y, clusters_text = align_words(words[adx], xy_slope[adx], text_slope[adx], kwargs_cluster, kwargs_dbscan)
+            clusters_x, clusters_y, clusters_text = align_words(words[adx], xy_gutter[adx], text_gutter[adx], kwargs_cluster, kwargs_dbscan)
         else:
             raise Exception('Not a valid `dot_freq` keyword')
         line_dict = {
@@ -347,16 +364,60 @@ def cluster_by_line(xy_slope, text_slope, annotation_labels, kwargs_cluster, kwa
     return frame_lines
 
 
-def cluster_by_slope(x, y, text, slope, kwargs_cluster, kwargs_dbscan):
+def cluster_by_gutter(x_slope, y_slope, text_slope, kwargs_cluster, kwargs_dbscan):
+    '''A function to take the annotations for each frame of a subject and group them
+    based on what side of the page gutter they are on.
+
+    Parameters
+    ----------
+    x_slope : list
+        A list-of-lists of the x values for each drawn dot. There is one item in the
+        list for annotation made by the user.
+    y_slope : list
+        A list-of-lists of the y values for each drawn dot. There is one item in the
+        list for annotation made by the user.
+    text_slope : list
+        A list-of-lists of the text for each drawn dot. There is one item in the
+        list for annotation made by the user.
+    kwargs_cluster : dict
+        A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
+    kwargs_dbscan : dict
+        A dictionary containing all the other DBSCAN keywords
+
+    Returns
+    -------
+    frame_gutter : list
+        A list of the resulting extractions, one item per line of text found.
+    '''
+    c = np.cos(np.deg2rad(-kwargs_cluster['avg_slope']))
+    s = np.sin(np.deg2rad(-kwargs_cluster['avg_slope']))
+    x_rotate = np.array([np.array(x) * c - np.array(y) * s for x, y in zip(x_slope, y_slope)])
+    y_rotate = np.array([np.array(y) * c + np.array(x) * s for x, y in zip(x_slope, y_slope)])
+    gutter_labels = gutter(x_rotate, tol=kwargs_cluster['gutter_tol'])
+    gutter_labels_sorted = sort_labels(np.array(gutter_labels), np.array([np.mean(x) for x in x_rotate]))
+    frame_gutter = []
+    for gutter_label in gutter_labels_sorted:
+        gdx = gutter_labels == gutter_label
+        annotation_label = np.hstack([np.zeros(len(i)) + idx for idx, i in enumerate(x_slope[gdx])])
+        xy_rotate = np.array(list(zip(np.hstack(x_rotate[gdx]), np.hstack(y_rotate[gdx]))))
+        xy_gutter = np.array(list(zip(np.hstack(x_slope[gdx]), np.hstack(y_slope[gdx]))))
+        text_gutter = np.hstack(text_slope[gdx])
+        kwargs_cluster['gutter_label'] = gutter_label
+        frame_lines = cluster_by_line(xy_rotate, xy_gutter, text_gutter, annotation_label, kwargs_cluster, kwargs_dbscan)
+        frame_gutter += frame_lines
+    return frame_gutter
+
+
+def cluster_by_slope(x_frame, y_frame, text_frame, slope_frame, kwargs_cluster, kwargs_dbscan):
     '''A function to take the annotations for one `gutter_label` and cluster them
     based on what slope the transcription is.
 
     Parameters
     ----------
-    x : list
+    x_frame : list
         A list-of-lists of the x values for each drawn dot. There is one item in the
         list for annotation made by the user.
-    y : list
+    y_frame : list
         A list-of-lists of the y values for each drawn dot. There is one item in the
         list for annotation made by the user.
     text_frame : list
@@ -376,62 +437,18 @@ def cluster_by_slope(x, y, text, slope, kwargs_cluster, kwargs_dbscan):
     frame_slope : list
         A list of the resulting extractions, one item per line of text found.
     '''
-    db_slope = DBSCAN(eps=kwargs_cluster['eps_slope'], metric=angle_metric, **kwargs_dbscan).fit(slope)
-    slope_labels = sort_labels(db_slope.labels_, slope, reducer=avg_angle, descending=True)
     frame_slope = []
-    for slope_label in slope_labels:
-        sdx = db_slope.labels_ == slope_label
-        annotation_label = np.hstack([np.zeros(len(i)) + idx for idx, i in enumerate(x[sdx])])
-        xy_slope = np.array(list(zip(np.hstack(x[sdx]), np.hstack(y[sdx]))))
-        text_slope = np.hstack(text[sdx])
-        avg_slope = avg_angle(slope[sdx])
-        kwargs_cluster['avg_slope'] = avg_slope
-        kwargs_cluster['slope_label'] = slope_label
-        frame_lines = cluster_by_line(xy_slope, text_slope, annotation_label, kwargs_cluster, kwargs_dbscan)
-        frame_slope += frame_lines
+    if len(slope_frame) > 1:
+        db_slope = DBSCAN(eps=kwargs_cluster['eps_slope'], metric=angle_metric, **kwargs_dbscan).fit(slope_frame)
+        slope_labels = sort_labels(db_slope.labels_, slope_frame, reducer=avg_angle, descending=True)
+        for slope_label in slope_labels:
+            sdx = db_slope.labels_ == slope_label
+            avg_slope = avg_angle(slope_frame[sdx])
+            kwargs_cluster['avg_slope'] = avg_slope
+            kwargs_cluster['slope_label'] = slope_label
+            frame_gutter = cluster_by_gutter(x_frame[sdx], y_frame[sdx], text_frame[sdx], kwargs_cluster, kwargs_dbscan)
+            frame_slope += frame_gutter
     return frame_slope
-
-
-def cluster_by_gutter(x_frame, y_frame, text_frame, slope_frame, kwargs_cluster, kwargs_dbscan):
-    '''A function to take the annotations for each frame of a subject and group them
-    based on what side of the page gutter they are on.
-
-    Parameters
-    ----------
-    x_frame : list
-        A list-of-lists of the x values for each drawn dot. There is one item in the
-        list for annotation made by the user.
-    y_frame : list
-        A list-of-lists of the y values for each drawn dot. There is one item in the
-        list for annotation made by the user.
-    text_frame : list
-        A list-of-lists of the text for each drawn dot. There is one item in the
-        list for annotation made by the user.
-    slope_frame : list
-        A list of the slopes (in deg) for each annotation
-    kwargs_cluster : dict
-        A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
-    kwargs_dbscan : dict
-        A dictionary containing all the other DBSCAN keywords
-
-    Returns
-    -------
-    frame_gutter : list
-        A list of the resulting extractions, one item per line of text found.
-    '''
-    gutter_labels = gutter(x_frame)
-    gutter_labels_sorted = sort_labels(np.array(gutter_labels), np.array([np.mean(x) for x in x_frame]))
-    frame_gutter = []
-    for gutter_label in gutter_labels_sorted:
-        gdx = gutter_labels == gutter_label
-        x = x_frame[gdx]
-        y = y_frame[gdx]
-        text = text_frame[gdx]
-        slope = slope_frame[gdx]
-        kwargs_cluster['gutter_label'] = gutter_label
-        frame_slope = cluster_by_slope(x, y, text, slope, kwargs_cluster, kwargs_dbscan)
-        frame_gutter += frame_slope
-    return frame_gutter
 
 
 def cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan):
@@ -446,6 +463,6 @@ def cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan):
         for t in text_frame:
             t.append('')
         text_frame = np.array(text_frame)
-        frame_gutter = cluster_by_gutter(x_frame, y_frame, text_frame, slope_frame, kwargs_cluster, kwargs_dbscan)
-        reduced_data[frame] += frame_gutter
+        frame_slope = cluster_by_slope(x_frame, y_frame, text_frame, slope_frame, kwargs_cluster, kwargs_dbscan)
+        reduced_data[frame] += frame_slope
     return reduced_data

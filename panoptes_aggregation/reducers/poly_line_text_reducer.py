@@ -14,6 +14,8 @@ DEFAULTS = {
     'eps_slope': {'default': 25.0, 'type': float},
     'eps_line': {'default': 40.0, 'type': float},
     'eps_word': {'default': 40.0, 'type': float},
+    'gutter_tol': {'default': 0.0, 'type': float},
+    'min_word_count': {'default': 1, 'type': int},
     'dot_freq': {'default': 'word', 'type': str},
     'min_samples': {'default': 1, 'type': int},
     'metric': {'default': 'euclidean', 'type': str},
@@ -92,6 +94,8 @@ def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
     kwargs_cluster['eps_slope'] = kwargs_dbscan.pop('eps_slope')
     kwargs_cluster['eps_line'] = kwargs_dbscan.pop('eps_line')
     kwargs_cluster['eps_word'] = kwargs_dbscan.pop('eps_word')
+    kwargs_cluster['gutter_tol'] = kwargs_dbscan.pop('gutter_tol')
     kwargs_cluster['dot_freq'] = kwargs_dbscan.pop('dot_freq')
     kwargs_cluster['metric'] = kwargs_dbscan.pop('metric')
+    kwargs_cluster['min_word_count'] = kwargs_dbscan.pop('min_word_count')
     return cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan)

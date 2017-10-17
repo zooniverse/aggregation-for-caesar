@@ -482,7 +482,7 @@ reduced_data = {
             'number_views': 7,
             'consensus_score': 4.0,
             'gutter_label': 0,
-            'line_slope': -2.0348953116170234,
+            'line_slope': -1.5696676279703352,
             'slope_label': 0
         },
         {
@@ -510,58 +510,8 @@ reduced_data = {
             'number_views': 5,
             'consensus_score': 3.5,
             'gutter_label': 0,
-            'line_slope': -2.0348953116170234,
+            'line_slope': -1.5696676279703352,
             'slope_label': 0
-        },
-        {
-            'clusters_x': [
-                107.52334594726562,
-                312.98029785156251,
-                435.48880004882812,
-                578.09634399414062
-            ],
-            'clusters_y': [
-                538.7662353515625,
-                357.3962463378906,
-                254.98679809570314,
-                133.79429626464844
-            ],
-            'clusters_text': [
-                ['There', 'There', '', 'There', ''],
-                ['is', 'is', 'is', 'is', 'is'],
-                ['this', 'this', 'this', 'this', ''],
-                ['', '', '', '', '']
-            ],
-            'number_views': 5,
-            'consensus_score': 4.0,
-            'gutter_label': 0,
-            'line_slope': -40.150929458965543,
-            'slope_label': 1
-        },
-        {
-            'clusters_x': [
-                245.50492350260416,
-                408.80970001220703,
-                541.00881958007812,
-                741.60054524739587
-            ],
-            'clusters_y': [
-                544.34928385416663,
-                417.33450317382812,
-                304.87551879882812,
-                126.4166971842448
-            ],
-            'clusters_text': [
-                ['text', 'test', 'text', ''],
-                ['as', 'as', 'as', 'as'],
-                ['well', 'well', 'well', ''],
-                ['', '', '', '']
-            ],
-            'number_views': 4,
-            'consensus_score': 3.0,
-            'gutter_label': 0,
-            'line_slope': -40.150929458965543,
-            'slope_label': 1
         },
         {
             'clusters_x': [
@@ -588,7 +538,7 @@ reduced_data = {
             'number_views': 6,
             'consensus_score': 4.25,
             'gutter_label': 1,
-            'line_slope': -1.0113944075943084,
+            'line_slope': -1.5696676279703352,
             'slope_label': 0
         },
         {
@@ -610,8 +560,58 @@ reduced_data = {
             'number_views': 4,
             'consensus_score': 3.5,
             'gutter_label': 1,
-            'line_slope': -1.0113944075943084,
+            'line_slope': -1.5696676279703352,
             'slope_label': 0
+        },
+        {
+            'clusters_x': [
+                107.52334594726562,
+                312.9802978515625,
+                435.4888000488281,
+                578.0963439941406
+            ],
+            'clusters_y': [
+                538.7662353515625,
+                357.3962463378906,
+                254.98679809570314,
+                133.79429626464844
+            ],
+            'clusters_text': [
+                ['There', 'There', '', 'There', ''],
+                ['is', 'is', 'is', 'is', 'is'],
+                ['this', 'this', 'this', 'this', ''],
+                ['', '', '', '', '']
+            ],
+            'number_views': 5,
+            'consensus_score': 4.0,
+            'gutter_label': 0,
+            'line_slope': -40.020044794251575,
+            'slope_label': 1
+        },
+        {
+            'clusters_x': [
+                245.50492350260416,
+                408.80970001220703,
+                541.0088195800781,
+                741.6005452473959
+            ],
+            'clusters_y': [
+                544.3492838541666,
+                417.3345031738281,
+                304.8755187988281,
+                126.4166971842448
+            ],
+            'clusters_text': [
+                ['text', 'test', 'text', ''],
+                ['as', 'as', 'as', 'as'],
+                ['well', 'well', 'well', ''],
+                ['', '', '', '']
+            ],
+            'number_views': 4,
+            'consensus_score': 3.0,
+            'gutter_label': 0,
+            'line_slope': -40.020044794251575,
+            'slope_label': 1
         },
         {
             'clusters_x': [
@@ -635,7 +635,7 @@ reduced_data = {
             'number_views': 5,
             'consensus_score': 4.0,
             'gutter_label': 1,
-            'line_slope': -39.912957341303802,
+            'line_slope': -40.020044794251575,
             'slope_label': 1
         },
         {
@@ -660,7 +660,7 @@ reduced_data = {
             'number_views': 6,
             'consensus_score': 4.333333333333333,
             'gutter_label': 1,
-            'line_slope': -39.912957341303802,
+            'line_slope': -40.020044794251575,
             'slope_label': 1
         }
     ],
@@ -703,15 +703,15 @@ class TestClusterLines(unittest.TestCase):
 
     def test_process_data(self):
         result = process_data(extracted_data)
-        self.assertDictEqual(result, processed_data)
+        self.assertDictEqual(dict(result), processed_data)
 
     def test_cluster_lines(self):
-        result = poly_line_text_reducer._original(processed_data, metric='euclidean', dot_freq='word', **self.kwargs)
-        self.assertDictEqual(result, reduced_data)
+        result = poly_line_text_reducer._original(processed_data, metric='euclidean', dot_freq='word', gutter_tol=0, min_word_count=1, **self.kwargs)
+        self.assertDictEqual(dict(result), reduced_data)
 
     def test_poly_line_text_reducer(self):
         result = poly_line_text_reducer(extracted_data, **self.kwargs)
-        self.assertDictEqual(result, reduced_data)
+        self.assertDictEqual(dict(result), reduced_data)
 
     def test_poly_line_text_reducer_request(self):
         app = flask.Flask(__name__)
@@ -722,7 +722,7 @@ class TestClusterLines(unittest.TestCase):
         url_params = '?{0}'.format(urllib.parse.urlencode(self.kwargs))
         with app.test_request_context(url_params, **request_kwargs):
             result = poly_line_text_reducer(flask.request)
-            self.assertDictEqual(result, reduced_data)
+            self.assertDictEqual(dict(result), reduced_data)
 
 
 if __name__ == '__main__':

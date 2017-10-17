@@ -15,10 +15,11 @@ def filter_annotations(annotations, config, human=False):
                     if human:
                         annotations_by_extractor[extractor_name][-1]['task_label'] = annotation['task_label']
                     for value in annotation['value']:
-                        if value['tool'] in tool_idx:
-                            if not human:
-                                value.pop('tool_label')
-                            annotations_by_extractor[extractor_name][-1]['value'].append(value)
+                        if 'tool' in value:
+                            if value['tool'] in tool_idx:
+                                if not human:
+                                    value.pop('tool_label')
+                                annotations_by_extractor[extractor_name][-1]['value'].append(value)
             else:
                 extractor_name = config[annotation['task']]
                 annotations_by_extractor.setdefault(extractor_name, [])
