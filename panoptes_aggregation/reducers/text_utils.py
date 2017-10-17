@@ -289,7 +289,10 @@ def align_words(word_line, xy_line, text_line, kwargs_cluster, kwargs_dbscan):
                 word_dict = cols.tokens_per_witness
                 word_list = []
                 for key in witness_key:
-                    word_list.append(str(word_dict.get(key, [''])[0]))
+                    if len(word_dict) >= kwargs_cluster['min_word_count']:
+                        word_list.append(str(word_dict.get(key, [''])[0]))
+                    else:
+                        word_list.append('')
                 clusters_text.append(word_list)
             # fix memory leak by deleting these
             del scheduler
@@ -400,8 +403,8 @@ def cluster_by_gutter(x_slope, y_slope, text_slope, kwargs_cluster, kwargs_dbsca
         xy_gutter = np.array(list(zip(np.hstack(x_slope[gdx]), np.hstack(y_slope[gdx]))))
         text_gutter = np.hstack(text_slope[gdx])
         kwargs_cluster['gutter_label'] = gutter_label
-        frame_slope = cluster_by_line(xy_rotate, xy_gutter, text_gutter, annotation_label, kwargs_cluster, kwargs_dbscan)
-        frame_gutter += frame_slope
+        frame_lines = cluster_by_line(xy_rotate, xy_gutter, text_gutter, annotation_label, kwargs_cluster, kwargs_dbscan)
+        frame_gutter += frame_lines
     return frame_gutter
 
 
@@ -434,16 +437,17 @@ def cluster_by_slope(x_frame, y_frame, text_frame, slope_frame, kwargs_cluster, 
     frame_slope : list
         A list of the resulting extractions, one item per line of text found.
     '''
-    db_slope = DBSCAN(eps=kwargs_cluster['eps_slope'], metric=angle_metric, **kwargs_dbscan).fit(slope_frame)
-    slope_labels = sort_labels(db_slope.labels_, slope_frame, reducer=avg_angle, descending=True)
     frame_slope = []
-    for slope_label in slope_labels:
-        sdx = db_slope.labels_ == slope_label
-        avg_slope = avg_angle(slope_frame[sdx])
-        kwargs_cluster['avg_slope'] = avg_slope
-        kwargs_cluster['slope_label'] = slope_label
-        frame_lines = cluster_by_gutter(x_frame[sdx], y_frame[sdx], text_frame[sdx], kwargs_cluster, kwargs_dbscan)
-        frame_slope += frame_lines
+    if len(slope_frame) > 1:
+        db_slope = DBSCAN(eps=kwargs_cluster['eps_slope'], metric=angle_metric, **kwargs_dbscan).fit(slope_frame)
+        slope_labels = sort_labels(db_slope.labels_, slope_frame, reducer=avg_angle, descending=True)
+        for slope_label in slope_labels:
+            sdx = db_slope.labels_ == slope_label
+            avg_slope = avg_angle(slope_frame[sdx])
+            kwargs_cluster['avg_slope'] = avg_slope
+            kwargs_cluster['slope_label'] = slope_label
+            frame_gutter = cluster_by_gutter(x_frame[sdx], y_frame[sdx], text_frame[sdx], kwargs_cluster, kwargs_dbscan)
+            frame_slope += frame_gutter
     return frame_slope
 
 
@@ -459,6 +463,6 @@ def cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan):
         for t in text_frame:
             t.append('')
         text_frame = np.array(text_frame)
-        frame_gutter = cluster_by_slope(x_frame, y_frame, text_frame, slope_frame, kwargs_cluster, kwargs_dbscan)
-        reduced_data[frame] += frame_gutter
+        frame_slope = cluster_by_slope(x_frame, y_frame, text_frame, slope_frame, kwargs_cluster, kwargs_dbscan)
+        reduced_data[frame] += frame_slope
     return reduced_data
