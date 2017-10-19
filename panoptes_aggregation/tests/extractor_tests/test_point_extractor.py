@@ -120,6 +120,16 @@ class TestPointExtractor(unittest.TestCase):
             result = extractors.point_extractor(flask.request)
             self.assertDictEqual(result, expected)
 
+    def test_extract_request_with_task(self):
+        request_kwargs = {
+            'data': json.dumps(annotation_by_task(classification)),
+            'content_type': 'application/json'
+        }
+        app = flask.Flask(__name__)
+        with app.test_request_context('?task=T0', **request_kwargs):
+            result = extractors.point_extractor(flask.request)
+            self.assertDictEqual(result, expected)
+
 
 if __name__ == '__main__':
     unittest.main()
