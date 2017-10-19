@@ -10,7 +10,7 @@ def unpack_annotations(annotations, task):
             else:
                 annotations_list.append(value)
     else:
-        annotations_list = annotations[task]
+        annotations_list = annotations.get(task, [])
     return annotations_list
 
 
