@@ -15,3 +15,6 @@ Reducers
 
 .. automodule:: panoptes_aggregation.reducers.text_utils
   :members:
+
+.. automodule:: panoptes_aggregation.reducers.sw_variant_reducer
+  :members:

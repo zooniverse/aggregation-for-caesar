@@ -50,6 +50,7 @@
 <li><a class="reference internal" href="#point-reducer">Point Reducer</a></li>
 <li><a class="reference internal" href="#survey-reducer">Survey Reducer</a></li>
 <li><a class="reference internal" href="#polygon-as-line-tool-for-text-reducer">Polygon As Line Tool for Text Reducer</a></li>
+<li><a class="reference internal" href="#shakespeares-world-variants-reducer">Shakespeares World Variants Reducer</a></li>
 </ul>
 </li>
 </ul>
@@ -392,7 +393,7 @@ in the range [-180, 180].</p>
 
 <dl class="function">
 <dt id="panoptes_aggregation.reducers.text_utils.cluster_by_gutter">
-<code class="descclassname">panoptes_aggregation.reducers.text_utils.</code><code class="descname">cluster_by_gutter</code><span class="sig-paren">(</span><em>x_frame</em>, <em>y_frame</em>, <em>text_frame</em>, <em>slope_frame</em>, <em>kwargs_cluster</em>, <em>kwargs_dbscan</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.text_utils.cluster_by_gutter" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">panoptes_aggregation.reducers.text_utils.</code><code class="descname">cluster_by_gutter</code><span class="sig-paren">(</span><em>x_slope</em>, <em>y_slope</em>, <em>text_slope</em>, <em>kwargs_cluster</em>, <em>kwargs_dbscan</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.text_utils.cluster_by_gutter" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function to take the annotations for each frame of a subject and group them
 based on what side of the page gutter they are on.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -400,13 +401,12 @@ based on what side of the page gutter they are on.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x_frame</strong> (<em>list</em>) – A list-of-lists of the x values for each drawn dot. There is one item in the
+<li><strong>x_slope</strong> (<em>list</em>) – A list-of-lists of the x values for each drawn dot. There is one item in the
 list for annotation made by the user.</li>
-<li><strong>y_frame</strong> (<em>list</em>) – A list-of-lists of the y values for each drawn dot. There is one item in the
+<li><strong>y_slope</strong> (<em>list</em>) – A list-of-lists of the y values for each drawn dot. There is one item in the
 list for annotation made by the user.</li>
-<li><strong>text_frame</strong> (<em>list</em>) – A list-of-lists of the text for each drawn dot. There is one item in the
+<li><strong>text_slope</strong> (<em>list</em>) – A list-of-lists of the text for each drawn dot. There is one item in the
 list for annotation made by the user.</li>
-<li><strong>slope_frame</strong> (<em>list</em>) – A list of the slopes (in deg) for each annotation</li>
 <li><strong>kwargs_cluster</strong> (<em>dict</em>) – A dictionary containing the <cite>eps_*</cite>, <cite>metric</cite>, and <cite>dot_freq</cite> keywords</li>
 <li><strong>kwargs_dbscan</strong> (<em>dict</em>) – A dictionary containing all the other DBSCAN keywords</li>
 </ul>
@@ -424,7 +424,7 @@ list for annotation made by the user.</li>
 
 <dl class="function">
 <dt id="panoptes_aggregation.reducers.text_utils.cluster_by_line">
-<code class="descclassname">panoptes_aggregation.reducers.text_utils.</code><code class="descname">cluster_by_line</code><span class="sig-paren">(</span><em>xy_slope</em>, <em>text_slope</em>, <em>annotation_labels</em>, <em>kwargs_cluster</em>, <em>kwargs_dbscan</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.text_utils.cluster_by_line" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">panoptes_aggregation.reducers.text_utils.</code><code class="descname">cluster_by_line</code><span class="sig-paren">(</span><em>xy_rotate</em>, <em>xy_gutter</em>, <em>text_gutter</em>, <em>annotation_labels</em>, <em>kwargs_cluster</em>, <em>kwargs_dbscan</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.text_utils.cluster_by_line" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function to take the annotations for one <cite>slope_label</cite> and cluster them
 based on perpendicular distance (e.g. lines of text).</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -432,8 +432,10 @@ based on perpendicular distance (e.g. lines of text).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>xy_slope</strong> (<em>np.array</em>) – An array of shape nx2 containing the (x, y) positions for <em>each</em> dot drawn.</li>
-<li><strong>text_slope</strong> (<em>np.array</em>) – An array of shape nx1 containing the text for <em>each</em> dot drawn. Note: each
+<li><strong>xy_rotate</strong> (<em>np.array</em>) – An array of shape nx2 containing the (x, y) positions of <em>each</em> dot drawn in the
+rotate coordiate frame.</li>
+<li><strong>xy_gutter</strong> (<em>np.array</em>) – An array of shape nx2 containing the (x, y) positions for <em>each</em> dot drawn.</li>
+<li><strong>text_gutter</strong> (<em>np.array</em>) – An array of shape nx1 containing the text for <em>each</em> dot drawn. Note: each
 annotation has an empty string added to the end so this array has the same
 shape as <cite>xy_slope</cite>.</li>
 <li><strong>annotation_labels</strong> (<em>np.array</em>) – An array of shape nx1 containing a unique lable indicating what annotation
@@ -457,7 +459,7 @@ containing the information for the line.</p>
 
 <dl class="function">
 <dt id="panoptes_aggregation.reducers.text_utils.cluster_by_slope">
-<code class="descclassname">panoptes_aggregation.reducers.text_utils.</code><code class="descname">cluster_by_slope</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>text</em>, <em>slope</em>, <em>kwargs_cluster</em>, <em>kwargs_dbscan</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.text_utils.cluster_by_slope" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">panoptes_aggregation.reducers.text_utils.</code><code class="descname">cluster_by_slope</code><span class="sig-paren">(</span><em>x_frame</em>, <em>y_frame</em>, <em>text_frame</em>, <em>slope_frame</em>, <em>kwargs_cluster</em>, <em>kwargs_dbscan</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.text_utils.cluster_by_slope" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function to take the annotations for one <cite>gutter_label</cite> and cluster them
 based on what slope the transcription is.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -465,9 +467,9 @@ based on what slope the transcription is.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>list</em>) – A list-of-lists of the x values for each drawn dot. There is one item in the
+<li><strong>x_frame</strong> (<em>list</em>) – A list-of-lists of the x values for each drawn dot. There is one item in the
 list for annotation made by the user.</li>
-<li><strong>y</strong> (<em>list</em>) – A list-of-lists of the y values for each drawn dot. There is one item in the
+<li><strong>y_frame</strong> (<em>list</em>) – A list-of-lists of the y values for each drawn dot. There is one item in the
 list for annotation made by the user.</li>
 <li><strong>text_frame</strong> (<em>list</em>) – A list-of-lists of the text for each drawn dot. There is one item in the
 list for annotation made by the user. The inner text lists are padded with
@@ -543,7 +545,7 @@ inner list contains the transcriptions for each word.</td>
 
 <dl class="function">
 <dt id="panoptes_aggregation.reducers.text_utils.gutter">
-<code class="descclassname">panoptes_aggregation.reducers.text_utils.</code><code class="descname">gutter</code><span class="sig-paren">(</span><em>lines_in</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.text_utils.gutter" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">panoptes_aggregation.reducers.text_utils.</code><code class="descname">gutter</code><span class="sig-paren">(</span><em>lines_in</em>, <em>tol=0</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.text_utils.gutter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cluster list of input line segments by what side of
 the page gutter they are on.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -564,7 +566,7 @@ idicates what side of the gutter(s) the input line segment is on.</td>
 
 <dl class="function">
 <dt id="panoptes_aggregation.reducers.text_utils.overlap">
-<code class="descclassname">panoptes_aggregation.reducers.text_utils.</code><code class="descname">overlap</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.text_utils.overlap" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">panoptes_aggregation.reducers.text_utils.</code><code class="descname">overlap</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>tol=0</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.text_utils.overlap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if two line segments overlap</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -573,6 +575,9 @@ idicates what side of the gutter(s) the input line segment is on.</td>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>x</strong> (<em>list</em>) – A list with the start and end point of the first line segment</li>
 <li><strong>y</strong> (<em>lits</em>) – A list with the start and end point of the second line segment</li>
+<li><strong>tol</strong> (<em>float</em>) – The tolerance to consider lines overlapping. Default 0, positive
+value indicate small overlaps are not considered, negitive values
+idicate small gaps are not considered.</li>
 </ul>
 </td>
 </tr>
@@ -620,6 +625,31 @@ Default: False</li>
 <dd><p>tokenize only on space so angle bracket tags are not split</p>
 </dd></dl>
 
+<span class="target" id="module-panoptes_aggregation.reducers.sw_variant_reducer"></span><div class="section" id="shakespeares-world-variants-reducer">
+<h2>Shakespeares World Variants Reducer<a class="headerlink" href="#shakespeares-world-variants-reducer" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a fuction to reduce the <cite>variants</cite> data from
+extracts.</p>
+<dl class="function">
+<dt id="panoptes_aggregation.reducers.sw_variant_reducer.sw_variant_reducer">
+<code class="descclassname">panoptes_aggregation.reducers.sw_variant_reducer.</code><code class="descname">sw_variant_reducer</code><span class="sig-paren">(</span><em>extracts</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.sw_variant_reducer.sw_variant_reducer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce all variants for a subject into one list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>extracts</strong> (<em>list</em>) – A list of extracts created by
+<a class="reference internal" href="extractros.html#panoptes_aggregation.extractors.sw_variant_extractor.sw_variant_extractor" title="panoptes_aggregation.extractors.sw_variant_extractor.sw_variant_extractor"><code class="xref py py-meth docutils literal"><span class="pre">panoptes_aggregation.extractors.sw_variant_extractor.sw_variant_extractor()</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>reduction</strong> – A dictionary with at most one key, <cite>variants</cite> with the list of
+all variants in the subject</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 </div>
 
 

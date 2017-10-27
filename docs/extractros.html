@@ -54,6 +54,7 @@
 <li><a class="reference internal" href="#point-extractor">Point Extractor</a></li>
 <li><a class="reference internal" href="#survey-extractor">Survey Extractor</a></li>
 <li><a class="reference internal" href="#polygon-as-line-tool-for-text-extractor">Polygon As Line Tool for Text Extractor</a></li>
+<li><a class="reference internal" href="#shakespeares-world-variants-extractor">Shakespeares World Variants Extractor</a></li>
 </ul>
 </li>
 </ul>
@@ -270,6 +271,31 @@ on the frame.</td>
 <span class="go">}}</span>
 </pre></div>
 </div>
+</dd></dl>
+
+</div>
+<span class="target" id="module-panoptes_aggregation.extractors.sw_variant_extractor"></span><div class="section" id="shakespeares-world-variants-extractor">
+<h2>Shakespeares World Variants Extractor<a class="headerlink" href="#shakespeares-world-variants-extractor" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a fuction to extract the <cite>variants</cite> data from
+annotations.</p>
+<dl class="function">
+<dt id="panoptes_aggregation.extractors.sw_variant_extractor.sw_variant_extractor">
+<code class="descclassname">panoptes_aggregation.extractors.sw_variant_extractor.</code><code class="descname">sw_variant_extractor</code><span class="sig-paren">(</span><em>classification</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.extractors.sw_variant_extractor.sw_variant_extractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract all variants in a classification into one list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>classification</strong> (<em>dict</em>) – A dictionary containing an <cite>annotations</cite> key that is a list of
+Shakespeares World annotations</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>extraction</strong> – A dictionary with at most one key, <cite>variants</cite> with the list of
+all variants in the classification</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
