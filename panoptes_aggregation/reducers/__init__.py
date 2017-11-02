@@ -8,7 +8,7 @@ from .sw_variant_reducer import sw_variant_reducer
 
 reducers = {
     'point_reducer': point_reducer,
-    'rectangle_reducer': rectangle_reducer
+    'rectangle_reducer': rectangle_reducer,
     'question_reducer': question_reducer,
     'survey_reducer': survey_reducer,
     'poly_line_text_reducer': poly_line_text_reducer,
