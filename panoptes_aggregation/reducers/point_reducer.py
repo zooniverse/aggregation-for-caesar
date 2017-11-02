@@ -62,7 +62,7 @@ def point_reducer(data_by_tool, **kwargs):
         A dictinary with the following keys
 
         * `tool*_points_x` : A list of `x` positions for **all** points drawn with `tool*`
-        * `tool*_points_x` : A list of `y` positions for **all** points drawn with `tool*`
+        * `tool*_points_y` : A list of `y` positions for **all** points drawn with `tool*`
         * `tool*_cluster_labels` : A list of cluster labels for **all** points drawn with `tool*`
         * `tool*_clusters_count` : The number of points in each **cluster** found
         * `tool*_clusters_x` : The `x` position for each **cluster** found
@@ -81,7 +81,7 @@ def point_reducer(data_by_tool, **kwargs):
         # default each point in no cluster
         clusters['{0}_cluster_labels'.format(tool)] = [-1] * loc.shape[0]
         if loc.shape[0] > kwargs['min_samples']:
-            db = DBSCAN(**kwargs).fit(np.array(loc))
+            db = DBSCAN(**kwargs).fit(loc)
             # what cluster each point belongs to
             clusters['{0}_cluster_labels'.format(tool)] = list(db.labels_)
             for k in set(db.labels_):
