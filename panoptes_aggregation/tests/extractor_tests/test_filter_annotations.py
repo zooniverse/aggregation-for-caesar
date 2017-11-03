@@ -40,6 +40,19 @@ annotation = [
         'task': 'T2',
         'task_label': 'A multi question',
         'value': ['Blue', 'Green']
+    }, {
+        'task': 'T3',
+        'task_label': 'Transcribe',
+        'value': [
+            {
+                'type': 'graphic',
+                'tag': '<graphic>word</graphic>'
+            },
+            {
+                'type': 'text',
+                'text': 'All the words'
+            }
+        ]
     }
 ]
 
@@ -49,7 +62,8 @@ config = {
         'point_extractor': [0, 2]
     },
     'T1': 'question_extractor',
-    'T2': 'question_extractor'
+    'T2': 'question_extractor',
+    'T3': ['sw_extractor', 'sw_graphic_extractor']
 }
 
 
@@ -94,6 +108,32 @@ class TestFilterAnnotations(unittest.TestCase):
             }, {
                 'task': 'T2',
                 'value': ['Blue', 'Green']
+            }],
+            'sw_extractor': [{
+                'task': 'T3',
+                'value': [
+                    {
+                        'type': 'graphic',
+                        'tag': '<graphic>word</graphic>'
+                    },
+                    {
+                        'type': 'text',
+                        'text': 'All the words'
+                    }
+                ]
+            }],
+            'sw_graphic_extractor': [{
+                'task': 'T3',
+                'value': [
+                    {
+                        'type': 'graphic',
+                        'tag': '<graphic>word</graphic>'
+                    },
+                    {
+                        'type': 'text',
+                        'text': 'All the words'
+                    }
+                ]
             }]
         }
         result = filter_annotations(self.annotation, config)
@@ -142,6 +182,34 @@ class TestFilterAnnotations(unittest.TestCase):
                 'task': 'T2',
                 'task_label': 'A multi question',
                 'value': ['Blue', 'Green']
+            }],
+            'sw_extractor': [{
+                'task': 'T3',
+                'task_label': 'Transcribe',
+                'value': [
+                    {
+                        'type': 'graphic',
+                        'tag': '<graphic>word</graphic>'
+                    },
+                    {
+                        'type': 'text',
+                        'text': 'All the words'
+                    }
+                ]
+            }],
+            'sw_graphic_extractor': [{
+                'task': 'T3',
+                'task_label': 'Transcribe',
+                'value': [
+                    {
+                        'type': 'graphic',
+                        'tag': '<graphic>word</graphic>'
+                    },
+                    {
+                        'type': 'text',
+                        'text': 'All the words'
+                    }
+                ]
             }]
         }
         result = filter_annotations(self.annotation, config, human=True)

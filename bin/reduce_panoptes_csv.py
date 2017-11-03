@@ -43,6 +43,8 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
     reducer_name = extractor_name.replace('extractor', 'reducer')
     if reducer_name == 'sw_reducer':
         reducer_name = 'poly_line_text_reducer'
+    if reducer_name == 'sw_graphic_reducer':
+        reducer_name = 'rectangle_reducer'
 
     output_path, output_base = os.path.split(output)
     output_base_name, output_ext = os.path.splitext(output_base)
