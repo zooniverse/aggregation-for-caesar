@@ -2,7 +2,7 @@
 Point Reducer
 -------------
 This module provides functions to cluster points extracted with
-:mod:panoptes_aggregation.extractors.point_extractor.
+:mod:`panoptes_aggregation.extractors.point_extractor`.
 '''
 import numpy as np
 from sklearn.cluster import DBSCAN

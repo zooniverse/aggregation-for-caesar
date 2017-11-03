@@ -1,6 +1,6 @@
 '''
 Rectangle Extractor
----------------
+-------------------
 This module provides a function to extract drawn rectangles from panoptes annotations.
 '''
 from collections import OrderedDict

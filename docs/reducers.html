@@ -48,6 +48,7 @@
 <li><a class="reference internal" href="#">Reducers</a><ul>
 <li><a class="reference internal" href="#question-reducer">Question Reducer</a></li>
 <li><a class="reference internal" href="#point-reducer">Point Reducer</a></li>
+<li><a class="reference internal" href="#rectangle-reducer">Rectangle Reducer</a></li>
 <li><a class="reference internal" href="#survey-reducer">Survey Reducer</a></li>
 <li><a class="reference internal" href="#polygon-as-line-tool-for-text-reducer">Polygon As Line Tool for Text Reducer</a></li>
 <li><a class="reference internal" href="#shakespeares-world-variants-reducer">Shakespeares World Variants Reducer</a></li>
@@ -138,7 +139,7 @@ When <cite>True</cite> the set of all choices is treated as a single answer</li>
 <span class="target" id="module-panoptes_aggregation.reducers.point_reducer"></span><div class="section" id="point-reducer">
 <h2>Point Reducer<a class="headerlink" href="#point-reducer" title="Permalink to this headline">¶</a></h2>
 <p>This module provides functions to cluster points extracted with
-:mod:panoptes_aggregation.extractors.point_extractor.</p>
+<a class="reference internal" href="extractros.html#module-panoptes_aggregation.extractors.point_extractor" title="panoptes_aggregation.extractors.point_extractor"><code class="xref py py-mod docutils literal"><span class="pre">panoptes_aggregation.extractors.point_extractor</span></code></a>.</p>
 <dl class="function">
 <dt id="panoptes_aggregation.reducers.point_reducer.point_reducer">
 <code class="descclassname">panoptes_aggregation.reducers.point_reducer.</code><code class="descname">point_reducer</code><span class="sig-paren">(</span><em>data_by_tool</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.point_reducer.point_reducer" title="Permalink to this definition">¶</a></dt>
@@ -190,6 +191,69 @@ When <cite>True</cite> the set of all choices is treated as a single answer</li>
 tuples as a vlaue</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-panoptes_aggregation.reducers.rectangle_reducer"></span><div class="section" id="rectangle-reducer">
+<h2>Rectangle Reducer<a class="headerlink" href="#rectangle-reducer" title="Permalink to this headline">¶</a></h2>
+<p>This module provides functions to cluster rectangles extracted with
+<a class="reference internal" href="extractros.html#module-panoptes_aggregation.extractors.rectangle_extractor" title="panoptes_aggregation.extractors.rectangle_extractor"><code class="xref py py-mod docutils literal"><span class="pre">panoptes_aggregation.extractors.rectangle_extractor</span></code></a>.</p>
+<dl class="function">
+<dt id="panoptes_aggregation.reducers.rectangle_reducer.process_data">
+<code class="descclassname">panoptes_aggregation.reducers.rectangle_reducer.</code><code class="descname">process_data</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.rectangle_reducer.process_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a list of extractions into lists of <cite>x</cite> and <cite>y</cite> sorted by <cite>frame</cite>
+and <cite>tool</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>list</em>) – A list of extractions crated by
+<code class="xref py py-meth docutils literal"><span class="pre">panoptes_aggregation.extractors.rectangle_extractor.rectangle_extractor()</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>processed_data</strong> – A dictionary with each key being a <cite>frame</cite> dictionary values with keys being
+<cite>tool</cite> with a list of (<cite>x</cite>, <cite>y</cite>, <cite>width</cite>, <cite>height</cite>) tuples as a vlaue</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="panoptes_aggregation.reducers.rectangle_reducer.rectangle_reducer">
+<code class="descclassname">panoptes_aggregation.reducers.rectangle_reducer.</code><code class="descname">rectangle_reducer</code><span class="sig-paren">(</span><em>data_by_tool</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.rectangle_reducer.rectangle_reducer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cluster a list of rectangles by tool and frame</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data_by_tool</strong> (<em>dict</em>) – A dictionary returned by <a class="reference internal" href="#panoptes_aggregation.reducers.rectangle_reducer.process_data" title="panoptes_aggregation.reducers.rectangle_reducer.process_data"><code class="xref py py-meth docutils literal"><span class="pre">process_data()</span></code></a></li>
+<li><strong>kwrgs</strong> – <a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html">See DBSCAN</a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p><strong>reduction</strong> – A dictinary with the following keys for each frame</p>
+<ul class="simple">
+<li><cite>tool*_rec_x</cite> : A list of <cite>x</cite> positions for <strong>all</strong> rectangles drawn with <cite>tool*</cite></li>
+<li><cite>tool*_rec_y</cite> : A list of <cite>y</cite> positions for <strong>all</strong> rectangles drawn with <cite>tool*</cite></li>
+<li><cite>tool*_rec_width</cite> : A list of <cite>width</cite> values for <strong>all</strong> rectangles drawn with <cite>tool*</cite></li>
+<li><cite>tool*_rec_height</cite> : A list of <cite>height</cite> values for <strong>all</strong> rectangles drawn with <cite>tool*</cite></li>
+<li><cite>tool*_cluster_labels</cite> : A list of cluster labels for <strong>all</strong> rectangles drawn with <cite>tool*</cite></li>
+<li><cite>tool*_clusters_count</cite> : The number of points in each <strong>cluster</strong> found</li>
+<li><cite>tool*_clusters_x</cite> : The <cite>x</cite> position for each <strong>cluster</strong> found</li>
+<li><cite>tool*_clusters_y</cite> : The <cite>y</cite> position for each <strong>cluster</strong> found</li>
+<li><cite>tool*_clusters_width</cite> : The <cite>widht</cite> value for each <strong>cluster</strong> found</li>
+<li><cite>tool*_clusters_height</cite> : The <cite>height</cite> value for each <strong>cluster</strong> found</li>
+</ul>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></p>
+</td>
 </tr>
 </tbody>
 </table>

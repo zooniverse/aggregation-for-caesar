@@ -1,8 +1,8 @@
 '''
-Point Reducer
--------------
+Rectangle Reducer
+-----------------
 This module provides functions to cluster rectangles extracted with
-:mod:panoptes_aggregation.extractors.rectangle_extractor.
+:mod:`panoptes_aggregation.extractors.rectangle_extractor`.
 '''
 import numpy as np
 from sklearn.cluster import DBSCAN
@@ -78,7 +78,7 @@ def rectangle_reducer(data_by_tool, **kwargs):
         * `tool*_rec_x` : A list of `x` positions for **all** rectangles drawn with `tool*`
         * `tool*_rec_y` : A list of `y` positions for **all** rectangles drawn with `tool*`
         * `tool*_rec_width` : A list of `width` values for **all** rectangles drawn with `tool*`
-        * `tool*_rec_height` : A list of `height` values for **all** rectangles drawn with `tool*
+        * `tool*_rec_height` : A list of `height` values for **all** rectangles drawn with `tool*`
         * `tool*_cluster_labels` : A list of cluster labels for **all** rectangles drawn with `tool*`
         * `tool*_clusters_count` : The number of points in each **cluster** found
         * `tool*_clusters_x` : The `x` position for each **cluster** found

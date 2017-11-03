@@ -7,6 +7,9 @@ Reducers
 .. automodule:: panoptes_aggregation.reducers.point_reducer
   :members:
 
+.. automodule:: panoptes_aggregation.reducers.rectangle_reducer
+  :members:
+
 .. automodule:: panoptes_aggregation.reducers.survey_reducer
   :members:
 
