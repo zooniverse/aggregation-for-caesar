@@ -4,7 +4,7 @@ def workflow_extractor_config(tasks):
         # this is Shakespeares World, return the correct config
         # the workflow is not stored in Panoptes
         extractor_config['T0'] = 'question_extractor'
-        extractor_config['T2'] = 'sw_extractor'
+        extractor_config['T2'] = ['sw_extractor', 'sw_variant_extractor', 'sw_graphic_extractor']
         extractor_config['T3'] = 'question_extractor'
         return extractor_config
     for task_key, task in tasks.items():
