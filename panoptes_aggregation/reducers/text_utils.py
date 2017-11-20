@@ -6,7 +6,7 @@ from sklearn.cluster import DBSCAN
 
 
 def tokenize(self, contents):
-    '''tokenize only on space so angle bracket tags are not split'''
+    '''Tokenize only on space so angle bracket tags are not split'''
     return contents.split()
 
 
@@ -27,6 +27,7 @@ def overlap(x, y, tol=0):
         The tolerance to consider lines overlapping. Default 0, positive
         value indicate small overlaps are not considered, negitive values
         idicate small gaps are not considered.
+
     Returns
     -------
     overlap : bool
