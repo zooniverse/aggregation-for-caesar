@@ -137,6 +137,21 @@ expected = {
     }
 }
 
+classification_blank = {
+    'annotations': []
+}
+
+expected_blank = {
+    'frame0': {
+        'points': {
+            'x': [],
+            'y': []
+        },
+        'text': [],
+        'slope': []
+    }
+}
+
 
 class TestSWExtractor(unittest.TestCase):
     def setUp(self):
@@ -173,6 +188,20 @@ class TestSWExtractor(unittest.TestCase):
                                 np.testing.assert_allclose(result[i][j], expected[i][j], atol=1e-5)
                             else:
                                 self.assertEqual(result[i][j], expected[i][j])
+
+    def test_extract_blank(self):
+        result = extractors.sw_extractor(classification_blank)
+        self.assertDictEqual(result, expected_blank)
+
+    def test_request_blank(self):
+        request_kwargs = {
+            'data': json.dumps(annotation_by_task(classification_blank)),
+            'content_type': 'application/json'
+        }
+        app = flask.Flask(__name__)
+        with app.test_request_context(**request_kwargs):
+            result = extractors.sw_extractor(flask.request)
+            self.assertDictEqual(result, expected_blank)
 
 
 if __name__ == '__main__':
