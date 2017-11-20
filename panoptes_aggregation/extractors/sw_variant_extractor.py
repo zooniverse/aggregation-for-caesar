@@ -25,10 +25,11 @@ def sw_variant_extractor(classification):
     '''
     extract = {}
     variants = []
-    annotation = classification['annotations'][0]
-    for value in annotation['value']:
-        if 'variants' in value:
-            variants += list(filter(None, value['variants']))
-    if len(variants) > 0:
-        extract['variants'] = variants
+    if len(classification['annotations']) > 0:
+        annotation = classification['annotations'][0]
+        for value in annotation['value']:
+            if 'variants' in value:
+                variants += list(filter(None, value['variants']))
+        if len(variants) > 0:
+            extract['variants'] = variants
     return extract

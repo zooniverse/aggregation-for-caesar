@@ -53,7 +53,8 @@ extracted_data = [
             'T0_tool0_width': [20.0],
             'T0_tool0_height': [20.0]
         }
-    }
+    },
+    {}
 ]
 
 processed_data = {
