@@ -93,6 +93,13 @@ expected_at = {
 }
 
 
+classification_blank = {
+    'annotations': []
+}
+
+expected_blank = {}
+
+
 class TextSWGraphicExtractor(unittest.TestCase):
     def test_extract_sw(self):
         result = extractors.sw_graphic_extractor(classification_sw)
@@ -121,3 +128,17 @@ class TextSWGraphicExtractor(unittest.TestCase):
         with app.test_request_context(**request_kwargs):
             result = extractors.sw_graphic_extractor(flask.request)
             self.assertDictEqual(result, expected_at)
+
+    def test_extract_blank(self):
+        result = extractors.sw_graphic_extractor(classification_blank)
+        self.assertDictEqual(result, expected_blank)
+
+    def test_request_blank(self):
+        request_kwargs = {
+            'data': json.dumps(annotation_by_task(classification_blank)),
+            'content_type': 'application/json'
+        }
+        app = flask.Flask(__name__)
+        with app.test_request_context(**request_kwargs):
+            result = extractors.sw_graphic_extractor(flask.request)
+            self.assertDictEqual(result, expected_blank)
