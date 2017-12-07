@@ -24,8 +24,12 @@ DEFAULTS = {
     'p': {'default': None, 'type': float}
 }
 
+DEFAULTS_PROCESS = {
+    'process_by_line': {'default': False, 'type': bool}
+}
 
-def process_data(data_list):
+
+def process_data(data_list, process_by_line=False):
     '''Process a list of extractions into a dictionary of `loc` and `text`
     organized by `frame`
 
@@ -52,14 +56,19 @@ def process_data(data_list):
             data_by_frame[frame].setdefault('text', [])
             data_by_frame[frame].setdefault('slope', [])
             for x, y, t, s in zip(value['points']['x'], value['points']['y'], value['text'], value['slope']):
-                data_by_frame[frame]['x'].append(x)
-                data_by_frame[frame]['y'].append(y)
-                data_by_frame[frame]['text'].append(t)
+                if process_by_line:
+                    data_by_frame[frame]['x'].append([x[0], x[-1]])
+                    data_by_frame[frame]['y'].append([y[0], y[-1]])
+                    data_by_frame[frame]['text'].append([' '.join(t)])
+                else:
+                    data_by_frame[frame]['x'].append(x)
+                    data_by_frame[frame]['y'].append(y)
+                    data_by_frame[frame]['text'].append(t)
                 data_by_frame[frame]['slope'].append(s)
     return data_by_frame
 
 
-@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
+@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS, defaults_process=DEFAULTS_PROCESS)
 def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
     '''
     Reduce the polygon-text answers as a list of lines of text.
