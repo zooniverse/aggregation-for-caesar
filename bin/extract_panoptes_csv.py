@@ -21,7 +21,7 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, hum
         workflows = pandas.read_csv(workflow_csv_in)
 
     if version is None:
-        version = workflows.version.max()
+        version = workflows[workflows.workflow_id == workflow_id].version.max()
         warnings.warn('No workflow version was specified, defaulting to version {0}'.format(version))
 
     wdx = (workflows.workflow_id == workflow_id) & (workflows.version == version)
