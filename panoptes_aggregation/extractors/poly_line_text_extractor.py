@@ -12,7 +12,7 @@ from .extractor_wrapper import extractor_wrapper
 
 
 @extractor_wrapper
-def poly_line_text_extractor(classification):
+def poly_line_text_extractor(classification, dot_freq='word'):
     '''Extract annotations from a polygon tool with a text sub-task
 
     Parameters
@@ -75,7 +75,6 @@ def poly_line_text_extractor(classification):
         frame = 'frame{0}'.format(value['frame'])
         extract.setdefault(frame, copy.deepcopy(blank_frame))
         text = value['details'][0]['value']
-        words = text.split(' ')
         x = [point['x'] for point in value['points']]
         y = [point['y'] for point in value['points']]
         if len(x) > 1:
@@ -87,10 +86,17 @@ def poly_line_text_extractor(classification):
         else:
             # default the slope to 0 if only one point was drawn
             slope = 0
-        # NOTE: if `words` + 1 and `points` are differnt lengths
-        # the extract is not used
-        if len(words) + 1 == len(x):
-            extract[frame]['text'].append(words)
+        if dot_freq == 'word':
+            # NOTE: if `words` + 1 and `points` are differnt lengths
+            # the extract is not used
+            words = text.split(' ')
+            if len(words) + 1 == len(x):
+                extract[frame]['text'].append(words)
+                extract[frame]['points']['x'].append(x)
+                extract[frame]['points']['y'].append(y)
+                extract[frame]['slope'].append(slope)
+        else:
+            extract[frame]['text'].append([text])
             extract[frame]['points']['x'].append(x)
             extract[frame]['points']['y'].append(y)
             extract[frame]['slope'].append(slope)

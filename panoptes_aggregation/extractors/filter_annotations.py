@@ -20,6 +20,8 @@ def filter_annotations(annotations, config, human=False):
                                 if not human:
                                     value.pop('tool_label')
                                 annotations_by_extractor[extractor_name][-1]['value'].append(value)
+                        else:
+                            annotations_by_extractor[extractor_name][-1]['value'].append(value)
             elif isinstance(config[annotation['task']], list):
                 extractor_names = config[annotation['task']]
                 for extractor_name in extractor_names:
