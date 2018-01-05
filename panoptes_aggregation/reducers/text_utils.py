@@ -439,7 +439,7 @@ def cluster_by_slope(x_frame, y_frame, text_frame, slope_frame, kwargs_cluster, 
         A list of the resulting extractions, one item per line of text found.
     '''
     frame_slope = []
-    if len(slope_frame) > 1:
+    if len(slope_frame) >= 1:
         db_slope = DBSCAN(eps=kwargs_cluster['eps_slope'], metric=angle_metric, **kwargs_dbscan).fit(slope_frame)
         slope_labels = sort_labels(db_slope.labels_, slope_frame, reducer=avg_angle, descending=True)
         for slope_label in slope_labels:
