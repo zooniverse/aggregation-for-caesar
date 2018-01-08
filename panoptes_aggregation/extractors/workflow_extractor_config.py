@@ -7,6 +7,11 @@ def workflow_extractor_config(tasks):
         extractor_config['T2'] = ['sw_extractor', 'sw_variant_extractor', 'sw_graphic_extractor']
         extractor_config['T3'] = 'question_extractor'
         return extractor_config
+    if ('T0' in tasks) and ('annotate-' in tasks['T0']['type']):
+        # this is annotate, return the correct config
+        extractor_config['T0'] = 'question_extractor'
+        extractor_config['T2'] = ['sw_extractor', 'sw_graphic_extractor']
+        extractor_config['T3'] = 'question_extractor'
     for task_key, task in tasks.items():
         if task['type'] == 'drawing':
             tools_config = {}

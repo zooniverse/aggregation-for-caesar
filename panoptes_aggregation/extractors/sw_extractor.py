@@ -53,17 +53,18 @@ def sw_extractor(classification):
     extract[frame] = copy.deepcopy(blank_frame)
     if len(classification['annotations']) > 0:
         annotation = classification['annotations'][0]
-        for value in annotation['value']:
-            if ('startPoint' in value) and ('endPoint' in value) and ('text' in value):
-                x = [value['startPoint']['x'], value['endPoint']['x']]
-                y = [value['startPoint']['y'], value['endPoint']['y']]
-                if (None not in x) and (None not in y):
-                    text = [clean_text(value['text'])]
-                    dx = x[-1] - x[0]
-                    dy = y[-1] - y[0]
-                    slope = np.rad2deg(np.arctan2(dy, dx))
-                    extract[frame]['text'].append(text)
-                    extract[frame]['points']['x'].append(x)
-                    extract[frame]['points']['y'].append(y)
-                    extract[frame]['slope'].append(slope)
+        if isinstance(annotation['value'], list):
+            for value in annotation['value']:
+                if ('startPoint' in value) and ('endPoint' in value) and ('text' in value):
+                    x = [value['startPoint']['x'], value['endPoint']['x']]
+                    y = [value['startPoint']['y'], value['endPoint']['y']]
+                    if (None not in x) and (None not in y):
+                        text = [clean_text(value['text'])]
+                        dx = x[-1] - x[0]
+                        dy = y[-1] - y[0]
+                        slope = np.rad2deg(np.arctan2(dy, dx))
+                        extract[frame]['text'].append(text)
+                        extract[frame]['points']['x'].append(x)
+                        extract[frame]['points']['y'].append(y)
+                        extract[frame]['slope'].append(slope)
     return extract
