@@ -1,10 +1,6 @@
-import unittest
 from collections import Counter
-import copy
-import flask
-import json
 from panoptes_aggregation.reducers.survey_reducer import process_data, survey_reducer
-from panoptes_aggregation.reducers.test_utils import extract_in_data
+from .base_test_class import ReducerTestSurvey
 
 extracted_data = [
     {'answers_howmanyanimalsdoyousee': {'1': 1.0}, 'answers_whatistheanimalsdoing': {'grooming': 1.0}, 'choice': 'raccoon'},
@@ -93,37 +89,11 @@ reduced_data = [
     }
 ]
 
-
-class TestCountSurvey(unittest.TestCase):
-    def setUp(self):
-        self.maxDiff = None
-        self.extracted_data = copy.deepcopy(extracted_data)
-        self.processed_data = copy.deepcopy(processed_data)
-        self.reduced_data = copy.deepcopy(reduced_data)
-
-    def test_process_data(self):
-        result_data, result_count = process_data(self.extracted_data)
-        self.assertEqual(result_count, len(self.extracted_data))
-        self.assertDictEqual(result_data, self.processed_data)
-
-    def test_count_vote(self):
-        result = survey_reducer._original((self.processed_data, len(self.extracted_data)))
-        self.assertCountEqual(result, self.reduced_data)
-
-    def test_survey_reducer(self):
-        result = survey_reducer(self.extracted_data)
-        self.assertCountEqual(result, self.reduced_data)
-
-    def test_survey_reducer_request(self):
-        app = flask.Flask(__name__)
-        request_kwargs = {
-            'data': json.dumps(extract_in_data(self.extracted_data)),
-            'content_type': 'application/json'
-        }
-        with app.test_request_context(**request_kwargs):
-            result = survey_reducer(flask.request)
-            self.assertCountEqual(result, self.reduced_data)
-
-
-if __name__ == '__main__':
-    unittest.main()
+TestSurvey = ReducerTestSurvey(
+    survey_reducer,
+    process_data,
+    extracted_data,
+    processed_data,
+    reduced_data,
+    'Test survey reducer'
+)

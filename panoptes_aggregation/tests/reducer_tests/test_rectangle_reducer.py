@@ -1,9 +1,5 @@
-import unittest
-import numpy as np
-import flask
-import json
 from panoptes_aggregation.reducers.rectangle_reducer import process_data, rectangle_reducer
-from panoptes_aggregation.reducers.test_utils import extract_in_data
+from .base_test_class import ReducerTest
 
 extracted_data = [
     {
@@ -125,6 +121,19 @@ reduced_data = {
     }
 }
 
+TestRectReducer = ReducerTest(
+    rectangle_reducer,
+    process_data,
+    extracted_data,
+    processed_data,
+    reduced_data,
+    'Test rectangle reducer',
+    kwargs={
+        'eps': 5,
+        'min_samples': 2
+    }
+)
+
 extracted_data_sw = [
     {
         'frame0': {
@@ -190,43 +199,15 @@ reduced_data_sw = {
     }
 }
 
-
-class TestRectangleReducer(unittest.TestCase):
-    def setUp(self):
-        self.maxDiff = None
-
-    def test_process_data(self):
-        result = process_data(extracted_data)
-        self.assertDictEqual(result, processed_data)
-
-    def test_process_data_sw(self):
-        result = process_data(extracted_data_sw)
-        self.assertDictEqual(result, processed_data_sw)
-
-    def test_reducer(self):
-        result = rectangle_reducer(extracted_data, eps=5, min_samples=2)
-        self.assertDictEqual(result, reduced_data)
-
-    def test_reducer_sw(self):
-        result = rectangle_reducer(extracted_data_sw, eps=5, min_samples=2)
-        self.assertDictEqual(result, reduced_data_sw)
-
-    def test_request(self):
-        app = flask.Flask(__name__)
-        request_kwargs = {
-            'data': json.dumps(extract_in_data(extracted_data)),
-            'content_type': 'application/json'
-        }
-        with app.test_request_context('/?eps=5&min_samples=2', **request_kwargs):
-            result = rectangle_reducer(flask.request)
-            self.assertDictEqual(result, reduced_data)
-
-    def test_request_sw(self):
-        app = flask.Flask(__name__)
-        request_kwargs = {
-            'data': json.dumps(extract_in_data(extracted_data_sw)),
-            'content_type': 'application/json'
-        }
-        with app.test_request_context('/?eps=5&min_samples=2', **request_kwargs):
-            result = rectangle_reducer(flask.request)
-            self.assertDictEqual(result, reduced_data_sw)
+TestSWRectReducer = ReducerTest(
+    rectangle_reducer,
+    process_data,
+    extracted_data_sw,
+    processed_data_sw,
+    reduced_data_sw,
+    'Test SW rectangle reducer',
+    kwargs={
+        'eps': 5,
+        'min_samples': 2
+    }
+)
