@@ -73,6 +73,7 @@ class TestFilterAnnotations(unittest.TestCase):
         self.maxDiff = None
 
     def test_filter(self):
+        '''Test annotation filter: Test with no task labels'''
         expected_result = {
             'line_extractor': [{
                 'task': 'T0',
@@ -140,6 +141,7 @@ class TestFilterAnnotations(unittest.TestCase):
         self.assertDictEqual(result, expected_result)
 
     def test_filter_human(self):
+        '''Test annotation filter: Test with task labels'''
         expected_result = {
             'line_extractor': [{
                 'task': 'T0',

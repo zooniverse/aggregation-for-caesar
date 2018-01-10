@@ -16,12 +16,13 @@ expected_default = {
 
 class TestProcessKwargs(unittest.TestCase):
     def test_defaults(self):
+        '''Test process kwargs: Test that defualts are used when nothing is passed in'''
         kwargs = {}
         result = process_kwargs(kwargs, DEFAULTS)
         self.assertDictEqual(result, expected_default)
 
     def test_setting_value(self):
-        # make sure value sets as correct type
+        '''Test process kwargs: Test data type casting works'''
         kwargs = {'a': '10'}
         expected = {
             'a': 10.0,
@@ -32,13 +33,13 @@ class TestProcessKwargs(unittest.TestCase):
         self.assertDictEqual(result, expected)
 
     def test_wrong_type(self):
-        # make sure default is used with bad keywords are passed in
+        '''Test process kwargs: Test that defualts are used when a bad keyword is passed in'''
         kwargs = {'b': '10.5'}
         result = process_kwargs(kwargs, DEFAULTS)
         self.assertDictEqual(result, expected_default)
 
     def test_wrong_key(self):
-        # make sure invalid keywords are not passed in
+        '''Test process kwargs: Test that invaild keywords are not passed in'''
         kwargs = {'random': 'set'}
         result = process_kwargs(kwargs, DEFAULTS)
         self.assertDictEqual(result, expected_default)
