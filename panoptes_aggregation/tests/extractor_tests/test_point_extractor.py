@@ -1,8 +1,5 @@
-import unittest
-import json
-import flask
 from panoptes_aggregation import extractors
-from panoptes_aggregation.extractors.test_utils import annotation_by_task
+from .base_test_class import ExtractorTest
 
 classification = {
     "annotations": [{
@@ -104,32 +101,17 @@ expected = {
     ]
 }
 
+TestPoint = ExtractorTest(
+    extractors.point_extractor,
+    classification,
+    expected,
+    'Test point'
+)
 
-class TestPointExtractor(unittest.TestCase):
-    def test_extract(self):
-        result = extractors.point_extractor(classification)
-        self.assertDictEqual(result, expected)
-
-    def test_extract_request(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(classification)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context(**request_kwargs):
-            result = extractors.point_extractor(flask.request)
-            self.assertDictEqual(result, expected)
-
-    def test_extract_request_with_task(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(classification)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context('?task=T0', **request_kwargs):
-            result = extractors.point_extractor(flask.request)
-            self.assertDictEqual(result, expected)
-
-
-if __name__ == '__main__':
-    unittest.main()
+TestPointTask = ExtractorTest(
+    extractors.point_extractor,
+    classification,
+    expected,
+    'Test point with task specified',
+    kwargs={'task': 'T0'}
+)

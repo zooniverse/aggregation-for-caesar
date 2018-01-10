@@ -1,9 +1,5 @@
-import unittest
-import json
-import flask
-import numpy as np
 from panoptes_aggregation import extractors
-from panoptes_aggregation.extractors.test_utils import annotation_by_task
+from .base_test_class import TextExtractorTest
 
 classification = {
     "annotations": [
@@ -139,43 +135,10 @@ expected = {
     }
 }
 
-
-class TestPolyLineTextExtractor(unittest.TestCase):
-    def setUp(self):
-        self.maxDiff = None
-
-    def test_extract(self):
-        result = extractors.poly_line_text_extractor(classification, dot_freq='line')
-        for i in expected.keys():
-            with self.subTest(i=i):
-                self.assertIn(i, result)
-                for j in expected[i].keys():
-                    with self.subTest(i=j):
-                        self.assertIn(j, result[i])
-                        if j == 'slope':
-                            np.testing.assert_allclose(result[i][j], expected[i][j], atol=1e-5)
-                        else:
-                            self.assertEqual(result[i][j], expected[i][j])
-
-    def test_request(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(classification)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context('?dot_freq=line', **request_kwargs):
-            result = extractors.poly_line_text_extractor(flask.request)
-            for i in expected.keys():
-                with self.subTest(i=i):
-                    self.assertIn(i, result)
-                    for j in expected[i].keys():
-                        with self.subTest(i=j):
-                            self.assertIn(j, result[i])
-                            if j == 'slope':
-                                np.testing.assert_allclose(result[i][j], expected[i][j], atol=1e-5)
-                            else:
-                                self.assertEqual(result[i][j], expected[i][j])
-
-
-if __name__ == '__main__':
-    unittest.main()
+TestPolyLineText = TextExtractorTest(
+    extractors.poly_line_text_extractor,
+    classification,
+    expected,
+    'Test poly-line-text extractor by line',
+    kwargs={'dot_freq': 'line'}
+)

@@ -1,8 +1,5 @@
-import unittest
-import json
-import flask
 from panoptes_aggregation import extractors
-from panoptes_aggregation.extractors.test_utils import annotation_by_task
+from .base_test_class import ExtractorTest
 
 classification = {
     'annotations': [
@@ -90,38 +87,22 @@ expected = {
     ]
 }
 
+TestSWVariant = ExtractorTest(
+    extractors.sw_variant_extractor,
+    classification,
+    expected,
+    'Test SW variant'
+)
+
 classification_blank = {
     'annotations': []
 }
 
 expected_blank = {}
 
-
-class TextSWVariantExtractor(unittest.TestCase):
-    def test_extract(self):
-        result = extractors.sw_variant_extractor(classification)
-        self.assertDictEqual(result, expected)
-
-    def test_request(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(classification)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context(**request_kwargs):
-            result = extractors.sw_variant_extractor(flask.request)
-            self.assertDictEqual(result, expected)
-
-    def test_extract_blank(self):
-        result = extractors.sw_variant_extractor(classification_blank)
-        self.assertDictEqual(result, expected_blank)
-
-    def test_request_blank(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(classification_blank)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context(**request_kwargs):
-            result = extractors.sw_variant_extractor(flask.request)
-            self.assertDictEqual(result, expected_blank)
+TestSWVariantBlank = ExtractorTest(
+    extractors.sw_variant_extractor,
+    classification_blank,
+    expected_blank,
+    'Test SW variant blank input'
+)

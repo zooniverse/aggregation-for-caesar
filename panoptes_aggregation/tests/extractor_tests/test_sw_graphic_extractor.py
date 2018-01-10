@@ -1,8 +1,5 @@
-import unittest
-import json
-import flask
 from panoptes_aggregation import extractors
-from panoptes_aggregation.extractors.test_utils import annotation_by_task
+from .base_test_class import ExtractorTest
 
 classification_sw = {
     'annotations': [
@@ -52,6 +49,13 @@ expected_sw = {
     }
 }
 
+TestSWGraphic = ExtractorTest(
+    extractors.sw_graphic_extractor,
+    classification_sw,
+    expected_sw,
+    'Test SW graphic'
+)
+
 classification_at = {
     'annotations': [
         {
@@ -92,12 +96,26 @@ expected_at = {
     }
 }
 
+TestATGraphic = ExtractorTest(
+    extractors.sw_graphic_extractor,
+    classification_at,
+    expected_at,
+    'Test AT graphic'
+)
+
 
 classification_blank = {
     'annotations': []
 }
 
 expected_blank = {}
+
+TestSWGraphicBlank = ExtractorTest(
+    extractors.sw_graphic_extractor,
+    classification_blank,
+    expected_blank,
+    'Test SW/AT graphic blank input'
+)
 
 classification_wrong = {
     'annotations': [
@@ -108,60 +126,9 @@ classification_wrong = {
     ]
 }
 
-
-class TextSWGraphicExtractor(unittest.TestCase):
-    def test_extract_sw(self):
-        result = extractors.sw_graphic_extractor(classification_sw)
-        self.assertDictEqual(result, expected_sw)
-
-    def test_extract_at(self):
-        result = extractors.sw_graphic_extractor(classification_at)
-        self.assertDictEqual(result, expected_at)
-
-    def test_request_sw(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(classification_sw)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context(**request_kwargs):
-            result = extractors.sw_graphic_extractor(flask.request)
-            self.assertDictEqual(result, expected_sw)
-
-    def test_request_at(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(classification_at)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context(**request_kwargs):
-            result = extractors.sw_graphic_extractor(flask.request)
-            self.assertDictEqual(result, expected_at)
-
-    def test_extract_blank(self):
-        result = extractors.sw_graphic_extractor(classification_blank)
-        self.assertDictEqual(result, expected_blank)
-
-    def test_request_blank(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(classification_blank)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context(**request_kwargs):
-            result = extractors.sw_graphic_extractor(flask.request)
-            self.assertDictEqual(result, expected_blank)
-
-    def test_extract_wrong(self):
-        result = extractors.sw_graphic_extractor(classification_wrong)
-        self.assertDictEqual(result, expected_blank)
-
-    def test_request_wrong(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(classification_wrong)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context(**request_kwargs):
-            result = extractors.sw_graphic_extractor(flask.request)
-            self.assertDictEqual(result, expected_blank)
+TestSWGraphicWrong = ExtractorTest(
+    extractors.sw_graphic_extractor,
+    classification_wrong,
+    expected_blank,
+    'Test SW/AT graphic wrong input'
+)

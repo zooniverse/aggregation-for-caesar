@@ -1,9 +1,6 @@
-import unittest
 import numpy as np
-import flask
-import json
 from panoptes_aggregation.reducers.point_reducer import process_data, point_reducer
-from panoptes_aggregation.reducers.test_utils import extract_in_data
+from .base_test_class import ReducerTestPoints
 
 c0_cov = np.array([[3, 0.5], [0.5, 4]])
 c1_cov = np.array([[7, -0.5], [-0.5, 5]])
@@ -48,47 +45,16 @@ reduced_data = {
 }
 
 
-class TestClusterPoints(unittest.TestCase):
-    def test_process_data(self):
-        result = process_data(extracted_data)
-        self.assertDictEqual(result, processed_data)
-
-    def test_keys(self):
-        result = point_reducer(extracted_data, eps=5, min_samples=3)
-        for i in reduced_data.keys():
-            with self.subTest(i=i):
-                self.assertIn(i, result)
-
-    def test_cluster_values(self):
-        result = point_reducer._original(processed_data, eps=5, min_samples=3)
-        for i in result.keys():
-            with self.subTest(i=i):
-                np.testing.assert_allclose(result[i], reduced_data[i], atol=2)
-
-    def test_type(self):
-        result = point_reducer._original(processed_data, eps=5, min_samples=3)
-        for i in result.values():
-            with self.subTest(i=i):
-                self.assertIsInstance(i, list)
-
-    def test_point_reducer(self):
-        result = point_reducer(extracted_data, eps=5, min_samples=3)
-        for i in result.keys():
-            with self.subTest(i=i):
-                np.testing.assert_allclose(result[i], reduced_data[i], atol=2)
-
-    def test_process_request(self):
-        app = flask.Flask(__name__)
-        request_kwargs = {
-            'data': json.dumps(extract_in_data(extracted_data)),
-            'content_type': 'application/json'
-        }
-        with app.test_request_context('/?eps=5&min_samples=3', **request_kwargs):
-            result = point_reducer(flask.request)
-            for i in result.keys():
-                with self.subTest(i=i):
-                    np.testing.assert_allclose(result[i], reduced_data[i], atol=2)
-
-
-if __name__ == '__main__':
-    unittest.main()
+TestPointsCluster = ReducerTestPoints(
+    point_reducer,
+    process_data,
+    extracted_data,
+    processed_data,
+    reduced_data,
+    'Test point reducer',
+    kwargs={
+        'eps': 5,
+        'min_samples': 3
+    },
+    atol=2
+)

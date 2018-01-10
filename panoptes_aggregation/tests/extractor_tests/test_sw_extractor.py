@@ -1,9 +1,5 @@
-import unittest
-import json
-import flask
-import numpy as np
 from panoptes_aggregation import extractors
-from panoptes_aggregation.extractors.test_utils import annotation_by_task
+from .base_test_class import ExtractorTest, TextExtractorTest
 
 classification = {
     'annotations': [
@@ -137,6 +133,13 @@ expected = {
     }
 }
 
+TestSW = TextExtractorTest(
+    extractors.sw_extractor,
+    classification,
+    expected,
+    'Test SW/AT text extractor'
+)
+
 classification_blank = {
     'annotations': []
 }
@@ -152,6 +155,13 @@ expected_blank = {
     }
 }
 
+TestSWBlank = ExtractorTest(
+    extractors.sw_extractor,
+    classification_blank,
+    expected_blank,
+    'Test SW/AT blank input'
+)
+
 classification_wrong = {
     'annotations': [
         {
@@ -161,71 +171,9 @@ classification_wrong = {
     ]
 }
 
-
-class TestSWExtractor(unittest.TestCase):
-    def setUp(self):
-        self.maxDiff = None
-
-    def test_extract(self):
-        result = extractors.sw_extractor(classification)
-        for i in expected.keys():
-            with self.subTest(i=i):
-                self.assertIn(i, result)
-                for j in expected[i].keys():
-                    with self.subTest(i=j):
-                        self.assertIn(j, result[i])
-                        if j == 'slope':
-                            np.testing.assert_allclose(result[i][j], expected[i][j], atol=1e-5)
-                        else:
-                            self.assertEqual(result[i][j], expected[i][j])
-
-    def test_request(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(classification)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context(**request_kwargs):
-            result = extractors.sw_extractor(flask.request)
-            for i in expected.keys():
-                with self.subTest(i=i):
-                    self.assertIn(i, result)
-                    for j in expected[i].keys():
-                        with self.subTest(i=j):
-                            self.assertIn(j, result[i])
-                            if j == 'slope':
-                                np.testing.assert_allclose(result[i][j], expected[i][j], atol=1e-5)
-                            else:
-                                self.assertEqual(result[i][j], expected[i][j])
-
-    def test_extract_blank(self):
-        result = extractors.sw_extractor(classification_blank)
-        self.assertDictEqual(result, expected_blank)
-
-    def test_request_blank(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(classification_blank)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context(**request_kwargs):
-            result = extractors.sw_extractor(flask.request)
-            self.assertDictEqual(result, expected_blank)
-
-    def test_extract_wrong(self):
-        result = extractors.sw_extractor(classification_wrong)
-        self.assertDictEqual(result, expected_blank)
-
-    def test_request_wrong(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(classification_wrong)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context(**request_kwargs):
-            result = extractors.sw_extractor(flask.request)
-            self.assertDictEqual(result, expected_blank)
-
-
-if __name__ == '__main__':
-    unittest.main()
+TestSWWrong = ExtractorTest(
+    extractors.sw_extractor,
+    classification_wrong,
+    expected_blank,
+    'Test SW/AT wrong input'
+)

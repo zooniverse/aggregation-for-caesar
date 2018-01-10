@@ -1,8 +1,5 @@
-import unittest
-import json
-import flask
 from panoptes_aggregation import extractors
-from panoptes_aggregation.extractors.test_utils import annotation_by_task
+from .base_test_class import ExtractorTest
 
 single_classification = {
     'annotations': [{
@@ -12,6 +9,15 @@ single_classification = {
     }]
 }
 
+single_expected = {'yes': 1}
+
+TestSingle = ExtractorTest(
+    extractors.question_extractor,
+    single_classification,
+    single_expected,
+    'Test single question'
+)
+
 multiple_classification = {
     'annotations': [{
         "task": "T1",
@@ -19,6 +25,15 @@ multiple_classification = {
         "value": ["Blue", "Green"]
     }]
 }
+
+multiple_expected = {'blue': 1, 'green': 1}
+
+TestMultiple = ExtractorTest(
+    extractors.question_extractor,
+    multiple_classification,
+    multiple_expected,
+    'Test multiple question'
+)
 
 null_classification = {
     'annotations': [{
@@ -28,56 +43,11 @@ null_classification = {
     }]
 }
 
-single_expected = {'yes': 1}
-
-multiple_expected = {'blue': 1, 'green': 1}
-
 null_expected = {'None': 1}
 
-
-class TestQuestionExtractor(unittest.TestCase):
-    def test_single(self):
-        result = extractors.question_extractor(single_classification)
-        self.assertDictEqual(result, single_expected)
-
-    def test_single_request(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(single_classification)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context(**request_kwargs):
-            result = extractors.question_extractor(flask.request)
-            self.assertDictEqual(result, single_expected)
-
-    def test_multiple(self):
-        result = extractors.question_extractor(multiple_classification)
-        self.assertDictEqual(result, multiple_expected)
-
-    def test_multiple_request(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(multiple_classification)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context(**request_kwargs):
-            result = extractors.question_extractor(flask.request)
-            self.assertDictEqual(result, multiple_expected)
-
-    def test_null(self):
-        result = extractors.question_extractor(null_classification)
-        self.assertDictEqual(result, null_expected)
-
-    def test_null_request(self):
-        request_kwargs = {
-            'data': json.dumps(annotation_by_task(null_classification)),
-            'content_type': 'application/json'
-        }
-        app = flask.Flask(__name__)
-        with app.test_request_context(**request_kwargs):
-            result = extractors.question_extractor(flask.request)
-            self.assertDictEqual(result, null_expected)
-
-
-if __name__ == '__main__':
-    unittest.main()
+TestNull = ExtractorTest(
+    extractors.question_extractor,
+    null_classification,
+    null_expected,
+    'Test null question'
+)
