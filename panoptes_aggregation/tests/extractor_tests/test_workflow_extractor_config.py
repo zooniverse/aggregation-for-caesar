@@ -103,6 +103,7 @@ expected = {
 
 class TestWorkflowExtractorConfig(unittest.TestCase):
     def test_config(self):
+        '''Test workflow auto config works'''
         result = workflow_extractor_config(tasks)
         self.assertDictEqual(result, expected)
 
