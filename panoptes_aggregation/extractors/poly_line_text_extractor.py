@@ -1,7 +1,7 @@
 '''
 Polygon As Line Tool for Text Extractor
 ---------------------------------------
-This module provides a fuction of eaxtract panoptes annotations
+This module provides a fuction to eaxtract panoptes annotations
 from porjects using a polygon tool to mark word in a transcribed
 document and provide the transcribed text as a sub-task.
 '''

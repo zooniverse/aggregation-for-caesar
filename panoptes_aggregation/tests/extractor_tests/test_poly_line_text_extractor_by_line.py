@@ -5,7 +5,7 @@ classification = {
     "annotations": [
         {
             "task": "T1",
-            "task_label": "Mark each space between word in a line.",
+            "task_label": "Mark each line.",
             "value": [
                 {
                     "tool": 0,
