@@ -1,6 +1,7 @@
 import unittest
 from panoptes_aggregation.extractors import workflow_extractor_config
 
+
 tasks = {
     'T0': {
         'enableHidePrevMarks': True,
@@ -19,7 +20,6 @@ tasks = {
                 'color': '#ff0000',
                 'details': [],
                 'label': 'T0.tools.1.label',
-                'size': 'small',
                 'type': 'line'
             },
             {
@@ -33,9 +33,14 @@ tasks = {
                 'color': '#ffffff',
                 'details': [],
                 'label': 'T0.tools.3.label',
-                'size': 'small',
                 'type': 'polygon'
-            }
+            },
+            {
+                'color': '#ff00ff',
+                'details': [],
+                'label': 'T0.tools.4.label',
+                'type': 'rectangle'
+            },
         ],
         'type': 'drawing'
     },
@@ -109,7 +114,8 @@ expected = {
     'T0': {
         'point_extractor': [0, 2],
         'line_extractor': [1],
-        'polygon_extractor': [3]
+        'polygon_extractor': [3],
+        'rectangle_extractor': [4]
     },
     'T1': 'question_extractor',
     'T2': 'question_extractor',
