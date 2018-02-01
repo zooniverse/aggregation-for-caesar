@@ -21,6 +21,11 @@ def workflow_extractor_config(tasks):
                    (tool['details'][0]['type'] == 'text')):
                     # this is very ugly but I can't think of a better way to auto detect this
                     tools_config.setdefault('poly_line_text_extractor'.format(tool['type']), []).append(tdx)
+                elif ((tool['type'] == 'line') and
+                      (len(tool['details']) == 1) and
+                      (tool['details'][0]['type'] == 'text')):
+                    # this is very ugly but I can't think of a better way to auto detect this
+                    tools_config.setdefault('line_text_extractor'.format(tool['type']), []).append(tdx)
                 else:
                     tools_config.setdefault('{0}_extractor'.format(tool['type']), []).append(tdx)
             extractor_config[task_key] = tools_config

@@ -4,20 +4,28 @@ Rectangle Extractor
 This module provides a function to extract drawn rectangles from panoptes annotations.
 '''
 from collections import OrderedDict
-import copy
-from slugify import slugify
 from .extractor_wrapper import extractor_wrapper
 
 
 @extractor_wrapper
 def rectangle_extractor(classification):
+    '''Extact rectangle dtata from annotation
+
+    Paramters
+    ---------
+    classification : dict
+        A dictionary containing an `annotations` key that is a list of
+        panoptes annotations
+
+    Returns
+    -------
+    extraction : dict
+        A dictionary containing one key per frame. Each frame contains
+        the `x`, `y`, `width`, and `height` values for each tool used in
+        the annotation.  These are lists that contain one value for each
+        rectangle drawn for each tool.
+    '''
     extract = OrderedDict()
-    blank_frame = OrderedDict([
-        ('x', []),
-        ('y', []),
-        ('width', []),
-        ('height', [])
-    ])
     for annotation in classification['annotations']:
         task_key = annotation['task']
         for idx, value in enumerate(annotation['value']):

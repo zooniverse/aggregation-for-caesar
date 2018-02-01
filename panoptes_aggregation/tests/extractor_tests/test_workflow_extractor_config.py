@@ -1,6 +1,7 @@
 import unittest
 from panoptes_aggregation.extractors import workflow_extractor_config
 
+
 tasks = {
     'T0': {
         'enableHidePrevMarks': True,
@@ -19,7 +20,6 @@ tasks = {
                 'color': '#ff0000',
                 'details': [],
                 'label': 'T0.tools.1.label',
-                'size': 'small',
                 'type': 'line'
             },
             {
@@ -33,9 +33,14 @@ tasks = {
                 'color': '#ffffff',
                 'details': [],
                 'label': 'T0.tools.3.label',
-                'size': 'small',
                 'type': 'polygon'
-            }
+            },
+            {
+                'color': '#ff00ff',
+                'details': [],
+                'label': 'T0.tools.4.label',
+                'type': 'rectangle'
+            },
         ],
         'type': 'drawing'
     },
@@ -83,6 +88,25 @@ tasks = {
             }
         ],
         'instruction': 'T4.instruction'
+    },
+    'T5': {
+        'help': 'T5.help',
+        'type': 'drawing',
+        'tools': [
+            {
+                'type': 'line',
+                'color': '#ff0000',
+                'label': 'T5.tools.0.label',
+                'details': [
+                    {
+                        'help': 'T5.tools.0.details.0.help',
+                        'type': 'text',
+                        'instruction': 'T5.tools.0.details.0.instruction'
+                    }
+                ]
+            }
+        ],
+        'instruction': 'T5.instruction'
     }
 }
 
@@ -90,13 +114,17 @@ expected = {
     'T0': {
         'point_extractor': [0, 2],
         'line_extractor': [1],
-        'polygon_extractor': [3]
+        'polygon_extractor': [3],
+        'rectangle_extractor': [4]
     },
     'T1': 'question_extractor',
     'T2': 'question_extractor',
     'T3': 'survey_extractor',
     'T4': {
         'poly_line_text_extractor': [0]
+    },
+    'T5': {
+        'line_text_extractor': [0]
     }
 }
 
