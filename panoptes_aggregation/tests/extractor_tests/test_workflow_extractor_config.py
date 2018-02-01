@@ -83,6 +83,25 @@ tasks = {
             }
         ],
         'instruction': 'T4.instruction'
+    },
+    'T5': {
+        'help': 'T5.help',
+        'type': 'drawing',
+        'tools': [
+            {
+                'type': 'line',
+                'color': '#ff0000',
+                'label': 'T5.tools.0.label',
+                'details': [
+                    {
+                        'help': 'T5.tools.0.details.0.help',
+                        'type': 'text',
+                        'instruction': 'T5.tools.0.details.0.instruction'
+                    }
+                ]
+            }
+        ],
+        'instruction': 'T5.instruction'
     }
 }
 
@@ -97,6 +116,9 @@ expected = {
     'T3': 'survey_extractor',
     'T4': {
         'poly_line_text_extractor': [0]
+    },
+    'T5': {
+        'line_text_extractor': [0]
     }
 }
 
