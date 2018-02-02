@@ -134,7 +134,7 @@ expected = {
     }
 }
 
-TestPolyLineText = TextExtractorTest(
+TestLineText = TextExtractorTest(
     extractors.line_text_extractor,
     classification,
     expected,
