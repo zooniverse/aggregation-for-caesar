@@ -7,6 +7,7 @@ from .line_text_extractor import line_text_extractor
 from .sw_extractor import sw_extractor
 from .sw_variant_extractor import sw_variant_extractor
 from .sw_graphic_extractor import sw_graphic_extractor
+from .dropdown_extractor import dropdown_extractor
 from .workflow_extractor_config import workflow_extractor_config
 from .filter_annotations import filter_annotations
 
@@ -19,5 +20,6 @@ extractors = {
     'line_text_extractor': line_text_extractor,
     'sw_extractor': sw_extractor,
     'sw_variant_extractor': sw_variant_extractor,
-    'sw_graphic_extractor': sw_graphic_extractor
+    'sw_graphic_extractor': sw_graphic_extractor,
+    'dropdown_extractor': dropdown_extractor
 }
