@@ -27,3 +27,6 @@ Extractors
 
 .. automodule:: panoptes_aggregation.extractors.sw_graphic_extractor
   :members:
+
+.. automodule:: panoptes_aggregation.extractors.dropdown_extractor
+  :members:
