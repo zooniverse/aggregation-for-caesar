@@ -21,3 +21,6 @@ Reducers
 
 .. automodule:: panoptes_aggregation.reducers.sw_variant_reducer
   :members:
+
+.. automodule:: panoptes_aggregation.reducers.dropdown_reducer
+  :members:
