@@ -57,6 +57,15 @@ classification = {
                             }
                         ]}
                     ]
+                },
+                {
+                    'tool': 1,
+                    'frame': 0,
+                    'x': 500,
+                    'y': 500,
+                    'width': 10,
+                    'height': 20,
+                    'details': []
                 }
             ]
         }
@@ -90,7 +99,11 @@ expected = {
                     {'option-5': 1}
                 ]}
             ]
-        ]
+        ],
+        'T0_tool1_x': [500],
+        'T0_tool1_y': [500],
+        'T0_tool1_width': [10],
+        'T0_tool1_height': [20],
     }
 }
 

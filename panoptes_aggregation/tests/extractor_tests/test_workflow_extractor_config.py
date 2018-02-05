@@ -24,7 +24,24 @@ tasks = {
             },
             {
                 'color': '#ffff00',
-                'details': [],
+                'details': [
+                    {
+                        'type': 'single',
+                        'answers': [
+                            {'label': 'T0.tools.2.detals.0.answers.0.label'},
+                            {'label': 'T0.tools.2.detals.0.answers.1.label'}
+                        ],
+                        'question': 'T0.tools.2.detals.0.question'
+                    },
+                    {
+                        'type': 'multiple',
+                        'answers': [
+                            {'label': 'T0.tools.2.detals.1.answers.0.label'},
+                            {'label': 'T0.tools.2.detals.1.answers.1.label'}
+                        ],
+                        'question': 'T0.tools.2.detals.1.question'
+                    }
+                ],
                 'label': 'T0.tools.2.label',
                 'size': 'small',
                 'type': 'point'
@@ -112,19 +129,31 @@ tasks = {
 
 expected = {
     'T0': {
-        'point_extractor': [0, 2],
-        'line_extractor': [1],
-        'polygon_extractor': [3],
-        'rectangle_extractor': [4]
+        'point_extractor': {
+            'tool': [
+                0,
+                2
+            ],
+            'details': {
+                'T0_tool2': [
+                    'question_extractor',
+                    'question_extractor'
+                ]
+            }
+        },
+        'rectangle_extractor': {
+            'tool': [4],
+            'details': {}
+        }
     },
     'T1': 'question_extractor',
     'T2': 'question_extractor',
     'T3': 'survey_extractor',
     'T4': {
-        'poly_line_text_extractor': [0]
+        'poly_line_text_extractor': {'tool': [0]}
     },
     'T5': {
-        'line_text_extractor': [0]
+        'line_text_extractor': {'tool': [0]}
     }
 }
 

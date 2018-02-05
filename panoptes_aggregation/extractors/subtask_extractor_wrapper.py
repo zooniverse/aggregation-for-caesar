@@ -16,15 +16,16 @@ def subtask_wrapper(func):
                     key_prefix = '{0}_tool{1}'.format(task_key, value['tool'])
                     key = '{0}_details'.format(key_prefix)
                     frame = 'frame{0}'.format(value['frame'])
-                    output[frame].setdefault(key, [[] for i in range(len(details_functions[key_prefix]))])
-                    for ddx, detail in enumerate(value['details']):
-                        mock_annotation = copy.deepcopy(blank_annotation)
-                        mock_annotation['annotations'].append(detail)
-                        if details_functions[key_prefix][ddx] in extractors.extractors:
-                            extractor = extractors.extractors[details_functions[key_prefix][ddx]]
-                            detail_extract = extractor(mock_annotation)
-                            output[frame][key][ddx].append(detail_extract)
-                        else:
-                            output[frame][key][ddx].append('No extractor for this subtask type')
+                    if key_prefix in details_functions:
+                        output[frame].setdefault(key, [[] for i in range(len(details_functions[key_prefix]))])
+                        for ddx, detail in enumerate(value['details']):
+                            mock_annotation = copy.deepcopy(blank_annotation)
+                            mock_annotation['annotations'].append(detail)
+                            if details_functions[key_prefix][ddx] in extractors.extractors:
+                                extractor = extractors.extractors[details_functions[key_prefix][ddx]]
+                                detail_extract = extractor(mock_annotation)
+                                output[frame][key][ddx].append(detail_extract)
+                            else:
+                                output[frame][key][ddx].append('No extractor for this subtask type')
         return output
     return wrapper
