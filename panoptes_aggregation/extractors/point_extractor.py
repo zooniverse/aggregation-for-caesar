@@ -6,9 +6,11 @@ This module provides a function to extract drawn points from panoptes annotation
 from collections import OrderedDict
 from slugify import slugify
 from .extractor_wrapper import extractor_wrapper
+from .subtask_extractor_wrapper import subtask_wrapper
 
 
 @extractor_wrapper
+@subtask_wrapper
 def point_extractor(classification):
     '''Extract annotations from a point drawing tool into lists
 
