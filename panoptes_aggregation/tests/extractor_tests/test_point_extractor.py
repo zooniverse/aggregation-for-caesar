@@ -113,5 +113,5 @@ TestPointTask = ExtractorTest(
     classification,
     expected,
     'Test point with task specified',
-    kwargs={'task': 'T0'}
+    rkwargs={'task': 'T0'}
 )
