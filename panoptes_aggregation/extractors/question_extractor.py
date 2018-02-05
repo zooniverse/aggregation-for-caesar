@@ -11,7 +11,7 @@ from .extractor_wrapper import extractor_wrapper
 
 def slugify_or_null(s):
     '''Slugify value while casting `null` as a string fisrt'''
-    if (s is None) or (isinstance(s, bool)):
+    if (s is None) or (isinstance(s, bool)) or (isinstance(s, int)):
         return str(s)
     else:
         return slugify(s, separator='-')
