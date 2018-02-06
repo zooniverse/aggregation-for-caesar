@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.cluster import DBSCAN
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
+from .subtask_reducer_wrapper import subtask_wrapper
 
 DEFAULTS = {
     'eps': {'default': 5.0, 'type': float},
@@ -60,6 +61,7 @@ def process_data(data):
 
 
 @reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
+@subtask_wrapper
 def rectangle_reducer(data_by_tool, **kwargs):
     '''Cluster a list of rectangles by tool and frame
 

@@ -1,3 +1,4 @@
+import ast
 from functools import wraps
 from .process_kwargs import process_kwargs
 
@@ -8,12 +9,19 @@ def reducer_wrapper(process_data=None, defaults_process=None, defaults_data=None
         def wrapper(argument, **kwargs):
             kwargs_process = {}
             kwargs_data = {}
+            kwargs_details = {}
             #: check if argument is a flask request
             if hasattr(argument, 'get_json'):
-                kwargs = argument.args
+                kwargs = argument.args.copy().to_dict()
                 data_in = [d['data'] for d in argument.get_json()]
+                if 'details' in kwargs:
+                    kwargs_details['details'] = ast.literal_eval(kwargs['details'])
+                    kwargs_details['data_in'] = data_in
             else:
                 data_in = argument
+                if 'details' in kwargs:
+                    kwargs_details['details'] = kwargs['details']
+                    kwargs_details['data_in'] = data_in
             if defaults_process is not None:
                 kwargs_process = process_kwargs(kwargs, defaults_process)
             if defaults_data is not None:
@@ -22,7 +30,7 @@ def reducer_wrapper(process_data=None, defaults_process=None, defaults_data=None
                 data = process_data(data_in, **kwargs_process)
             else:
                 data = data_in
-            return func(data, **kwargs_data)
+            return func(data, **kwargs_data, **kwargs_details)
         #: keep the orignal function around for testing
         #: and access by other reducers
         wrapper._original = func
