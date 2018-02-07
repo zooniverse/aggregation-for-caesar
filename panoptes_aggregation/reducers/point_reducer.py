@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.cluster import DBSCAN
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
+from .subtask_reducer_wrapper import subtask_wrapper
 
 
 DEFAULTS = {
@@ -46,6 +47,7 @@ def process_data(data):
 
 
 @reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
+@subtask_wrapper
 def point_reducer(data_by_tool, **kwargs):
     '''Cluster a list of points by tool
 

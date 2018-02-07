@@ -8,6 +8,9 @@ from panoptes_aggregation.reducers.test_utils import extract_in_data
 
 
 def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs={}, okwargs={}, kwargs={}, processed_type='dict'):
+    # pkwargs: keywords passed into the process_data funciton
+    # okwargs: keywords only passed into the _original function
+    # kwargs: keywords passed into all steps
     class ReducerTest(unittest.TestCase):
         def setUp(self):
             self.maxDiff = None
@@ -55,7 +58,7 @@ def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs
     return ReducerTest
 
 
-def ReducerTestNoProcessing(reducer, extracted, reduced, name):
+def ReducerTestNoProcessing(reducer, extracted, reduced, name, kwargs={}):
     class ReducerTestNoProcessing(unittest.TestCase):
         def setUp(self):
             self.maxDiff = None
@@ -65,7 +68,7 @@ def ReducerTestNoProcessing(reducer, extracted, reduced, name):
 
         def test_reducer(self):
             '''Test the offline reducer'''
-            result = reducer(extracted)
+            result = reducer(extracted, **kwargs)
             self.assertDictEqual(result, reduced)
 
         def test_request(self):
@@ -75,7 +78,11 @@ def ReducerTestNoProcessing(reducer, extracted, reduced, name):
                 'content_type': 'application/json'
             }
             app = flask.Flask(__name__)
-            with app.test_request_context(**request_kwargs):
+            if len(kwargs) > 0:
+                url_params = '?{0}'.format(urllib.parse.urlencode(kwargs))
+            else:
+                url_params = ''
+            with app.test_request_context(url_params, **request_kwargs):
                 result = reducer(flask.request)
                 self.assertDictEqual(result, reduced)
 

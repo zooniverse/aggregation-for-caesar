@@ -1,3 +1,4 @@
+import ast
 from functools import wraps
 
 
@@ -19,7 +20,9 @@ def extractor_wrapper(func):
     def wrapper(argument, **kwargs):
         #: check if argument is a flask request
         if hasattr(argument, 'get_json'):
-            kwargs = argument.args.copy()
+            kwargs = argument.args.copy().to_dict()
+            if 'details' in kwargs:
+                kwargs['details'] = ast.literal_eval(kwargs['details'])
             task = kwargs.pop('task', 'all')
             data = argument.get_json()
             annotations = data['annotations']
