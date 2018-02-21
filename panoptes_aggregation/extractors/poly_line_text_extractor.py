@@ -77,7 +77,7 @@ def poly_line_text_extractor(classification, dot_freq='word'):
         text = value['details'][0]['value']
         x = [point['x'] for point in value['points']]
         y = [point['y'] for point in value['points']]
-        if (len(x) > 1) and (not np.isclose(np.min(x), np.max(x), atol=0.01)):
+        if len(x) > 1:
             fit = np.polyfit(x, y, 1)
             y_fit = np.polyval(fit, [x[0], x[-1]])
             dx = x[-1] - x[0]

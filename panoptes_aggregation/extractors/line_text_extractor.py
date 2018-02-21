@@ -44,11 +44,9 @@ def line_text_extractor(classification):
         text = value['details'][0]['value']
         x = [value['x1'], value['x2']]
         y = [value['y1'], value['y2']]
-        if (len(x) > 1) and (not np.isclose(x[0], x[-1], atol=0.01)):
-            fit = np.polyfit(x, y, 1)
-            y_fit = np.polyval(fit, [x[0], x[-1]])
+        if len(x) > 1:
             dx = x[-1] - x[0]
-            dy = y_fit[-1] - y_fit[0]
+            dy = y[-1] - y[0]
             slope = np.rad2deg(np.arctan2(dy, dx))
         else:
             # default the slope to 0 if only one point was drawn
