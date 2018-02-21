@@ -8,7 +8,7 @@ def filter_annotations(annotations, config, human=False):
             if isinstance(config[annotation['task']], dict):
                 for extractor_name, tool_config in config[annotation['task']].items():
                     annotations_by_extractor.setdefault(extractor_name, {'annotations': [], 'config': {}})
-                    if len(tool_config['details']) > 0:
+                    if len(tool_config.get('details', [])) > 0:
                         annotations_by_extractor[extractor_name]['config'] = {'details': tool_config['details']}
                     annotations_by_extractor[extractor_name]['annotations'].append({
                         'task': annotation['task'],

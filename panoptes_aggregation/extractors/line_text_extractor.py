@@ -44,7 +44,7 @@ def line_text_extractor(classification):
         text = value['details'][0]['value']
         x = [value['x1'], value['x2']]
         y = [value['y1'], value['y2']]
-        if len(x) > 1:
+        if (len(x) > 1) and (x[0] != x[-1]):
             fit = np.polyfit(x, y, 1)
             y_fit = np.polyval(fit, [x[0], x[-1]])
             dx = x[-1] - x[0]

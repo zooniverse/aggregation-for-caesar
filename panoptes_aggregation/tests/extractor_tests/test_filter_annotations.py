@@ -56,6 +56,41 @@ annotation = [
                 'text': 'All the words'
             }
         ]
+    }, {
+        'task': 'T4',
+        'task_label': 'Draw poly and transcribe',
+        'value': [
+            {
+                "tool": 0,
+                "frame": 0,
+                "closed": True,
+                "points": [
+                    {"x": 749.7457275390625, "y": 139.9468231201172},
+                    {"x": 1373.24658203125, "y": 128.85250854492188}
+                ],
+                "details": [
+                    {"value": "John's Island Sept 18th 1856"}
+                ],
+                "tool_label": "Poly"
+            }
+        ]
+    }, {
+        'task': 'T5',
+        'task_label': 'Draw line and transcribe',
+        'value': [
+            {
+                'tool': 0,
+                'frame': 0,
+                'x1': 749.7457275390625,
+                'y1': 139.9468231201172,
+                'x2': 1373.24658203125,
+                'y2': 128.85250854492188,
+                'details': [
+                    {'value': "John's Island Sept 18th 1856"}
+                ],
+                'tool_label': 'Line'
+            }
+        ]
     }
 ]
 
@@ -80,7 +115,13 @@ config = {
     },
     'T1': 'question_extractor',
     'T2': 'question_extractor',
-    'T3': ['sw_extractor', 'sw_graphic_extractor']
+    'T3': ['sw_extractor', 'sw_graphic_extractor'],
+    'T4': {
+        'poly_line_text_extractor': {'tool': [0]}
+    },
+    'T5': {
+        'line_text_extractor': {'tool': [0]}
+    }
 }
 
 
@@ -174,6 +215,45 @@ class TestFilterAnnotations(unittest.TestCase):
                         }
                     ]
                 }]
+            },
+            'poly_line_text_extractor': {
+                'annotations': [{
+                    'task': 'T4',
+                    'value': [
+                        {
+                            "tool": 0,
+                            "frame": 0,
+                            "closed": True,
+                            "points": [
+                                {"x": 749.7457275390625, "y": 139.9468231201172},
+                                {"x": 1373.24658203125, "y": 128.85250854492188}
+                            ],
+                            "details": [
+                                {"value": "John's Island Sept 18th 1856"}
+                            ]
+                        }
+                    ]
+                }],
+                'config': {}
+            },
+            'line_text_extractor': {
+                'annotations': [{
+                    'task': 'T5',
+                    'value': [
+                        {
+                            'tool': 0,
+                            'frame': 0,
+                            'x1': 749.7457275390625,
+                            'y1': 139.9468231201172,
+                            'x2': 1373.24658203125,
+                            'y2': 128.85250854492188,
+                            'details': [
+                                {'value': "John's Island Sept 18th 1856"}
+                            ]
+                        }
+                    ]
+                }],
+                'config': {}
             }
         }
         result = filter_annotations(self.annotation, config)
@@ -273,6 +353,49 @@ class TestFilterAnnotations(unittest.TestCase):
                         }
                     ]
                 }]
+            },
+            'poly_line_text_extractor': {
+                'annotations': [{
+                    'task': 'T4',
+                    'task_label': 'Draw poly and transcribe',
+                    'value': [
+                        {
+                            "tool": 0,
+                            "frame": 0,
+                            "closed": True,
+                            "points": [
+                                {"x": 749.7457275390625, "y": 139.9468231201172},
+                                {"x": 1373.24658203125, "y": 128.85250854492188}
+                            ],
+                            "details": [
+                                {"value": "John's Island Sept 18th 1856"}
+                            ],
+                            "tool_label": "Poly"
+                        }
+                    ]
+                }],
+                'config': {}
+            },
+            'line_text_extractor': {
+                'annotations': [{
+                    'task': 'T5',
+                    'task_label': 'Draw line and transcribe',
+                    'value': [
+                        {
+                            'tool': 0,
+                            'frame': 0,
+                            'x1': 749.7457275390625,
+                            'y1': 139.9468231201172,
+                            'x2': 1373.24658203125,
+                            'y2': 128.85250854492188,
+                            'details': [
+                                {'value': "John's Island Sept 18th 1856"}
+                            ],
+                            'tool_label': 'Line'
+                        }
+                    ]
+                }],
+                'config': {}
             }
         }
         result = filter_annotations(self.annotation, config, human=True)
