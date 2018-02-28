@@ -41,7 +41,7 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
     workflow_id = extracted.workflow_id.iloc[0]
     extractor_name = extracted.extractor.iloc[0]
     reducer_name = extractor_name.replace('extractor', 'reducer')
-    if reducer_name == 'sw_reducer':
+    if (reducer_name == 'sw_reducer') or (reducer_name == 'line_text_reducer'):
         reducer_name = 'poly_line_text_reducer'
     if reducer_name == 'sw_graphic_reducer':
         reducer_name = 'rectangle_reducer'
