@@ -13,7 +13,7 @@ import progressbar
 import warnings
 
 
-def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, human=False, output='extractions', order=False):
+def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, human=False, output='extractions', order=False, keywords={}):
     if not isinstance(workflow_csv, io.IOBase):
         workflow_csv = open(workflow_csv, 'r')
 
@@ -31,7 +31,7 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, hum
         raise IndexError('workflow ID and workflow version combination is not unique')
     workflow = workflows[wdx].iloc[0]
     workflow_tasks = json.loads(workflow.tasks)
-    extractor_config = extractors.workflow_extractor_config(workflow_tasks)
+    extractor_config = extractors.workflow_extractor_config(workflow_tasks, keywords=keywords)
 
     blank_extracted_data = OrderedDict([
         ('classification_id', []),
@@ -62,12 +62,14 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, hum
         if (classification.workflow_id != workflow_id) or (math.floor(classification.workflow_version) != version):
             pbar.update(cdx + 1)
             continue
-        annotations_by_extractor = extractors.filter_annotations(json.loads(classification.annotations), extractor_config, human=human)
+        extractor_config_copy = copy.deepcopy(extractor_config)
+        annotations_by_extractor = extractors.filter_annotations(json.loads(classification.annotations), extractor_config_copy, human=human)
         for extractor_name, annotations_dict in annotations_by_extractor.items():
             extractor_kwargs = annotations_dict.get('config', {})
+            keywords = annotations_dict.get('keywords', {})
             for annotations in annotations_dict['annotations']:
                 if extractor_name in extractors.extractors:
-                    extract = extractors.extractors[extractor_name]({'annotations': [annotations]}, **extractor_kwargs)
+                    extract = extractors.extractors[extractor_name]({'annotations': [annotations]}, **extractor_kwargs, **keywords)
                     if isinstance(extract, list):
                         for e in extract:
                             extracted_data.setdefault(extractor_name, copy.deepcopy(blank_extracted_data))
@@ -117,9 +119,10 @@ if __name__ == "__main__":
     parser.add_argument("workflow_csv", help="the csv file containing the workflow data", type=argparse.FileType('r'))
     parser.add_argument("workflow_id", help="the workflow ID you would like to extract", type=int)
     parser.add_argument("-v", "--version", help="the workflow version to extract", type=int)
+    parser.add_argument("-k", "--keywords", help="keywords to be passed into the extractor for a task in the form of a json string, e.g. \'{\"T0\": {\"dot_freq\": \"line\"} }\'  (note: double quotes must be used inside the brackets)", type=json.loads, default={})
     parser.add_argument("-H", "--human", help="switch to make the data column labels use the task and question labels instead of generic labels", action="store_true")
     parser.add_argument("-O", "--order", help="arrange the data columns in alphabetical order before saving", action="store_true")
     parser.add_argument("-o", "--output", help="the base name for output csv file to store the annotation extractions (one file will be created for each extractor used)", type=str, default="extractions")
     args = parser.parse_args()
 
-    extract_csv(args.classification_csv, args.workflow_csv, args.workflow_id, version=args.version, human=args.human, output=args.output, order=args.order)
+    extract_csv(args.classification_csv, args.workflow_csv, args.workflow_id, version=args.version, human=args.human, output=args.output, order=args.order, keywords=args.keywords)

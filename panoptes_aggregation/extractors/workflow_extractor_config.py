@@ -8,7 +8,7 @@ type_to_extractor = {
 }
 
 
-def workflow_extractor_config(tasks):
+def workflow_extractor_config(tasks, keywords={}):
     extractor_config = {}
     if tasks == {'init': {'question': 'init.question', 'type': 'single', 'answers': []}}:
         # this is Shakespeares World, return the correct config
@@ -50,6 +50,8 @@ def workflow_extractor_config(tasks):
                                     details_functions.append(None)
                             tools_config[tool_key]['details'][detail_key] = details_functions
             extractor_config[task_key] = tools_config
+            if task_key in keywords:
+                extractor_config[task_key]['keywords'] = keywords[task_key]
         elif task['type'] in type_to_extractor:
             extractor_config[task_key] = type_to_extractor[task['type']]
     return extractor_config

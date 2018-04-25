@@ -117,10 +117,12 @@ config = {
     'T2': 'question_extractor',
     'T3': ['sw_extractor', 'sw_graphic_extractor'],
     'T4': {
-        'poly_line_text_extractor': {'tool': [0]}
+        'poly_line_text_extractor': {'tool': [0]},
+        'keywords': {'dot_freq': 'line'}
     },
     'T5': {
-        'line_text_extractor': {'tool': [0]}
+        'line_text_extractor': {'tool': [0]},
+        'keywords': {'dot_freq': 'word'}
     }
 }
 
@@ -128,6 +130,7 @@ config = {
 class TestFilterAnnotations(unittest.TestCase):
     def setUp(self):
         self.annotation = copy.deepcopy(annotation)
+        self.config = copy.deepcopy(config)
         self.maxDiff = None
 
     def test_filter(self):
@@ -234,7 +237,8 @@ class TestFilterAnnotations(unittest.TestCase):
                         }
                     ]
                 }],
-                'config': {}
+                'config': {},
+                'keywords': {'dot_freq': 'line'}
             },
             'line_text_extractor': {
                 'annotations': [{
@@ -253,10 +257,11 @@ class TestFilterAnnotations(unittest.TestCase):
                         }
                     ]
                 }],
-                'config': {}
+                'config': {},
+                'keywords': {'dot_freq': 'word'}
             }
         }
-        result = filter_annotations(self.annotation, config)
+        result = filter_annotations(self.annotation, self.config)
         self.assertDictEqual(result, expected_result)
 
     def test_filter_human(self):
@@ -374,7 +379,8 @@ class TestFilterAnnotations(unittest.TestCase):
                         }
                     ]
                 }],
-                'config': {}
+                'config': {},
+                'keywords': {'dot_freq': 'line'}
             },
             'line_text_extractor': {
                 'annotations': [{
@@ -395,10 +401,11 @@ class TestFilterAnnotations(unittest.TestCase):
                         }
                     ]
                 }],
-                'config': {}
+                'config': {},
+                'keywords': {'dot_freq': 'word'}
             }
         }
-        result = filter_annotations(self.annotation, config, human=True)
+        result = filter_annotations(self.annotation, self.config, human=True)
         self.assertDictEqual(result, expected_result)
 
 

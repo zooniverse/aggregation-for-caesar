@@ -3,7 +3,7 @@
 This is a collection of external reducers written for [caesar](https://github.com/zooniverse/caesar) and offline use.
 
 # Documentation
-https://zooniverse.github.io/aggregation-for-caesar/
+https://aggregation-caesar.zooniverse.org/docs
 
 # Offline use
 To install (python 3 only):
@@ -22,8 +22,10 @@ You will need two files for offline use:
 Note: this only works for question tasks and the drawing tool's point data at the moment
 
 Use the command line tool to extract your data into one flat `csv` file for each extractor used:
+
 ```bash
-usage: extract_panoptes_csv.py [-h] [-v VERSION] [-H] [-o OUTPUT]
+usage: extract_panoptes_csv.py [-h] [-v VERSION] [-k KEYWORDS] [-H] [-O]
+                               [-o OUTPUT]
                                classification_csv workflow_csv workflow_id
 
 extract data from panoptes classifications based on the workflow
@@ -38,8 +40,15 @@ optional arguments:
   -h, --help            show this help message and exit
   -v VERSION, --version VERSION
                         the workflow version to extract
+  -k KEYWORDS, --keywords KEYWORDS
+                        keywords to be passed into the extractor for a task in
+                        the form of a json string, e.g. '{"T0": {"dot_freq":
+                        "line"} }' (note: double quotes must be used inside
+                        the brackets)
   -H, --human           switch to make the data column labels use the task and
                         question labels instead of generic labels
+  -O, --order           arrange the data columns in alphabetical order before
+                        saving
   -o OUTPUT, --output OUTPUT
                         the base name for output csv file to store the
                         annotation extractions (one file will be created for

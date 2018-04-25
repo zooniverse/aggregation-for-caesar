@@ -6,8 +6,11 @@ def filter_annotations(annotations, config, human=False):
     for annotation in annotations:
         if annotation['task'] in config:
             if isinstance(config[annotation['task']], dict):
+                keywords = config[annotation['task']].pop('keywords', None)
                 for extractor_name, tool_config in config[annotation['task']].items():
                     annotations_by_extractor.setdefault(extractor_name, {'annotations': [], 'config': {}})
+                    if keywords is not None:
+                        annotations_by_extractor[extractor_name]['keywords'] = keywords
                     if len(tool_config.get('details', [])) > 0:
                         annotations_by_extractor[extractor_name]['config'] = {'details': tool_config['details']}
                     annotations_by_extractor[extractor_name]['annotations'].append({

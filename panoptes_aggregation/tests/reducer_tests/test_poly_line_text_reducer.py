@@ -249,6 +249,13 @@ extracted_data = [
                 -38.990998547208093
             ]
         }
+    },
+    {
+        'frame2': {
+            'points': {'x': [[1, 180, 250]], 'y': [[1, 1, 1]]},
+            'text': [['some', 'words']],
+            'slope': [0]
+        }
     }
 ]
 
@@ -448,6 +455,16 @@ processed_data = {
             0,
             0
         ]
+    },
+    'frame2': {
+        'x': [
+            [1, 180, 250]
+        ],
+        'y': [
+            [1, 1, 1]
+        ],
+        'text': [['some', 'words']],
+        'slope': [0]
     }
 }
 
@@ -683,6 +700,30 @@ reduced_data = {
             'line_slope': 0.0,
             'slope_label': 0
         }
+    ],
+    'frame2': [
+        {
+            'clusters_x': [
+                1,
+                180,
+                250
+            ],
+            'clusters_y': [
+                1.0,
+                1.0,
+                1.0
+            ],
+            'clusters_text': [
+                ['some'],
+                ['words'],
+                ['']
+            ],
+            'number_views': 1,
+            'consensus_score': 1.0,
+            'gutter_label': 0,
+            'line_slope': 0.0,
+            'slope_label': 0
+        }
     ]
 }
 
@@ -903,6 +944,20 @@ processed_data_by_line = {
             0,
             0
         ]
+    },
+    'frame2': {
+        'x': [
+            [1, 250]
+        ],
+        'y': [
+            [1, 1]
+        ],
+        'text': [
+            ['some words']
+        ],
+        'slope': [
+            0
+        ]
     }
 }
 
@@ -1087,6 +1142,21 @@ reduced_data_by_line = {
             ],
             'number_views': 2,
             'consensus_score': 2.0,
+            'gutter_label': 0,
+            'line_slope': 0.0,
+            'slope_label': 0
+        }
+    ],
+    'frame2': [
+        {
+            'clusters_x': [1, 250],
+            'clusters_y': [1, 1],
+            'clusters_text': [
+                ['some'],
+                ['words']
+            ],
+            'number_views': 1,
+            'consensus_score': 1.0,
             'gutter_label': 0,
             'line_slope': 0.0,
             'slope_label': 0

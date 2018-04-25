@@ -127,6 +127,11 @@ tasks = {
     }
 }
 
+keywords = {
+    'T4': {'dot_freq': 'line'},
+    'T5': {'dot_freq': 'word'}
+}
+
 expected = {
     'T0': {
         'point_extractor': {
@@ -150,10 +155,12 @@ expected = {
     'T2': 'question_extractor',
     'T3': 'survey_extractor',
     'T4': {
-        'poly_line_text_extractor': {'tool': [0]}
+        'poly_line_text_extractor': {'tool': [0]},
+        'keywords': {'dot_freq': 'line'}
     },
     'T5': {
-        'line_text_extractor': {'tool': [0]}
+        'line_text_extractor': {'tool': [0]},
+        'keywords': {'dot_freq': 'word'}
     }
 }
 
@@ -161,7 +168,7 @@ expected = {
 class TestWorkflowExtractorConfig(unittest.TestCase):
     def test_config(self):
         '''Test workflow auto config works'''
-        result = workflow_extractor_config(tasks)
+        result = workflow_extractor_config(tasks, keywords=keywords)
         self.assertDictEqual(result, expected)
 
 
