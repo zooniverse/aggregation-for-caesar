@@ -4,7 +4,7 @@ node {
     checkout scm
 
     def dockerRepoName = 'zooniverse/aggregation-for-caesar'
-    def stackName = 'caesar'
+    def stackName = 'aggregation-caesar'
 
     def dockerImageName = "${dockerRepoName}:${BRANCH_NAME}"
     def newImage = null
