@@ -17,8 +17,8 @@ extracted_data = [
     {
         'tool1_x': list(xy[:12, 0]),
         'tool1_y': list(xy[:12, 1]),
-        'tool2_x': [3],
-        'tool2_y': [4]
+        'tool2_x': [3, None, None],
+        'tool2_y': [4, None, None]
     },
     {
         'tool1_x': list(xy[12:, 0]),
@@ -27,7 +27,7 @@ extracted_data = [
 ]
 processed_data = {
     'tool1': [tuple(z) for z in list(xy)],
-    'tool2': [(3, 4)]
+    'tool2': [(3, 4), (None, None), (None, None)]
 }
 reduced_data = {
     'tool1_points_x': list(xy[:, 0]),
