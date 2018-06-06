@@ -13,6 +13,14 @@ cd aggregation-for-caesar
 pip install .
 ```
 
+Or use the docker image provided
+```
+`docker build . -f Dockerfile.bin_cmds -t aggregation_for_caesar`
+
+From the root directory of this repository, run cmds using the docker image
+docker run -it --rm --name extract_panoptes_csv -v "$PWD":/usr/src/aggregation aggregation_for_caesar python bin/extract_panoptes_csv.py --help
+```
+
 ## Download your data from the project builder
 You will need two files for offline use:
  - The classification dump: The `Request new classification export` or `Request new workflow classification export` button from the lab's `Data Export` tab
