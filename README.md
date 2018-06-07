@@ -15,9 +15,10 @@ pip install .
 
 Or use the docker image provided
 ```
-`docker build . -f Dockerfile.bin_cmds -t aggregation_for_caesar`
-
-From the root directory of this repository, run cmds using the docker image
+docker build . -f Dockerfile.bin_cmds -t aggregation_for_caesar`
+```
+From the root directory of this repository, run the desirect python scripts using the docker image, e.g. `extract_panoptes_csv.py --help`
+```
 docker run -it --rm --name extract_panoptes_csv -v "$PWD":/usr/src/aggregation aggregation_for_caesar python bin/extract_panoptes_csv.py --help
 ```
 
