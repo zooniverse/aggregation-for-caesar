@@ -28,7 +28,7 @@ docker-compose -f docker-compose.local_scripts.yml run --rm local_scripts python
 ```
 **Or directly via docker**
 ```
-docker build . -f Dockerfile.bin_cmds -t aggregation_for_caesar`
+docker build . -f Dockerfile.bin_cmds -t aggregation_for_caesar
 ```
 From the root directory of this repository, run the desirect python scripts using the docker image, e.g. `extract_panoptes_csv.py --help`
 ```
