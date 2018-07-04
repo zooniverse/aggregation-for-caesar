@@ -15,10 +15,10 @@ import warnings
 
 def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, human=False, output='extractions', order=False, keywords={}):
     if not isinstance(workflow_csv, io.IOBase):
-        workflow_csv = open(workflow_csv, 'r')
+        workflow_csv = open(workflow_csv, 'r', encoding='utf-8')
 
     with workflow_csv as workflow_csv_in:
-        workflows = pandas.read_csv(workflow_csv_in)
+        workflows = pandas.read_csv(workflow_csv_in, encoding='utf-8')
 
     if version is None:
         version = workflows[workflows.workflow_id == workflow_id].version.max()
@@ -48,7 +48,7 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, hum
     extracted_data = {}
 
     with classification_csv as classification_csv_in:
-        classifications = pandas.read_csv(classification_csv_in)
+        classifications = pandas.read_csv(classification_csv_in, encoding='utf-8')
 
     widgets = [
         'Extracting: ',
@@ -108,15 +108,15 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, hum
         flat_extract = flatten_data(data)
         if order:
             flat_extract = order_columns(flat_extract, front=['choice'])
-        flat_extract.to_csv(output_name, index=False)
+        flat_extract.to_csv(output_name, index=False, encoding='utf-8')
     return output_files
 
 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="extract data from panoptes classifications based on the workflow")
-    parser.add_argument("classification_csv", help="the classificaiton csv file containing the panoptes data dump", type=argparse.FileType('r'))
-    parser.add_argument("workflow_csv", help="the csv file containing the workflow data", type=argparse.FileType('r'))
+    parser.add_argument("classification_csv", help="the classificaiton csv file containing the panoptes data dump", type=argparse.FileType('r', encoding='utf-8'))
+    parser.add_argument("workflow_csv", help="the csv file containing the workflow data", type=argparse.FileType('r', encoding='utf-8'))
     parser.add_argument("workflow_id", help="the workflow ID you would like to extract", type=int)
     parser.add_argument("-v", "--version", help="the workflow version to extract", type=int)
     parser.add_argument("-k", "--keywords", help="keywords to be passed into the extractor for a task in the form of a json string, e.g. \'{\"T0\": {\"dot_freq\": \"line\"} }\'  (note: double quotes must be used inside the brackets)", type=json.loads, default={})
