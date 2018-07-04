@@ -5,13 +5,11 @@ import copy
 from panoptes_aggregation import reducers
 from panoptes_aggregation.csv_utils import flatten_data, unflatten_data, order_columns
 import json
-import math
 import numpy as np
 import io
 import os
 import pandas
 import progressbar
-import warnings
 
 
 def first_filter(data):
@@ -28,10 +26,10 @@ def last_filter(data):
 
 def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', order=False, stream=False):
     if not isinstance(extracted_csv, io.IOBase):
-        extracted_csv = open(extracted_csv, 'r')
+        extracted_csv = open(extracted_csv, 'r', encoding='utf-8')
 
     with extracted_csv as extracted_csv_in:
-        extracted = pandas.read_csv(extracted_csv_in, infer_datetime_format=True, parse_dates=['created_at'])
+        extracted = pandas.read_csv(extracted_csv_in, infer_datetime_format=True, parse_dates=['created_at'], encoding='utf-8')
 
     extracted.sort_values(['subject_id', 'created_at'], inplace=True)
 
@@ -54,8 +52,8 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
         if os.path.isfile(output_name):
             print('resuming from last run')
             resume = True
-            with open(output_name, 'r') as reduced_file:
-                reduced_csv = pandas.read_csv(reduced_file)
+            with open(output_name, 'r', encoding='utf-8') as reduced_file:
+                reduced_csv = pandas.read_csv(reduced_file, encoding='utf-8')
                 subjects = np.setdiff1d(subjects, reduced_csv.subject_id)
 
     blank_reduced_data = OrderedDict([
@@ -104,15 +102,15 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
                 reduced_data['data'].append(reduction)
         if stream:
             if (sdx == 0) and (not resume):
-                pandas.DataFrame(reduced_data).to_csv(output_name, mode='w', index=False)
+                pandas.DataFrame(reduced_data).to_csv(output_name, mode='w', index=False, encoding='utf-8')
             else:
-                pandas.DataFrame(reduced_data).to_csv(output_name, mode='a', index=False, header=False)
+                pandas.DataFrame(reduced_data).to_csv(output_name, mode='a', index=False, header=False, encoding='utf-8')
             reduced_data = copy.deepcopy(blank_reduced_data)
         pbar.update(sdx + 1)
     pbar.finish()
 
     if stream:
-        reduced_csv = pandas.read_csv(output_name)
+        reduced_csv = pandas.read_csv(output_name, encoding='utf-8')
         if 'data' in reduced_csv:
             reduced_csv.data = reduced_csv.data.apply(eval)
             flat_reduced_data = flatten_data(reduced_csv)
@@ -122,14 +120,14 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
         flat_reduced_data = flatten_data(reduced_data)
     if order:
         flat_reduced_data = order_columns(flat_reduced_data, front=['choice', 'total_vote_count', 'choice_count'])
-    flat_reduced_data.to_csv(output_name, index=False)
+    flat_reduced_data.to_csv(output_name, index=False, encoding='utf-8')
     return output_name
 
 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="reduce data from panoptes classifications based on the extracted data (see extract_panoptes_csv)")
-    parser.add_argument("extracted_csv", help="the extracted csv file output from extract_panoptes_csv", type=argparse.FileType('r'))
+    parser.add_argument("extracted_csv", help="the extracted csv file output from extract_panoptes_csv", type=argparse.FileType('r', encoding='utf-8'))
     parser.add_argument("-F", "--filter", help="how to filter a user makeing multiple classifications for one subject", type=str, choices=['first', 'last', 'all'], default='fisrt')
     parser.add_argument("-k", "--keywords", help="keywords to be passed into the reducer in the form of a json string, e.g. \'{\"eps\": 5.5, \"min_samples\": 3}\'  (note: double quotes must be used inside the brackets)", type=json.loads, default={})
     parser.add_argument("-O", "--order", help="arrange the data columns in alphabetical order before saving", action="store_true")
