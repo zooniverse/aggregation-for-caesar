@@ -7,6 +7,9 @@ Reducers
 .. automodule:: panoptes_aggregation.reducers.point_reducer
   :members:
 
+.. automodule:: panoptes_aggregation.reducers.point_reducer_hdbscan
+  :members:
+
 .. automodule:: panoptes_aggregation.reducers.rectangle_reducer
   :members:
 
@@ -20,4 +23,7 @@ Reducers
   :members:
 
 .. automodule:: panoptes_aggregation.reducers.sw_variant_reducer
+  :members:
+
+.. automodule:: panoptes_aggregation.reducers.dropdown_reducer
   :members:
