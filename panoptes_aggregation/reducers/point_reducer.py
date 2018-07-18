@@ -49,7 +49,7 @@ def process_data(data):
 @reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
 @subtask_wrapper
 def point_reducer(data_by_tool, **kwargs):
-    '''Cluster a list of points by tool
+    '''Cluster a list of points by tool using DBSCAN
 
     Parameters
     ----------
