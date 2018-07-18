@@ -1,6 +1,7 @@
 collatex
 beautifulsoup4
 Flask
+hdbscan
 nose
 numpy
 python-levenshtein
