@@ -55,7 +55,9 @@
 <li><a class="reference internal" href="#rectangle-extractor">Rectangle Extractor</a></li>
 <li><a class="reference internal" href="#survey-extractor">Survey Extractor</a></li>
 <li><a class="reference internal" href="#polygon-as-line-tool-for-text-extractor">Polygon As Line Tool for Text Extractor</a></li>
+<li><a class="reference internal" href="#line-tool-for-text-extractortest">Line Tool for Text ExtractorTest</a></li>
 <li><a class="reference internal" href="#shakespeares-world-variants-extractor">Shakespeares World Variants Extractor</a></li>
+<li><a class="reference internal" href="#dropdown-extractor">Dropdown Extractor</a></li>
 </ul>
 </li>
 </ul>
@@ -111,7 +113,7 @@ panoptes annotations</td>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>extraction</strong> – A dictionary (formated like a counter) indicating what annotations were
 made</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></td>
 </tr>
 </tbody>
 </table>
@@ -158,7 +160,7 @@ panoptes annotations</td>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>extraction</strong> – A dictionary with two keys, <cite>x</cite> and <cite>y</cite>, each containing a list of
 <cite>x</cite> and <cite>y</cite> postions for each marked point</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></td>
 </tr>
 </tbody>
 </table>
@@ -179,6 +181,28 @@ panoptes annotations</td>
 <span class="target" id="module-panoptes_aggregation.extractors.rectangle_extractor"></span><div class="section" id="rectangle-extractor">
 <h2>Rectangle Extractor<a class="headerlink" href="#rectangle-extractor" title="Permalink to this headline">¶</a></h2>
 <p>This module provides a function to extract drawn rectangles from panoptes annotations.</p>
+<dl class="function">
+<dt id="panoptes_aggregation.extractors.rectangle_extractor.rectangle_extractor">
+<code class="descclassname">panoptes_aggregation.extractors.rectangle_extractor.</code><code class="descname">rectangle_extractor</code><span class="sig-paren">(</span><em>classification</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.extractors.rectangle_extractor.rectangle_extractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extact rectangle dtata from annotation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>classification</strong> (<em>dict</em>) – A dictionary containing an <cite>annotations</cite> key that is a list of
+panoptes annotations</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>extraction</strong> – A dictionary containing one key per frame. Each frame contains
+the <cite>x</cite>, <cite>y</cite>, <cite>width</cite>, and <cite>height</cite> values for each tool used in
+the annotation.  These are lists that contain one value for each
+rectangle drawn for each tool.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <span class="target" id="module-panoptes_aggregation.extractors.survey_extractor"></span><div class="section" id="survey-extractor">
 <h2>Survey Extractor<a class="headerlink" href="#survey-extractor" title="Permalink to this headline">¶</a></h2>
@@ -199,7 +223,7 @@ panoptes annotations</td>
 <cite>choice</cite> made in an annotation is extacted to a different element
 of the list.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></td>
 </tr>
 </tbody>
 </table>
@@ -218,12 +242,12 @@ of the list.</td>
 </div>
 <span class="target" id="module-panoptes_aggregation.extractors.poly_line_text_extractor"></span><div class="section" id="polygon-as-line-tool-for-text-extractor">
 <h2>Polygon As Line Tool for Text Extractor<a class="headerlink" href="#polygon-as-line-tool-for-text-extractor" title="Permalink to this headline">¶</a></h2>
-<p>This module provides a fuction of eaxtract panoptes annotations
+<p>This module provides a fuction to eaxtract panoptes annotations
 from porjects using a polygon tool to mark word in a transcribed
 document and provide the transcribed text as a sub-task.</p>
 <dl class="function">
 <dt id="panoptes_aggregation.extractors.poly_line_text_extractor.poly_line_text_extractor">
-<code class="descclassname">panoptes_aggregation.extractors.poly_line_text_extractor.</code><code class="descname">poly_line_text_extractor</code><span class="sig-paren">(</span><em>classification</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.extractors.poly_line_text_extractor.poly_line_text_extractor" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">panoptes_aggregation.extractors.poly_line_text_extractor.</code><code class="descname">poly_line_text_extractor</code><span class="sig-paren">(</span><em>classification</em>, <em>dot_freq='word'</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.extractors.poly_line_text_extractor.poly_line_text_extractor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract annotations from a polygon tool with a text sub-task</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -239,7 +263,7 @@ and <cite>slope</cite>, a list of the slopes (in deg) of each line drawn.
 For <cite>points</cite> and <cite>text</cite> there is one inner list for each annotaiton made
 on the frame.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></td>
 </tr>
 </tbody>
 </table>
@@ -279,6 +303,36 @@ on the frame.</td>
 </dd></dl>
 
 </div>
+<span class="target" id="module-panoptes_aggregation.extractors.line_text_extractor"></span><div class="section" id="line-tool-for-text-extractortest">
+<h2>Line Tool for Text ExtractorTest<a class="headerlink" href="#line-tool-for-text-extractortest" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a function to extract panoptes annotations
+from projects using a line tool to mark lines of text in a
+transcribed document and provide the text as a sub-task.</p>
+<dl class="function">
+<dt id="panoptes_aggregation.extractors.line_text_extractor.line_text_extractor">
+<code class="descclassname">panoptes_aggregation.extractors.line_text_extractor.</code><code class="descname">line_text_extractor</code><span class="sig-paren">(</span><em>classification</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.extractors.line_text_extractor.line_text_extractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract annotations from a line tool with a text sub-task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>classification</strong> (<em>dict</em>) – A dictionary containing an <cite>annotations</cite> key that is a list of
+panoptes annotations</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>extraction</strong> – A dictionary with one key for each <cite>frame</cite>. The value for each frame
+is a dict with <cite>text</cite>, a list-of-lists of transcribe lines, <cite>points</cite>, a
+dict with the list-of-lists of <cite>x</cite> and <cite>y</cite> postions of each line,
+and <cite>slope</cite>, a list of the slopes (in deg) of each line drawn.
+For <cite>points</cite> and <cite>text</cite> there is one inner list for each annotaiton made
+on the frame.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 <span class="target" id="module-panoptes_aggregation.extractors.sw_extractor"></span><span class="target" id="module-panoptes_aggregation.extractors.sw_variant_extractor"></span><div class="section" id="shakespeares-world-variants-extractor">
 <h2>Shakespeares World Variants Extractor<a class="headerlink" href="#shakespeares-world-variants-extractor" title="Permalink to this headline">¶</a></h2>
 <p>This module provides a fuction to extract the <cite>variants</cite> data from
@@ -297,14 +351,39 @@ Shakespeares World annotations</td>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>extraction</strong> – A dictionary with at most one key, <cite>variants</cite> with the list of
 all variants in the classification</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 </div>
-<span class="target" id="module-panoptes_aggregation.extractors.sw_graphic_extractor"></span></div>
+<span class="target" id="module-panoptes_aggregation.extractors.sw_graphic_extractor"></span><span class="target" id="module-panoptes_aggregation.extractors.dropdown_extractor"></span><div class="section" id="dropdown-extractor">
+<h2>Dropdown Extractor<a class="headerlink" href="#dropdown-extractor" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a function to extract dropdown selections from panoptes annotations.</p>
+<dl class="function">
+<dt id="panoptes_aggregation.extractors.dropdown_extractor.dropdown_extractor">
+<code class="descclassname">panoptes_aggregation.extractors.dropdown_extractor.</code><code class="descname">dropdown_extractor</code><span class="sig-paren">(</span><em>classification</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.extractors.dropdown_extractor.dropdown_extractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract annotations from a dropdown task into a Counter object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>classification</strong> (<em>dict</em>) – A dictionary containing <cite>annotations</cite> as a key that is a list of
+panoptes annotations</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>extraction</strong> – A dictionary containing <cite>value</cite> as a key that is a list of
+Counter dictionaries, one entry for each dropdown list in the
+task</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
 
 
           </div>

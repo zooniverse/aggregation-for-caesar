@@ -1,6 +1,6 @@
 '''
-Point Reducer
--------------
+Point Reducer HDBSCAN
+---------------------
 This module provides functions to cluster points extracted with
 :mod:`panoptes_aggregation.extractors.point_extractor`.
 '''

@@ -13,8 +13,8 @@ from .subtask_extractor_wrapper import subtask_wrapper
 def rectangle_extractor(classification):
     '''Extact rectangle dtata from annotation
 
-    Paramters
-    ---------
+    Parameters
+    ----------
     classification : dict
         A dictionary containing an `annotations` key that is a list of
         panoptes annotations
