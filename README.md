@@ -21,7 +21,7 @@ https://docs.docker.com/get-started/
 ```
 docker-compose -f docker-compose.local_scripts.yml build local_scripts
 ```
-From the root directory of this repository, run the desirect python scripts using the docker image, e.g. `extract_panoptes_csv.py --help`
+From the root directory of this repository, run the desired python scripts using the docker image, e.g. `extract_panoptes_csv.py --help`
 ```
 docker-compose -f docker-compose.local_scripts.yml run --rm local_scripts python bin/extract_panoptes_csv.py --help
 
@@ -30,7 +30,7 @@ docker-compose -f docker-compose.local_scripts.yml run --rm local_scripts python
 ```
 docker build . -f Dockerfile.bin_cmds -t aggregation_for_caesar
 ```
-From the root directory of this repository, run the desirect python scripts using the docker image, e.g. `extract_panoptes_csv.py --help`
+From the root directory of this repository, run the desired python scripts using the docker image, e.g. `extract_panoptes_csv.py --help`
 ```
 docker run -it --rm --name extract_panoptes_csv -v "$PWD":/usr/src/aggregation aggregation_for_caesar python bin/extract_panoptes_csv.py --help
 ```
