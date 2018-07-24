@@ -1,25 +1,23 @@
 '''
-Point Reducer HDBSCAN
----------------------
+Point Reducer DBSCAN
+--------------------
 This module provides functions to cluster points extracted with
 :mod:`panoptes_aggregation.extractors.point_extractor`.
 '''
 import numpy as np
-from hdbscan import HDBSCAN
+from sklearn.cluster import DBSCAN
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
 
 
 DEFAULTS = {
-    'min_cluster_size': {'default': 5, 'type': int},
+    'eps': {'default': 5.0, 'type': float},
     'min_samples': {'default': 3, 'type': int},
     'metric': {'default': 'euclidean', 'type': str},
-    'algorithm': {'default': 'best', 'type': str},
-    'leaf_size': {'default': 40, 'type': int},
-    'p': {'default': None, 'type': float},
-    'cluster_selection_method': {'default': 'eom', 'type': str},
-    'allow_single_cluster': {'default': True, 'type': bool}
+    'algorithm': {'default': 'auto', 'type': str},
+    'leaf_size': {'default': 30, 'type': int},
+    'p': {'default': None, 'type': float}
 }
 
 
@@ -54,15 +52,15 @@ def process_data(data):
 
 @reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
 @subtask_wrapper
-def point_reducer_hdbscan(data_by_tool, **kwargs):
-    '''Cluster a list of points by tool using HDBSCAN
+def point_reducer_dbscan(data_by_tool, **kwargs):
+    '''Cluster a list of points by tool using DBSCAN
 
     Parameters
     ----------
     data_by_tool : dict
         A dictionary returned by :meth:`process_data`
     kwrgs :
-        `See HDBSCAN <http://hdbscan.readthedocs.io/en/latest/api.html#hdbscan>`_
+        `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
 
     Returns
     -------
@@ -93,7 +91,7 @@ def point_reducer_hdbscan(data_by_tool, **kwargs):
             # default each point in no cluster
             clusters[frame]['{0}_cluster_labels'.format(tool)] = [-1] * loc.shape[0]
             if loc.shape[0] >= kwargs['min_samples']:
-                db = HDBSCAN(**kwargs).fit(loc)
+                db = DBSCAN(**kwargs).fit(loc)
                 # what cluster each point belongs to
                 clusters[frame]['{0}_cluster_labels'.format(tool)] = list(db.labels_)
                 for k in set(db.labels_):

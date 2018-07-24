@@ -66,6 +66,14 @@ extracted_data = [
             'T0_tool1_height': [20.0]
         }
     },
+    {
+        'frame0': {
+            'T0_tool1_x': [500.0],
+            'T0_tool1_y': [500.0],
+            'T0_tool1_width': [10.0],
+            'T0_tool1_height': [20.0]
+        }
+    }
 ]
 
 reduced_data = {
@@ -138,12 +146,12 @@ reduced_data = {
                 ]}
             ]
         ],
-        'T0_tool1_rec_x': [500.0, 500.0],
-        'T0_tool1_rec_y': [500.0, 500.0],
-        'T0_tool1_rec_width': [10.0, 10.0],
-        'T0_tool1_rec_height': [20.0, 20.0],
-        'T0_tool1_cluster_labels': [0, 0],
-        'T0_tool1_clusters_count': [2],
+        'T0_tool1_rec_x': [500.0, 500.0, 500.0],
+        'T0_tool1_rec_y': [500.0, 500.0, 500.0],
+        'T0_tool1_rec_width': [10.0, 10.0, 10.0],
+        'T0_tool1_rec_height': [20.0, 20.0, 20.0],
+        'T0_tool1_cluster_labels': [0, 0, 0],
+        'T0_tool1_clusters_count': [3],
         'T0_tool1_clusters_x': [500.0],
         'T0_tool1_clusters_y': [500.0],
         'T0_tool1_clusters_width': [10.0],

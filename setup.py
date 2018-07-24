@@ -23,6 +23,7 @@ setup(
     install_requires=[
         'beautifulsoup4',
         'collatex',
+        'cython',
         'hdbscan',
         'numpy',
         'pandas',

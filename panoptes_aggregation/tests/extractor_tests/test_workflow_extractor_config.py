@@ -134,7 +134,7 @@ keywords = {
 
 expected = {
     'T0': {
-        'point_extractor': {
+        'point_extractor_by_frame': {
             'tool': [
                 0,
                 2

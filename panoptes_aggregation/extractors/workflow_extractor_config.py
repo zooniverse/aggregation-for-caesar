@@ -3,7 +3,7 @@ type_to_extractor = {
     'multiple': 'question_extractor',
     'dropdown': 'dropdown_extractor',
     'survey': 'survey_extractor',
-    'point': 'point_extractor',
+    'point': 'point_extractor_by_frame',
     'rectangle': 'rectangle_extractor'
 }
 

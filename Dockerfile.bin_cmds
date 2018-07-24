@@ -6,7 +6,8 @@ WORKDIR /usr/src/aggregation
 
 # install requirements
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip
+RUN cat requirements.txt | xargs -n 1 -L 1 pip install --no-cache-dir
 
 COPY . ./
 RUN pip install .

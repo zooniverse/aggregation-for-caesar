@@ -1,7 +1,7 @@
+cython
 collatex
 beautifulsoup4
 Flask
-hdbscan
 nose
 numpy
 python-levenshtein
@@ -12,3 +12,4 @@ scikit-image
 sphinx
 sphinxcontrib-httpdomain
 werkzeug
+hdbscan

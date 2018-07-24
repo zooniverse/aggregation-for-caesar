@@ -1,5 +1,5 @@
 import numpy as np
-from panoptes_aggregation.reducers.point_reducer_hdbscan import process_data, point_reducer_hdbscan
+from panoptes_aggregation.reducers.point_reducer_dbscan import process_data, point_reducer_dbscan
 from .base_test_class import ReducerTestPoints
 
 c0_cov = np.array([[3, 0.5], [0.5, 4]])
@@ -25,7 +25,7 @@ extracted_data = [
     {
         'frame0': {
             'tool1_x': list(xy[12:, 0]),
-            'tool1_y': list(xy[12:, 1])
+            'tool1_y': list(xy[12:, 1]),
         }
     }
 ]
@@ -39,13 +39,13 @@ reduced_data = {
     'frame0': {
         'tool1_points_x': list(xy[:, 0]),
         'tool1_points_y': list(xy[:, 1]),
-        'tool1_cluster_labels': [1] * c0_count + [0] * c1_count,
-        'tool1_clusters_count': [c1_count, c0_count],
-        'tool1_clusters_x': [c1_loc[0], c0_loc[0]],
-        'tool1_clusters_y': [c1_loc[1], c0_loc[1]],
-        'tool1_clusters_var_x': [c1_cov[0, 0], c0_cov[0, 0]],
-        'tool1_clusters_var_y': [c1_cov[1, 1], c0_cov[1, 1]],
-        'tool1_clusters_var_x_y': [c1_cov[0, 1], c0_cov[0, 1]],
+        'tool1_cluster_labels': [0] * c0_count + [1] * c1_count,
+        'tool1_clusters_count': [c0_count, c1_count],
+        'tool1_clusters_x': [c0_loc[0], c1_loc[0]],
+        'tool1_clusters_y': [c0_loc[1], c1_loc[1]],
+        'tool1_clusters_var_x': [c0_cov[0, 0], c1_cov[0, 0]],
+        'tool1_clusters_var_y': [c0_cov[1, 1], c1_cov[1, 1]],
+        'tool1_clusters_var_x_y': [c0_cov[0, 1], c1_cov[0, 1]],
         'tool2_points_x': [3],
         'tool2_points_y': [4],
         'tool2_cluster_labels': [-1]
@@ -54,14 +54,14 @@ reduced_data = {
 
 
 TestPointsCluster = ReducerTestPoints(
-    point_reducer_hdbscan,
+    point_reducer_dbscan,
     process_data,
     extracted_data,
     processed_data,
     reduced_data,
-    'Test point reducer HDBSCAN',
+    'Test point reducer DBSCAN',
     kwargs={
-        'min_cluster_size': 5,
+        'eps': 5,
         'min_samples': 3
     },
     atol=2
