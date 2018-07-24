@@ -149,7 +149,10 @@ made</td>
 <dl class="function">
 <dt id="panoptes_aggregation.extractors.point_extractor.point_extractor">
 <code class="descclassname">panoptes_aggregation.extractors.point_extractor.</code><code class="descname">point_extractor</code><span class="sig-paren">(</span><em>classification</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.extractors.point_extractor.point_extractor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract annotations from a point drawing tool into lists</p>
+<dd><p>Extract annotations from a point drawing tool into lists.
+This extractor does <em>not</em> support extraction from multi-frame subjects or
+subtask extraction.  If either of these are needed use
+<code class="xref py py-meth docutils literal"><span class="pre">panoptes_aggregation.extractors.point_extractor.point_extractor_by_frame()</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

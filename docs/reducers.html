@@ -181,7 +181,11 @@ When <cite>True</cite> the set of all choices is treated as a single answer</li>
 <dl class="function">
 <dt id="panoptes_aggregation.reducers.point_reducer.process_data">
 <code class="descclassname">panoptes_aggregation.reducers.point_reducer.</code><code class="descname">process_data</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#panoptes_aggregation.reducers.point_reducer.process_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Process a list of extractions into lists of <cite>x</cite> and <cite>y</cite> sorted by <cite>tool</cite></p>
+<dd><p>Process a list of extractions into lists of <cite>x</cite> and <cite>y</cite> sorted by <cite>tool</cite>.
+This reducer is for use with <a class="reference internal" href="extractros.html#panoptes_aggregation.extractors.point_extractor.point_extractor" title="panoptes_aggregation.extractors.point_extractor.point_extractor"><code class="xref py py-meth docutils literal"><span class="pre">panoptes_aggregation.extractors.point_extractor.point_extractor()</span></code></a>
+that does <em>not</em> seperate points by <cite>frame</cite> and does not support subtask reduction.  Use
+<code class="xref py py-meth docutils literal"><span class="pre">panoptes_aggregation.extractors.point_extractor.point_extractor_dbscan()</span></code> if there
+are multiple frames <em>or</em> subtasks.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
