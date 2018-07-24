@@ -1,4 +1,5 @@
 from .point_extractor import point_extractor
+from .point_extractor_by_frame import point_extractor_by_frame
 from .rectangle_extractor import rectangle_extractor
 from .question_extractor import question_extractor
 from .survey_extractor import survey_extractor
@@ -13,6 +14,7 @@ from .filter_annotations import filter_annotations
 
 extractors = {
     'point_extractor': point_extractor,
+    'point_extractor_by_frame': point_extractor_by_frame,
     'rectangle_extractor': rectangle_extractor,
     'question_extractor': question_extractor,
     'survey_extractor': survey_extractor,
