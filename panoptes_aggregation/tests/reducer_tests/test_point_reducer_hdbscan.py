@@ -15,33 +15,41 @@ xy = np.vstack([
 ])
 extracted_data = [
     {
-        'tool1_x': list(xy[:12, 0]),
-        'tool1_y': list(xy[:12, 1]),
-        'tool2_x': [3, None, None],
-        'tool2_y': [4, None, None]
+        'frame0': {
+            'tool1_x': list(xy[:12, 0]),
+            'tool1_y': list(xy[:12, 1]),
+            'tool2_x': [3, None, None],
+            'tool2_y': [4, None, None]
+        }
     },
     {
-        'tool1_x': list(xy[12:, 0]),
-        'tool1_y': list(xy[12:, 1]),
+        'frame0': {
+            'tool1_x': list(xy[12:, 0]),
+            'tool1_y': list(xy[12:, 1])
+        }
     }
 ]
 processed_data = {
-    'tool1': [tuple(z) for z in list(xy)],
-    'tool2': [(3, 4), (None, None), (None, None)]
+    'frame0': {
+        'tool1': [tuple(z) for z in list(xy)],
+        'tool2': [(3, 4), (None, None), (None, None)]
+    }
 }
 reduced_data = {
-    'tool1_points_x': list(xy[:, 0]),
-    'tool1_points_y': list(xy[:, 1]),
-    'tool1_cluster_labels': [1] * c0_count + [0] * c1_count,
-    'tool1_clusters_count': [c1_count, c0_count],
-    'tool1_clusters_x': [c1_loc[0], c0_loc[0]],
-    'tool1_clusters_y': [c1_loc[1], c0_loc[1]],
-    'tool1_clusters_var_x': [c1_cov[0, 0], c0_cov[0, 0]],
-    'tool1_clusters_var_y': [c1_cov[1, 1], c0_cov[1, 1]],
-    'tool1_clusters_var_x_y': [c1_cov[0, 1], c0_cov[0, 1]],
-    'tool2_points_x': [3],
-    'tool2_points_y': [4],
-    'tool2_cluster_labels': [-1]
+    'frame0': {
+        'tool1_points_x': list(xy[:, 0]),
+        'tool1_points_y': list(xy[:, 1]),
+        'tool1_cluster_labels': [1] * c0_count + [0] * c1_count,
+        'tool1_clusters_count': [c1_count, c0_count],
+        'tool1_clusters_x': [c1_loc[0], c0_loc[0]],
+        'tool1_clusters_y': [c1_loc[1], c0_loc[1]],
+        'tool1_clusters_var_x': [c1_cov[0, 0], c0_cov[0, 0]],
+        'tool1_clusters_var_y': [c1_cov[1, 1], c0_cov[1, 1]],
+        'tool1_clusters_var_x_y': [c1_cov[0, 1], c0_cov[0, 1]],
+        'tool2_points_x': [3],
+        'tool2_points_y': [4],
+        'tool2_cluster_labels': [-1]
+    }
 }
 
 

@@ -151,20 +151,34 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
             result = reducer._original(self.processed, **kwargs)
             for i in result.keys():
                 with self.subTest(i=i):
-                    np.testing.assert_allclose(result[i], reduced[i], atol=atol)
+                    if isinstance(result[i], dict):
+                        for j in result[i].keys():
+                            with self.subTest(i=j):
+                                np.testing.assert_allclose(result[i][j], reduced[i][j], atol=atol)
+                    else:
+                        np.testing.assert_allclose(result[i], reduced[i], atol=atol)
 
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(self.extracted, **kwargs)
             for i in result.keys():
                 with self.subTest(i=i):
-                    np.testing.assert_allclose(result[i], reduced[i], atol=atol)
+                    if isinstance(result[i], dict):
+                        for j in result[i].keys():
+                            with self.subTest(i=j):
+                                np.testing.assert_allclose(result[i][j], reduced[i][j], atol=atol)
+                    else:
+                        np.testing.assert_allclose(result[i], reduced[i], atol=atol)
 
         def test_keys(self):
             result = reducer(self.extracted, **kwargs)
             for i in reduced.keys():
                 with self.subTest(i=i):
                     self.assertIn(i, result)
+                    if isinstance(result[i], dict):
+                        for j in result[i].keys():
+                            with self.subTest(i=j):
+                                self.assertIn(j, result[i])
 
         def test_reducer_request(self):
             '''Test the online reducer'''
@@ -181,6 +195,11 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
                 result = reducer(flask.request)
                 for i in result.keys():
                     with self.subTest(i=i):
-                        np.testing.assert_allclose(result[i], reduced[i], atol=atol)
+                        if isinstance(result[i], dict):
+                            for j in result[i].keys():
+                                with self.subTest(i=j):
+                                    np.testing.assert_allclose(result[i][j], reduced[i][j], atol=atol)
+                        else:
+                            np.testing.assert_allclose(result[i], reduced[i], atol=atol)
 
     return ReducerTest
