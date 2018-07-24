@@ -8,7 +8,6 @@ import numpy as np
 from sklearn.cluster import DBSCAN
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
-from .subtask_reducer_wrapper import subtask_wrapper
 
 
 DEFAULTS = {
@@ -22,7 +21,11 @@ DEFAULTS = {
 
 
 def process_data(data):
-    '''Process a list of extractions into lists of `x` and `y` sorted by `tool`
+    '''Process a list of extractions into lists of `x` and `y` sorted by `tool`.
+    This reducer is for use with :meth:`panoptes_aggregation.extractors.point_extractor.point_extractor`
+    that does *not* seperate points by `frame` and does not support subtask reduction.  Use
+    :meth:`panoptes_aggregation.extractors.point_extractor.point_extractor_dbscan` if there
+    are multiple frames *or* subtasks.
 
     Parameters
     ----------
@@ -47,7 +50,6 @@ def process_data(data):
 
 
 @reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
-@subtask_wrapper
 def point_reducer(data_by_tool, **kwargs):
     '''Cluster a list of points by tool using DBSCAN
 

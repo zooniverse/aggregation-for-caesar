@@ -6,13 +6,14 @@ This module provides a function to extract drawn points from panoptes annotation
 from collections import OrderedDict
 from slugify import slugify
 from .extractor_wrapper import extractor_wrapper
-from .subtask_extractor_wrapper import subtask_wrapper
 
 
 @extractor_wrapper
-@subtask_wrapper
 def point_extractor(classification):
-    '''Extract annotations from a point drawing tool into lists
+    '''Extract annotations from a point drawing tool into lists.
+    This extractor does *not* support extraction from multi-frame subjects or
+    subtask extraction.  If either of these are needed use
+    :meth:`panoptes_aggregation.extractors.point_extractor.point_extractor_by_frame`.
 
     Parameters
     ----------
