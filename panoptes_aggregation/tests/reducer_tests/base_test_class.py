@@ -153,7 +153,7 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
                 with self.subTest(i=i):
                     if isinstance(result[i], dict):
                         for j in result[i].keys():
-                            with self.subTest(i=j):
+                            with self.subTest(j=j):
                                 np.testing.assert_allclose(result[i][j], reduced[i][j], atol=atol)
                     else:
                         np.testing.assert_allclose(result[i], reduced[i], atol=atol)
@@ -165,7 +165,7 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
                 with self.subTest(i=i):
                     if isinstance(result[i], dict):
                         for j in result[i].keys():
-                            with self.subTest(i=j):
+                            with self.subTest(j=j):
                                 np.testing.assert_allclose(result[i][j], reduced[i][j], atol=atol)
                     else:
                         np.testing.assert_allclose(result[i], reduced[i], atol=atol)
@@ -177,7 +177,7 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
                     self.assertIn(i, result)
                     if isinstance(result[i], dict):
                         for j in result[i].keys():
-                            with self.subTest(i=j):
+                            with self.subTest(j=j):
                                 self.assertIn(j, result[i])
 
         def test_reducer_request(self):
@@ -197,7 +197,7 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
                     with self.subTest(i=i):
                         if isinstance(result[i], dict):
                             for j in result[i].keys():
-                                with self.subTest(i=j):
+                                with self.subTest(j=j):
                                     np.testing.assert_allclose(result[i][j], reduced[i][j], atol=atol)
                         else:
                             np.testing.assert_allclose(result[i], reduced[i], atol=atol)

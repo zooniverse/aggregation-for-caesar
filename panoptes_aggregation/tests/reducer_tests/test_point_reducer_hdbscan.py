@@ -40,6 +40,32 @@ reduced_data = {
         'tool1_points_x': list(xy[:, 0]),
         'tool1_points_y': list(xy[:, 1]),
         'tool1_cluster_labels': [1] * c0_count + [0] * c1_count,
+        'tool1_cluster_probabilities': [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.8,
+            0.9,
+            1.0,
+            0.7,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        'tool1_clusters_persistance': [0.1, 0.6],
         'tool1_clusters_count': [c1_count, c0_count],
         'tool1_clusters_x': [c1_loc[0], c0_loc[0]],
         'tool1_clusters_y': [c1_loc[1], c0_loc[1]],
@@ -48,7 +74,8 @@ reduced_data = {
         'tool1_clusters_var_x_y': [c1_cov[0, 1], c0_cov[0, 1]],
         'tool2_points_x': [3],
         'tool2_points_y': [4],
-        'tool2_cluster_labels': [-1]
+        'tool2_cluster_labels': [-1],
+        'tool2_cluster_probabilities': [0]
     }
 }
 
@@ -64,5 +91,5 @@ TestPointsCluster = ReducerTestPoints(
         'min_cluster_size': 5,
         'min_samples': 3
     },
-    atol=2
+    atol=2.5
 )

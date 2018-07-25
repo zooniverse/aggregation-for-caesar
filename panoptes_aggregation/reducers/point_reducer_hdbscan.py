@@ -19,7 +19,7 @@ DEFAULTS = {
     'leaf_size': {'default': 40, 'type': int},
     'p': {'default': None, 'type': float},
     'cluster_selection_method': {'default': 'eom', 'type': str},
-    'allow_single_cluster': {'default': True, 'type': bool}
+    'allow_single_cluster': {'default': False, 'type': bool}
 }
 
 
@@ -72,12 +72,14 @@ def point_reducer_hdbscan(data_by_tool, **kwargs):
         * `tool*_points_x` : A list of `x` positions for **all** points drawn with `tool*`
         * `tool*_points_y` : A list of `y` positions for **all** points drawn with `tool*`
         * `tool*_cluster_labels` : A list of cluster labels for **all** points drawn with `tool*`
+        * `tool*_cluster_probabilities`: A list of cluster probabilities for **all** points drawn with `tool*`
+        * `tool*_clusters_persistance`: A mesure for how persistent each **cluster** is (1.0 = stable, 0.0 = unstable)
         * `tool*_clusters_count` : The number of points in each **cluster** found
-        * `tool*_clusters_x` : The `x` position for each **cluster** found
-        * `tool*_clusters_y` : The `y` position for each **cluster** found
-        * `tool*_clusters_var_x` : The `x` varaince of points in each **cluster** found
-        * `tool*_clusters_var_y` : The `y` varaince of points in each **cluster** found
-        * `tool*_clusters_var_x_y` : The `x-y` covaraince of points in each **cluster** found
+        * `tool*_clusters_x` : The weighted `x` position for each **cluster** found
+        * `tool*_clusters_y` : The weighted `y` position for each **cluster** found
+        * `tool*_clusters_var_x` : The weighted `x` varaince of points in each **cluster** found
+        * `tool*_clusters_var_y` : The weighted `y` varaince of points in each **cluster** found
+        * `tool*_clusters_var_x_y` : The weighted `x-y` covaraince of points in each **cluster** found
 
     '''
     clusters = OrderedDict()
@@ -92,22 +94,27 @@ def point_reducer_hdbscan(data_by_tool, **kwargs):
             clusters[frame]['{0}_points_y'.format(tool)] = list(loc[:, 1])
             # default each point in no cluster
             clusters[frame]['{0}_cluster_labels'.format(tool)] = [-1] * loc.shape[0]
-            if loc.shape[0] >= kwargs['min_samples']:
+            clusters[frame]['{0}_cluster_probabilities'.format(tool)] = [0] * loc.shape[0]
+            if loc.shape[0] >= kwargs['min_cluster_size']:
                 db = HDBSCAN(**kwargs).fit(loc)
                 # what cluster each point belongs to
                 clusters[frame]['{0}_cluster_labels'.format(tool)] = list(db.labels_)
+                clusters[frame]['{0}_cluster_probabilities'.format(tool)] = list(db.probabilities_)
+                clusters[frame]['{0}_clusters_persistance'.format(tool)] = list(db.cluster_persistence_)
                 for k in set(db.labels_):
                     if k > -1:
                         idx = db.labels_ == k
                         # number of points in the cluster
                         clusters[frame].setdefault('{0}_clusters_count'.format(tool), []).append(int(idx.sum()))
                         # mean of the cluster
+                        weights = db.probabilities_[idx]
+                        k_loc = np.average(loc[idx], axis=0, weights=weights)
                         k_loc = loc[idx].mean(axis=0)
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(float(k_loc[0]))
                         clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(float(k_loc[1]))
                         # cov matrix of the cluster
                         if idx.sum() > 1:
-                            k_cov = np.cov(loc[idx].T)
+                            k_cov = np.cov(loc[idx].T, aweights=weights)
                             clusters[frame].setdefault('{0}_clusters_var_x'.format(tool), []).append(float(k_cov[0, 0]))
                             clusters[frame].setdefault('{0}_clusters_var_y'.format(tool), []).append(float(k_cov[1, 1]))
                             clusters[frame].setdefault('{0}_clusters_var_x_y'.format(tool), []).append(float(k_cov[0, 1]))
