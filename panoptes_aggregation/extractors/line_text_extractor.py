@@ -9,9 +9,11 @@ from collections import OrderedDict
 import copy
 import numpy as np
 from .extractor_wrapper import extractor_wrapper
+from .tool_wrapper import tool_wrapper
 
 
 @extractor_wrapper
+@tool_wrapper
 def line_text_extractor(classification):
     '''Extract annotations from a line tool with a text sub-task
 

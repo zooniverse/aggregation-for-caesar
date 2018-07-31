@@ -179,3 +179,11 @@ TestPolyLineText = TextExtractorTest(
     expected,
     'Test poly-line-text extractor by word'
 )
+
+TestPolyLineTextTool = TextExtractorTest(
+    extractors.poly_line_text_extractor,
+    classification,
+    expected,
+    'Test poly-line-text extractor by word with tool specified',
+    kwargs={'tools': [0]}
+)

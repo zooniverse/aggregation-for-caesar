@@ -9,9 +9,11 @@ from collections import OrderedDict
 import copy
 import numpy as np
 from .extractor_wrapper import extractor_wrapper
+from .tool_wrapper import tool_wrapper
 
 
 @extractor_wrapper
+@tool_wrapper
 def poly_line_text_extractor(classification, dot_freq='word'):
     '''Extract annotations from a polygon tool with a text sub-task
 

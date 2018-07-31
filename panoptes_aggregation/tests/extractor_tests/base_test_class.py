@@ -1,3 +1,4 @@
+import copy
 import unittest
 import json
 import flask
@@ -18,7 +19,7 @@ def ExtractorTest(function, classification, expected, name, rkwargs={}, fkwargs=
 
         def test_extract(self):
             '''Test the offline extract function'''
-            result = function(classification, **fkwargs)
+            result = function(copy.deepcopy(classification), **fkwargs)
             if test_type == 'assertDictEqual':
                 self.assertDictEqual(dict(result), expected)
             else:
@@ -27,7 +28,7 @@ def ExtractorTest(function, classification, expected, name, rkwargs={}, fkwargs=
         def test_request(self):
             '''Test the online extract function'''
             request_kwargs = {
-                'data': json.dumps(annotation_by_task(classification)),
+                'data': json.dumps(annotation_by_task(copy.deepcopy(classification))),
                 'content_type': 'application/json'
             }
             app = flask.Flask(__name__)
@@ -56,7 +57,7 @@ def TextExtractorTest(function, classification, expected, name, kwargs={}):
 
         def test_extract(self):
             '''Test the offline extract function'''
-            result = function(classification, **kwargs)
+            result = function(copy.deepcopy(classification), **kwargs)
             for i in expected.keys():
                 with self.subTest(i=i):
                     self.assertIn(i, result)
@@ -71,7 +72,7 @@ def TextExtractorTest(function, classification, expected, name, kwargs={}):
         def test_request(self):
             '''Test the online extract function'''
             request_kwargs = {
-                'data': json.dumps(annotation_by_task(classification)),
+                'data': json.dumps(annotation_by_task(copy.deepcopy(classification))),
                 'content_type': 'application/json'
             }
             app = flask.Flask(__name__)

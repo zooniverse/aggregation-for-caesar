@@ -7,9 +7,11 @@ from collections import OrderedDict
 from slugify import slugify
 from .extractor_wrapper import extractor_wrapper
 from .subtask_extractor_wrapper import subtask_wrapper
+from .tool_wrapper import tool_wrapper
 
 
 @extractor_wrapper
+@tool_wrapper
 @subtask_wrapper
 def point_extractor_by_frame(classification):
     '''Extract annotations from a point drawing tool into lists

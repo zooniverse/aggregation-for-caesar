@@ -135,10 +135,18 @@ expected = {
     }
 }
 
-TestPolyLineText = TextExtractorTest(
+TestPolyLineTextByLine = TextExtractorTest(
     extractors.poly_line_text_extractor,
     classification,
     expected,
     'Test poly-line-text extractor by line',
     kwargs={'dot_freq': 'line'}
+)
+
+TestPolyLineTextByLineTool = TextExtractorTest(
+    extractors.poly_line_text_extractor,
+    classification,
+    expected,
+    'Test poly-line-text extractor by line with tool specified',
+    kwargs={'dot_freq': 'line', 'tools': [0]}
 )
