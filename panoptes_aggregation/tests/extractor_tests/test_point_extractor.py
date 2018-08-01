@@ -113,7 +113,7 @@ TestPointTask = ExtractorTest(
     classification,
     expected,
     'Test point with task specified',
-    rkwargs={'task': 'T0'}
+    kwargs={'task': 'T0'}
 )
 
 TestPointAllTools = ExtractorTest(
@@ -121,8 +121,10 @@ TestPointAllTools = ExtractorTest(
     classification,
     expected,
     'Test point with all tools specified',
-    rkwargs={'task': 'T0'},
-    fkwargs={'tools': [0, 1]}
+    kwargs={
+        'task': 'T0',
+        'tools': [0, 1]
+    }
 )
 
 expected_0 = {
@@ -135,6 +137,8 @@ TestPointOneTool = ExtractorTest(
     classification,
     expected_0,
     'Test point with one tool specified',
-    rkwargs={'task': 'T0'},
-    fkwargs={'tools': [0]}
+    kwargs={
+        'task': 'T0',
+        'tools': [0]
+    }
 )

@@ -6,7 +6,6 @@ panoptes survey tasks.
 '''
 from collections import OrderedDict
 from slugify import slugify
-import itertools
 from .question_extractor import question_extractor
 from .extractor_wrapper import extractor_wrapper
 
@@ -48,9 +47,11 @@ def survey_extractor(classification):
             for question, answer in value['answers'].items():
                 k = slugify(question, separator='-')
                 question_classification = {
-                    'annotations': [
-                        {'value': answer}
-                    ]
+                    'annotations': {
+                        'ST': [
+                            {'value': answer}
+                        ]
+                    }
                 }
                 v = question_extractor(question_classification)
                 extract['answers_{0}'.format(k)] = v

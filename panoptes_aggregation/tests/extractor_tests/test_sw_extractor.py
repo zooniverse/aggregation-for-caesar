@@ -77,7 +77,6 @@ classification = {
     ]
 }
 
-
 expected = {
     'frame0': {
         'points': {

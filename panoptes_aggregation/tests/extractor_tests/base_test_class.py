@@ -1,4 +1,3 @@
-import copy
 import unittest
 import json
 import flask
@@ -7,9 +6,7 @@ import urllib
 from panoptes_aggregation.extractors.test_utils import annotation_by_task
 
 
-def ExtractorTest(function, classification, expected, name, rkwargs={}, fkwargs={}, test_type='assertDictEqual'):
-    # rkwargs = request only keywords (i.e. task key)
-    # fkwargs = function keywords (i.e. subtask details)
+def ExtractorTest(function, classification, expected, name, kwargs={}, test_type='assertDictEqual'):
     class ExtractorTest(unittest.TestCase):
         def setUp(self):
             self.maxDiff = None
@@ -19,7 +16,7 @@ def ExtractorTest(function, classification, expected, name, rkwargs={}, fkwargs=
 
         def test_extract(self):
             '''Test the offline extract function'''
-            result = function(copy.deepcopy(classification), **fkwargs)
+            result = function(annotation_by_task(classification), **kwargs)
             if test_type == 'assertDictEqual':
                 self.assertDictEqual(dict(result), expected)
             else:
@@ -28,13 +25,12 @@ def ExtractorTest(function, classification, expected, name, rkwargs={}, fkwargs=
         def test_request(self):
             '''Test the online extract function'''
             request_kwargs = {
-                'data': json.dumps(annotation_by_task(copy.deepcopy(classification))),
+                'data': json.dumps(annotation_by_task(classification)),
                 'content_type': 'application/json'
             }
             app = flask.Flask(__name__)
-            all_kwargs = dict(rkwargs, **fkwargs)
-            if len(all_kwargs) > 0:
-                url_params = '?{0}'.format(urllib.parse.urlencode(all_kwargs))
+            if len(kwargs) > 0:
+                url_params = '?{0}'.format(urllib.parse.urlencode(kwargs))
             else:
                 url_params = ''
             with app.test_request_context(url_params, **request_kwargs):
@@ -57,7 +53,7 @@ def TextExtractorTest(function, classification, expected, name, kwargs={}):
 
         def test_extract(self):
             '''Test the offline extract function'''
-            result = function(copy.deepcopy(classification), **kwargs)
+            result = function(annotation_by_task(classification), **kwargs)
             for i in expected.keys():
                 with self.subTest(i=i):
                     self.assertIn(i, result)
@@ -72,7 +68,7 @@ def TextExtractorTest(function, classification, expected, name, kwargs={}):
         def test_request(self):
             '''Test the online extract function'''
             request_kwargs = {
-                'data': json.dumps(annotation_by_task(copy.deepcopy(classification))),
+                'data': json.dumps(annotation_by_task(classification)),
                 'content_type': 'application/json'
             }
             app = flask.Flask(__name__)

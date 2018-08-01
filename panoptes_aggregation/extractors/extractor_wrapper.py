@@ -25,13 +25,13 @@ def extractor_wrapper(func):
                 kwargs['details'] = ast.literal_eval(kwargs['details'])
             if 'tools' in kwargs:
                 kwargs['tools'] = ast.literal_eval(kwargs['tools'])
-            task = kwargs.pop('task', 'all')
             data = argument.get_json()
-            annotations = data['annotations']
-            annotations_list = unpack_annotations(annotations, task)
-            data['annotations'] = annotations_list
-            return func(data, **kwargs)
         else:
-            return func(argument, **kwargs)
+            data = argument
+        task = kwargs.pop('task', 'all')
+        annotations = data['annotations']
+        annotations_list = unpack_annotations(annotations, task)
+        data['annotations'] = annotations_list
+        return func(data, **kwargs)
     wrapper._original = func
     return wrapper
