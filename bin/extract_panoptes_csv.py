@@ -4,34 +4,27 @@ from collections import OrderedDict
 import copy
 from panoptes_aggregation import extractors
 from panoptes_aggregation.csv_utils import flatten_data, order_columns
+from panoptes_aggregation.extractors.test_utils import annotation_by_task
 import json
 import math
 import io
+import yaml
 import os
 import pandas
 import progressbar
 import warnings
 
 
-def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, human=False, output='extractions', order=False, keywords={}):
-    if not isinstance(workflow_csv, io.IOBase):
-        workflow_csv = open(workflow_csv, 'r', encoding='utf-8')
+def extract_csv(classification_csv, config, human=False, output='extractions', order=False):
+    if not isinstance(config, io.IOBase):
+        config = open(config, 'r', encoding='utf-8')
 
-    with workflow_csv as workflow_csv_in:
-        workflows = pandas.read_csv(workflow_csv_in, encoding='utf-8')
+    with config as config_in:
+        config_yaml = yaml.load(config_in)
 
-    if version is None:
-        version = workflows[workflows.workflow_id == workflow_id].version.max()
-        warnings.warn('No workflow version was specified, defaulting to version {0}'.format(version))
-
-    wdx = (workflows.workflow_id == workflow_id) & (workflows.version == version)
-    if wdx.sum() == 0:
-        raise IndexError('workflow ID and workflow version combination does not exist')
-    if wdx.sum() > 1:
-        raise IndexError('workflow ID and workflow version combination is not unique')
-    workflow = workflows[wdx].iloc[0]
-    workflow_tasks = json.loads(workflow.tasks)
-    extractor_config = extractors.workflow_extractor_config(workflow_tasks, keywords=keywords)
+    extractor_config = config_yaml['extractor_config']
+    workflow_id = config_yaml['workflow_id']
+    version = config_yaml['workflow_version']
 
     blank_extracted_data = OrderedDict([
         ('classification_id', []),
@@ -47,8 +40,14 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, hum
 
     extracted_data = {}
 
+    if not isinstance(classification_csv, io.IOBase):
+        classification_csv = open(classification_csv, 'r', encoding='utf-8')
+
     with classification_csv as classification_csv_in:
         classifications = pandas.read_csv(classification_csv_in, encoding='utf-8')
+
+    wdx = classifications.workflow_id == workflow_id
+    vdx = classifications.workflow_version.apply(math.floor) == version
 
     widgets = [
         'Extracting: ',
@@ -56,20 +55,20 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, hum
         ' ', progressbar.Bar(),
         ' ', progressbar.ETA()
     ]
-    pbar = progressbar.ProgressBar(widgets=widgets, max_value=len(classifications))
+    pbar = progressbar.ProgressBar(widgets=widgets, max_value=(wdx & vdx).sum())
     pbar.start()
-    for cdx, classification in classifications.iterrows():
-        if (classification.workflow_id != workflow_id) or (math.floor(classification.workflow_version) != version):
-            pbar.update(cdx + 1)
-            continue
-        extractor_config_copy = copy.deepcopy(extractor_config)
-        annotations_by_extractor = extractors.filter_annotations(json.loads(classification.annotations), extractor_config_copy, human=human)
-        for extractor_name, annotations_dict in annotations_by_extractor.items():
-            extractor_kwargs = annotations_dict.get('config', {})
-            keywords = annotations_dict.get('keywords', {})
-            for annotations in annotations_dict['annotations']:
+    for cdx, classification in classifications[wdx & vdx].iterrows():
+        classification_by_task = annotation_by_task({'annotations': json.loads(classification.annotations)})
+        for extractor_name, keywords in extractor_config.items():
+            for keyword in keywords:
                 if extractor_name in extractors.extractors:
-                    extract = extractors.extractors[extractor_name]({'annotations': [annotations]}, **extractor_kwargs, **keywords)
+                    try:
+                        extract = extractors.extractors[extractor_name](copy.deepcopy(classification_by_task), **keyword)
+                    except:
+                        print()
+                        print(classification_by_task)
+                        print('-------')
+                        raise
                     if isinstance(extract, list):
                         for e in extract:
                             extracted_data.setdefault(extractor_name, copy.deepcopy(blank_extracted_data))
@@ -77,7 +76,7 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, hum
                             extracted_data[extractor_name]['user_name'].append(classification.user_name)
                             extracted_data[extractor_name]['user_id'].append(classification.user_id)
                             extracted_data[extractor_name]['workflow_id'].append(classification.workflow_id)
-                            extracted_data[extractor_name]['task'].append(annotations['task'])
+                            extracted_data[extractor_name]['task'].append(keyword['task'])
                             extracted_data[extractor_name]['created_at'].append(classification.created_at)
                             extracted_data[extractor_name]['subject_id'].append(classification.subject_ids)
                             extracted_data[extractor_name]['extractor'].append(extractor_name)
@@ -88,7 +87,7 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, hum
                         extracted_data[extractor_name]['user_name'].append(classification.user_name)
                         extracted_data[extractor_name]['user_id'].append(classification.user_id)
                         extracted_data[extractor_name]['workflow_id'].append(classification.workflow_id)
-                        extracted_data[extractor_name]['task'].append(annotations['task'])
+                        extracted_data[extractor_name]['task'].append(keyword['task'])
                         extracted_data[extractor_name]['created_at'].append(classification.created_at)
                         extracted_data[extractor_name]['subject_id'].append(classification.subject_ids)
                         extracted_data[extractor_name]['extractor'].append(extractor_name)
@@ -114,15 +113,38 @@ def extract_csv(classification_csv, workflow_csv, workflow_id, version=None, hum
 
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description="extract data from panoptes classifications based on the workflow")
-    parser.add_argument("classification_csv", help="the classificaiton csv file containing the panoptes data dump", type=argparse.FileType('r', encoding='utf-8'))
-    parser.add_argument("workflow_csv", help="the csv file containing the workflow data", type=argparse.FileType('r', encoding='utf-8'))
-    parser.add_argument("workflow_id", help="the workflow ID you would like to extract", type=int)
-    parser.add_argument("-v", "--version", help="the workflow version to extract", type=int)
-    parser.add_argument("-k", "--keywords", help="keywords to be passed into the extractor for a task in the form of a json string, e.g. \'{\"T0\": {\"dot_freq\": \"line\"} }\'  (note: double quotes must be used inside the brackets)", type=json.loads, default={})
-    parser.add_argument("-H", "--human", help="switch to make the data column labels use the task and question labels instead of generic labels", action="store_true")
-    parser.add_argument("-O", "--order", help="arrange the data columns in alphabetical order before saving", action="store_true")
-    parser.add_argument("-o", "--output", help="the base name for output csv file to store the annotation extractions (one file will be created for each extractor used)", type=str, default="extractions")
+    parser = argparse.ArgumentParser(
+        description="extract data from panoptes classifications based on the workflow"
+    )
+    parser.add_argument(
+        "classification_csv",
+        help="the classificaiton csv file containing the panoptes data dump",
+        type=argparse.FileType('r', encoding='utf-8')
+    )
+    parser.add_argument(
+        'extractor_config',
+        help="the extractor configuration yaml file produced by `config_workflow_panoptes`",
+        type=argparse.FileType('r', encoding='utf-8')
+    )
+    parser.add_argument(
+        "-H",
+        "--human",
+        help="switch to make the data column labels use the task and question labels instead of generic labels",
+        action="store_true"
+    )
+    parser.add_argument(
+        "-O",
+        "--order",
+        help="arrange the data columns in alphabetical order before saving",
+        action="store_true"
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="the base name for output csv file to store the annotation extractions (one file will be created for each extractor used)",
+        type=str,
+        default="extractions"
+    )
     args = parser.parse_args()
 
-    extract_csv(args.classification_csv, args.workflow_csv, args.workflow_id, version=args.version, human=args.human, output=args.output, order=args.order, keywords=args.keywords)
+    extract_csv(args.classification_csv, args.extractor_config, human=args.human, output=args.output, order=args.order)
