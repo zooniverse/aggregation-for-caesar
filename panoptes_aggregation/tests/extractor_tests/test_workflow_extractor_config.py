@@ -133,43 +133,58 @@ keywords = {
 }
 
 expected = {
-    'T0': {
-        'point_extractor_by_frame': {
-            'tool': [
-                0,
-                2
-            ],
+    'point_extractor_by_frame': [
+        {
+            'task': 'T0',
+            'tools': [0, 2],
             'details': {
                 'T0_tool2': [
                     'question_extractor',
                     'question_extractor'
                 ]
             }
-        },
-        'rectangle_extractor': {
-            'tool': [4],
+        }
+    ],
+    'rectangle_extractor': [
+        {
+            'task': 'T0',
+            'tools': [4],
             'details': {}
         }
-    },
-    'T1': 'question_extractor',
-    'T2': 'question_extractor',
-    'T3': 'survey_extractor',
-    'T4': {
-        'poly_line_text_extractor': {'tool': [0]},
-        'keywords': {'dot_freq': 'line'}
-    },
-    'T5': {
-        'line_text_extractor': {'tool': [0]},
-        'keywords': {'dot_freq': 'word'}
-    }
+    ],
+    'question_extractor': [
+        {'task': 'T1'},
+        {'task': 'T2'}
+    ],
+    'survey_extractor': [
+        {'task': 'T3'}
+    ],
+    'poly_line_text_extractor': [
+        {
+            'task': 'T4',
+            'tools': [0],
+            'dot_freq': 'line'
+        }
+    ],
+    'line_text_extractor': [
+        {
+            'task': 'T5',
+            'tools': [0],
+            'dot_freq': 'word'
+        }
+    ]
 }
 
 
 class TestWorkflowExtractorConfig(unittest.TestCase):
     def test_config(self):
         '''Test workflow auto config works'''
+        self.maxDiff = None
         result = workflow_extractor_config(tasks, keywords=keywords)
-        self.assertDictEqual(result, expected)
+        self.assertCountEqual(result, expected)
+        for i in expected.keys():
+            with self.subTest(i=i):
+                self.assertCountEqual(result[i], expected[i])
 
 
 if __name__ == '__main__':

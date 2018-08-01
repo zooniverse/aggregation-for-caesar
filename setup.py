@@ -30,6 +30,7 @@ setup(
         'progressbar2',
         'python-levenshtein',
         'python-slugify',
+        'pyyaml',
         'scikit-image',
         'scikit-learn',
         'scipy',

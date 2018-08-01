@@ -6,6 +6,7 @@ nose
 numpy
 python-levenshtein
 python-slugify
+pyyaml
 scipy
 scikit-learn
 scikit-image
