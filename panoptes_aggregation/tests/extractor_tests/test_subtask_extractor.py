@@ -120,3 +120,83 @@ TestSubtask = ExtractorTest(
         }
     }
 )
+
+TestSubtaskTask = ExtractorTest(
+    extractors.rectangle_extractor,
+    classification,
+    expected,
+    'Test subtask extraction with task specified',
+    rkwargs={'task': 'T0'},
+    fkwargs={
+        'details': {
+            'T0_tool0': [
+                'question_extractor',
+                'question_extractor',
+                'dropdown_extractor'
+            ]
+        }
+    }
+)
+
+TestSubtaskAllTools = ExtractorTest(
+    extractors.rectangle_extractor,
+    classification,
+    expected,
+    'Test subtask extraction with all tools specified',
+    fkwargs={
+        'tools': [0, 1],
+        'details': {
+            'T0_tool0': [
+                'question_extractor',
+                'question_extractor',
+                'dropdown_extractor'
+            ]
+        }
+    }
+)
+
+expected_0 = {
+    'frame0': {
+        'T0_tool0_x': [0, 100],
+        'T0_tool0_y': [0, 105],
+        'T0_tool0_width': [5, 50],
+        'T0_tool0_height': [10, 100],
+        'T0_tool0_details': [
+            [
+                {'0': 1},
+                {'1': 1, '0': 1},
+                {'value': [
+                    {'option-1': 1},
+                    {'option-2': 1},
+                    {'None': 1}
+                ]}
+            ],
+            [
+                {'1': 1},
+                {'0': 1},
+                {'value': [
+                    {'option-3': 1},
+                    {'option-4': 1},
+                    {'option-5': 1}
+                ]}
+            ]
+        ]
+    }
+}
+
+TestSubtaskOneTool = ExtractorTest(
+    extractors.rectangle_extractor,
+    classification,
+    expected_0,
+    'Test subtask extraction with one tool specified',
+    fkwargs={
+        'tools': [0],
+        'details': {
+            'T0_tool0': [
+                'question_extractor',
+                'question_extractor',
+                'dropdown_extractor'
+            ]
+        }
+    }
+)

@@ -68,3 +68,39 @@ TestRectangle = ExtractorTest(
     expected,
     'Test rectangle'
 )
+
+TestRectangleTask = ExtractorTest(
+    extractors.rectangle_extractor,
+    classification,
+    expected,
+    'Test rectangle with task specified',
+    rkwargs={'task': 'T2'}
+)
+
+TestRectangleAllTools = ExtractorTest(
+    extractors.rectangle_extractor,
+    classification,
+    expected,
+    'Test rectangle with all tools specified',
+    rkwargs={'task': 'T2'},
+    fkwargs={'tools': [0, 1]}
+)
+
+expected_0 = {
+    'frame0': {
+        'T2_tool0_x': expected['frame0']['T2_tool0_x'],
+        'T2_tool0_y': expected['frame0']['T2_tool0_y'],
+        'T2_tool0_width': expected['frame0']['T2_tool0_width'],
+        'T2_tool0_height': expected['frame0']['T2_tool0_height']
+    },
+    'frame1': expected['frame1']
+}
+
+TestRectangleOneTool = ExtractorTest(
+    extractors.rectangle_extractor,
+    classification,
+    expected_0,
+    'Test rectangle one tool specified',
+    rkwargs={'task': 'T2'},
+    fkwargs={'tools': [0]}
+)

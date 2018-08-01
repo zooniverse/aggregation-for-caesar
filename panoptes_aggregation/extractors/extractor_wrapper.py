@@ -23,6 +23,8 @@ def extractor_wrapper(func):
             kwargs = argument.args.copy().to_dict()
             if 'details' in kwargs:
                 kwargs['details'] = ast.literal_eval(kwargs['details'])
+            if 'tools' in kwargs:
+                kwargs['tools'] = ast.literal_eval(kwargs['tools'])
             task = kwargs.pop('task', 'all')
             data = argument.get_json()
             annotations = data['annotations']
