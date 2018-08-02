@@ -132,17 +132,6 @@ expected = {
     }
 }
 
-TestSW = TextExtractorTest(
-    extractors.sw_extractor,
-    classification,
-    expected,
-    'Test SW/AT text extractor'
-)
-
-classification_blank = {
-    'annotations': []
-}
-
 expected_blank = {
     'frame0': {
         'points': {
@@ -154,11 +143,12 @@ expected_blank = {
     }
 }
 
-TestSWBlank = ExtractorTest(
+TestSW = TextExtractorTest(
     extractors.sw_extractor,
-    classification_blank,
-    expected_blank,
-    'Test SW/AT blank input'
+    classification,
+    expected,
+    'Test SW/AT text extractor',
+    blank_extract=expected_blank
 )
 
 classification_wrong = {
@@ -174,5 +164,6 @@ TestSWWrong = ExtractorTest(
     extractors.sw_extractor,
     classification_wrong,
     expected_blank,
-    'Test SW/AT wrong input'
+    'Test SW/AT wrong input',
+    blank_extract=expected_blank
 )

@@ -43,5 +43,6 @@ TestSurvey = ExtractorTest(
     classification,
     expected,
     'Test survey',
+    blank_extract=[],
     test_type='assertCountEqual'
 )

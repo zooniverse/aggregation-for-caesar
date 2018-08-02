@@ -39,22 +39,23 @@ def line_text_extractor(classification):
         ('slope', [])
     ])
     extract = OrderedDict()
-    annotation = classification['annotations'][0]
-    for value in annotation['value']:
-        frame = 'frame{0}'.format(value['frame'])
-        extract.setdefault(frame, copy.deepcopy(blank_frame))
-        text = value['details'][0]['value']
-        x = [value['x1'], value['x2']]
-        y = [value['y1'], value['y2']]
-        if len(x) > 1:
-            dx = x[-1] - x[0]
-            dy = y[-1] - y[0]
-            slope = np.rad2deg(np.arctan2(dy, dx))
-        else:
-            # default the slope to 0 if only one point was drawn
-            slope = 0
-        extract[frame]['text'].append([text])
-        extract[frame]['points']['x'].append(x)
-        extract[frame]['points']['y'].append(y)
-        extract[frame]['slope'].append(slope)
+    if len(classification['annotations']) > 0:
+        annotation = classification['annotations'][0]
+        for value in annotation['value']:
+            frame = 'frame{0}'.format(value['frame'])
+            extract.setdefault(frame, copy.deepcopy(blank_frame))
+            text = value['details'][0]['value']
+            x = [value['x1'], value['x2']]
+            y = [value['y1'], value['y2']]
+            if len(x) > 1:
+                dx = x[-1] - x[0]
+                dy = y[-1] - y[0]
+                slope = np.rad2deg(np.arctan2(dy, dx))
+            else:
+                # default the slope to 0 if only one point was drawn
+                slope = 0
+            extract[frame]['text'].append([text])
+            extract[frame]['points']['x'].append(x)
+            extract[frame]['points']['y'].append(y)
+            extract[frame]['slope'].append(slope)
     return extract

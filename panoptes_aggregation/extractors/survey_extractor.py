@@ -38,22 +38,23 @@ def survey_extractor(classification):
     [{'choice': 'agouti','answers_howmany': {'1': 1}}]
     '''
     extract_list = []
-    annotation = classification['annotations'][0]
-    for value in annotation['value']:
-        extract = OrderedDict()
-        choice = slugify(value['choice'], separator='-')
-        extract['choice'] = choice
-        if 'answers' in value:
-            for question, answer in value['answers'].items():
-                k = slugify(question, separator='-')
-                question_classification = {
-                    'annotations': {
-                        'ST': [
-                            {'value': answer}
-                        ]
+    if len(classification['annotations']) > 0:
+        annotation = classification['annotations'][0]
+        for value in annotation['value']:
+            extract = OrderedDict()
+            choice = slugify(value['choice'], separator='-')
+            extract['choice'] = choice
+            if 'answers' in value:
+                for question, answer in value['answers'].items():
+                    k = slugify(question, separator='-')
+                    question_classification = {
+                        'annotations': {
+                            'ST': [
+                                {'value': answer}
+                            ]
+                        }
                     }
-                }
-                v = question_extractor(question_classification)
-                extract['answers_{0}'.format(k)] = v
-        extract_list.append(extract)
+                    v = question_extractor(question_classification)
+                    extract['answers_{0}'.format(k)] = v
+            extract_list.append(extract)
     return extract_list

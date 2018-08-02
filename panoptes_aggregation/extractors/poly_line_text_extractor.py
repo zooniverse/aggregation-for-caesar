@@ -72,34 +72,35 @@ def poly_line_text_extractor(classification, dot_freq='word'):
         ('slope', [])
     ])
     extract = OrderedDict()
-    annotation = classification['annotations'][0]
-    for value in annotation['value']:
-        frame = 'frame{0}'.format(value['frame'])
-        extract.setdefault(frame, copy.deepcopy(blank_frame))
-        text = value['details'][0]['value']
-        x = [point['x'] for point in value['points']]
-        y = [point['y'] for point in value['points']]
-        if len(x) > 1:
-            fit = np.polyfit(x, y, 1)
-            y_fit = np.polyval(fit, [x[0], x[-1]])
-            dx = x[-1] - x[0]
-            dy = y_fit[-1] - y_fit[0]
-            slope = np.rad2deg(np.arctan2(dy, dx))
-        else:
-            # default the slope to 0 if only one point was drawn
-            slope = 0
-        if dot_freq == 'word':
-            # NOTE: if `words` + 1 and `points` are differnt lengths
-            # the extract is not used
-            words = text.split(' ')
-            if len(words) + 1 == len(x):
-                extract[frame]['text'].append(words)
+    if len(classification['annotations']) > 0:
+        annotation = classification['annotations'][0]
+        for value in annotation['value']:
+            frame = 'frame{0}'.format(value['frame'])
+            extract.setdefault(frame, copy.deepcopy(blank_frame))
+            text = value['details'][0]['value']
+            x = [point['x'] for point in value['points']]
+            y = [point['y'] for point in value['points']]
+            if len(x) > 1:
+                fit = np.polyfit(x, y, 1)
+                y_fit = np.polyval(fit, [x[0], x[-1]])
+                dx = x[-1] - x[0]
+                dy = y_fit[-1] - y_fit[0]
+                slope = np.rad2deg(np.arctan2(dy, dx))
+            else:
+                # default the slope to 0 if only one point was drawn
+                slope = 0
+            if dot_freq == 'word':
+                # NOTE: if `words` + 1 and `points` are differnt lengths
+                # the extract is not used
+                words = text.split(' ')
+                if len(words) + 1 == len(x):
+                    extract[frame]['text'].append(words)
+                    extract[frame]['points']['x'].append(x)
+                    extract[frame]['points']['y'].append(y)
+                    extract[frame]['slope'].append(slope)
+            else:
+                extract[frame]['text'].append([text])
                 extract[frame]['points']['x'].append(x)
                 extract[frame]['points']['y'].append(y)
                 extract[frame]['slope'].append(slope)
-        else:
-            extract[frame]['text'].append([text])
-            extract[frame]['points']['x'].append(x)
-            extract[frame]['points']['y'].append(y)
-            extract[frame]['slope'].append(slope)
     return extract

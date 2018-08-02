@@ -1,3 +1,4 @@
+import copy
 import unittest
 import json
 import flask
@@ -6,7 +7,7 @@ import urllib
 from panoptes_aggregation.extractors.test_utils import annotation_by_task
 
 
-def ExtractorTest(function, classification, expected, name, kwargs={}, test_type='assertDictEqual'):
+def ExtractorTest(function, classification, expected, name, blank_extract={}, kwargs={}, test_type='assertDictEqual'):
     class ExtractorTest(unittest.TestCase):
         def setUp(self):
             self.maxDiff = None
@@ -21,6 +22,17 @@ def ExtractorTest(function, classification, expected, name, kwargs={}, test_type
                 self.assertDictEqual(dict(result), expected)
             else:
                 self.__getattribute__(test_type)(result, expected)
+
+        def test_blank(self):
+            '''Test a blank annotation'''
+            blank = {'annotations': {'ST': []}}
+            kwargs_blank = copy.deepcopy(kwargs)
+            kwargs_blank['task'] = 'ST'
+            result = function(blank, **kwargs_blank)
+            if test_type == 'assertDictEqual':
+                self.assertDictEqual(dict(result), blank_extract)
+            else:
+                self.__getattribute__(test_type)(result, blank_extract)
 
         def test_request(self):
             '''Test the online extract function'''
@@ -43,7 +55,7 @@ def ExtractorTest(function, classification, expected, name, kwargs={}, test_type
     return ExtractorTest
 
 
-def TextExtractorTest(function, classification, expected, name, kwargs={}):
+def TextExtractorTest(function, classification, expected, name, blank_extract={}, kwargs={}):
     class TextExtractorTest(unittest.TestCase):
         def setUp(self):
             self.maxDiff = None
@@ -64,6 +76,14 @@ def TextExtractorTest(function, classification, expected, name, kwargs={}):
                                 np.testing.assert_allclose(result[i][j], expected[i][j], atol=1e-5)
                             else:
                                 self.assertEqual(result[i][j], expected[i][j])
+
+        def test_blank(self):
+            '''Test a blank annotation'''
+            blank = {'annotations': {'ST': []}}
+            kwargs_blank = copy.deepcopy(kwargs)
+            kwargs_blank['task'] = 'ST'
+            result = function(blank, **kwargs_blank)
+            self.assertDictEqual(dict(result), blank_extract)
 
         def test_request(self):
             '''Test the online extract function'''
