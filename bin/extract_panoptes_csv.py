@@ -15,10 +15,14 @@ import progressbar
 import warnings
 
 
-def extract_csv(classification_csv, config, human=False, output='extractions', order=False):
-    if not isinstance(config, io.IOBase):
-        config = open(config, 'r', encoding='utf-8')
+def get_file_instance(file):
+    if not isinstance(file, io.IOBase):
+        file = open(file, 'r', encoding='utf-8')
+    return file
 
+
+def extract_csv(classification_csv, config, human=False, output='extractions', order=False):
+    config = get_file_instance(config)
     with config as config_in:
         config_yaml = yaml.load(config_in)
 
@@ -40,9 +44,7 @@ def extract_csv(classification_csv, config, human=False, output='extractions', o
 
     extracted_data = {}
 
-    if not isinstance(classification_csv, io.IOBase):
-        classification_csv = open(classification_csv, 'r', encoding='utf-8')
-
+    classification_csv = get_file_instance(classification_csv)
     with classification_csv as classification_csv_in:
         classifications = pandas.read_csv(classification_csv_in, encoding='utf-8')
 
@@ -145,4 +147,10 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    extract_csv(args.classification_csv, args.extractor_config, human=args.human, output=args.output, order=args.order)
+    extract_csv(
+        args.classification_csv,
+        args.extractor_config,
+        human=args.human,
+        output=args.output,
+        order=args.order
+    )
