@@ -42,7 +42,7 @@ def clean_text(s):
 
 
 @extractor_wrapper
-def sw_extractor(classification):
+def sw_extractor(classification, **kwargs):
     extract = OrderedDict()
     blank_frame = OrderedDict([
         ('points', OrderedDict([('x', []), ('y', [])])),

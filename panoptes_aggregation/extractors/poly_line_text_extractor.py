@@ -14,7 +14,7 @@ from .tool_wrapper import tool_wrapper
 
 @extractor_wrapper
 @tool_wrapper
-def poly_line_text_extractor(classification, dot_freq='word'):
+def poly_line_text_extractor(classification, dot_freq='word', **kwargs):
     '''Extract annotations from a polygon tool with a text sub-task
 
     Parameters

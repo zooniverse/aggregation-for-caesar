@@ -18,7 +18,7 @@ def slugify_or_null(s):
 
 
 @extractor_wrapper
-def question_extractor(classification):
+def question_extractor(classification, **kwargs):
     '''Extract annotations from a question task into a Counter object
 
     Parameters

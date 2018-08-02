@@ -13,7 +13,7 @@ from .tool_wrapper import tool_wrapper
 @extractor_wrapper
 @tool_wrapper
 @subtask_wrapper
-def point_extractor_by_frame(classification):
+def point_extractor_by_frame(classification, **kwargs):
     '''Extract annotations from a point drawing tool into lists
 
     Parameters
@@ -40,8 +40,9 @@ def point_extractor_by_frame(classification):
     {'frame0': {'T0_tool0_x': [5], 'T0_tool0_y': [10]}}
     '''
     extract = OrderedDict()
+    human = kwargs.get('human', False)
     for annotation in classification['annotations']:
-        if 'task_label' in annotation:
+        if (human) and ('task_label' in annotation):
             #: we should really add a `short_label` on the workflow so this name can be configured
             task_key = slugify(annotation['task_label'], separator='-')
         else:
@@ -49,7 +50,7 @@ def point_extractor_by_frame(classification):
         for idx, value in enumerate(annotation['value']):
             frame = 'frame{0}'.format(value['frame'])
             extract.setdefault(frame, {})
-            if 'tool_label' in value:
+            if (human) and ('tool_label' in value):
                 #: we should really add a `short_label` on the workflow so this name can be configured
                 key = '{0}_{1}'.format(task_key, slugify(value['tool_label'], separator='-'))
             else:

@@ -8,7 +8,7 @@ from .extractor_wrapper import extractor_wrapper
 
 
 @extractor_wrapper
-def sw_variant_extractor(classification):
+def sw_variant_extractor(classification, **kwargs):
     '''Extract all variants in a classification into one list
 
     Parameters

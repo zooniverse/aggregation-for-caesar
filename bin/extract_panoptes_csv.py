@@ -56,19 +56,16 @@ def extract_csv(classification_csv, config, human=False, output='extractions', o
         ' ', progressbar.ETA()
     ]
     pbar = progressbar.ProgressBar(widgets=widgets, max_value=(wdx & vdx).sum())
+    counter = 0
     pbar.start()
     for cdx, classification in classifications[wdx & vdx].iterrows():
         classification_by_task = annotation_by_task({'annotations': json.loads(classification.annotations)})
         for extractor_name, keywords in extractor_config.items():
             for keyword in keywords:
                 if extractor_name in extractors.extractors:
-                    try:
-                        extract = extractors.extractors[extractor_name](copy.deepcopy(classification_by_task), **keyword)
-                    except:
-                        print()
-                        print(classification_by_task)
-                        print('-------')
-                        raise
+                    if human:
+                        keyword['human'] = True
+                    extract = extractors.extractors[extractor_name](copy.deepcopy(classification_by_task), **keyword)
                     if isinstance(extract, list):
                         for e in extract:
                             extracted_data.setdefault(extractor_name, copy.deepcopy(blank_extracted_data))
@@ -92,7 +89,8 @@ def extract_csv(classification_csv, config, human=False, output='extractions', o
                         extracted_data[extractor_name]['subject_id'].append(classification.subject_ids)
                         extracted_data[extractor_name]['extractor'].append(extractor_name)
                         extracted_data[extractor_name]['data'].append(extract)
-        pbar.update(cdx + 1)
+        counter += 1
+        pbar.update(counter)
     pbar.finish()
 
     # create one flat csv file for each extractor used

@@ -1,7 +1,6 @@
 import ast
 import pandas
 from pandas.io.json.normalize import nested_to_record
-import json
 
 
 def flatten_data(data, json_column='data'):

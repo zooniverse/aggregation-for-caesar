@@ -11,7 +11,7 @@ from .tool_wrapper import tool_wrapper
 
 @extractor_wrapper
 @tool_wrapper
-def point_extractor(classification):
+def point_extractor(classification, human=False):
     '''Extract annotations from a point drawing tool into lists.
     This extractor does *not* support extraction from multi-frame subjects or
     subtask extraction.  If either of these are needed use
@@ -42,7 +42,7 @@ def point_extractor(classification):
     '''
     extract = OrderedDict()
     for annotation in classification['annotations']:
-        if 'task_label' in annotation:
+        if human and ('task_label' in annotation):
             #: we should really add a `short_label` on the workflow so this name can be configured
             task_key = slugify(annotation['task_label'], separator='-')
         else:

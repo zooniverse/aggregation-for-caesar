@@ -11,7 +11,7 @@ from .extractor_wrapper import extractor_wrapper
 
 
 @extractor_wrapper
-def survey_extractor(classification):
+def survey_extractor(classification, **kwargs):
     '''Extract annotations from a survye task into a list
 
     Parameters

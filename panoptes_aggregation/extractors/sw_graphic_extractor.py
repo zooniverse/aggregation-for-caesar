@@ -7,7 +7,7 @@ def exist_and_finite(d, key):
 
 
 @extractor_wrapper
-def sw_graphic_extractor(classification):
+def sw_graphic_extractor(classification, **kwargs):
     extract = OrderedDict()
     frame = 'frame0'
     if len(classification['annotations']) > 0:
