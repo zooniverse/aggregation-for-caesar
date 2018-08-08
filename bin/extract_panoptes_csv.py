@@ -21,7 +21,7 @@ def get_file_instance(file):
     return file
 
 
-def extract_csv(classification_csv, config, human=False, output='extractions', order=False):
+def extract_csv(classification_csv, config, output='extractions', order=False):
     config = get_file_instance(config)
     with config as config_in:
         config_yaml = yaml.load(config_in)
@@ -65,8 +65,6 @@ def extract_csv(classification_csv, config, human=False, output='extractions', o
         for extractor_name, keywords in extractor_config.items():
             for keyword in keywords:
                 if extractor_name in extractors.extractors:
-                    if human:
-                        keyword['human'] = True
                     extract = extractors.extractors[extractor_name](copy.deepcopy(classification_by_task), **keyword)
                     if isinstance(extract, list):
                         for e in extract:
@@ -127,12 +125,6 @@ if __name__ == "__main__":
         type=argparse.FileType('r', encoding='utf-8')
     )
     parser.add_argument(
-        "-H",
-        "--human",
-        help="switch to make the data column labels use the task and question labels instead of generic labels",
-        action="store_true"
-    )
-    parser.add_argument(
         "-O",
         "--order",
         help="arrange the data columns in alphabetical order before saving",
@@ -150,7 +142,6 @@ if __name__ == "__main__":
     extract_csv(
         args.classification_csv,
         args.extractor_config,
-        human=args.human,
         output=args.output,
         order=args.order
     )
