@@ -94,7 +94,7 @@ def config_workflow(workflow_csv, workflow_id, version=None, keywords={}, workfl
 def main():
     import argparse
     parser = argparse.ArgumentParser(
-        description="Make configuation files for panoptes data extraction and reduction based on a workflow export"
+        description="Make configuration files for panoptes data extraction and reduction based on a workflow export"
     )
     parser.add_argument(
         "workflow_csv",
@@ -115,7 +115,7 @@ def main():
     parser.add_argument(
         "-k",
         "--keywords",
-        help="keywords to be passed into the extractor for a task in the form of a json string, e.g. \'{\"T0\": {\"dot_freq\": \"line\"} }\'  (note: double quotes must be used inside the brackets)",
+        help="keywords to be passed into the configuration of a task in the form of a json string, e.g. \'{\"T0\": {\"dot_freq\": \"line\"} }\'  (note: double quotes must be used inside the brackets)",
         type=json.loads,
         default={}
     )
@@ -128,7 +128,7 @@ def main():
     parser.add_argument(
         "-m",
         "--minor_version",
-        help="The minor worikow version used to create the lookup table for the workflow content",
+        help="The minor workflow version used to create the lookup table for the workflow content",
         type=int
     )
     args = parser.parse_args()

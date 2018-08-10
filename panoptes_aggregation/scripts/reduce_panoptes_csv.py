@@ -158,7 +158,7 @@ def main():
     parser.add_argument(
         "-F",
         "--filter",
-        help="how to filter a user makeing multiple classifications for one subject",
+        help="how to filter a user making multiple classifications for one subject",
         type=str,
         choices=['first', 'last', 'all'],
         default='fisrt'
@@ -179,7 +179,7 @@ def main():
     parser.add_argument(
         "-s",
         "--stream",
-        help="stream output to csv after each redcution (this is slower but is resumable)",
+        help="stream output to csv after each reduction (this is slower but is resumable)",
         action="store_true"
     )
     args = parser.parse_args()

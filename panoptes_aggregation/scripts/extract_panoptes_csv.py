@@ -120,7 +120,7 @@ def main():
     )
     parser.add_argument(
         "classification_csv",
-        help="the classificaiton csv file containing the panoptes data dump",
+        help="the classification csv file containing the panoptes data dump",
         type=argparse.FileType('r', encoding='utf-8')
     )
     parser.add_argument(
