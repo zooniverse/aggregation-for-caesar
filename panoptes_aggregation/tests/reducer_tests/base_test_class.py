@@ -4,6 +4,7 @@ import urllib
 import copy
 import numpy as np
 from panoptes_aggregation.reducers.test_utils import extract_in_data
+from panoptes_aggregation.append_version import append_version
 
 try:
     import flask
@@ -22,6 +23,8 @@ def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs
             self.extracted = copy.deepcopy(extracted)
             self.processed = copy.deepcopy(processed)
             self.reduced = copy.deepcopy(reduced)
+            self.reduced_with_vesrion = copy.deepcopy(reduced)
+            append_version(self.reduced_with_vesrion)
 
         def shortDescription(self):
             return '{0}: {1}'.format(name, self._testMethodDoc)
@@ -42,7 +45,7 @@ def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(self.extracted, **kwargs, **pkwargs)
-            self.assertDictEqual(dict(result), self.reduced)
+            self.assertDictEqual(dict(result), self.reduced_with_vesrion)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_reducer_request(self):
@@ -59,7 +62,7 @@ def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs
                 url_params = ''
             with app.test_request_context(url_params, **request_kwargs):
                 result = reducer(flask.request)
-                self.assertDictEqual(dict(result), self.reduced)
+                self.assertDictEqual(dict(result), self.reduced_with_vesrion)
 
     return ReducerTest
 
@@ -75,6 +78,7 @@ def ReducerTestNoProcessing(reducer, extracted, reduced, name, kwargs={}):
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(extracted, **kwargs)
+            append_version(reduced)
             self.assertDictEqual(result, reduced)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
@@ -85,6 +89,7 @@ def ReducerTestNoProcessing(reducer, extracted, reduced, name, kwargs={}):
                 'content_type': 'application/json'
             }
             app = flask.Flask(__name__)
+            append_version(reduced)
             if len(kwargs) > 0:
                 url_params = '?{0}'.format(urllib.parse.urlencode(kwargs))
             else:
@@ -103,6 +108,8 @@ def ReducerTestSurvey(reducer, processer, extracted, processed, reduced, name):
             self.extracted = copy.deepcopy(extracted)
             self.processed = copy.deepcopy(processed)
             self.reduced = copy.deepcopy(reduced)
+            self.reduced_with_vesrion = copy.deepcopy(reduced)
+            append_version(self.reduced_with_vesrion)
 
         def shortDescription(self):
             return '{0}: {1}'.format(name, self._testMethodDoc)
@@ -121,7 +128,7 @@ def ReducerTestSurvey(reducer, processer, extracted, processed, reduced, name):
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(self.extracted)
-            self.assertCountEqual(result, self.reduced)
+            self.assertCountEqual(result, self.reduced_with_vesrion)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_reducer_request(self):
@@ -133,7 +140,7 @@ def ReducerTestSurvey(reducer, processer, extracted, processed, reduced, name):
             }
             with app.test_request_context(**request_kwargs):
                 result = reducer(flask.request)
-                self.assertCountEqual(result, self.reduced)
+                self.assertCountEqual(result, self.reduced_with_vesrion)
 
     return ReducerTest
 
@@ -145,9 +152,24 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
             self.extracted = copy.deepcopy(extracted)
             self.processed = copy.deepcopy(processed)
             self.reduced = copy.deepcopy(reduced)
+            self.reduced_with_vesrion = copy.deepcopy(reduced)
+            append_version(self.reduced_with_vesrion)
 
         def shortDescription(self):
             return '{0}: {1}'.format(name, self._testMethodDoc)
+
+        def assertPoints(self, result, reduced):
+            for i in result.keys():
+                with self.subTest(i=i):
+                    if isinstance(result[i], dict):
+                        for j in result[i].keys():
+                            with self.subTest(j=j):
+                                np.testing.assert_allclose(result[i][j], reduced[i][j], atol=atol)
+                    else:
+                        try:
+                            np.testing.assert_allclose(result[i], reduced[i], atol=atol)
+                        except TypeError:
+                            self.assertEqual(result[i], reduced[i])
 
         def test_process_data(self):
             '''Test data processing function'''
@@ -157,30 +179,16 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
         def test_original_reducer(self):
             '''Test the reducer function starting with the processed data'''
             result = reducer._original(self.processed, **kwargs)
-            for i in result.keys():
-                with self.subTest(i=i):
-                    if isinstance(result[i], dict):
-                        for j in result[i].keys():
-                            with self.subTest(j=j):
-                                np.testing.assert_allclose(result[i][j], reduced[i][j], atol=atol)
-                    else:
-                        np.testing.assert_allclose(result[i], reduced[i], atol=atol)
+            self.assertPoints(result, self.reduced)
 
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(self.extracted, **kwargs)
-            for i in result.keys():
-                with self.subTest(i=i):
-                    if isinstance(result[i], dict):
-                        for j in result[i].keys():
-                            with self.subTest(j=j):
-                                np.testing.assert_allclose(result[i][j], reduced[i][j], atol=atol)
-                    else:
-                        np.testing.assert_allclose(result[i], reduced[i], atol=atol)
+            self.assertPoints(result, self.reduced_with_vesrion)
 
         def test_keys(self):
             result = reducer(self.extracted, **kwargs)
-            for i in reduced.keys():
+            for i in self.reduced_with_vesrion.keys():
                 with self.subTest(i=i):
                     self.assertIn(i, result)
                     if isinstance(result[i], dict):
@@ -202,13 +210,6 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
                 url_params = ''
             with app.test_request_context(url_params, **request_kwargs):
                 result = reducer(flask.request)
-                for i in result.keys():
-                    with self.subTest(i=i):
-                        if isinstance(result[i], dict):
-                            for j in result[i].keys():
-                                with self.subTest(j=j):
-                                    np.testing.assert_allclose(result[i][j], reduced[i][j], atol=atol)
-                        else:
-                            np.testing.assert_allclose(result[i], reduced[i], atol=atol)
+                self.assertPoints(result, self.reduced_with_vesrion)
 
     return ReducerTest

@@ -1,6 +1,7 @@
 import ast
 from functools import wraps
 from .process_kwargs import process_kwargs
+from ..append_version import append_version
 
 
 def reducer_wrapper(process_data=None, defaults_process=None, defaults_data=None):
@@ -22,6 +23,7 @@ def reducer_wrapper(process_data=None, defaults_process=None, defaults_data=None
                 if 'details' in kwargs:
                     kwargs_details['details'] = kwargs['details']
                     kwargs_details['data_in'] = data_in
+            no_version = kwargs.pop('no_version', False)
             if defaults_process is not None:
                 kwargs_process = process_kwargs(kwargs, defaults_process)
             if defaults_data is not None:
@@ -30,7 +32,10 @@ def reducer_wrapper(process_data=None, defaults_process=None, defaults_data=None
                 data = process_data(data_in, **kwargs_process)
             else:
                 data = data_in
-            return func(data, **kwargs_data, **kwargs_details)
+            reduction = func(data, **kwargs_data, **kwargs_details)
+            if not no_version:
+                append_version(reduction)
+            return reduction
         #: keep the orignal function around for testing
         #: and access by other reducers
         wrapper._original = func

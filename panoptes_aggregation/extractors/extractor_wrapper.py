@@ -1,15 +1,6 @@
 import ast
 from functools import wraps
-import pkg_resources
-__version__ = pkg_resources.get_distribution('panoptes_aggregation').version
-
-
-def append_version(extraction):
-    if isinstance(extraction, list):
-        for extract in extraction:
-            extract['aggregation_version'] = __version__
-    else:
-        extraction['aggregation_version'] = __version__
+from ..append_version import append_version
 
 
 def unpack_annotations(annotations, task):
