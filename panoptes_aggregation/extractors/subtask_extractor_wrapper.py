@@ -23,7 +23,7 @@ def subtask_wrapper(func):
                             mock_annotation['annotations']['ST'].append(detail)
                             if details_functions[key_prefix][ddx] in extractors.extractors:
                                 extractor = extractors.extractors[details_functions[key_prefix][ddx]]
-                                detail_extract = extractor(mock_annotation)
+                                detail_extract = extractor(mock_annotation, no_version=True)
                                 output[frame][key][-1].append(detail_extract)
                             else:
                                 output[frame][key][-1].append('No extractor for this subtask type')

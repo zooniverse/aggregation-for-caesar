@@ -54,7 +54,7 @@ def survey_extractor(classification, **kwargs):
                             ]
                         }
                     }
-                    v = question_extractor(question_classification)
+                    v = question_extractor(question_classification, no_version=True)
                     extract['answers_{0}'.format(k)] = v
             extract_list.append(extract)
     return extract_list
