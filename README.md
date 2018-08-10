@@ -23,7 +23,7 @@ docker-compose -f docker-compose.local_scripts.yml build local_scripts
 ```
 From the root directory of this repository, run the desired python scripts using the docker image, e.g. `extract_panoptes_csv.py --help`
 ```
-docker-compose -f docker-compose.local_scripts.yml run --rm local_scripts python bin/extract_panoptes_csv.py --help
+docker-compose -f docker-compose.local_scripts.yml run --rm local_scripts extract_panoptes_csv --help
 
 ```
 **Or directly via docker**
@@ -147,7 +147,7 @@ and listen on `localhost:5000`.  The documentation will automatically be created
 ## run tests
 To run the tests use:
 ```bash
-docker-compose run aggregation /bin/bash -lc "nosetests"
+docker-compose run --rm aggregation nosetests
 ```
 
 # Contributing

@@ -2,8 +2,7 @@ language: "python"
 python:
   - "3.6"
 install:
-  - cat requirements.txt | xargs -n 1 -L 1 pip install --no-cache-dir
-  - pip install -U .
+  - pip install -U .[online,test,doc]
 script: nosetests
 notifications:
   email: false

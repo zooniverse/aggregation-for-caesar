@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='panoptes_aggregation',
     version='1.0.0',
-    description='Aggegation code for Zooniverse panoptes projects.',
+    description='Aggregation code for Zooniverse panoptes projects.',
     classifiers=['Programming Language :: Python :: 3 :: Only'],
     url='https://github.com/zooniverse/aggregation-for-caesar',
     author='Coleman Krawczyk',
