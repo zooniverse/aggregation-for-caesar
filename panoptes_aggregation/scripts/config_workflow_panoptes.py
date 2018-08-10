@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 
 import io
-from panoptes_aggregation import extractors
-import pandas
 import yaml
 import json
 import warnings
+
+warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
+
+from panoptes_aggregation import extractors
+import pandas
+
 
 standard_reducers = {
     'question_extractor': 'question_reducer',
@@ -86,7 +91,7 @@ def config_workflow(workflow_csv, workflow_id, version=None, keywords={}, workfl
     return config
 
 
-if __name__ == "__main__":
+def main():
     import argparse
     parser = argparse.ArgumentParser(
         description="Make configuation files for panoptes data extraction and reduction based on a workflow export"
@@ -136,3 +141,7 @@ if __name__ == "__main__":
         workflow_content=args.workflow_content,
         minor_version=args.minor_version
     )
+
+
+if __name__ == "__main__":
+    main()

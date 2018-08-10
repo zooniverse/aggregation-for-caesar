@@ -2,17 +2,21 @@
 
 from collections import OrderedDict
 import copy
-from panoptes_aggregation import extractors
-from panoptes_aggregation.csv_utils import flatten_data, order_columns
-from panoptes_aggregation.extractors.test_utils import annotation_by_task
 import json
 import math
 import io
 import yaml
 import os
-import pandas
 import progressbar
 import warnings
+
+warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
+
+import pandas
+from panoptes_aggregation import extractors
+from panoptes_aggregation.csv_utils import flatten_data, order_columns
+from panoptes_aggregation.extractors.test_utils import annotation_by_task
 
 
 def get_file_instance(file):
@@ -109,7 +113,7 @@ def extract_csv(classification_csv, config, output='extractions', order=False):
     return output_files
 
 
-if __name__ == "__main__":
+def main():
     import argparse
     parser = argparse.ArgumentParser(
         description="extract data from panoptes classifications based on the workflow"
@@ -145,3 +149,7 @@ if __name__ == "__main__":
         output=args.output,
         order=args.order
     )
+
+
+if __name__ == "__main__":
+    main()

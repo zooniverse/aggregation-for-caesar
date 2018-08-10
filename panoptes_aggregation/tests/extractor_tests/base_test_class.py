@@ -1,10 +1,15 @@
 import copy
 import unittest
 import json
-import flask
 import numpy as np
 import urllib
 from panoptes_aggregation.extractors.test_utils import annotation_by_task
+
+try:
+    import flask
+    OFFLINE = False
+except ImportError:
+    OFFLINE = True
 
 
 def ExtractorTest(function, classification, expected, name, blank_extract={}, kwargs={}, test_type='assertDictEqual'):
@@ -34,6 +39,7 @@ def ExtractorTest(function, classification, expected, name, blank_extract={}, kw
             else:
                 self.__getattribute__(test_type)(result, blank_extract)
 
+        @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_request(self):
             '''Test the online extract function'''
             request_kwargs = {
@@ -85,6 +91,7 @@ def TextExtractorTest(function, classification, expected, name, blank_extract={}
             result = function(blank, **kwargs_blank)
             self.assertDictEqual(dict(result), blank_extract)
 
+        @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_request(self):
             '''Test the online extract function'''
             request_kwargs = {

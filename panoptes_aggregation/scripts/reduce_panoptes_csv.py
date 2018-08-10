@@ -2,14 +2,19 @@
 
 from collections import OrderedDict
 import copy
-from panoptes_aggregation import reducers
-from panoptes_aggregation.csv_utils import flatten_data, unflatten_data, order_columns
-import numpy as np
 import io
 import os
-import pandas
 import progressbar
 import yaml
+import warnings
+
+warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
+
+import numpy as np
+import pandas
+from panoptes_aggregation import reducers
+from panoptes_aggregation.csv_utils import flatten_data, unflatten_data, order_columns
 
 
 def first_filter(data):
@@ -135,7 +140,7 @@ def reduce_csv(extracted_csv, reducer_config, filter='first', output='reductions
     return output_name
 
 
-if __name__ == "__main__":
+def main():
     import argparse
     parser = argparse.ArgumentParser(
         description="reduce data from panoptes classifications based on the extracted data (see extract_panoptes_csv)"
@@ -187,3 +192,7 @@ if __name__ == "__main__":
         order=args.order,
         stream=args.stream
     )
+
+
+if __name__ == "__main__":
+    main()

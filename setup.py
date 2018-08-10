@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='panoptes_aggregation',
-    version='1.0',
+    version='1.0.0',
     description='Aggegation code for Zooniverse panoptes projects.',
     classifiers=['Programming Language :: Python :: 3 :: Only'],
     url='https://github.com/zooniverse/aggregation-for-caesar',
@@ -10,26 +10,33 @@ setup(
     author_email='coleman@zooniverse.org',
     test_suite='nose.collector',
     tests_require=['nose'],
-    scripts=[
-        'bin/extract_panoptes_csv.py',
-        'bin/reduce_panoptes_csv.py',
-        'bin/config_workflow_panoptes'
-    ],
+    entry_points={
+        'console_scripts': [
+            'config_workflow_panoptes=panoptes_aggregation.scripts.config_workflow_panoptes:main',
+            'extract_panoptes_csv=panoptes_aggregation.scripts.extract_panoptes_csv:main',
+            'reduce_panoptes_csv=panoptes_aggregation.scripts.reduce_panoptes_csv:main'
+        ]
+    },
     packages=find_packages(),
     include_package_data=True,
-    extra_require={
+    extras_require={
         'online': [
             'flask',
+        ],
+        'doc': [
             'sphinx',
             'sphinxcontrib-httpdomain'
+        ],
+        'test': [
+            'nose'
         ]
     },
     install_requires=[
         'beautifulsoup4',
         'collatex',
-        'cython',
         'hdbscan',
         'numpy',
+        'nose',
         'pandas',
         'progressbar2',
         'python-levenshtein',

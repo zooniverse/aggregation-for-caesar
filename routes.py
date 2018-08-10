@@ -1,4 +1,4 @@
-from flask import jsonify, request, Flask, send_from_directory
+from flask import jsonify, request, Flask
 from flask.json import JSONEncoder
 from functools import wraps
 import os

@@ -1,10 +1,15 @@
 import unittest
-import flask
 import json
 import urllib
 import copy
 import numpy as np
 from panoptes_aggregation.reducers.test_utils import extract_in_data
+
+try:
+    import flask
+    OFFLINE = False
+except ImportError:
+    OFFLINE = True
 
 
 def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs={}, okwargs={}, kwargs={}, processed_type='dict'):
@@ -39,6 +44,7 @@ def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs
             result = reducer(self.extracted, **kwargs, **pkwargs)
             self.assertDictEqual(dict(result), self.reduced)
 
+        @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_reducer_request(self):
             '''Test the online reducer'''
             app = flask.Flask(__name__)
@@ -71,6 +77,7 @@ def ReducerTestNoProcessing(reducer, extracted, reduced, name, kwargs={}):
             result = reducer(extracted, **kwargs)
             self.assertDictEqual(result, reduced)
 
+        @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_request(self):
             '''Test the online reducer'''
             request_kwargs = {
@@ -116,6 +123,7 @@ def ReducerTestSurvey(reducer, processer, extracted, processed, reduced, name):
             result = reducer(self.extracted)
             self.assertCountEqual(result, self.reduced)
 
+        @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_reducer_request(self):
             '''Test the online reducer'''
             app = flask.Flask(__name__)
@@ -180,6 +188,7 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
                             with self.subTest(j=j):
                                 self.assertIn(j, result[i])
 
+        @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_reducer_request(self):
             '''Test the online reducer'''
             app = flask.Flask(__name__)
