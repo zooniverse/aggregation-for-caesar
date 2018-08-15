@@ -21,6 +21,8 @@ def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs
         def setUp(self):
             self.maxDiff = None
             self.extracted = copy.deepcopy(extracted)
+            self.extracted_with_version = copy.deepcopy(extracted)
+            append_version(self.extracted_with_version)
             self.processed = copy.deepcopy(processed)
             self.reduced = copy.deepcopy(reduced)
             self.reduced_with_vesrion = copy.deepcopy(reduced)
@@ -44,7 +46,7 @@ def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs
 
         def test_reducer(self):
             '''Test the offline reducer'''
-            result = reducer(self.extracted, **kwargs, **pkwargs)
+            result = reducer(self.extracted_with_version, **kwargs, **pkwargs)
             self.assertDictEqual(dict(result), self.reduced_with_vesrion)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
@@ -52,7 +54,7 @@ def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs
             '''Test the online reducer'''
             app = flask.Flask(__name__)
             request_kwargs = {
-                'data': json.dumps(extract_in_data(self.extracted)),
+                'data': json.dumps(extract_in_data(self.extracted_with_version)),
                 'content_type': 'application/json'
             }
             all_kwargs = dict(kwargs, **pkwargs)
@@ -71,32 +73,36 @@ def ReducerTestNoProcessing(reducer, extracted, reduced, name, kwargs={}):
     class ReducerTestNoProcessing(unittest.TestCase):
         def setUp(self):
             self.maxDiff = None
+            self.extracted = copy.deepcopy(extracted)
+            self.extracted_with_version = copy.deepcopy(extracted)
+            append_version(self.extracted_with_version)
+            self.reduced = copy.deepcopy(reduced)
+            self.reduced_with_vesrion = copy.deepcopy(reduced)
+            append_version(self.reduced_with_vesrion)
 
         def shortDescription(self):
             return '{0}: {1}'.format(name, self._testMethodDoc)
 
         def test_reducer(self):
             '''Test the offline reducer'''
-            result = reducer(extracted, **kwargs)
-            append_version(reduced)
-            self.assertDictEqual(result, reduced)
+            result = reducer(self.extracted_with_version, **kwargs)
+            self.assertDictEqual(result, self.reduced_with_vesrion)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_request(self):
             '''Test the online reducer'''
             request_kwargs = {
-                'data': json.dumps(extract_in_data(extracted)),
+                'data': json.dumps(extract_in_data(self.extracted_with_version)),
                 'content_type': 'application/json'
             }
             app = flask.Flask(__name__)
-            append_version(reduced)
             if len(kwargs) > 0:
                 url_params = '?{0}'.format(urllib.parse.urlencode(kwargs))
             else:
                 url_params = ''
             with app.test_request_context(url_params, **request_kwargs):
                 result = reducer(flask.request)
-                self.assertDictEqual(result, reduced)
+                self.assertDictEqual(result, self.reduced_with_vesrion)
 
     return ReducerTestNoProcessing
 
@@ -106,6 +112,8 @@ def ReducerTestSurvey(reducer, processer, extracted, processed, reduced, name):
         def setUp(self):
             self.maxDiff = None
             self.extracted = copy.deepcopy(extracted)
+            self.extracted_with_version = copy.deepcopy(extracted)
+            append_version(self.extracted_with_version)
             self.processed = copy.deepcopy(processed)
             self.reduced = copy.deepcopy(reduced)
             self.reduced_with_vesrion = copy.deepcopy(reduced)
@@ -127,7 +135,7 @@ def ReducerTestSurvey(reducer, processer, extracted, processed, reduced, name):
 
         def test_reducer(self):
             '''Test the offline reducer'''
-            result = reducer(self.extracted)
+            result = reducer(self.extracted_with_version)
             self.assertCountEqual(result, self.reduced_with_vesrion)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
@@ -135,7 +143,7 @@ def ReducerTestSurvey(reducer, processer, extracted, processed, reduced, name):
             '''Test the online reducer'''
             app = flask.Flask(__name__)
             request_kwargs = {
-                'data': json.dumps(extract_in_data(self.extracted)),
+                'data': json.dumps(extract_in_data(self.extracted_with_version)),
                 'content_type': 'application/json'
             }
             with app.test_request_context(**request_kwargs):
@@ -150,6 +158,8 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
         def setUp(self):
             self.maxDiff = None
             self.extracted = copy.deepcopy(extracted)
+            self.extracted_with_version = copy.deepcopy(extracted)
+            append_version(self.extracted_with_version)
             self.processed = copy.deepcopy(processed)
             self.reduced = copy.deepcopy(reduced)
             self.reduced_with_vesrion = copy.deepcopy(reduced)
@@ -183,11 +193,11 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
 
         def test_reducer(self):
             '''Test the offline reducer'''
-            result = reducer(self.extracted, **kwargs)
+            result = reducer(self.extracted_with_version, **kwargs)
             self.assertPoints(result, self.reduced_with_vesrion)
 
         def test_keys(self):
-            result = reducer(self.extracted, **kwargs)
+            result = reducer(self.extracted_with_version, **kwargs)
             for i in self.reduced_with_vesrion.keys():
                 with self.subTest(i=i):
                     self.assertIn(i, result)
@@ -201,7 +211,7 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
             '''Test the online reducer'''
             app = flask.Flask(__name__)
             request_kwargs = {
-                'data': json.dumps(extract_in_data(self.extracted)),
+                'data': json.dumps(extract_in_data(self.extracted_with_version)),
                 'content_type': 'application/json'
             }
             if len(kwargs) > 0:
