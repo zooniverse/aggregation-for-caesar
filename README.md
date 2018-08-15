@@ -14,7 +14,7 @@ cd aggregation-for-caesar
 pip install .
 ```
 
-If you see an error about `Cython` not being installed run `pip install cython` and try again.
+If you see an error about `Cython` not being installed run `pip install cython` and try `pip install .` again.
 
 ### With Docker
 https://docs.docker.com/get-started/
@@ -51,7 +51,7 @@ Penguin Watch has several workflows, for this example we will look at workflow n
 
 
 ## Configure the extractors and reducers
-Use the command line tool to make configuration `yaml` files that are used to set up the extractors and reducers.  These base files will use the default settings for various task types, they can be adjusted if the defaults are not needed (e.g. you don't need to extract all the tasks, or you need more control over the reducer's settings).
+Use the command line tool to make configuration `yaml` files that are used to set up the extractors and reducers.  These base files will use the default settings for various task types. They can be adjusted if the defaults are not needed (e.g. you don't need to extract all the tasks, or you need more control over the reducer's settings).
 
 ```bash
 usage: config_workflow_panoptes [-h] [-v VERSION] [-k KEYWORDS]
@@ -85,7 +85,7 @@ optional arguments:
 
 ### Example: Penguin Watch
 ```bash
-op
+config_workflow_panoptes penguin-watch-workflows.csv 6465 -v 52 -c penguin-watch-workflow_contents.csv -m 76
 ```
 
 This creates four files:
