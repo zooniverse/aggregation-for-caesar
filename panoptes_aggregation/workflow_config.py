@@ -10,6 +10,20 @@ type_to_extractor = {
     'rectangle': 'rectangle_extractor'
 }
 
+standard_reducers = {
+    'question_extractor': 'question_reducer',
+    'dropdown_extractor': 'dropdown_reducer',
+    'survey_extractor': 'survey_reducer',
+    'point_extractor': 'point_reducer',
+    'point_extractor_by_frame': 'point_reducer_dbscan',
+    'rectangle_extractor': 'rectangle_reducer',
+    'sw_graphic_extractor': 'rectangle_reducer',
+    'line_text_extractor': 'poly_line_text_reducer',
+    'poly_line_text_extractor': 'poly_line_text_reducer',
+    'sw_extractor': 'poly_line_text_reducer',
+    'sw_variant_extractor': 'sw_variant_reducer'
+}
+
 
 def workflow_extractor_config(tasks, keywords={}):
     extractor_config = defaultdict(list)
@@ -86,3 +100,22 @@ def workflow_extractor_config(tasks, keywords={}):
                 **task_keywords
             })
     return dict(extractor_config)
+
+
+def workflow_reducer_config(extractor_config):
+    reducer_config_list = []
+    for extractor in sorted(extractor_config.keys()):
+        reducer_key = standard_reducers[extractor]
+        reducer_config = {reducer_key: {}}
+        for task in extractor_config[extractor]:
+            if ('details' in task) and (len(task['details']) > 0):
+                details = {}
+                for tool in task['details'].keys():
+                    details[tool] = []
+                    for sub_extractor in task['details'][tool]:
+                        details[tool].append(standard_reducers[sub_extractor])
+                reducer_config[reducer_key]['details'] = details
+            if 'dot_freq' in task:
+                reducer_config[reducer_key]['dot_freq'] = task['dot_freq']
+        reducer_config_list.append(reducer_config)
+    return reducer_config_list

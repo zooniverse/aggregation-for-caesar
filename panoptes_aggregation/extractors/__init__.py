@@ -9,7 +9,6 @@ from .sw_extractor import sw_extractor
 from .sw_variant_extractor import sw_variant_extractor
 from .sw_graphic_extractor import sw_graphic_extractor
 from .dropdown_extractor import dropdown_extractor
-from .workflow_extractor_config import workflow_extractor_config
 
 extractors = {
     'point_extractor': point_extractor,

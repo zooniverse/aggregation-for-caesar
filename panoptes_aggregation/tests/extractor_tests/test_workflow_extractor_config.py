@@ -1,5 +1,5 @@
 import unittest
-from panoptes_aggregation.extractors import workflow_extractor_config
+from panoptes_aggregation.workflow_config import workflow_extractor_config, workflow_reducer_config
 
 
 tasks = {
@@ -132,7 +132,7 @@ keywords = {
     'T5': {'dot_freq': 'word'}
 }
 
-expected = {
+extractor_config = {
     'point_extractor_by_frame': [
         {
             'task': 'T0',
@@ -175,16 +175,44 @@ expected = {
     ]
 }
 
+reducer_config = [
+    {'poly_line_text_reducer': {
+        'dot_freq': 'word'
+    }},
+    {'point_reducer_dbscan': {
+        'details': {
+            'T0_tool2': [
+                'question_reducer',
+                'question_reducer'
+            ]
+        }
+    }},
+    {'poly_line_text_reducer': {
+        'dot_freq': 'line'
+    }},
+    {'question_reducer': {}},
+    {'rectangle_reducer': {}},
+    {'survey_reducer': {}},
+]
+
 
 class TestWorkflowExtractorConfig(unittest.TestCase):
     def test_config(self):
-        '''Test workflow auto config works'''
+        '''Test workflow extractor auto config'''
         self.maxDiff = None
         result = workflow_extractor_config(tasks, keywords=keywords)
-        self.assertCountEqual(result, expected)
-        for i in expected.keys():
+        self.assertCountEqual(result, extractor_config)
+        for i in extractor_config.keys():
             with self.subTest(i=i):
-                self.assertCountEqual(result[i], expected[i])
+                self.assertCountEqual(result[i], extractor_config[i])
+
+
+class TestWorkflowReducerConfig(unittest.TestCase):
+    def test_config(self):
+        '''Test workflow reducer auto config'''
+        self.maxDiff = None
+        result = workflow_reducer_config(extractor_config)
+        self.assertEqual(result, reducer_config)
 
 
 if __name__ == '__main__':

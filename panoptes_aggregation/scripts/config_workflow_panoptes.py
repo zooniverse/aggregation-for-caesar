@@ -8,23 +8,8 @@ import warnings
 warnings.filterwarnings("ignore", message="numpy.dtype size changed")
 warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
 
-from panoptes_aggregation import extractors
+from panoptes_aggregation.workflow_config import workflow_extractor_config, workflow_reducer_config
 import pandas
-
-
-standard_reducers = {
-    'question_extractor': 'question_reducer',
-    'dropdown_extractor': 'dropdown_reducer',
-    'survey_extractor': 'survey_reducer',
-    'point_extractor': 'point_reducer',
-    'point_extractor_by_frame': 'point_reducer_dbscan',
-    'rectangle_extractor': 'rectangle_reducer',
-    'sw_graphic_extractor': 'rectangle_reducer',
-    'line_text_extractor': 'poly_line_text_reducer',
-    'poly_line_text_extractor': 'poly_line_text_reducer',
-    'sw_extractor': 'poly_line_text_reducer',
-    'sw_variant_extractor': 'sw_variant_reducer'
-}
 
 
 def get_file_instance(file):
@@ -49,7 +34,7 @@ def config_workflow(workflow_csv, workflow_id, version=None, keywords={}, workfl
         raise IndexError('workflow ID and workflow major version combination is not unique')
     workflow = workflows[wdx].iloc[0]
     workflow_tasks = json.loads(workflow.tasks)
-    extractor_config = extractors.workflow_extractor_config(workflow_tasks, keywords=keywords)
+    extractor_config = workflow_extractor_config(workflow_tasks, keywords=keywords)
     config = {
         'workflow_id': workflow_id,
         'workflow_version': int(version),
@@ -58,18 +43,17 @@ def config_workflow(workflow_csv, workflow_id, version=None, keywords={}, workfl
     filename = 'Extractor_config_workflow_{0}_V{1}.yaml'.format(workflow_id, version)
     with open(filename, 'w', encoding='utf-8') as stream:
         yaml.dump(config, stream=stream, default_flow_style=False)
+    reducer_config_list = workflow_reducer_config(extractor_config)
     task_set = set({})
-    for extractor in extractor_config.keys():
+    for extractor, reducer in zip(sorted(extractor_config.keys()), reducer_config_list):
         reducer_config = {
-            'reducer_config': {
-                standard_reducers[extractor]: {}
-            }
+            'reducer_config': reducer
         }
-        for task in extractor_config[extractor]:
-            task_set.add(task['task'])
         filename = 'Reducer_config_workflow_{0}_V{1}_{2}.yaml'.format(workflow_id, version, extractor)
         with open(filename, 'w', encoding='utf-8') as stream:
             yaml.dump(reducer_config, stream=stream, default_flow_style=False)
+        for task in extractor_config[extractor]:
+            task_set.add(task['task'])
     if workflow_content is not None:
         workflow_content = get_file_instance(workflow_content)
         with workflow_content as workflow_content_in:

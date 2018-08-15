@@ -85,7 +85,7 @@ optional arguments:
 
 ### Example: Penguin Watch
 ```bash
-config_workflow_panoptes penguin-watch-workflows.csv 6465 -v 52 -c penguin-watch-workflow_contents.csv -m 76
+op
 ```
 
 This creates four files:
@@ -186,15 +186,21 @@ optional arguments:
 For this example we will do the point clustering for the task `T0`.  Let's take a look at the default config file for that reducer `Reducer_config_workflow_6465_V52_point_extractor_by_frame.yaml`:
 ```yaml
 reducer_config:
-  point_reducer_dbscan: {}
+  point_reducer_dbscan:
+    details:
+      T0_tool3:
+      - question_reducer
 ```
 
-As we can see, the default reducer is `point_reducer_dbscan` and no keywords have been specified.  To get better results we will add some keywords to the configuration of `DBSCAN`:
+As we can see, the default reducer is `point_reducer_dbscan` and the only keyword specified is the only associated with the sub-task of `tool3`.  To get better results we will add some clustering keywords to the configuration of `DBSCAN`:
 ```yaml
 reducer_config:
   point_reducer_dbscan:
     eps: 5
     min_samples: 3
+    details:
+      T0_tool3:
+      - question_reducer
 ```
 
 But for this project there is a large amount of depth-of-field in the images, leading to a non-constant density of point clusters across the images (more dense in the background of the image and less dense in the foreground).  This means that `HDBSCAN` will work better:
@@ -203,6 +209,9 @@ reducer_config:
   point_reducer_hdbscan:
     min_cluster_size: 4
     min_samples: 3
+    details:
+      T0_tool3:
+      - question_reducer
 ```
 
 Now that it is set up we can run:
