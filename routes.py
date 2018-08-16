@@ -4,6 +4,7 @@ from functools import wraps
 import os
 from panoptes_aggregation import reducers
 from panoptes_aggregation import extractors
+from panoptes_aggregation import __version__
 import numpy as np
 
 
@@ -51,10 +52,12 @@ this is the same as:
 application.route('/path', methods=['POST', 'GET'])(process_wrapper('string returned on a GET request')(func))
 '''
 
+home_screen_message = 'Python extractors and reducers for panoptes aggregation. Code version {0}'.format(__version__)
+
 
 @application.route('/')
 def index():
-    return jsonify('Python extractors and reducers for panoptes aggregation.')
+    return jsonify(home_screen_message)
 
 
 for route, route_function in reducers.reducers.items():
