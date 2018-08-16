@@ -10,8 +10,11 @@ Welcome to panoptes_aggregation's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   README
+   Scripts
    extractros
    reducers
+   Contributing
 
 Indices and tables
 ==================

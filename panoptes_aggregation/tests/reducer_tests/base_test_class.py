@@ -3,7 +3,7 @@ import json
 import urllib
 import copy
 import numpy as np
-from panoptes_aggregation.reducers.test_utils import extract_in_data
+from panoptes_aggregation.reducers.utilities import extract_in_data
 from panoptes_aggregation.append_version import append_version
 
 try:

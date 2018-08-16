@@ -14,7 +14,7 @@ def point_extractor(classification, **kwargs):
     '''Extract annotations from a point drawing tool into lists.
     This extractor does *not* support extraction from multi-frame subjects or
     subtask extraction.  If either of these are needed use
-    :meth:`panoptes_aggregation.extractors.point_extractor.point_extractor_by_frame`.
+    :mod:`panoptes_aggregation.extractors.point_extractor_by_frame`.
 
     Parameters
     ----------

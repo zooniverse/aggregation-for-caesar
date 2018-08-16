@@ -13,7 +13,7 @@ from .tool_wrapper import tool_wrapper
 @tool_wrapper
 @subtask_wrapper
 def point_extractor_by_frame(classification, **kwargs):
-    '''Extract annotations from a point drawing tool into lists
+    '''Extract annotations from a point drawing tool into lists.
 
     Parameters
     ----------

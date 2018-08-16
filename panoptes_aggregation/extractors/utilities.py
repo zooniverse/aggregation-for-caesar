@@ -1,4 +1,4 @@
-'''Utility functions used to transform data for tests'''
+'''Utility functions used to transform data for filtering'''
 import copy
 from collections import defaultdict
 

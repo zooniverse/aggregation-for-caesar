@@ -24,6 +24,7 @@ setup(
             'flask',
         ],
         'doc': [
+            'recommonmark',
             'sphinx',
             'sphinxcontrib-httpdomain'
         ],

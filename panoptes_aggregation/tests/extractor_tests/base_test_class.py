@@ -3,7 +3,7 @@ import unittest
 import json
 import numpy as np
 import urllib
-from panoptes_aggregation.extractors.test_utils import annotation_by_task
+from panoptes_aggregation.extractors.utilities import annotation_by_task
 from panoptes_aggregation.append_version import append_version
 
 try:

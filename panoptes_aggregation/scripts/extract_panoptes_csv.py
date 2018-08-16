@@ -16,7 +16,7 @@ warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
 import pandas
 from panoptes_aggregation import extractors
 from panoptes_aggregation.csv_utils import flatten_data, order_columns
-from panoptes_aggregation.extractors.test_utils import annotation_by_task
+from panoptes_aggregation.extractors.utilities import annotation_by_task
 
 
 def get_file_instance(file):

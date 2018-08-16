@@ -1,3 +1,9 @@
+'''
+Shakespeares World Text Extractor
+---------------------------------
+This module provides a fuction to extract the `text` data from
+annotations made on Shakespeares World and AnnoTate.
+'''
 import bs4
 from collections import OrderedDict
 import copy
@@ -22,7 +28,20 @@ tag_whitelist = [
 
 
 def clean_text(s):
-    # remove unicode chars
+    '''
+    Clean text from Shakespeares World and AnnoTate classification to prepare
+    it for aggregation.  Unicode characters, `xml`, and `html` are removed.
+
+    Parameters
+    ----------
+    s : string
+        A string to be cleaned
+
+    Returns
+    -------
+    clean_s : string
+        The string with all unicode, `xml`, and `html` removed
+    '''
     s_out = s.encode('ascii', 'ignore').decode('ascii')
     if '<xml>' in s_out:
         # the user copy and pasted in from micorsoft office
@@ -43,6 +62,24 @@ def clean_text(s):
 
 @extractor_wrapper
 def sw_extractor(classification, **kwargs):
+    '''Extract text annotations from Shakespeares World and AnnoTate.
+
+    Parameters
+    ----------
+    classification : dict
+        A dictionary containing an `annotations` key that is a list of
+        panoptes annotations
+
+    Returns
+    -------
+    extraction : dict
+        A dictionary with one key for each `frame`. The value for each frame
+        is a dict with `text`, a list-of-lists of transcribe words, `points`, a
+        dict with the list-of-lists of `x` and `y` postions of each space between words,
+        and `slope`, a list of the slopes (in deg) of each line drawn.
+        For `points` and `text` there is one inner list for each annotaiton made
+        on the frame.
+    '''
     extract = OrderedDict()
     blank_frame = OrderedDict([
         ('points', OrderedDict([('x', []), ('y', [])])),
