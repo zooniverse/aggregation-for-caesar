@@ -34,7 +34,7 @@ setup(
     },
     install_requires=[
         'beautifulsoup4',
-        'collatex',
+        'collatex==2.1.2',
         'hdbscan',
         'numpy',
         'nose',
