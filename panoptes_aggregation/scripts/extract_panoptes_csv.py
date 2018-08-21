@@ -12,6 +12,7 @@ import warnings
 
 warnings.filterwarnings("ignore", message="numpy.dtype size changed")
 warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
+warnings.filterwarnings("ignore", message="Polyfit may be poorly conditioned")
 
 import pandas
 from panoptes_aggregation import extractors

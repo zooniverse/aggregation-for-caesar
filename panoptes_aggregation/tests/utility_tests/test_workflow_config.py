@@ -162,14 +162,12 @@ extractor_config = {
     'poly_line_text_extractor': [
         {
             'task': 'T4',
-            'tools': [0],
             'dot_freq': 'line'
         }
     ],
     'line_text_extractor': [
         {
             'task': 'T5',
-            'tools': [0],
             'dot_freq': 'word'
         }
     ]
