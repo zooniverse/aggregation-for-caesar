@@ -1,10 +1,19 @@
 from setuptools import setup, find_packages
 
+with open('README.md', 'r') as fh:
+    long_description = fh.read()
+
 setup(
     name='panoptes_aggregation',
     version='1.0.0',
     description='Aggregation code for Zooniverse panoptes projects.',
-    classifiers=['Programming Language :: Python :: 3 :: Only'],
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    license='Apache License 2.0',
+    classifiers=[
+        'Programming Language :: Python :: 3 :: Only',
+        'License :: OSI Approved :: Apache Software License'
+    ],
     url='https://github.com/zooniverse/aggregation-for-caesar',
     author='Coleman Krawczyk',
     author_email='coleman@zooniverse.org',
@@ -26,7 +35,8 @@ setup(
         'doc': [
             'recommonmark',
             'sphinx',
-            'sphinxcontrib-httpdomain'
+            'sphinxcontrib-httpdomain',
+            'sphinx_rtd_theme'
         ],
         'test': [
             'nose'
