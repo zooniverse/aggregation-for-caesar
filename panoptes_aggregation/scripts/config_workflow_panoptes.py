@@ -18,7 +18,7 @@ def get_file_instance(file):
     return file
 
 
-def config_workflow(workflow_csv, workflow_id, version=None, keywords={}, workflow_content=None, minor_version=None):
+def config_workflow(workflow_csv, workflow_id, version=None, keywords={}, workflow_content=None, minor_version=None, language='en'):
     workflow_csv = get_file_instance(workflow_csv)
     with workflow_csv as workflow_csv_in:
         workflows = pandas.read_csv(workflow_csv_in, encoding='utf-8')
@@ -115,6 +115,13 @@ def main():
         help="The minor workflow version used to create the lookup table for the workflow content",
         type=int
     )
+    parser.add_argument(
+        "-l",
+        "--language",
+        help="The language to use for the workflow content",
+        type=str,
+        default='en'
+    )
     args = parser.parse_args()
 
     config_workflow(
@@ -123,7 +130,8 @@ def main():
         version=args.version,
         keywords=args.keywords,
         workflow_content=args.workflow_content,
-        minor_version=args.minor_version
+        minor_version=args.minor_version,
+        language=args.language
     )
 
 

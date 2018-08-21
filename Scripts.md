@@ -46,6 +46,8 @@ optional arguments:
   -m MINOR_VERSION, --minor_version MINOR_VERSION
                         The minor workflow version used to create the lookup
                         table for the workflow content
+  -l LANGUAGE, --language LANGUAGE
+                        The language to use for the workflow content
 ```
 
 ### Example: Penguin Watch
