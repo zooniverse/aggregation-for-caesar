@@ -35,9 +35,12 @@ def config_workflow(workflow_csv, workflow_id, version=None, keywords={}, workfl
     workflow = workflows[wdx].iloc[0]
     workflow_tasks = json.loads(workflow.tasks)
     extractor_config = workflow_extractor_config(workflow_tasks, keywords=keywords)
+    workflow_version = '{0}'.format(version)
+    if minor_version is not None:
+        workflow_version = '{0}.{1}'.format(version, minor_version)
     config = {
         'workflow_id': workflow_id,
-        'workflow_version': int(version),
+        'workflow_version': workflow_version,
         'extractor_config': extractor_config
     }
     filename = 'Extractor_config_workflow_{0}_V{1}.yaml'.format(workflow_id, version)

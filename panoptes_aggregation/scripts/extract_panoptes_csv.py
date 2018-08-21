@@ -54,7 +54,10 @@ def extract_csv(classification_csv, config, output='extractions', order=False):
         classifications = pandas.read_csv(classification_csv_in, encoding='utf-8')
 
     wdx = classifications.workflow_id == workflow_id
-    vdx = classifications.workflow_version.apply(math.floor) == version
+    if '.' in version:
+        vdx = classifications.workflow_version.apply(str) == version
+    else:
+        vdx = classifications.workflow_version.apply(math.floor) == int(version)
 
     widgets = [
         'Extracting: ',
