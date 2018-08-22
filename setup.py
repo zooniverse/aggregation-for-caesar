@@ -1,7 +1,10 @@
 from setuptools import setup, find_packages
 
-with open('README.md', 'r') as fh:
-    long_description = fh.read()
+try:
+    with open('README.md', 'r') as fh:
+        long_description = fh.read()
+except FileNotFoundError:
+    long_description = ''
 
 setup(
     name='panoptes_aggregation',
