@@ -256,7 +256,8 @@ extracted_data = [
             'text': [['some', 'words']],
             'slope': [0]
         }
-    }
+    },
+    {}
 ]
 
 processed_data = {

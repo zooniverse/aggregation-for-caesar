@@ -4,9 +4,6 @@ Polygon As Line Tool for Text Reducer
 This module provides functions to reduce the polygon-text extractions from
 :mod:`panoptes_aggregation.extractors.poly_line_text_extractor`.
 '''
-import numpy as np
-from sklearn.cluster import DBSCAN
-import copy
 from .text_utils import cluster_by_frame
 from .reducer_wrapper import reducer_wrapper
 

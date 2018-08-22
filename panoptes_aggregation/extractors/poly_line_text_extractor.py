@@ -98,6 +98,13 @@ def poly_line_text_extractor(classification, dot_freq='word', **kwargs):
                     extract[frame]['points']['x'].append(x)
                     extract[frame]['points']['y'].append(y)
                     extract[frame]['slope'].append(slope)
+            elif (dot_freq == 'line'):
+                # NOTE: if there are not two `points` the extract is not used
+                if len(x) == 2:
+                    extract[frame]['text'].append([text])
+                    extract[frame]['points']['x'].append(x)
+                    extract[frame]['points']['y'].append(y)
+                    extract[frame]['slope'].append(slope)
             else:
                 extract[frame]['text'].append([text])
                 extract[frame]['points']['x'].append(x)
