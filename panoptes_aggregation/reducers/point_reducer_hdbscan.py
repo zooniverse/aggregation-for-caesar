@@ -67,7 +67,7 @@ def point_reducer_hdbscan(data_by_tool, **kwargs):
     Returns
     -------
     reduction : dict
-        A dictinary with the following keys
+        A dictinary with one key per subject `frame`.  Each frame has the following keys
 
         * `tool*_points_x` : A list of `x` positions for **all** points drawn with `tool*`
         * `tool*_points_y` : A list of `y` positions for **all** points drawn with `tool*`

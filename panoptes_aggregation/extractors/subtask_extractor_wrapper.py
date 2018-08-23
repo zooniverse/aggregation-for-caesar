@@ -9,7 +9,7 @@ def subtask_wrapper(func):
         details_functions = kwargs.pop('details', None)
         output = func(data, **kwargs)
         if details_functions is not None:
-            blank_annotation = {'annotations': []}
+            blank_annotation = {'annotations': {'ST': []}}
             for annotation in data['annotations']:
                 task_key = annotation['task']
                 for value in annotation['value']:
@@ -20,10 +20,10 @@ def subtask_wrapper(func):
                         output[frame].setdefault(key, []).append([])
                         for ddx, detail in enumerate(value['details']):
                             mock_annotation = copy.deepcopy(blank_annotation)
-                            mock_annotation['annotations'].append(detail)
+                            mock_annotation['annotations']['ST'].append(detail)
                             if details_functions[key_prefix][ddx] in extractors.extractors:
                                 extractor = extractors.extractors[details_functions[key_prefix][ddx]]
-                                detail_extract = extractor(mock_annotation)
+                                detail_extract = extractor(mock_annotation, no_version=True)
                                 output[frame][key][-1].append(detail_extract)
                             else:
                                 output[frame][key][-1].append('No extractor for this subtask type')

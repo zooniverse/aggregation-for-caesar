@@ -2,13 +2,13 @@
 Shakespeares World Variants Extractor
 -------------------------------------
 This module provides a fuction to extract the `variants` data from
-annotations.
+annotations made on Shakespeares World.
 '''
 from .extractor_wrapper import extractor_wrapper
 
 
 @extractor_wrapper
-def sw_variant_extractor(classification):
+def sw_variant_extractor(classification, **kwargs):
     '''Extract all variants in a classification into one list
 
     Parameters

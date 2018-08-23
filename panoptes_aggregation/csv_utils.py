@@ -1,7 +1,6 @@
 import ast
 import pandas
 from pandas.io.json.normalize import nested_to_record
-import json
 
 
 def flatten_data(data, json_column='data'):
@@ -47,7 +46,7 @@ def json_non_null(value):
     if pandas.notnull(value):
         try:
             return ast.literal_eval(value)
-        except TypeError:
+        except:
             return value
     else:
         return value

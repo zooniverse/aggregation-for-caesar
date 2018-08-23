@@ -1,9 +1,10 @@
-from flask import jsonify, request, Flask, send_from_directory
+from flask import jsonify, request, Flask
 from flask.json import JSONEncoder
 from functools import wraps
 import os
 from panoptes_aggregation import reducers
 from panoptes_aggregation import extractors
+from panoptes_aggregation import __version__
 import numpy as np
 
 
@@ -22,7 +23,7 @@ class MyEncoder(JSONEncoder):
 application = Flask(__name__,
                     instance_relative_config=True,
                     static_url_path='',
-                    static_folder='docs')
+                    static_folder='docs/build/html')
 application.json_encoder = MyEncoder
 
 
@@ -51,10 +52,12 @@ this is the same as:
 application.route('/path', methods=['POST', 'GET'])(process_wrapper('string returned on a GET request')(func))
 '''
 
+home_screen_message = 'Python extractors and reducers for panoptes aggregation. Code version {0}'.format(__version__)
+
 
 @application.route('/')
 def index():
-    return jsonify('Python extractors and reducers for panoptes aggregation.')
+    return jsonify(home_screen_message)
 
 
 for route, route_function in reducers.reducers.items():

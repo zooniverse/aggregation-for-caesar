@@ -110,7 +110,7 @@ TestSubtask = ExtractorTest(
     classification,
     expected,
     'Test subtask extraction',
-    fkwargs={
+    kwargs={
         'details': {
             'T0_tool0': [
                 'question_extractor',
@@ -126,8 +126,8 @@ TestSubtaskTask = ExtractorTest(
     classification,
     expected,
     'Test subtask extraction with task specified',
-    rkwargs={'task': 'T0'},
-    fkwargs={
+    kwargs={
+        'task': 'T0',
         'details': {
             'T0_tool0': [
                 'question_extractor',
@@ -143,7 +143,7 @@ TestSubtaskAllTools = ExtractorTest(
     classification,
     expected,
     'Test subtask extraction with all tools specified',
-    fkwargs={
+    kwargs={
         'tools': [0, 1],
         'details': {
             'T0_tool0': [
@@ -189,7 +189,7 @@ TestSubtaskOneTool = ExtractorTest(
     classification,
     expected_0,
     'Test subtask extraction with one tool specified',
-    fkwargs={
+    kwargs={
         'tools': [0],
         'details': {
             'T0_tool0': [

@@ -1,3 +1,9 @@
+'''
+Shakespeares World Graphic Extractor
+------------------------------------
+This module provides a fuction to extract the `graphic` data from
+annotations made on Shakespeares World and AnnoTate.
+'''
 from .extractor_wrapper import extractor_wrapper
 from collections import OrderedDict
 
@@ -7,7 +13,23 @@ def exist_and_finite(d, key):
 
 
 @extractor_wrapper
-def sw_graphic_extractor(classification):
+def sw_graphic_extractor(classification, **kwargs):
+    '''Extract all graphics data from a classification
+
+    Parameters
+    ----------
+    classification : dict
+        A dictionary containing an `annotations` key that is a list of
+        Shakespeares World or AnnoTate annotations
+
+    Returns
+    -------
+    extraction : dict
+        A dictionary containing one key per frame. Each frame contains
+        the `x`, `y`, `width`, and `height` values for each tool used in
+        the annotation.  These are lists that contain one value for each
+        rectangle drawn for each tool.
+    '''
     extract = OrderedDict()
     frame = 'frame0'
     if len(classification['annotations']) > 0:

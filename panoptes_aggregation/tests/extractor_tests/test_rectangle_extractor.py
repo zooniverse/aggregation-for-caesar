@@ -74,7 +74,7 @@ TestRectangleTask = ExtractorTest(
     classification,
     expected,
     'Test rectangle with task specified',
-    rkwargs={'task': 'T2'}
+    kwargs={'task': 'T2'}
 )
 
 TestRectangleAllTools = ExtractorTest(
@@ -82,8 +82,10 @@ TestRectangleAllTools = ExtractorTest(
     classification,
     expected,
     'Test rectangle with all tools specified',
-    rkwargs={'task': 'T2'},
-    fkwargs={'tools': [0, 1]}
+    kwargs={
+        'task': 'T2',
+        'tools': [0, 1]
+    }
 )
 
 expected_0 = {
@@ -101,6 +103,8 @@ TestRectangleOneTool = ExtractorTest(
     classification,
     expected_0,
     'Test rectangle one tool specified',
-    rkwargs={'task': 'T2'},
-    fkwargs={'tools': [0]}
+    kwargs={
+        'task': 'T2',
+        'tools': [0]
+    }
 )

@@ -1,3 +1,9 @@
+'''
+Text aggregation utilities
+--------------------------
+This module provides utility functions used in the polyton-as-line-text-reducer code from
+:mod:`panoptes_aggregation.reducers.poly_line_text_reducer`.
+'''
 import collatex as col
 from collections import OrderedDict, Counter
 import copy

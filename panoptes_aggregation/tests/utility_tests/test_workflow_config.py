@@ -1,5 +1,5 @@
 import unittest
-from panoptes_aggregation.extractors import workflow_extractor_config
+from panoptes_aggregation.workflow_config import workflow_extractor_config, workflow_reducer_config
 
 
 tasks = {
@@ -132,44 +132,85 @@ keywords = {
     'T5': {'dot_freq': 'word'}
 }
 
-expected = {
-    'T0': {
-        'point_extractor_by_frame': {
-            'tool': [
-                0,
-                2
-            ],
+extractor_config = {
+    'point_extractor_by_frame': [
+        {
+            'task': 'T0',
+            'tools': [0, 2],
             'details': {
                 'T0_tool2': [
                     'question_extractor',
                     'question_extractor'
                 ]
             }
-        },
-        'rectangle_extractor': {
-            'tool': [4],
+        }
+    ],
+    'rectangle_extractor': [
+        {
+            'task': 'T0',
+            'tools': [4],
             'details': {}
         }
-    },
-    'T1': 'question_extractor',
-    'T2': 'question_extractor',
-    'T3': 'survey_extractor',
-    'T4': {
-        'poly_line_text_extractor': {'tool': [0]},
-        'keywords': {'dot_freq': 'line'}
-    },
-    'T5': {
-        'line_text_extractor': {'tool': [0]},
-        'keywords': {'dot_freq': 'word'}
-    }
+    ],
+    'question_extractor': [
+        {'task': 'T1'},
+        {'task': 'T2'}
+    ],
+    'survey_extractor': [
+        {'task': 'T3'}
+    ],
+    'poly_line_text_extractor': [
+        {
+            'task': 'T4',
+            'dot_freq': 'line'
+        }
+    ],
+    'line_text_extractor': [
+        {
+            'task': 'T5',
+            'dot_freq': 'word'
+        }
+    ]
 }
+
+reducer_config = [
+    {'poly_line_text_reducer': {
+        'dot_freq': 'word'
+    }},
+    {'point_reducer_dbscan': {
+        'details': {
+            'T0_tool2': [
+                'question_reducer',
+                'question_reducer'
+            ]
+        }
+    }},
+    {'poly_line_text_reducer': {
+        'dot_freq': 'line'
+    }},
+    {'question_reducer': {}},
+    {'rectangle_reducer': {}},
+    {'survey_reducer': {}},
+]
 
 
 class TestWorkflowExtractorConfig(unittest.TestCase):
     def test_config(self):
-        '''Test workflow auto config works'''
+        '''Test workflow extractor auto config'''
+        self.maxDiff = None
         result = workflow_extractor_config(tasks, keywords=keywords)
-        self.assertDictEqual(result, expected)
+        self.assertCountEqual(result, extractor_config)
+        for i in extractor_config.keys():
+            with self.subTest(i=i):
+                self.assertCountEqual(result[i], extractor_config[i])
+
+
+class TestWorkflowReducerConfig(unittest.TestCase):
+    def test_config(self):
+        '''Test workflow reducer auto config'''
+        self.maxDiff = None
+        result = workflow_reducer_config(extractor_config)
+        self.assertEqual(result, reducer_config)
 
 
 if __name__ == '__main__':

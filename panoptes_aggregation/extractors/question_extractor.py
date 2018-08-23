@@ -18,7 +18,7 @@ def slugify_or_null(s):
 
 
 @extractor_wrapper
-def question_extractor(classification):
+def question_extractor(classification, **kwargs):
     '''Extract annotations from a question task into a Counter object
 
     Parameters
@@ -50,11 +50,12 @@ def question_extractor(classification):
     {'yes': 1}
     '''
     #: assumes only one task is filtered into the extractor
-    annotation = classification['annotations'][0]
     answers = Counter()
-    if isinstance(annotation['value'], list):
-        for answer in annotation['value']:
-            answers[slugify_or_null(answer)] += 1
-    else:
-        answers[slugify_or_null(annotation['value'])] += 1
+    if len(classification['annotations']) > 0:
+        annotation = classification['annotations'][0]
+        if isinstance(annotation['value'], list):
+            for answer in annotation['value']:
+                answers[slugify_or_null(answer)] += 1
+        else:
+            answers[slugify_or_null(annotation['value'])] += 1
     return dict(answers)

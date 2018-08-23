@@ -22,10 +22,6 @@ DEFAULTS = {
 
 def process_data(data):
     '''Process a list of extractions into lists of `x` and `y` sorted by `tool`.
-    This reducer is for use with :meth:`panoptes_aggregation.extractors.point_extractor.point_extractor`
-    that does *not* seperate points by `frame` and does not support subtask reduction.  Use
-    :meth:`panoptes_aggregation.extractors.point_extractor.point_extractor_dbscan` if there
-    are multiple frames *or* subtasks.
 
     Parameters
     ----------
@@ -52,6 +48,12 @@ def process_data(data):
 @reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
 def point_reducer(data_by_tool, **kwargs):
     '''Cluster a list of points by tool using DBSCAN
+
+    This reducer is for use with :mod:`panoptes_aggregation.extractors.point_extractor`
+    that does *not* seperate points by `frame` and does not support subtask reduction.  Use
+    :mod:`panoptes_aggregation.extractors.point_extractor_by_frame`  and
+    :mod:`panoptes_aggregation.reducers.point_reducer_dbscan` if there
+    are multiple frames *or* subtasks.
 
     Parameters
     ----------

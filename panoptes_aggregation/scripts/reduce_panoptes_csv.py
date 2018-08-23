@@ -2,14 +2,19 @@
 
 from collections import OrderedDict
 import copy
-from panoptes_aggregation import reducers
-from panoptes_aggregation.csv_utils import flatten_data, unflatten_data, order_columns
-import json
-import numpy as np
 import io
 import os
-import pandas
 import progressbar
+import yaml
+import warnings
+
+warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
+
+import numpy as np
+import pandas
+from panoptes_aggregation import reducers
+from panoptes_aggregation.csv_utils import flatten_data, unflatten_data, order_columns
 
 
 def first_filter(data):
@@ -24,27 +29,38 @@ def last_filter(data):
     return data[ldx]
 
 
-def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', order=False, stream=False):
-    if not isinstance(extracted_csv, io.IOBase):
-        extracted_csv = open(extracted_csv, 'r', encoding='utf-8')
+FILTER_TYPES = {
+    'first': first_filter,
+    'last': last_filter
+}
 
+
+def get_file_instance(file):
+    if not isinstance(file, io.IOBase):
+        file = open(file, 'r', encoding='utf-8')
+    return file
+
+
+def reduce_csv(extracted_csv, reducer_config, filter='first', output='reductions', order=False, stream=False):
+    extracted_csv = get_file_instance(extracted_csv)
     with extracted_csv as extracted_csv_in:
         extracted = pandas.read_csv(extracted_csv_in, infer_datetime_format=True, parse_dates=['created_at'], encoding='utf-8')
 
     extracted.sort_values(['subject_id', 'created_at'], inplace=True)
-
     resume = False
     subjects = extracted.subject_id.unique()
     tasks = extracted.task.unique()
     workflow_id = extracted.workflow_id.iloc[0]
-    extractor_name = extracted.extractor.iloc[0]
-    reducer_name = extractor_name.replace('extractor', 'reducer')
-    if (reducer_name == 'sw_reducer') or (reducer_name == 'line_text_reducer'):
-        reducer_name = 'poly_line_text_reducer'
-    if reducer_name == 'sw_graphic_reducer':
-        reducer_name = 'rectangle_reducer'
-    if reducer_name == 'point_reducer_by_frame':
-        reducer_name = 'point_reducer_dbscan'
+
+    reducer_config = get_file_instance(reducer_config)
+    with reducer_config as config:
+        config_yaml = yaml.load(config)
+
+    assert (len(config_yaml['reducer_config']) == 1), 'There must be only one reducer in the config file.'
+    for key, value in config_yaml['reducer_config'].items():
+        reducer_name = key
+        keywords = value
+    assert (reducer_name in reducers.reducers), 'The reducer in the config files does not exist.'
 
     output_path, output_base = os.path.split(output)
     output_base_name, output_ext = os.path.splitext(output_base)
@@ -83,10 +99,8 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
             jdx = extracted.task == task
             classifications = extracted[idx & jdx]
             classifications = classifications.drop_duplicates()
-            if filter == 'first':
-                classifications = classifications.groupby(['user_name'], group_keys=False).apply(first_filter)
-            elif filter == 'last':
-                classifications = classifications.groupby(['user_name'], group_keys=False).apply(last_filter)
+            if filter in FILTER_TYPES:
+                classifications = classifications.groupby(['user_name'], group_keys=False).apply(FILTER_TYPES[filter])
             data = [unflatten_data(c) for cdx, c in classifications.iterrows()]
             reduction = reducers.reducers[reducer_name](data, **keywords)
             if isinstance(reduction, list):
@@ -126,15 +140,59 @@ def reduce_csv(extracted_csv, filter='first', keywords={}, output='reductions', 
     return output_name
 
 
-if __name__ == "__main__":
+def main():
     import argparse
-    parser = argparse.ArgumentParser(description="reduce data from panoptes classifications based on the extracted data (see extract_panoptes_csv)")
-    parser.add_argument("extracted_csv", help="the extracted csv file output from extract_panoptes_csv", type=argparse.FileType('r', encoding='utf-8'))
-    parser.add_argument("-F", "--filter", help="how to filter a user makeing multiple classifications for one subject", type=str, choices=['first', 'last', 'all'], default='fisrt')
-    parser.add_argument("-k", "--keywords", help="keywords to be passed into the reducer in the form of a json string, e.g. \'{\"eps\": 5.5, \"min_samples\": 3}\'  (note: double quotes must be used inside the brackets)", type=json.loads, default={})
-    parser.add_argument("-O", "--order", help="arrange the data columns in alphabetical order before saving", action="store_true")
-    parser.add_argument("-o", "--output", help="the base name for output csv file to store the reductions", type=str, default="reductions")
-    parser.add_argument("-s", "--stream", help="stream output to csv after each redcution (this is slower but is resumable)", action="store_true")
+    parser = argparse.ArgumentParser(
+        description="reduce data from panoptes classifications based on the extracted data (see extract_panoptes_csv)"
+    )
+    parser.add_argument(
+        "extracted_csv",
+        help="the extracted csv file output from extract_panoptes_csv",
+        type=argparse.FileType('r', encoding='utf-8')
+    )
+    parser.add_argument(
+        "reducer_config",
+        help="the reducer yaml file output from config_workflow_panoptes",
+        type=argparse.FileType('r', encoding='utf-8')
+    )
+    parser.add_argument(
+        "-F",
+        "--filter",
+        help="how to filter a user making multiple classifications for one subject",
+        type=str,
+        choices=['first', 'last', 'all'],
+        default='fisrt'
+    )
+    parser.add_argument(
+        "-O",
+        "--order",
+        help="arrange the data columns in alphabetical order before saving",
+        action="store_true"
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="the base name for output csv file to store the reductions",
+        type=str,
+        default="reductions"
+    )
+    parser.add_argument(
+        "-s",
+        "--stream",
+        help="stream output to csv after each reduction (this is slower but is resumable)",
+        action="store_true"
+    )
     args = parser.parse_args()
 
-    reduce_csv(args.extracted_csv, filter=args.filter, keywords=args.keywords, output=args.output, order=args.order, stream=args.stream)
+    reduce_csv(
+        args.extracted_csv,
+        args.reducer_config,
+        filter=args.filter,
+        output=args.output,
+        order=args.order,
+        stream=args.stream
+    )
+
+
+if __name__ == "__main__":
+    main()

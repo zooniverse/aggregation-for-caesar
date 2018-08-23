@@ -8,7 +8,7 @@ from .question_extractor import slugify_or_null
 
 
 @extractor_wrapper
-def dropdown_extractor(classification):
+def dropdown_extractor(classification, **kwargs):
     '''Extract annotations from a dropdown task into a Counter object
 
     Parameters
@@ -24,10 +24,12 @@ def dropdown_extractor(classification):
         Counter dictionaries, one entry for each dropdown list in the
         task
     '''
-    annotation = classification['annotations'][0]
-    answers = {
-        'value': []
-    }
-    for value in annotation['value']:
-        answers['value'].append({slugify_or_null(value['value']): 1})
+    answers = {}
+    if len(classification['annotations']) > 0:
+        annotation = classification['annotations'][0]
+        answers = {
+            'value': []
+        }
+        for value in annotation['value']:
+            answers['value'].append({slugify_or_null(value['value']): 1})
     return answers
