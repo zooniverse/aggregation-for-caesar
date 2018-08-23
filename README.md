@@ -10,12 +10,20 @@ You can find the [latest documentation](https://aggregation-caesar.zooniverse.or
 ---
 
 ## Installing for offline use
-### With your own python install
-To install (python 3 only):
+### With your own python install (python 3 only)
+Instal the latest stable release:
 ```bash
-git clone https://github.com/zooniverse/aggregation-for-caesar.git
-cd aggregation-for-caesar
-pip install .
+pip install panoptes_aggregation
+```
+
+Or for development or testing, you can install the development version directly from GitHub:
+```bash
+pip install -U git+git://github.com/zooniverse/aggregation-for-caesar.git
+```
+
+Upgrade and existing installation:
+```bash
+pip install -U panoptes_aggregation
 ```
 
 If you see an error about `Cython` not being installed run `pip install cython` and try `pip install .` again.
