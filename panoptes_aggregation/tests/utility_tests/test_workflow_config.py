@@ -124,6 +124,14 @@ tasks = {
             }
         ],
         'instruction': 'T5.instruction'
+    },
+    'T6': {
+        'type': 'shortcut',
+        'question': 'T6.question',
+        'answers': [
+            {'label': 'T6.answers.0.label'},
+            {'label': 'T6.answers.1.label'}
+        ]
     }
 }
 
@@ -154,7 +162,8 @@ extractor_config = {
     ],
     'question_extractor': [
         {'task': 'T1'},
-        {'task': 'T2'}
+        {'task': 'T2'},
+        {'task': 'T6'}
     ],
     'survey_extractor': [
         {'task': 'T3'}
