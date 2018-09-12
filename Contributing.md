@@ -56,6 +56,7 @@ The code is auto-documented using [sphinx](http://www.sphinx-doc.org/en/stable/i
 
 ### 5. Make sure everything still works
 1. run `nosetests` and ensure all tests still pass
+2. (optional) run `nosetests --with-coverage --cover-erase --cover-html --cover-package=panoptes_aggregation` to check test coverage
 
 ---
 
@@ -99,3 +100,4 @@ The code is auto-documented using [sphinx](http://www.sphinx-doc.org/en/stable/i
 
 ### 4. Make sure everything still works
 1. run `nosetests` and ensure all tests still pass
+2. (optional) run `nosetests --with-coverage --cover-erase --cover-html --cover-package=panoptes_aggregation` to check test coverage
