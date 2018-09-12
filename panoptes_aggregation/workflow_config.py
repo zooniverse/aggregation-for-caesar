@@ -4,6 +4,7 @@ from collections import defaultdict
 type_to_extractor = {
     'single': 'question_extractor',
     'multiple': 'question_extractor',
+    'shortcut': 'question_extractor',
     'dropdown': 'dropdown_extractor',
     'survey': 'survey_extractor',
     'point': 'point_extractor_by_frame',

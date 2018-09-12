@@ -28,10 +28,8 @@ def config_workflow(workflow_csv, workflow_id, version=None, keywords={}, workfl
         warnings.warn('No major workflow version was specified, defaulting to version {0}'.format(version))
 
     wdx = (workflows.workflow_id == workflow_id) & (workflows.version == version)
-    if wdx.sum() == 0:
-        raise IndexError('workflow ID and workflow major version combination does not exist')
-    if wdx.sum() > 1:
-        raise IndexError('workflow ID and workflow major version combination is not unique')
+    assert (wdx.sum() > 0), 'workflow ID and workflow major version combination does not exist'
+    assert (wdx.sum() == 1), 'workflow ID and workflow major version combination is not unique'
     workflow = workflows[wdx].iloc[0]
     workflow_tasks = json.loads(workflow.tasks)
     extractor_config = workflow_extractor_config(workflow_tasks, keywords=keywords)

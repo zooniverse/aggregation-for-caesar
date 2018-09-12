@@ -26,6 +26,10 @@ def get_file_instance(file):
     return file
 
 
+def get_major_version(s):
+    return s.split('.')[0]
+
+
 def extract_csv(classification_csv, config, output='extractions', order=False):
     config = get_file_instance(config)
     with config as config_in:
@@ -51,13 +55,17 @@ def extract_csv(classification_csv, config, output='extractions', order=False):
 
     classification_csv = get_file_instance(classification_csv)
     with classification_csv as classification_csv_in:
-        classifications = pandas.read_csv(classification_csv_in, encoding='utf-8')
+        classifications = pandas.read_csv(classification_csv_in, encoding='utf-8', dtype={'workflow_version': str})
 
     wdx = classifications.workflow_id == workflow_id
+    assert (wdx.sum() > 0), 'There are no classifications matching the configured workflow ID'
     if '.' in version:
-        vdx = classifications.workflow_version.apply(str) == version
+        vdx = classifications.workflow_version == version
     else:
-        vdx = classifications.workflow_version.apply(math.floor) == int(version)
+        vdx = classifications.workflow_version.apply(get_major_version) == version
+
+    assert (vdx.sum() > 0), 'There are no classificaitons matching the configured version number'
+    assert ((vdx & wdx).sum() > 0), 'There are no classifications matching the combined workflow ID and version number'
 
     widgets = [
         'Extracting: ',
@@ -73,7 +81,13 @@ def extract_csv(classification_csv, config, output='extractions', order=False):
         for extractor_name, keywords in extractor_config.items():
             for keyword in keywords:
                 if extractor_name in extractors.extractors:
-                    extract = extractors.extractors[extractor_name](copy.deepcopy(classification_by_task), **keyword)
+                    try:
+                        extract = extractors.extractors[extractor_name](copy.deepcopy(classification_by_task), **keyword)
+                    except:
+                        print()
+                        print('Incorrectly formatted annotation')
+                        print(classification)
+                        continue
                     if isinstance(extract, list):
                         for e in extract:
                             extracted_data.setdefault(extractor_name, copy.deepcopy(blank_extracted_data))

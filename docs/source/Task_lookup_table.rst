@@ -12,6 +12,8 @@ Basic task types
 | Single Question   | :mod:`panoptes_aggregation.extractors.question_extractor`            | :mod:`panoptes_aggregation.reducers.question_reducer`              |
 +-------------------+                                                                      |                                                                    |
 | Multiple Question |                                                                      |                                                                    |
++-------------------+                                                                      |                                                                    |
+| Shortcut          |                                                                      |                                                                    |
 +-------------------+----------------------------------------------------------------------+--------------------------------------------------------------------+
 | Dropdown          | :mod:`panoptes_aggregation.extractors.dropdown_extractor`            | :mod:`panoptes_aggregation.reducers.dropdown_reducer`              |
 +-------------------+----------------------------------------------------------------------+--------------------------------------------------------------------+
