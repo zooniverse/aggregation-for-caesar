@@ -43,7 +43,7 @@ def config_workflow(workflow_csv, workflow_id, version=None, keywords={}, workfl
     }
     filename = 'Extractor_config_workflow_{0}_V{1}.yaml'.format(workflow_id, version)
     with open(filename, 'w', encoding='utf-8') as stream:
-        yaml.dump(config, stream=stream, default_flow_style=False)
+        yaml.dump(config, stream=stream, default_flow_style=False, indent=4)
     reducer_config_list = workflow_reducer_config(extractor_config)
     task_set = set({})
     for extractor, reducer in zip(sorted(extractor_config.keys()), reducer_config_list):
@@ -52,7 +52,7 @@ def config_workflow(workflow_csv, workflow_id, version=None, keywords={}, workfl
         }
         filename = 'Reducer_config_workflow_{0}_V{1}_{2}.yaml'.format(workflow_id, version, extractor)
         with open(filename, 'w', encoding='utf-8') as stream:
-            yaml.dump(reducer_config, stream=stream, default_flow_style=False)
+            yaml.dump(reducer_config, stream=stream, default_flow_style=False, indent=4)
         for task in extractor_config[extractor]:
             task_set.add(task['task'])
     if workflow_content is not None:
@@ -72,7 +72,7 @@ def config_workflow(workflow_csv, workflow_id, version=None, keywords={}, workfl
         stirngs_extract = {key: value for key, value in strings.items() for task in task_set if (key.startswith(task) and ('help' not in key))}
         filename = 'Task_labels_workflow_{0}_V{1}.{2}.yaml'.format(workflow_id, version, minor_version)
         with open(filename, 'w', encoding='utf-8') as stream:
-            yaml.dump(stirngs_extract, stream=stream, default_flow_style=False)
+            yaml.dump(stirngs_extract, stream=stream, default_flow_style=False, indent=4)
     return config
 
 
