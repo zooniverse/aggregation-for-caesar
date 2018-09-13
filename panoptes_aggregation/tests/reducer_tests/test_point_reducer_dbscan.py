@@ -66,3 +66,44 @@ TestPointsCluster = ReducerTestPoints(
     },
     atol=2
 )
+
+extracted_data_one_point = [
+    {
+        'frame0': {
+            'tool1_x': [0],
+            'tool1_y': [0]
+        }
+    }
+]
+processed_data_one_point = {
+    'frame0': {
+        'tool1': [(0, 0)]
+    }
+}
+reduced_data_one_point = {
+    'frame0': {
+        'tool1_points_x': [0],
+        'tool1_points_y': [0],
+        'tool1_cluster_labels': [0],
+        'tool1_clusters_count': [1],
+        'tool1_clusters_x': [0],
+        'tool1_clusters_y': [0],
+        'tool1_clusters_var_x': [None],
+        'tool1_clusters_var_y': [None],
+        'tool1_clusters_var_x_y': [None]
+    }
+}
+
+TestOnePointCluster = ReducerTestPoints(
+    point_reducer_dbscan,
+    process_data,
+    extracted_data_one_point,
+    processed_data_one_point,
+    reduced_data_one_point,
+    'Test point reducer DBSCAN with one data point',
+    kwargs={
+        'eps': 5,
+        'min_samples': 1
+    },
+    atol=2
+)

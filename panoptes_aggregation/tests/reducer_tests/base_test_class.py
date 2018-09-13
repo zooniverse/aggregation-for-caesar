@@ -174,7 +174,10 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
                     if isinstance(result[i], dict):
                         for j in result[i].keys():
                             with self.subTest(j=j):
-                                np.testing.assert_allclose(result[i][j], reduced[i][j], atol=atol)
+                                try:
+                                    np.testing.assert_allclose(result[i][j], reduced[i][j], atol=atol)
+                                except TypeError:
+                                    self.assertEqual(result[i][j], reduced[i][j])
                     else:
                         try:
                             np.testing.assert_allclose(result[i], reduced[i], atol=atol)
@@ -197,6 +200,7 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
             self.assertPoints(result, self.reduced_with_vesrion)
 
         def test_keys(self):
+            '''Test the keys match up'''
             result = reducer(self.extracted_with_version, **kwargs)
             for i in self.reduced_with_vesrion.keys():
                 with self.subTest(i=i):
