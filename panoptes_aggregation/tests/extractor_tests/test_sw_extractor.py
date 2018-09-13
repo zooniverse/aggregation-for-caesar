@@ -71,6 +71,12 @@ classification = {
                     "complete": True,
                     "endPoint": {"x": 688.64, "y": 109.64},
                     "startPoint": {"x": 447.21, "y": 119.54}
+                }, {
+                    "text": "<xml>stuff\n</xml>",
+                    "type": "text",
+                    "complete": True,
+                    "endPoint": {"x": 688.64, "y": 109.64},
+                    "startPoint": {"x": 447.21, "y": 119.54}
                 }
             ]
         }
@@ -90,6 +96,7 @@ expected = {
                 [242.39, 1025.06],
                 [151.35, 1009.23],
                 [384.87, 926.11],
+                [447.21, 688.64],
                 [447.21, 688.64]
             ],
             'y': [
@@ -102,6 +109,7 @@ expected = {
                 [1449.4, 1387.06],
                 [1494.91, 1449.4],
                 [1500.85, 1489.96],
+                [119.54, 109.64],
                 [119.54, 109.64]
             ]
         },
@@ -115,7 +123,8 @@ expected = {
             ['since now its remoud into <brev-y>th</brev-y><sl>e</sl> other:'],
             ['hee had rather deal with a fixt <brev-y>th</brev-y><sw-ex>e</sw-ex><sl>n</sl> '],
             ['with a runing gout:'],
-            ['Gout:']
+            ['Gout:'],
+            ['stuff']
         ],
         'slope': [
             -5.09541495134,
@@ -127,6 +136,7 @@ expected = {
             -4.55401904274,
             -3.03665894777,
             -1.15266214742,
+            -2.34813657242,
             -2.34813657242
         ]
     }
