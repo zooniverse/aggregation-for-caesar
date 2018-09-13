@@ -113,13 +113,8 @@ def point_reducer_hdbscan(data_by_tool, **kwargs):
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(float(k_loc[0]))
                         clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(float(k_loc[1]))
                         # cov matrix of the cluster
-                        if idx.sum() > 1:
-                            k_cov = np.cov(loc[idx].T, aweights=weights)
-                            clusters[frame].setdefault('{0}_clusters_var_x'.format(tool), []).append(float(k_cov[0, 0]))
-                            clusters[frame].setdefault('{0}_clusters_var_y'.format(tool), []).append(float(k_cov[1, 1]))
-                            clusters[frame].setdefault('{0}_clusters_var_x_y'.format(tool), []).append(float(k_cov[0, 1]))
-                        else:
-                            clusters[frame].setdefault('{0}_clusters_var_x'.format(tool), []).append(None)
-                            clusters[frame].setdefault('{0}_clusters_var_y'.format(tool), []).append(None)
-                            clusters[frame].setdefault('{0}_clusters_var_x_y'.format(tool), []).append(None)
+                        k_cov = np.cov(loc[idx].T, aweights=weights)
+                        clusters[frame].setdefault('{0}_clusters_var_x'.format(tool), []).append(float(k_cov[0, 0]))
+                        clusters[frame].setdefault('{0}_clusters_var_y'.format(tool), []).append(float(k_cov[1, 1]))
+                        clusters[frame].setdefault('{0}_clusters_var_x_y'.format(tool), []).append(float(k_cov[0, 1]))
     return clusters
