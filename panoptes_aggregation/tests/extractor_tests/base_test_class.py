@@ -116,3 +116,19 @@ def TextExtractorTest(function, classification, expected, name, blank_extract={}
                 self.assertTextExtractor(result, expected)
 
     return TextExtractorTest
+
+
+def TextExtractorBadKeywordTest(function, classification, expected, name):
+    class TextExtractorTestBadKeyword(unittest.TestCase):
+        def setUp(self):
+            self.maxDiff = None
+
+        def shortDescription(self):
+            return '{0}: {1}'.format(name, self._testMethodDoc)
+
+        def test_bad_keyword(self):
+            '''Test error is raised if a bad keyword is used for dot_freq'''
+            with self.assertRaises(ValueError):
+                function(annotation_by_task(classification), dot_freq='bad_keyword')
+
+    return TextExtractorTestBadKeyword

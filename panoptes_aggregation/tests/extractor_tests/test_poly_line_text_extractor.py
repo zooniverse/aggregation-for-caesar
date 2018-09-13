@@ -1,5 +1,5 @@
 from panoptes_aggregation import extractors
-from .base_test_class import TextExtractorTest
+from .base_test_class import TextExtractorTest, TextExtractorBadKeywordTest
 
 classification = {
     "annotations": [
@@ -186,4 +186,11 @@ TestPolyLineTextTool = TextExtractorTest(
     expected,
     'Test poly-line-text extractor by word with tool specified',
     kwargs={'tools': [0]}
+)
+
+TestPolyLineTextBadKeyword = TextExtractorBadKeywordTest(
+    extractors.poly_line_text_extractor,
+    classification,
+    expected,
+    'Test poly-line-text extractor by word with bad keyword'
 )
