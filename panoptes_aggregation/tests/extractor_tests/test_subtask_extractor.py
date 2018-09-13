@@ -29,7 +29,8 @@ classification = {
                                 'value': None,
                                 'option': False
                             }
-                        ]}
+                        ]},
+                        {'not-supported-subtask': 1}
                     ]
                 },
                 {
@@ -55,7 +56,8 @@ classification = {
                                 'value': 'Option 5',
                                 'option': True
                             }
-                        ]}
+                        ]},
+                        {'not-supported-subtask': 1}
                     ]
                 },
                 {
@@ -86,7 +88,8 @@ expected = {
                     {'option-1': 1},
                     {'option-2': 1},
                     {'None': 1}
-                ]}
+                ]},
+                'No extractor for this subtask type'
             ],
             [
                 {'1': 1},
@@ -95,7 +98,8 @@ expected = {
                     {'option-3': 1},
                     {'option-4': 1},
                     {'option-5': 1}
-                ]}
+                ]},
+                'No extractor for this subtask type'
             ]
         ],
         'T0_tool1_x': [500],
@@ -115,7 +119,8 @@ TestSubtask = ExtractorTest(
             'T0_tool0': [
                 'question_extractor',
                 'question_extractor',
-                'dropdown_extractor'
+                'dropdown_extractor',
+                None
             ]
         }
     }
@@ -132,7 +137,8 @@ TestSubtaskTask = ExtractorTest(
             'T0_tool0': [
                 'question_extractor',
                 'question_extractor',
-                'dropdown_extractor'
+                'dropdown_extractor',
+                None
             ]
         }
     }
@@ -149,7 +155,8 @@ TestSubtaskAllTools = ExtractorTest(
             'T0_tool0': [
                 'question_extractor',
                 'question_extractor',
-                'dropdown_extractor'
+                'dropdown_extractor',
+                None
             ]
         }
     }
@@ -169,7 +176,8 @@ expected_0 = {
                     {'option-1': 1},
                     {'option-2': 1},
                     {'None': 1}
-                ]}
+                ]},
+                'No extractor for this subtask type'
             ],
             [
                 {'1': 1},
@@ -178,7 +186,8 @@ expected_0 = {
                     {'option-3': 1},
                     {'option-4': 1},
                     {'option-5': 1}
-                ]}
+                ]},
+                'No extractor for this subtask type'
             ]
         ]
     }
@@ -195,7 +204,8 @@ TestSubtaskOneTool = ExtractorTest(
             'T0_tool0': [
                 'question_extractor',
                 'question_extractor',
-                'dropdown_extractor'
+                'dropdown_extractor',
+                None
             ]
         }
     }
