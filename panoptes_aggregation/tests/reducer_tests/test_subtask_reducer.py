@@ -16,7 +16,8 @@ extracted_data = [
                         {'option-1': 1},
                         {'option-2': 1},
                         {'None': 1}
-                    ]}
+                    ]},
+                    'No extractor for this subtask type'
                 ],
                 [
                     {'1': 1},
@@ -25,7 +26,8 @@ extracted_data = [
                         {'option-3': 1},
                         {'option-4': 1},
                         {'option-5': 1}
-                    ]}
+                    ]},
+                    'No extractor for this subtask type'
                 ],
             ],
             'T0_tool1_x': [500.0],
@@ -48,7 +50,8 @@ extracted_data = [
                         {'option-1': 1},
                         {'option-2': 1},
                         {'option-3': 1}
-                    ]}
+                    ]},
+                    'No extractor for this subtask type'
                 ],
                 [
                     {'1': 1},
@@ -57,7 +60,8 @@ extracted_data = [
                         {'option-1': 1},
                         {'option-4': 1},
                         {'option-5': 1}
-                    ]}
+                    ]},
+                    'No extractor for this subtask type'
                 ]
             ],
             'T0_tool1_x': [500.0],
@@ -96,7 +100,8 @@ reduced_data = {
                     {'option-1': 1},
                     {'option-2': 1},
                     {'None': 1}
-                ]}
+                ]},
+                'No extractor for this subtask type'
             ],
             [
                 {'1': 1},
@@ -105,7 +110,8 @@ reduced_data = {
                     {'option-3': 1},
                     {'option-4': 1},
                     {'option-5': 1}
-                ]}
+                ]},
+                'No extractor for this subtask type'
             ],
             [
                 {'1': 1},
@@ -114,7 +120,8 @@ reduced_data = {
                     {'option-1': 1},
                     {'option-2': 1},
                     {'option-3': 1}
-                ]}
+                ]},
+                'No extractor for this subtask type'
             ],
             [
                 {'1': 1},
@@ -123,7 +130,8 @@ reduced_data = {
                     {'option-1': 1},
                     {'option-4': 1},
                     {'option-5': 1}
-                ]}
+                ]},
+                'No extractor for this subtask type'
             ]
         ],
         'T0_tool0_clusters_details': [
@@ -134,7 +142,8 @@ reduced_data = {
                     {'option-1': 2},
                     {'option-2': 2},
                     {'None': 1, 'option-3': 1}
-                ]}
+                ]},
+                'No reducer for this subtask type'
             ],
             [
                 {'1': 2},
@@ -143,7 +152,8 @@ reduced_data = {
                     {'option-3': 1, 'option-1': 1},
                     {'option-4': 2},
                     {'option-5': 2}
-                ]}
+                ]},
+                'No reducer for this subtask type'
             ]
         ],
         'T0_tool1_rec_x': [500.0, 500.0, 500.0],
@@ -171,7 +181,8 @@ TestSubtaskReducer = ReducerTestNoProcessing(
             'T0_tool0': [
                 'question_reducer',
                 'question_reducer',
-                'dropdown_reducer'
+                'dropdown_reducer',
+                None
             ]
         }
     }

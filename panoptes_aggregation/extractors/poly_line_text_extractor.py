@@ -66,6 +66,8 @@ def poly_line_text_extractor(classification, dot_freq='word', **kwargs):
         'slope': [0, 0]
     }}
     '''
+    if dot_freq not in ['word', 'line']:
+        raise ValueError('dot_freq must be either "word" or "line"')
     blank_frame = OrderedDict([
         ('points', OrderedDict([('x', []), ('y', [])])),
         ('text', []),
@@ -86,28 +88,20 @@ def poly_line_text_extractor(classification, dot_freq='word', **kwargs):
                 dx = x[-1] - x[0]
                 dy = y_fit[-1] - y_fit[0]
                 slope = np.rad2deg(np.arctan2(dy, dx))
-            else:
-                # default the slope to 0 if only one point was drawn
-                slope = 0
-            if dot_freq == 'word':
-                # NOTE: if `words` + 1 and `points` are differnt lengths
-                # the extract is not used
-                words = text.split(' ')
-                if len(words) + 1 == len(x):
-                    extract[frame]['text'].append(words)
-                    extract[frame]['points']['x'].append(x)
-                    extract[frame]['points']['y'].append(y)
-                    extract[frame]['slope'].append(slope)
-            elif (dot_freq == 'line'):
-                # NOTE: if there are not two `points` the extract is not used
-                if len(x) == 2:
-                    extract[frame]['text'].append([text])
-                    extract[frame]['points']['x'].append(x)
-                    extract[frame]['points']['y'].append(y)
-                    extract[frame]['slope'].append(slope)
-            else:
-                extract[frame]['text'].append([text])
-                extract[frame]['points']['x'].append(x)
-                extract[frame]['points']['y'].append(y)
-                extract[frame]['slope'].append(slope)
+                if dot_freq == 'word':
+                    # NOTE: if `words` + 1 and `points` are differnt lengths
+                    # the extract is not used
+                    words = text.split(' ')
+                    if len(words) + 1 == len(x):
+                        extract[frame]['text'].append(words)
+                        extract[frame]['points']['x'].append(x)
+                        extract[frame]['points']['y'].append(y)
+                        extract[frame]['slope'].append(slope)
+                elif (dot_freq == 'line'):
+                    # NOTE: if there are not two `points` the extract is not used
+                    if len(x) == 2:
+                        extract[frame]['text'].append([text])
+                        extract[frame]['points']['x'].append(x)
+                        extract[frame]['points']['y'].append(y)
+                        extract[frame]['slope'].append(slope)
     return extract

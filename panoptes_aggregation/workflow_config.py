@@ -108,13 +108,18 @@ def workflow_reducer_config(extractor_config):
     for extractor in sorted(extractor_config.keys()):
         reducer_key = standard_reducers[extractor]
         reducer_config = {reducer_key: {}}
+        if extractor == 'sw_extractor':
+            reducer_config[reducer_key]['dot_freq'] = 'line'
         for task in extractor_config[extractor]:
             if ('details' in task) and (len(task['details']) > 0):
                 details = {}
                 for tool in task['details'].keys():
                     details[tool] = []
                     for sub_extractor in task['details'][tool]:
-                        details[tool].append(standard_reducers[sub_extractor])
+                        if sub_extractor is None:
+                            details[tool].append(None)
+                        else:
+                            details[tool].append(standard_reducers[sub_extractor])
                 reducer_config[reducer_key]['details'] = details
             if 'dot_freq' in task:
                 reducer_config[reducer_key]['dot_freq'] = task['dot_freq']

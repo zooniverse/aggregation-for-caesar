@@ -7,10 +7,7 @@ def unpack_annotations(annotations, task):
     if task == 'all':
         annotations_list = []
         for value in annotations.values():
-            if isinstance(value, list):
-                annotations_list += value
-            else:
-                annotations_list.append(value)
+            annotations_list += value
     else:
         annotations_list = annotations.get(task, [])
     return annotations_list

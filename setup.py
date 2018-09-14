@@ -42,13 +42,15 @@ setup(
             'sphinx_rtd_theme'
         ],
         'test': [
-            'nose'
+            'nose',
+            'coverage'
         ]
     },
     install_requires=[
         'beautifulsoup4',
         'collatex==2.1.2',
         'hdbscan',
+        'lxml',
         'numpy',
         'nose',
         'pandas',

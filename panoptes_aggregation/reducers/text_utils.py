@@ -42,13 +42,6 @@ def overlap(x, y, tol=0):
     return (x[1] - tol) >= (y[0] + tol) and (y[1] - tol) >= (x[0] + tol)
 
 
-def false_in_middle(a):
-    a = np.array(a)
-    first = np.nonzero(np.cumsum(a) == 1)[0][0]
-    last = np.nonzero(np.cumsum(a[::-1])[::-1] == 1)[0][0]
-    return not a[first:last + 1].all()
-
-
 def gutter(lines_in, tol=0):
     '''Cluster list of input line segments by what side of
     the page gutter they are on.
@@ -67,10 +60,6 @@ def gutter(lines_in, tol=0):
     '''
     if len(lines_in) > 0:
         lines = np.array([[min(l), max(l)] for l in lines_in])
-        # x_line = np.arange(lines.min(), lines.max() + 0.1, 0.1).round(1)
-        # num_overlap = np.array([sum([overlap(l, [x, x]) for l in lines]) for x in x_line])
-        # min_overlap = num_overlap >= min_samples
-        # mask_out = np.array([false_in_middle(min_overlap[np.array([overlap(l, [x, x]) for x in x_line])]) for l in lines])
         overlap_lines = []
         for ldx, l in enumerate(lines):
             if ldx == 0:
@@ -337,6 +326,8 @@ def cluster_by_line(xy_rotate, xy_gutter, text_gutter, annotation_labels, kwargs
         A list of reductions, one for each line. Each reduction is a dictionary
         containing the information for the line.
     '''
+    if kwargs_cluster['dot_freq'] not in ['word', 'line']:
+        raise ValueError('dot_freq needs to be either "word" or "line"')
     lines = xy_rotate[:, 1].reshape(-1, 1)
     words = xy_rotate[:, 0].reshape(-1, 1)
     a_lables = np.unique(annotation_labels)
@@ -354,8 +345,6 @@ def cluster_by_line(xy_rotate, xy_gutter, text_gutter, annotation_labels, kwargs
             clusters_x, clusters_y, clusters_text = cluster_by_word(words[adx], xy_gutter[adx], text_gutter[adx], annotation_labels[adx], kwargs_cluster, kwargs_dbscan)
         elif kwargs_cluster['dot_freq'] == 'line':
             clusters_x, clusters_y, clusters_text = align_words(words[adx], xy_gutter[adx], text_gutter[adx], kwargs_cluster, kwargs_dbscan)
-        else:
-            raise Exception('Not a valid `dot_freq` keyword')
         line_dict = {
             'clusters_x': clusters_x,
             'clusters_y': clusters_y,

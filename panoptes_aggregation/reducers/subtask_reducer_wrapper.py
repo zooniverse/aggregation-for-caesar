@@ -29,8 +29,11 @@ def subtask_wrapper(func):
                                 detail_cluster = detail_array[cluster_labels == label]
                                 detail_reduced = []
                                 for ddx, detail in enumerate(detail_cluster.T):
-                                    reducer = reducers.reducers[details_functions[df][ddx]]
-                                    detail_reduced.append(reducer(detail, no_version=True))
+                                    if details_functions[df][ddx] is None:
+                                        detail_reduced.append('No reducer for this subtask type')
+                                    else:
+                                        reducer = reducers.reducers[details_functions[df][ddx]]
+                                        detail_reduced.append(reducer(detail, no_version=True))
                                 output[frame_key].setdefault(kc, []).append(detail_reduced)
         return output
     return wrapper

@@ -47,13 +47,9 @@ def line_text_extractor(classification, **kwargs):
             text = value['details'][0]['value']
             x = [value['x1'], value['x2']]
             y = [value['y1'], value['y2']]
-            if len(x) > 1:
-                dx = x[-1] - x[0]
-                dy = y[-1] - y[0]
-                slope = np.rad2deg(np.arctan2(dy, dx))
-            else:
-                # default the slope to 0 if only one point was drawn
-                slope = 0
+            dx = x[-1] - x[0]
+            dy = y[-1] - y[0]
+            slope = np.rad2deg(np.arctan2(dy, dx))
             extract[frame]['text'].append([text])
             extract[frame]['points']['x'].append(x)
             extract[frame]['points']['y'].append(y)

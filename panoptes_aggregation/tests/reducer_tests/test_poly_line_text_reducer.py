@@ -738,14 +738,14 @@ TestPLTReducer = ReducerTest(
     okwargs={
         'metric': 'euclidean',
         'gutter_tol': 0,
-        'min_word_count': 1,
-        'dot_freq': 'word'
     },
     kwargs={
         'eps_slope': 25,
         'eps_line': 40,
         'eps_word': 50,
-        'min_samples': 1
+        'min_samples': 1,
+        'dot_freq': 'word',
+        'min_word_count': 1
     }
 )
 
@@ -1174,8 +1174,7 @@ TestPLTReducerByLine = ReducerTest(
     'Test poly-line-text reducer by line',
     okwargs={
         'metric': 'euclidean',
-        'gutter_tol': 0,
-        'min_word_count': 1
+        'gutter_tol': 0
     },
     pkwargs={
         'process_by_line': True
@@ -1186,5 +1185,233 @@ TestPLTReducerByLine = ReducerTest(
         'eps_word': 50,
         'min_samples': 1,
         'dot_freq': 'line',
+        'min_word_count': 1
+    }
+)
+
+reduced_data_min_word = {
+    'frame0': [
+        {
+            'clusters_x': [
+                34.145858764648438,
+                989.0501708984375
+            ],
+            'clusters_y': [
+                298.69424438476562,
+                276.76075744628906
+            ],
+            'clusters_text': [
+                ['', '', '', '', '', '', ''],
+                ['are', 'are', 'are', '', 'are', '', 'are'],
+                ['some', 'some', '', '', 'some', 'some', ''],
+                ['test', 'test', '', 'test', 'test', '', '']
+            ],
+            'number_views': 7,
+            'consensus_score': 4.333333333333333,
+            'gutter_label': 0,
+            'line_slope': -1.5696676279703352,
+            'slope_label': 0
+        },
+        {
+            'clusters_x': [
+                35.421990966796876,
+                984.8629150390625
+            ],
+            'clusters_y': [
+                412.42936401367189,
+                395.20158894856769
+            ],
+            'clusters_text': [
+                ['words', 'words', 'words', 'words', 'words'],
+                ['', '', '', '', ''],
+                ['', '', '', '', ''],
+                ['', '', '', '', '']
+            ],
+            'number_views': 5,
+            'consensus_score': 5.0,
+            'gutter_label': 0,
+            'line_slope': -1.5696676279703352,
+            'slope_label': 0
+        },
+        {
+            'clusters_x': [
+                1138.5966796875,
+                2151.9237670898438
+            ],
+            'clusters_y': [
+                288.12629699707031,
+                270.77890014648438
+            ],
+            'clusters_text': [
+                ['There', 'There', 'There', 'There', '', ''],
+                ['are', 'are', 'are', 'are', 'are', ''],
+                ['two', 'two', 'two', 'two', '', ''],
+                ['columns', 'columns', '', 'columns', '', 'columns']
+            ],
+            'number_views': 6,
+            'consensus_score': 4.25,
+            'gutter_label': 1,
+            'line_slope': -1.5696676279703352,
+            'slope_label': 0
+        },
+        {
+            'clusters_x': [
+                1126.0347900390625,
+                1584.2452392578125
+            ],
+            'clusters_y': [
+                388.82095336914062,
+                377.25601196289062
+            ],
+            'clusters_text': [
+                ['', '', '', ''],
+                ['text.', 'text.', 'text.', 'text.']
+            ],
+            'number_views': 4,
+            'consensus_score': 4.0,
+            'gutter_label': 1,
+            'line_slope': -1.5696676279703352,
+            'slope_label': 0
+        },
+        {
+            'clusters_x': [
+                107.52334594726562,
+                578.0963439941406
+            ],
+            'clusters_y': [
+                538.7662353515625,
+                133.79429626464844
+            ],
+            'clusters_text': [
+                ['', '', '', '', ''],
+                ['is', 'is', 'is', 'is', 'is'],
+                ['this', 'this', 'this', 'this', '']
+            ],
+            'number_views': 5,
+            'consensus_score': 4.5,
+            'gutter_label': 0,
+            'line_slope': -40.020044794251575,
+            'slope_label': 1
+        },
+        {
+            'clusters_x': [
+                245.50492350260416,
+                741.6005452473959
+            ],
+            'clusters_y': [
+                544.3492838541666,
+                126.4166971842448
+            ],
+            'clusters_text': [
+                ['', '', '', ''],
+                ['as', 'as', 'as', 'as'],
+                ['', '', '', '']
+            ],
+            'number_views': 4,
+            'consensus_score': 4.0,
+            'gutter_label': 0,
+            'line_slope': -40.020044794251575,
+            'slope_label': 1
+        },
+        {
+            'clusters_x': [
+                1245.6719563802083,
+                1758.9155578613281
+            ],
+            'clusters_y': [
+                487.72101847330731,
+                60.81561279296875
+            ],
+            'clusters_text': [
+                ['', '', '', '', ''],
+                ['looks', 'looks', 'looks', 'looks', 'looks'],
+                ['like', 'like', 'like', 'like', '']
+            ],
+            'number_views': 5,
+            'consensus_score': 4.5,
+            'gutter_label': 1,
+            'line_slope': -40.020044794251575,
+            'slope_label': 1
+        },
+        {
+            'clusters_x': [
+                1351.9098144531249,
+                1800.1903991699219
+            ],
+            'clusters_y': [
+                528.71669921875002,
+                155.32899475097656
+            ],
+            'clusters_text': [
+                ['a', 'a', 'a', 'a', 'a', ''],
+                ['big', 'big', 'big', 'big', '', ''],
+                ['mess', 'mess', '', 'mess', '', 'mess']
+            ],
+            'number_views': 6,
+            'consensus_score': 4.333333333333333,
+            'gutter_label': 1,
+            'line_slope': -40.020044794251575,
+            'slope_label': 1
+        }
+    ],
+    'frame1': [
+        {
+            'clusters_x': [
+                1.05,
+                250.5
+            ],
+            'clusters_y': [
+                0.94999999999999996,
+                0.94999999999999996
+            ],
+            'clusters_text': [
+                ['', ''],
+                ['', '']
+            ],
+            'number_views': 2,
+            'consensus_score': 0.0,
+            'gutter_label': 0,
+            'line_slope': 0.0,
+            'slope_label': 0
+        }
+    ],
+    'frame2': [
+        {
+            'clusters_x': [1, 250],
+            'clusters_y': [1, 1],
+            'clusters_text': [
+                [''],
+                ['']
+            ],
+            'number_views': 1,
+            'consensus_score': 0.0,
+            'gutter_label': 0,
+            'line_slope': 0.0,
+            'slope_label': 0
+        }
+    ]
+}
+
+TestPLTReducerWithMinWordCount = ReducerTest(
+    poly_line_text_reducer,
+    process_data,
+    extracted_data,
+    processed_data_by_line,
+    reduced_data_min_word,
+    'Test poly-line-text reducer by line with a min word count',
+    okwargs={
+        'metric': 'euclidean',
+        'gutter_tol': 0
+    },
+    pkwargs={
+        'process_by_line': True
+    },
+    kwargs={
+        'eps_slope': 25,
+        'eps_line': 40,
+        'eps_word': 50,
+        'min_samples': 1,
+        'dot_freq': 'line',
+        'min_word_count': 4
     }
 )

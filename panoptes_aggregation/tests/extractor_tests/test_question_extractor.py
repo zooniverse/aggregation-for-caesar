@@ -51,3 +51,34 @@ TestNull = ExtractorTest(
     null_expected,
     'Test null question'
 )
+
+single_classification_two_tasks = {
+    'annotations': [{
+        "task": "T0",
+        "task_label": "A single question 1",
+        "value": "Yes"
+    }, {
+        "task": "T1",
+        "task_label": "A single question 2",
+        "value": "No"
+    }]
+}
+
+single_expected_1 = {'yes': 1}
+single_expected_2 = {'no': 1}
+
+TestSingleTwoTasks = ExtractorTest(
+    extractors.question_extractor,
+    single_classification_two_tasks,
+    single_expected_1,
+    'Test multiple single questions passed in without task keyword'
+)
+
+
+TestSingleTwoTasks = ExtractorTest(
+    extractors.question_extractor,
+    single_classification_two_tasks,
+    single_expected_2,
+    'Test multiple single questions passed in with task keyword',
+    kwargs={'task': 'T1'}
+)
