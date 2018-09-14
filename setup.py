@@ -42,7 +42,8 @@ setup(
             'sphinx_rtd_theme'
         ],
         'test': [
-            'nose'
+            'nose',
+            'coverage'
         ]
     },
     install_requires=[
