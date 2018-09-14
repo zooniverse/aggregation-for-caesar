@@ -50,6 +50,7 @@ setup(
         'beautifulsoup4',
         'collatex==2.1.2',
         'hdbscan',
+        'lxml',
         'numpy',
         'nose',
         'pandas',
