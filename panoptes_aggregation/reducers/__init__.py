@@ -8,6 +8,7 @@ from .poly_line_text_reducer import poly_line_text_reducer
 from .dropdown_reducer import dropdown_reducer
 from .process_kwargs import process_kwargs
 from .sw_variant_reducer import sw_variant_reducer
+from .shape_reducer_dbscan import shape_reducer_dbscan
 
 reducers = {
     'point_reducer': point_reducer,
@@ -18,5 +19,6 @@ reducers = {
     'survey_reducer': survey_reducer,
     'poly_line_text_reducer': poly_line_text_reducer,
     'sw_variant_reducer': sw_variant_reducer,
-    'dropdown_reducer': dropdown_reducer
+    'dropdown_reducer': dropdown_reducer,
+    'shape_reducer_dbscan': shape_reducer_dbscan
 }

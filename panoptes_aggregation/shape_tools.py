@@ -9,5 +9,5 @@ SHAPE_LUT = {
     'rectangle': ['x', 'y', 'width', 'height'],
     'rotateRectangle': ['x', 'y', 'width', 'height', 'angle'],
     'triangle': ['x', 'y', 'r', 'angle'],
-    'fan': ['x', 'y', 'radius', 'rotation', 'spread']
+    'fan': ['x', 'y', 'radius', 'spread', 'rotation']
 }
