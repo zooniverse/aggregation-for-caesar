@@ -13,7 +13,7 @@ from .tool_wrapper import tool_wrapper
 @tool_wrapper
 @subtask_wrapper
 def rectangle_extractor(classification, **kwargs):
-    '''Extact rectangle dtata from annotation
+    '''Extact rectangle data from annotation
 
     Parameters
     ----------
@@ -32,7 +32,7 @@ def rectangle_extractor(classification, **kwargs):
     extract = OrderedDict()
     for annotation in classification['annotations']:
         task_key = annotation['task']
-        for idx, value in enumerate(annotation['value']):
+        for value in annotation['value']:
             key = '{0}_tool{1}'.format(task_key, value['tool'])
             frame = 'frame{0}'.format(value['frame'])
             if ('x' in value) and ('y' in value) and ('width' in value) and ('height' in value):
