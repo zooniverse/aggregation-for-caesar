@@ -26,8 +26,6 @@ Upgrade and existing installation:
 pip install -U panoptes_aggregation
 ```
 
-If you see an error about `Cython` not being installed run `pip install cython` and try `pip install .` again.
-
 ### With Docker
 [https://docs.docker.com/get-started/](https://docs.docker.com/get-started/)
 

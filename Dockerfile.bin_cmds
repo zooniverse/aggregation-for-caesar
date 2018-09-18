@@ -6,9 +6,6 @@ WORKDIR /usr/src/aggregation
 
 RUN pip install --upgrade pip
 
-# this line is still needed until hdbscan pushes to pip next
-RUN pip install cython numpy
-
 # install dependencies
 COPY setup.py .
 RUN pip install .[test]
