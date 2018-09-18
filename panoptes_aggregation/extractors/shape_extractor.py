@@ -27,7 +27,28 @@ SHAPE_LUT = {
 @tool_wrapper
 @subtask_wrapper
 def shape_extractor(classification, **kwargs):
-    '''Extract shape data from annotations'''
+    '''Extract shape data from annotations
+
+    Parameters
+    ----------
+    classification : dict
+        A dictionary containing an `annotations` key that is a list of
+        panoptes annotations
+
+    Keywords
+    --------
+    shape: str (required)
+        A string indicating what shape the annotation contains. This
+        should be the name of one of the pre-defined shape tools.
+
+    Returns
+    -------
+    extraction : dict
+        A dictionary containing one key per frame. Each frame contains
+        the shape defining values for each tool used in the annotation.
+        These are lists that contain one value for each shape drawn for
+        each tool.
+    '''
     extract = OrderedDict()
     if 'shape' not in kwargs:
         raise KeyError('`shape` must be provided as a keyword')
