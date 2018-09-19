@@ -9,6 +9,7 @@ from .dropdown_reducer import dropdown_reducer
 from .process_kwargs import process_kwargs
 from .sw_variant_reducer import sw_variant_reducer
 from .shape_reducer_dbscan import shape_reducer_dbscan
+from .shape_reducer_hdbscan import shape_reducer_hdbscan
 
 reducers = {
     'point_reducer': point_reducer,
@@ -20,5 +21,6 @@ reducers = {
     'poly_line_text_reducer': poly_line_text_reducer,
     'sw_variant_reducer': sw_variant_reducer,
     'dropdown_reducer': dropdown_reducer,
-    'shape_reducer_dbscan': shape_reducer_dbscan
+    'shape_reducer_dbscan': shape_reducer_dbscan,
+    'shape_reducer_hdbscan': shape_reducer_hdbscan
 }

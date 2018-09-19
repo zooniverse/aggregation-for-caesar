@@ -3,6 +3,7 @@ import json
 import urllib
 import copy
 import numpy as np
+from collections import OrderedDict
 from panoptes_aggregation.reducers.utilities import extract_in_data
 from panoptes_aggregation.append_version import append_version
 
@@ -11,6 +12,17 @@ try:
     OFFLINE = False
 except ImportError:
     OFFLINE = True
+
+
+def cast_to_dict(result):
+    if isinstance(result, OrderedDict):
+        result_out = dict(result)
+    else:
+        result_out = result
+    for key in result_out.keys():
+        if isinstance(result_out[key], OrderedDict):
+            result_out[key] = cast_to_dict(result_out[key])
+    return result_out
 
 
 def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs={}, okwargs={}, kwargs={}, processed_type='dict'):
@@ -35,19 +47,19 @@ def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs
             '''Test data processing function'''
             result = processer(self.extracted, **pkwargs)
             if processed_type == 'dict':
-                self.assertDictEqual(dict(result), self.processed)
+                self.assertDictEqual(cast_to_dict(result), self.processed)
             else:
                 self.assertCountEqual(result, self.processed)
 
         def test_original_reducer(self):
             '''Test the reducer function starting with the processed data'''
             result = reducer._original(self.processed, **okwargs, **kwargs)
-            self.assertDictEqual(dict(result), self.reduced)
+            self.assertDictEqual(cast_to_dict(result), self.reduced)
 
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(self.extracted_with_version, **kwargs, **pkwargs)
-            self.assertDictEqual(dict(result), self.reduced_with_vesrion)
+            self.assertDictEqual(cast_to_dict(result), self.reduced_with_vesrion)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_reducer_request(self):
@@ -64,7 +76,7 @@ def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs
                 url_params = ''
             with app.test_request_context(url_params, **request_kwargs):
                 result = reducer(flask.request)
-                self.assertDictEqual(dict(result), self.reduced_with_vesrion)
+                self.assertDictEqual(cast_to_dict(result), self.reduced_with_vesrion)
 
     return ReducerTest
 
@@ -187,7 +199,7 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
         def test_process_data(self):
             '''Test data processing function'''
             result = processer(self.extracted)
-            self.assertDictEqual(dict(result), self.processed)
+            self.assertDictEqual(cast_to_dict(result), self.processed)
 
         def test_original_reducer(self):
             '''Test the reducer function starting with the processed data'''
