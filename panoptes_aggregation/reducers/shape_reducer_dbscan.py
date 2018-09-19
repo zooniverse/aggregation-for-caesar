@@ -34,11 +34,15 @@ def angle_euclidean_metric(a, b):
     return distance
 
 
-def angle_mean(data, angle=False):
+def angle_mean(data, angle=False, kind=None):
     theta = data[:, -1]
-    if angle and (theta.max() - theta.min() > 180):
-        ndx = theta < 0
-        data[ndx, -1] += 360
+    if angle:
+        if (kind == 'angle') and (theta.max() - theta.min() > 180):
+            ndx = theta < 0
+            data[ndx, -1] += 360
+        if (kind == 'rotation') and (theta.max() - theta.min() > 180):
+            ndx = theta > 180
+            data[ndx, -1] -= 360
     return data.mean(axis=0)
 
 
@@ -100,6 +104,8 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
         clusters[frame] = OrderedDict()
         for tool, loc_list in frame_data.items():
             loc = np.array(loc_list)
+            if len(shape_params) == 1:
+                loc = loc.reshape(-1, 1)
             # orignal data points in order used by cluster code
             for pdx, param in enumerate(shape_params):
                 clusters[frame]['{0}_{1}_{2}'.format(tool, shape, param)] = loc[:, pdx].tolist()
@@ -115,7 +121,7 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
                         # number of points in the cluster
                         clusters[frame].setdefault('{0}_clusters_count'.format(tool), []).append(int(idx.sum()))
                         # mean of the cluster
-                        k_loc = angle_mean(loc[idx], angle=angle)
+                        k_loc = angle_mean(loc[idx], angle=angle, kind=shape_params[-1])
                         for pdx, param in enumerate(shape_params):
                             clusters[frame].setdefault('{0}_clusters_{1}'.format(tool, param), []).append(float(k_loc[pdx]))
     return clusters
