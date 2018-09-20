@@ -1,6 +1,6 @@
 '''
-Rectangle Extractor
--------------------
+Shape Extractor
+---------------
 This module provides a function to extract drawn shapes from panoptes annotations.
 '''
 from collections import OrderedDict
@@ -20,11 +20,8 @@ def shape_extractor(classification, **kwargs):
     ----------
     classification : dict
         A dictionary containing an `annotations` key that is a list of
-        panoptes annotations
-
-    Keywords
-    --------
-    shape: str (required)
+        panoptes annotation
+    shape: str, keyword, required
         A string indicating what shape the annotation contains. This
         should be the name of one of the pre-defined shape tools.
 

@@ -1,8 +1,8 @@
 '''
-Point Reducer DBSCAN
---------------------
-This module provides functions to cluster points extracted with
-:mod:`panoptes_aggregation.extractors.point_extractor`.
+Shape Reducer HDBSCAN
+---------------------
+This module provides functions to cluster shapes extracted with
+:mod:`panoptes_aggregation.extractors.shape_extractor`.
 '''
 import numpy as np
 from hdbscan import HDBSCAN

@@ -1,8 +1,8 @@
 '''
-Point Reducer DBSCAN
+Shape Reducer DBSCAN
 --------------------
-This module provides functions to cluster points extracted with
-:mod:`panoptes_aggregation.extractors.point_extractor`.
+This module provides functions to cluster shapes extracted with
+:mod:`panoptes_aggregation.extractors.shape_extractor`.
 '''
 import numpy as np
 from sklearn.cluster import DBSCAN
