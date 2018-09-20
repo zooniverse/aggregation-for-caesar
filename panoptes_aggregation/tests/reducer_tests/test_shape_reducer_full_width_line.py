@@ -1,7 +1,9 @@
 from panoptes_aggregation.reducers.shape_reducer_dbscan import shape_reducer_dbscan
+from panoptes_aggregation.reducers.shape_reducer_hdbscan import shape_reducer_hdbscan
 from .base_test_class import ReducerTestNoProcessing
+import copy
 
-eytracted_data = [
+extracted_data = [
     {
         'frame0': {
             'T0_tool0_y': [0.0, 100.0]
@@ -82,12 +84,34 @@ reduced_data = {
 
 TestShapeReducerFullWidthLine = ReducerTestNoProcessing(
     shape_reducer_dbscan,
-    eytracted_data,
+    extracted_data,
     reduced_data,
-    'Test shape fullWidthLine reducer',
+    'Test shape fullWidthLine reducer with DBSCAN',
     kwargs={
         'eps': 5,
         'min_samples': 2,
+        'shape': 'fullWidthLine'
+    }
+)
+
+reduced_data_hdbscan = copy.deepcopy(reduced_data)
+reduced_data_hdbscan['frame0']['T0_tool0_cluster_probabilities'] = [1, 1, 1, 1]
+reduced_data_hdbscan['frame0']['T0_tool0_clusters_persistance'] = [1, 1]
+reduced_data_hdbscan['frame0']['T0_tool1_cluster_probabilities'] = [1, 1, 1, 1]
+reduced_data_hdbscan['frame0']['T0_tool1_clusters_persistance'] = [1, 1]
+reduced_data_hdbscan['frame1']['T0_tool0_cluster_probabilities'] = [0]
+reduced_data_hdbscan['frame1']['T0_tool1_cluster_probabilities'] = [1, 1]
+reduced_data_hdbscan['frame1']['T0_tool1_clusters_persistance'] = [1]
+
+TestShapeReducerFullWidthLineHdbscan = ReducerTestNoProcessing(
+    shape_reducer_hdbscan,
+    extracted_data,
+    reduced_data_hdbscan,
+    'Test shape fullWidthLine reducer with HDBSCAN',
+    kwargs={
+        'min_cluster_size': 2,
+        'min_samples': 1,
+        'allow_single_cluster': True,
         'shape': 'fullWidthLine'
     }
 )
