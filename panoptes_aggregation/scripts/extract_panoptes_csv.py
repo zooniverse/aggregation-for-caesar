@@ -79,6 +79,8 @@ def extract_csv(classification_csv, config, output='extractions', order=False):
     for cdx, classification in classifications[wdx & vdx].iterrows():
         classification_by_task = annotation_by_task({'annotations': json.loads(classification.annotations)})
         for extractor_name, keywords in extractor_config.items():
+            if 'shape_extractor' in extractor_name:
+                extractor_name = 'shape_extractor'
             for keyword in keywords:
                 if extractor_name in extractors.extractors:
                     try:

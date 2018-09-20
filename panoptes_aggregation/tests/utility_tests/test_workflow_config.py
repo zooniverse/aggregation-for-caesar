@@ -155,11 +155,20 @@ extractor_config = {
             }
         }
     ],
-    'rectangle_extractor': [
+    'shape_extractor_line': [
+        {
+            'task': 'T0',
+            'tools': [1],
+            'details': {},
+            'shape': 'line'
+        }
+    ],
+    'shape_extractor_rectangle': [
         {
             'task': 'T0',
             'tools': [4],
-            'details': {}
+            'details': {},
+            'shape': 'rectangle'
         }
     ],
     'question_extractor': [
@@ -200,7 +209,12 @@ reducer_config = [
         'dot_freq': 'line'
     }},
     {'question_reducer': {}},
-    {'rectangle_reducer': {}},
+    {'shape_reducer_dbscan': {
+        'shape': 'line'
+    }},
+    {'shape_reducer_dbscan': {
+        'shape': 'rectangle'
+    }},
     {'survey_reducer': {}},
 ]
 

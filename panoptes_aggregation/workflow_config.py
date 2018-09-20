@@ -8,7 +8,16 @@ type_to_extractor = {
     'dropdown': 'dropdown_extractor',
     'survey': 'survey_extractor',
     'point': 'point_extractor_by_frame',
-    'rectangle': 'rectangle_extractor'
+    'rectangle': 'shape_extractor',
+    'circle': 'shape_extractor',
+    'column': 'shape_extractor',
+    'ellipse': 'shape_extractor',
+    'fullWidthLine': 'shape_extractor',
+    'fullHeightLine': 'shape_extractor',
+    'line': 'shape_extractor',
+    'rotateRectangle': 'shape_extractor',
+    'triangle': 'shape_extractor',
+    'fan': 'shape_extractor'
 }
 
 standard_reducers = {
@@ -22,7 +31,8 @@ standard_reducers = {
     'line_text_extractor': 'poly_line_text_reducer',
     'poly_line_text_extractor': 'poly_line_text_reducer',
     'sw_extractor': 'poly_line_text_reducer',
-    'sw_variant_extractor': 'sw_variant_reducer'
+    'sw_variant_extractor': 'sw_variant_reducer',
+    'shape_extractor': 'shape_reducer_dbscan'
 }
 
 
@@ -80,8 +90,14 @@ def workflow_extractor_config(tasks, keywords={}):
                     default_config['details'] = {}
                     if tool['type'] in type_to_extractor:
                         extractor_key = type_to_extractor[tool['type']]
+                        shape = None
+                        if extractor_key == 'shape_extractor':
+                            extractor_key = '{0}_{1}'.format(extractor_key, tool['type'])
+                            shape = tool['type']
                         task_config.setdefault(extractor_key, copy.deepcopy(default_config))
                         task_config[extractor_key]['tools'].append(tdx)
+                        if shape is not None:
+                            task_config[extractor_key]['shape'] = shape
                         detail_key = '{0}_tool{1}'.format(task_key, tdx)
                         if len(tool['details']) > 0:
                             details_functions = []
@@ -106,7 +122,10 @@ def workflow_extractor_config(tasks, keywords={}):
 def workflow_reducer_config(extractor_config):
     reducer_config_list = []
     for extractor in sorted(extractor_config.keys()):
-        reducer_key = standard_reducers[extractor]
+        if 'shape_extractor' in extractor:
+            reducer_key = standard_reducers['shape_extractor']
+        else:
+            reducer_key = standard_reducers[extractor]
         reducer_config = {reducer_key: {}}
         if extractor == 'sw_extractor':
             reducer_config[reducer_key]['dot_freq'] = 'line'
@@ -123,5 +142,7 @@ def workflow_reducer_config(extractor_config):
                 reducer_config[reducer_key]['details'] = details
             if 'dot_freq' in task:
                 reducer_config[reducer_key]['dot_freq'] = task['dot_freq']
+            if 'shape' in task:
+                reducer_config[reducer_key]['shape'] = task['shape']
         reducer_config_list.append(reducer_config)
     return reducer_config_list
