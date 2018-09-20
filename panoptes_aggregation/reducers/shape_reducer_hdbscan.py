@@ -10,7 +10,7 @@ from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
 from ..shape_tools import SHAPE_LUT
-from .text_utils import angle_metric
+from .angle_utils import angle_euclidean_metric, angle_mean
 
 
 DEFAULTS = {
@@ -27,25 +27,6 @@ DEFAULTS = {
 DEFAULTS_PROCESS = {
     'shape': {'default': None, 'type': str}
 }
-
-
-def angle_euclidean_metric(a, b):
-    theta_distance_2 = angle_metric(a[-1], b[-1]) ** 2
-    space_distance_2 = (a[:-1] - b[:-1]) ** 2
-    distance = np.sqrt(space_distance_2.sum() + theta_distance_2)
-    return distance
-
-
-def angle_mean(data, angle=False, kind=None):
-    theta = data[:, -1]
-    if angle:
-        if (kind == 'angle') and (theta.max() - theta.min() > 180):
-            ndx = theta < 0
-            data[ndx, -1] += 360
-        if (kind == 'rotation') and (theta.max() - theta.min() > 180):
-            ndx = theta > 180
-            data[ndx, -1] -= 360
-    return data.mean(axis=0)
 
 
 def process_data(data, shape=None):
@@ -94,6 +75,18 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
         A dictionary returned by :meth:`process_data`
     kwrgs :
         `See HDBSCAN <http://hdbscan.readthedocs.io/en/latest/api.html#hdbscan>`_
+
+    Returns
+    -------
+    reduction : dict
+        A dictinary with the following keys for each frame
+
+        * `tool*_<shape>_<param>` : A list of **all** `param` for the `sahpe` drawn with `tool*`
+        * `tool*_cluster_labels` : A list of cluster labels for **all** shapes drawn with `tool*`
+        * `tool*_cluster_probabilities`: A list of cluster probabilities for **all** points drawn with `tool*`
+        * `tool*_clusters_persistance`: A mesure for how persistent each **cluster** is (1.0 = stable, 0.0 = unstable)
+        * `tool*_clusters_count` : The number of points in each **cluster** found
+        * `tool*_clusters_<param>` : The `param` value for each **cluster** found
     '''
     shape = data_by_tool.pop('shape')
     shape_params = SHAPE_LUT[shape]

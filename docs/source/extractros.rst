@@ -21,6 +21,11 @@ Extractors
 
 ----
 
+.. automodule:: panoptes_aggregation.extractors.shape_extractor
+  :members:
+
+----
+
 .. automodule:: panoptes_aggregation.extractors.survey_extractor
   :members:
 
