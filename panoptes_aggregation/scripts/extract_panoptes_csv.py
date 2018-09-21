@@ -3,7 +3,6 @@
 from collections import OrderedDict
 import copy
 import json
-import math
 import io
 import yaml
 import os
@@ -79,10 +78,13 @@ def extract_csv(classification_csv, config, output='extractions', order=False):
     for cdx, classification in classifications[wdx & vdx].iterrows():
         classification_by_task = annotation_by_task({'annotations': json.loads(classification.annotations)})
         for extractor_name, keywords in extractor_config.items():
+            extractor_key = extractor_name
+            if 'shape_extractor' in extractor_name:
+                extractor_key = 'shape_extractor'
             for keyword in keywords:
-                if extractor_name in extractors.extractors:
+                if extractor_key in extractors.extractors:
                     try:
-                        extract = extractors.extractors[extractor_name](copy.deepcopy(classification_by_task), **keyword)
+                        extract = extractors.extractors[extractor_key](copy.deepcopy(classification_by_task), **keyword)
                     except:
                         print()
                         print('Incorrectly formatted annotation')

@@ -26,6 +26,16 @@ Reducers
 
 ----
 
+.. automodule:: panoptes_aggregation.reducers.shape_reducer_dbscan
+  :members:
+
+----
+
+.. automodule:: panoptes_aggregation.reducers.shape_reducer_hdbscan
+  :members:
+
+----
+
 .. automodule:: panoptes_aggregation.reducers.survey_reducer
   :members:
 
