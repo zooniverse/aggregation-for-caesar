@@ -43,6 +43,7 @@ extracted_data = [
 
 processed_data = {
     'shape': 'column',
+    'symetric': False,
     'frame0': {
         'T0_tool0': [
             (0.0, 0.0),

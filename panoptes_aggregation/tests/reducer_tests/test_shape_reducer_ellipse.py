@@ -64,6 +64,7 @@ extracted_data = [
 
 processed_data = {
     'shape': 'ellipse',
+    'symetric': False,
     'frame0': {
         'T0_tool0': [
             (0.0, 0.0, 50.0, 60.0, 179.0),
