@@ -36,6 +36,7 @@ extracted_data = [
 
 processed_data = {
     'shape': 'fullHeightLine',
+    'symmetric': False,
     'frame0': {
         'T0_tool0': [
             (0.0),
