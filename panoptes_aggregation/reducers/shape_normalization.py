@@ -1,6 +1,3 @@
-import numpy as np
-
-
 def ellipse_normalize(params):
     x, y, rx, ry, angle = params
     if ry <= rx:
@@ -11,13 +8,13 @@ def ellipse_normalize(params):
         major = ry
         minor = rx
         angle = (angle - 90) % 180
-    return [x, y, major, minor, angle]
+    return (x, y, major, minor, angle)
 
 
 def line_normalize(params):
     x1, y1, x2, y2 = params
-    forward = [x1, y1, x2, y2]
-    backwards = [x2, y2, x1, y1]
+    forward = (x1, y1, x2, y2)
+    backwards = (x2, y2, x1, y1)
     if x1 < x2:
         return forward
     elif x1 > x2:
@@ -43,12 +40,12 @@ def rotate_rectangle_normalize(params):
         width = height_in
         height = width_in
         angle = (angle - 90) % 180
-    return [x, y, width, height, angle]
+    return (x, y, width, height, angle)
 
 
 def triangle_normalize(params):
     x, y, r, angle = params
-    return [x, y, r, angle % 120]
+    return (x, y, r, angle % 120)
 
 
 SHAPE_NORMALIZATION = {

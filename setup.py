@@ -60,7 +60,7 @@ setup(
         'pyyaml',
         'scikit-image',
         'scikit-learn',
-        'scipy',
+        'scipy>=1.1.0',
         'werkzeug'
     ]
 )

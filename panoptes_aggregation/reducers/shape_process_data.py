@@ -5,11 +5,11 @@ import numpy as np
 
 DEFAULTS_PROCESS = {
     'shape': {'default': None, 'type': str},
-    'symetric': {'default': False, 'type': bool}
+    'symmetric': {'default': False, 'type': bool}
 }
 
 
-def process_data(data, shape=None, symetric=False):
+def process_data(data, shape=None, symmetric=False):
     '''Process a list of extractions into lists of `x` and `y` sorted by `tool`
 
     Parameters
@@ -32,7 +32,7 @@ def process_data(data, shape=None, symetric=False):
     unique_frames = set(sum([list(d.keys()) for d in data], []))
     data_by_tool = {
         'shape': shape,
-        'symetric': symetric
+        'symmetric': symmetric
     }
     for frame in unique_frames:
         data_by_tool[frame] = {}
@@ -44,7 +44,7 @@ def process_data(data, shape=None, symetric=False):
                     keys = ['{0}_{1}'.format(tool, param) for param in shape_params]
                     if np.all([k in d[frame] for k in keys]):
                         params_list = list(zip(*(d[frame][k] for k in keys)))
-                        if symetric and shape in SHAPE_NORMALIZATION:
+                        if symmetric and shape in SHAPE_NORMALIZATION:
                             params_list = [SHAPE_NORMALIZATION[shape](p) for p in params_list]
                         data_by_tool[frame][tool] += params_list
     return data_by_tool

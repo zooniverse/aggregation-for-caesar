@@ -47,8 +47,8 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
     '''
     shape = data_by_tool.pop('shape')
     shape_params = SHAPE_LUT[shape]
-    symetric = data_by_tool.pop('symetric')
-    metric, avg = get_shape_metric_and_avg(shape, symetric=symetric)
+    symmetric = data_by_tool.pop('symmetric')
+    metric, avg = get_shape_metric_and_avg(shape, symmetric=symmetric)
     kwargs['metric'] = metric
     clusters = OrderedDict()
     for frame, frame_data in data_by_tool.items():
