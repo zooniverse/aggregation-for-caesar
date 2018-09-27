@@ -17,6 +17,13 @@ def process_data(data, shape=None, symmetric=False):
     data : list
         A list of extractions crated by
         :meth:`panoptes_aggregation.extractors.shape_extractor.shape_extractor`
+    shape: str, keyword, required
+        A string indicating what shape the extractions contain. This
+        should be the name of one of the pre-defined shape tools.
+    symmetric: bool, keyword, optional
+        If `True` the extracts will be normalized to account for shape
+        symmetries. E.g. an ellipse draw with `angle=180` is normalized
+        to have `angle=0`.
 
     Returns
     -------
