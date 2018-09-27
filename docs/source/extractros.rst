@@ -6,6 +6,11 @@ Extractors
 
 ----
 
+.. automodule:: panoptes_aggregation.extractors.slider_extractor
+  :members:
+
+----
+
 .. automodule:: panoptes_aggregation.extractors.point_extractor
   :members:
 

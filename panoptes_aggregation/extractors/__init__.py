@@ -10,6 +10,7 @@ from .sw_variant_extractor import sw_variant_extractor
 from .sw_graphic_extractor import sw_graphic_extractor
 from .dropdown_extractor import dropdown_extractor
 from .shape_extractor import shape_extractor
+from .slider_extractor import slider_extractor
 
 extractors = {
     'point_extractor': point_extractor,
@@ -23,5 +24,6 @@ extractors = {
     'sw_variant_extractor': sw_variant_extractor,
     'sw_graphic_extractor': sw_graphic_extractor,
     'dropdown_extractor': dropdown_extractor,
-    'shape_extractor': shape_extractor
+    'shape_extractor': shape_extractor,
+    'slider_extractor': slider_extractor
 }
