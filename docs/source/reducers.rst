@@ -6,6 +6,11 @@ Reducers
 
 ----
 
+.. automodule:: panoptes_aggregation.reducers.slider_reducer
+  :members:
+
+----
+
 .. automodule:: panoptes_aggregation.reducers.point_reducer
   :members:
 

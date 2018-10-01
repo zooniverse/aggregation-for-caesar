@@ -17,7 +17,8 @@ type_to_extractor = {
     'line': 'shape_extractor',
     'rotateRectangle': 'shape_extractor',
     'triangle': 'shape_extractor',
-    'fan': 'shape_extractor'
+    'fan': 'shape_extractor',
+    'slider': 'slider_extractor'
 }
 
 standard_reducers = {
@@ -32,7 +33,8 @@ standard_reducers = {
     'poly_line_text_extractor': 'poly_line_text_reducer',
     'sw_extractor': 'poly_line_text_reducer',
     'sw_variant_extractor': 'sw_variant_reducer',
-    'shape_extractor': 'shape_reducer_dbscan'
+    'shape_extractor': 'shape_reducer_dbscan',
+    'slider_extractor': 'slider_reducer'
 }
 
 

@@ -17,6 +17,8 @@ Basic task types
 +--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 | Dropdown           | :mod:`panoptes_aggregation.extractors.dropdown_extractor`            | :mod:`panoptes_aggregation.reducers.dropdown_reducer`                                 |
 +--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Slider             | :mod:`panoptes_aggregation.extractors.slider_extractor`              | :mod:`panoptes_aggregation.reducers.slider_reducer`                                   |
++--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 | Survey             | :mod:`panoptes_aggregation.extractors.survey_extractor`              | :mod:`panoptes_aggregation.reducers.survey_reducer`                                   |
 +--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 | Point              | :mod:`panoptes_aggregation.extractors.point_extractor_by_frame`      | :mod:`panoptes_aggregation.reducers.point_reducer_dbscan` (includes cov information)  |

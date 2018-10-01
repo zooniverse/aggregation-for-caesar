@@ -135,6 +135,13 @@ tasks = {
             {'label': 'T6.answers.0.label'},
             {'label': 'T6.answers.1.label'}
         ]
+    },
+    'T7': {
+        'type': 'slider',
+        'instruction': 'T7.instruction',
+        'max': '3',
+        'min': '1.5',
+        'step': '0.01'
     }
 }
 keywords = {
@@ -190,6 +197,9 @@ extractor_config = {
             'task': 'T5',
             'dot_freq': 'word'
         }
+    ],
+    'slider_extractor': [
+        {'task': 'T7'}
     ]
 }
 reducer_config = [
@@ -215,7 +225,8 @@ reducer_config = [
     {'shape_reducer_dbscan': {
         'shape': 'rectangle'
     }},
-    {'survey_reducer': {}},
+    {'slider_reducer': {}},
+    {'survey_reducer': {}}
 ]
 
 
