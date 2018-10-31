@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 from collections import OrderedDict
 import copy
 import io
@@ -41,7 +39,15 @@ def get_file_instance(file):
     return file
 
 
-def reduce_csv(extracted_csv, reducer_config, filter='first', output='reductions', order=False, stream=False):
+def reduce_csv(
+            extracted_csv,
+            reducer_config,
+            filter='first',
+            output_name='reductions',
+            output_dir=os.path.abspath('.'),
+            order=False,
+            stream=False
+        ):
     extracted_csv = get_file_instance(extracted_csv)
     with extracted_csv as extracted_csv_in:
         extracted = pandas.read_csv(extracted_csv_in, infer_datetime_format=True, parse_dates=['created_at'], encoding='utf-8')
@@ -62,15 +68,14 @@ def reduce_csv(extracted_csv, reducer_config, filter='first', output='reductions
         keywords = value
     assert (reducer_name in reducers.reducers), 'The reducer in the config files does not exist.'
 
-    output_path, output_base = os.path.split(output)
-    output_base_name, output_ext = os.path.splitext(output_base)
-    output_name = os.path.join(output_path, '{0}_{1}.csv'.format(reducer_name, output_base_name))
+    output_base_name, output_ext = os.path.splitext(output_name)
+    output_path = os.path.join(output_dir, '{0}_{1}.csv'.format(reducer_name, output_base_name))
 
     if stream:
-        if os.path.isfile(output_name):
+        if os.path.isfile(output_path):
             print('resuming from last run')
             resume = True
-            with open(output_name, 'r', encoding='utf-8') as reduced_file:
+            with open(output_path, 'r', encoding='utf-8') as reduced_file:
                 reduced_csv = pandas.read_csv(reduced_file, encoding='utf-8')
                 subjects = np.setdiff1d(subjects, reduced_csv.subject_id)
 
@@ -118,81 +123,23 @@ def reduce_csv(extracted_csv, reducer_config, filter='first', output='reductions
                 reduced_data['data'].append(reduction)
         if stream:
             if (sdx == 0) and (not resume):
-                pandas.DataFrame(reduced_data).to_csv(output_name, mode='w', index=False, encoding='utf-8')
+                pandas.DataFrame(reduced_data).to_csv(output_path, mode='w', index=False, encoding='utf-8')
             else:
-                pandas.DataFrame(reduced_data).to_csv(output_name, mode='a', index=False, header=False, encoding='utf-8')
+                pandas.DataFrame(reduced_data).to_csv(output_path, mode='a', index=False, header=False, encoding='utf-8')
             reduced_data = copy.deepcopy(blank_reduced_data)
         pbar.update(sdx + 1)
     pbar.finish()
 
     if stream:
-        reduced_csv = pandas.read_csv(output_name, encoding='utf-8')
+        reduced_csv = pandas.read_csv(output_path, encoding='utf-8')
         if 'data' in reduced_csv:
             reduced_csv.data = reduced_csv.data.apply(eval)
             flat_reduced_data = flatten_data(reduced_csv)
         else:
-            return output_name
+            return output_path
     else:
         flat_reduced_data = flatten_data(reduced_data)
     if order:
         flat_reduced_data = order_columns(flat_reduced_data, front=['choice', 'total_vote_count', 'choice_count'])
-    flat_reduced_data.to_csv(output_name, index=False, encoding='utf-8')
-    return output_name
-
-
-def main():
-    import argparse
-    parser = argparse.ArgumentParser(
-        description="reduce data from panoptes classifications based on the extracted data (see extract_panoptes_csv)"
-    )
-    parser.add_argument(
-        "extracted_csv",
-        help="the extracted csv file output from extract_panoptes_csv",
-        type=argparse.FileType('r', encoding='utf-8')
-    )
-    parser.add_argument(
-        "reducer_config",
-        help="the reducer yaml file output from config_workflow_panoptes",
-        type=argparse.FileType('r', encoding='utf-8')
-    )
-    parser.add_argument(
-        "-F",
-        "--filter",
-        help="how to filter a user making multiple classifications for one subject",
-        type=str,
-        choices=['first', 'last', 'all'],
-        default='fisrt'
-    )
-    parser.add_argument(
-        "-O",
-        "--order",
-        help="arrange the data columns in alphabetical order before saving",
-        action="store_true"
-    )
-    parser.add_argument(
-        "-o",
-        "--output",
-        help="the base name for output csv file to store the reductions",
-        type=str,
-        default="reductions"
-    )
-    parser.add_argument(
-        "-s",
-        "--stream",
-        help="stream output to csv after each reduction (this is slower but is resumable)",
-        action="store_true"
-    )
-    args = parser.parse_args()
-
-    reduce_csv(
-        args.extracted_csv,
-        args.reducer_config,
-        filter=args.filter,
-        output=args.output,
-        order=args.order,
-        stream=args.stream
-    )
-
-
-if __name__ == "__main__":
-    main()
+    flat_reduced_data.to_csv(output_path, index=False, encoding='utf-8')
+    return output_path
