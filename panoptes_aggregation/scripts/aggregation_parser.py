@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-from config_workflow_panoptes import config_workflow
-from extract_panoptes_csv import extract_csv, progressbar as pbe
-from reduce_panoptes_csv import reduce_csv, progressbar as pbr
-import argparse
-from path_type import PathType
+from .config_workflow_panoptes import config_workflow
+from .extract_panoptes_csv import extract_csv, progressbar as pbe
+from .reduce_panoptes_csv import reduce_csv, progressbar as pbr
+from .path_type import PathType
 from gooey import GooeyParser
+import argparse
 import json
 import os
 
@@ -39,7 +39,7 @@ def main():
     )
     config_keywords = config_parser.add_argument_group(
         'Other keywords',
-        'Addional keywords to be passed into the configuration files',
+        'Additional keywords to be passed into the configuration files',
         gooey_options={
             'show_border': False,
             'columns': 1
@@ -69,7 +69,7 @@ def main():
     config_save_files.add_argument(
         "-o",
         "--output",
-        help="The directory to save the configuraiton files to",
+        help="The directory to save the configuration files to",
         type=PathType(type='dir'),
         default=os.path.abspath('.'),
         widget='DirChooser'
@@ -112,14 +112,14 @@ def main():
         help="Extract data from panoptes classifications based on the workflow"
     )
     extract_load_files = extract_parser.add_argument_group(
-        'Load classification and configuraiton files',
+        'Load classification and configuration files',
         gooey_options={
             'show_border': False,
             'columns': 1
         }
     )
     extract_save_files = extract_parser.add_argument_group(
-        'What direcotry and base name should be used for the extractions',
+        'What directory and base name should be used for the extractions',
         gooey_options={
             'show_border': False,
             'columns': 1
@@ -172,14 +172,14 @@ def main():
         help="reduce data from panoptes classifications based on the extracted data"
     )
     reduce_load_files = reduce_parser.add_argument_group(
-        'Load extraction and configuraiton files',
+        'Load extraction and configuration files',
         gooey_options={
             'show_border': False,
             'columns': 1
         }
     )
     reduce_save_files = reduce_parser.add_argument_group(
-        'What direcotry and base name should be used for the reductions',
+        'What directory and base name should be used for the reductions',
         gooey_options={
             'show_border': False,
             'columns': 1
@@ -200,7 +200,7 @@ def main():
     )
     reduce_load_files.add_argument(
         "reducer_config",
-        help="The reducer configuraiton file",
+        help="The reducer configuration file",
         type=argparse.FileType('r', encoding='utf-8'),
         widget='FileChooser'
     )
