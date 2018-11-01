@@ -8,6 +8,7 @@ except FileNotFoundError:
 
 setup(
     name='panoptes_aggregation',
+    python_requires='>=3',
     version='2.0.0',
     description='Aggregation code for Zooniverse panoptes projects.',
     long_description=long_description,
