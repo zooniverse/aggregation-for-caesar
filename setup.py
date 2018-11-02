@@ -25,8 +25,10 @@ setup(
     tests_require=['nose'],
     entry_points={
         'console_scripts': [
-            'panoptes_aggregation=panoptes_aggregation.scripts.aggregation_parser:main',
-            'panoptes_aggregation_gui=panoptes_aggregation.scripts.gui:gui'
+            'panoptes_aggregation = panoptes_aggregation.scripts.aggregation_parser:main'
+        ],
+        'gui_scripts': [
+            'panoptes_aggregation_gui = panoptes_aggregation.scripts.gui:gui'
         ]
     },
     packages=find_packages(),

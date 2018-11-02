@@ -1,9 +1,9 @@
 #!/usr/bin/env pythonw
 
 import gooey
-from gui_overrides import gui_override, pbar_override
-from aggregation_parser import main, pbe, pbr
 import os
+from .gui_overrides import gui_override, pbar_override
+from .aggregation_parser import main, pbe, pbr
 
 pbar_override(pbe)
 pbar_override(pbr)
