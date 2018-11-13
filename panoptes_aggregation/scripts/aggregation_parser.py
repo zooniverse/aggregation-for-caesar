@@ -64,8 +64,8 @@ def main():
         widget='FileChooser'
     )
     config_save_files.add_argument(
-        "-o",
-        "--output",
+        "-d",
+        "--dir",
         help="The directory to save the configuration files to",
         type=panoptes_aggregation.scripts.PathType(type='dir'),
         default=os.path.abspath('.'),
@@ -248,7 +248,7 @@ def main():
             workflow_content=args.workflow_content,
             minor_version=args.minor_version,
             language=args.language,
-            output_dir=args.output
+            output_dir=args.dir
         )
     elif args.subparser == 'extract':
         panoptes_aggregation.scripts.extract_csv(
