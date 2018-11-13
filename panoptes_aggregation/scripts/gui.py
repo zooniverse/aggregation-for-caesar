@@ -2,12 +2,11 @@
 
 import gooey
 import os
-from .gui_overrides import gui_override, pbar_override
-from .aggregation_parser import main, pbe, pbr
+import panoptes_aggregation
 
-pbar_override(pbe)
-pbar_override(pbr)
-gui_override(gooey)
+panoptes_aggregation.scripts.pbar_override(panoptes_aggregation.scripts.pbe)
+panoptes_aggregation.scripts.pbar_override(panoptes_aggregation.scripts.pbr)
+panoptes_aggregation.scripts.gui_override(gooey)
 
 current_folder = os.path.dirname(os.path.abspath(__file__))
 
@@ -18,7 +17,7 @@ gui = gooey.Gooey(
     terminal_font_family="Consolas",
     navigation='TABBED',
     image_dir=os.path.join(current_folder, 'icons')
-)(main)
+)(panoptes_aggregation.scripts.parser_main)
 
 if __name__ == '__main__':
     gui()

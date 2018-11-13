@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 
-from .config_workflow_panoptes import config_workflow
-from .extract_panoptes_csv import extract_csv, progressbar as pbe
-from .reduce_panoptes_csv import reduce_csv, progressbar as pbr
-from .path_type import PathType
 from gooey import GooeyParser
+import panoptes_aggregation
 import argparse
 import json
 import os
@@ -70,7 +67,7 @@ def main():
         "-o",
         "--output",
         help="The directory to save the configuration files to",
-        type=PathType(type='dir'),
+        type=panoptes_aggregation.scripts.PathType(type='dir'),
         default=os.path.abspath('.'),
         widget='DirChooser'
     )
@@ -148,7 +145,7 @@ def main():
         "-d",
         "--dir",
         help="The directory to save the extraction file(s) to",
-        type=PathType(type='dir'),
+        type=panoptes_aggregation.scripts.PathType(type='dir'),
         default=os.path.abspath('.'),
         widget='DirChooser'
     )
@@ -222,7 +219,7 @@ def main():
         "-d",
         "--dir",
         help="The directory to save the reduction file to",
-        type=PathType(type='dir'),
+        type=panoptes_aggregation.scripts.PathType(type='dir'),
         default=os.path.abspath('.'),
         widget='DirChooser'
     )
@@ -243,7 +240,7 @@ def main():
 
     args = parser.parse_args()
     if args.subparser == 'config':
-        config_workflow(
+        panoptes_aggregation.scripts.config_workflow(
             args.workflow_csv,
             args.workflow_id,
             version=args.version,
@@ -254,7 +251,7 @@ def main():
             output_dir=args.output
         )
     elif args.subparser == 'extract':
-        extract_csv(
+        panoptes_aggregation.scripts.extract_csv(
             args.classification_csv,
             args.extractor_config,
             output_name=args.output,
@@ -262,7 +259,7 @@ def main():
             order=args.order
         )
     elif args.subparser == 'reduce':
-        reduce_csv(
+        panoptes_aggregation.scripts.reduce_csv(
             args.extracted_csv,
             args.reducer_config,
             filter=args.filter,
