@@ -8,7 +8,7 @@ You will need two to three files from your project for offline use:
  - The workflow contents (optional): The `Request new workflow contents export` button from the lab's `Data Export` tab.  This file is used to make a look up table between the column names used for each task/answer/tool and the original text used for them on the project.
 
 ### Example: Penguin Watch
-Penguin Watch has several workflows, for this example we will look at workflow number 6465 (time lapse cameras) and version `57.76`.  The downloaded files for this project are:
+Penguin Watch has several workflows, for this example we will look at workflow number 6465 (time lapse cameras) and version `52.76`.  The downloaded files for this project are:
  - `penguin-watch-workflows.csv`: the workflow file (contains the major version number as a column)
  - `penguin-watch-workflow_contents.csv`: the workflow contents file (contains the minor version number as a column)
  - `time-lapse-cameras-classifications-trim.csv`: the classification file for workflow 6465
@@ -93,14 +93,14 @@ Save Config Files:
 
 ### Example: Penguin Watch
 ```bash
-panoptes_aggregation config penguin-watch-workflows.csv 6465 -v 57 -c penguin-watch-workflow_contents.csv -m 76
+panoptes_aggregation config penguin-watch-workflows.csv 6465 -v 52 -c penguin-watch-workflow_contents.csv -m 76
 ```
 
 This creates four files:
- - `Extractor_config_workflow_6465_V57.yaml`: The configuration for the extractor code
- - `Reducer_config_workflow_6465_V57_point_extractor_by_frame.yaml`: The configuration for the reducer used for the point task
- - `Reducer_config_workflow_6465_V57_question_extractor.yaml`: The configuration for the reducer used for the question task
- - `Task_labels_workflow_6465_V57.76.yaml`: A lookup table to translate the column names used in the extractor/reducer output files into the text originally used on the workflow.
+ - `Extractor_config_workflow_6465_V52.yaml`: The configuration for the extractor code
+ - `Reducer_config_workflow_6465_V52_point_extractor_by_frame.yaml`: The configuration for the reducer used for the point task
+ - `Reducer_config_workflow_6465_V52_question_extractor.yaml`: The configuration for the reducer used for the question task
+ - `Task_labels_workflow_6465_V52.76.yaml`: A lookup table to translate the column names used in the extractor/reducer output files into the text originally used on the workflow.
 
 ---
 
@@ -139,20 +139,21 @@ Other options:
 Before starting let's take a closer look at the extractor configuration file `Extractor_config_workflow_6465_V52.yaml`:
 ```yaml
 extractor_config:
-  point_extractor_by_frame:
-  - details:
-      T0_tool3:
-      - question_extractor
-    task: T0
-    tools:
-    - 0
-    - 1
-    - 2
-    - 3
-  question_extractor:
-  - task: T1
+    point_extractor_by_frame:
+    -   details:
+            T0_tool3:
+            - question_extractor
+        task: T0
+        tools:
+        - 0
+        - 1
+        - 2
+        - 3
+    question_extractor:
+    -   task: T6
+    -   task: T1
 workflow_id: 6465
-workflow_version: 57
+workflow_version: '52.76'
 ```
 This shows the basic setup for what extractor will be used for each task.  From this configuration we can see that the point extractor will be used for each of the tools in task `T0`, `tool3` of that task will have the question extractor run on its sub-task, and a question extractor will be used for tasks `T1`.  If any of these extractions are not desired they can be deleted from this file before running the extractor.  In this case task `T4` was on the original workflow but was never used on the final project, I have already removed it from the configuration above.
 
@@ -205,32 +206,32 @@ Reducer options:
 For this example we will do the point clustering for the task `T0`.  Let's take a look at the default config file for that reducer `Reducer_config_workflow_6465_V52_point_extractor_by_frame.yaml`:
 ```yaml
 reducer_config:
-  point_reducer_dbscan:
-    details:
-      T0_tool3:
-      - question_reducer
+    point_reducer_dbscan:
+        details:
+            T0_tool3:
+            - question_reducer
 ```
 
 As we can see, the default reducer is `point_reducer_dbscan` and the only keyword specified is the only associated with the sub-task of `tool3`.  To get better results we will add some clustering keywords to the configuration of `DBSCAN`:
 ```yaml
 reducer_config:
-  point_reducer_dbscan:
-    eps: 5
-    min_samples: 3
-    details:
-      T0_tool3:
-      - question_reducer
+    point_reducer_dbscan:
+        eps: 5
+        min_samples: 3
+        details:
+            T0_tool3:
+            - question_reducer
 ```
 
 But for this project there is a large amount of depth-of-field in the images, leading to a non-constant density of point clusters across the images (more dense in the background of the image and less dense in the foreground).  This means that `HDBSCAN` will work better:
 ```yaml
 reducer_config:
-  point_reducer_hdbscan:
-    min_cluster_size: 4
-    min_samples: 3
-    details:
-      T0_tool3:
-      - question_reducer
+    point_reducer_hdbscan:
+        min_cluster_size: 4
+        min_samples: 3
+        details:
+            T0_tool3:
+            - question_reducer
 ```
 
 Now that it is set up we can run:
