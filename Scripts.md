@@ -93,14 +93,14 @@ Save Config Files:
 
 ### Example: Penguin Watch
 ```bash
-panoptes_aggregation config penguin-watch-workflows.csv 6465 -v 52 -c penguin-watch-workflow_contents.csv -m 76
+panoptes_aggregation config penguin-watch-workflows.csv 6465 -v 57 -c penguin-watch-workflow_contents.csv -m 76
 ```
 
 This creates four files:
- - `Extractor_config_workflow_6465_V52.yaml`: The configuration for the extractor code
- - `Reducer_config_workflow_6465_V52_point_extractor_by_frame.yaml`: The configuration for the reducer used for the point task
- - `Reducer_config_workflow_6465_V52_question_extractor.yaml`: The configuration for the reducer used for the question task
- - `Task_labels_workflow_6465_V52.76.yaml`: A lookup table to translate the column names used in the extractor/reducer output files into the text originally used on the workflow.
+ - `Extractor_config_workflow_6465_V57.yaml`: The configuration for the extractor code
+ - `Reducer_config_workflow_6465_V57_point_extractor_by_frame.yaml`: The configuration for the reducer used for the point task
+ - `Reducer_config_workflow_6465_V57_question_extractor.yaml`: The configuration for the reducer used for the question task
+ - `Task_labels_workflow_6465_V57.76.yaml`: A lookup table to translate the column names used in the extractor/reducer output files into the text originally used on the workflow.
 
 ---
 
@@ -152,7 +152,7 @@ extractor_config:
   question_extractor:
   - task: T1
 workflow_id: 6465
-workflow_version: 52
+workflow_version: 57
 ```
 This shows the basic setup for what extractor will be used for each task.  From this configuration we can see that the point extractor will be used for each of the tools in task `T0`, `tool3` of that task will have the question extractor run on its sub-task, and a question extractor will be used for tasks `T1`.  If any of these extractions are not desired they can be deleted from this file before running the extractor.  In this case task `T4` was on the original workflow but was never used on the final project, I have already removed it from the configuration above.
 
