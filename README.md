@@ -26,6 +26,28 @@ Upgrade and existing installation:
 pip install -U panoptes_aggregation
 ```
 
+### Mac anaconda build
+If you are installing this code on a Mac using the anaconda build of python and you want to use the GUI instead of the command line you will have to update one line of the of code in the `panoptes_aggregation_gui` script.  The the first line from:
+```python
+#!/path/to/anaconda/python/bin/python
+```
+to:
+```python
+#!/bin/bash /path/to/anaconda/python/bin/pythonw
+```
+
+You can find the location of this file with the command:
+```bash
+which panoptes_aggregation_gui
+```
+
+### Windows anaconda build
+On windows computers using the anaconda build of python you may need to install two of the dependencies using the `conda` package manager before installing `panoptes_aggregation`:
+```bash
+conda install -c conda-forge python-levenshtein hdbscan
+pip install panoptes_aggregation
+```
+
 ### With Docker
 [https://docs.docker.com/get-started/](https://docs.docker.com/get-started/)
 
