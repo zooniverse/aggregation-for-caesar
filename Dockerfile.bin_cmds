@@ -15,7 +15,7 @@ RUN apt-get -y install \
  libgstreamer-plugins-base1.0-dev \
  freeglut3 \
  freeglut3-dev \
- libnotify-dev \
+ libnotify-dev
 RUN pip install --upgrade pip
 RUN pip install wxPython-4.0.3-cp35-cp35m-linux_x86_64.whl
 
