@@ -64,8 +64,8 @@ docker-compose -f docker-compose.local_scripts.yml build local_scripts
 From the root directory of this repository, run the desired python scripts using the docker image, e.g. `config_workflow_panoptes --help`
 ```
 docker-compose -f docker-compose.local_scripts.yml run --rm local_scripts panoptes_aggregation --help
-
 ```
+
 **Or directly via docker**
 ```
 docker build . -f Dockerfile.bin_cmds -t aggregation_for_caesar
@@ -74,6 +74,8 @@ From the root directory of this repository, run the desired python scripts using
 ```
 docker run -it --rm --name config_workflow_panoptes -v "$PWD":/usr/src/aggregation aggregation_for_caesar panoptes_aggregation --help
 ```
+
+**Note** The GUI does not work inside a docker container.
 
 ---
 
