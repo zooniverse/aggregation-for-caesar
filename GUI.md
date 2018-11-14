@@ -13,7 +13,7 @@ Penguin Watch has several workflows, for this example we will look at workflow n
  - `penguin-watch-workflow_contents.csv`: the workflow contents file (contains the minor version number as a column)
  - `time-lapse-cameras-classifications-trim.csv`: the classification file for workflow 6465
 
-This [zip folder](https://drive.google.com/file/d/177uXdt3IRIOc2b42UvG4EdNJv973RCtS/view?usp=sharing) contains to these files.
+This [zip folder](https://drive.google.com/file/d/177uXdt3IRIOc2b42UvG4EdNJv973RCtS/view?usp=sharing) contains these files.
 
 ## Launching the GUI
 Open a terminal and type:
