@@ -46,12 +46,14 @@ setup(
         'test': [
             'nose',
             'coverage'
+        ],
+        'gui': [
+            'Gooey'
         ]
     },
     install_requires=[
         'beautifulsoup4',
         'collatex==2.1.2',
-        'Gooey',
         'hdbscan',
         'lxml',
         'numpy>=1.14.5',
