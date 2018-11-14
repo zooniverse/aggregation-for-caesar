@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from gooey import GooeyParser
 import panoptes_aggregation
 import argparse
 import json
@@ -9,16 +8,7 @@ import os
 try:
     from gooey import GooeyParser
 except ImportError:
-    class GooeyParser(argparse.ArgumentParser):
-        def add_argument(self, *args, **kwargs):
-            kwargs.pop('widget', None)
-            kwargs.pop('metavar', None)
-            kwargs.pop('gooey_options', None)
-            super(GooeyParser, self).add_argument(*args, **kwargs)
-
-        def add_argument_group(self, *args, **kwargs):
-            kwargs.pop('gooey_options', {})
-            super(GooeyParser, self).add_argument_group(*args, **kwargs)
+    from .no_gooey import GooeyParser
 
 
 def main():
