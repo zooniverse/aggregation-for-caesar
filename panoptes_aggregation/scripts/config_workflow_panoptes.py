@@ -54,6 +54,8 @@ def config_workflow(
         filename = os.path.join(output_dir, filename)
     with open(filename, 'w', encoding='utf-8') as stream:
         yaml.dump(config, stream=stream, default_flow_style=False, indent=4)
+        print('Saving Extractor config to:\n{0}'.format(filename))
+        print()
     reducer_config_list = workflow_reducer_config(extractor_config)
     task_set = set({})
     for extractor, reducer in zip(sorted(extractor_config.keys()), reducer_config_list):
@@ -65,6 +67,8 @@ def config_workflow(
             filename = os.path.join(output_dir, filename)
         with open(filename, 'w', encoding='utf-8') as stream:
             yaml.dump(reducer_config, stream=stream, default_flow_style=False, indent=4)
+            print('Saving Reducer config to:\n{0}'.format(filename))
+            print()
         for task in extractor_config[extractor]:
             task_set.add(task['task'])
     if workflow_content is not None:
@@ -87,4 +91,5 @@ def config_workflow(
             filename = os.path.join(output_dir, filename)
         with open(filename, 'w', encoding='utf-8') as stream:
             yaml.dump(stirngs_extract, stream=stream, default_flow_style=False, indent=4)
+            print('Saving task key look up table to:\n{0}'.format(filename))
     return config

@@ -13,7 +13,7 @@ Penguin Watch has several workflows, for this example we will look at workflow n
  - `penguin-watch-workflow_contents.csv`: the workflow contents file (contains the minor version number as a column)
  - `time-lapse-cameras-classifications-trim.csv`: the classification file for workflow 6465
 
-This [zip folder](https://drive.google.com/file/d/177uXdt3IRIOc2b42UvG4EdNJv973RCtS/view?usp=sharing) contains links to these files.
+This [zip folder](https://drive.google.com/file/d/177uXdt3IRIOc2b42UvG4EdNJv973RCtS/view?usp=sharing) contains these files.
 
 ---
 
@@ -42,7 +42,7 @@ optional arguments:
 Use the command line tool to make configuration `yaml` files that are used to set up the extractors and reducers.  These base files will use the default settings for various task types. They can be adjusted if the defaults are not needed (e.g. you don't need to extract all the tasks, or you need more control over the reducer's settings).
 
 ```bash
-usage: panoptes_aggregation config [-h] [-c WORKFLOW_CONTENT] [-o OUTPUT]
+usage: panoptes_aggregation config [-h] [-c WORKFLOW_CONTENT] [-d DIR]
                                    [-v VERSION] [-m MINOR_VERSION]
                                    [-l LANGUAGE] [-k KEYWORDS]
                                    workflow_csv workflow_id
@@ -87,8 +87,7 @@ Other keywords:
 Save Config Files:
   The directory to save the configuration files to
 
-  -o OUTPUT, --output OUTPUT
-                        The directory to save the configuration files to
+  -d DIR, --dir DIR     The directory to save the configuration files to
 ```
 
 ### Example: Penguin Watch
@@ -155,7 +154,7 @@ extractor_config:
 workflow_id: 6465
 workflow_version: '52.76'
 ```
-This shows the basic setup for what extractor will be used for each task.  From this configuration we can see that the point extractor will be used for each of the tools in task `T0`, `tool3` of that task will have the question extractor run on its sub-task, and a question extractor will be used for tasks `T1`.  If any of these extractions are not desired they can be deleted from this file before running the extractor.  In this case task `T4` was on the original workflow but was never used on the final project, I have already removed it from the configuration above.
+This shows the basic setup for what extractor will be used for each task.  From this configuration we can see that the point extractor will be used for each of the tools in task `T0`, `tool3` of that task will have the question extractor run on its sub-task, and a question extractor will be used for tasks `T1` and `T6`.  If any of these extractions are not desired they can be deleted from this file before running the extractor.  In this case task `T4` was on the original workflow but was never used on the final project, I have already removed it from the configuration above.
 
 Note: If a workflow contains any task types that don't have extractors or reducers they will not show up in this config file.
 

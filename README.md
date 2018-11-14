@@ -26,7 +26,7 @@ Upgrade and existing installation:
 pip install -U panoptes_aggregation
 ```
 
-#### Install the Graphics User Interface (GUI)
+#### Install the Graphical User Interface (GUI)
 If you would like to use the GUI instead of the command line install the package with:
 ```bash
 pip install panoptes_aggregation[gui]
