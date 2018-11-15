@@ -4,7 +4,7 @@ from scipy.optimize import minimize_scalar
 
 def angle_distance(theta1, theta2, factor=1):
     max_angle = 360 / factor
-    d = abs(theta1 - theta2)
+    d = abs(theta1 % max_angle - theta2 % max_angle)
     return min(max_angle - d, d)
 
 

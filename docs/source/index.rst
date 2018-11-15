@@ -12,6 +12,7 @@ Welcome to panoptes_aggregation's documentation
 
    README
    Scripts
+   GUI
    Task_lookup_table
    extractros
    reducers

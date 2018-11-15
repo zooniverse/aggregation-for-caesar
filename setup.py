@@ -1,14 +1,35 @@
 from setuptools import setup, find_packages
+import re
+import os
+
+here = os.path.abspath(os.path.dirname(__file__))
 
 try:
-    with open('README.md', 'r') as fh:
+    with open(os.path.join(here, 'README.md'), 'r') as fh:
         long_description = fh.read()
 except FileNotFoundError:
     long_description = ''
 
+try:
+    with open(os.path.join(here, 'panoptes_aggregation/version/__init__.py'), 'r') as fp:
+        version_file = fp.read()
+    version_match = re.search(
+        r"^__version__ = ['\"]([^'\"]*)['\"]",
+        version_file,
+        re.M
+    )
+    if version_match:
+        VERSION = version_match.group(1)
+    else:
+        raise RuntimeError("Unable to find version string.")
+except FileNotFoundError:
+    VERSION = '0.0.0'
+
+
 setup(
     name='panoptes_aggregation',
-    version='1.3.0',
+    python_requires='>=3',
+    version=VERSION,
     description='Aggregation code for Zooniverse panoptes projects.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -24,9 +45,10 @@ setup(
     tests_require=['nose'],
     entry_points={
         'console_scripts': [
-            'config_workflow_panoptes=panoptes_aggregation.scripts.config_workflow_panoptes:main',
-            'extract_panoptes_csv=panoptes_aggregation.scripts.extract_panoptes_csv:main',
-            'reduce_panoptes_csv=panoptes_aggregation.scripts.reduce_panoptes_csv:main'
+            'panoptes_aggregation = panoptes_aggregation.scripts.aggregation_parser:main'
+        ],
+        'gui_scripts': [
+            'panoptes_aggregation_gui = panoptes_aggregation.scripts.gui:gui'
         ]
     },
     packages=find_packages(),
@@ -44,6 +66,9 @@ setup(
         'test': [
             'nose',
             'coverage'
+        ],
+        'gui': [
+            'Gooey'
         ]
     },
     install_requires=[
@@ -58,7 +83,6 @@ setup(
         'python-levenshtein',
         'python-slugify',
         'pyyaml',
-        'scikit-image',
         'scikit-learn',
         'scipy>=1.1.0',
         'werkzeug'
