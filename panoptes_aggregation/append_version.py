@@ -1,5 +1,5 @@
-import pkg_resources
-__version__ = pkg_resources.get_distribution('panoptes_aggregation').version
+from . import version
+__version__ = version.__version__
 
 
 def append_version(results):
