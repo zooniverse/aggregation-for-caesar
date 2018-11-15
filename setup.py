@@ -23,7 +23,7 @@ try:
     else:
         raise RuntimeError("Unable to find version string.")
 except FileNotFoundError:
-    raise RuntimeError("Unable to find version string.")
+    VERSION = '0.0.0'
 
 
 setup(
