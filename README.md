@@ -46,12 +46,17 @@ If you are installing this code on a Mac using the anaconda build of python and 
 ```
 to:
 ```python
-#!/bin/bash /path/to/anaconda/python/bin/pythonw
+#!/bin/bash /path/to/anaconda/python/bin/python.app
 ```
 
 You can find the location of this file with the command:
 ```bash
 which panoptes_aggregation_gui
+```
+
+You will also need to run:
+```bash
+conda install python.app
 ```
 
 ### With Docker
