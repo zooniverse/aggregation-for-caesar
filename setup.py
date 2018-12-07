@@ -79,6 +79,7 @@ setup(
         'numpy>=1.14.5',
         'nose',
         'pandas',
+        'peakutils',
         'progressbar2',
         'python-levenshtein',
         'python-slugify',
