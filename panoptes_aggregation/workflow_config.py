@@ -18,6 +18,7 @@ type_to_extractor = {
     'rotateRectangle': 'shape_extractor',
     'triangle': 'shape_extractor',
     'fan': 'shape_extractor',
+    'polygon': 'shape_extractor',
     'slider': 'slider_extractor'
 }
 
