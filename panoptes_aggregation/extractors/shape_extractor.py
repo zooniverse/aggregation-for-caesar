@@ -48,5 +48,11 @@ def shape_extractor(classification, **kwargs):
             if all(param in value for param in shape_params):
                 extract.setdefault(frame, {})
                 for param in shape_params:
-                    extract[frame].setdefault('{0}_{1}'.format(key, param), []).append(value[param])
+                    if param == 'points':
+                        x = [v['x'] for v in value[param]]
+                        y = [v['y'] for v in value[param]]
+                        extract[frame].setdefault('{0}_{1}_x'.format(key, param), []).append(x)
+                        extract[frame].setdefault('{0}_{1}_y'.format(key, param), []).append(y)
+                    else:
+                        extract[frame].setdefault('{0}_{1}'.format(key, param), []).append(value[param])
     return extract
