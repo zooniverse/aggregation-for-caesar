@@ -5,14 +5,16 @@ import sys
 import inspect
 import panoptes_aggregation
 
-if (sys.platform == 'win32') and (inspect.stack()[-1].filename.endswith('.exe')):
-    # when on windows make sure a copy of the calling script does not have `.exe`
-    # at the end of the filename
-    import shutil
-    exe = inspect.stack()[-1].filename
-    base_name = os.path.splitext(exe)[0]
-    if not os.path.isfile(base_name):
-        shutil.copy2(exe, base_name)
+if sys.platform == 'win32':
+    stack_filename = [s.filename for s in inspect.stack() if ('.exe' in s.filename)]
+    if len(stack_filename) == 1:
+        # when on windows make sure a copy of the calling script does not have `.exe`
+        # at the end of the filename
+        base_name = stack_filename[0].split('.exe')[0]
+        exe = '{0}.exe'.format(base_name)
+        import shutil
+        if not os.path.isfile(base_name):
+            shutil.copy2(exe, base_name)
 
 try:
     import gooey
