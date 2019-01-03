@@ -178,6 +178,14 @@ extractor_config = {
             'shape': 'rectangle'
         }
     ],
+    'shape_extractor_polygon': [
+        {
+            'task': 'T0',
+            'tools': [3],
+            'details': {},
+            'shape': 'polygon'
+        }
+    ],
     'question_extractor': [
         {'task': 'T1'},
         {'task': 'T2'},
@@ -221,6 +229,9 @@ reducer_config = [
     {'question_reducer': {}},
     {'shape_reducer_dbscan': {
         'shape': 'line'
+    }},
+    {'shape_reducer_dbscan': {
+        'shape': 'polygon'
     }},
     {'shape_reducer_dbscan': {
         'shape': 'rectangle'
