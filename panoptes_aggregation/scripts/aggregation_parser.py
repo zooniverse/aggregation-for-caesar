@@ -54,6 +54,13 @@ def main():
             'columns': 1
         }
     )
+    config_options = config_parser.add_argument_group(
+        'Other options',
+        gooey_options={
+            'show_border': False,
+            'columns': 1
+        }
+    )
     config_load_files.add_argument(
         "workflow_csv",
         help="The csv file containing the workflow data",
@@ -105,6 +112,12 @@ def main():
         help="keywords to be passed into the configuration of a task in the form of a json string, e.g. \'{\"T0\": {\"dot_freq\": \"line\"} }\'\n(note: double quotes must be used inside the brackets)",
         type=json.loads,
         default={}
+    )
+    config_options.add_argument(
+        "-vv",
+        "--verbose",
+        help="increase output verbosity",
+        action="store_true"
     )
 
     extract_parser = subparsers.add_parser(
@@ -164,6 +177,12 @@ def main():
         "-O",
         "--order",
         help="Arrange the data columns in alphabetical order before saving",
+        action="store_true"
+    )
+    extract_options.add_argument(
+        "-vv",
+        "--verbose",
+        help="increase output verbosity",
         action="store_true"
     )
 
@@ -252,7 +271,8 @@ def main():
             workflow_content=args.workflow_content,
             minor_version=args.minor_version,
             language=args.language,
-            output_dir=args.dir
+            output_dir=args.dir,
+            verbose=args.verbose
         )
     elif args.subparser == 'extract':
         panoptes_aggregation.scripts.extract_csv(
@@ -260,7 +280,8 @@ def main():
             args.extractor_config,
             output_name=args.output,
             output_dir=args.dir,
-            order=args.order
+            order=args.order,
+            verbose=args.verbose
         )
     elif args.subparser == 'reduce':
         panoptes_aggregation.scripts.reduce_csv(

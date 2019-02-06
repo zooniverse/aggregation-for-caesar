@@ -25,7 +25,8 @@ def config_workflow(
             workflow_content=None,
             minor_version=None,
             language='en',
-            output_dir=None
+            output_dir=None,
+            verbose=False
         ):
     workflow_csv = get_file_instance(workflow_csv)
     with workflow_csv as workflow_csv_in:
@@ -33,7 +34,8 @@ def config_workflow(
 
     if version is None:
         version = workflows[workflows.workflow_id == workflow_id].version.max()
-        warnings.warn('No major workflow version was specified, defaulting to version {0}'.format(version))
+        if verbose:
+            warnings.warn('No major workflow version was specified, defaulting to version {0}'.format(version))
 
     wdx = (workflows.workflow_id == workflow_id) & (workflows.version == version)
     assert (wdx.sum() > 0), 'workflow ID and workflow major version combination does not exist'
@@ -77,7 +79,8 @@ def config_workflow(
             contents = pandas.read_csv(workflow_content_in, encoding='utf-8')
         if minor_version is None:
             minor_version = contents[contents.workflow_id == workflow_id].version.max()
-            warnings.warn('No minor workflow version was specified, defaulting to version {0}'.format(minor_version))
+            if verbose:
+                warnings.warn('No minor workflow version was specified, defaulting to version {0}'.format(minor_version))
         cdx = (contents.workflow_id == workflow_id) & (contents.version == minor_version)
         if cdx.sum() == 0:
             raise IndexError('workflow ID and workflow minor version combination does not exist')
