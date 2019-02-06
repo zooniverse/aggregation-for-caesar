@@ -32,7 +32,8 @@ def extract_csv(
             config,
             output_dir=os.path.abspath('.'),
             output_name='extractions',
-            order=False
+            order=False,
+            verbose=False
         ):
     config = get_file_instance(config)
     with config as config_in:
@@ -125,7 +126,7 @@ def extract_csv(
     output_base_name, output_ext = os.path.splitext(output_name)
     output_files = []
     for extractor_name, data in extracted_data.items():
-        if len(data['data']) == 0:
+        if (len(data['data']) == 0) and (verbose):
             warnings.warn('No data extracted with {0}'.format(extractor_name))
         output_path = os.path.join(output_dir, '{0}_{1}.csv'.format(extractor_name, output_base_name))
         output_files.append(output_path)
