@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/98517215.svg)](https://zenodo.org/badge/latestdoi/98517215)
+
 # Getting started
 
 This is a collection of external reducers written for [caesar](https://github.com/zooniverse/caesar) and offline use.
