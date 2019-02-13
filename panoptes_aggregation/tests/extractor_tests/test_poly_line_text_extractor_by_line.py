@@ -58,6 +58,19 @@ classification = {
                         {"value": "know the prospects on the next page"}
                     ],
                     "tool_label": "Tool name"
+                },
+                {
+                    "tool": 0,
+                    "frame": 1,
+                    "closed": True,
+                    "points": [
+                        {"x": 600, "y": 0},
+                        {"x": 600, "y": 100}
+                    ],
+                    "details": [
+                        {"value": "This is vertical text"}
+                    ],
+                    "tool_label": "Tool name"
                 }
             ]
         }
@@ -95,7 +108,7 @@ expected = {
                     [
                         308.71209716796875,
                         305.293701171875
-                    ],
+                    ]
                 ]
         },
         'text': [
@@ -116,6 +129,10 @@ expected = {
                     [
                         587.9367065429688,
                         1384.6763916015625
+                    ],
+                    [
+                        600,
+                        600
                     ]
                 ],
             'y':
@@ -123,14 +140,20 @@ expected = {
                     [
                         131.58277893066406,
                         147.67852783203125
+                    ],
+                    [
+                        0,
+                        100
                     ]
                 ]
         },
         'text': [
-            ['know the prospects on the next page']
+            ['know the prospects on the next page'],
+            ['This is vertical text']
         ],
         'slope': [
-            1.157333
+            1.157333,
+            90
         ]
     }
 }

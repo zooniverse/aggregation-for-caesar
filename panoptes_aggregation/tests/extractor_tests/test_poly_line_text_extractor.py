@@ -76,6 +76,22 @@ classification = {
                         {"value": "know the prospects on the next page"}
                     ],
                     "tool_label": "Tool name"
+                },
+                {
+                    "tool": 0,
+                    "frame": 1,
+                    "closed": True,
+                    "points": [
+                        {"x": 600, "y": 0},
+                        {"x": 600, "y": 20},
+                        {"x": 600, "y": 40},
+                        {"x": 600, "y": 60},
+                        {"x": 600, "y": 80}
+                    ],
+                    "details": [
+                        {"value": "This is vertical text"}
+                    ],
+                    "tool_label": "Tool name"
                 }
             ]
         }
@@ -148,6 +164,13 @@ expected = {
                         1167.3837890625,
                         1275.225341796875,
                         1384.6763916015625
+                    ],
+                    [
+                        600,
+                        600,
+                        600,
+                        600,
+                        600
                     ]
                 ],
             'y':
@@ -161,14 +184,23 @@ expected = {
                         139.6306610107422,
                         139.6306610107422,
                         147.67852783203125
+                    ],
+                    [
+                        0,
+                        20,
+                        40,
+                        60,
+                        80
                     ]
                 ]
         },
         'text': [
-            ['know', 'the', 'prospects', 'on', 'the', 'next', 'page']
+            ['know', 'the', 'prospects', 'on', 'the', 'next', 'page'],
+            ['This', 'is', 'vertical', 'text']
         ],
         'slope': [
-            1.1519519690072122
+            1.1519519690072122,
+            90
         ]
     }
 }

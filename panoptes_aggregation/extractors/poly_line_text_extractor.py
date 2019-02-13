@@ -10,6 +10,7 @@ import copy
 import numpy as np
 from .extractor_wrapper import extractor_wrapper
 from .tool_wrapper import tool_wrapper
+import warnings
 
 
 @extractor_wrapper
@@ -83,11 +84,24 @@ def poly_line_text_extractor(classification, dot_freq='word', **kwargs):
             x = [point['x'] for point in value['points']]
             y = [point['y'] for point in value['points']]
             if len(x) > 1:
-                fit = np.polyfit(x, y, 1)
-                y_fit = np.polyval(fit, [x[0], x[-1]])
-                dx = x[-1] - x[0]
-                dy = y_fit[-1] - y_fit[0]
-                slope = np.rad2deg(np.arctan2(dy, dx))
+                with warnings.catch_warnings():
+                    warnings.filterwarnings('error')
+                    try:
+                        fit = np.polyfit(x, y, 1)
+                        y_fit = np.polyval(fit, [x[0], x[-1]])
+                        dx = x[-1] - x[0]
+                        dy = y_fit[-1] - y_fit[0]
+                        slope = np.rad2deg(np.arctan2(dy, dx))
+                    except np.RankWarning:
+                        # rotate by 90 before fitting
+                        x_tmp = -np.array(y)
+                        y_tmp = np.array(x)
+                        fit = np.polyfit(x_tmp, y_tmp, 1)
+                        y_fit = np.polyval(fit, [x_tmp[0], x_tmp[-1]])
+                        dx = x_tmp[-1] - x_tmp[0]
+                        dy = y_fit[-1] - y_fit[0]
+                        # rotate by -90 to bring back into correct coordiates
+                        slope = np.rad2deg(np.arctan2(dy, dx)) - 90
                 if dot_freq == 'word':
                     # NOTE: if `words` + 1 and `points` are differnt lengths
                     # the extract is not used
