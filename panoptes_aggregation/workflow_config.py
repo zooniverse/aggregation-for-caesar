@@ -4,7 +4,7 @@ from collections import defaultdict
 type_to_extractor = {
     'single': 'question_extractor',
     'multiple': 'question_extractor',
-    'shortcut': 'question_extractor',
+    'shortcut': 'shortcut_extractor',
     'dropdown': 'dropdown_extractor',
     'survey': 'survey_extractor',
     'point': 'point_extractor_by_frame',
@@ -23,6 +23,7 @@ type_to_extractor = {
 
 standard_reducers = {
     'question_extractor': 'question_reducer',
+    'shortcut_extractor': 'shortcut_reducer',
     'dropdown_extractor': 'dropdown_reducer',
     'survey_extractor': 'survey_reducer',
     'point_extractor': 'point_reducer',

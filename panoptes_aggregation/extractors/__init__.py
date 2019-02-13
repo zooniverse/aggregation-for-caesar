@@ -17,6 +17,7 @@ extractors = {
     'point_extractor_by_frame': point_extractor_by_frame,
     'rectangle_extractor': rectangle_extractor,
     'question_extractor': question_extractor,
+    'shortcut_extractor': question_extractor,
     'survey_extractor': survey_extractor,
     'poly_line_text_extractor': poly_line_text_extractor,
     'line_text_extractor': line_text_extractor,
