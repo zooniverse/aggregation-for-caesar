@@ -36,6 +36,10 @@ def reducer_wrapper(
                 if 'details' in kwargs:
                     kwargs_details['details'] = kwargs['details']
                     kwargs_details['data_in'] = data_in
+                if user_id:
+                    kwargs_extra_data['user_id'] = kwargs['user_id']
+                if relevant_reduction:
+                    kwargs_extra_data['relevant_reduction'] = kwargs['relevant_reduction']
             no_version = kwargs.pop('no_version', False)
             if defaults_process is not None:
                 kwargs_process = process_kwargs(kwargs, defaults_process)
