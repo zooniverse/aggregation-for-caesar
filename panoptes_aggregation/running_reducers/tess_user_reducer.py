@@ -1,4 +1,4 @@
-from runnign_reducer_wrapper import running_reducer_wrapper
+from .running_reducer_wrapper import running_reducer_wrapper
 import numpy as np
 
 
