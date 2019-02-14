@@ -4,6 +4,7 @@ from functools import wraps
 import os
 from panoptes_aggregation import reducers
 from panoptes_aggregation import extractors
+from panoptes_aggregation import running_reducers
 from panoptes_aggregation import __version__
 import numpy as np
 
@@ -66,6 +67,10 @@ for route, route_function in reducers.reducers.items():
 
 for route, route_function in extractors.extractors.items():
     application.route('/extractors/{0}'.format(route), methods=['POST', 'GET'])(request_wrapper(route)(route_function))
+
+
+for route, route_function in running_reducers.running_reducers.items():
+    application.route('/running_reducers/{0}'.format(route), methods=['POST', 'GET'])(request_wrapper(route)(route_function))
 
 
 @application.route('/docs')
