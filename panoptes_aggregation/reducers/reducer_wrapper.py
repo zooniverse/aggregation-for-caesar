@@ -4,13 +4,20 @@ from .process_kwargs import process_kwargs
 from ..append_version import append_version, remove_version
 
 
-def reducer_wrapper(process_data=None, defaults_process=None, defaults_data=None):
+def reducer_wrapper(
+    process_data=None,
+    defaults_process=None,
+    defaults_data=None,
+    user_id=False,
+    relevant_reduction=False
+):
     def decorator(func):
         @wraps(func)
         def wrapper(argument, **kwargs):
             kwargs_process = {}
             kwargs_data = {}
             kwargs_details = {}
+            kwargs_extra_data = {}
             #: check if argument is a flask request
             if hasattr(argument, 'get_json'):
                 kwargs = argument.args.copy().to_dict()
@@ -19,6 +26,10 @@ def reducer_wrapper(process_data=None, defaults_process=None, defaults_data=None
                 if 'details' in kwargs:
                     kwargs_details['details'] = ast.literal_eval(kwargs['details'])
                     kwargs_details['data_in'] = data_in
+                if user_id:
+                    kwargs_extra_data['user_id'] = [d['user_id'] for d in argument.get_json()]
+                if relevant_reduction:
+                    kwargs_extra_data['relevant_reduction'] = [d['relevant_reduction'] for d in argument.get_json()]
             else:
                 data_in = argument
                 remove_version(data_in)
@@ -34,7 +45,7 @@ def reducer_wrapper(process_data=None, defaults_process=None, defaults_data=None
                 data = process_data(data_in, **kwargs_process)
             else:
                 data = data_in
-            reduction = func(data, **kwargs_data, **kwargs_details)
+            reduction = func(data, **kwargs_data, **kwargs_details, **kwargs_extra_data)
             if not no_version:
                 append_version(reduction)
             return reduction
