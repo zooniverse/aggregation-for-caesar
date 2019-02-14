@@ -25,10 +25,23 @@ def cast_to_dict(result):
     return result_out
 
 
-def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs={}, okwargs={}, kwargs={}, processed_type='dict'):
+def ReducerTest(
+    reducer,
+    processer,
+    extracted,
+    processed,
+    reduced,
+    name,
+    pkwargs={},
+    okwargs={},
+    kwargs={},
+    network_kwargs={},
+    processed_type='dict'
+):
     # pkwargs: keywords passed into the process_data funciton
     # okwargs: keywords only passed into the _original function
     # kwargs: keywords passed into all steps
+    # network_kwargs: keywords passed to the function but included along side `data` in the network reqeust
     class ReducerTest(unittest.TestCase):
         def setUp(self):
             self.maxDiff = None
@@ -53,12 +66,12 @@ def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs
 
         def test_original_reducer(self):
             '''Test the reducer function starting with the processed data'''
-            result = reducer._original(self.processed, **okwargs, **kwargs)
+            result = reducer._original(self.processed, **okwargs, **kwargs, **network_kwargs)
             self.assertDictEqual(cast_to_dict(result), self.reduced)
 
         def test_reducer(self):
             '''Test the offline reducer'''
-            result = reducer(self.extracted_with_version, **kwargs, **pkwargs)
+            result = reducer(self.extracted_with_version, **kwargs, **pkwargs, **network_kwargs)
             self.assertDictEqual(cast_to_dict(result), self.reduced_with_vesrion)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
@@ -66,7 +79,7 @@ def ReducerTest(reducer, processer, extracted, processed, reduced, name, pkwargs
             '''Test the online reducer'''
             app = flask.Flask(__name__)
             request_kwargs = {
-                'data': json.dumps(extract_in_data(self.extracted_with_version)),
+                'data': json.dumps(extract_in_data(self.extracted_with_version, **network_kwargs)),
                 'content_type': 'application/json'
             }
             all_kwargs = dict(kwargs, **pkwargs)
