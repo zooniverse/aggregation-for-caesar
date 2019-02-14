@@ -16,7 +16,7 @@ def tess_user_reducer(data, store, **kwargs):
     user_incorrect = len(data) - user_correct
     seed_current = (2 * user_correct - user_incorrect) * d_subject
     seed = store.get('seed', 0) + seed_current
-    count = store.get('count', 0) + 1
+    count = store.get('count', 0) + len(data)
     store = {
         'seed': seed,
         'count': count
