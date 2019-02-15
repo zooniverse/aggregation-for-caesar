@@ -4,7 +4,7 @@ import numpy as np
 
 @running_reducer_wrapper(relevant_reduction=True)
 def tess_user_reducer(data, **kwargs):
-    data = data[0]['values']
+    data = data[0]['value']
     store = kwargs.pop('store')[0]
     relevant_reduction = kwargs.pop('relevant_reduction')[0]
     number_correct = relevant_reduction['True']

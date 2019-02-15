@@ -3,7 +3,7 @@ from .base_test_class import RunningReducerTestNoProcessing
 
 extracted_data = [
     {
-        'values': [
+        'value': [
             True,
             True,
             False,
