@@ -3,7 +3,8 @@ import numpy as np
 
 
 @running_reducer_wrapper(relevant_reduction=True)
-def tess_user_reducer(data, store, **kwargs):
+def tess_user_reducer(data, **kwargs):
+    store = kwargs.pop('store')
     relevant_reduction = kwargs.pop('relevant_reduction')
     # not sure what data the stats reducer will return
     # this assuems a dict {'True': 3, 'False': 5}

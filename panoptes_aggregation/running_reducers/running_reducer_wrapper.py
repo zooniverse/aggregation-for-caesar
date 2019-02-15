@@ -1,4 +1,3 @@
-import ast
 from functools import wraps
 from ..reducers.process_kwargs import process_kwargs
 from ..append_version import append_version, remove_version
@@ -15,26 +14,19 @@ def running_reducer_wrapper(
         def wrapper(argument, **kwargs):
             kwargs_process = {}
             kwargs_data = {}
-            kwargs_details = {}
             kwargs_extra_data = {}
             #: check if argument is a flask request
             if hasattr(argument, 'get_json'):
                 kwargs = argument.args.copy().to_dict()
-                data_in = [d['data'] for d in argument.get_json()]
-                store = [d['store'] for d in argument.get_json()]
+                data_in = argument.get_json()['data']
+                store = argument.get_json()['store']
                 remove_version(data_in)
-                if 'details' in kwargs:
-                    kwargs_details['details'] = ast.literal_eval(kwargs['details'])
-                    kwargs_details['data_in'] = data_in
                 if relevant_reduction:
-                    kwargs_extra_data['relevant_reduction'] = [d['relevant_reduction'] for d in argument.get_json()]
+                    kwargs_extra_data['relevant_reduction'] = argument.get_json()['relevant_reduction']
             else:
                 data_in = argument
                 store = kwargs['store']
                 remove_version(data_in)
-                if 'details' in kwargs:
-                    kwargs_details['details'] = kwargs['details']
-                    kwargs_details['data_in'] = data_in
                 if relevant_reduction:
                     kwargs_extra_data['relevant_reduction'] = kwargs['relevant_reduction']
             no_version = kwargs.pop('no_version', False)
@@ -46,7 +38,7 @@ def running_reducer_wrapper(
                 data = process_data(data_in, **kwargs_process)
             else:
                 data = data_in
-            reduction = func(data, store, **kwargs_data, **kwargs_details, **kwargs_extra_data)
+            reduction = func(data, store=store, **kwargs_data, **kwargs_extra_data)
             if not no_version:
                 append_version(reduction)
             return reduction
