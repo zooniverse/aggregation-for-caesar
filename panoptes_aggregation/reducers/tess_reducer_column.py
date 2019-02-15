@@ -24,8 +24,11 @@ def process_data(data, **kwargs_extra_data):
 
     Returns
     -------
-    processed_data : np.array
-        An Nx2 numpy array containing the *center* and width of each column drawn
+    processed_data : dict
+        A dictionary with two keys
+
+        * `data`: An Nx2 numpy array containing the *center* and width of each column drawn
+        * `index`: A list of lenght N indicating the extract index for each drawn column
     '''
     shape_params = SHAPE_LUT['column']
     unique_frames = set(sum([list(d.keys()) for d in data], []))
@@ -46,6 +49,31 @@ def process_data(data, **kwargs_extra_data):
 
 @reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS, user_id=True, relevant_reduction=True)
 def tess_reducer_column(data_by_tool, **kwargs):
+    '''Cluster TESS columns using DBSCAN
+
+    Parameters
+    ----------
+    data_by_tool : dict
+        A dictionary returned by :meth:`process_data`
+    user_id : keyword, list
+        A list containing the user IDs for each extract
+    relevant_reduction : keyword, list
+        A list containing the TESS user reducer for each extract
+        (see :meth:`panoptes_aggregation.running_reducers.tess_user_reducer.tess_user_reducer`)
+    kwrgs :
+        `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
+
+    Returns
+    -------
+    reduction : dict
+        A dictinary with the following keys
+
+        * `centers` : A list with the center `x` position for all identified columns
+        * `widths` : A list with the full width of all identified columns
+        * `counts` : A list with the number of volunteers who identified each column
+        * `weighted_counts` : A list with the weighted number of volunteers who identified each column
+        * `user_ids`: A list of lists with the `user_id`s that marked each identified column
+    '''
     user_id = np.array(kwargs.pop('user_id'))
     relevant_reduction = kwargs.pop('relevant_reduction')
     skill = np.array([rr['skill'] for rr in relevant_reduction])
