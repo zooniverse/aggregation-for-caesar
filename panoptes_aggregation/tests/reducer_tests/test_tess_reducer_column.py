@@ -115,7 +115,7 @@ reduced_data = {
 }
 
 
-TestShapeReducerColumn = ReducerTest(
+TestTESSReducerColumn = ReducerTest(
     tess_reducer_column,
     process_data,
     extracted_data,

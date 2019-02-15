@@ -18,11 +18,11 @@ def running_reducer_wrapper(
             #: check if argument is a flask request
             if hasattr(argument, 'get_json'):
                 kwargs = argument.args.copy().to_dict()
-                data_in = argument.get_json()['data']
-                store = argument.get_json()['store']
+                data_in = [d['data'] for d in argument.get_json()]
+                store = [d['store'] for d in argument.get_json()]
                 remove_version(data_in)
                 if relevant_reduction:
-                    kwargs_extra_data['relevant_reduction'] = argument.get_json()['relevant_reduction']
+                    kwargs_extra_data['relevant_reduction'] = [d['relevant_reduction'] for d in argument.get_json()]
             else:
                 data_in = argument
                 store = kwargs['store']
