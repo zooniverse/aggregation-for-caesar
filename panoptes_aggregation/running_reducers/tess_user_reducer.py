@@ -1,9 +1,43 @@
+'''
+TESS User Reducer
+-----------------
+This module porvides functions to calculate uesr weights for the TESS project.
+Extracts are from Ceasars `PluckFieldExtractor`.
+'''
 from .running_reducer_wrapper import running_reducer_wrapper
 import numpy as np
 
 
 @running_reducer_wrapper(relevant_reduction=True)
 def tess_user_reducer(data, **kwargs):
+    '''Calculate TESS user weights
+
+    Parameters
+    ----------
+    data : list
+        A list with one item containing the extract with the user's feedback on a
+        gold standard subject
+    store : keyword, list
+        A list with one item containing the user's current store.  This item is a
+        dictinary with two keys:
+
+        * `seed`: sum of all previous `seed` values
+        * `count`: sum of all previous gold standard transits seen
+    relevant_reduction : keyword, list
+        A list with one item containing the results of the current subject's stats reducer.
+        This item is a dictinary with two keys:
+
+        * `True`: number of users who correctly identified the gold standard transits in the subject
+        * `False`: number of users who incorrectly identified the gold standard transits in the subject
+
+    Returns
+    -------
+    reduction : dict
+        A dictinary with two keys:
+
+        * `data`: A dictionary with the `skill` value as the only item
+        * `store`: The updated store for the user
+    '''
     data = data[0]['value']
     store = kwargs.pop('store')[0]
     relevant_reduction = kwargs.pop('relevant_reduction')[0]

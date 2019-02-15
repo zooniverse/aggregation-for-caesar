@@ -1,3 +1,9 @@
+'''
+TESS Column Reducer
+-------------------
+This module porvides functions to reduce the column task extracts for the TESS project.
+Extracts are from :mod:`panoptes_aggregation.extractors.shape_extractor`.
+'''
 from .reducer_wrapper import reducer_wrapper
 from ..shape_tools import SHAPE_LUT
 from collections import OrderedDict
@@ -58,8 +64,8 @@ def tess_reducer_column(data_by_tool, **kwargs):
     user_id : keyword, list
         A list containing the user IDs for each extract
     relevant_reduction : keyword, list
-        A list containing the TESS user reducer for each extract
-        (see :meth:`panoptes_aggregation.running_reducers.tess_user_reducer.tess_user_reducer`)
+        A list containing the TESS user reduction for each extract
+        :meth:`panoptes_aggregation.running_reducers.tess_user_reducer.tess_user_reducer`
     kwrgs :
         `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
 
@@ -72,7 +78,7 @@ def tess_reducer_column(data_by_tool, **kwargs):
         * `widths` : A list with the full width of all identified columns
         * `counts` : A list with the number of volunteers who identified each column
         * `weighted_counts` : A list with the weighted number of volunteers who identified each column
-        * `user_ids`: A list of lists with the `user_id`s that marked each identified column
+        * `user_ids`: A list of lists with the `user_id` for each volunteer who marked each column
     '''
     user_id = np.array(kwargs.pop('user_id'))
     relevant_reduction = kwargs.pop('relevant_reduction')
