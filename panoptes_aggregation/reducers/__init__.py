@@ -11,6 +11,7 @@ from .sw_variant_reducer import sw_variant_reducer
 from .shape_reducer_dbscan import shape_reducer_dbscan
 from .shape_reducer_hdbscan import shape_reducer_hdbscan
 from .slider_reducer import slider_reducer
+from .tess_reducer_column import tess_reducer_column
 
 reducers = {
     'point_reducer': point_reducer,
@@ -24,5 +25,6 @@ reducers = {
     'dropdown_reducer': dropdown_reducer,
     'shape_reducer_dbscan': shape_reducer_dbscan,
     'shape_reducer_hdbscan': shape_reducer_hdbscan,
-    'slider_reducer': slider_reducer
+    'slider_reducer': slider_reducer,
+    'tess_reducer_column': tess_reducer_column
 }
