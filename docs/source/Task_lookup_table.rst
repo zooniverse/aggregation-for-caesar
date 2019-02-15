@@ -73,3 +73,18 @@ These are extractors and reducers designed for specific text transcription proje
 +--------------------------------------+-----------------------------------------------------------------+                                                                    |
 | Polygon tool with text sub-task      | :mod:`panoptes_aggregation.extractors.poly_line_text_extractor` |                                                                    |
 +--------------------------------------+-----------------------------------------------------------------+--------------------------------------------------------------------+
+
+----
+
+TESS project
+------------
+These reducers were designed for use with the TESS project to handle real-time user weighting of identified column tool clusters.  This process requires proper
+`relevant_reduction` being set for each reducer and several extractors/reducers internal to Caesar.
+
++-----------------------------------+--------------------------------------------------------+----------------------------------------------------------------+
+| Task Type                         | Extractor                                              | Reducer                                                        |
++===================================+========================================================+================================================================+
+| TESS Column Tool                  | :mod:`panoptes_aggregation.extractors.shape_extractor` | :mod:`panoptes_aggregation.reducers.tess_reducer_column`       |
++-----------------------------------+--------------------------------------------------------+----------------------------------------------------------------+
+| TESS Classification of GS subject | Caesar's `PluckFieldExtractor`                         | :mod:`panoptes_aggregation.running_reducers.tess_user_reducer` |
++-----------------------------------+--------------------------------------------------------+----------------------------------------------------------------+
