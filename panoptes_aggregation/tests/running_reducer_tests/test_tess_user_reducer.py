@@ -13,12 +13,14 @@ extracted_data = [
 kwargs_extra_data = {
     'relevant_reduction': [
         {
-            'data': [
-                0.9,
-                0.4,
-                0.1,
-                0.8
-            ]
+            'data': {
+                'difficulty': [
+                    0.9,
+                    0.4,
+                    0.1,
+                    0.8
+                ]
+            }
         }
     ],
     'store': {

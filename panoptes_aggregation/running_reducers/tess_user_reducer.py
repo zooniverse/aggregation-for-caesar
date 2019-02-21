@@ -40,7 +40,7 @@ def tess_user_reducer(data, **kwargs):
     '''
     success = [d['success'] for d in data[0]]
     store = kwargs.pop('store')
-    d_subject = np.array(kwargs.pop('relevant_reduction')[0]['data'])
+    d_subject = np.array(kwargs.pop('relevant_reduction')[0]['data']['difficulty'])
     seed_current = (np.where(success, 2, -1) * d_subject).sum()
     seed = store.get('seed', 0) + seed_current
     count = store.get('count', 0) + len(success)
