@@ -12,6 +12,7 @@ from .shape_reducer_dbscan import shape_reducer_dbscan
 from .shape_reducer_hdbscan import shape_reducer_hdbscan
 from .slider_reducer import slider_reducer
 from .tess_reducer_column import tess_reducer_column
+from .tess_gold_standard_reducer import tess_gold_standard_reducer
 
 reducers = {
     'point_reducer': point_reducer,
@@ -26,5 +27,6 @@ reducers = {
     'shape_reducer_dbscan': shape_reducer_dbscan,
     'shape_reducer_hdbscan': shape_reducer_hdbscan,
     'slider_reducer': slider_reducer,
-    'tess_reducer_column': tess_reducer_column
+    'tess_reducer_column': tess_reducer_column,
+    'tess_gold_standard_reducer': tess_gold_standard_reducer
 }

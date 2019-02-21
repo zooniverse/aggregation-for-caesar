@@ -36,7 +36,8 @@ def ReducerTest(
     okwargs={},
     kwargs={},
     network_kwargs={},
-    processed_type='dict'
+    processed_type='dict',
+    add_version=True
 ):
     # pkwargs: keywords passed into the process_data funciton
     # okwargs: keywords only passed into the _original function
@@ -47,7 +48,8 @@ def ReducerTest(
             self.maxDiff = None
             self.extracted = copy.deepcopy(extracted)
             self.extracted_with_version = copy.deepcopy(extracted)
-            append_version(self.extracted_with_version)
+            if add_version:
+                append_version(self.extracted_with_version)
             self.processed = copy.deepcopy(processed)
             self.reduced = copy.deepcopy(reduced)
             self.reduced_with_vesrion = copy.deepcopy(reduced)
