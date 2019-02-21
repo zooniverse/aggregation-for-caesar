@@ -38,25 +38,20 @@ def tess_user_reducer(data, **kwargs):
         * `data`: A dictionary with the `skill` value as the only item
         * `store`: The updated store for the user
     '''
-    data = data[0]['value']
-    store = kwargs.pop('store')[0]
-    relevant_reduction = kwargs.pop('relevant_reduction')[0]
-    number_correct = relevant_reduction['True']
-    number_incorrect = relevant_reduction['False']
-    d_subject = number_correct / (number_correct + number_incorrect)
-    user_correct = sum(data)
-    user_incorrect = len(data) - user_correct
-    seed_current = (2 * user_correct - user_incorrect) * d_subject
+    success = [d['success'] for d in data[0]]
+    store = kwargs.pop('store')
+    d_subject = np.array(kwargs.pop('relevant_reduction')[0]['data'])
+    seed_current = (np.where(success, 2, -1) * d_subject).sum()
     seed = store.get('seed', 0) + seed_current
-    count = store.get('count', 0) + len(data)
+    count = store.get('count', 0) + len(success)
     store = {
         'seed': seed,
         'count': count
     }
     c0 = 1
-    skill = c0 * pow((1.0 + np.log10(count)), (float(seed)/float(count)))
+    skill = c0 * pow((1.0 + np.log10(count)), (seed / count))
     skill = min([3.0, max([0.05, skill])])
     return {
-        'data': {'skill': skill},
-        'store': store
+        'skill': skill,
+        '_store': store
     }

@@ -82,7 +82,7 @@ def tess_reducer_column(data_by_tool, **kwargs):
     '''
     user_id = np.array(kwargs.pop('user_id'))
     relevant_reduction = kwargs.pop('relevant_reduction')
-    skill = np.array([rr['skill'] for rr in relevant_reduction])
+    skill = np.array([rr['data']['skill'] for rr in relevant_reduction])
     clusters = OrderedDict()
     loc = np.array(data_by_tool['data'])
     index = np.array(data_by_tool['index'])

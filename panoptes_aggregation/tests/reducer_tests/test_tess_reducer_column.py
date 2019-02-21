@@ -55,11 +55,11 @@ kwargs_extra_data = {
         5
     ],
     'relevant_reduction': [
-        {'skill': 0.4},
-        {'skill': 0.8},
-        {'skill': 0.1},
-        {'skill': 0.3},
-        {'skill': 0.2}
+        {'data': {'skill': 0.4}},
+        {'data': {'skill': 0.8}},
+        {'data': {'skill': 0.1}},
+        {'data': {'skill': 0.3}},
+        {'data': {'skill': 0.2}}
     ]
 }
 

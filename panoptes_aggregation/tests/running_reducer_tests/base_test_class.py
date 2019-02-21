@@ -2,7 +2,7 @@ import unittest
 import json
 import urllib
 import copy
-from panoptes_aggregation.reducers.utilities import extract_in_data
+from panoptes_aggregation.running_reducers.utilities import extract_in_data
 from panoptes_aggregation.append_version import append_version
 
 try:
@@ -24,8 +24,6 @@ def RunningReducerTestNoProcessing(
         def setUp(self):
             self.maxDiff = None
             self.extracted = copy.deepcopy(extracted)
-            self.extracted_with_version = copy.deepcopy(extracted)
-            append_version(self.extracted_with_version)
             self.reduced = copy.deepcopy(reduced)
             self.reduced_with_vesrion = copy.deepcopy(reduced)
             append_version(self.reduced_with_vesrion)
@@ -35,14 +33,14 @@ def RunningReducerTestNoProcessing(
 
         def test_reducer(self):
             '''Test the offline reducer'''
-            result = reducer(self.extracted_with_version, **kwargs, **network_kwargs)
+            result = reducer(self.extracted, **kwargs, **network_kwargs)
             self.assertDictEqual(result, self.reduced_with_vesrion)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_request(self):
             '''Test the online reducer'''
             request_kwargs = {
-                'data': json.dumps(extract_in_data(self.extracted_with_version, **network_kwargs)),
+                'data': json.dumps(extract_in_data(self.extracted, **network_kwargs)),
                 'content_type': 'application/json'
             }
             app = flask.Flask(__name__)

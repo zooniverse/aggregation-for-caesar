@@ -2,37 +2,35 @@ from panoptes_aggregation.running_reducers.tess_user_reducer import tess_user_re
 from .base_test_class import RunningReducerTestNoProcessing
 
 extracted_data = [
-    {
-        'value': [
-            True,
-            True,
-            False,
-            True
-        ]
-    }
+    [
+        {'success': True},
+        {'success': True},
+        {'success': False},
+        {'success': True}
+    ]
 ]
 
 kwargs_extra_data = {
     'relevant_reduction': [
         {
-            'True': 5,
-            'False': 3
+            'data': [
+                0.9,
+                0.4,
+                0.1,
+                0.8
+            ]
         }
     ],
-    'store': [
-        {
-            'seed': 1,
-            'count': 5
-        }
-    ]
+    'store': {
+        'seed': 1,
+        'count': 5
+    }
 }
 
 reduced_data = {
-    'data': {
-        'skill': 1.3594559055874569
-    },
-    'store': {
-        'seed': 4.125,
+    'skill': 1.4617994418680003,
+    '_store': {
+        'seed': 5.1,
         'count': 9
     }
 }
