@@ -1,5 +1,6 @@
 from panoptes_aggregation.reducers.tess_reducer_column import process_data, tess_reducer_column
 from .base_test_class import ReducerTest
+import copy
 
 extracted_data = [
     {
@@ -115,14 +116,37 @@ reduced_data = {
 }
 
 
-TestTESSReducerColumn = ReducerTest(
+TestTESSReducerColumnLeft = ReducerTest(
     tess_reducer_column,
     process_data,
     extracted_data,
     processed_data,
     reduced_data,
-    'Test TESS column reducer',
+    'Test TESS column reducer x=left',
     kwargs={
+        'x': 'left',
+        'eps': 50,
+        'min_samples': 2
+    },
+    network_kwargs=kwargs_extra_data
+)
+
+reduced_data_center = copy.deepcopy(reduced_data)
+reduced_data_center['centers'] = [
+    0.0,
+    100.0,
+    68.33333333333333
+]
+
+TestTESSReducerColumnCenter = ReducerTest(
+    tess_reducer_column,
+    process_data,
+    extracted_data,
+    processed_data,
+    reduced_data_center,
+    'Test TESS column reducer x=center',
+    kwargs={
+        'x': 'center',
         'eps': 50,
         'min_samples': 2
     },

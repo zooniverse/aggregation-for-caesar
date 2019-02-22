@@ -11,6 +11,7 @@ from sklearn.cluster import DBSCAN
 import numpy as np
 
 DEFAULTS = {
+    'x': {'default': 'center', 'type': str},
     'eps': {'default': 5.0, 'type': float},
     'min_samples': {'default': 3, 'type': int},
     'algorithm': {'default': 'auto', 'type': str},
@@ -66,6 +67,9 @@ def tess_reducer_column(data_by_tool, **kwargs):
     relevant_reduction : keyword, list
         A list containing the TESS user reduction for each extract
         :meth:`panoptes_aggregation.running_reducers.tess_user_reducer.tess_user_reducer`
+    x : keyword, str
+        Either `"center"` or `"left"` and indicates if the `x` value of the classification
+        is the center or left side of the column
     kwrgs :
         `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
 
@@ -86,7 +90,9 @@ def tess_reducer_column(data_by_tool, **kwargs):
     clusters = OrderedDict()
     loc = np.array(data_by_tool['data'])
     index = np.array(data_by_tool['index'])
-    loc[:, 0] += 0.5 * loc[:, 1]
+    x = kwargs.pop('x')
+    if x == 'left':
+        loc[:, 0] += 0.5 * loc[:, 1]
     if loc.shape[0] >= kwargs['min_samples']:
         db = DBSCAN(**kwargs).fit(loc)
         for k in set(db.labels_):
