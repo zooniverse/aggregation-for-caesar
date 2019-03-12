@@ -63,3 +63,8 @@ Reducers
 
 .. automodule:: panoptes_aggregation.reducers.dropdown_reducer
   :members:
+
+----
+
+.. automodule:: panoptes_aggregation.reducers.tess_reducer_column
+  :members:
