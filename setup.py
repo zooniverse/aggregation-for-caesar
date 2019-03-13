@@ -76,7 +76,7 @@ setup(
         'collatex==2.1.2',
         'hdbscan',
         'lxml',
-        'numpy==1.16.2,
+        'numpy==1.16.2',
         'nose',
         'pandas',
         'progressbar2',
