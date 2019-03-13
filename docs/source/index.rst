@@ -14,8 +14,9 @@ Welcome to panoptes_aggregation's documentation
    Scripts
    GUI
    Task_lookup_table
-   extractros
+   extractors
    reducers
+   running_reducers
    Contributing
    CODE_OF_CONDUCT
 
