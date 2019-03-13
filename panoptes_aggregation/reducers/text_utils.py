@@ -69,7 +69,7 @@ def gutter(lines_in, tol=0):
                 if o_lines.any():
                     comp = np.vstack([overlap_lines[o_lines], l])
                     overlap_lines[o_lines] = [comp.min(), comp.max()]
-                    overlap_lines = np.vstack({tuple(row) for row in overlap_lines})
+                    overlap_lines = np.vstack(list({tuple(row) for row in overlap_lines}))
                 else:
                     overlap_lines = np.vstack([overlap_lines, l])
         overlap_lines.sort(axis=0)
