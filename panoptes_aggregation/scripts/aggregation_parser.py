@@ -24,15 +24,15 @@ def main():
     )
     config_load_files = config_parser.add_argument_group(
         'Load Workflow Files',
-        'These files can be exported from a project\'s Data Export tab',
+        'This file can be exported from a project\'s Data Export tab',
         gooey_options={
             'show_border': False,
             'columns': 1
         }
     )
     config_numbers = config_parser.add_argument_group(
-        'ID, version numbers, and language',
-        'Enter the workflow ID, major version number, minor version number, and language',
+        'Workflow ID and version numbers',
+        'Enter the workflow ID, major version number, and minor version number',
         gooey_options={
             'show_border': False,
             'columns': 1
@@ -67,13 +67,6 @@ def main():
         type=argparse.FileType('r', encoding='utf-8'),
         widget='FileChooser'
     )
-    config_load_files.add_argument(
-        "-c",
-        "--workflow_content",
-        help="The (optional) workflow content file can be provided to create a lookup table for task/answer/tool numbers\nto the text used on the workflow.",
-        type=argparse.FileType('r', encoding='utf-8'),
-        widget='FileChooser'
-    )
     config_save_files.add_argument(
         "-d",
         "--dir",
@@ -98,13 +91,6 @@ def main():
         "--minor_version",
         help="The minor workflow version used to create the lookup table for the workflow content",
         type=int
-    )
-    config_numbers.add_argument(
-        "-l",
-        "--language",
-        help="The language to use for the workflow content",
-        type=str,
-        default='en'
     )
     config_keywords.add_argument(
         "-k",
@@ -267,10 +253,8 @@ def main():
             args.workflow_csv,
             args.workflow_id,
             version=args.version,
-            keywords=args.keywords,
-            workflow_content=args.workflow_content,
             minor_version=args.minor_version,
-            language=args.language,
+            keywords=args.keywords,
             output_dir=args.dir,
             verbose=args.verbose
         )

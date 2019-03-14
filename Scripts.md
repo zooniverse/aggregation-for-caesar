@@ -5,13 +5,11 @@ This package comes with several command line scripts for use with the `csv` data
 You will need two to three files from your project for offline use:
  - The classification dump: The `Request new classification export` or `Request new workflow classification export` button from the lab's `Data Export` tab
  - The workflow dump: The `Request new workflow export` button from the lab's `Data Export` tab
- - The workflow contents (optional): The `Request new workflow contents export` button from the lab's `Data Export` tab.  This file is used to make a look up table between the column names used for each task/answer/tool and the original text used for them on the project.
 
 ### Example: Penguin Watch
 Penguin Watch has several workflows, for this example we will look at workflow number 6465 (time lapse cameras) and version `52.76`.  The downloaded files for this project are:
  - `penguin-watch-workflows.csv`: the workflow file (contains the major version number as a column)
- - `penguin-watch-workflow_contents.csv`: the workflow contents file (contains the minor version number as a column)
- - `time-lapse-cameras-classifications-trim.csv`: the classification file for workflow 6465
+ - `penguin-watch-classifications-trim.csv`: the classification file for workflow 6465
 
 This [zip folder](https://drive.google.com/file/d/177uXdt3IRIOc2b42UvG4EdNJv973RCtS/view?usp=sharing) contains these files.
 
@@ -42,9 +40,8 @@ optional arguments:
 Use the command line tool to make configuration `yaml` files that are used to set up the extractors and reducers.  These base files will use the default settings for various task types. They can be adjusted if the defaults are not needed (e.g. you don't need to extract all the tasks, or you need more control over the reducer's settings).
 
 ```bash
-usage: panoptes_aggregation config [-h] [-c WORKFLOW_CONTENT] [-d DIR]
-                                   [-v VERSION] [-m MINOR_VERSION]
-                                   [-l LANGUAGE] [-k KEYWORDS]
+usage: panoptes_aggregation config [-h] [-d DIR] [-v VERSION]
+                                   [-m MINOR_VERSION] [-k KEYWORDS] [-vv]
                                    workflow_csv workflow_id
 
 Make configuration files for panoptes data extraction and reduction based on a
@@ -54,17 +51,12 @@ optional arguments:
   -h, --help            show this help message and exit
 
 Load Workflow Files:
-  These files can be exported from a project\'s Data Export tab
+  This file can be exported from a project\'s Data Export tab
 
   workflow_csv          The csv file containing the workflow data
-  -c WORKFLOW_CONTENT, --workflow_content WORKFLOW_CONTENT
-                        The (optional) workflow content file can be provided
-                        to create a lookup table for task/answer/tool numbers
-                        to the text used on the workflow.
 
-ID, version numbers, and language:
-  Enter the workflow ID, major version number, minor version number, and
-  language
+Workflow ID and version numbers:
+  Enter the workflow ID, major version number, and minor version number
 
   workflow_id           the workflow ID you would like to extract
   -v VERSION, --version VERSION
@@ -72,8 +64,6 @@ ID, version numbers, and language:
   -m MINOR_VERSION, --minor_version MINOR_VERSION
                         The minor workflow version used to create the lookup
                         table for the workflow content
-  -l LANGUAGE, --language LANGUAGE
-                        The language to use for the workflow content
 
 Other keywords:
   Additional keywords to be passed into the configuration files
@@ -88,17 +78,20 @@ Save Config Files:
   The directory to save the configuration files to
 
   -d DIR, --dir DIR     The directory to save the configuration files to
+
+Other options:
+  -vv, --verbose        increase output verbosity
 ```
 
 ### Example: Penguin Watch
 ```bash
-panoptes_aggregation config penguin-watch-workflows.csv 6465 -v 52 -c penguin-watch-workflow_contents.csv -m 76
+panoptes_aggregation config penguin-watch-workflows.csv 6465 -v 52 -m 76
 ```
 
 This creates four files:
- - `Extractor_config_workflow_6465_V52.yaml`: The configuration for the extractor code
- - `Reducer_config_workflow_6465_V52_point_extractor_by_frame.yaml`: The configuration for the reducer used for the point task
- - `Reducer_config_workflow_6465_V52_question_extractor.yaml`: The configuration for the reducer used for the question task
+ - `Extractor_config_workflow_6465_V52.76.yaml`: The configuration for the extractor code
+ - `Reducer_config_workflow_6465_V52.76_point_extractor_by_frame.yaml`: The configuration for the reducer used for the point task
+ - `Reducer_config_workflow_6465_V52.76_question_extractor.yaml`: The configuration for the reducer used for the question task
  - `Task_labels_workflow_6465_V52.76.yaml`: A lookup table to translate the column names used in the extractor/reducer output files into the text originally used on the workflow.
 
 ---
@@ -135,7 +128,7 @@ Other options:
 ```
 
 ### Example: Penguin Watch
-Before starting let's take a closer look at the extractor configuration file `Extractor_config_workflow_6465_V52.yaml`:
+Before starting let's take a closer look at the extractor configuration file `Extractor_config_workflow_6465_V52.76.yaml`:
 ```yaml
 extractor_config:
     point_extractor_by_frame:
@@ -159,7 +152,7 @@ This shows the basic setup for what extractor will be used for each task.  From 
 Note: If a workflow contains any task types that don't have extractors or reducers they will not show up in this config file.
 
 ```bash
-panoptes_aggregation extract time-lapse-cameras-classifications-trim.csv Extractor_config_workflow_6465_V52.yaml -o example
+panoptes_aggregation extract penguin-watch-classifications-trim.csv Extractor_config_workflow_6465_V52.76.yaml -o example
 ```
 
 This creates two `csv` files (one for each extractor listed in the config file):
@@ -202,7 +195,7 @@ Reducer options:
 ```
 
 ### Example: Penguin Watch
-For this example we will do the point clustering for the task `T0`.  Let's take a look at the default config file for that reducer `Reducer_config_workflow_6465_V52_point_extractor_by_frame.yaml`:
+For this example we will do the point clustering for the task `T0`.  Let's take a look at the default config file for that reducer `Reducer_config_workflow_6465_V52.76_point_extractor_by_frame.yaml`:
 ```yaml
 reducer_config:
     point_reducer_dbscan:
@@ -235,7 +228,7 @@ reducer_config:
 
 Now that it is set up we can run:
 ```bash
-panoptes_aggregation reduce point_extractor_by_frame_example.csv Reducer_config_workflow_6465_V52_point_extractor_by_frame.yaml -o example
+panoptes_aggregation reduce point_extractor_by_frame_example.csv Reducer_config_workflow_6465_V52.76_point_extractor_by_frame.yaml -o example
 ```
 
 This will create one file:
