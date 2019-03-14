@@ -1,3 +1,4 @@
 [report]
 omit =
-  */tests/*
+  panoptes_aggregation/tests/*
+  panoptes_aggregation/scripts/gui*.py
