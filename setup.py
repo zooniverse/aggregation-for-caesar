@@ -65,7 +65,8 @@ setup(
         ],
         'test': [
             'nose',
-            'coverage'
+            'coverage',
+            'pylama'
         ],
         'gui': [
             'Gooey'

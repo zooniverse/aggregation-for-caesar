@@ -1,7 +1,7 @@
 # Contributing
 
 ## Code Style
-Use [PEP8](https://www.python.org/dev/peps/pep-0008/) syntax.
+[PEP8](https://www.python.org/dev/peps/pep-0008/) style is used in most cases and Pylama is used for linting by running `pylama` in the source directory.  The `setup.cfg` contains the configuration for the linter and lists the error codes that are being ignored.
 
 ---
 
@@ -99,5 +99,5 @@ The code is auto-documented using [sphinx](http://www.sphinx-doc.org/en/stable/i
 4. Build the docs with the `make_docs.sh` bash script
 
 ### 4. Make sure everything still works
-1. run `nosetests` and ensure all tests still pass
-2. (optional) run `nosetests --with-coverage --cover-erase --cover-html --cover-package=panoptes_aggregation` to check test coverage
+1. run `nosetests` and ensure all tests still pass (coverage is automatically reported)
+2. (optional) `nosetests --cover-html` to compile an html page for checking what parts of the code are not covered
