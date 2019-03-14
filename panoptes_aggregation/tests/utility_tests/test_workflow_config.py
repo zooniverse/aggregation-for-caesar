@@ -180,7 +180,9 @@ extractor_config = {
     ],
     'question_extractor': [
         {'task': 'T1'},
-        {'task': 'T2'},
+        {'task': 'T2'}
+    ],
+    'shortcut_extractor': [
         {'task': 'T6'}
     ],
     'survey_extractor': [
@@ -225,6 +227,7 @@ reducer_config = [
     {'shape_reducer_dbscan': {
         'shape': 'rectangle'
     }},
+    {'shortcut_reducer': {}},
     {'slider_reducer': {}},
     {'survey_reducer': {}}
 ]

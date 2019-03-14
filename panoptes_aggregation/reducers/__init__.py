@@ -20,6 +20,7 @@ reducers = {
     'point_reducer_hdbscan': point_reducer_hdbscan,
     'rectangle_reducer': rectangle_reducer,
     'question_reducer': question_reducer,
+    'shortcut_reducer': question_reducer,
     'survey_reducer': survey_reducer,
     'poly_line_text_reducer': poly_line_text_reducer,
     'sw_variant_reducer': sw_variant_reducer,
