@@ -1,4 +1,5 @@
 [![DOI](https://zenodo.org/badge/98517215.svg)](https://zenodo.org/badge/latestdoi/98517215)
+[![Coverage Status](https://coveralls.io/repos/github/zooniverse/aggregation-for-caesar/badge.svg?branch=master)](https://coveralls.io/github/zooniverse/aggregation-for-caesar?branch=master)
 
 # Getting started
 
