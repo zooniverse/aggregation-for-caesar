@@ -21,10 +21,8 @@ def config_workflow(
             workflow_csv,
             workflow_id,
             version=None,
-            keywords={},
-            workflow_content=None,
             minor_version=None,
-            language='en',
+            keywords={},
             output_dir=None,
             verbose=False
         ):
@@ -32,39 +30,46 @@ def config_workflow(
     with workflow_csv as workflow_csv_in:
         workflows = pandas.read_csv(workflow_csv_in, encoding='utf-8')
 
+    wdx = (workflows.workflow_id == workflow_id)
     if version is None:
-        version = workflows[workflows.workflow_id == workflow_id].version.max()
+        version = workflows[wdx].version.max()
         if verbose:
             warnings.warn('No major workflow version was specified, defaulting to version {0}'.format(version))
 
-    wdx = (workflows.workflow_id == workflow_id) & (workflows.version == version)
-    assert (wdx.sum() > 0), 'workflow ID and workflow major version combination does not exist'
-    assert (wdx.sum() == 1), 'workflow ID and workflow major version combination is not unique'
+    wdx &= (workflows.version == version)
+    if minor_version is None:
+        minor_version = workflows[wdx].minor_version.max()
+        if verbose:
+            warnings.warn('No minor workflow version was specified, defaulting to version {0}'.format(minor_version))
+
+    wdx &= (workflows.minor_version == minor_version)
+    assert (wdx.sum() > 0), 'workflow ID and workflow version combination does not exist'
+    assert (wdx.sum() == 1), 'workflow ID and workflow version combination is not unique'
     workflow = workflows[wdx].iloc[0]
     workflow_tasks = json.loads(workflow.tasks)
     extractor_config = workflow_extractor_config(workflow_tasks, keywords=keywords)
-    workflow_version = '{0}'.format(version)
-    if minor_version is not None:
-        workflow_version = '{0}.{1}'.format(version, minor_version)
+    workflow_version = '{0}.{1}'.format(version, minor_version)
     config = {
         'workflow_id': workflow_id,
         'workflow_version': workflow_version,
         'extractor_config': extractor_config
     }
-    filename = 'Extractor_config_workflow_{0}_V{1}.yaml'.format(workflow_id, version)
+    # configure the extractors
+    filename = 'Extractor_config_workflow_{0}_V{1}.yaml'.format(workflow_id, workflow_version)
     if output_dir is not None:
         filename = os.path.join(output_dir, filename)
     with open(filename, 'w', encoding='utf-8') as stream:
         yaml.dump(config, stream=stream, default_flow_style=False, indent=4)
         print('Saving Extractor config to:\n{0}'.format(filename))
         print()
+    # configure the reducers
     reducer_config_list = workflow_reducer_config(extractor_config)
     task_set = set({})
     for extractor, reducer in zip(sorted(extractor_config.keys()), reducer_config_list):
         reducer_config = {
             'reducer_config': reducer
         }
-        filename = 'Reducer_config_workflow_{0}_V{1}_{2}.yaml'.format(workflow_id, version, extractor)
+        filename = 'Reducer_config_workflow_{0}_V{1}_{2}.yaml'.format(workflow_id, workflow_version, extractor)
         if output_dir is not None:
             filename = os.path.join(output_dir, filename)
         with open(filename, 'w', encoding='utf-8') as stream:
@@ -73,26 +78,13 @@ def config_workflow(
             print()
         for task in extractor_config[extractor]:
             task_set.add(task['task'])
-    if workflow_content is not None:
-        workflow_content = get_file_instance(workflow_content)
-        with workflow_content as workflow_content_in:
-            contents = pandas.read_csv(workflow_content_in, encoding='utf-8')
-        if minor_version is None:
-            minor_version = contents[contents.workflow_id == workflow_id].version.max()
-            if verbose:
-                warnings.warn('No minor workflow version was specified, defaulting to version {0}'.format(minor_version))
-        cdx = (contents.workflow_id == workflow_id) & (contents.version == minor_version)
-        if cdx.sum() == 0:
-            raise IndexError('workflow ID and workflow minor version combination does not exist')
-        if cdx.sum() > 1:
-            raise IndexError('workflow ID and workflow mainor version combination is not unique')
-        content = contents[cdx].iloc[0]
-        strings = eval(content.strings)
-        stirngs_extract = {key: value for key, value in strings.items() for task in task_set if (key.startswith(task) and ('help' not in key))}
-        filename = 'Task_labels_workflow_{0}_V{1}.{2}.yaml'.format(workflow_id, version, minor_version)
-        if output_dir is not None:
-            filename = os.path.join(output_dir, filename)
-        with open(filename, 'w', encoding='utf-8') as stream:
-            yaml.dump(stirngs_extract, stream=stream, default_flow_style=False, indent=4)
-            print('Saving task key look up table to:\n{0}'.format(filename))
+    # make the task string look up table
+    strings = eval(workflow.strings)
+    stirngs_extract = {key: value for key, value in strings.items() for task in task_set if (key.startswith(task) and ('help' not in key))}
+    filename = 'Task_labels_workflow_{0}_V{1}.yaml'.format(workflow_id, workflow_version)
+    if output_dir is not None:
+        filename = os.path.join(output_dir, filename)
+    with open(filename, 'w', encoding='utf-8') as stream:
+        yaml.dump(stirngs_extract, stream=stream, default_flow_style=False, indent=4)
+        print('Saving task key look up table to:\n{0}'.format(filename))
     return config

@@ -10,8 +10,7 @@ You will need two to three files from your project for offline use:
 ### Example: Penguin Watch
 Penguin Watch has several workflows, for this example we will look at workflow number 6465 (time lapse cameras) and version `52.76`.  The downloaded files for this project are:
  - `penguin-watch-workflows.csv`: the workflow file (contains the major version number as a column)
- - `penguin-watch-workflow_contents.csv`: the workflow contents file (contains the minor version number as a column)
- - `time-lapse-cameras-classifications-trim.csv`: the classification file for workflow 6465
+ - `penguin-watch-classifications-trim.csv`: the classification file for workflow 6465
 
 This [zip folder](https://drive.google.com/file/d/177uXdt3IRIOc2b42UvG4EdNJv973RCtS/view?usp=sharing) contains these files.
 
@@ -36,9 +35,9 @@ We want to configure files for workflow 6465 v52.76.  Enter this information int
 ![GUI config](_static/gui_config_output.png)
 
 We can see this created four `yaml` files in our chosen output directory:
- - `Extractor_config_workflow_6465_V52.yaml`: The configuration for the extractor code
- - `Reducer_config_workflow_6465_V52_point_extractor_by_frame.yaml`: The configuration for the reducer used for the point task
- - `Reducer_config_workflow_6465_V52_question_extractor.yaml`: The configuration for the reducer used for the question task
+ - `Extractor_config_workflow_6465_V52.76.yaml`: The configuration for the extractor code
+ - `Reducer_config_workflow_6465_V52.76_point_extractor_by_frame.yaml`: The configuration for the reducer used for the point task
+ - `Reducer_config_workflow_6465_V52.76_question_extractor.yaml`: The configuration for the reducer used for the question task
  - `Task_labels_workflow_6465_V52.76.yaml`: A lookup table to translate the column names used in the extractor/reducer output files into the text originally used on the workflow.
 
 Click the `Edit` button to go back to the previous screen.
@@ -94,7 +93,7 @@ Note: this only works for some task types, see the [documentation](https://aggre
 The `reduce` tab will reduce the extracts by `subject_id` into a consensus aggregation.
 
 ### Example: Penguin Watch
-For this example we will do the point clustering for the task `T0`.  Let's take a look at the default config file for that reducer `Reducer_config_workflow_6465_V52_point_extractor_by_frame.yaml`:
+For this example we will do the point clustering for the task `T0`.  Let's take a look at the default config file for that reducer `Reducer_config_workflow_6465_V52.76_point_extractor_by_frame.yaml`:
 ```yaml
 reducer_config:
     point_reducer_dbscan:
