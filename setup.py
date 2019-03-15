@@ -67,7 +67,7 @@ setup(
             'nose',
             'coverage',
             'coveralls',
-            'pylama'
+            'flake8'
         ],
         'gui': [
             'Gooey'

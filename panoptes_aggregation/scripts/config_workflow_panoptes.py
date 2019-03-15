@@ -18,14 +18,14 @@ def get_file_instance(file):
 
 
 def config_workflow(
-            workflow_csv,
-            workflow_id,
-            version=None,
-            minor_version=None,
-            keywords={},
-            output_dir=None,
-            verbose=False
-        ):
+    workflow_csv,
+    workflow_id,
+    version=None,
+    minor_version=None,
+    keywords={},
+    output_dir=None,
+    verbose=False
+):
     workflow_csv = get_file_instance(workflow_csv)
     with workflow_csv as workflow_csv_in:
         workflows = pandas.read_csv(workflow_csv_in, encoding='utf-8')

@@ -28,13 +28,13 @@ def get_major_version(s):
 
 
 def extract_csv(
-            classification_csv,
-            config,
-            output_dir=os.path.abspath('.'),
-            output_name='extractions',
-            order=False,
-            verbose=False
-        ):
+    classification_csv,
+    config,
+    output_dir=os.path.abspath('.'),
+    output_name='extractions',
+    order=False,
+    verbose=False
+):
     config = get_file_instance(config)
     with config as config_in:
         config_yaml = yaml.load(config_in)

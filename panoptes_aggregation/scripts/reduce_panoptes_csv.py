@@ -40,14 +40,14 @@ def get_file_instance(file):
 
 
 def reduce_csv(
-            extracted_csv,
-            reducer_config,
-            filter='first',
-            output_name='reductions',
-            output_dir=os.path.abspath('.'),
-            order=False,
-            stream=False
-        ):
+    extracted_csv,
+    reducer_config,
+    filter='first',
+    output_name='reductions',
+    output_dir=os.path.abspath('.'),
+    order=False,
+    stream=False
+):
     extracted_csv = get_file_instance(extracted_csv)
     with extracted_csv as extracted_csv_in:
         extracted = pandas.read_csv(extracted_csv_in, infer_datetime_format=True, parse_dates=['created_at'], encoding='utf-8')
