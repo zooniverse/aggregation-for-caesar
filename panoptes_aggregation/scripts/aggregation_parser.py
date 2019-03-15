@@ -4,6 +4,7 @@ import panoptes_aggregation
 import argparse
 import json
 import os
+import sys
 
 try:
     from gooey import GooeyParser
@@ -11,7 +12,7 @@ except ImportError:
     from .no_gooey import GooeyParser
 
 
-def main():
+def main(args=None):
     parser = GooeyParser(
         description="Aggregate panoptes data files"
     )
@@ -247,7 +248,7 @@ def main():
         action="store_true"
     )
 
-    args = parser.parse_args()
+    args = parser.parse_args(args)
     if args.subparser == 'config':
         panoptes_aggregation.scripts.config_workflow(
             args.workflow_csv,
@@ -279,7 +280,8 @@ def main():
         )
     else:
         raise ValueError('Invalid command')
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main(sys.argv[1:]))
