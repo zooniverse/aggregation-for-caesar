@@ -8,8 +8,8 @@ import sys
 
 try:
     from gooey import GooeyParser
-except ImportError:
-    from .no_gooey import GooeyParser
+except ImportError:  # pragma: no cover
+    from .no_gooey import GooeyParser  # pragma: no cover
 
 
 def main(args=None):
@@ -278,10 +278,8 @@ def main(args=None):
             order=args.order,
             stream=args.stream
         )
-    else:
-        raise ValueError('Invalid command')
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    main(sys.argv[1:])  # pragma: no cover

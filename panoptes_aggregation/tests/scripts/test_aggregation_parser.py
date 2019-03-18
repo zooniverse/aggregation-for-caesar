@@ -24,7 +24,7 @@ class TestAggregationParser(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.aggregation_parser.argparse.FileType')
     @patch('panoptes_aggregation.scripts.extract_csv')
     def test_extract_called(self, mock_extract_csv, mock_FileType):
-        '''Test panoptes_aggregation config calls config_workflow once'''
+        '''Test panoptes_aggregation extract calls extract_csv once'''
         panoptes_aggregation.scripts.parser_main(['extract', 'file_in_1', 'file_in_2'])
         mock_extract_csv.assert_called_once_with(
             mock_FileType.return_value.return_value,
@@ -38,7 +38,7 @@ class TestAggregationParser(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.aggregation_parser.argparse.FileType')
     @patch('panoptes_aggregation.scripts.reduce_csv')
     def test_reduce_called(self, mock_reduce_csv, mock_FileType):
-        '''Test panoptes_aggregation config calls config_workflow once'''
+        '''Test panoptes_aggregation reduce calls reduce_csv once'''
         panoptes_aggregation.scripts.parser_main(['reduce', 'file_in_1', 'file_in_2'])
         mock_reduce_csv.assert_called_once_with(
             mock_FileType.return_value.return_value,
