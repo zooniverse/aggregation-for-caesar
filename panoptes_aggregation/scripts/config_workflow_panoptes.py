@@ -13,7 +13,7 @@ import pandas
 
 def get_file_instance(file):
     if not isinstance(file, io.IOBase):
-        file = open(file, 'r', encoding='utf-8')
+        file = open(file, 'r', encoding='utf-8')  # pragma: no cover
     return file
 
 
