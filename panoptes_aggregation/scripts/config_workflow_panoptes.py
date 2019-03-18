@@ -87,4 +87,4 @@ def config_workflow(
     with open(filename, 'w', encoding='utf-8') as stream:
         yaml.dump(stirngs_extract, stream=stream, default_flow_style=False, indent=4)
         print('Saving task key look up table to:\n{0}'.format(filename))
-    return config
+    return config, reducer_config, stirngs_extract
