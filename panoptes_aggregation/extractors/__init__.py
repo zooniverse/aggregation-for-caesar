@@ -2,6 +2,7 @@ from .point_extractor import point_extractor
 from .point_extractor_by_frame import point_extractor_by_frame
 from .rectangle_extractor import rectangle_extractor
 from .question_extractor import question_extractor
+from .shortcut_extractor import shortcut_extractor
 from .survey_extractor import survey_extractor
 from .poly_line_text_extractor import poly_line_text_extractor
 from .line_text_extractor import line_text_extractor
@@ -17,7 +18,7 @@ extractors = {
     'point_extractor_by_frame': point_extractor_by_frame,
     'rectangle_extractor': rectangle_extractor,
     'question_extractor': question_extractor,
-    'shortcut_extractor': question_extractor,
+    'shortcut_extractor': shortcut_extractor,
     'survey_extractor': survey_extractor,
     'poly_line_text_extractor': poly_line_text_extractor,
     'line_text_extractor': line_text_extractor,
