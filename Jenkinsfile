@@ -1,7 +1,7 @@
 #!groovy
 
 node {
-    checkout scm
+    def scmVars = checkout scm
 
     def dockerRepoName = 'zooniverse/aggregation-for-caesar'
     def stackName = 'aggregation-caesar'
@@ -12,6 +12,7 @@ node {
     stage('Build Docker image') {
         newImage = docker.build(dockerImageName)
         newImage.push()
+        newImage.push(scmVars.GIT_COMMIT)
     }
 
     if (BRANCH_NAME == 'master') {
@@ -19,14 +20,9 @@ node {
             newImage.push('latest')
         }
 
-        stage('Deploy to Swarm') {
-            sh """
-                cd "/var/jenkins_home/jobs/Zooniverse GitHub/jobs/operations/branches/master/workspace" && \
-                ./hermes_wrapper.sh exec swarm19a -- \
-                    docker stack deploy --prune \
-  	                -c /opt/infrastructure/stacks/${stackName}.yml \
-                    ${stackName}
-            """
+        stage('Deploy to Kubernetes') {
+          sh "kubectl apply --record -f kubernetes/"
+          sh "sed 's/__IMAGE_TAG__/${scmVars.GIT_COMMIT}/g' kubernetes/deployment.tmpl | kubectl apply --record -f -"
         }
     }
 }
