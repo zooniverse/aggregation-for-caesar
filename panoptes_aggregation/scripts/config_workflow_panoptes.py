@@ -13,19 +13,19 @@ import pandas
 
 def get_file_instance(file):
     if not isinstance(file, io.IOBase):
-        file = open(file, 'r', encoding='utf-8')
+        file = open(file, 'r', encoding='utf-8')  # pragma: no cover
     return file
 
 
 def config_workflow(
-            workflow_csv,
-            workflow_id,
-            version=None,
-            minor_version=None,
-            keywords={},
-            output_dir=None,
-            verbose=False
-        ):
+    workflow_csv,
+    workflow_id,
+    version=None,
+    minor_version=None,
+    keywords={},
+    output_dir=None,
+    verbose=False
+):
     workflow_csv = get_file_instance(workflow_csv)
     with workflow_csv as workflow_csv_in:
         workflows = pandas.read_csv(workflow_csv_in, encoding='utf-8')
@@ -87,4 +87,4 @@ def config_workflow(
     with open(filename, 'w', encoding='utf-8') as stream:
         yaml.dump(stirngs_extract, stream=stream, default_flow_style=False, indent=4)
         print('Saving task key look up table to:\n{0}'.format(filename))
-    return config
+    return config, reducer_config, stirngs_extract

@@ -19,7 +19,7 @@ from panoptes_aggregation.extractors.utilities import annotation_by_task
 
 def get_file_instance(file):
     if not isinstance(file, io.IOBase):
-        file = open(file, 'r', encoding='utf-8')
+        file = open(file, 'r', encoding='utf-8')  # pragma: no cover
     return file
 
 
@@ -28,13 +28,13 @@ def get_major_version(s):
 
 
 def extract_csv(
-            classification_csv,
-            config,
-            output_dir=os.path.abspath('.'),
-            output_name='extractions',
-            order=False,
-            verbose=False
-        ):
+    classification_csv,
+    config,
+    output_dir=os.path.abspath('.'),
+    output_name='extractions',
+    order=False,
+    verbose=False
+):
     config = get_file_instance(config)
     with config as config_in:
         config_yaml = yaml.load(config_in)
@@ -91,9 +91,13 @@ def extract_csv(
                     try:
                         extract = extractors.extractors[extractor_key](copy.deepcopy(classification_by_task), **keyword)
                     except:
-                        print()
-                        print('Incorrectly formatted annotation')
-                        print(classification)
+                        if verbose:
+                            print()
+                            print('Incorrectly formatted annotation')
+                            print(classification)
+                            print(extractor_key)
+                            print(classification_by_task)
+                            print(keyword)
                         continue
                     if isinstance(extract, list):
                         for e in extract:
@@ -126,8 +130,6 @@ def extract_csv(
     output_base_name, output_ext = os.path.splitext(output_name)
     output_files = []
     for extractor_name, data in extracted_data.items():
-        if (len(data['data']) == 0) and (verbose):
-            warnings.warn('No data extracted with {0}'.format(extractor_name))
         output_path = os.path.join(output_dir, '{0}_{1}.csv'.format(extractor_name, output_base_name))
         output_files.append(output_path)
         flat_extract = flatten_data(data)

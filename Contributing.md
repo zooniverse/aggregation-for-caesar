@@ -1,7 +1,7 @@
 # Contributing
 
 ## Code Style
-[PEP8](https://www.python.org/dev/peps/pep-0008/) style is used in most cases and Pylama is used for linting by running `pylama` in the source directory.  The `setup.cfg` contains the configuration for the linter and lists the error codes that are being ignored.
+[PEP8](https://www.python.org/dev/peps/pep-0008/) style is used in most cases and flake8 is used for linting by running `flake8` in the source directory.  The `setup.cfg` contains the configuration for the linter and lists the error codes and files that are being ignored.
 
 ---
 
