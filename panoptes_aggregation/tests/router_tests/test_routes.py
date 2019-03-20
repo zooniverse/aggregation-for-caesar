@@ -1,5 +1,5 @@
 try:
-    import flask
+    import flask  # noqa: F401
     OFFLINE = False
 except ImportError:
     OFFLINE = True
