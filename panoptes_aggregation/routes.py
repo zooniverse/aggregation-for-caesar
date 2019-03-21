@@ -1,5 +1,9 @@
-from flask import jsonify, request, Flask
-from flask.json import JSONEncoder
+try:
+    from flask import jsonify, request, Flask
+    from flask.json import JSONEncoder
+except ImportError:
+    print('You must install `flask` to use panoptes_aggregation.routes')
+    raise
 from functools import wraps
 import os
 from panoptes_aggregation import reducers
