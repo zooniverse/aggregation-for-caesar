@@ -56,6 +56,7 @@ setup(
     extras_require={
         'online': [
             'flask',
+            'panoptes-client'
         ],
         'doc': [
             'recommonmark',
@@ -67,7 +68,8 @@ setup(
             'nose',
             'coverage',
             'coveralls',
-            'flake8'
+            'flake8',
+            'panoptes-client'
         ],
         'gui': [
             'Gooey'
