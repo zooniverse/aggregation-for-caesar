@@ -6,6 +6,7 @@ except ImportError:
 import unittest
 from unittest.mock import patch, MagicMock
 import numpy as np
+import os
 import panoptes_aggregation.routes as routes
 import panoptes_aggregation
 
@@ -67,6 +68,7 @@ class RouterTest(unittest.TestCase):
                 )
 
     @unittest.skipIf(OFFLINE, 'Installed in offline mode')
+    @unittest.skipIf("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true", "Skipping this test on Travis CI.")
     def test_docs_route(self):
         '''Test docs route works'''
         with self.application.test_client() as client:
