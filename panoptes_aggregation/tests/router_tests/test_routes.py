@@ -1,5 +1,5 @@
 try:
-    import flask  # noqa: F401
+    import panoptes_aggregation.routes as routes
     OFFLINE = False
 except ImportError:
     OFFLINE = True
@@ -7,8 +7,6 @@ import unittest
 from unittest.mock import patch, MagicMock
 import numpy as np
 import os
-if not OFFLINE:
-    import panoptes_aggregation.routes as routes
 import panoptes_aggregation
 
 mock_question_extractor = MagicMock()
