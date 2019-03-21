@@ -37,7 +37,7 @@ def extract_csv(
 ):
     config = get_file_instance(config)
     with config as config_in:
-        config_yaml = yaml.load(config_in)
+        config_yaml = yaml.load(config_in, Loader=yaml.SafeLoader)
 
     extractor_config = config_yaml['extractor_config']
     workflow_id = config_yaml['workflow_id']

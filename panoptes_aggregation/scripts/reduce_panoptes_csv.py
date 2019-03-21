@@ -60,7 +60,7 @@ def reduce_csv(
 
     reducer_config = get_file_instance(reducer_config)
     with reducer_config as config:
-        config_yaml = yaml.load(config)
+        config_yaml = yaml.load(config, Loader=yaml.SafeLoader)
 
     assert (len(config_yaml['reducer_config']) == 1), 'There must be only one reducer in the config file.'
     for key, value in config_yaml['reducer_config'].items():
