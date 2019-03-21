@@ -17,4 +17,4 @@ RUN pip install -U .[online,test,doc]
 # make documentation
 RUN /bin/bash -lc ./make_docs.sh
 
-CMD python routes.py
+CMD python ./panoptes_aggregation/routes.py
