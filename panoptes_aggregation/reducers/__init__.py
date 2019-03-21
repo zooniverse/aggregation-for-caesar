@@ -3,7 +3,6 @@ from .point_reducer_dbscan import point_reducer_dbscan
 from .point_reducer_hdbscan import point_reducer_hdbscan
 from .rectangle_reducer import rectangle_reducer
 from .question_reducer import question_reducer
-from .shortcut_reducer import shortcut_reducer
 from .survey_reducer import survey_reducer
 from .poly_line_text_reducer import poly_line_text_reducer
 from .dropdown_reducer import dropdown_reducer
@@ -14,6 +13,9 @@ from .shape_reducer_hdbscan import shape_reducer_hdbscan
 from .slider_reducer import slider_reducer
 from .tess_reducer_column import tess_reducer_column
 from .tess_gold_standard_reducer import tess_gold_standard_reducer
+from ..copy_function import copy_function
+
+shortcut_reducer = copy_function(question_reducer, 'shortcut_reducer')
 
 reducers = {
     'point_reducer': point_reducer,

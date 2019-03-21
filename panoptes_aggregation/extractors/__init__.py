@@ -2,7 +2,6 @@ from .point_extractor import point_extractor
 from .point_extractor_by_frame import point_extractor_by_frame
 from .rectangle_extractor import rectangle_extractor
 from .question_extractor import question_extractor
-from .shortcut_extractor import shortcut_extractor
 from .survey_extractor import survey_extractor
 from .poly_line_text_extractor import poly_line_text_extractor
 from .line_text_extractor import line_text_extractor
@@ -12,6 +11,9 @@ from .sw_graphic_extractor import sw_graphic_extractor
 from .dropdown_extractor import dropdown_extractor
 from .shape_extractor import shape_extractor
 from .slider_extractor import slider_extractor
+from ..copy_function import copy_function
+
+shortcut_extractor = copy_function(question_extractor, 'shortcut_extractor')
 
 extractors = {
     'point_extractor': point_extractor,
