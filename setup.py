@@ -56,7 +56,8 @@ setup(
     extras_require={
         'online': [
             'flask',
-            'panoptes-client'
+            'panoptes-client',
+            'requests'
         ],
         'doc': [
             'recommonmark',
@@ -69,7 +70,6 @@ setup(
             'coverage',
             'coveralls',
             'flake8',
-            'panoptes-client'
         ],
         'gui': [
             'Gooey'

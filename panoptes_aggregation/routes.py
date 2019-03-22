@@ -1,6 +1,7 @@
 try:
     from flask import jsonify, request, Flask
     from flask.json import JSONEncoder
+    from panoptes_aggregation import panoptes
 except ImportError:  # pragma: no cover
     print('You must install `flask` to use panoptes_aggregation.routes')  # pragma: no cover
     raise  # pragma: no cover
@@ -70,6 +71,9 @@ def make_application():
 
     for route, route_function in running_reducers.running_reducers.items():
         application.route('/running_reducers/{0}'.format(route), methods=['POST', 'GET'])(request_wrapper(route)(route_function))
+
+    for route, route_function in panoptes.panoptes.items():
+        application.route('/panoptes/{0}'.format(route), methods=['POST', 'PUT', 'GET'])(route_function)
 
     @application.route('/docs')
     def web_docs():
