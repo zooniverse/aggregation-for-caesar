@@ -56,7 +56,7 @@ The code is auto-documented using [sphinx](http://www.sphinx-doc.org/en/stable/i
 
 ### 5. Make sure everything still works
 1. run `nosetests` and ensure all tests still pass
-2. (optional) run `nosetests --with-coverage --cover-erase --cover-html --cover-package=panoptes_aggregation` to check test coverage
+2. (optional) `nosetests --cover-html` to compile an html page for checking what parts of the code are not covered
 
 ---
 
@@ -101,3 +101,15 @@ The code is auto-documented using [sphinx](http://www.sphinx-doc.org/en/stable/i
 ### 4. Make sure everything still works
 1. run `nosetests` and ensure all tests still pass (coverage is automatically reported)
 2. (optional) `nosetests --cover-html` to compile an html page for checking what parts of the code are not covered
+
+---
+
+## Copying extractors and reducers
+
+Sometimes it is useful to have two extractor/reducers routes point to the same underlying function (e.g. question and shortcut tasks), to ensure separate `csv` files are created in offline mode.  Unfortunately if you just place the same function multiple times in the `extractors/__init__.py` or `reducers/__init__.py` dictionaries `flask` will crash since two routes point to functions with the same name.  To help with this `panoptes_aggregation.copy_function.copy_function` can be used to clone any function with a new name:
+
+```python
+from panoptes_aggregation.copy_function import copy_function
+
+new_function = copy_function(old_function, 'new_name')
+```

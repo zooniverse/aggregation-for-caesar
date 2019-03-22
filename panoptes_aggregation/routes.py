@@ -1,9 +1,9 @@
 try:
     from flask import jsonify, request, Flask
     from flask.json import JSONEncoder
-except ImportError:
-    print('You must install `flask` to use panoptes_aggregation.routes')
-    raise
+except ImportError:  # pragma: no cover
+    print('You must install `flask` to use panoptes_aggregation.routes')  # pragma: no cover
+    raise  # pragma: no cover
 from functools import wraps
 import os
 from panoptes_aggregation import reducers
