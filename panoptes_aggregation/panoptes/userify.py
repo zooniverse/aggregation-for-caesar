@@ -1,10 +1,8 @@
 from collections import Iterable
 from json import dumps as jsonify
 from os import environ
-from flask import request
 from panoptes_client import Panoptes, User
 import requests
-from sys import modules
 
 
 class ConfigurationError(Exception):
@@ -25,22 +23,18 @@ destinations = {
 }
 
 
-def userify():
+def userify(all_args, target_object):
     global users
-    if request.method == 'GET':
-        return 'Usage'
-    elif request.method in ['POST', 'PUT']:
-        find_fields = _discover_fields(request.args)
-        target_object = request.get_json()
-        destination = request.args.get('destination')
+    find_fields = _discover_fields(all_args)
+    destination = all_args.get('destination')
 
-        _stuff_object(target_object, find_fields)
-        users = {}
+    _stuff_object(target_object, find_fields)
+    users = {}
 
-        if destination:
-            _forward_contents(target_object, destination)
+    if destination:
+        _forward_contents(target_object, destination)
 
-        return jsonify(target_object)
+    return jsonify(target_object)
 
 
 def _forward_contents(payload, destination):
@@ -62,9 +56,11 @@ def _stuff_object(target_object, find_fields):
         target_object['users'] = target_object.get('users', [])
         target_object['users'].append(_build_user_hash(user, find_fields))
 
+    return target_object
+
 
 def _discover_fields(request_args):
-    raw_list = request_args.to_dict().keys()
+    raw_list = request_args.keys()
     return [i for i in raw_list if i not in known_params]
 
 
@@ -81,7 +77,7 @@ def _discover_user_ids(target_object):
 def _build_user_hash(user, find_fields):
     user_hash = {'id': user.id}
     for key in find_fields:
-        user_hash[key] = user.__getattr__(key)
+        user_hash[key] = getattr(user, key)
     return user_hash
 
 
@@ -98,6 +94,7 @@ def _flatten(l):
 
 
 def _retrieve_user(user_id):
+    global connected
     if user_id in users:
         user = users[user_id]
     else:
