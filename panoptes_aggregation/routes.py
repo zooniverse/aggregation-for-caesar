@@ -73,7 +73,7 @@ def make_application():
         application.route('/running_reducers/{0}'.format(route), methods=['POST', 'GET'])(request_wrapper(route)(route_function))
 
     for route, route_function in panoptes.panoptes.items():
-        application.route('/panoptes/{0}'.format(route), methods=['POST', 'PUT', 'GET'])(route_function)
+        application.route('/panoptes/{0}'.format(route), methods=['POST', 'PUT'])(lambda: route_function(request.args.to_dict(), request.get_json()))
 
     @application.route('/docs')
     def web_docs():
