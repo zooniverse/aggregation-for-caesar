@@ -17,6 +17,7 @@ Welcome to panoptes_aggregation's documentation
    extractors
    reducers
    running_reducers
+   panoptes
    Contributing
    CODE_OF_CONDUCT
 
