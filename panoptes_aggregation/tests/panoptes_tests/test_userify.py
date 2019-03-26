@@ -4,6 +4,10 @@ from unittest.mock import MagicMock, PropertyMock, Mock
 from nose.tools import assert_equals, assert_raises, assert_count_equal
 from panoptes_client import Panoptes, User
 import requests
+from os import environ
+
+environ.setdefault('FLASK_PANOPTES_ID', 'TEST')
+environ.setdefault('FLASK_PANOPTES_SECRET', 'TEST')
 
 panoptes = import_module('panoptes_aggregation.panoptes', __name__).panoptes_testing
 

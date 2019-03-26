@@ -1,3 +1,9 @@
+'''
+Panoptes Userify
+------------------
+This module provides a function to Fetch specific information from panoptes
+about all users whose ids appear in the provided object.
+'''
 from collections import Iterable
 from json import dumps as jsonify
 from os import environ
@@ -6,6 +12,8 @@ import requests
 
 
 class ConfigurationError(Exception):
+    '''Indicates that no destination was provided or an unknown destination was provided
+    '''
     pass
 
 
@@ -24,6 +32,46 @@ destinations = {
 
 
 def userify(all_args, target_object):
+    '''Augment `target_object` with panoptes user data specified in `all_args` and post it to the specified endpoint
+
+    Parameters
+    ----------
+    all_args : dict
+        A dictionary containing the key/value pairs from the querystring;
+        these represent either certain predefined fields like destination
+        or the names of fields to be retrieved from the `User` objects
+
+    target_object : dict
+        A dictionary containing an object vivified from a JSON string in
+        the request body. This entire object graph will be searched for
+        all occurrences of `user_id` and `user_ids` and any object that has
+        either will be populated with a `users` array containing the
+        requested fields
+
+    Returns
+    -------
+    target_object : dict
+        The original object, augmented with User arrays for each object
+        in the object graph with a `user_id` or `user_ids` field.
+
+    Examples
+    --------
+    >>> userify({'login': None, 'destination': 'mast'}, {
+        'some_field': 'some_value',
+        'user_ids': [[1, 2], 3],
+        'another_field': 'another_value'
+    })
+    {
+        'some_field': 'some_value',
+        'user_ids': [[1, 2], 3],
+        'another_field': 'another_value',
+        'users': [
+            {'id': 1, 'login': 'login 1'},
+            {'id': 2, 'login': 'login 2'},
+            {'id': 3, 'login': 'login 3'}
+        ]
+    }
+    '''
     global users
     find_fields = _discover_fields(all_args)
     destination = all_args.get('destination')
