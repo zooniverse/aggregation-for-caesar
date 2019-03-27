@@ -76,13 +76,14 @@ def tess_reducer_column(data_by_tool, **kwargs):
     Returns
     -------
     reduction : dict
-        A dictinary with the following keys
+        A dictionary with the following keys
 
         * `centers` : A list with the center `x` position for all identified columns
         * `widths` : A list with the full width of all identified columns
         * `counts` : A list with the number of volunteers who identified each column
         * `weighted_counts` : A list with the weighted number of volunteers who identified each column
         * `user_ids`: A list of lists with the `user_id` for each volunteer who marked each column
+        * `max_weighted_counts`: The largest likelihood of a transit for this subject
     '''
     user_id = np.array(kwargs.pop('user_id'))
     relevant_reduction = kwargs.pop('relevant_reduction')
@@ -110,4 +111,5 @@ def tess_reducer_column(data_by_tool, **kwargs):
                 # user_ids in the cluster
                 k_users = [user_id[j] for j in index[idx]]
                 clusters.setdefault('user_ids', []).append(k_users)
+    clusters['max_weighted_count'] = max(clusters['weighted_counts'])
     return clusters
