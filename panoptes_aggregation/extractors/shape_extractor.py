@@ -44,7 +44,7 @@ def shape_extractor(classification, **kwargs):
         task_key = annotation['task']
         for value in annotation['value']:
             key = '{0}_tool{1}'.format(task_key, value['tool'])
-            frame = 'frame{0}'.format(value['frame'])
+            frame = 'frame{0}'.format(value.get('frame', 0))
             if all(param in value for param in shape_params):
                 extract.setdefault(frame, {})
                 for param in shape_params:
