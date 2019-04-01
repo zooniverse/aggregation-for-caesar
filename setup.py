@@ -57,6 +57,8 @@ setup(
         'online': [
             'flask',
             'panoptes-client',
+            'python-dotenv',
+            'pyyaml',
             'requests'
         ],
         'doc': [

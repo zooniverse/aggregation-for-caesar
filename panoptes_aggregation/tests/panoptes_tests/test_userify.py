@@ -6,8 +6,8 @@ from panoptes_client import Panoptes, User
 import requests
 from os import environ
 
-environ.setdefault('FLASK_PANOPTES_ID', 'TEST')
-environ.setdefault('FLASK_PANOPTES_SECRET', 'TEST')
+environ.setdefault('AGGREGATION_PANOPTES_ID', 'TEST')
+environ.setdefault('AGGREGATION_PANOPTES_SECRET', 'TEST')
 
 panoptes = import_module('panoptes_aggregation.panoptes', __name__).panoptes_testing
 
@@ -20,6 +20,8 @@ def build_mock_user(**kwargs):
 
 
 def test_userify():
+    panoptes._read_config = Mock(return_value={'endpoints': {'mockable': 'https://demo1580318.mockable.io/mast', 'mast': 'https://mast-forwarder.zooniverse.org/'}})
+
     # doesn't choke if nothing to do
     assert_equals(panoptes.userify({}, {'foo': 'bar'}), '{"foo": "bar"}')
     assert_equals(panoptes.userify({'login': None}, {'foo': 'bar'}), '{"foo": "bar"}')
@@ -156,6 +158,8 @@ def test_stuff_object():
 
 
 def test_forward_contents():
+    panoptes._read_config = Mock(return_value={'endpoints': {'mockable': 'https://demo1580318.mockable.io/mast', 'mast': 'https://mast-forwarder.zooniverse.org/'}})
+
     # only will send to known endpoints
     requests.post = MagicMock()
     assert_raises(panoptes.ConfigurationError, lambda: panoptes._forward_contents('contents', None))
@@ -169,4 +173,4 @@ def test_forward_contents():
     (requests.post).assert_called_once_with(url='https://demo1580318.mockable.io/mast', json={'foo': 'bar'})
     requests.post = MagicMock()
     panoptes._forward_contents({'foo': 'bar'}, 'mast')
-    (requests.post).assert_called_once_with(url='https://mast-forward.zooniverse.org/', json={'foo': 'bar'})
+    (requests.post).assert_called_once_with(url='https://mast-forwarder.zooniverse.org/', json={'foo': 'bar'})

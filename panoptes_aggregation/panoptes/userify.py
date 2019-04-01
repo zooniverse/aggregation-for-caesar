@@ -6,8 +6,9 @@ about all users whose ids appear in the provided object.
 '''
 from collections import Iterable
 from json import dumps as jsonify
-from os import environ
+from os import getenv
 from panoptes_client import Panoptes, User
+from yaml import safe_load
 import requests
 
 
@@ -17,18 +18,13 @@ class ConfigurationError(Exception):
     pass
 
 
-known_params = [
-    'destination'
-]
+known_params = ['destination']
 
 connected = False
 
 users = {}
 
-destinations = {
-    'mast': 'https://mast-forward.zooniverse.org/',
-    'mockable': 'https://demo1580318.mockable.io/mast'
-}
+destinations = None
 
 
 def userify(all_args, target_object):
@@ -85,7 +81,17 @@ def userify(all_args, target_object):
     return jsonify(target_object)
 
 
+def _read_config():  # pragma: no cover
+    with open('endpoints.yml', mode='r') as f:
+        return safe_load(f)
+
+
 def _forward_contents(payload, destination):
+    global destinations
+
+    if not destinations:
+        destinations = _read_config()['endpoints']
+
     if destination not in destinations:
         raise ConfigurationError('Unknown destination')
 
@@ -147,7 +153,12 @@ def _retrieve_user(user_id):
         user = users[user_id]
     else:
         if not connected:
-            Panoptes.connect(endpoint='https://panoptes.zooniverse.org/', client_id=environ['FLASK_PANOPTES_ID'], client_secret=environ['FLASK_PANOPTES_SECRET'])
+            Panoptes.connect(
+                endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
+                client_id=getenv('AGGREGATION_PANOPTES_ID'),
+                client_secret=getenv('AGGREGATION_PANOPTES_SECRET')
+            )
+
             connected = True
         user = User.find(user_id)
         users[user_id] = user
