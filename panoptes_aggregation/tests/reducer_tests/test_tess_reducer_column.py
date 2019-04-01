@@ -60,7 +60,7 @@ kwargs_extra_data = {
         {'data': {'skill': 0.8}},
         {'data': {'skill': 0.1}},
         {'data': {'skill': 0.3}},
-        {'data': {'skill': 0.2}}
+        None
     ]
 }
 
