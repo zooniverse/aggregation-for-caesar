@@ -16,10 +16,26 @@ classification = {
     ]
 }
 
+data_subject_classification = {
+    'annotations': [
+        {
+            'task': 'T0',
+            'value': [
+                {
+                    'tool': 0,
+                }
+            ]
+        }
+    ]
+}
+
 
 class ShapeExtractorBadKeywords(unittest.TestCase):
     def setUp(self):
         self.maxDiff = None
+
+    def test_missing_frame(self):
+        extractors.shape_extractor(annotation_by_task(data_subject_classification), shape="column")
 
     def test_no_keyword(self):
         '''Test error is raised if no keyword is used for shape'''
