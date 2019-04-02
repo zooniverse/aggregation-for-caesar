@@ -111,5 +111,8 @@ def tess_reducer_column(data_by_tool, **kwargs):
                 # user_ids in the cluster
                 k_users = [user_id[j] for j in index[idx]]
                 clusters.setdefault('user_ids', []).append(k_users)
-    clusters['max_weighted_count'] = max(clusters['weighted_counts'])
+    if 'weighted_counts' in clusters:
+        clusters['max_weighted_count'] = max(clusters['weighted_counts'])
+    else:
+        clusters['max_weighted_count'] = None
     return clusters
