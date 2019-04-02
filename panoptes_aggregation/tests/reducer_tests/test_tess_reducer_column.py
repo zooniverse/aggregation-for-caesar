@@ -153,3 +153,61 @@ TestTESSReducerColumnCenter = ReducerTest(
     },
     network_kwargs=kwargs_extra_data
 )
+
+extracted_data_no_cluster = [
+    {
+        'frame0': {
+            'T0_tool0_x': [
+                0.0,
+                100.0,
+                50.0
+            ],
+            'T0_tool0_width': [
+                1.0,
+                100.0,
+                50.0
+            ]
+        }
+    }
+]
+
+kwargs_extra_data_no_cluster = {
+    'user_id': [
+        1
+    ],
+    'relevant_reduction': [
+        {'data': {'skill': 0.4}}
+    ]
+}
+
+processed_data_no_cluster = {
+    'data': [
+        (0.0, 1.0),
+        (100.0, 100.0),
+        (50.0, 50.0),
+    ],
+    'index': [
+        0,
+        0,
+        0
+    ]
+}
+
+reduced_data_no_cluster = {
+    'max_weighted_count': None
+}
+
+TestTESSReducerColumnCenter = ReducerTest(
+    tess_reducer_column,
+    process_data,
+    extracted_data_no_cluster,
+    processed_data_no_cluster,
+    reduced_data_no_cluster,
+    'Test TESS column reducer no clusters',
+    kwargs={
+        'x': 'left',
+        'eps': 50,
+        'min_samples': 2
+    },
+    network_kwargs=kwargs_extra_data_no_cluster
+)
