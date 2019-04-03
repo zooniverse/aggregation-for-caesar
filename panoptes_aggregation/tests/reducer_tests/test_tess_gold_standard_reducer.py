@@ -2,30 +2,45 @@ from panoptes_aggregation.reducers.tess_gold_standard_reducer import process_dat
 from .base_test_class import ReducerTest
 
 extracted_data = [
-    [
-        {'success': True},
-        {'success': True},
-        {'success': False},
-        {'success': True}
-    ],
-    [
-        {'success': False},
-        {'success': True},
-        {'success': False},
-        {'success': True}
-    ],
-    [
-        {'success': True},
-        {'success': False},
-        {'success': True},
-        {'success': True}
-    ],
-    [
-        {'success': True},
-        {'success': True},
-        {'success': False},
-        {'success': True}
-    ]
+    {
+        'feedback':
+            [
+                {'success': True},
+                {'success': True},
+                {'success': False},
+                {'success': True}
+            ]
+    },
+    {
+        'feedback':
+            [
+                {'success': False},
+                {'success': True},
+                {'success': False},
+                {'success': True}
+            ]
+    },
+    {
+        'feedback':
+            [
+                {'success': True},
+                {'success': False},
+                {'success': True},
+                {'success': True}
+            ]
+    },
+    {
+        'feedback': None
+    },
+    {
+        'feedback':
+            [
+                {'success': True},
+                {'success': True},
+                {'success': False},
+                {'success': True}
+            ]
+    }
 ]
 
 processed_data = [

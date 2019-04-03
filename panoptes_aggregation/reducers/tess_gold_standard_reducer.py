@@ -5,7 +5,8 @@ import numpy as np
 def process_data(extracts):
     success = []
     for extract in extracts:
-        success.append([e['success'] for e in extract])
+        if extract['feedback']:
+            success.append([transit['success'] for transit in extract['feedback']])
     return success
 
 
