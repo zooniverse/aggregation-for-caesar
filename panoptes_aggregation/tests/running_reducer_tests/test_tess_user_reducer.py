@@ -1,14 +1,15 @@
 from panoptes_aggregation.running_reducers.tess_user_reducer import tess_user_reducer
 from .base_test_class import RunningReducerTestNoProcessing
 
-extracted_data = [
-    [
-        {'success': True},
-        {'success': True},
-        {'success': False},
-        {'success': True}
-    ]
-]
+extracted_data = [{
+    'feedback':
+        [
+            {'success': True},
+            {'success': True},
+            {'success': False},
+            {'success': True}
+        ]
+}]
 
 kwargs_extra_data = {
     'relevant_reduction': [
