@@ -38,7 +38,7 @@ def tess_user_reducer(data, **kwargs):
         * `data`: A dictionary with the `skill` value as the only item
         * `store`: The updated store for the user
     '''
-    success = [d['success'] for d in data[0]]
+    success = [d['success'] for d in data[0]['feedback']]
     store = kwargs.pop('store')
     d_subject = np.array(kwargs.pop('relevant_reduction')[0]['data']['difficulty'])
     seed_current = (np.where(success, 2, -1) * d_subject).sum()
