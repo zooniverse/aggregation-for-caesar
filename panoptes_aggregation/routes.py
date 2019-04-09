@@ -2,7 +2,6 @@ try:
     from flask import jsonify, request, Flask
     from flask.json import JSONEncoder
     from panoptes_aggregation import panoptes
-    from dotenv import load_dotenv
 except ImportError:  # pragma: no cover
     print('You must install `flask` to use panoptes_aggregation.routes')  # pragma: no cover
     raise  # pragma: no cover
@@ -52,8 +51,6 @@ def request_wrapper(name):
 
 
 def make_application():
-    load_dotenv()
-
     application = Flask(__name__,
                         instance_relative_config=True,
                         static_url_path='',

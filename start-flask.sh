@@ -1,11 +1,8 @@
 #!/bin/bash -e
 
-# load configs if present
-if [ "$FLASK_ENV" != "development" ]; then
-  if [ -f /run/secrets/environment ]
-  then
-      source /run/secrets/environment
-  fi
+# if there is no endpoints file create it
+if ! [ -f endpoints.yml ]; then
+  cp endpoints.yml.template endpoints.yml
 fi
 
 exec python panoptes_aggregation/routes.py
