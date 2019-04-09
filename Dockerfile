@@ -17,4 +17,5 @@ RUN pip install -U .[online,test,doc]
 # make documentation
 RUN /bin/bash -lc ./make_docs.sh
 
-CMD python ./panoptes_aggregation/routes.py
+# load configs and start flask app
+CMD ["bash", "./start-flask.sh"]

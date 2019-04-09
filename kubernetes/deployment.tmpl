@@ -17,5 +17,20 @@ spec:
       containers:
         - name: aggregation-caesar-app
           image: zooniverse/aggregation-for-caesar:__IMAGE_TAG__
+          env:
+            - name: FLASK_ENV
+              value: production
+            - name: PANOPTES_URL
+              value: https://panoptes.zooniverse.org/
+            - name: PANOPTES_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-for-caesar-environment
+                  key: PANOPES_CLIENT_ID
+            - name: PANOPTES_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-for-caesar-environment
+                  key: PANOPTES_CLIENT_SECRET
           ports:
             - containerPort: 80
