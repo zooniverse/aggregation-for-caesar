@@ -41,9 +41,9 @@ def tess_user_reducer(data, **kwargs):
     success = [d['success'] for d in data[0]['feedback']]
     store = kwargs.pop('store')
     relevant_reduction = kwargs.pop('relevant_reduction')[0]
-    if relevant_reduction:
+    try:
         d_subject = relevant_reduction['data']['difficulty']
-    else:
+    except:
         d_subject = 0
 
     seed_current = (np.where(success, 2, -1) * d_subject).sum()
