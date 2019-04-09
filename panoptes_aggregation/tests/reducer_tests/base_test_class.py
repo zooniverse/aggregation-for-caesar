@@ -52,8 +52,8 @@ def ReducerTest(
                 append_version(self.extracted_with_version)
             self.processed = copy.deepcopy(processed)
             self.reduced = copy.deepcopy(reduced)
-            self.reduced_with_vesrion = copy.deepcopy(reduced)
-            append_version(self.reduced_with_vesrion)
+            self.reduced_with_version = copy.deepcopy(reduced)
+            append_version(self.reduced_with_version)
 
         def shortDescription(self):
             return '{0}: {1}'.format(name, self._testMethodDoc)
@@ -74,7 +74,7 @@ def ReducerTest(
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(self.extracted_with_version, **kwargs, **pkwargs, **network_kwargs)
-            self.assertDictEqual(cast_to_dict(result), self.reduced_with_vesrion)
+            self.assertDictEqual(cast_to_dict(result), self.reduced_with_version)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_reducer_request(self):
@@ -91,7 +91,7 @@ def ReducerTest(
                 url_params = ''
             with app.test_request_context(url_params, **request_kwargs):
                 result = reducer(flask.request)
-                self.assertDictEqual(cast_to_dict(result), self.reduced_with_vesrion)
+                self.assertDictEqual(cast_to_dict(result), self.reduced_with_version)
 
     return ReducerTest
 
@@ -104,8 +104,8 @@ def ReducerTestNoProcessing(reducer, extracted, reduced, name, kwargs={}):
             self.extracted_with_version = copy.deepcopy(extracted)
             append_version(self.extracted_with_version)
             self.reduced = copy.deepcopy(reduced)
-            self.reduced_with_vesrion = copy.deepcopy(reduced)
-            append_version(self.reduced_with_vesrion)
+            self.reduced_with_version = copy.deepcopy(reduced)
+            append_version(self.reduced_with_version)
 
         def shortDescription(self):
             return '{0}: {1}'.format(name, self._testMethodDoc)
@@ -113,7 +113,7 @@ def ReducerTestNoProcessing(reducer, extracted, reduced, name, kwargs={}):
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(self.extracted_with_version, **kwargs)
-            self.assertDictEqual(result, self.reduced_with_vesrion)
+            self.assertDictEqual(result, self.reduced_with_version)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_request(self):
@@ -129,7 +129,7 @@ def ReducerTestNoProcessing(reducer, extracted, reduced, name, kwargs={}):
                 url_params = ''
             with app.test_request_context(url_params, **request_kwargs):
                 result = reducer(flask.request)
-                self.assertDictEqual(result, self.reduced_with_vesrion)
+                self.assertDictEqual(result, self.reduced_with_version)
 
     return ReducerTestNoProcessing
 
@@ -143,8 +143,8 @@ def ReducerTestSurvey(reducer, processer, extracted, processed, reduced, name):
             append_version(self.extracted_with_version)
             self.processed = copy.deepcopy(processed)
             self.reduced = copy.deepcopy(reduced)
-            self.reduced_with_vesrion = copy.deepcopy(reduced)
-            append_version(self.reduced_with_vesrion)
+            self.reduced_with_version = copy.deepcopy(reduced)
+            append_version(self.reduced_with_version)
 
         def shortDescription(self):
             return '{0}: {1}'.format(name, self._testMethodDoc)
@@ -163,7 +163,7 @@ def ReducerTestSurvey(reducer, processer, extracted, processed, reduced, name):
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(self.extracted_with_version)
-            self.assertCountEqual(result, self.reduced_with_vesrion)
+            self.assertCountEqual(result, self.reduced_with_version)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_reducer_request(self):
@@ -175,7 +175,7 @@ def ReducerTestSurvey(reducer, processer, extracted, processed, reduced, name):
             }
             with app.test_request_context(**request_kwargs):
                 result = reducer(flask.request)
-                self.assertCountEqual(result, self.reduced_with_vesrion)
+                self.assertCountEqual(result, self.reduced_with_version)
 
     return ReducerTest
 
@@ -189,8 +189,8 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
             append_version(self.extracted_with_version)
             self.processed = copy.deepcopy(processed)
             self.reduced = copy.deepcopy(reduced)
-            self.reduced_with_vesrion = copy.deepcopy(reduced)
-            append_version(self.reduced_with_vesrion)
+            self.reduced_with_version = copy.deepcopy(reduced)
+            append_version(self.reduced_with_version)
 
         def shortDescription(self):
             return '{0}: {1}'.format(name, self._testMethodDoc)
@@ -224,12 +224,12 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(self.extracted_with_version, **kwargs)
-            self.assertPoints(result, self.reduced_with_vesrion)
+            self.assertPoints(result, self.reduced_with_version)
 
         def test_keys(self):
             '''Test the keys match up'''
             result = reducer(self.extracted_with_version, **kwargs)
-            for i in self.reduced_with_vesrion.keys():
+            for i in self.reduced_with_version.keys():
                 with self.subTest(i=i):
                     self.assertIn(i, result)
                     if isinstance(result[i], dict):
@@ -251,6 +251,6 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
                 url_params = ''
             with app.test_request_context(url_params, **request_kwargs):
                 result = reducer(flask.request)
-                self.assertPoints(result, self.reduced_with_vesrion)
+                self.assertPoints(result, self.reduced_with_version)
 
     return ReducerTest

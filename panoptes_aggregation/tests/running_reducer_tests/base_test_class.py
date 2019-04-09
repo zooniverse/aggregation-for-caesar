@@ -25,8 +25,8 @@ def RunningReducerTestNoProcessing(
             self.maxDiff = None
             self.extracted = copy.deepcopy(extracted)
             self.reduced = copy.deepcopy(reduced)
-            self.reduced_with_vesrion = copy.deepcopy(reduced)
-            append_version(self.reduced_with_vesrion)
+            self.reduced_with_version = copy.deepcopy(reduced)
+            append_version(self.reduced_with_version)
 
         def shortDescription(self):
             return '{0}: {1}'.format(name, self._testMethodDoc)
@@ -34,7 +34,7 @@ def RunningReducerTestNoProcessing(
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(self.extracted, **kwargs, **network_kwargs)
-            self.assertDictEqual(result, self.reduced_with_vesrion)
+            self.assertDictEqual(result, self.reduced_with_version)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_request(self):
@@ -50,6 +50,6 @@ def RunningReducerTestNoProcessing(
                 url_params = ''
             with app.test_request_context(url_params, **request_kwargs):
                 result = reducer(flask.request)
-                self.assertDictEqual(result, self.reduced_with_vesrion)
+                self.assertDictEqual(result, self.reduced_with_version)
 
     return RunningReducerTestNoProcessing
