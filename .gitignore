@@ -107,3 +107,6 @@ ENV/
 handler_venv/*
 test_runner.py
 dist_installer/
+
+# endpoints file
+endpoints.yml
