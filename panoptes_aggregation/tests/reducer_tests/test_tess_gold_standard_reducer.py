@@ -69,3 +69,20 @@ TestTESSGoldStandardReducer = ReducerTest(
     add_version=False,
     processed_type='list'
 )
+
+extracted_data_empty = []
+
+processed_data_empty = []
+
+reduced_data_empty = {}
+
+TestTESSGoldStandardReducerEmpty = ReducerTest(
+    tess_gold_standard_reducer,
+    process_data,
+    extracted_data_empty,
+    processed_data_empty,
+    reduced_data_empty,
+    'Test TESS gold standard reducer with no extracts',
+    add_version=False,
+    processed_type='list'
+)
