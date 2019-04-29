@@ -151,8 +151,8 @@ def _retrieve_user(user_id):
     else:
         Panoptes.connect(
             endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
-            client_id=getenv('AGGREGATION_PANOPTES_ID'),
-            client_secret=getenv('AGGREGATION_PANOPTES_SECRET')
+            client_id=getenv('PANOPTES_CLIENT_ID'),
+            client_secret=getenv('PANOPTES_CLIENT_SECRET')
         )
 
         user = User.find(user_id)
