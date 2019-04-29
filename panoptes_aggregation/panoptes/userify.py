@@ -20,8 +20,6 @@ class ConfigurationError(Exception):
 
 known_params = ['destination']
 
-connected = False
-
 users = {}
 
 destinations = None
@@ -148,18 +146,15 @@ def _flatten(l):
 
 
 def _retrieve_user(user_id):
-    global connected
     if user_id in users:
         user = users[user_id]
     else:
-        if not connected:
-            Panoptes.connect(
-                endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
-                client_id=getenv('AGGREGATION_PANOPTES_ID'),
-                client_secret=getenv('AGGREGATION_PANOPTES_SECRET')
-            )
+        Panoptes.connect(
+            endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
+            client_id=getenv('AGGREGATION_PANOPTES_ID'),
+            client_secret=getenv('AGGREGATION_PANOPTES_SECRET')
+        )
 
-            connected = True
         user = User.find(user_id)
         users[user_id] = user
 
