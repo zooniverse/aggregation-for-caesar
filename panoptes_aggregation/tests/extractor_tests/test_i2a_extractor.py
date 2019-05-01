@@ -52,7 +52,7 @@ expected = {
     "lambdacen": 438.4527192698966
 }
 
-TestI2A= ExtractorTest(
+TestI2A = ExtractorTest(
     extractors.i2a_extractor,
     classification,
     expected,

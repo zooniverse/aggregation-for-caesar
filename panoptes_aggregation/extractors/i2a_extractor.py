@@ -4,8 +4,6 @@ Intro2Astro Extractor
 This module provides a function that converts the pixel annotation to wavelength and uses the subject metadata
 to precalculate values required by students to use Hubble's Law to compute galactic velocity.
 '''
-import json
-import sys
 from .extractor_wrapper import extractor_wrapper
 
 def get_annotation(classification):
