@@ -10,7 +10,7 @@ from .extractor_wrapper import extractor_wrapper
 
 def get_annotation(classification):
     # Gets the first (only) task's annotation's 'values', pulling the first from lists when required
-    annotation_values = next(iter(classification['annotations'].values()))[0]['value'][0]
+    annotation_values = next(iter(classification['annotations']))['value'][0]
 
     xleft = annotation_values['x']
     width = annotation_values['width']
@@ -41,9 +41,79 @@ def calc_lambda_central(annotation):
 
 @extractor_wrapper
 def i2a_extractor(classification, **kwargs):
-    # import pdb; pdb.set_trace()
+    '''Extract annotations from intro2astro annotation and returns calculated values
+    and values extracted from subject metadata required by students to use Hubble's Law
+    to compute galactic velocity.
+
+    Parameters
+    ----------
+    classification : dict
+        A dictionary containing an `annotations` key that is a list of
+        panoptes annotations. There should only be one, and the first
+        is the only one considered.
+
+    Returns
+    -------
+    extraction : dict
+        A dictionary with a set of keys, including those that were computed by this
+        function and those that were extracted from the subject metadata.
+
+    Examples
+    --------
+    classification = {
+        "annotations": [
+            {
+                "task": "T0",
+                "value": [
+                    {
+                        "width": 80.36077880859375,
+                        "tool": 0,
+                        "0": 0,
+                        "details": [],
+                        "x": 541.7737426757812,
+                        "frame": 0
+                    }
+                ]
+            }
+        ],
+        "metadata": {
+            "subject_dimensions": [
+                {
+                    "clientWidth": 444,
+                    "clientHeight": 333,
+                    "naturalWidth": 1152,
+                    "naturalHeight": 864
+                }
+            ]
+        },
+        "subject": {
+            "metadata": {
+                "RA": "121.62522",
+                "Dec": "17.42804",
+                "URL": "http://skyserver.sdss.org/dr12/en/tools/explore/Summary.aspx?ra=121.62522&dec=17.42804",
+                "spiral": "0",
+                "elliptical": "1",
+                "Distance_Mpc": "481.4064706",
+                "SVG_filename": "1237665128518320259.svg",
+                "#Published_Redshift": "0.1091188"
+            }
+        }
+    }
+
+    >>> point_extractor(classification)
+        {
+            "galaxy_id": "1237665128518320259",
+            "url": "http://skyserver.sdss.org/dr12/en/tools/explore/Summary.aspx?ra=121.62522&dec=17.42804",
+            "RA": "121.62522",
+            "dec": "17.42804",
+            "dist": 481.40647058823527,
+            "redshift": 0.1146063992421806,
+            "velocity": 34381.91977265418,
+            "lambdacen": 438.4527192698966
+        }
+    '''
     response = {}
-    if len(classification['annotation']) > 0:
+    if len(classification['annotations']) > 0:
         annotation = get_annotation(classification)
         galaxy_metadata = get_galaxy_metadata(classification['subject']['metadata'])
         lambdacen = calc_lambda_central(annotation)
