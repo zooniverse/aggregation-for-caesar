@@ -18,7 +18,8 @@ type_to_extractor = {
     'rotateRectangle': 'shape_extractor',
     'triangle': 'shape_extractor',
     'fan': 'shape_extractor',
-    'slider': 'slider_extractor'
+    'slider': 'slider_extractor',
+    'i2a': 'i2a_extractor'
 }
 
 standard_reducers = {
