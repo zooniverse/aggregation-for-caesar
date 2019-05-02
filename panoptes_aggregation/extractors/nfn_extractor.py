@@ -6,11 +6,6 @@ annotation for use in their Field Book.
 '''
 from .extractor_wrapper import extractor_wrapper
 
-import os
-import sys
-import logging
-import json
-import urllib.parse as urlparse
 from dateutil.parser import parse as dateparse
 from datetime import timedelta
 
@@ -92,7 +87,6 @@ def nfn_extractor(classification, **kwargs):
     response = {}
     if len(classification['annotations']) > 0:
         parser = ClassificationParser(classification, kwargs)
-
 
         if 'workflow' in parser.params:
             response['workflow'] = parser.params['workflow']
