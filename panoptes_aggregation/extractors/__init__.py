@@ -11,6 +11,7 @@ from .sw_graphic_extractor import sw_graphic_extractor
 from .dropdown_extractor import dropdown_extractor
 from .shape_extractor import shape_extractor
 from .slider_extractor import slider_extractor
+from .nfn_extractor import nfn_extractor
 from ..copy_function import copy_function
 
 shortcut_extractor = copy_function(question_extractor, 'shortcut_extractor')
@@ -29,5 +30,6 @@ extractors = {
     'sw_graphic_extractor': sw_graphic_extractor,
     'dropdown_extractor': dropdown_extractor,
     'shape_extractor': shape_extractor,
-    'slider_extractor': slider_extractor
+    'slider_extractor': slider_extractor,
+    'nfn_extractor': nfn_extractor
 }
