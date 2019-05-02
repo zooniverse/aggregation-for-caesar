@@ -15,6 +15,7 @@ def get_annotation(classification):
     nw = classification['metadata']['subject_dimensions'][0]['naturalWidth']
     return {'xleft': xleft, 'width': width, 'nw': nw}
 
+
 def get_galaxy_metadata(metadata):
     ra = metadata['RA']
     dec = metadata['Dec']
@@ -23,6 +24,7 @@ def get_galaxy_metadata(metadata):
     elliptical = bool(metadata['elliptical'])
     url = metadata['URL']
     return {'ra': ra, 'dec': dec, 'z': z, 'galID': galID, 'elliptical': elliptical, 'url': url}
+
 
 def calc_lambda_central(annotation):
     # Input is a annotation dictionary with x_left, width, and natural window width
@@ -36,6 +38,7 @@ def calc_lambda_central(annotation):
     lamperpix = (lambdamax - lambdamin) / (xmax - xmin)
     lambdacen = (xleft + (width / 2.) - xmin) * lamperpix + lambdamin
     return lambdacen
+
 
 @extractor_wrapper
 def i2a_extractor(classification, **kwargs):
