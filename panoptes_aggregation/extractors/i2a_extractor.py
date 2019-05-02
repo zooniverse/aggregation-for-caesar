@@ -6,6 +6,7 @@ to precalculate values required by students to use Hubble's Law to compute galac
 '''
 from .extractor_wrapper import extractor_wrapper
 
+
 def get_annotation(classification):
     # Gets the first (only) task's annotation's 'values', pulling the first from lists when required
     annotation_values = next(iter(classification['annotations']))['value'][0]
