@@ -75,16 +75,16 @@ def workflow_extractor_config(tasks, keywords={}):
                 **task_keywords
             }
             for tdx, tool in enumerate(task['tools']):
-                if ((tool['type'] == 'polygon') and
-                   (len(tool['details']) == 1) and
-                   (tool['details'][0]['type'] == 'text')):
+                if ((tool['type'] == 'polygon')
+                   and (len(tool['details']) == 1)
+                   and (tool['details'][0]['type'] == 'text')):
                     # this is very ugly but I can't think of a better way to auto detect this
                     extractor_key = 'poly_line_text_extractor'
                     task_config.setdefault(extractor_key, default_config)
                     del task_config[extractor_key]['tools']
-                elif ((tool['type'] == 'line') and
-                      (len(tool['details']) == 1) and
-                      (tool['details'][0]['type'] == 'text')):
+                elif ((tool['type'] == 'line')
+                    and (len(tool['details']) == 1)
+                    and (tool['details'][0]['type'] == 'text')):
                     # this is very ugly but I can't think of a better way to auto detect this
                     extractor_key = 'line_text_extractor'
                     task_config.setdefault(extractor_key, default_config)
