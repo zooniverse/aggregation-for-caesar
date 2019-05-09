@@ -93,8 +93,18 @@ def _forward_contents(payload, destination):
     if destination not in destinations:
         raise ConfigurationError('Unknown destination')
 
-    requests.post(url=destinations[destination], json=payload)
-    return
+    endpoint = destinations[destination]
+    request_args = {
+        'url': endpoint['url'],
+        'json': payload,
+    }
+
+    if 'auth-header' in endpoint:
+        request_args['headers'] = {
+            endpoint['auth-header']: getenv(endpoint['auth-token'])
+        }
+
+    return requests.post(**request_args)
 
 
 def _stuff_object(target_object, find_fields):
