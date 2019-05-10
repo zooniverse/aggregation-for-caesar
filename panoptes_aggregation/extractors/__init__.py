@@ -32,6 +32,6 @@ extractors = {
     'dropdown_extractor': dropdown_extractor,
     'shape_extractor': shape_extractor,
     'slider_extractor': slider_extractor,
+    'i2a_extractor': i2a_extractor,
     'nfn_extractor': nfn_extractor
-    'i2a_extractor': i2a_extractor
 }
