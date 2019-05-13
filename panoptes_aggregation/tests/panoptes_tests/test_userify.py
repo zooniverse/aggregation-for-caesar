@@ -1,9 +1,11 @@
 from importlib import import_module
 
-from unittest.mock import MagicMock, PropertyMock, Mock
+from unittest.mock import MagicMock, PropertyMock, Mock, patch
 from nose.tools import assert_equals, assert_raises, assert_count_equal
 from panoptes_client import Panoptes, User
 import requests
+
+import os
 from os import environ
 
 environ.setdefault('AGGREGATION_PANOPTES_ID', 'TEST')
@@ -20,7 +22,18 @@ def build_mock_user(**kwargs):
 
 
 def test_userify():
-    panoptes._read_config = Mock(return_value={'endpoints': {'mockable': 'https://demo1580318.mockable.io/mast', 'mast': 'https://mast-forwarder.zooniverse.org/'}})
+    panoptes._read_config = Mock(return_value={
+        'endpoints': {
+            'mockable': {
+                'url': 'https://demo1580318.mockable.io/mast',
+            },
+            'mast': {
+                'url': 'https://mast-forwarder.zooniverse.org/',
+                'auth-header': 'X-ASB-AUTH',
+                'auth-token': 'MAST_AUTH_TOKEN',
+            },
+        }
+    })
 
     # doesn't choke if nothing to do
     assert_equals(panoptes.userify({}, {'foo': 'bar'}), '{"foo": "bar"}')
@@ -158,7 +171,18 @@ def test_stuff_object():
 
 
 def test_forward_contents():
-    panoptes._read_config = Mock(return_value={'endpoints': {'mockable': 'https://demo1580318.mockable.io/mast', 'mast': 'https://mast-forwarder.zooniverse.org/'}})
+    panoptes._read_config = Mock(return_value={
+        'endpoints': {
+            'mockable': {
+                'url': 'https://demo1580318.mockable.io/mast',
+            },
+            'mast': {
+                'url': 'https://mast-forwarder.zooniverse.org/',
+                'auth-header': 'X-ASB-AUTH',
+                'auth-token': 'MAST_AUTH_TOKEN',
+            },
+        }
+    })
 
     # only will send to known endpoints
     requests.post = MagicMock()
@@ -171,6 +195,13 @@ def test_forward_contents():
     requests.post = MagicMock()
     panoptes._forward_contents({'foo': 'bar'}, 'mockable')
     (requests.post).assert_called_once_with(url='https://demo1580318.mockable.io/mast', json={'foo': 'bar'})
+
     requests.post = MagicMock()
-    panoptes._forward_contents({'foo': 'bar'}, 'mast')
-    (requests.post).assert_called_once_with(url='https://mast-forwarder.zooniverse.org/', json={'foo': 'bar'})
+    with patch.dict(os.environ, {'MAST_AUTH_TOKEN': 'foo'}):
+        panoptes._forward_contents({'foo': 'bar'}, 'mast')
+
+    (requests.post).assert_called_once_with(
+        url='https://mast-forwarder.zooniverse.org/',
+        json={'foo': 'bar'},
+        headers={'X-ASB-AUTH': 'foo'}
+    )
