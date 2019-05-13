@@ -11,6 +11,7 @@ from .sw_graphic_extractor import sw_graphic_extractor
 from .dropdown_extractor import dropdown_extractor
 from .shape_extractor import shape_extractor
 from .slider_extractor import slider_extractor
+from .nfn_extractor import nfn_extractor
 from .i2a_extractor import i2a_extractor
 from ..copy_function import copy_function
 
@@ -31,5 +32,6 @@ extractors = {
     'dropdown_extractor': dropdown_extractor,
     'shape_extractor': shape_extractor,
     'slider_extractor': slider_extractor,
-    'i2a_extractor': i2a_extractor
+    'i2a_extractor': i2a_extractor,
+    'nfn_extractor': nfn_extractor
 }
