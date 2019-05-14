@@ -20,8 +20,15 @@ classification = {
                     "option": True
                 }
             ]
+        },
+        {
+            "task": "T3",
+            "value": 5
         }
     ],
+    "subject": {
+        "metadata": {}
+    },
     "metadata": {
         "utc_offset": "21600",
     },
@@ -43,15 +50,15 @@ TestNfN = ExtractorTest(
     kwargs={'year': 'T10', 'workflow': 'herbarium', 'country': "T1"}
 )
 
-classification = {
+classification_0 = {
     "annotations": [{
-        "task": "T31",
+        "task": "T99",
         "value": [
             {
-                "task": "T10",
+                "task": "T11",
                 "value": [
                     {
-                        "value": 1999,
+                        "value": 2001,
                         "option": True
                     }
                 ]
@@ -69,18 +76,18 @@ classification = {
     "created_at": "2019-04-22T06:28:13.667Z",
 }
 
-expected = {
+expected_0 = {
     "workflow": "herbarium",
-    "decade": "90s",
+    "decade": "00s",
     "time": "lunchbreak",
     "earth_day": True,
     "country": "United States"
 }
 
-TestNfN = ExtractorTest(
+TestNfNTwo = ExtractorTest(
     extractors.nfn_extractor,
-    classification,
-    expected,
+    classification_0,
+    expected_0,
     'Test NfN on Earth Day with year as nested task and country from metadata. At lunchtime, local time.',
-    kwargs={'year': 'T10', 'workflow': 'herbarium', 'country': 'metadata'}
+    kwargs={'year': 'T11', 'workflow': 'herbarium', 'country': 'metadata'}
 )

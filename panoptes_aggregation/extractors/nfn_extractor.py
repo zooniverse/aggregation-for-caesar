@@ -6,6 +6,7 @@ annotation for use in their Field Book.
 '''
 from .extractor_wrapper import extractor_wrapper
 
+import collections
 from dateutil.parser import parse as dateparse
 from datetime import timedelta
 
@@ -25,13 +26,20 @@ class ClassificationParser(object):
         }
         self.tasks = self.flatten(classification['annotations'])
 
+    def iterable(self, arg):
+        return (
+            isinstance(arg, collections.Iterable)
+            and not isinstance(arg, str)
+        )
+
     def flatten(self, anno):
         f = {}
         for a in anno:
             f[a['task']] = a['value']
-            for subanno in a['value']:
-                if 'task' in subanno:
-                    f[subanno['task']] = subanno['value']
+            if (self.iterable(a['value'])):
+                for subanno in a['value']:
+                    if 'task' in subanno:
+                        f[subanno['task']] = subanno['value']
         return f
 
     def get_basic(self, label):
