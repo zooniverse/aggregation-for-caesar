@@ -43,14 +43,16 @@ class ClassificationParser(object):
         return f
 
     def get_basic(self, label):
-        # import pdb; pdb.set_trace()
         if label in self.subject_metadata:
             return self.subject_metadata[label]
         elif label in self.params:
             task = self.params[label]
-            if self.params[label] in self.tasks:
+            if task in self.tasks:
                 value = self.tasks[task]
-                return value[0]['value']
+                try:
+                    return value[0]['value']
+                except TypeError:
+                    return value
             else:
                 return None
         else:
