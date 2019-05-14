@@ -91,3 +91,33 @@ TestNfNTwo = ExtractorTest(
     'Test NfN on Earth Day with year as nested task and country from metadata. At lunchtime, local time.',
     kwargs={'year': 'T11', 'workflow': 'herbarium', 'country': 'metadata'}
 )
+
+classification_1 = {
+    "annotations": [
+        {
+            "task": "T10",
+            "value": 1976
+        }
+    ],
+    "metadata": {
+        "utc_offset": "21600",
+    },
+    "subject": {
+        "metadata": {}
+    },
+    "created_at": "2019-05-22T06:28:13.667Z",
+}
+
+expected_1 = {
+    "workflow": "herbarium",
+    "decade": "70s",
+    "time": "lunchbreak"
+}
+
+TestNfNThree = ExtractorTest(
+    extractors.nfn_extractor,
+    classification_1,
+    expected_1,
+    'Test NfN bare integer year annotation at lunchtime.',
+    kwargs={'year': 'T10', 'workflow': 'herbarium'}
+)
