@@ -166,6 +166,9 @@ def test_stuff_object():
     # fetches multiple users if user_ids
     assert_equals(panoptes._stuff_object({'user_ids': [3, 4]}, []), {'user_ids': [3, 4], 'users': [{'id': 3}, {'id': 4}]})
 
+    # handles null user ids
+    assert_equals(panoptes._stuff_object({'user_ids': [3, None]}, []), {'user_ids': [3, None], 'users': [{'id': 3}]})
+
     # finds fields at multiple levels
     assert_equals(panoptes._stuff_object({'foo': {'user_id': 3}, 'user_id': 4}, []), {'foo': {'user_id': 3, 'users': [{'id': 3}]}, 'user_id': 4, 'users': [{'id': 4}]})
 

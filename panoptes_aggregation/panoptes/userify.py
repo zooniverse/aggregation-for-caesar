@@ -114,6 +114,9 @@ def _stuff_object(target_object, find_fields):
 
     user_ids = _discover_user_ids(target_object)
     for user_id in user_ids:
+        if not user_id:
+            continue
+
         user = _retrieve_user(user_id)
         target_object['users'] = target_object.get('users', [])
         target_object['users'].append(_build_user_hash(user, find_fields))
