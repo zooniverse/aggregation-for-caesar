@@ -8,6 +8,7 @@ from .reducer_wrapper import reducer_wrapper
 from ..shape_tools import SHAPE_LUT
 from collections import OrderedDict
 from sklearn.cluster import DBSCAN
+from scipy.spatial.distance import cdist
 import numpy as np
 
 DEFAULTS = {
@@ -18,6 +19,16 @@ DEFAULTS = {
     'leaf_size': {'default': 30, 'type': int},
     'p': {'default': None, 'type': float}
 }
+
+
+def metric(a, b):
+    if (a == b).all():
+        return 0
+    if (a[-1] == b[-1]):
+        return np.inf
+    a_pt = a[:-1]
+    b_pt = b[:-1]
+    return np.sqrt(np.sum((a_pt - b_pt)**2))
 
 
 def process_data(data, **kwargs_extra_data):
@@ -91,25 +102,48 @@ def tess_reducer_column(data_by_tool, **kwargs):
     clusters = OrderedDict()
     loc = np.array(data_by_tool['data'])
     index = np.array(data_by_tool['index'])
+    number_users = len(np.unique(index))
     x = kwargs.pop('x')
     if x == 'left':
         loc[:, 0] += 0.5 * loc[:, 1]
-    if loc.shape[0] >= kwargs['min_samples']:
-        db = DBSCAN(**kwargs).fit(loc)
+    loc_with_index = np.hstack([loc, index.reshape(-1, 1)])
+    if number_users >= kwargs['min_samples']:
+        db = DBSCAN(**kwargs, metric=metric).fit(loc_with_index)
+        core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
+        core_samples_mask[db.core_sample_indices_] = True
         for k in set(db.labels_):
             if k > -1:
                 idx = db.labels_ == k
                 # center and width of the cluster
-                k_loc = loc[idx].mean(axis=0)
-                clusters.setdefault('centers', []).append(float(k_loc[0]))
-                clusters.setdefault('widths', []).append(float(k_loc[1]))
+                k_loc = loc[idx]
+                k_index = index[idx]
+                unique_users = np.unique(k_index)
+                count = idx.sum()
+                if len(unique_users) < idx.sum():
+                    k_loc = []
+                    k_loc_core = loc[idx & core_samples_mask].mean(axis=0)
+                    # a singel user is in this cluster more than once
+                    for user in unique_users:
+                        udx = k_index == user
+                        if udx.sum() > 1:
+                            core_distance = cdist([k_loc_core], loc[idx][udx])
+                            min_index = core_distance.argmin()
+                            k_loc.append(loc[idx][udx][min_index])
+                        else:
+                            k_loc.append(loc[idx][udx])
+                    k_loc = np.vstack(k_loc)
+                    k_index = unique_users
+                    count = len(unique_users)
+                k_loc_mean = k_loc.mean(axis=0)
+                clusters.setdefault('centers', []).append(float(k_loc_mean[0]))
+                clusters.setdefault('widths', []).append(float(k_loc_mean[1]))
                 # number of points in the cluster
-                clusters.setdefault('counts', []).append(int(idx.sum()))
+                clusters.setdefault('counts', []).append(int(count))
                 # weighted number of points in the cluster
-                k_skill = [skill[j] for j in index[idx]]
+                k_skill = [skill[j] for j in k_index]
                 clusters.setdefault('weighted_counts', []).append(float(sum(k_skill)))
                 # user_ids in the cluster
-                k_users = [user_id[j] for j in index[idx]]
+                k_users = [user_id[j] for j in k_index]
                 clusters.setdefault('user_ids', []).append(k_users)
     if 'weighted_counts' in clusters:
         clusters['max_weighted_count'] = max(clusters['weighted_counts'])
