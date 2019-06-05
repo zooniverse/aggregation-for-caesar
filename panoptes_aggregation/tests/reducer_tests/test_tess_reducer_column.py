@@ -201,7 +201,7 @@ reduced_data_no_cluster = {
     'max_weighted_count': None
 }
 
-TestTESSReducerColumnCenter = ReducerTest(
+TestTESSReducerNoCluster = ReducerTest(
     tess_reducer_column,
     process_data,
     extracted_data_no_cluster,

@@ -106,8 +106,8 @@ def tess_reducer_column(data_by_tool, **kwargs):
     x = kwargs.pop('x')
     if x == 'left':
         loc[:, 0] += 0.5 * loc[:, 1]
-    loc_with_index = np.hstack([loc, index.reshape(-1, 1)])
-    if number_users >= kwargs['min_samples']:
+    if (number_users >= kwargs['min_samples']) and (len(loc) == len(index)):
+        loc_with_index = np.hstack([loc, index.reshape(-1, 1)])
         db = DBSCAN(**kwargs, metric=metric).fit(loc_with_index)
         core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
         core_samples_mask[db.core_sample_indices_] = True
