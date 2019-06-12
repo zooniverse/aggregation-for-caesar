@@ -78,7 +78,7 @@ setup(
     },
     install_requires=[
         'beautifulsoup4',
-        'collatex==2.1.2',
+        'collatex==2.2',
         'hdbscan',
         'lxml',
         'numpy==1.16.2',

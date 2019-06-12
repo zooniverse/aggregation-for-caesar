@@ -749,9 +749,9 @@ reduced_data = {
         },
         {
             'clusters_text': [
-                ['are', '', 'are', 'are', '', 'are'],
+                ['are', '', 'are', 'are', '&', 'are'],
                 ['', 'going', 'going', '', '', 'going'],
-                ['', 'to', 'to', '', '&', 'to'],
+                ['', 'to', 'to', '', '', 'to'],
                 ['', '', 'fall', '', '', 'fall']
             ],
             'clusters_x': [819.36, 1344.815],
