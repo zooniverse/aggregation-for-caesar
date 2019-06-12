@@ -1,8 +1,4 @@
 endpoints:
-    mast:
-        url: https://masttest.stsci.edu/planethunterstess/api/v0.1/load/transit
-        auth-header: X-ASB-AUTH
-        auth-token: MAST_AUTH_TOKEN
     mast_test:
         url: https://masttest.stsci.edu/planethunterstess/api/v0.1/load/transit
         auth-header: X-ASB-AUTH
