@@ -279,8 +279,7 @@ def align_words(word_line, xy_line, text_line, kwargs_cluster, kwargs_dbscan):
                 collation.add_plain_witness(key, t)
                 witness_key.append(key)
         if len(collation.witnesses) > 0:
-            scheduler = col.near_matching.Scheduler()
-            alignment_table = col.collate(collation, near_match=True, segmentation=False, scheduler=scheduler)
+            alignment_table = col.collate(collation, near_match=True, segmentation=False)
             for cols in alignment_table.columns:
                 word_dict = cols.tokens_per_witness
                 word_list = []
@@ -290,8 +289,7 @@ def align_words(word_line, xy_line, text_line, kwargs_cluster, kwargs_dbscan):
                     else:
                         word_list.append('')
                 clusters_text.append(word_list)
-            # fix memory leak by deleting these
-            del scheduler
+            # fix memory leak by deleting this
             del alignment_table
     return clusters_x, clusters_y, clusters_text
 
