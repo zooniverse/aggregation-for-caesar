@@ -9,11 +9,13 @@ from collections import OrderedDict, Counter
 import copy
 import numpy as np
 from sklearn.cluster import DBSCAN
+import re
 
 
 def tokenize(self, contents):
     '''Tokenize only on space so angle bracket tags are not split'''
-    return contents.split()
+    return re.findall(r'[^\w\[\]\{\}\<\>\s]+|[\w\[\]\<\>\{\}]+', contents)
+    # return contents.split()
 
 
 # override the built-in tokenize
