@@ -151,6 +151,11 @@ extracted_data = [
         }
     },
     {
+        'frame0': {
+            'points': {'x': [[1000, 10]], 'y': [[700, 10]]},
+            'text': [['not in a cluster']],
+            'slope': [-145.12467165539783]
+        },
         'frame2': {
             'points': {'x': [[1, 250]], 'y': [[1, 1]]},
             'text': [['some words']],
@@ -186,7 +191,8 @@ processed_data = {
             [20, 2],
             [21, 2],
             [22, 2],
-            [23, 2]
+            [23, 2],
+            [24, 3]
         ],
         'data': [
             {'x': [27.765213012695312, 984.8629150390625], 'y': [419.1290588378906, 397.5943298339844], 'text': ['words on a page.']},
@@ -212,7 +218,8 @@ processed_data = {
             {'x': [106.72576904296875, 597.23828125], 'y': [545.9444580078125, 127.21426391601562], 'text': ['There is this']},
             {'x': [1145.1767578125, 1587.8343505859375], 'y': [390.4161071777344, 373.6669006347656], 'text': ['of text.']},
             {'x': [247.89767456054688, 759.9449462890625], 'y': [548.337158203125, 127.21426391601562], 'text': ['text as well']},
-            {'x': [1137.99853515625, 2162.093017578125], 'y': [287.5281066894531, 268.3861389160156], 'text': ['There are two columns']}
+            {'x': [1137.99853515625, 2162.093017578125], 'y': [287.5281066894531, 268.3861389160156], 'text': ['There are two columns']},
+            {'x': [1000, 10], 'y': [700, 10], 'text': ['not in a cluster']}
         ]
     },
     'frame1': {
@@ -235,7 +242,146 @@ processed_data = {
     }
 }
 
-reduced_data = {'value': 'tmp'}
+reduced_data = {
+    'frame0': [
+        {
+            'clusters_text': [
+                ['not'],
+                ['in'],
+                ['a'],
+                ['cluster']
+            ],
+            'clusters_x': [1000, 10],
+            'clusters_y': [700, 10],
+            'consensus_score': 1.0,
+            'line_slope': -145.12467165539783,
+            'number_views': 1
+        },
+        {
+            'clusters_text': [
+                ['words', 'words', 'words'],
+                ['on', 'on', 'on'],
+                ['a', 'a', 'a'],
+                ['page.', 'page.', 'page.']
+            ],
+            'clusters_x': [30.157958984375, 984.8629150390625],
+            'clusters_y': [402.3798522949219, 395.2015686035156],
+            'consensus_score': 3.0,
+            'line_slope': -0.4307902739020878,
+            'number_views': 3
+        },
+        {
+            'clusters_text': [
+                ['Here', 'Here', 'Here'],
+                ['are', 'are', 'are'],
+                ['some', 'some', 'some'],
+                ['test', 'test', 'test']
+            ],
+            'clusters_x': [32.550689697265625, 989.6483154296875],
+            'clusters_y': [297.0990905761719, 280.3498840332031],
+            'consensus_score': 3.0,
+            'line_slope': -1.0025736896133275,
+            'number_views': 3
+        },
+        {
+            'clusters_text': [
+                ['text', 'test', 'text'],
+                ['as', 'as', 'as'],
+                ['well', 'well', 'well']
+            ],
+            'clusters_x': [245.50491333007812, 733.624755859375],
+            'clusters_y': [543.5517578125, 127.21426391601562],
+            'consensus_score': 2.6666666666666665,
+            'line_slope': -40.462226211337374,
+            'number_views': 3
+        },
+        {
+            'clusters_text': [
+                ['There', 'There', 'There'],
+                ['is', 'is', 'is'],
+                ['this', 'this', 'this']
+            ],
+            'clusters_x': [106.72576904296875, 578.0963134765625],
+            'clusters_y': [536.37353515625, 131.99972534179688],
+            'consensus_score': 3.0,
+            'line_slope': -40.62524430317739,
+            'number_views': 3
+        },
+        {
+            'clusters_text': [
+                ['of', 'of', 'of'],
+                ['text.', 'text.', 'text.']
+            ],
+            'clusters_x': [1118.8565673828125, 1587.8343505859375],
+            'clusters_y': [390.4161071777344, 373.6669006347656],
+            'consensus_score': 3.0,
+            'line_slope': -2.0454084888872277,
+            'number_views': 3
+        },
+        {
+            'clusters_text': [
+                ['This', 'This', 'This'],
+                ['looks', 'looks', 'looks'],
+                ['like', 'like', 'like']],
+            'clusters_x': [1245.6719970703125, 1760.1119384765625],
+            'clusters_y': [483.7331237792969, 67.39566040039062],
+            'consensus_score': 3.0,
+            'line_slope': -38.983328513212115,
+            'number_views': 3
+        },
+        {
+            'clusters_text': [
+                ['a', 'a', 'a'],
+                ['big', 'big', 'big'],
+                ['mess', 'mess', 'mess']
+            ],
+            'clusters_x': [1346.167236328125, 1798.3958740234375],
+            'clusters_y': [526.802490234375, 155.92721557617188],
+            'consensus_score': 3.0,
+            'line_slope': -39.35537301183047,
+            'number_views': 3
+        },
+        {
+            'clusters_text': [
+                ['There', 'There', 'There'],
+                ['are', 'are', 'are'],
+                ['two', 'two', 'two'],
+                ['columns', 'columns', 'columns']
+            ],
+            'clusters_x': [1137.99853515625, 2152.52197265625],
+            'clusters_y': [287.5281066894531, 270.7789001464844],
+            'consensus_score': 3.0,
+            'line_slope': -0.9458348967092045,
+            'number_views': 3
+        }
+    ],
+    'frame1': [
+        {
+            'clusters_text': [
+                ['page', 'page'],
+                ['2', '2']
+            ],
+            'clusters_x': [1.05, 250.5],
+            'clusters_y': [0.95, 0.95],
+            'consensus_score': 2.0,
+            'line_slope': 0.0,
+            'number_views': 2
+        }
+    ],
+    'frame2': [
+        {
+            'clusters_text': [
+                ['some'],
+                ['words']
+            ],
+            'clusters_x': [1, 250],
+            'clusters_y': [1, 1],
+            'consensus_score': 1.0,
+            'line_slope': 0.0,
+            'number_views': 1
+        }
+    ]
+}
 
 TestOpticsLTReducer = ReducerTest(
     optics_line_text_reducer,
@@ -243,5 +389,16 @@ TestOpticsLTReducer = ReducerTest(
     extracted_data,
     processed_data,
     reduced_data,
-    'Test optics line-text reducer'
+    'Test optics line-text reducer with auto min_samples',
+    okwargs={'min_samples': 'auto'}
+)
+
+TestOpticsLTReducerWithMinSamples = ReducerTest(
+    optics_line_text_reducer,
+    process_data,
+    extracted_data,
+    processed_data,
+    reduced_data,
+    'Test optics line-text reducer with specified min_samples',
+    kwargs={'min_samples': 2}
 )

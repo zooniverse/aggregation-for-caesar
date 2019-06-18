@@ -84,6 +84,45 @@ class TextOpticsTextUtils(unittest.TestCase):
         )
         np.testing.assert_array_equal(result, expected)
 
+    def test_cluster_of_one(self):
+        '''Test cluster of one'''
+        X = [
+            [0, 0],
+            [1, 0]
+        ]
+        expected = [
+            {
+                'clusters_x': [1, 5],
+                'clusters_y': [1, 1],
+                'clusters_text': [
+                    ['This'],
+                    ['is'],
+                    ['some'],
+                    ['[underline]test'],
+                    ['text[/underline]']
+                ],
+                'number_views': 1,
+                'line_slope': 0.0,
+                'consensus_score': 1.0
+            },
+            {
+                'clusters_x': [1, 3],
+                'clusters_y': [1, 1],
+                'clusters_text': [
+                    ['This'],
+                    ['is'],
+                    ['some'],
+                    ['test'],
+                    ['text']
+                ],
+                'number_views': 1,
+                'line_slope': 0.0,
+                'consensus_score': 1.0
+            }
+        ]
+        result = optics_text_utils.cluster_of_one(X, data)
+        self.assertCountEqual(result, expected)
+
 
 if __name__ == '__main__':
     unittest.main()
