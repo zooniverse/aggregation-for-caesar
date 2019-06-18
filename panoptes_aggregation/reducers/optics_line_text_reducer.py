@@ -126,7 +126,7 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                     collation = col.Collation()
                     witness_keys = []
                     clusters_text = []
-                    for tdx, i in enumerate(X[cdx, 0]):
+                    for i in X[cdx, 0]:
                         text = data[int(i)]['text'][0]
                         if text.strip() != '':
                             key = str(i)

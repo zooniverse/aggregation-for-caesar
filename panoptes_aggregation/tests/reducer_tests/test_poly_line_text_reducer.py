@@ -1249,10 +1249,11 @@ reduced_data_by_line = {
                 ['words', 'words', 'words', 'words', 'words'],
                 ['on', 'on', '', 'on', ''],
                 ['a', 'a', '', 'a', ''],
-                ['page.', 'page.', '', 'page.', '']
+                ['page', 'page', '', 'page', ''],
+                ['.', '.', '', '.', '']
             ],
             'number_views': 5,
-            'consensus_score': 3.5,
+            'consensus_score': 3.4,
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
@@ -1293,10 +1294,11 @@ reduced_data_by_line = {
             ],
             'clusters_text': [
                 ['of', 'of', '', 'of'],
-                ['text.', 'text.', 'text.', 'text.']
+                ['text', 'text', 'text', 'text'],
+                ['.', '.', '.', '.']
             ],
             'number_views': 4,
-            'consensus_score': 3.5,
+            'consensus_score': 3.6666666666666665,
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
@@ -1417,8 +1419,8 @@ reduced_data_by_line = {
     ],
     'frame2': [
         {
-            'clusters_x': [1, 250],
-            'clusters_y': [1, 1],
+            'clusters_x': [1.0, 250.0],
+            'clusters_y': [1.0, 1.0],
             'clusters_text': [
                 ['some'],
                 ['words']
@@ -1497,6 +1499,7 @@ reduced_data_min_word = {
                 ['words', 'words', 'words', 'words', 'words'],
                 ['', '', '', '', ''],
                 ['', '', '', '', ''],
+                ['', '', '', '', ''],
                 ['', '', '', '', '']
             ],
             'number_views': 5,
@@ -1541,7 +1544,8 @@ reduced_data_min_word = {
             ],
             'clusters_text': [
                 ['', '', '', ''],
-                ['text.', 'text.', 'text.', 'text.']
+                ['text', 'text', 'text', 'text'],
+                ['.', '.', '.', '.']
             ],
             'number_views': 4,
             'consensus_score': 4.0,
@@ -1665,8 +1669,8 @@ reduced_data_min_word = {
     ],
     'frame2': [
         {
-            'clusters_x': [1, 250],
-            'clusters_y': [1, 1],
+            'clusters_x': [1.0, 250.0],
+            'clusters_y': [1.0, 1.0],
             'clusters_text': [
                 [''],
                 ['']
