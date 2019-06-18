@@ -145,19 +145,37 @@ def remove_user_duplication(labels_, core_distances_, users):
     return clean_labels
 
 
-# def cluster_data(X, data, min_samples='auto'):
-#     if min_samples == 'auto':
-#         num_users = len(np.unique(X[:, 1]))
-#         min_samples = get_min_samples(num_users)
-#     db = OPTICS(
-#         min_samples=min_samples,
-#         metric=metric,
-#         metric_params={'data_in': data}
-#     )
-#     db.fit(X)
-#     clean_labels = remove_user_duplication(
-#         db.labels_,
-#         db.core_distances_,
-#         X[:, 1]
-#     )
-#     return db, clean_labels
+def cluster_of_one(X, data):
+    '''Create "clusters of one" out of the data passed in. Lines of text
+    identified as noise are kept around as clusters of one so they can be
+    displayed in the front-end to the next user.
+
+    Parameters
+    ----------
+    X: list
+        A nx2 list with each row containing [index mapping to data, index mapping to user]
+    data: list
+        A list containing dictionaries with the original data that X maps to, of the form
+        `{'x': [start_x, end_x], 'y': [start_y, end_y], 'text': ['text for line']}`.
+
+    Returns
+    -------
+    clusters: list
+        A list with n clusters each containing only one calssification
+    '''
+    clusters = []
+    for row in X:
+        line = data[int(row[0])]
+        dx = line['x'][-1] - line['x'][0]
+        dy = line['y'][-1] - line['y'][0]
+        slope = np.rad2deg(np.arctan2(dy, dx))
+        value = {
+            'clusters_x': line['x'],
+            'clusters_y': line['y'],
+            'clusters_text': [[w] for w in line['text'][0].split()],
+            'number_views': 1,
+            'line_slope': slope,
+            'consensus_score': 1.0
+        }
+        clusters.append(value)
+    return clusters
