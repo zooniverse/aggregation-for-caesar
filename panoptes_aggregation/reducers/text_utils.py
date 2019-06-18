@@ -14,7 +14,7 @@ import re
 
 def tokenize(self, contents):
     '''Tokenize only on space so angle bracket tags are not split'''
-    return re.findall(r'[^\w\[\]\{\}\<\>\s]+|[\w\[\]\<\>\{\}]+', contents)
+    return re.findall(r'[^\w\[\]\{\}\<\>\s]+|[\w\[\]\<\>\{\}?]+', contents)
     # return contents.split()
 
 
