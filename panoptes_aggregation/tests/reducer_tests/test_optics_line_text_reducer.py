@@ -262,7 +262,8 @@ reduced_data = {
                 ['words', 'words', 'words'],
                 ['on', 'on', 'on'],
                 ['a', 'a', 'a'],
-                ['page.', 'page.', 'page.']
+                ['page', 'page', 'page'],
+                ['.', '.', '.']
             ],
             'clusters_x': [30.157958984375, 984.8629150390625],
             'clusters_y': [402.3798522949219, 395.2015686035156],
@@ -310,7 +311,8 @@ reduced_data = {
         {
             'clusters_text': [
                 ['of', 'of', 'of'],
-                ['text.', 'text.', 'text.']
+                ['text', 'text', 'text'],
+                ['.', '.', '.']
             ],
             'clusters_x': [1118.8565673828125, 1587.8343505859375],
             'clusters_y': [390.4161071777344, 373.6669006347656],
@@ -401,4 +403,128 @@ TestOpticsLTReducerWithMinSamples = ReducerTest(
     reduced_data,
     'Test optics line-text reducer with specified min_samples',
     kwargs={'min_samples': 2}
+)
+
+extracted_data_with_dolar_sign = [
+    {
+        'frame0': {
+            'points': {
+                'x': [[0, 100]],
+                'y': [[0, 0]]
+            },
+            'text': [['$1 2 3 4 5']],
+            'slope': [0.0]
+        }
+    },
+    {
+        'frame0': {
+            'points': {
+                'x': [[0, 100]],
+                'y': [[0, 0]]
+            },
+            'text': [['$1 2 3 4 5']],
+            'slope': [0.0]
+        }
+    },
+    {
+        'frame0': {
+            'points': {
+                'x': [[0, 100]],
+                'y': [[0, 0]]
+            },
+            'text': [['$1 2 3 4 5']],
+            'slope': [0.0]
+        }
+    },
+    {
+        'frame0': {
+            'points': {
+                'x': [[0, 100]],
+                'y': [[0, 0]]
+            },
+            'text': [['$1 2 3 4 5']],
+            'slope': [0.0]
+        }
+    },
+    {
+        'frame0': {
+            'points': {
+                'x': [[0, 100]],
+                'y': [[0, 0]]
+            },
+            'text': [['$1 2 3 4 5']],
+            'slope': [0.0]
+        }
+    },
+    {
+        'frame0': {
+            'points': {
+                'x': [[0, 100]],
+                'y': [[0, 0]]
+            },
+            'text': [['$1 2 3 4 5']],
+            'slope': [0.0]
+        }
+    },
+    {
+        'frame0': {
+            'points': {
+                'x': [[0, 100]],
+                'y': [[0, 0]]
+            },
+            'text': [['$1 2 3 4 5']],
+            'slope': [0.0]
+        }
+    }
+]
+
+processed_data_with_dolar_sign = {
+    'frame0': {
+        'X': [
+            [0, 0],
+            [1, 1],
+            [2, 2],
+            [3, 3],
+            [4, 4],
+            [5, 5],
+            [6, 6]
+        ],
+        'data': [
+            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5']},
+            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5']},
+            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5']},
+            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5']},
+            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5']},
+            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5']},
+            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5']}
+        ]
+    }
+}
+
+reduced_data_with_dolar_sign = {
+    'frame0': [{
+        'clusters_x': [0.0, 100.0],
+        'clusters_y': [0.0, 0.0],
+        'clusters_text': [
+            ['$', '$', '$', '$', '$', '$', '$'],
+            ['1', '1', '1', '1', '1', '1', '1'],
+            ['2', '2', '2', '2', '2', '2', '2'],
+            ['3', '3', '3', '3', '3', '3', '3'],
+            ['4', '4', '4', '4', '4', '4', '4'],
+            ['5', '5', '5', '5', '5', '5', '5'],
+        ],
+        'consensus_score': 7.0,
+        'line_slope': 0.0,
+        'number_views': 7
+    }]
+}
+
+TestOpticsLTReducerWithDolarSign = ReducerTest(
+    optics_line_text_reducer,
+    process_data,
+    extracted_data_with_dolar_sign,
+    processed_data_with_dolar_sign,
+    reduced_data_with_dolar_sign,
+    'Test optics line-text reducer with dolar sign',
+    okwargs={'min_samples': 'auto'}
 )
