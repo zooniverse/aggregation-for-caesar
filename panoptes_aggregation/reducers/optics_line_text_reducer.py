@@ -13,6 +13,7 @@ import collatex as col
 from .optics_text_utils import get_min_samples, metric, remove_user_duplication, cluster_of_one
 from .text_utils import consensus_score, tokenize
 from .reducer_wrapper import reducer_wrapper
+import warnings
 
 DEFAULTS = {
     'min_samples': {'default': 'auto', 'type': int},
@@ -106,7 +107,9 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                 min_samples=min_samples,
                 **kwargs_optics
             )
-            db.fit(X)
+            with warnings.catch_warnings():
+                warnings.filterwarnings('ignore', category=RuntimeWarning)
+                db.fit(X)
             clean_labels = remove_user_duplication(
                 db.labels_,
                 db.core_distances_,
