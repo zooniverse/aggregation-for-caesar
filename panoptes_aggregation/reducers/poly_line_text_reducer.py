@@ -82,7 +82,7 @@ def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
     reduction : dict
         A dictionary with on key for each `frame` of the subject that have lists as values.
         Each item of the list represents one line transcribed of text and is a dictionary
-        with three keys:
+        with these keys:
 
         * `clusters_x` : the `x` position of each identified word
         * `clusters_y` : the `y` position of each identified word
