@@ -37,5 +37,10 @@ spec:
                 secretKeyRef:
                   name: aggregation-for-caesar-environment
                   key: MAST_AUTH_TOKEN
+            - name: MAST_PROD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-for-caesar-environment
+                  key: MAST_PROD_TOKEN
           ports:
             - containerPort: 80
