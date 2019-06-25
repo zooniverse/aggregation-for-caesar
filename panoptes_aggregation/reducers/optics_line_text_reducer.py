@@ -18,15 +18,18 @@ import warnings
 DEFAULTS = {
     'min_samples': {'default': 'auto', 'type': int},
     'max_eps': {'default': np.inf, 'type': float},
-    'xi': {'default': 0.05, 'type': float},
+    'xi': {'default': 0.05, 'type': float}
 }
 
+DEFAULTS_PROCESS = {
+    'min_line_length': {'default': 0.0, 'type': float}
+}
 
 # override the built-in tokenize
 col.core_classes.WordPunctuationTokenizer.tokenize = tokenize
 
 
-def process_data(data_list):
+def process_data(data_list, min_line_length=0.0):
     '''Process a list of extractions into a dictinary organized by `frame`
 
     Parameters
@@ -52,17 +55,19 @@ def process_data(data_list):
             data_by_frame.setdefault(frame, {'X': [], 'data': []})
             row_ct.setdefault(frame, 0)
             for x, y, t in zip(value['points']['x'], value['points']['y'], value['text']):
-                data_by_frame[frame]['data'].append({
-                    'x': [x[0], x[-1]],
-                    'y': [y[0], y[-1]],
-                    'text': t
-                })
-                data_by_frame[frame]['X'].append([row_ct[frame], user_ct])
-                row_ct[frame] += 1
+                line_length = np.sqrt((x[-1] - x[0])**2 + (y[-1] - y[0])**2)
+                if line_length > min_line_length:
+                    data_by_frame[frame]['data'].append({
+                        'x': [x[0], x[-1]],
+                        'y': [y[0], y[-1]],
+                        'text': t
+                    })
+                    data_by_frame[frame]['X'].append([row_ct[frame], user_ct])
+                    row_ct[frame] += 1
     return data_by_frame
 
 
-@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
+@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS, defaults_process=DEFAULTS_PROCESS)
 def optics_line_text_reducer(data_by_frame, **kwargs_optics):
     '''Reduce the line-text extracts as a list of lines of text.
 
