@@ -49,7 +49,7 @@ The routes are automatically constructed using the `extractors` dictionary in th
 ### 4. Add to documentation
 The code is auto-documented using [sphinx](http://www.sphinx-doc.org/en/stable/index.html).
 
-1. Add a doc string to every function written and a "heading" doc string at the top of any new files created (follow the [numpy doc string convention](https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt))
+1. Add a doc string to every function written and a "heading" doc string at the top of any new files created (follow the [numpy doc string convention](https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard))
 2. Add a reference to the new file to `docs/source/extractors.rst`
 3. Add to the extractor/reducer lookup table `docs/source/Task_lookup_table.rst`
 4. Build the docs with the `make_docs.sh` bash script
@@ -93,7 +93,7 @@ The routes are automatically constructed using the `reducers` dictionary in the 
 ### 3. Add to documentation
 The code is auto-documented using [sphinx](http://www.sphinx-doc.org/en/stable/index.html).
 
-1. Add a doc string to every function written and a "heading" doc string at the top of any new files created (follow the [numpy doc string convention](https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt))
+1. Add a doc string to every function written and a "heading" doc string at the top of any new files created (follow the [numpy doc string convention](https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard))
 2. Add a reference to the new file to `docs/source/reducers.rst`
 3. Add to the extractor/reducer lookup table `docs/source/Task_lookup_table.rst`
 4. Build the docs with the `make_docs.sh` bash script
