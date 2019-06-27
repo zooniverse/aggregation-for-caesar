@@ -28,9 +28,10 @@ def poly_line_text_extractor(classification, dot_freq='word', gold_standard=Fals
     -------
     extraction : dict
         A dictionary with one key for each `frame`. The value for each frame
-        is a dict with `text`, a list-of-lists of transcribe words, `points`, a
+        is a dict with `text` a list-of-lists of transcribe words, `points` a
         dict with the list-of-lists of `x` and `y` postions of each space between words,
-        and `slope`, a list of the slopes (in deg) of each line drawn.
+        `slope` a list of the slopes (in deg) of each line drawn, and `gold_standard` a
+        bool indicating if the annotation was made in gold standard mode in the classifier.
         For `points` and `text` there is one inner list for each annotaiton made
         on the frame.
 
@@ -64,7 +65,8 @@ def poly_line_text_extractor(classification, dot_freq='word', gold_standard=Fals
     {'frame0': {
         'points': {'x': [[756, 856], [756, 856, 956]], 'y': [[197, 197], [97, 97, 97]]},
         'text': [['[unclear]Cipher[/unclear]'], ['A', 'word']]
-        'slope': [0, 0]
+        'slope': [0, 0],
+        'gold_standard': False
     }}
     '''
     if dot_freq not in ['word', 'line']:

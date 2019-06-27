@@ -6,22 +6,26 @@ data = [
     {
         'x': [1, 5],
         'y': [1, 1],
-        'text': ['This is   some [underline]test  text[/underline]']
+        'text': ['This is   some [underline]test  text[/underline]'],
+        'gold_standard': False
     },
     {
         'x': [1, 3],
         'y': [1, 1],
-        'text': ['This is some test text']
+        'text': ['This is some test text'],
+        'gold_standard': False
     },
     {
         'x': [1, 5],
         'y': [1, 3],
-        'text': ['This is some test text']
+        'text': ['This is some test text'],
+        'gold_standard': False
     },
     {
         'x': [1, 5],
         'y': [1, 1],
-        'text': ['This is some test test']
+        'text': ['This is some test test'],
+        'gold_standard': False
     },
 ]
 
@@ -107,7 +111,8 @@ class TextOpticsTextUtils(unittest.TestCase):
                 'number_views': 1,
                 'line_slope': 0.0,
                 'consensus_score': 1.0,
-                'user_ids': [0]
+                'user_ids': [0],
+                'gold_standard': [False]
             },
             {
                 'clusters_x': [1, 3],
@@ -122,7 +127,8 @@ class TextOpticsTextUtils(unittest.TestCase):
                 'number_views': 1,
                 'line_slope': 0.0,
                 'consensus_score': 1.0,
-                'user_ids': [0]
+                'user_ids': [0],
+                'gold_standard': [False]
             }
         ]
         result = optics_text_utils.cluster_of_one(X, data, user_ids)
