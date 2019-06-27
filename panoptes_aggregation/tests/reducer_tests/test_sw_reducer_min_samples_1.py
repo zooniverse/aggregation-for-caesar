@@ -17,7 +17,8 @@ extracted_data = [
             ],
             'slope': [
                 0.80162463698921349
-            ]
+            ],
+            'gold_standard': False
         }
     }
 ]
