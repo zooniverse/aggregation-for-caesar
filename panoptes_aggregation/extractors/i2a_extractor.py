@@ -41,7 +41,7 @@ def calc_lambda_central(annotation):
     return lambdacen
 
 
-@extractor_wrapper
+@extractor_wrapper()
 def i2a_extractor(classification, **kwargs):
     '''Extract annotations from intro2astro annotation and returns calculated values
     and values extracted from subject metadata required by students to use Hubble's Law

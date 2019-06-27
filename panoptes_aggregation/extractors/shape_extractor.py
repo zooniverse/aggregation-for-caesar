@@ -10,7 +10,7 @@ from .tool_wrapper import tool_wrapper
 from ..shape_tools import SHAPE_LUT
 
 
-@extractor_wrapper
+@extractor_wrapper()
 @tool_wrapper
 @subtask_wrapper
 def shape_extractor(classification, **kwargs):

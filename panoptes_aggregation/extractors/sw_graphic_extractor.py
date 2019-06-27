@@ -12,7 +12,7 @@ def exist_and_finite(d, key):
     return (key in d) and (d[key] != 'NaN')
 
 
-@extractor_wrapper
+@extractor_wrapper()
 def sw_graphic_extractor(classification, **kwargs):
     '''Extract all graphics data from a classification
 

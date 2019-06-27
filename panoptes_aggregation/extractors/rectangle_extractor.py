@@ -9,7 +9,7 @@ from .subtask_extractor_wrapper import subtask_wrapper
 from .tool_wrapper import tool_wrapper
 
 
-@extractor_wrapper
+@extractor_wrapper()
 @tool_wrapper
 @subtask_wrapper
 def rectangle_extractor(classification, **kwargs):
