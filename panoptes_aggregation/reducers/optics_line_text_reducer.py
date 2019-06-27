@@ -45,7 +45,8 @@ def process_data(data_list, min_line_length=0.0):
         is a dictionary with two keys `X` and `data`. `X` is a 2D array with each row
         mapping to the data held in `data`.  The first column contains row indicies
         and the second column is an index assigned to each user. `data` is a list of
-        dictionaries of the form `{'x': [start_x, end_x], 'y': [start_y, end_y], 'text': ['text for line']}`.
+        dictionaries of the form `{'x': [start_x, end_x], 'y': [start_y, end_y],
+        'text': ['text for line'], 'gold_standard': bool}`.
     '''
     data_by_frame = {}
     row_ct = {}
@@ -54,13 +55,15 @@ def process_data(data_list, min_line_length=0.0):
         for frame, value in data.items():
             data_by_frame.setdefault(frame, {'X': [], 'data': []})
             row_ct.setdefault(frame, 0)
+            gs = value['gold_standard']
             for x, y, t in zip(value['points']['x'], value['points']['y'], value['text']):
                 line_length = np.sqrt((x[-1] - x[0])**2 + (y[-1] - y[0])**2)
                 if line_length > min_line_length:
                     data_by_frame[frame]['data'].append({
                         'x': [x[0], x[-1]],
                         'y': [y[0], y[-1]],
-                        'text': t
+                        'text': t,
+                        'gold_standard': gs
                     })
                     data_by_frame[frame]['X'].append([row_ct[frame], user_ct])
                     row_ct[frame] += 1
@@ -136,14 +139,17 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                     witness_keys = []
                     clusters_text = []
                     user_ids = []
+                    gold_standard = []
                     for row in X[cdx]:
                         index = int(row[0])
                         user_index = int(row[1])
                         text = data[index]['text'][0]
+                        gs = data[index]['gold_standard']
                         if text.strip() != '':
                             key = str(index)
                             witness_keys.append(key)
                             user_ids.append(user_ids_input[user_index])
+                            gold_standard.append(gs)
                             collation.add_plain_witness(key, text)
                     if len(collation.witnesses) > 0:
                         alignment_table = col.collate(collation, near_match=True, segmentation=False)
@@ -160,7 +166,8 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                         'number_views': cdx.sum(),
                         'line_slope': slope,
                         'consensus_score': consensus_score(clusters_text),
-                        'user_ids': user_ids
+                        'user_ids': user_ids,
+                        'gold_standard': gold_standard
                     }
                     output[frame].append(value)
         else:
