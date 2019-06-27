@@ -90,6 +90,9 @@ class TextOpticsTextUtils(unittest.TestCase):
             [0, 0],
             [1, 0]
         ]
+        user_ids = [
+            0
+        ]
         expected = [
             {
                 'clusters_x': [1, 5],
@@ -103,7 +106,8 @@ class TextOpticsTextUtils(unittest.TestCase):
                 ],
                 'number_views': 1,
                 'line_slope': 0.0,
-                'consensus_score': 1.0
+                'consensus_score': 1.0,
+                'user_ids': [0]
             },
             {
                 'clusters_x': [1, 3],
@@ -117,10 +121,11 @@ class TextOpticsTextUtils(unittest.TestCase):
                 ],
                 'number_views': 1,
                 'line_slope': 0.0,
-                'consensus_score': 1.0
+                'consensus_score': 1.0,
+                'user_ids': [0]
             }
         ]
-        result = optics_text_utils.cluster_of_one(X, data)
+        result = optics_text_utils.cluster_of_one(X, data, user_ids)
         self.assertCountEqual(result, expected)
 
 

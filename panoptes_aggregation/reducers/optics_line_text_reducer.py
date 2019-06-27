@@ -67,7 +67,7 @@ def process_data(data_list, min_line_length=0.0):
     return data_by_frame
 
 
-@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS, defaults_process=DEFAULTS_PROCESS)
+@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS, defaults_process=DEFAULTS_PROCESS, user_id=True)
 def optics_line_text_reducer(data_by_frame, **kwargs_optics):
     '''Reduce the line-text extracts as a list of lines of text.
 
@@ -95,6 +95,7 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
 
         Note: the image coordiate system is left handed with y increasing downward.
     '''
+    user_ids_input = np.array(kwargs_optics.pop('user_id'))
     output = defaultdict(list)
     min_samples_orig = kwargs_optics.pop('min_samples')
     for frame, value in data_by_frame.items():
@@ -124,7 +125,7 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                 cdx = clean_labels == label
                 if label == -1:
                     # noise values are assigned to clusters of one
-                    output[frame] += cluster_of_one(X[cdx], data)
+                    output[frame] += cluster_of_one(X[cdx], data, user_ids_input)
                 else:
                     xs = [data[int(i)]['x'] for i in X[cdx, 0]]
                     ys = [data[int(i)]['y'] for i in X[cdx, 0]]
@@ -134,11 +135,15 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                     collation = col.Collation()
                     witness_keys = []
                     clusters_text = []
-                    for i in X[cdx, 0]:
-                        text = data[int(i)]['text'][0]
+                    user_ids = []
+                    for row in X[cdx]:
+                        index = int(row[0])
+                        user_index = int(row[1])
+                        text = data[index]['text'][0]
                         if text.strip() != '':
-                            key = str(i)
+                            key = str(index)
                             witness_keys.append(key)
+                            user_ids.append(user_ids_input[user_index])
                             collation.add_plain_witness(key, text)
                     if len(collation.witnesses) > 0:
                         alignment_table = col.collate(collation, near_match=True, segmentation=False)
@@ -154,11 +159,12 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                         'clusters_text': clusters_text,
                         'number_views': cdx.sum(),
                         'line_slope': slope,
-                        'consensus_score': consensus_score(clusters_text)
+                        'consensus_score': consensus_score(clusters_text),
+                        'user_ids': user_ids
                     }
                     output[frame].append(value)
         else:
             # not enough data to cluster so assign each extract
             # to its own cluster
-            output[frame] += cluster_of_one(X, data)
+            output[frame] += cluster_of_one(X, data, user_ids_input)
     return dict(output)
