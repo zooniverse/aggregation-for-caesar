@@ -164,11 +164,7 @@ class TestReduceCSV(unittest.TestCase):
     @patch.dict('panoptes_aggregation.scripts.reduce_panoptes_csv.reducers.reducers', mock_reducers_dict)
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(reduce_panoptes_csv.flatten_data))
     def test_reduce_csv_stream(self, mock_is_file, mock_read_csv, mock_to_csv, mock_pbar):
-<<<<<<< HEAD
-        '''Test object reducer makes one csv file (stream)'''
-=======
         '''Test streaming object reducer makes one csv file'''
->>>>>>> 3c5d310... Pass user_id as reducer keyword in offline mode
         mock_is_file.return_value = False
         mock_read_csv.side_effect = [
             self.extracted_dataframe_question,
