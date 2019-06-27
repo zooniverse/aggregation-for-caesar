@@ -51,7 +51,7 @@ def metric(a, b, data_in=[]):
         A two element list containing [index mapping to data, index mapping to user]
     data_in : list
         A list of dicts that take the form
-        {`x`: [start_x, end_x], `y`: [start_y, end_y], 'text': ['text for line']}
+        {`x`: [start_x, end_x], `y`: [start_y, end_y], 'text': ['text for line'], 'gold_standard', bool}
         There is one element in this list for each classification made.
 
     Returns
@@ -156,7 +156,7 @@ def cluster_of_one(X, data, user_ids):
         A nx2 list with each row containing [index mapping to data, index mapping to user]
     data: list
         A list containing dictionaries with the original data that X maps to, of the form
-        `{'x': [start_x, end_x], 'y': [start_y, end_y], 'text': ['text for line']}`.
+        `{'x': [start_x, end_x], 'y': [start_y, end_y], 'text': ['text for line'], 'gold_standard': bool}`.
 
     Returns
     -------
@@ -178,7 +178,8 @@ def cluster_of_one(X, data, user_ids):
             'number_views': 1,
             'line_slope': slope,
             'consensus_score': 1.0,
-            'user_ids': [user_ids[user_index]]
+            'user_ids': [user_ids[user_index]],
+            'gold_standard': [line['gold_standard']]
         }
         clusters.append(value)
     return clusters

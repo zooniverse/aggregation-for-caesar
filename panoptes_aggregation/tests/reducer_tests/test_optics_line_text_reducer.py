@@ -45,7 +45,8 @@ extracted_data = [
                 -0.23999309197815955,
                 -40.103966913878772,
                 -39.504439692518773
-            ]
+            ],
+            'gold_standard': False
         }
     },
     {
@@ -91,12 +92,14 @@ extracted_data = [
                 -1.9350479072142399,
                 -40.214619322353997,
                 -40.655937635767046
-            ]
+            ],
+            'gold_standard': True
         },
         'frame1': {
             'points': {'x': [[1, 250]], 'y': [[1, 1]]},
             'text': [['page 2']],
-            'slope': [0]
+            'slope': [0],
+            'gold_standard': True
         }
     },
     {
@@ -142,24 +145,28 @@ extracted_data = [
                 -1.8257636189450075,
                 -39.334667288762937,
                 -1.122924085203026
-            ]
+            ],
+            'gold_standard': False
         },
         'frame1': {
             'points': {'x': [[1.1, 251]], 'y': [[0.9, 0.9]]},
             'text': [['page 2']],
-            'slope': [0]
+            'slope': [0],
+            'gold_standard': False
         }
     },
     {
         'frame0': {
             'points': {'x': [[1000, 10]], 'y': [[700, 10]]},
             'text': [['not in a cluster']],
-            'slope': [-145.12467165539783]
+            'slope': [-145.12467165539783],
+            'gold_standard': False
         },
         'frame2': {
             'points': {'x': [[1, 250]], 'y': [[1, 1]]},
             'text': [['some words']],
-            'slope': [0]
+            'slope': [0],
+            'gold_standard': False
         }
     },
     {}
@@ -205,31 +212,31 @@ processed_data = {
             [24, 3]
         ],
         'data': [
-            {'x': [27.765213012695312, 984.8629150390625], 'y': [419.1290588378906, 397.5943298339844], 'text': ['words on a page.']},
-            {'x': [111.51124572753906, 578.0963134765625], 'y': [533.980712890625, 131.99972534179688], 'text': ['There is this']},
-            {'x': [30.157958984375, 989.6483154296875], 'y': [313.8482971191406, 285.1353454589844], 'text': ['Here are some test']},
-            {'x': [243.1121826171875, 733.624755859375], 'y': [541.158935546875, 122.42880249023438], 'text': ['text as well']},
-            {'x': [1149.962158203125, 2152.52197265625], 'y': [297.0990905761719, 273.1716613769531], 'text': ['There are two columns']},
-            {'x': [1118.8565673828125, 1599.798095703125], 'y': [376.0596618652344, 373.6669006347656], 'text': ['of text.']},
-            {'x': [1245.6719970703125, 1760.1119384765625], 'y': [498.0895690917969, 69.78839111328125], 'text': ['This looks like']},
-            {'x': [1346.167236328125, 1796.0030517578125], 'y': [533.980712890625, 158.31991577148438], 'text': ['a big mess']},
-            {'x': [32.550689697265625, 984.8629150390625], 'y': [285.1353454589844, 268.3861389160156], 'text': ['Here are some test']},
-            {'x': [30.157958984375, 992.0411376953125], 'y': [402.3798522949219, 395.2015686035156], 'text': ['words on a page.']},
-            {'x': [1243.2791748046875, 1755.326416015625], 'y': [481.3403625488281, 45.8609619140625], 'text': ['This looks like']},
-            {'x': [1346.167236328125, 1798.3958740234375], 'y': [526.802490234375, 148.74893188476562], 'text': ['a big mess']},
-            {'x': [1128.427490234375, 2142.950927734375], 'y': [282.7426452636719, 270.7789001464844], 'text': ['There are two columns']},
-            {'x': [1114.071044921875, 1587.8343505859375], 'y': [399.9870910644531, 380.8451232910156], 'text': ['of text.']},
-            {'x': [104.33302307128906, 563.7398681640625], 'y': [536.37353515625, 148.74893188476562], 'text': ['There is this']},
-            {'x': [245.50491333007812, 731.23193359375], 'y': [543.5517578125, 129.60702514648438], 'text': ['test as well']},
-            {'x': [1248.064697265625, 1762.504638671875], 'y': [483.7331237792969, 67.39566040039062], 'text': ['This looks like']},
-            {'x': [1346.167236328125, 1800.78857421875], 'y': [526.802490234375, 155.92721557617188], 'text': ['a big mess']},
-            {'x': [37.336181640625, 977.6846923828125], 'y': [399.9870910644531, 392.8088684082031], 'text': ['words on a page.']},
-            {'x': [39.72892761230469, 1013.5758056640625], 'y': [297.0990905761719, 280.3498840332031], 'text': ['Here are some test']},
-            {'x': [106.72576904296875, 597.23828125], 'y': [545.9444580078125, 127.21426391601562], 'text': ['There is this']},
-            {'x': [1145.1767578125, 1587.8343505859375], 'y': [390.4161071777344, 373.6669006347656], 'text': ['of text.']},
-            {'x': [247.89767456054688, 759.9449462890625], 'y': [548.337158203125, 127.21426391601562], 'text': ['text as well']},
-            {'x': [1137.99853515625, 2162.093017578125], 'y': [287.5281066894531, 268.3861389160156], 'text': ['There are two columns']},
-            {'x': [1000, 10], 'y': [700, 10], 'text': ['not in a cluster']}
+            {'x': [27.765213012695312, 984.8629150390625], 'y': [419.1290588378906, 397.5943298339844], 'text': ['words on a page.'], 'gold_standard': False},
+            {'x': [111.51124572753906, 578.0963134765625], 'y': [533.980712890625, 131.99972534179688], 'text': ['There is this'], 'gold_standard': False},
+            {'x': [30.157958984375, 989.6483154296875], 'y': [313.8482971191406, 285.1353454589844], 'text': ['Here are some test'], 'gold_standard': False},
+            {'x': [243.1121826171875, 733.624755859375], 'y': [541.158935546875, 122.42880249023438], 'text': ['text as well'], 'gold_standard': False},
+            {'x': [1149.962158203125, 2152.52197265625], 'y': [297.0990905761719, 273.1716613769531], 'text': ['There are two columns'], 'gold_standard': False},
+            {'x': [1118.8565673828125, 1599.798095703125], 'y': [376.0596618652344, 373.6669006347656], 'text': ['of text.'], 'gold_standard': False},
+            {'x': [1245.6719970703125, 1760.1119384765625], 'y': [498.0895690917969, 69.78839111328125], 'text': ['This looks like'], 'gold_standard': False},
+            {'x': [1346.167236328125, 1796.0030517578125], 'y': [533.980712890625, 158.31991577148438], 'text': ['a big mess'], 'gold_standard': False},
+            {'x': [32.550689697265625, 984.8629150390625], 'y': [285.1353454589844, 268.3861389160156], 'text': ['Here are some test'], 'gold_standard': True},
+            {'x': [30.157958984375, 992.0411376953125], 'y': [402.3798522949219, 395.2015686035156], 'text': ['words on a page.'], 'gold_standard': True},
+            {'x': [1243.2791748046875, 1755.326416015625], 'y': [481.3403625488281, 45.8609619140625], 'text': ['This looks like'], 'gold_standard': True},
+            {'x': [1346.167236328125, 1798.3958740234375], 'y': [526.802490234375, 148.74893188476562], 'text': ['a big mess'], 'gold_standard': True},
+            {'x': [1128.427490234375, 2142.950927734375], 'y': [282.7426452636719, 270.7789001464844], 'text': ['There are two columns'], 'gold_standard': True},
+            {'x': [1114.071044921875, 1587.8343505859375], 'y': [399.9870910644531, 380.8451232910156], 'text': ['of text.'], 'gold_standard': True},
+            {'x': [104.33302307128906, 563.7398681640625], 'y': [536.37353515625, 148.74893188476562], 'text': ['There is this'], 'gold_standard': True},
+            {'x': [245.50491333007812, 731.23193359375], 'y': [543.5517578125, 129.60702514648438], 'text': ['test as well'], 'gold_standard': True},
+            {'x': [1248.064697265625, 1762.504638671875], 'y': [483.7331237792969, 67.39566040039062], 'text': ['This looks like'], 'gold_standard': False},
+            {'x': [1346.167236328125, 1800.78857421875], 'y': [526.802490234375, 155.92721557617188], 'text': ['a big mess'], 'gold_standard': False},
+            {'x': [37.336181640625, 977.6846923828125], 'y': [399.9870910644531, 392.8088684082031], 'text': ['words on a page.'], 'gold_standard': False},
+            {'x': [39.72892761230469, 1013.5758056640625], 'y': [297.0990905761719, 280.3498840332031], 'text': ['Here are some test'], 'gold_standard': False},
+            {'x': [106.72576904296875, 597.23828125], 'y': [545.9444580078125, 127.21426391601562], 'text': ['There is this'], 'gold_standard': False},
+            {'x': [1145.1767578125, 1587.8343505859375], 'y': [390.4161071777344, 373.6669006347656], 'text': ['of text.'], 'gold_standard': False},
+            {'x': [247.89767456054688, 759.9449462890625], 'y': [548.337158203125, 127.21426391601562], 'text': ['text as well'], 'gold_standard': False},
+            {'x': [1137.99853515625, 2162.093017578125], 'y': [287.5281066894531, 268.3861389160156], 'text': ['There are two columns'], 'gold_standard': False},
+            {'x': [1000, 10], 'y': [700, 10], 'text': ['not in a cluster'], 'gold_standard': False}
         ]
     },
     'frame1': {
@@ -238,8 +245,8 @@ processed_data = {
             [1, 2]
         ],
         'data': [
-            {'x': [1, 250], 'y': [1, 1], 'text': ['page 2']},
-            {'x': [1.1, 251], 'y': [0.9, 0.9], 'text': ['page 2']}
+            {'x': [1, 250], 'y': [1, 1], 'text': ['page 2'], 'gold_standard': True},
+            {'x': [1.1, 251], 'y': [0.9, 0.9], 'text': ['page 2'], 'gold_standard': False}
         ]
     },
     'frame2': {
@@ -247,7 +254,7 @@ processed_data = {
             [0, 3]
         ],
         'data': [
-            {'x': [1, 250], 'y': [1, 1], 'text': ['some words']}
+            {'x': [1, 250], 'y': [1, 1], 'text': ['some words'], 'gold_standard': False}
         ]
     }
 }
@@ -266,7 +273,8 @@ reduced_data = {
             'consensus_score': 1.0,
             'line_slope': -145.12467165539783,
             'number_views': 1,
-            'user_ids': [4]
+            'user_ids': [4],
+            'gold_standard': [False]
         },
         {
             'clusters_text': [
@@ -281,7 +289,8 @@ reduced_data = {
             'consensus_score': 3.0,
             'line_slope': -0.4307902739020878,
             'number_views': 3,
-            'user_ids': [1, 2, 3]
+            'user_ids': [1, 2, 3],
+            'gold_standard': [False, True, False]
         },
         {
             'clusters_text': [
@@ -295,7 +304,8 @@ reduced_data = {
             'consensus_score': 3.0,
             'line_slope': -1.0025736896133275,
             'number_views': 3,
-            'user_ids': [1, 2, 3]
+            'user_ids': [1, 2, 3],
+            'gold_standard': [False, True, False]
         },
         {
             'clusters_text': [
@@ -308,7 +318,8 @@ reduced_data = {
             'consensus_score': 2.6666666666666665,
             'line_slope': -40.462226211337374,
             'number_views': 3,
-            'user_ids': [1, 2, 3]
+            'user_ids': [1, 2, 3],
+            'gold_standard': [False, True, False]
         },
         {
             'clusters_text': [
@@ -321,7 +332,8 @@ reduced_data = {
             'consensus_score': 3.0,
             'line_slope': -40.62524430317739,
             'number_views': 3,
-            'user_ids': [1, 2, 3]
+            'user_ids': [1, 2, 3],
+            'gold_standard': [False, True, False]
         },
         {
             'clusters_text': [
@@ -334,7 +346,8 @@ reduced_data = {
             'consensus_score': 3.0,
             'line_slope': -2.0454084888872277,
             'number_views': 3,
-            'user_ids': [1, 2, 3]
+            'user_ids': [1, 2, 3],
+            'gold_standard': [False, True, False]
         },
         {
             'clusters_text': [
@@ -346,7 +359,8 @@ reduced_data = {
             'consensus_score': 3.0,
             'line_slope': -38.983328513212115,
             'number_views': 3,
-            'user_ids': [1, 2, 3]
+            'user_ids': [1, 2, 3],
+            'gold_standard': [False, True, False]
         },
         {
             'clusters_text': [
@@ -359,7 +373,8 @@ reduced_data = {
             'consensus_score': 3.0,
             'line_slope': -39.35537301183047,
             'number_views': 3,
-            'user_ids': [1, 2, 3]
+            'user_ids': [1, 2, 3],
+            'gold_standard': [False, True, False]
         },
         {
             'clusters_text': [
@@ -373,7 +388,8 @@ reduced_data = {
             'consensus_score': 3.0,
             'line_slope': -0.9458348967092045,
             'number_views': 3,
-            'user_ids': [1, 2, 3]
+            'user_ids': [1, 2, 3],
+            'gold_standard': [False, True, False]
         }
     ],
     'frame1': [
@@ -387,7 +403,8 @@ reduced_data = {
             'consensus_score': 2.0,
             'line_slope': 0.0,
             'number_views': 2,
-            'user_ids': [2, 3]
+            'user_ids': [2, 3],
+            'gold_standard': [True, False]
         }
     ],
     'frame2': [
@@ -401,7 +418,8 @@ reduced_data = {
             'consensus_score': 1.0,
             'line_slope': 0.0,
             'number_views': 1,
-            'user_ids': [4]
+            'user_ids': [4],
+            'gold_standard': [False]
         }
     ]
 }
@@ -436,7 +454,8 @@ extracted_data_with_dolar_sign = [
                 'y': [[0, 0]]
             },
             'text': [['$1 2 3 4 5']],
-            'slope': [0.0]
+            'slope': [0.0],
+            'gold_standard': False
         }
     },
     {
@@ -446,7 +465,8 @@ extracted_data_with_dolar_sign = [
                 'y': [[0, 0]]
             },
             'text': [['$1 2 3 4 5']],
-            'slope': [0.0]
+            'slope': [0.0],
+            'gold_standard': False
         }
     },
     {
@@ -456,7 +476,8 @@ extracted_data_with_dolar_sign = [
                 'y': [[0, 0]]
             },
             'text': [['$1 2 3 4 5']],
-            'slope': [0.0]
+            'slope': [0.0],
+            'gold_standard': False
         }
     },
     {
@@ -466,7 +487,8 @@ extracted_data_with_dolar_sign = [
                 'y': [[0, 0]]
             },
             'text': [['$1 2 3 4 5']],
-            'slope': [0.0]
+            'slope': [0.0],
+            'gold_standard': False
         }
     },
     {
@@ -476,7 +498,8 @@ extracted_data_with_dolar_sign = [
                 'y': [[0, 0]]
             },
             'text': [['$1 2 3 4 5']],
-            'slope': [0.0]
+            'slope': [0.0],
+            'gold_standard': False
         }
     },
     {
@@ -486,17 +509,19 @@ extracted_data_with_dolar_sign = [
                 'y': [[0, 0]]
             },
             'text': [['$1 2 3 4 5']],
-            'slope': [0.0]
+            'slope': [0.0],
+            'gold_standard': False
         }
     },
     {
         'frame0': {
             'points': {
                 'x': [[0, 100]],
-                'y': [[0, 0]]
+                'y': [[0, 0]],
             },
             'text': [['$1 2 3 4 5']],
-            'slope': [0.0]
+            'slope': [0.0],
+            'gold_standard': False
         }
     }
 ]
@@ -525,13 +550,13 @@ processed_data_with_dolar_sign = {
             [6, 6]
         ],
         'data': [
-            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5']},
-            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5']},
-            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5']},
-            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5']},
-            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5']},
-            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5']},
-            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5']}
+            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5'], 'gold_standard': False},
+            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5'], 'gold_standard': False},
+            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5'], 'gold_standard': False},
+            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5'], 'gold_standard': False},
+            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5'], 'gold_standard': False},
+            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5'], 'gold_standard': False},
+            {'x': [0, 100], 'y': [0, 0], 'text': ['$1 2 3 4 5'], 'gold_standard': False}
         ]
     }
 }
@@ -551,7 +576,8 @@ reduced_data_with_dolar_sign = {
         'consensus_score': 7.0,
         'line_slope': 0.0,
         'number_views': 7,
-        'user_ids': [1, 2, 3, 4, 5, 6, 7]
+        'user_ids': [1, 2, 3, 4, 5, 6, 7],
+        'gold_standard': [False, False, False, False, False, False, False]
     }]
 }
 
