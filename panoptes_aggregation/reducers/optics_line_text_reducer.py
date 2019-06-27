@@ -90,12 +90,17 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
 
         * `clusters_x` : the `x` position of each identified word
         * `clusters_y` : the `y` position of each identified word
-        * `clusters_text` : A list of text at each cluster position
+        * `clusters_text` : A list of lists containing the text at each cluster position
+            There is one list for each identified word, and each of those lists contains
+            one item for each user that identified the cluster. If the user did not transcribe
+            the word an empty string is used.
         * `line_slope`: The slope of the line of text in degrees
         * `number_views` : The number of users that transcribed the line of text
         * `consensus_score` : The average number of users who's text agreed for the line
             Note, if `consensus_score` is the same a `number_views` every user agreed with each other
-
+        * `user_ids`: List of panoptes user ids in the same order as `clusters_text`
+        * `gold_standard`: List of bools indicating of the if a transcription was made in frontends
+            gold standard mode
         Note: the image coordiate system is left handed with y increasing downward.
     '''
     user_ids_input = np.array(kwargs_optics.pop('user_id'))
