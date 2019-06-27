@@ -165,6 +165,16 @@ extracted_data = [
     {}
 ]
 
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4,
+        5
+    ]
+}
+
 processed_data = {
     'frame0': {
         'X': [
@@ -255,7 +265,8 @@ reduced_data = {
             'clusters_y': [700, 10],
             'consensus_score': 1.0,
             'line_slope': -145.12467165539783,
-            'number_views': 1
+            'number_views': 1,
+            'user_ids': [4]
         },
         {
             'clusters_text': [
@@ -269,7 +280,8 @@ reduced_data = {
             'clusters_y': [402.3798522949219, 395.2015686035156],
             'consensus_score': 3.0,
             'line_slope': -0.4307902739020878,
-            'number_views': 3
+            'number_views': 3,
+            'user_ids': [1, 2, 3]
         },
         {
             'clusters_text': [
@@ -282,7 +294,8 @@ reduced_data = {
             'clusters_y': [297.0990905761719, 280.3498840332031],
             'consensus_score': 3.0,
             'line_slope': -1.0025736896133275,
-            'number_views': 3
+            'number_views': 3,
+            'user_ids': [1, 2, 3]
         },
         {
             'clusters_text': [
@@ -294,7 +307,8 @@ reduced_data = {
             'clusters_y': [543.5517578125, 127.21426391601562],
             'consensus_score': 2.6666666666666665,
             'line_slope': -40.462226211337374,
-            'number_views': 3
+            'number_views': 3,
+            'user_ids': [1, 2, 3]
         },
         {
             'clusters_text': [
@@ -306,7 +320,8 @@ reduced_data = {
             'clusters_y': [536.37353515625, 131.99972534179688],
             'consensus_score': 3.0,
             'line_slope': -40.62524430317739,
-            'number_views': 3
+            'number_views': 3,
+            'user_ids': [1, 2, 3]
         },
         {
             'clusters_text': [
@@ -318,7 +333,8 @@ reduced_data = {
             'clusters_y': [390.4161071777344, 373.6669006347656],
             'consensus_score': 3.0,
             'line_slope': -2.0454084888872277,
-            'number_views': 3
+            'number_views': 3,
+            'user_ids': [1, 2, 3]
         },
         {
             'clusters_text': [
@@ -329,7 +345,8 @@ reduced_data = {
             'clusters_y': [483.7331237792969, 67.39566040039062],
             'consensus_score': 3.0,
             'line_slope': -38.983328513212115,
-            'number_views': 3
+            'number_views': 3,
+            'user_ids': [1, 2, 3]
         },
         {
             'clusters_text': [
@@ -341,7 +358,8 @@ reduced_data = {
             'clusters_y': [526.802490234375, 155.92721557617188],
             'consensus_score': 3.0,
             'line_slope': -39.35537301183047,
-            'number_views': 3
+            'number_views': 3,
+            'user_ids': [1, 2, 3]
         },
         {
             'clusters_text': [
@@ -354,7 +372,8 @@ reduced_data = {
             'clusters_y': [287.5281066894531, 270.7789001464844],
             'consensus_score': 3.0,
             'line_slope': -0.9458348967092045,
-            'number_views': 3
+            'number_views': 3,
+            'user_ids': [1, 2, 3]
         }
     ],
     'frame1': [
@@ -367,7 +386,8 @@ reduced_data = {
             'clusters_y': [0.95, 0.95],
             'consensus_score': 2.0,
             'line_slope': 0.0,
-            'number_views': 2
+            'number_views': 2,
+            'user_ids': [2, 3]
         }
     ],
     'frame2': [
@@ -380,7 +400,8 @@ reduced_data = {
             'clusters_y': [1, 1],
             'consensus_score': 1.0,
             'line_slope': 0.0,
-            'number_views': 1
+            'number_views': 1,
+            'user_ids': [4]
         }
     ]
 }
@@ -392,7 +413,8 @@ TestOpticsLTReducer = ReducerTest(
     processed_data,
     reduced_data,
     'Test optics line-text reducer with auto min_samples',
-    okwargs={'min_samples': 'auto'}
+    okwargs={'min_samples': 'auto'},
+    network_kwargs=kwargs_extra_data
 )
 
 TestOpticsLTReducerWithMinSamples = ReducerTest(
@@ -402,7 +424,8 @@ TestOpticsLTReducerWithMinSamples = ReducerTest(
     processed_data,
     reduced_data,
     'Test optics line-text reducer with specified min_samples',
-    kwargs={'min_samples': 2}
+    kwargs={'min_samples': 2},
+    network_kwargs=kwargs_extra_data
 )
 
 extracted_data_with_dolar_sign = [
@@ -478,6 +501,18 @@ extracted_data_with_dolar_sign = [
     }
 ]
 
+kwargs_extra_data_with_dolar_sign = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+    ]
+}
+
 processed_data_with_dolar_sign = {
     'frame0': {
         'X': [
@@ -515,7 +550,8 @@ reduced_data_with_dolar_sign = {
         ],
         'consensus_score': 7.0,
         'line_slope': 0.0,
-        'number_views': 7
+        'number_views': 7,
+        'user_ids': [1, 2, 3, 4, 5, 6, 7]
     }]
 }
 
@@ -526,5 +562,6 @@ TestOpticsLTReducerWithDolarSign = ReducerTest(
     processed_data_with_dolar_sign,
     reduced_data_with_dolar_sign,
     'Test optics line-text reducer with dolar sign',
-    okwargs={'min_samples': 'auto'}
+    okwargs={'min_samples': 'auto'},
+    network_kwargs=kwargs_extra_data_with_dolar_sign
 )

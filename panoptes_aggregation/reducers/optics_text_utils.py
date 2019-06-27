@@ -145,7 +145,7 @@ def remove_user_duplication(labels_, core_distances_, users):
     return clean_labels
 
 
-def cluster_of_one(X, data):
+def cluster_of_one(X, data, user_ids):
     '''Create "clusters of one" out of the data passed in. Lines of text
     identified as noise are kept around as clusters of one so they can be
     displayed in the front-end to the next user.
@@ -165,7 +165,9 @@ def cluster_of_one(X, data):
     '''
     clusters = []
     for row in X:
-        line = data[int(row[0])]
+        index = int(row[0])
+        user_index = int(row[1])
+        line = data[index]
         dx = line['x'][-1] - line['x'][0]
         dy = line['y'][-1] - line['y'][0]
         slope = np.rad2deg(np.arctan2(dy, dx))
@@ -175,7 +177,8 @@ def cluster_of_one(X, data):
             'clusters_text': [[w] for w in line['text'][0].split()],
             'number_views': 1,
             'line_slope': slope,
-            'consensus_score': 1.0
+            'consensus_score': 1.0,
+            'user_ids': [user_ids[user_index]]
         }
         clusters.append(value)
     return clusters
