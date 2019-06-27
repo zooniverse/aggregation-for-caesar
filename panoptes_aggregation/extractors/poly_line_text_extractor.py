@@ -13,9 +13,9 @@ from .tool_wrapper import tool_wrapper
 import warnings
 
 
-@extractor_wrapper
+@extractor_wrapper(gold_standard=True)
 @tool_wrapper
-def poly_line_text_extractor(classification, dot_freq='word', **kwargs):
+def poly_line_text_extractor(classification, dot_freq='word', gold_standard=False, **kwargs):
     '''Extract annotations from a polygon tool with a text sub-task
 
     Parameters
@@ -111,6 +111,7 @@ def poly_line_text_extractor(classification, dot_freq='word', **kwargs):
                         extract[frame]['points']['x'].append(x)
                         extract[frame]['points']['y'].append(y)
                         extract[frame]['slope'].append(slope)
+                        extract[frame]['gold_standard'] = gold_standard
                 elif (dot_freq == 'line'):
                     # NOTE: if there are not two `points` the extract is not used
                     if len(x) == 2:
@@ -118,4 +119,5 @@ def poly_line_text_extractor(classification, dot_freq='word', **kwargs):
                         extract[frame]['points']['x'].append(x)
                         extract[frame]['points']['y'].append(y)
                         extract[frame]['slope'].append(slope)
+                        extract[frame]['gold_standard'] = gold_standard
     return extract

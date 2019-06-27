@@ -92,7 +92,7 @@ def earth_day(parser):
         return None
 
 
-@extractor_wrapper
+@extractor_wrapper()
 def nfn_extractor(classification, **kwargs):
     response = {}
     if len(classification['annotations']) > 0:
