@@ -263,18 +263,20 @@ reduced_data = {
     'frame0': [
         {
             'clusters_text': [
-                ['not'],
-                ['in'],
-                ['a'],
-                ['cluster']
+                ['Here', 'Here', 'Here'],
+                ['are', 'are', 'are'],
+                ['some', 'some', 'some'],
+                ['test', 'test', 'test']
             ],
-            'clusters_x': [1000, 10],
-            'clusters_y': [700, 10],
-            'consensus_score': 1.0,
-            'line_slope': -145.12467165539783,
-            'number_views': 1,
-            'user_ids': [4],
-            'gold_standard': [False]
+            'clusters_x': [32.550689697265625, 989.6483154296875],
+            'clusters_y': [297.0990905761719, 280.3498840332031],
+            'consensus_score': 3.0,
+            'line_slope': -1.0025736896133275,
+            'number_views': 3,
+            'user_ids': [1, 2, 3],
+            'gold_standard': [False, True, False],
+            'slope_label': 0,
+            'gutter_label': 0
         },
         {
             'clusters_text': [
@@ -290,91 +292,9 @@ reduced_data = {
             'line_slope': -0.4307902739020878,
             'number_views': 3,
             'user_ids': [1, 2, 3],
-            'gold_standard': [False, True, False]
-        },
-        {
-            'clusters_text': [
-                ['Here', 'Here', 'Here'],
-                ['are', 'are', 'are'],
-                ['some', 'some', 'some'],
-                ['test', 'test', 'test']
-            ],
-            'clusters_x': [32.550689697265625, 989.6483154296875],
-            'clusters_y': [297.0990905761719, 280.3498840332031],
-            'consensus_score': 3.0,
-            'line_slope': -1.0025736896133275,
-            'number_views': 3,
-            'user_ids': [1, 2, 3],
-            'gold_standard': [False, True, False]
-        },
-        {
-            'clusters_text': [
-                ['text', 'test', 'text'],
-                ['as', 'as', 'as'],
-                ['well', 'well', 'well']
-            ],
-            'clusters_x': [245.50491333007812, 733.624755859375],
-            'clusters_y': [543.5517578125, 127.21426391601562],
-            'consensus_score': 2.6666666666666665,
-            'line_slope': -40.462226211337374,
-            'number_views': 3,
-            'user_ids': [1, 2, 3],
-            'gold_standard': [False, True, False]
-        },
-        {
-            'clusters_text': [
-                ['There', 'There', 'There'],
-                ['is', 'is', 'is'],
-                ['this', 'this', 'this']
-            ],
-            'clusters_x': [106.72576904296875, 578.0963134765625],
-            'clusters_y': [536.37353515625, 131.99972534179688],
-            'consensus_score': 3.0,
-            'line_slope': -40.62524430317739,
-            'number_views': 3,
-            'user_ids': [1, 2, 3],
-            'gold_standard': [False, True, False]
-        },
-        {
-            'clusters_text': [
-                ['of', 'of', 'of'],
-                ['text', 'text', 'text'],
-                ['.', '.', '.']
-            ],
-            'clusters_x': [1118.8565673828125, 1587.8343505859375],
-            'clusters_y': [390.4161071777344, 373.6669006347656],
-            'consensus_score': 3.0,
-            'line_slope': -2.0454084888872277,
-            'number_views': 3,
-            'user_ids': [1, 2, 3],
-            'gold_standard': [False, True, False]
-        },
-        {
-            'clusters_text': [
-                ['This', 'This', 'This'],
-                ['looks', 'looks', 'looks'],
-                ['like', 'like', 'like']],
-            'clusters_x': [1245.6719970703125, 1760.1119384765625],
-            'clusters_y': [483.7331237792969, 67.39566040039062],
-            'consensus_score': 3.0,
-            'line_slope': -38.983328513212115,
-            'number_views': 3,
-            'user_ids': [1, 2, 3],
-            'gold_standard': [False, True, False]
-        },
-        {
-            'clusters_text': [
-                ['a', 'a', 'a'],
-                ['big', 'big', 'big'],
-                ['mess', 'mess', 'mess']
-            ],
-            'clusters_x': [1346.167236328125, 1798.3958740234375],
-            'clusters_y': [526.802490234375, 155.92721557617188],
-            'consensus_score': 3.0,
-            'line_slope': -39.35537301183047,
-            'number_views': 3,
-            'user_ids': [1, 2, 3],
-            'gold_standard': [False, True, False]
+            'gold_standard': [False, True, False],
+            'slope_label': 0,
+            'gutter_label': 0
         },
         {
             'clusters_text': [
@@ -389,7 +309,105 @@ reduced_data = {
             'line_slope': -0.9458348967092045,
             'number_views': 3,
             'user_ids': [1, 2, 3],
-            'gold_standard': [False, True, False]
+            'gold_standard': [False, True, False],
+            'slope_label': 0,
+            'gutter_label': 1
+        },
+        {
+            'clusters_text': [
+                ['of', 'of', 'of'],
+                ['text', 'text', 'text'],
+                ['.', '.', '.']
+            ],
+            'clusters_x': [1118.8565673828125, 1587.8343505859375],
+            'clusters_y': [390.4161071777344, 373.6669006347656],
+            'consensus_score': 3.0,
+            'line_slope': -2.0454084888872277,
+            'number_views': 3,
+            'user_ids': [1, 2, 3],
+            'gold_standard': [False, True, False],
+            'slope_label': 0,
+            'gutter_label': 1
+        },
+        {
+            'clusters_text': [
+                ['There', 'There', 'There'],
+                ['is', 'is', 'is'],
+                ['this', 'this', 'this']
+            ],
+            'clusters_x': [106.72576904296875, 578.0963134765625],
+            'clusters_y': [536.37353515625, 131.99972534179688],
+            'consensus_score': 3.0,
+            'line_slope': -40.62524430317739,
+            'number_views': 3,
+            'user_ids': [1, 2, 3],
+            'gold_standard': [False, True, False],
+            'slope_label': 1,
+            'gutter_label': 0
+        },
+        {
+            'clusters_text': [
+                ['text', 'test', 'text'],
+                ['as', 'as', 'as'],
+                ['well', 'well', 'well']
+            ],
+            'clusters_x': [245.50491333007812, 733.624755859375],
+            'clusters_y': [543.5517578125, 127.21426391601562],
+            'consensus_score': 2.6666666666666665,
+            'line_slope': -40.462226211337374,
+            'number_views': 3,
+            'user_ids': [1, 2, 3],
+            'gold_standard': [False, True, False],
+            'slope_label': 1,
+            'gutter_label': 0
+        },
+        {
+            'clusters_text': [
+                ['This', 'This', 'This'],
+                ['looks', 'looks', 'looks'],
+                ['like', 'like', 'like']],
+            'clusters_x': [1245.6719970703125, 1760.1119384765625],
+            'clusters_y': [483.7331237792969, 67.39566040039062],
+            'consensus_score': 3.0,
+            'line_slope': -38.983328513212115,
+            'number_views': 3,
+            'user_ids': [1, 2, 3],
+            'gold_standard': [False, True, False],
+            'slope_label': 1,
+            'gutter_label': 1
+        },
+        {
+            'clusters_text': [
+                ['a', 'a', 'a'],
+                ['big', 'big', 'big'],
+                ['mess', 'mess', 'mess']
+            ],
+            'clusters_x': [1346.167236328125, 1798.3958740234375],
+            'clusters_y': [526.802490234375, 155.92721557617188],
+            'consensus_score': 3.0,
+            'line_slope': -39.35537301183047,
+            'number_views': 3,
+            'user_ids': [1, 2, 3],
+            'gold_standard': [False, True, False],
+            'slope_label': 1,
+            'gutter_label': 1
+        },
+        {
+            'clusters_text': [
+                ['not'],
+                ['in'],
+                ['a'],
+                ['cluster']
+            ],
+            'clusters_x': [1000, 10],
+            'clusters_y': [700, 10],
+            'consensus_score': 1.0,
+            'line_slope': -145.12467165539783,
+            'number_views': 1,
+            'user_ids': [4],
+            'gold_standard': [False],
+            'slope_label': 2,
+            'gutter_label': 0
         }
     ],
     'frame1': [
@@ -404,7 +422,9 @@ reduced_data = {
             'line_slope': 0.0,
             'number_views': 2,
             'user_ids': [2, 3],
-            'gold_standard': [True, False]
+            'gold_standard': [True, False],
+            'slope_label': 0,
+            'gutter_label': 0
         }
     ],
     'frame2': [
@@ -419,7 +439,9 @@ reduced_data = {
             'line_slope': 0.0,
             'number_views': 1,
             'user_ids': [4],
-            'gold_standard': [False]
+            'gold_standard': [False],
+            'slope_label': 0,
+            'gutter_label': 0
         }
     ]
 }
@@ -431,7 +453,13 @@ TestOpticsLTReducer = ReducerTest(
     processed_data,
     reduced_data,
     'Test optics line-text reducer with auto min_samples',
-    okwargs={'min_samples': 'auto'},
+    kwargs={
+        'angle_eps': 30,
+        'gutter_eps': 150
+    },
+    okwargs={
+        'min_samples': 'auto'
+    },
     network_kwargs=kwargs_extra_data
 )
 
@@ -442,7 +470,11 @@ TestOpticsLTReducerWithMinSamples = ReducerTest(
     processed_data,
     reduced_data,
     'Test optics line-text reducer with specified min_samples',
-    kwargs={'min_samples': 2},
+    kwargs={
+        'min_samples': 2,
+        'angle_eps': 30,
+        'gutter_eps': 150
+    },
     network_kwargs=kwargs_extra_data
 )
 
@@ -577,7 +609,9 @@ reduced_data_with_dolar_sign = {
         'line_slope': 0.0,
         'number_views': 7,
         'user_ids': [1, 2, 3, 4, 5, 6, 7],
-        'gold_standard': [False, False, False, False, False, False, False]
+        'gold_standard': [False, False, False, False, False, False, False],
+        'slope_label': 0,
+        'gutter_label': 0
     }]
 }
 
@@ -588,6 +622,10 @@ TestOpticsLTReducerWithDolarSign = ReducerTest(
     processed_data_with_dolar_sign,
     reduced_data_with_dolar_sign,
     'Test optics line-text reducer with dolar sign',
+    kwargs={
+        'angle_eps': 30,
+        'gutter_eps': 150
+    },
     okwargs={'min_samples': 'auto'},
     network_kwargs=kwargs_extra_data_with_dolar_sign
 )

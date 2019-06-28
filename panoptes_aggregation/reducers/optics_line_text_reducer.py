@@ -10,7 +10,7 @@ from sklearn.cluster import OPTICS
 import numpy as np
 from collections import defaultdict
 import collatex as col
-from .optics_text_utils import get_min_samples, metric, remove_user_duplication, cluster_of_one
+from .optics_text_utils import get_min_samples, metric, remove_user_duplication, cluster_of_one, order_lines
 from .text_utils import consensus_score, tokenize
 from .reducer_wrapper import reducer_wrapper
 import warnings
@@ -18,7 +18,9 @@ import warnings
 DEFAULTS = {
     'min_samples': {'default': 'auto', 'type': int},
     'max_eps': {'default': np.inf, 'type': float},
-    'xi': {'default': 0.05, 'type': float}
+    'xi': {'default': 0.05, 'type': float},
+    'angle_eps': {'default': 30, 'type': float},
+    'gutter_eps': {'default': 150, 'type': float}
 }
 
 DEFAULTS_PROCESS = {
@@ -78,6 +80,12 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
     ----------
     data_by_frame : dict
         A dictionary returned by :meth:`process_data`
+    angle_eps : float
+        The DBSCAN `eps` value to use for the slope clustering (only changes the order of the returned
+        lines)
+    gutter_eps : float
+        The DBSCAN `eps` value to use for the column clustering (only changes the order of the returned
+        lines)
     kwargs :
         `See OPTICS <https://scikit-learn.org/stable/modules/generated/sklearn.cluster.OPTICS.html>`_
 
@@ -101,12 +109,17 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
         * `user_ids`: List of panoptes user ids in the same order as `clusters_text`
         * `gold_standard`: List of bools indicating of the if a transcription was made in frontends
             gold standard mode
+        * `slope_label`: integer indicating what slope cluster the line belongs to
+        * `gutter_label`: integer indicating what gutter cluster (i.e. column) the line belongs to
         Note: the image coordiate system is left handed with y increasing downward.
     '''
     user_ids_input = np.array(kwargs_optics.pop('user_id'))
     output = defaultdict(list)
     min_samples_orig = kwargs_optics.pop('min_samples')
+    angle_eps = kwargs_optics.pop('angle_eps')
+    gutter_eps = kwargs_optics.pop('gutter_eps')
     for frame, value in data_by_frame.items():
+        frame_unordered = []
         X = np.array(value['X'])
         data = np.array(value['data'])
         num_users = len(np.unique(X[:, 1]))
@@ -133,7 +146,7 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                 cdx = clean_labels == label
                 if label == -1:
                     # noise values are assigned to clusters of one
-                    output[frame] += cluster_of_one(X[cdx], data, user_ids_input)
+                    frame_unordered += cluster_of_one(X[cdx], data, user_ids_input)
                 else:
                     xs = [data[int(i)]['x'] for i in X[cdx, 0]]
                     ys = [data[int(i)]['y'] for i in X[cdx, 0]]
@@ -174,9 +187,14 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                         'user_ids': user_ids,
                         'gold_standard': gold_standard
                     }
-                    output[frame].append(value)
+                    frame_unordered.append(value)
         else:
             # not enough data to cluster so assign each extract
             # to its own cluster
-            output[frame] += cluster_of_one(X, data, user_ids_input)
+            frame_unordered += cluster_of_one(X, data, user_ids_input)
+        output[frame] = order_lines(
+            frame_unordered,
+            angle_eps=angle_eps,
+            gutter_eps=gutter_eps
+        )
     return dict(output)

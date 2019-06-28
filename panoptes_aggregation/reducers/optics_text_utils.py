@@ -10,6 +10,8 @@ import Levenshtein
 import collections
 import copy
 import re
+from sklearn.cluster import DBSCAN
+from .shape_metric import angle_distance, avg_angle
 
 
 def strip_tags(s):
@@ -152,7 +154,7 @@ def cluster_of_one(X, data, user_ids):
 
     Parameters
     ----------
-    X: list
+    X : list
         A nx2 list with each row containing [index mapping to data, index mapping to user]
     data: list
         A list containing dictionaries with the original data that X maps to, of the form
@@ -183,3 +185,83 @@ def cluster_of_one(X, data, user_ids):
         }
         clusters.append(value)
     return clusters
+
+
+def order_lines(frame, angle_eps=30, gutter_eps=150):
+    '''Place the identified lines within a single frame in reading order
+
+    Parameters
+    ----------
+    frame : list
+        A list of identified transcribed lines (one frame from
+        panoptes_aggregation.reducers.optics_line_text_reducer.optics_line_text_reducer)
+    angle_eps : float
+        The DBSCAN `eps` value to use for the slope clustering
+    gutter_eps : float
+        The DBSCAN `eps` value to use for the column clustering
+
+    Returns
+    -------
+    frame_ordered : list
+        The identified transcribed lines in reading order. The `slope_label` and
+        `gutter_label` values are added to each line to indicate what cluster it
+        belongs to.
+    '''
+    xy_start = np.array([[l['clusters_x'][0], l['clusters_y'][0]] for l in frame])
+    xy_end = np.array([[l['clusters_x'][1], l['clusters_y'][1]] for l in frame])
+    slope = np.array([l['line_slope'] for l in frame])
+    frame = np.array(frame)
+    frame_ordered = []
+
+    # cluster by angle
+    db_angle = DBSCAN(min_samples=1, eps=angle_eps, metric=angle_distance)
+    db_angle.fit(slope.reshape(-1, 1))
+
+    # sort angle clusters
+    distance_to_zero = []
+    for l in np.unique(db_angle.labels_):
+        cdx = db_angle.labels_ == l
+        a = avg_angle(slope[cdx])
+        distance_to_zero.append([l, a, angle_distance(a, 0)])
+    distance_to_zero = np.array(distance_to_zero)
+    distance_to_zero = distance_to_zero[distance_to_zero[:, 2].argsort()]
+    slope_label = 0
+
+    for angle_row in distance_to_zero:
+        # find midpoints of each line in angle cluster
+        cdx = db_angle.labels_ == angle_row[0]
+        mid_points = (xy_end[cdx] + xy_start[cdx]) / 2
+        mid_point = mid_points.mean(axis=0)
+
+        # rotate by this angle
+        c = np.cos(np.deg2rad(-angle_row[1]))
+        s = np.sin(np.deg2rad(-angle_row[1]))
+        R = np.array([[c, s], [-s, c]])
+        start_points_rot = np.dot(xy_start[cdx] - mid_point, R) + mid_point
+
+        # cluster in rotated `x` direction
+        db_start = DBSCAN(min_samples=1, eps=gutter_eps)
+        db_start.fit(start_points_rot[:, 0].reshape(-1, 1))
+
+        # sort column clusters
+        x_distance_to_zero = []
+        for ml in np.unique(db_start.labels_):
+            mdx = db_start.labels_ == ml
+            x_distance_to_zero.append([ml, start_points_rot[mdx, 0].mean()])
+        x_distance_to_zero = np.array(x_distance_to_zero)
+        x_distance_to_zero = x_distance_to_zero[x_distance_to_zero[:, 1].argsort()]
+        gutter_label = 0
+
+        for x_row in x_distance_to_zero:
+            mdx = db_start.labels_ == x_row[0]
+            # for each column sort in `y` direction
+            y_order = start_points_rot[mdx, 1].argsort()
+            # append to final list
+            new_frames = list(frame[cdx][mdx][y_order])
+            for nf in new_frames:
+                nf['slope_label'] = slope_label
+                nf['gutter_label'] = gutter_label
+            frame_ordered += new_frames
+            gutter_label += 1
+        slope_label += 1
+    return frame_ordered
