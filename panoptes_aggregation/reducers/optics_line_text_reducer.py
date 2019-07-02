@@ -122,11 +122,14 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
         frame_unordered = []
         X = np.array(value['X'])
         data = np.array(value['data'])
-        num_users = len(np.unique(X[:, 1]))
+        if X.size > 0:
+            num_users = len(np.unique(X[:, 1]))
+        else:
+            num_users = 0
         if min_samples_orig == 'auto':
             min_samples = get_min_samples(num_users)
         else:
-            min_samples = min_samples_orig
+            min_samples = max(2, min_samples_orig)
         if num_users >= min_samples:
             db = OPTICS(
                 metric=metric,
