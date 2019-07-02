@@ -212,56 +212,58 @@ def order_lines(frame, angle_eps=30, gutter_eps=150):
     slope = np.array([l['line_slope'] for l in frame])
     frame = np.array(frame)
     frame_ordered = []
+    if slope.size > 0:
+        # cluster by angle
+        db_angle = DBSCAN(min_samples=1, eps=angle_eps, metric=angle_distance)
+        db_angle.fit(slope.reshape(-1, 1))
 
-    # cluster by angle
-    db_angle = DBSCAN(min_samples=1, eps=angle_eps, metric=angle_distance)
-    db_angle.fit(slope.reshape(-1, 1))
+        # sort angle clusters
+        distance_to_zero = []
+        for l in np.unique(db_angle.labels_):
+            cdx = db_angle.labels_ == l
+            a = avg_angle(slope[cdx])
+            distance_to_zero.append([l, a, angle_distance(a, 0)])
+        distance_to_zero = np.array(distance_to_zero)
+        distance_to_zero = distance_to_zero[distance_to_zero[:, 2].argsort()]
+        slope_label = 0
 
-    # sort angle clusters
-    distance_to_zero = []
-    for l in np.unique(db_angle.labels_):
-        cdx = db_angle.labels_ == l
-        a = avg_angle(slope[cdx])
-        distance_to_zero.append([l, a, angle_distance(a, 0)])
-    distance_to_zero = np.array(distance_to_zero)
-    distance_to_zero = distance_to_zero[distance_to_zero[:, 2].argsort()]
-    slope_label = 0
+        for angle_row in distance_to_zero:
+            # find midpoints of each line in angle cluster
+            cdx = db_angle.labels_ == angle_row[0]
+            mid_points = (xy_end[cdx] + xy_start[cdx]) / 2
+            mid_point = mid_points.mean(axis=0)
 
-    for angle_row in distance_to_zero:
-        # find midpoints of each line in angle cluster
-        cdx = db_angle.labels_ == angle_row[0]
-        mid_points = (xy_end[cdx] + xy_start[cdx]) / 2
-        mid_point = mid_points.mean(axis=0)
+            # rotate by this angle
+            c = np.cos(np.deg2rad(-angle_row[1]))
+            s = np.sin(np.deg2rad(-angle_row[1]))
+            R = np.array([[c, s], [-s, c]])
+            start_points_rot = np.dot(xy_start[cdx] - mid_point, R) + mid_point
 
-        # rotate by this angle
-        c = np.cos(np.deg2rad(-angle_row[1]))
-        s = np.sin(np.deg2rad(-angle_row[1]))
-        R = np.array([[c, s], [-s, c]])
-        start_points_rot = np.dot(xy_start[cdx] - mid_point, R) + mid_point
+            # cluster in rotated `x` direction
+            db_start = DBSCAN(min_samples=1, eps=gutter_eps)
+            db_start.fit(start_points_rot[:, 0].reshape(-1, 1))
 
-        # cluster in rotated `x` direction
-        db_start = DBSCAN(min_samples=1, eps=gutter_eps)
-        db_start.fit(start_points_rot[:, 0].reshape(-1, 1))
+            # sort column clusters
+            x_distance_to_zero = []
+            for ml in np.unique(db_start.labels_):
+                mdx = db_start.labels_ == ml
+                x_distance_to_zero.append([ml, start_points_rot[mdx, 0].mean()])
+            x_distance_to_zero = np.array(x_distance_to_zero)
+            x_distance_to_zero = x_distance_to_zero[x_distance_to_zero[:, 1].argsort()]
+            gutter_label = 0
 
-        # sort column clusters
-        x_distance_to_zero = []
-        for ml in np.unique(db_start.labels_):
-            mdx = db_start.labels_ == ml
-            x_distance_to_zero.append([ml, start_points_rot[mdx, 0].mean()])
-        x_distance_to_zero = np.array(x_distance_to_zero)
-        x_distance_to_zero = x_distance_to_zero[x_distance_to_zero[:, 1].argsort()]
-        gutter_label = 0
-
-        for x_row in x_distance_to_zero:
-            mdx = db_start.labels_ == x_row[0]
-            # for each column sort in `y` direction
-            y_order = start_points_rot[mdx, 1].argsort()
-            # append to final list
-            new_frames = list(frame[cdx][mdx][y_order])
-            for nf in new_frames:
-                nf['slope_label'] = slope_label
-                nf['gutter_label'] = gutter_label
-            frame_ordered += new_frames
-            gutter_label += 1
-        slope_label += 1
+            for x_row in x_distance_to_zero:
+                mdx = db_start.labels_ == x_row[0]
+                # for each column sort in `y` direction
+                y_order = start_points_rot[mdx, 1].argsort()
+                # append to final list
+                new_frames = list(frame[cdx][mdx][y_order])
+                for nf in new_frames:
+                    nf['slope_label'] = slope_label
+                    nf['gutter_label'] = gutter_label
+                frame_ordered += new_frames
+                gutter_label += 1
+            slope_label += 1
+        else:
+            frame_ordered = frame
     return frame_ordered
