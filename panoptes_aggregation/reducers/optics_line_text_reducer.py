@@ -57,7 +57,7 @@ def process_data(data_list, min_line_length=0.0):
         for frame, value in data.items():
             data_by_frame.setdefault(frame, {'X': [], 'data': []})
             row_ct.setdefault(frame, 0)
-            gs = value['gold_standard']
+            gs = value.get('gold_standard', False)
             for x, y, t in zip(value['points']['x'], value['points']['y'], value['text']):
                 line_length = np.sqrt((x[-1] - x[0])**2 + (y[-1] - y[0])**2)
                 if line_length > min_line_length:
