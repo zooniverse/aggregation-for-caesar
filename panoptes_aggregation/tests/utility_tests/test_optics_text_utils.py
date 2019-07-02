@@ -134,6 +134,29 @@ class TextOpticsTextUtils(unittest.TestCase):
         result = optics_text_utils.cluster_of_one(X, data, user_ids)
         self.assertCountEqual(result, expected)
 
+    def test_order_lines(self):
+        '''Test order lines function returns a list'''
+        frame = [
+            {
+                'clusters_x': [1, 5],
+                'clusters_y': [2, 2],
+                'clusters_text': [
+                    ['This'],
+                    ['is'],
+                    ['some'],
+                    ['[underline]test'],
+                    ['text[/underline]']
+                ],
+                'number_views': 1,
+                'line_slope': 0.0,
+                'consensus_score': 1.0,
+                'user_ids': [0],
+                'gold_standard': [False]
+            }
+        ]
+        result = optics_text_utils.order_lines(frame)
+        self.assertIsInstance(result, list)
+
 
 if __name__ == '__main__':
     unittest.main()
