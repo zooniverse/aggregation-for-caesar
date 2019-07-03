@@ -177,7 +177,7 @@ def cluster_of_one(X, data, user_ids):
         line = data[index]
         dx = line['x'][-1] - line['x'][0]
         dy = line['y'][-1] - line['y'][0]
-        slope = np.rad2deg(np.arctan2(dy, dx))
+        slope = np.rad2deg(np.arctan2(dy, dx)) % 360
         value = {
             'clusters_x': line['x'],
             'clusters_y': line['y'],
@@ -265,6 +265,7 @@ def order_lines(frame_in, angle_eps=30, gutter_eps=150):
             # append to final list
             new_frames = list(frame[cdx][mdx][y_order])
             for nf in new_frames:
+                nf['line_slope'] = angle_row[1]
                 nf['slope_label'] = slope_label
                 nf['gutter_label'] = gutter_label
             frame_ordered += new_frames
