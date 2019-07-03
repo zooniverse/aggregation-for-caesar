@@ -10,7 +10,7 @@ from sklearn.cluster import OPTICS
 import numpy as np
 from collections import defaultdict
 import collatex as col
-from .optics_text_utils import get_min_samples, metric, remove_user_duplication, cluster_of_one, order_lines
+from .optics_text_utils import get_min_samples, metric, remove_user_duplication, cluster_of_one, order_lines, remove_nans
 from .text_utils import consensus_score, tokenize
 from .reducer_wrapper import reducer_wrapper
 import warnings
@@ -187,7 +187,7 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                         'number_views': cdx.sum(),
                         'line_slope': slope,
                         'consensus_score': consensus_score(clusters_text),
-                        'user_ids': user_ids,
+                        'user_ids': remove_nans(user_ids),
                         'gold_standard': gold_standard
                     }
                     frame_unordered.append(value)
