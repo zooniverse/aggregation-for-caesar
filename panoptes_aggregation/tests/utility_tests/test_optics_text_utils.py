@@ -157,6 +157,13 @@ class TextOpticsTextUtils(unittest.TestCase):
         result = optics_text_utils.order_lines(frame)
         self.assertIsInstance(result, list)
 
+    def test_remove_nans(self):
+        '''Test remove nans'''
+        input = [np.nan, 1, 2, 3, np.nan]
+        expected = [None, 1, 2, 3, None]
+        result = optics_text_utils.remove_nans(input)
+        self.assertEquals(result, expected)
+
 
 if __name__ == '__main__':
     unittest.main()
