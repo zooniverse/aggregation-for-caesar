@@ -36,6 +36,9 @@ processed_data = {
         ],
         'slope': [
             0.80162463698921349
+        ],
+        'gold_standard': [
+            False
         ]
     }
 }
@@ -55,7 +58,8 @@ reduced_data = {
             'gutter_label': 0,
             'line_slope': 0.80162463698921349,
             'number_views': 1,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False]
         }
     ]
 }

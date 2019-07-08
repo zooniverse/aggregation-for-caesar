@@ -690,6 +690,80 @@ processed_data = {
             -0.83260148559900182,
             -0.34062188619212308,
             0.42514103064765579
+        ],
+        'gold_standard': [
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False
         ]
     }
 }
@@ -707,7 +781,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 4,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False]
         },
         {
             'clusters_text': [
@@ -722,7 +797,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 4,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False]
         },
         {
             'clusters_text': [
@@ -737,7 +813,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 5,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, False]
         },
         {
             'clusters_text': [
@@ -752,7 +829,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 4,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False]
         },
         {
             'clusters_text': [
@@ -767,7 +845,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 6,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, False, False]
         },
         {
             'clusters_text': [
@@ -783,7 +862,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 3,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False]
         },
         {
             'clusters_text': [
@@ -799,7 +879,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 4,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False]
         },
         {
             'clusters_text': [
@@ -814,7 +895,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 4,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False]
         },
         {
             'clusters_text': [
@@ -829,7 +911,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 5,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, False]
         },
         {
             'clusters_text': [
@@ -843,7 +926,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 3,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False]
         },
         {
             'clusters_text': [
@@ -859,7 +943,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 3,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False]
         },
         {
             'clusters_text': [
@@ -874,7 +959,9 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 3,
-            'slope_label': 0},
+            'slope_label': 0,
+            'gold_standard': [False, False, False]
+        },
         {
             'clusters_text': [
                 ['then', 'them', 'them'],
@@ -888,7 +975,9 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 3,
-            'slope_label': 0},
+            'slope_label': 0,
+            'gold_standard': [False, False, False]
+        },
         {
             'clusters_text': [
                 ['every', 'every'],
@@ -900,7 +989,9 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 2,
-            'slope_label': 0},
+            'slope_label': 0,
+            'gold_standard': [False, False]
+        },
         {
             'clusters_text': [
                 ['dry', 'dry'],
@@ -914,7 +1005,9 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 2,
-            'slope_label': 0},
+            'slope_label': 0,
+            'gold_standard': [False, False]
+        },
         {
             'clusters_text': [
                 ['a', 'a', 'a', 'a'],
@@ -929,7 +1022,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': 0.09112619119034585,
             'number_views': 4,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False]
         }
     ]
 }

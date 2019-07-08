@@ -75,6 +75,7 @@ class TestTextUtils(unittest.TestCase):
                 [],
                 [],
                 [],
+                [],
                 {'dot_freq': 'bad_keyword'},
                 {}
             )
