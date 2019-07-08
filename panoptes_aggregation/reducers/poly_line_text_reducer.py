@@ -47,11 +47,13 @@ def process_data(data_list, process_by_line=False):
     data_by_frame = {}
     for data in data_list:
         for frame, value in data.items():
+            gs = value.get('gold_standard', False)
             data_by_frame.setdefault(frame, {})
             data_by_frame[frame].setdefault('x', [])
             data_by_frame[frame].setdefault('y', [])
             data_by_frame[frame].setdefault('text', [])
             data_by_frame[frame].setdefault('slope', [])
+            data_by_frame[frame].setdefault('gold_standard', [])
             for x, y, t, s in zip(value['points']['x'], value['points']['y'], value['text'], value['slope']):
                 if process_by_line:
                     data_by_frame[frame]['x'].append([x[0], x[-1]])
@@ -62,6 +64,7 @@ def process_data(data_list, process_by_line=False):
                     data_by_frame[frame]['y'].append(y)
                     data_by_frame[frame]['text'].append(t)
                 data_by_frame[frame]['slope'].append(s)
+                data_by_frame[frame]['gold_standard'].append(gs)
     return data_by_frame
 
 

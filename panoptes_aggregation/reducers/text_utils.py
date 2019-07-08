@@ -241,6 +241,8 @@ def align_words(word_line, xy_line, text_line, kwargs_cluster, kwargs_dbscan):
         An nx2 array with the non-rotated (x, y) positions of each dot.
     text_line : np.array
         An nx1 array with the text for each dot.
+    gs_line : np.array
+        An array of bools indicating if the annotation was made in gold standard mode
     kwargs_cluster : dict
         A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
     kwargs_dbscan : dict
@@ -296,7 +298,7 @@ def align_words(word_line, xy_line, text_line, kwargs_cluster, kwargs_dbscan):
     return clusters_x, clusters_y, clusters_text
 
 
-def cluster_by_line(xy_rotate, xy_gutter, text_gutter, annotation_labels, kwargs_cluster, kwargs_dbscan):
+def cluster_by_line(xy_rotate, xy_gutter, text_gutter, annotation_labels, gs_gutter, kwargs_cluster, kwargs_dbscan):
     '''A function to take the annotations for one `slope_label` and cluster them
     based on perpendicular distance (e.g. lines of text).
 
@@ -315,6 +317,8 @@ def cluster_by_line(xy_rotate, xy_gutter, text_gutter, annotation_labels, kwargs
         An array of shape nx1 containing a unique lable indicating what annotation
         each position/text came from.  This information is used to ensure one annotation
         does not span multiple lines.
+    gs_gutter : np.array
+        An array of bools indicating if the annotation was made in gold standard mode
     kwargs_cluster : dict
         A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
     kwargs_dbscan : dict
@@ -342,9 +346,22 @@ def cluster_by_line(xy_rotate, xy_gutter, text_gutter, annotation_labels, kwargs
         for a_label in a_lables[ldx]:
             adx |= annotation_labels == a_label
         if kwargs_cluster['dot_freq'] == 'word':
-            clusters_x, clusters_y, clusters_text = cluster_by_word(words[adx], xy_gutter[adx], text_gutter[adx], annotation_labels[adx], kwargs_cluster, kwargs_dbscan)
+            clusters_x, clusters_y, clusters_text = cluster_by_word(
+                words[adx],
+                xy_gutter[adx],
+                text_gutter[adx],
+                annotation_labels[adx],
+                kwargs_cluster,
+                kwargs_dbscan
+            )
         elif kwargs_cluster['dot_freq'] == 'line':
-            clusters_x, clusters_y, clusters_text = align_words(words[adx], xy_gutter[adx], text_gutter[adx], kwargs_cluster, kwargs_dbscan)
+            clusters_x, clusters_y, clusters_text = align_words(
+                words[adx],
+                xy_gutter[adx],
+                text_gutter[adx],
+                kwargs_cluster,
+                kwargs_dbscan
+            )
         line_dict = {
             'clusters_x': clusters_x,
             'clusters_y': clusters_y,
@@ -353,14 +370,15 @@ def cluster_by_line(xy_rotate, xy_gutter, text_gutter, annotation_labels, kwargs
             'consensus_score': consensus_score(clusters_text),
             'line_slope': float(kwargs_cluster['avg_slope']),
             'slope_label': int(kwargs_cluster['slope_label']),
-            'gutter_label': int(kwargs_cluster['gutter_label'])
+            'gutter_label': int(kwargs_cluster['gutter_label']),
+            'gold_standard': gs_gutter[ldx].tolist()
         }
         if len(line_dict['clusters_x']) > 0:
             frame_lines.append(line_dict)
     return frame_lines
 
 
-def cluster_by_gutter(x_slope, y_slope, text_slope, kwargs_cluster, kwargs_dbscan):
+def cluster_by_gutter(x_slope, y_slope, text_slope, gs_slope, kwargs_cluster, kwargs_dbscan):
     '''A function to take the annotations for each frame of a subject and group them
     based on what side of the page gutter they are on.
 
@@ -375,6 +393,8 @@ def cluster_by_gutter(x_slope, y_slope, text_slope, kwargs_cluster, kwargs_dbsca
     text_slope : list
         A list-of-lists of the text for each drawn dot. There is one item in the
         list for annotation made by the user.
+    gs_slope : list
+        A list of bools indicating if the annotation was made in gold standard mode
     kwargs_cluster : dict
         A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
     kwargs_dbscan : dict
@@ -398,13 +418,14 @@ def cluster_by_gutter(x_slope, y_slope, text_slope, kwargs_cluster, kwargs_dbsca
         xy_rotate = np.array(list(zip(np.hstack(x_rotate[gdx]), np.hstack(y_rotate[gdx]))))
         xy_gutter = np.array(list(zip(np.hstack(x_slope[gdx]), np.hstack(y_slope[gdx]))))
         text_gutter = np.hstack(text_slope[gdx])
+        gs_gutter = np.hstack(gs_slope[gdx])
         kwargs_cluster['gutter_label'] = gutter_label
-        frame_lines = cluster_by_line(xy_rotate, xy_gutter, text_gutter, annotation_label, kwargs_cluster, kwargs_dbscan)
+        frame_lines = cluster_by_line(xy_rotate, xy_gutter, text_gutter, annotation_label, gs_gutter, kwargs_cluster, kwargs_dbscan)
         frame_gutter += frame_lines
     return frame_gutter
 
 
-def cluster_by_slope(x_frame, y_frame, text_frame, slope_frame, kwargs_cluster, kwargs_dbscan):
+def cluster_by_slope(x_frame, y_frame, text_frame, slope_frame, gs_frame, kwargs_cluster, kwargs_dbscan):
     '''A function to take the annotations for one `gutter_label` and cluster them
     based on what slope the transcription is.
 
@@ -423,6 +444,8 @@ def cluster_by_slope(x_frame, y_frame, text_frame, slope_frame, kwargs_cluster, 
         dots.
     slope_frame : list
         A list of the slopes (in deg) for each annotation
+    gs_frame : list
+        A list of bools indicating if the annotation was made in gold standard mode
     kwargs_cluster : dict
         A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
     kwargs_dbscan : dict
@@ -442,7 +465,7 @@ def cluster_by_slope(x_frame, y_frame, text_frame, slope_frame, kwargs_cluster, 
             avg_slope = avg_angle(slope_frame[sdx])
             kwargs_cluster['avg_slope'] = avg_slope
             kwargs_cluster['slope_label'] = slope_label
-            frame_gutter = cluster_by_gutter(x_frame[sdx], y_frame[sdx], text_frame[sdx], kwargs_cluster, kwargs_dbscan)
+            frame_gutter = cluster_by_gutter(x_frame[sdx], y_frame[sdx], text_frame[sdx], gs_frame[sdx], kwargs_cluster, kwargs_dbscan)
             frame_slope += frame_gutter
     return frame_slope
 
@@ -451,6 +474,7 @@ def cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan):
     reduced_data = OrderedDict()
     for frame, value in data_by_frame.items():
         reduced_data[frame] = []
+        gs_frame = np.array(copy.deepcopy(value['gold_standard']))
         slope_frame = np.array(copy.deepcopy(value['slope'])).reshape(-1, 1)
         x_frame = np.array(copy.deepcopy(value['x']))
         y_frame = np.array(copy.deepcopy(value['y']))
@@ -459,6 +483,6 @@ def cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan):
         for t in text_frame:
             t.append('')
         text_frame = np.array(text_frame)
-        frame_slope = cluster_by_slope(x_frame, y_frame, text_frame, slope_frame, kwargs_cluster, kwargs_dbscan)
+        frame_slope = cluster_by_slope(x_frame, y_frame, text_frame, slope_frame, gs_frame, kwargs_cluster, kwargs_dbscan)
         reduced_data[frame] += frame_slope
     return reduced_data
