@@ -444,6 +444,50 @@ processed_data = {
             -33.996461321522638,
             -1.7356948677716408,
             -38.990998547208093
+        ],
+        'gold_standard': [
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False
         ]
     },
     'frame1': {
@@ -462,6 +506,10 @@ processed_data = {
         'slope': [
             0,
             0
+        ],
+        'gold_standard': [
+            False,
+            False
         ]
     },
     'frame2': {
@@ -472,7 +520,10 @@ processed_data = {
             [1, 1, 1]
         ],
         'text': [['some', 'words']],
-        'slope': [0]
+        'slope': [0],
+        'gold_standard': [
+            False
+        ]
     }
 }
 
@@ -504,7 +555,8 @@ reduced_data = {
             'consensus_score': 4.0,
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -532,7 +584,8 @@ reduced_data = {
             'consensus_score': 3.5,
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -560,7 +613,8 @@ reduced_data = {
             'consensus_score': 4.25,
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -582,7 +636,8 @@ reduced_data = {
             'consensus_score': 3.5,
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False]
         },
         {
             'clusters_x': [
@@ -607,7 +662,8 @@ reduced_data = {
             'consensus_score': 4.0,
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -632,7 +688,8 @@ reduced_data = {
             'consensus_score': 3.0,
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, False]
         },
         {
             'clusters_x': [
@@ -657,7 +714,8 @@ reduced_data = {
             'consensus_score': 4.0,
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -682,7 +740,8 @@ reduced_data = {
             'consensus_score': 4.333333333333333,
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, False, False, False]
         }
     ],
     'frame1': [
@@ -706,15 +765,16 @@ reduced_data = {
             'consensus_score': 2.0,
             'gutter_label': 0,
             'line_slope': 0.0,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False]
         }
     ],
     'frame2': [
         {
             'clusters_x': [
-                1,
-                180,
-                250
+                1.0,
+                180.0,
+                250.0
             ],
             'clusters_y': [
                 1.0,
@@ -730,7 +790,8 @@ reduced_data = {
             'consensus_score': 1.0,
             'gutter_label': 0,
             'line_slope': 0.0,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False]
         }
     ]
 }
@@ -933,6 +994,50 @@ processed_data_by_line = {
             -33.996461321522638,
             -1.7356948677716408,
             -38.990998547208093
+        ],
+        'gold_standard': [
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False
         ]
     },
     'frame1': {
@@ -951,6 +1056,10 @@ processed_data_by_line = {
         'slope': [
             0,
             0
+        ],
+        'gold_standard': [
+            False,
+            False
         ]
     },
     'frame2': {
@@ -965,6 +1074,9 @@ processed_data_by_line = {
         ],
         'slope': [
             0
+        ],
+        'gold_standard': [
+            False
         ]
     }
 }
@@ -990,7 +1102,8 @@ reduced_data_by_line = {
             'consensus_score': 4.0,
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -1011,7 +1124,8 @@ reduced_data_by_line = {
             'consensus_score': 3.5,
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -1032,7 +1146,8 @@ reduced_data_by_line = {
             'consensus_score': 4.25,
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -1051,7 +1166,8 @@ reduced_data_by_line = {
             'consensus_score': 3.5,
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False]
         },
         {
             'clusters_x': [
@@ -1071,7 +1187,8 @@ reduced_data_by_line = {
             'consensus_score': 4.0,
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -1091,7 +1208,8 @@ reduced_data_by_line = {
             'consensus_score': 3.0,
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, False]
         },
         {
             'clusters_x': [
@@ -1111,7 +1229,8 @@ reduced_data_by_line = {
             'consensus_score': 4.0,
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -1131,7 +1250,8 @@ reduced_data_by_line = {
             'consensus_score': 4.333333333333333,
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, False, False, False]
         }
     ],
     'frame1': [
@@ -1152,7 +1272,8 @@ reduced_data_by_line = {
             'consensus_score': 2.0,
             'gutter_label': 0,
             'line_slope': 0.0,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False]
         }
     ],
     'frame2': [
@@ -1167,7 +1288,8 @@ reduced_data_by_line = {
             'consensus_score': 1.0,
             'gutter_label': 0,
             'line_slope': 0.0,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False]
         }
     ]
 }
@@ -1217,7 +1339,8 @@ reduced_data_min_word = {
             'consensus_score': 4.333333333333333,
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -1238,7 +1361,8 @@ reduced_data_min_word = {
             'consensus_score': 5.0,
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -1259,7 +1383,8 @@ reduced_data_min_word = {
             'consensus_score': 4.25,
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -1278,7 +1403,8 @@ reduced_data_min_word = {
             'consensus_score': 4.0,
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False]
         },
         {
             'clusters_x': [
@@ -1298,7 +1424,8 @@ reduced_data_min_word = {
             'consensus_score': 4.5,
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -1318,7 +1445,8 @@ reduced_data_min_word = {
             'consensus_score': 4.0,
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, False]
         },
         {
             'clusters_x': [
@@ -1338,7 +1466,8 @@ reduced_data_min_word = {
             'consensus_score': 4.5,
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, False, False]
         },
         {
             'clusters_x': [
@@ -1358,7 +1487,8 @@ reduced_data_min_word = {
             'consensus_score': 4.333333333333333,
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, False, False, False]
         }
     ],
     'frame1': [
@@ -1379,7 +1509,8 @@ reduced_data_min_word = {
             'consensus_score': 0.0,
             'gutter_label': 0,
             'line_slope': 0.0,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False]
         }
     ],
     'frame2': [
@@ -1394,7 +1525,8 @@ reduced_data_min_word = {
             'consensus_score': 0.0,
             'gutter_label': 0,
             'line_slope': 0.0,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False]
         }
     ]
 }
