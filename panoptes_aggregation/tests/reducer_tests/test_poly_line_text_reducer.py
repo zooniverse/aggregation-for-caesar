@@ -193,12 +193,13 @@ extracted_data = [
                 -39.334667288762937,
                 -1.122924085203026
             ],
-            'gold_standard': False
+            'gold_standard': True
         },
         'frame1': {
             'points': {'x': [[1.1, 180.1, 251]], 'y': [[0.9, 0.9, 0.9]]},
             'text': [['page', '2']],
-            'slope': [0]
+            'slope': [0],
+            'gold_standard': True
         }
     },
     {
@@ -266,6 +267,18 @@ extracted_data = [
     },
     {}
 ]
+
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+    ]
+}
 
 processed_data = {
     'frame0': {
@@ -470,14 +483,14 @@ processed_data = {
             False,
             False,
             False,
-            False,
-            False,
-            False,
-            False,
-            False,
-            False,
-            False,
-            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
             False,
             False,
             False,
@@ -488,6 +501,50 @@ processed_data = {
             False,
             False,
             False
+        ],
+        'data_index': [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
         ]
     },
     'frame1': {
@@ -509,7 +566,11 @@ processed_data = {
         ],
         'gold_standard': [
             False,
-            False
+            True
+        ],
+        'data_index': [
+            1,
+            3
         ]
     },
     'frame2': {
@@ -519,10 +580,17 @@ processed_data = {
         'y': [
             [1, 1, 1]
         ],
-        'text': [['some', 'words']],
-        'slope': [0],
+        'text': [
+            ['some', 'words']
+        ],
+        'slope': [
+            0
+        ],
         'gold_standard': [
             False
+        ],
+        'data_index': [
+            5
         ]
     }
 }
@@ -556,7 +624,8 @@ reduced_data = {
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False, False, False, False]
+            'gold_standard': [False, False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 3, 4, 5, 5]
         },
         {
             'clusters_x': [
@@ -585,7 +654,8 @@ reduced_data = {
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -614,7 +684,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 4, 5, 5]
         },
         {
             'clusters_x': [
@@ -637,7 +708,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False]
+            'gold_standard': [False, False, False, True],
+            'user_ids': [1, 2, 3, 4]
         },
         {
             'clusters_x': [
@@ -663,7 +735,8 @@ reduced_data = {
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
             'slope_label': 1,
-            'gold_standard': [False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -689,7 +762,8 @@ reduced_data = {
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
             'slope_label': 1,
-            'gold_standard': [False, False, False, False]
+            'gold_standard': [False, False, True, False],
+            'user_ids': [1, 2, 4, 5]
         },
         {
             'clusters_x': [
@@ -715,7 +789,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
             'slope_label': 1,
-            'gold_standard': [False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -741,7 +816,8 @@ reduced_data = {
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
             'slope_label': 1,
-            'gold_standard': [False, False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 4, 5, 5]
         }
     ],
     'frame1': [
@@ -766,7 +842,8 @@ reduced_data = {
             'gutter_label': 0,
             'line_slope': 0.0,
             'slope_label': 0,
-            'gold_standard': [False, False]
+            'gold_standard': [False, True],
+            'user_ids': [2, 4]
         }
     ],
     'frame2': [
@@ -791,7 +868,8 @@ reduced_data = {
             'gutter_label': 0,
             'line_slope': 0.0,
             'slope_label': 0,
-            'gold_standard': [False]
+            'gold_standard': [False],
+            'user_ids': [6]
         }
     ]
 }
@@ -814,7 +892,8 @@ TestPLTReducer = ReducerTest(
         'min_samples': 1,
         'dot_freq': 'word',
         'min_word_count': 1
-    }
+    },
+    network_kwargs=kwargs_extra_data
 )
 
 processed_data_by_line = {
@@ -1020,14 +1099,14 @@ processed_data_by_line = {
             False,
             False,
             False,
-            False,
-            False,
-            False,
-            False,
-            False,
-            False,
-            False,
-            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
             False,
             False,
             False,
@@ -1038,6 +1117,50 @@ processed_data_by_line = {
             False,
             False,
             False
+        ],
+        'data_index': [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
         ]
     },
     'frame1': {
@@ -1059,7 +1182,11 @@ processed_data_by_line = {
         ],
         'gold_standard': [
             False,
-            False
+            True
+        ],
+        'data_index': [
+            1,
+            3
         ]
     },
     'frame2': {
@@ -1077,6 +1204,9 @@ processed_data_by_line = {
         ],
         'gold_standard': [
             False
+        ],
+        'data_index': [
+            5
         ]
     }
 }
@@ -1103,7 +1233,8 @@ reduced_data_by_line = {
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False, False, False, False]
+            'gold_standard': [False, False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 3, 4, 5, 5]
         },
         {
             'clusters_x': [
@@ -1126,7 +1257,8 @@ reduced_data_by_line = {
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -1148,7 +1280,8 @@ reduced_data_by_line = {
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 4, 5, 5]
         },
         {
             'clusters_x': [
@@ -1169,7 +1302,8 @@ reduced_data_by_line = {
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False]
+            'gold_standard': [False, False, False, True],
+            'user_ids': [1, 2, 3, 4]
         },
         {
             'clusters_x': [
@@ -1190,7 +1324,8 @@ reduced_data_by_line = {
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
             'slope_label': 1,
-            'gold_standard': [False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -1211,7 +1346,8 @@ reduced_data_by_line = {
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
             'slope_label': 1,
-            'gold_standard': [False, False, False, False]
+            'gold_standard': [False, False, True, False],
+            'user_ids': [1, 2, 4, 5]
         },
         {
             'clusters_x': [
@@ -1232,7 +1368,8 @@ reduced_data_by_line = {
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
             'slope_label': 1,
-            'gold_standard': [False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -1253,7 +1390,8 @@ reduced_data_by_line = {
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
             'slope_label': 1,
-            'gold_standard': [False, False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 4, 5, 5]
         }
     ],
     'frame1': [
@@ -1275,7 +1413,8 @@ reduced_data_by_line = {
             'gutter_label': 0,
             'line_slope': 0.0,
             'slope_label': 0,
-            'gold_standard': [False, False]
+            'gold_standard': [False, True],
+            'user_ids': [2, 4]
         }
     ],
     'frame2': [
@@ -1291,7 +1430,8 @@ reduced_data_by_line = {
             'gutter_label': 0,
             'line_slope': 0.0,
             'slope_label': 0,
-            'gold_standard': [False]
+            'gold_standard': [False],
+            'user_ids': [6]
         }
     ]
 }
@@ -1317,7 +1457,8 @@ TestPLTReducerByLine = ReducerTest(
         'min_samples': 1,
         'dot_freq': 'line',
         'min_word_count': 1
-    }
+    },
+    network_kwargs=kwargs_extra_data
 )
 
 reduced_data_min_word = {
@@ -1342,7 +1483,8 @@ reduced_data_min_word = {
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False, False, False, False]
+            'gold_standard': [False, False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 3, 4, 5, 5]
         },
         {
             'clusters_x': [
@@ -1365,7 +1507,8 @@ reduced_data_min_word = {
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -1387,7 +1530,8 @@ reduced_data_min_word = {
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 4, 5, 5]
         },
         {
             'clusters_x': [
@@ -1408,7 +1552,8 @@ reduced_data_min_word = {
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False]
+            'gold_standard': [False, False, False, True],
+            'user_ids': [1, 2, 3, 4]
         },
         {
             'clusters_x': [
@@ -1429,7 +1574,8 @@ reduced_data_min_word = {
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
             'slope_label': 1,
-            'gold_standard': [False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -1450,7 +1596,8 @@ reduced_data_min_word = {
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
             'slope_label': 1,
-            'gold_standard': [False, False, False, False]
+            'gold_standard': [False, False, True, False],
+            'user_ids': [1, 2, 4, 5]
         },
         {
             'clusters_x': [
@@ -1471,7 +1618,8 @@ reduced_data_min_word = {
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
             'slope_label': 1,
-            'gold_standard': [False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -1492,7 +1640,8 @@ reduced_data_min_word = {
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
             'slope_label': 1,
-            'gold_standard': [False, False, False, False, False, False]
+            'gold_standard': [False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 4, 5, 5]
         }
     ],
     'frame1': [
@@ -1514,7 +1663,8 @@ reduced_data_min_word = {
             'gutter_label': 0,
             'line_slope': 0.0,
             'slope_label': 0,
-            'gold_standard': [False, False]
+            'gold_standard': [False, True],
+            'user_ids': [2, 4]
         }
     ],
     'frame2': [
@@ -1530,7 +1680,8 @@ reduced_data_min_word = {
             'gutter_label': 0,
             'line_slope': 0.0,
             'slope_label': 0,
-            'gold_standard': [False]
+            'gold_standard': [False],
+            'user_ids': [6]
         }
     ]
 }
@@ -1556,5 +1707,6 @@ TestPLTReducerWithMinWordCount = ReducerTest(
         'min_samples': 1,
         'dot_freq': 'line',
         'min_word_count': 4
-    }
+    },
+    network_kwargs=kwargs_extra_data
 )

@@ -393,6 +393,18 @@ extracted_data = [
     }
 ]
 
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+    ]
+}
+
 processed_data = {
     'frame0': {
         'x': [
@@ -764,6 +776,80 @@ processed_data = {
             False,
             False,
             False
+        ],
+        'data_index': [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
         ]
     }
 }
@@ -782,7 +868,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 4,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False]
+            'gold_standard': [False, False, False, False],
+            'user_ids': [1, 4, 5, 6]
         },
         {
             'clusters_text': [
@@ -798,7 +885,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 4,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False]
+            'gold_standard': [False, False, False, False],
+            'user_ids': [2, 4, 5, 6]
         },
         {
             'clusters_text': [
@@ -814,7 +902,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 5,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False, False]
+            'gold_standard': [False, False, False, False, False],
+            'user_ids': [2, 3, 4, 5, 6]
         },
         {
             'clusters_text': [
@@ -830,7 +919,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 4,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False]
+            'gold_standard': [False, False, False, False],
+            'user_ids': [3, 4, 5, 6]
         },
         {
             'clusters_text': [
@@ -846,7 +936,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 6,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False, False, False]
+            'gold_standard': [False, False, False, False, False, False],
+            'user_ids': [3, 3, 4, 5, 5, 6]
         },
         {
             'clusters_text': [
@@ -863,7 +954,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 3,
             'slope_label': 0,
-            'gold_standard': [False, False, False]
+            'gold_standard': [False, False, False],
+            'user_ids': [1, 4, 6]
         },
         {
             'clusters_text': [
@@ -880,7 +972,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 4,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False]
+            'gold_standard': [False, False, False, False],
+            'user_ids': [3, 4, 5, 6],
         },
         {
             'clusters_text': [
@@ -896,7 +989,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 4,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False]
+            'gold_standard': [False, False, False, False],
+            'user_ids': [3, 4, 5, 6]
         },
         {
             'clusters_text': [
@@ -912,7 +1006,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 5,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False, False]
+            'gold_standard': [False, False, False, False, False],
+            'user_ids': [1, 4, 5, 5, 6]
         },
         {
             'clusters_text': [
@@ -927,7 +1022,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 3,
             'slope_label': 0,
-            'gold_standard': [False, False, False]
+            'gold_standard': [False, False, False],
+            'user_ids': [4, 5, 6]
         },
         {
             'clusters_text': [
@@ -944,7 +1040,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 3,
             'slope_label': 0,
-            'gold_standard': [False, False, False]
+            'gold_standard': [False, False, False],
+            'user_ids': [4, 5, 6]
         },
         {
             'clusters_text': [
@@ -960,7 +1057,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 3,
             'slope_label': 0,
-            'gold_standard': [False, False, False]
+            'gold_standard': [False, False, False],
+            'user_ids': [5, 5, 6]
         },
         {
             'clusters_text': [
@@ -976,7 +1074,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 3,
             'slope_label': 0,
-            'gold_standard': [False, False, False]
+            'gold_standard': [False, False, False],
+            'user_ids': [4, 5, 6]
         },
         {
             'clusters_text': [
@@ -990,7 +1089,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 2,
             'slope_label': 0,
-            'gold_standard': [False, False]
+            'gold_standard': [False, False],
+            'user_ids': [5, 6]
         },
         {
             'clusters_text': [
@@ -1006,7 +1106,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 2,
             'slope_label': 0,
-            'gold_standard': [False, False]
+            'gold_standard': [False, False],
+            'user_ids': [5, 6]
         },
         {
             'clusters_text': [
@@ -1023,7 +1124,8 @@ reduced_data = {
             'line_slope': 0.09112619119034585,
             'number_views': 4,
             'slope_label': 0,
-            'gold_standard': [False, False, False, False]
+            'gold_standard': [False, False, False, False],
+            'user_ids': [1, 4, 5, 6]
         }
     ]
 }
@@ -1046,5 +1148,6 @@ TestSWReducer = ReducerTest(
         'eps_word': 30,
         'dot_freq': 'line',
         'min_samples': 2
-    }
+    },
+    network_kwargs=kwargs_extra_data
 )
