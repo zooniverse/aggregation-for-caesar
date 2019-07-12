@@ -364,15 +364,22 @@ def cluster_by_gutter(x_slope, y_slope, text_slope, kwargs_cluster, kwargs_dbsca
 
     Parameters
     ----------
-    x_slope : list
+    x_slope : np.array
         A list-of-lists of the x values for each drawn dot. There is one item in the
         list for annotation made by the user.
-    y_slope : list
+    y_slope : np.array
         A list-of-lists of the y values for each drawn dot. There is one item in the
         list for annotation made by the user.
-    text_slope : list
+    text_slope : np.array
         A list-of-lists of the text for each drawn dot. There is one item in the
         list for annotation made by the user.
+<<<<<<< HEAD
+=======
+    gs_slope : np.array
+        A list of bools indicating if the annotation was made in gold standard mode
+    data_index_slope : np.array
+        A list of indicies indicating what calssification each classification came from
+>>>>>>> bb4bb34... Update help text dtypes
     kwargs_cluster : dict
         A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
     kwargs_dbscan : dict
@@ -408,19 +415,26 @@ def cluster_by_slope(x_frame, y_frame, text_frame, slope_frame, kwargs_cluster, 
 
     Parameters
     ----------
-    x_frame : list
+    x_frame : np.array
         A list-of-lists of the x values for each drawn dot. There is one item in the
         list for annotation made by the user.
-    y_frame : list
+    y_frame : np.array
         A list-of-lists of the y values for each drawn dot. There is one item in the
         list for annotation made by the user.
-    text_frame : list
+    text_frame : np.array
         A list-of-lists of the text for each drawn dot. There is one item in the
         list for annotation made by the user. The inner text lists are padded with
         an empty string at the end so there is the same number of words as there are
         dots.
-    slope_frame : list
+    slope_frame : np.array
         A list of the slopes (in deg) for each annotation
+<<<<<<< HEAD
+=======
+    gs_frame : np.array
+        A list of bools indicating if the annotation was made in gold standard mode
+    data_index_frame : np.array
+        A list of indicies indicating what calssification each classification came from
+>>>>>>> bb4bb34... Update help text dtypes
     kwargs_cluster : dict
         A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
     kwargs_dbscan : dict
