@@ -58,7 +58,8 @@ setup(
             'flask',
             'panoptes-client',
             'pyyaml',
-            'requests'
+            'requests',
+            'gunicorn'
         ],
         'doc': [
             'recommonmark',
