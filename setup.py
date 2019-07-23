@@ -78,17 +78,17 @@ setup(
     },
     install_requires=[
         'beautifulsoup4',
-        'collatex==2.1.2',
+        'collatex==2.2',
         'hdbscan',
         'lxml',
         'numpy==1.16.2',
         'nose',
-        'pandas',
+        'pandas==0.24.2',
         'progressbar2',
         'python-levenshtein',
         'python-slugify',
         'pyyaml',
-        'scikit-learn==0.20.3',
+        'scikit-learn==0.21.1',
         'scipy>=1.1.0',
         'werkzeug'
     ]

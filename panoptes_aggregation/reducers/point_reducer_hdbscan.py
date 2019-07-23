@@ -5,10 +5,14 @@ This module provides functions to cluster points extracted with
 :mod:`panoptes_aggregation.extractors.point_extractor`.
 '''
 import numpy as np
-from hdbscan import HDBSCAN
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
+import warnings
+
+with warnings.catch_warnings():
+    warnings.filterwarnings('ignore', category=DeprecationWarning)
+    from hdbscan import HDBSCAN
 
 
 DEFAULTS = {
