@@ -7,7 +7,7 @@ from .extractor_wrapper import extractor_wrapper
 from .question_extractor import slugify_or_null
 
 
-@extractor_wrapper
+@extractor_wrapper()
 def dropdown_extractor(classification, **kwargs):
     '''Extract annotations from a dropdown task into a Counter object
 

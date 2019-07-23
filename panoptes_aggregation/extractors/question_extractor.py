@@ -17,7 +17,7 @@ def slugify_or_null(s):
         return slugify(s, separator='-')
 
 
-@extractor_wrapper
+@extractor_wrapper()
 def question_extractor(classification, **kwargs):
     '''Extract annotations from a question task into a Counter object
 

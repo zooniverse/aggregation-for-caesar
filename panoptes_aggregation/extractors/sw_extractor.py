@@ -60,7 +60,7 @@ def clean_text(s):
     return s_out
 
 
-@extractor_wrapper
+@extractor_wrapper()
 def sw_extractor(classification, **kwargs):
     '''Extract text annotations from Shakespeares World and AnnoTate.
 
