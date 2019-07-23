@@ -8,7 +8,7 @@ from .extractor_wrapper import extractor_wrapper
 from .tool_wrapper import tool_wrapper
 
 
-@extractor_wrapper
+@extractor_wrapper()
 @tool_wrapper
 def point_extractor(classification, **kwargs):
     '''Extract annotations from a point drawing tool into lists.

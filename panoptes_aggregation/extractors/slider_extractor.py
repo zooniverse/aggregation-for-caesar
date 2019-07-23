@@ -6,7 +6,7 @@ This module provides a function to extract slider tasks from panoptes annotation
 from .extractor_wrapper import extractor_wrapper
 
 
-@extractor_wrapper
+@extractor_wrapper()
 def slider_extractor(classification, **kwargs):
     '''Extract annotations from a slider task
 
