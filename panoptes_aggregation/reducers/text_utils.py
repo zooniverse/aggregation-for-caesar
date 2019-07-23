@@ -373,13 +373,10 @@ def cluster_by_gutter(x_slope, y_slope, text_slope, kwargs_cluster, kwargs_dbsca
     text_slope : np.array
         A list-of-lists of the text for each drawn dot. There is one item in the
         list for annotation made by the user.
-<<<<<<< HEAD
-=======
     gs_slope : np.array
         A list of bools indicating if the annotation was made in gold standard mode
     data_index_slope : np.array
         A list of indicies indicating what calssification each classification came from
->>>>>>> bb4bb34... Update help text dtypes
     kwargs_cluster : dict
         A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
     kwargs_dbscan : dict
@@ -428,13 +425,10 @@ def cluster_by_slope(x_frame, y_frame, text_frame, slope_frame, kwargs_cluster, 
         dots.
     slope_frame : np.array
         A list of the slopes (in deg) for each annotation
-<<<<<<< HEAD
-=======
     gs_frame : np.array
         A list of bools indicating if the annotation was made in gold standard mode
     data_index_frame : np.array
         A list of indicies indicating what calssification each classification came from
->>>>>>> bb4bb34... Update help text dtypes
     kwargs_cluster : dict
         A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
     kwargs_dbscan : dict
