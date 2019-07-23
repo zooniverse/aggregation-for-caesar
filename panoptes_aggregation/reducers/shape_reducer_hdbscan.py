@@ -5,14 +5,17 @@ This module provides functions to cluster shapes extracted with
 :mod:`panoptes_aggregation.extractors.shape_extractor`.
 '''
 import numpy as np
-from hdbscan import HDBSCAN
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
 from ..shape_tools import SHAPE_LUT
 from .shape_process_data import process_data, DEFAULTS_PROCESS
 from .shape_metric import get_shape_metric_and_avg
+import warnings
 
+with warnings.catch_warnings():
+    warnings.filterwarnings('ignore', category=DeprecationWarning)
+    from hdbscan import HDBSCAN
 
 DEFAULTS = {
     'min_cluster_size': {'default': 5, 'type': int},
