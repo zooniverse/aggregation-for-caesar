@@ -153,7 +153,7 @@ class TestReduceCSV(unittest.TestCase):
         output_path = os.path.join(os.getcwd(), 'question_reducer_reductions.csv')
         self.assertEqual(output_file_name, output_path)
         result_dataframe = reduce_panoptes_csv.flatten_data.return_values[0]
-        assert_frame_equal(result_dataframe, self.reduced_dataframe_question)
+        assert_frame_equal(result_dataframe, self.reduced_dataframe_question, check_like=True)
         mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
 
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.progressbar.ProgressBar')
@@ -163,7 +163,7 @@ class TestReduceCSV(unittest.TestCase):
     @patch.dict('panoptes_aggregation.scripts.reduce_panoptes_csv.reducers.reducers', mock_reducers_dict)
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(reduce_panoptes_csv.flatten_data))
     def test_reduce_csv_stream(self, mock_is_file, mock_read_csv, mock_to_csv, mock_pbar):
-        '''Test object reducer makes one csv file'''
+        '''Test object reducer makes one csv file (stream)'''
         mock_is_file.return_value = False
         mock_read_csv.side_effect = [
             self.extracted_dataframe_question,
@@ -186,7 +186,7 @@ class TestReduceCSV(unittest.TestCase):
         mock_to_csv.assert_has_calls(to_csv_calls, any_order=False)
         mock_read_csv.assert_has_calls([call(output_path, encoding='utf-8')])
         result_dataframe = reduce_panoptes_csv.flatten_data.return_values[0]
-        assert_frame_equal(result_dataframe, self.reduced_dataframe_question)
+        assert_frame_equal(result_dataframe, self.reduced_dataframe_question, check_like=True)
 
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.DataFrame.to_csv')
@@ -219,7 +219,7 @@ class TestReduceCSV(unittest.TestCase):
         mock_to_csv.assert_has_calls(to_csv_calls, any_order=False)
         mock_read_csv.assert_has_calls([call(output_path, encoding='utf-8')])
         result_dataframe = reduce_panoptes_csv.flatten_data.return_values[0]
-        assert_frame_equal(result_dataframe, self.reduced_dataframe_question)
+        assert_frame_equal(result_dataframe, self.reduced_dataframe_question, check_like=True)
 
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.DataFrame.to_csv')

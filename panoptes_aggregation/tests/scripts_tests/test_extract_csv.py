@@ -159,7 +159,7 @@ class TestExtractCSV(unittest.TestCase):
         output_path = os.path.join(os.getcwd(), 'question_extractor_extractions.csv')
         self.assertEqual(output_file_names, [output_path])
         result_dataframe = extract_panoptes_csv.flatten_data.return_values[0]
-        assert_frame_equal(result_dataframe, self.extracts_dataframe_question)
+        assert_frame_equal(result_dataframe, self.extracts_dataframe_question, check_like=True)
         mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
 
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.progressbar.ProgressBar')
@@ -198,8 +198,8 @@ class TestExtractCSV(unittest.TestCase):
         else:
             result_dataframe_T1 = extract_panoptes_csv.flatten_data.return_values[0]
             result_dataframe_T0 = extract_panoptes_csv.flatten_data.return_values[1]
-        assert_frame_equal(result_dataframe_T0, self.extracts_dataframe_two_T0)
-        assert_frame_equal(result_dataframe_T1, self.extracts_dataframe_two_T1)
+        assert_frame_equal(result_dataframe_T0, self.extracts_dataframe_two_T0, check_like=True)
+        assert_frame_equal(result_dataframe_T1, self.extracts_dataframe_two_T1, check_like=True)
         to_csv_calls = [
             call(output_path_T0, index=False, encoding='utf-8'),
             call(output_path_T1, index=False, encoding='utf-8')
