@@ -58,7 +58,8 @@ setup(
             'flask',
             'panoptes-client',
             'pyyaml',
-            'requests'
+            'requests',
+            'gunicorn'
         ],
         'doc': [
             'recommonmark',
@@ -81,14 +82,14 @@ setup(
         'collatex==2.2',
         'hdbscan',
         'lxml',
-        'numpy==1.16.2',
+        'numpy==1.16.4',
         'nose',
-        'pandas==0.24.2',
+        'pandas==0.25.0',
         'progressbar2',
         'python-levenshtein',
         'python-slugify',
         'pyyaml',
-        'scikit-learn==0.21.1',
+        'scikit-learn==0.21.2',
         'scipy>=1.1.0',
         'werkzeug'
     ]
