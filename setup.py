@@ -82,7 +82,7 @@ setup(
         'collatex==2.2',
         'hdbscan',
         'lxml',
-        'numpy==1.16.2',
+        'numpy==1.16.4',
         'nose',
         'pandas==0.25.0',
         'progressbar2',
