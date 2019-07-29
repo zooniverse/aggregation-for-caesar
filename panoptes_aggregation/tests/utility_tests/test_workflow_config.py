@@ -142,6 +142,10 @@ tasks = {
         'max': '3',
         'min': '1.5',
         'step': '0.01'
+    },
+    'T8': {
+        'type': 'text',
+        'instruction': 'T8.instruction'
     }
 }
 keywords = {
@@ -202,6 +206,9 @@ extractor_config = {
     ],
     'slider_extractor': [
         {'task': 'T7'}
+    ],
+    'text_extractor': [
+        {'task': 'T8'}
     ]
 }
 reducer_config = [
@@ -229,7 +236,8 @@ reducer_config = [
     }},
     {'shortcut_reducer': {}},
     {'slider_reducer': {}},
-    {'survey_reducer': {}}
+    {'survey_reducer': {}},
+    {'text_reducer': {}}
 ]
 
 
