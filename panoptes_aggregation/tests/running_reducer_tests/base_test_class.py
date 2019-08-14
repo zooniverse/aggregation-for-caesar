@@ -26,6 +26,7 @@ def RunningReducerTestNoProcessing(
             self.extracted = copy.deepcopy(extracted)
             self.reduced = copy.deepcopy(reduced)
             self.reduced_with_version = copy.deepcopy(reduced)
+            self.network_kwargs = copy.deepcopy(network_kwargs)
             append_version(self.reduced_with_version)
 
         def shortDescription(self):
@@ -33,14 +34,14 @@ def RunningReducerTestNoProcessing(
 
         def test_reducer(self):
             '''Test the offline reducer'''
-            result = reducer(self.extracted, **kwargs, **network_kwargs)
+            result = reducer(self.extracted, **kwargs, **self.network_kwargs)
             self.assertDictEqual(result, self.reduced_with_version)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_request(self):
             '''Test the online reducer'''
             request_kwargs = {
-                'data': json.dumps(extract_in_data(self.extracted, **network_kwargs)),
+                'data': json.dumps(extract_in_data(self.extracted, **self.network_kwargs)),
                 'content_type': 'application/json'
             }
             app = flask.Flask(__name__)
