@@ -6,6 +6,7 @@ This module provides functions to reduce the polygon-text extractions from
 '''
 from .text_utils import cluster_by_frame
 from .reducer_wrapper import reducer_wrapper
+import numpy as np
 
 DEFAULTS = {
     'eps_slope': {'default': 25.0, 'type': float},
@@ -45,13 +46,16 @@ def process_data(data_list, process_by_line=False):
         inner lists.
     '''
     data_by_frame = {}
-    for data in data_list:
+    for data_index, data in enumerate(data_list):
         for frame, value in data.items():
+            gs = value.get('gold_standard', False)
             data_by_frame.setdefault(frame, {})
             data_by_frame[frame].setdefault('x', [])
             data_by_frame[frame].setdefault('y', [])
             data_by_frame[frame].setdefault('text', [])
             data_by_frame[frame].setdefault('slope', [])
+            data_by_frame[frame].setdefault('gold_standard', [])
+            data_by_frame[frame].setdefault('data_index', [])
             for x, y, t, s in zip(value['points']['x'], value['points']['y'], value['text'], value['slope']):
                 if process_by_line:
                     data_by_frame[frame]['x'].append([x[0], x[-1]])
@@ -62,10 +66,12 @@ def process_data(data_list, process_by_line=False):
                     data_by_frame[frame]['y'].append(y)
                     data_by_frame[frame]['text'].append(t)
                 data_by_frame[frame]['slope'].append(s)
+                data_by_frame[frame]['gold_standard'].append(gs)
+                data_by_frame[frame]['data_index'].append(data_index)
     return data_by_frame
 
 
-@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS, defaults_process=DEFAULTS_PROCESS)
+@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS, defaults_process=DEFAULTS_PROCESS, user_id=True)
 def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
     '''
     Reduce the polygon-text answers as a list of lines of text.
@@ -82,7 +88,7 @@ def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
     reduction : dict
         A dictionary with on key for each `frame` of the subject that have lists as values.
         Each item of the list represents one line transcribed of text and is a dictionary
-        with three keys:
+        with these keys:
 
         * `clusters_x` : the `x` position of each identified word
         * `clusters_y` : the `y` position of each identified word
@@ -96,6 +102,7 @@ def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
 
         Note: the image coordiate system is left handed with y increasing downward.
     '''
+    user_ids_input = kwargs_dbscan.pop('user_id')
     kwargs_cluster = {}
     kwargs_cluster['eps_slope'] = kwargs_dbscan.pop('eps_slope')
     kwargs_cluster['eps_line'] = kwargs_dbscan.pop('eps_line')
@@ -104,4 +111,5 @@ def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
     kwargs_cluster['dot_freq'] = kwargs_dbscan.pop('dot_freq')
     kwargs_cluster['metric'] = kwargs_dbscan.pop('metric')
     kwargs_cluster['min_word_count'] = kwargs_dbscan.pop('min_word_count')
-    return cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan)
+    user_ids_input = [i if np.isfinite(i) else None for i in user_ids_input]
+    return cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan, user_ids_input)
