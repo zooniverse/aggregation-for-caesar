@@ -68,3 +68,13 @@ Reducers
 
 .. automodule:: panoptes_aggregation.reducers.tess_reducer_column
   :members:
+
+----
+
+.. automodule:: panoptes_aggregation.reducers.optics_text_utils
+  :members:
+
+----
+
+.. automodule:: panoptes_aggregation.reducers.optics_line_text_reducer
+  :members:
