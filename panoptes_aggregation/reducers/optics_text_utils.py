@@ -152,7 +152,7 @@ def remove_nans(input):
     return [i if np.isfinite(i) else None for i in input]
 
 
-def cluster_of_one(X, data, user_ids):
+def cluster_of_one(X, data, user_ids, extract_index):
     '''Create "clusters of one" out of the data passed in. Lines of text
     identified as noise are kept around as clusters of one so they can be
     displayed in the front-end to the next user.
@@ -164,6 +164,10 @@ def cluster_of_one(X, data, user_ids):
     data: list
         A list containing dictionaries with the original data that X maps to, of the form
         `{'x': [start_x, end_x], 'y': [start_y, end_y], 'text': ['text for line'], 'gold_standard': bool}`.
+    user_ids: list
+        A list of user_ids (The second column of X maps to this list)
+    extract_index: list
+        A list of n values with the extract index for each of rows in X
 
     Returns
     -------
@@ -171,7 +175,7 @@ def cluster_of_one(X, data, user_ids):
         A list with n clusters each containing only one calssification
     '''
     clusters = []
-    for row in X:
+    for rdx, row in enumerate(X):
         index = int(row[0])
         user_index = int(row[1])
         line = data[index]
@@ -186,6 +190,7 @@ def cluster_of_one(X, data, user_ids):
             'line_slope': slope,
             'consensus_score': 1.0,
             'user_ids': remove_nans([user_ids[user_index]]),
+            'extract_index': [extract_index[rdx]],
             'gold_standard': [line['gold_standard']]
         }
         clusters.append(value)
