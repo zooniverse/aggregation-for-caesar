@@ -334,6 +334,7 @@ def cluster_by_line(
     annotation_labels,
     gs_gutter,
     data_index_gutter,
+    ext_index_gutter,
     kwargs_cluster,
     kwargs_dbscan
 ):
@@ -359,6 +360,8 @@ def cluster_by_line(
         An array of bools indicating if the annotation was made in gold standard mode
     data_index_gutter : np.array
         An array of indicies indicating what calssification each classification came from
+    ext_index_gutter : np.array
+        A list of extractor indicies used to map the reduction to the extract
     kwargs_cluster : dict
         A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
     kwargs_dbscan : dict
@@ -412,7 +415,8 @@ def cluster_by_line(
             'slope_label': int(kwargs_cluster['slope_label']),
             'gutter_label': int(kwargs_cluster['gutter_label']),
             'gold_standard': gs_gutter[ldx].tolist(),
-            'data_index': data_index_gutter[ldx].tolist()
+            'data_index': data_index_gutter[ldx].tolist(),
+            'extract_index': ext_index_gutter[ldx].tolist()
         }
         if len(line_dict['clusters_x']) > 0:
             frame_lines.append(line_dict)
@@ -425,6 +429,7 @@ def cluster_by_gutter(
     text_slope,
     gs_slope,
     data_index_slope,
+    ext_index_slope,
     kwargs_cluster,
     kwargs_dbscan
 ):
@@ -446,6 +451,8 @@ def cluster_by_gutter(
         A list of bools indicating if the annotation was made in gold standard mode
     data_index_slope : np.array
         A list of indicies indicating what calssification each classification came from
+    ext_index_slope : np.array
+        A list of extractor indicies used to map the reduction to the extract
     kwargs_cluster : dict
         A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
     kwargs_dbscan : dict
@@ -477,6 +484,7 @@ def cluster_by_gutter(
             annotation_label,
             gs_slope[gdx],
             data_index_slope[gdx],
+            ext_index_slope[gdx],
             kwargs_cluster,
             kwargs_dbscan
         )
@@ -491,6 +499,7 @@ def cluster_by_slope(
     slope_frame,
     gs_frame,
     data_index_frame,
+    ext_index_frame,
     kwargs_cluster,
     kwargs_dbscan
 ):
@@ -516,6 +525,8 @@ def cluster_by_slope(
         A list of bools indicating if the annotation was made in gold standard mode
     data_index_frame : np.array
         A list of indicies indicating what calssification each classification came from
+    ext_index_frame : np.array
+        A list of extractor indicies used to map the reduction to the extract
     kwargs_cluster : dict
         A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
     kwargs_dbscan : dict
@@ -541,6 +552,7 @@ def cluster_by_slope(
                 text_frame[sdx],
                 gs_frame[sdx],
                 data_index_frame[sdx],
+                ext_index_frame[sdx],
                 kwargs_cluster,
                 kwargs_dbscan
             )
@@ -558,6 +570,7 @@ def cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan, user_ids_inpu
         x_frame = np.array(copy.deepcopy(value['x']))
         y_frame = np.array(copy.deepcopy(value['y']))
         text_frame = copy.deepcopy(value['text'])
+        ext_index_frame = np.array(extractor_index(value['data_index']))
         # pad with empty strings to keep array sizes the same
         for t in text_frame:
             t.append('')
@@ -569,6 +582,7 @@ def cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan, user_ids_inpu
             slope_frame,
             gs_frame,
             data_index_frame,
+            ext_index_frame,
             kwargs_cluster,
             kwargs_dbscan
         )

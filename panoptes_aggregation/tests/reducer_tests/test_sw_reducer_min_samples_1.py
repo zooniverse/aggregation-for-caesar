@@ -69,7 +69,8 @@ reduced_data = {
             'number_views': 1,
             'slope_label': 0,
             'gold_standard': [False],
-            'user_ids': [1]
+            'user_ids': [1],
+            'extract_index': [0]
         }
     ]
 }
