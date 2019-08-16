@@ -89,7 +89,7 @@ setup(
         'python-levenshtein',
         'python-slugify',
         'pyyaml',
-        'scikit-learn==0.21.2',
+        'scikit-learn==0.21.3',
         'scipy>=1.1.0',
         'werkzeug'
     ]
