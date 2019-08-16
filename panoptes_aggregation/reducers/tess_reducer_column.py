@@ -59,7 +59,7 @@ def process_data(data, **kwargs_extra_data):
                 if frame in d:
                     keys = ['{0}_{1}'.format(tool, param) for param in shape_params]
                     if np.all([k in d[frame] for k in keys]):
-                        params_list = list(zip(*(d[frame][k] for k in keys)))
+                        params_list = list(map(list, zip(*(d[frame][k] for k in keys))))
                         index_by_tool += [ddx] * len(params_list)
                         data_by_tool += params_list
     return {'data': data_by_tool, 'index': index_by_tool}

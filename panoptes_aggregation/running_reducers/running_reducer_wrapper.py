@@ -7,7 +7,8 @@ def running_reducer_wrapper(
     process_data=None,
     defaults_process=None,
     defaults_data=None,
-    relevant_reduction=False
+    relevant_reduction=False,
+    user_id=False
 ):
     def decorator(func):
         @wraps(func)
@@ -21,12 +22,16 @@ def running_reducer_wrapper(
                 argument_json = argument.get_json()
                 data_in = [d['data'] for d in argument_json['extracts']]
                 store = argument_json['store']
+                if user_id:
+                    kwargs_extra_data['user_id'] = [d['user_id'] for d in argument_json['extracts']]
                 if relevant_reduction:
                     kwargs_extra_data['relevant_reduction'] = [d['relevant_reduction'] for d in argument_json['extracts']]
             else:
                 data_in = argument
                 store = kwargs['store']
                 remove_version(data_in)
+                if user_id:
+                    kwargs_extra_data['user_id'] = kwargs['user_id']
                 if relevant_reduction:
                     kwargs_extra_data['relevant_reduction'] = kwargs['relevant_reduction']
             no_version = kwargs.pop('no_version', False)
