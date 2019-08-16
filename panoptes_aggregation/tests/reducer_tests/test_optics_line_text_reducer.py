@@ -274,6 +274,7 @@ reduced_data = {
             'line_slope': 358.894,
             'number_views': 3,
             'user_ids': [1, 2, 3],
+            'extract_index': [2, 0, 3],
             'gold_standard': [False, True, False],
             'slope_label': 0,
             'gutter_label': 0
@@ -292,6 +293,7 @@ reduced_data = {
             'line_slope': 358.894,
             'number_views': 3,
             'user_ids': [1, 2, 3],
+            'extract_index': [0, 1, 2],
             'gold_standard': [False, True, False],
             'slope_label': 0,
             'gutter_label': 0
@@ -309,6 +311,7 @@ reduced_data = {
             'line_slope': 358.894,
             'number_views': 3,
             'user_ids': [1, 2, 3],
+            'extract_index': [4, 4, 7],
             'gold_standard': [False, True, False],
             'slope_label': 0,
             'gutter_label': 1
@@ -325,6 +328,7 @@ reduced_data = {
             'line_slope': 358.894,
             'number_views': 3,
             'user_ids': [1, 2, 3],
+            'extract_index': [5, 5, 5],
             'gold_standard': [False, True, False],
             'slope_label': 0,
             'gutter_label': 1
@@ -341,6 +345,7 @@ reduced_data = {
             'line_slope': 320.143,
             'number_views': 3,
             'user_ids': [1, 2, 3],
+            'extract_index': [1, 6, 4],
             'gold_standard': [False, True, False],
             'slope_label': 1,
             'gutter_label': 0
@@ -357,6 +362,7 @@ reduced_data = {
             'line_slope': 320.143,
             'number_views': 3,
             'user_ids': [1, 2, 3],
+            'extract_index': [3, 7, 6],
             'gold_standard': [False, True, False],
             'slope_label': 1,
             'gutter_label': 0
@@ -372,6 +378,7 @@ reduced_data = {
             'line_slope': 320.143,
             'number_views': 3,
             'user_ids': [1, 2, 3],
+            'extract_index': [6, 2, 0],
             'gold_standard': [False, True, False],
             'slope_label': 1,
             'gutter_label': 1
@@ -388,6 +395,7 @@ reduced_data = {
             'line_slope': 320.143,
             'number_views': 3,
             'user_ids': [1, 2, 3],
+            'extract_index': [7, 3, 1],
             'gold_standard': [False, True, False],
             'slope_label': 1,
             'gutter_label': 1
@@ -405,6 +413,7 @@ reduced_data = {
             'line_slope': 214.875,
             'number_views': 1,
             'user_ids': [4],
+            'extract_index': [0],
             'gold_standard': [False],
             'slope_label': 2,
             'gutter_label': 0
@@ -422,6 +431,7 @@ reduced_data = {
             'line_slope': 0.0,
             'number_views': 2,
             'user_ids': [2, 3],
+            'extract_index': [0, 0],
             'gold_standard': [True, False],
             'slope_label': 0,
             'gutter_label': 0
@@ -439,6 +449,7 @@ reduced_data = {
             'line_slope': 0.0,
             'number_views': 1,
             'user_ids': [4],
+            'extract_index': [0],
             'gold_standard': [False],
             'slope_label': 0,
             'gutter_label': 0
@@ -609,6 +620,7 @@ reduced_data_with_dolar_sign = {
         'line_slope': 0.0,
         'number_views': 7,
         'user_ids': [1, 2, 3, 4, 5, 6, 7],
+        'extract_index': [0, 0, 0, 0, 0, 0, 0],
         'gold_standard': [False, False, False, False, False, False, False],
         'slope_label': 0,
         'gutter_label': 0

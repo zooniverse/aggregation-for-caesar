@@ -11,7 +11,7 @@ import numpy as np
 from collections import defaultdict
 import collatex as col
 from .optics_text_utils import get_min_samples, metric, remove_user_duplication, cluster_of_one, order_lines, remove_nans
-from .text_utils import consensus_score, tokenize
+from .text_utils import consensus_score, tokenize, extractor_index
 from .reducer_wrapper import reducer_wrapper
 import warnings
 
@@ -122,6 +122,7 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
         frame_unordered = []
         X = np.array(value['X'])
         data = np.array(value['data'])
+        ext_index = np.array(extractor_index(X[:, 1]))
         if X.size > 0:
             num_users = len(np.unique(X[:, 1]))
         else:
@@ -149,7 +150,7 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                 cdx = clean_labels == label
                 if label == -1:
                     # noise values are assigned to clusters of one
-                    frame_unordered += cluster_of_one(X[cdx], data, user_ids_input)
+                    frame_unordered += cluster_of_one(X[cdx], data, user_ids_input, ext_index[cdx].tolist())
                 else:
                     xs = [data[int(i)]['x'] for i in X[cdx, 0]]
                     ys = [data[int(i)]['y'] for i in X[cdx, 0]]
@@ -188,13 +189,14 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                         'line_slope': slope,
                         'consensus_score': consensus_score(clusters_text),
                         'user_ids': remove_nans(user_ids),
+                        'extract_index': ext_index[cdx].tolist(),
                         'gold_standard': gold_standard
                     }
                     frame_unordered.append(value)
         else:
             # not enough data to cluster so assign each extract
             # to its own cluster
-            frame_unordered += cluster_of_one(X, data, user_ids_input)
+            frame_unordered += cluster_of_one(X, data, user_ids_input, ext_index.tolist())
         output[frame] = order_lines(
             frame_unordered,
             angle_eps=angle_eps,

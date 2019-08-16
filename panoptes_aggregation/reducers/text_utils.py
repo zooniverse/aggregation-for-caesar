@@ -22,6 +22,22 @@ def tokenize(self, contents):
 col.core_classes.WordPunctuationTokenizer.tokenize = tokenize
 
 
+def extractor_index(x):
+    edx = []
+    i_prev = None
+    e_prev = -1
+    for i in x:
+        if i_prev is None:
+            i_prev = i
+        else:
+            if i != i_prev:
+                i_prev = i
+                e_prev = -1
+        e_prev += 1
+        edx.append(e_prev)
+    return edx
+
+
 def overlap(x, y, tol=0):
     '''Check if two line segments overlap
 
