@@ -107,7 +107,8 @@ def reduce_csv(
             if filter in FILTER_TYPES:
                 classifications = classifications.groupby(['user_name'], group_keys=False).apply(FILTER_TYPES[filter])
             data = [unflatten_data(c) for cdx, c in classifications.iterrows()]
-            reduction = reducers.reducers[reducer_name](data, **keywords)
+            user_ids = [c.user_id for cdx, c in classifications.iterrows()]
+            reduction = reducers.reducers[reducer_name](data, user_id=user_ids, **keywords)
             if isinstance(reduction, list):
                 for r in reduction:
                     reduced_data['subject_id'].append(subject)

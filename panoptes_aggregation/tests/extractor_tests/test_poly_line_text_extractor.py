@@ -149,7 +149,8 @@ expected = {
         'slope': [
             -1.0475230663632435,
             -0.39003195214578423
-        ]
+        ],
+        'gold_standard': False
     },
     'frame1': {
         'points': {
@@ -201,7 +202,8 @@ expected = {
         'slope': [
             1.1519519690072122,
             90
-        ]
+        ],
+        'gold_standard': False
     }
 }
 
