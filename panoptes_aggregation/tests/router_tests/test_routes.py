@@ -25,9 +25,9 @@ class RouterTest(unittest.TestCase):
     def route_exists(self, route, expected):
         with self.application.test_client() as client:
             response = client.get(route)
-            self.assertEquals(response.status_code, 200)
+            self.assertEqual(response.status_code, 200)
             result = eval(response.data)
-            self.assertEquals(result, expected)
+            self.assertEqual(result, expected)
 
     def test_home_route(self):
         '''Test home page returns version'''
@@ -68,14 +68,14 @@ class RouterTest(unittest.TestCase):
         '''Test docs route works'''
         with self.application.test_client() as client:
             response = client.get('/docs')
-            self.assertEquals(response.status_code, 200)
+            self.assertEqual(response.status_code, 200)
 
     def test_post_to_route(self):
         '''Test POST to route works'''
         with patch.dict('panoptes_aggregation.routes.extractors.extractors', mock_extractors_dict):
             with routes.make_application().test_client() as client:
                 response = client.post('/extractors/question_extractor')
-                self.assertEquals(response.status_code, 200)
+                self.assertEqual(response.status_code, 200)
 
     def test_MyEncoder_int(self):
         '''Test MyEncoder converts numpy ints'''

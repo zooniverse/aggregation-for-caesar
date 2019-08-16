@@ -17,10 +17,17 @@ extracted_data = [
             ],
             'slope': [
                 0.80162463698921349
-            ]
+            ],
+            'gold_standard': False
         }
     }
 ]
+
+kwargs_extra_data = {
+    'user_id': [
+        1
+    ]
+}
 
 processed_data = {
     'frame0': {
@@ -35,6 +42,12 @@ processed_data = {
         ],
         'slope': [
             0.80162463698921349
+        ],
+        'gold_standard': [
+            False
+        ],
+        'data_index': [
+            0
         ]
     }
 }
@@ -54,7 +67,9 @@ reduced_data = {
             'gutter_label': 0,
             'line_slope': 0.80162463698921349,
             'number_views': 1,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False],
+            'user_ids': [1]
         }
     ]
 }
@@ -65,7 +80,7 @@ TestSWReducer = ReducerTest(
     extracted_data,
     processed_data,
     reduced_data,
-    'Test SW text reducer',
+    'Test SW text reducer with min_samples=1',
     okwargs={
         'metric': 'euclidean',
         'gutter_tol': 0,
@@ -77,5 +92,6 @@ TestSWReducer = ReducerTest(
         'eps_word': 30,
         'dot_freq': 'line',
         'min_samples': 1
-    }
+    },
+    network_kwargs=kwargs_extra_data
 )
