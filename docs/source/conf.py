@@ -25,7 +25,6 @@ compat.make_admonition = BaseAdmonition
 sys.path.insert(0, os.path.abspath('../../panoptes_aggregation'))
 sys.path.insert(0, os.path.abspath('../..'))
 from panoptes_aggregation import __version__
-from recommonmark.parser import CommonMarkParser
 import datetime
 
 # -- General configuration ------------------------------------------------
@@ -41,7 +40,8 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.githubpages',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    'recommonmark'
 ]
 napoleon_google_docstring = False
 napoleon_use_param = False
@@ -50,13 +50,13 @@ napoleon_use_ivar = True
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
-source_parsers = {
-   '.md': CommonMarkParser,
-}
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-source_suffix = ['.rst', '.md']
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown'
+}
 # source_suffix = '.rst'
 
 # The master toctree document.
