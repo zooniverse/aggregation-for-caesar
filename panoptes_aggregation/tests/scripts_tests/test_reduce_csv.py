@@ -150,6 +150,7 @@ class TestReduceCSV(unittest.TestCase):
             self.config_yaml_question,
             filter='all'
         )
+        mock_question_reducer.assert_any_call([{'yes': 1.0}, {'no': 1.0}], user_id=[1, 2])
         output_path = os.path.join(os.getcwd(), 'question_reducer_reductions.csv')
         self.assertEqual(output_file_name, output_path)
         result_dataframe = reduce_panoptes_csv.flatten_data.return_values[0]
@@ -163,7 +164,7 @@ class TestReduceCSV(unittest.TestCase):
     @patch.dict('panoptes_aggregation.scripts.reduce_panoptes_csv.reducers.reducers', mock_reducers_dict)
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(reduce_panoptes_csv.flatten_data))
     def test_reduce_csv_stream(self, mock_is_file, mock_read_csv, mock_to_csv, mock_pbar):
-        '''Test object reducer makes one csv file (stream)'''
+        '''Test streaming object reducer makes one csv file'''
         mock_is_file.return_value = False
         mock_read_csv.side_effect = [
             self.extracted_dataframe_question,

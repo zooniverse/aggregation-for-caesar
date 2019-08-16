@@ -45,7 +45,8 @@ extracted_data = [
                 -0.23999309197815955,
                 -40.103966913878772,
                 -39.504439692518773
-            ]
+            ],
+            'gold_standard': False
         }
     },
     {
@@ -91,12 +92,14 @@ extracted_data = [
                 -1.9350479072142399,
                 -40.214619322353997,
                 -40.655937635767046
-            ]
+            ],
+            'gold_standard': False
         },
         'frame1': {
             'points': {'x': [[1, 180, 250]], 'y': [[1, 1, 1]]},
             'text': [['page', '2']],
-            'slope': [0]
+            'slope': [0],
+            'gold_standard': False
         }
     },
     {
@@ -142,7 +145,8 @@ extracted_data = [
                 -39.400653706482863,
                 -3.503541802690775,
                 -2.4681237681723815
-            ]
+            ],
+            'gold_standard': False
         }
     },
     {
@@ -188,12 +192,14 @@ extracted_data = [
                 -1.8257636189450075,
                 -39.334667288762937,
                 -1.122924085203026
-            ]
+            ],
+            'gold_standard': True
         },
         'frame1': {
             'points': {'x': [[1.1, 180.1, 251]], 'y': [[0.9, 0.9, 0.9]]},
             'text': [['page', '2']],
-            'slope': [0]
+            'slope': [0],
+            'gold_standard': True
         }
     },
     {
@@ -247,18 +253,32 @@ extracted_data = [
                 -33.996461321522638,
                 -1.7356948677716408,
                 -38.990998547208093
-            ]
+            ],
+            'gold_standard': False
         }
     },
     {
         'frame2': {
             'points': {'x': [[1, 180, 250]], 'y': [[1, 1, 1]]},
             'text': [['some', 'words']],
-            'slope': [0]
+            'slope': [0],
+            'gold_standard': False
         }
     },
     {}
 ]
+
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+    ]
+}
 
 processed_data = {
     'frame0': {
@@ -437,6 +457,94 @@ processed_data = {
             -33.996461321522638,
             -1.7356948677716408,
             -38.990998547208093
+        ],
+        'gold_standard': [
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False
+        ],
+        'data_index': [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
         ]
     },
     'frame1': {
@@ -455,6 +563,14 @@ processed_data = {
         'slope': [
             0,
             0
+        ],
+        'gold_standard': [
+            False,
+            True
+        ],
+        'data_index': [
+            1,
+            3
         ]
     },
     'frame2': {
@@ -464,8 +580,18 @@ processed_data = {
         'y': [
             [1, 1, 1]
         ],
-        'text': [['some', 'words']],
-        'slope': [0]
+        'text': [
+            ['some', 'words']
+        ],
+        'slope': [
+            0
+        ],
+        'gold_standard': [
+            False
+        ],
+        'data_index': [
+            5
+        ]
     }
 }
 
@@ -497,7 +623,9 @@ reduced_data = {
             'consensus_score': 4.0,
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 3, 4, 5, 5]
         },
         {
             'clusters_x': [
@@ -525,7 +653,9 @@ reduced_data = {
             'consensus_score': 3.5,
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -553,7 +683,9 @@ reduced_data = {
             'consensus_score': 4.25,
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 4, 5, 5]
         },
         {
             'clusters_x': [
@@ -575,7 +707,9 @@ reduced_data = {
             'consensus_score': 3.5,
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, True],
+            'user_ids': [1, 2, 3, 4]
         },
         {
             'clusters_x': [
@@ -600,7 +734,9 @@ reduced_data = {
             'consensus_score': 4.0,
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -625,7 +761,9 @@ reduced_data = {
             'consensus_score': 3.0,
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, True, False],
+            'user_ids': [1, 2, 4, 5]
         },
         {
             'clusters_x': [
@@ -650,7 +788,9 @@ reduced_data = {
             'consensus_score': 4.0,
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -675,7 +815,9 @@ reduced_data = {
             'consensus_score': 4.333333333333333,
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 4, 5, 5]
         }
     ],
     'frame1': [
@@ -699,15 +841,17 @@ reduced_data = {
             'consensus_score': 2.0,
             'gutter_label': 0,
             'line_slope': 0.0,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, True],
+            'user_ids': [2, 4]
         }
     ],
     'frame2': [
         {
             'clusters_x': [
-                1,
-                180,
-                250
+                1.0,
+                180.0,
+                250.0
             ],
             'clusters_y': [
                 1.0,
@@ -723,7 +867,9 @@ reduced_data = {
             'consensus_score': 1.0,
             'gutter_label': 0,
             'line_slope': 0.0,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False],
+            'user_ids': [6]
         }
     ]
 }
@@ -746,7 +892,8 @@ TestPLTReducer = ReducerTest(
         'min_samples': 1,
         'dot_freq': 'word',
         'min_word_count': 1
-    }
+    },
+    network_kwargs=kwargs_extra_data
 )
 
 processed_data_by_line = {
@@ -926,6 +1073,94 @@ processed_data_by_line = {
             -33.996461321522638,
             -1.7356948677716408,
             -38.990998547208093
+        ],
+        'gold_standard': [
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False
+        ],
+        'data_index': [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
         ]
     },
     'frame1': {
@@ -944,6 +1179,14 @@ processed_data_by_line = {
         'slope': [
             0,
             0
+        ],
+        'gold_standard': [
+            False,
+            True
+        ],
+        'data_index': [
+            1,
+            3
         ]
     },
     'frame2': {
@@ -958,6 +1201,12 @@ processed_data_by_line = {
         ],
         'slope': [
             0
+        ],
+        'gold_standard': [
+            False
+        ],
+        'data_index': [
+            5
         ]
     }
 }
@@ -983,7 +1232,9 @@ reduced_data_by_line = {
             'consensus_score': 4.0,
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 3, 4, 5, 5]
         },
         {
             'clusters_x': [
@@ -998,13 +1249,16 @@ reduced_data_by_line = {
                 ['words', 'words', 'words', 'words', 'words'],
                 ['on', 'on', '', 'on', ''],
                 ['a', 'a', '', 'a', ''],
-                ['page.', 'page.', '', 'page.', '']
+                ['page', 'page', '', 'page', ''],
+                ['.', '.', '', '.', '']
             ],
             'number_views': 5,
-            'consensus_score': 3.5,
+            'consensus_score': 3.4,
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -1025,7 +1279,9 @@ reduced_data_by_line = {
             'consensus_score': 4.25,
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 4, 5, 5]
         },
         {
             'clusters_x': [
@@ -1038,13 +1294,16 @@ reduced_data_by_line = {
             ],
             'clusters_text': [
                 ['of', 'of', '', 'of'],
-                ['text.', 'text.', 'text.', 'text.']
+                ['text', 'text', 'text', 'text'],
+                ['.', '.', '.', '.']
             ],
             'number_views': 4,
-            'consensus_score': 3.5,
+            'consensus_score': 3.6666666666666665,
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, True],
+            'user_ids': [1, 2, 3, 4]
         },
         {
             'clusters_x': [
@@ -1064,7 +1323,9 @@ reduced_data_by_line = {
             'consensus_score': 4.0,
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -1084,7 +1345,9 @@ reduced_data_by_line = {
             'consensus_score': 3.0,
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, True, False],
+            'user_ids': [1, 2, 4, 5]
         },
         {
             'clusters_x': [
@@ -1104,7 +1367,9 @@ reduced_data_by_line = {
             'consensus_score': 4.0,
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -1124,7 +1389,9 @@ reduced_data_by_line = {
             'consensus_score': 4.333333333333333,
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 4, 5, 5]
         }
     ],
     'frame1': [
@@ -1145,13 +1412,15 @@ reduced_data_by_line = {
             'consensus_score': 2.0,
             'gutter_label': 0,
             'line_slope': 0.0,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, True],
+            'user_ids': [2, 4]
         }
     ],
     'frame2': [
         {
-            'clusters_x': [1, 250],
-            'clusters_y': [1, 1],
+            'clusters_x': [1.0, 250.0],
+            'clusters_y': [1.0, 1.0],
             'clusters_text': [
                 ['some'],
                 ['words']
@@ -1160,7 +1429,9 @@ reduced_data_by_line = {
             'consensus_score': 1.0,
             'gutter_label': 0,
             'line_slope': 0.0,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False],
+            'user_ids': [6]
         }
     ]
 }
@@ -1186,7 +1457,8 @@ TestPLTReducerByLine = ReducerTest(
         'min_samples': 1,
         'dot_freq': 'line',
         'min_word_count': 1
-    }
+    },
+    network_kwargs=kwargs_extra_data
 )
 
 reduced_data_min_word = {
@@ -1210,7 +1482,9 @@ reduced_data_min_word = {
             'consensus_score': 4.333333333333333,
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 3, 4, 5, 5]
         },
         {
             'clusters_x': [
@@ -1225,13 +1499,16 @@ reduced_data_min_word = {
                 ['words', 'words', 'words', 'words', 'words'],
                 ['', '', '', '', ''],
                 ['', '', '', '', ''],
+                ['', '', '', '', ''],
                 ['', '', '', '', '']
             ],
             'number_views': 5,
             'consensus_score': 5.0,
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -1252,7 +1529,9 @@ reduced_data_min_word = {
             'consensus_score': 4.25,
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 4, 5, 5]
         },
         {
             'clusters_x': [
@@ -1265,13 +1544,16 @@ reduced_data_min_word = {
             ],
             'clusters_text': [
                 ['', '', '', ''],
-                ['text.', 'text.', 'text.', 'text.']
+                ['text', 'text', 'text', 'text'],
+                ['.', '.', '.', '.']
             ],
             'number_views': 4,
             'consensus_score': 4.0,
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, False, False, True],
+            'user_ids': [1, 2, 3, 4]
         },
         {
             'clusters_x': [
@@ -1291,7 +1573,9 @@ reduced_data_min_word = {
             'consensus_score': 4.5,
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -1311,7 +1595,9 @@ reduced_data_min_word = {
             'consensus_score': 4.0,
             'gutter_label': 0,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, True, False],
+            'user_ids': [1, 2, 4, 5]
         },
         {
             'clusters_x': [
@@ -1331,7 +1617,9 @@ reduced_data_min_word = {
             'consensus_score': 4.5,
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, True, False],
+            'user_ids': [1, 2, 3, 4, 5]
         },
         {
             'clusters_x': [
@@ -1351,7 +1639,9 @@ reduced_data_min_word = {
             'consensus_score': 4.333333333333333,
             'gutter_label': 1,
             'line_slope': -40.020044794251575,
-            'slope_label': 1
+            'slope_label': 1,
+            'gold_standard': [False, False, False, True, False, False],
+            'user_ids': [1, 2, 3, 4, 5, 5]
         }
     ],
     'frame1': [
@@ -1372,13 +1662,15 @@ reduced_data_min_word = {
             'consensus_score': 0.0,
             'gutter_label': 0,
             'line_slope': 0.0,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False, True],
+            'user_ids': [2, 4]
         }
     ],
     'frame2': [
         {
-            'clusters_x': [1, 250],
-            'clusters_y': [1, 1],
+            'clusters_x': [1.0, 250.0],
+            'clusters_y': [1.0, 1.0],
             'clusters_text': [
                 [''],
                 ['']
@@ -1387,7 +1679,9 @@ reduced_data_min_word = {
             'consensus_score': 0.0,
             'gutter_label': 0,
             'line_slope': 0.0,
-            'slope_label': 0
+            'slope_label': 0,
+            'gold_standard': [False],
+            'user_ids': [6]
         }
     ]
 }
@@ -1413,5 +1707,6 @@ TestPLTReducerWithMinWordCount = ReducerTest(
         'min_samples': 1,
         'dot_freq': 'line',
         'min_word_count': 4
-    }
+    },
+    network_kwargs=kwargs_extra_data
 )
