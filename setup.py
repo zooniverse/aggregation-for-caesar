@@ -63,7 +63,7 @@ setup(
         ],
         'doc': [
             'recommonmark',
-            'sphinx==2.1.2',
+            'sphinx==2.2.0',
             'sphinxcontrib-httpdomain',
             'sphinx_rtd_theme'
         ],
