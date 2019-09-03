@@ -189,7 +189,7 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                         'number_views': cdx.sum(),
                         'line_slope': slope,
                         'consensus_score': consensus_score(clusters_text),
-                        'user_ids': remove_nans(user_ids),
+                        'user_ids': user_ids,
                         'extract_index': ext_index[cdx].tolist(),
                         'gold_standard': gold_standard
                     }

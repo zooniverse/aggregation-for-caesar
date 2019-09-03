@@ -1166,3 +1166,81 @@ TestSWReducer = ReducerTest(
     },
     network_kwargs=kwargs_extra_data
 )
+
+extracted_data_all_blank = [
+    {
+        'frame0': {
+            'text': [],
+            'slope': [],
+            'points': {
+                'x': [],
+                'y': []
+            }
+        }
+    },
+    {
+        'frame0': {
+            'text': [],
+            'slope': [],
+            'points': {
+                'x': [],
+                'y': []
+            }
+        }
+    },
+    {
+        'frame0': {
+            'text': [],
+            'slope': [],
+            'points': {
+                'x': [],
+                'y': []
+            }
+        }
+    }
+]
+
+kwargs_extra_data_all_blank = {
+    'user_id': [
+        1,
+        2,
+        None
+    ]
+}
+
+processed_data_all_blank = {
+    'frame0': {
+        'x': [],
+        'y': [],
+        'text': [],
+        'slope': [],
+        'gold_standard': [],
+        'data_index': []
+    }
+}
+
+reduced_data_all_blank = {
+    'frame0': []
+}
+
+TestSWReducerAllBlank = ReducerTest(
+    poly_line_text_reducer,
+    process_data,
+    extracted_data_all_blank,
+    processed_data_all_blank,
+    reduced_data_all_blank,
+    'Test SW text reducer when all extracts are blank',
+    okwargs={
+        'metric': 'euclidean',
+        'gutter_tol': 0,
+        'min_word_count': 1
+    },
+    kwargs={
+        'eps_slope': 0.5,
+        'eps_line': 15,
+        'eps_word': 30,
+        'dot_freq': 'line',
+        'min_samples': 2
+    },
+    network_kwargs=kwargs_extra_data_all_blank
+)

@@ -577,7 +577,7 @@ kwargs_extra_data_with_dolar_sign = {
         4,
         5,
         6,
-        7
+        None
     ]
 }
 
@@ -619,7 +619,7 @@ reduced_data_with_dolar_sign = {
         'consensus_score': 7.0,
         'line_slope': 0.0,
         'number_views': 7,
-        'user_ids': [1, 2, 3, 4, 5, 6, 7],
+        'user_ids': [1, 2, 3, 4, 5, 6, None],
         'extract_index': [0, 0, 0, 0, 0, 0, 0],
         'gold_standard': [False, False, False, False, False, False, False],
         'slope_label': 0,
