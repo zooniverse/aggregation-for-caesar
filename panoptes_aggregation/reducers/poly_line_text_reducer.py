@@ -6,7 +6,6 @@ This module provides functions to reduce the polygon-text extractions from
 '''
 from .text_utils import cluster_by_frame
 from .reducer_wrapper import reducer_wrapper
-import numpy as np
 
 DEFAULTS = {
     'eps_slope': {'default': 25.0, 'type': float},
