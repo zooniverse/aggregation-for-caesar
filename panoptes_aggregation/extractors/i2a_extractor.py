@@ -1,6 +1,6 @@
 '''
 Intro2Astro Extractor
-------------------
+---------------------
 This module provides a function that converts the pixel annotation to wavelength and uses the subject metadata
 to precalculate values required by students to use Hubble's Law to compute galactic velocity.
 '''
@@ -62,7 +62,7 @@ def i2a_extractor(classification, **kwargs):
 
     Examples
     --------
-    classification = {
+    >>> classification = {
         "annotations": [
             {
                 "task": "T0",
@@ -101,7 +101,6 @@ def i2a_extractor(classification, **kwargs):
             }
         }
     }
-
     >>> point_extractor(classification)
         {
             "galaxy_id": "1237665128518320259",

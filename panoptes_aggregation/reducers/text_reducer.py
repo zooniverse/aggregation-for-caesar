@@ -31,12 +31,12 @@ def text_reducer(data, **kwargs):
     reduction : dict
         A dictionary with the following keys:
 
-        * `aligned_text` : A list of lists containing the aligned text.
+        *   `aligned_text`: A list of lists containing the aligned text.
             There is one list for each identified word, and each of those lists contains
             one item for each user that entered text. If the user did not transcribe
             a word an empty string is used.
-        * `number_views` : Number of volunteers who entered non-blank text
-        * `consensus_score` : The average number of users who's text agreed
+        *   `number_views`: Number of volunteers who entered non-blank text
+        *   `consensus_score`: The average number of users who's text agreed.
             Note, if `consensus_score` is the same a `number_views` every user agreed with each other
     '''
     reduction = {}

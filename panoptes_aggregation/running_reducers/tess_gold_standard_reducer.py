@@ -1,3 +1,8 @@
+'''
+TESS Gold Standard Running Reducer
+----------------------------------
+This module porvides functions to reduce the gold standard task extracts for the TESS project in running mode.
+'''
 from ..reducers.tess_gold_standard_reducer import process_data as tgsr_process_data
 from .running_reducer_wrapper import running_reducer_wrapper
 import numpy as np
@@ -5,6 +10,9 @@ import numpy as np
 
 @running_reducer_wrapper()
 def tess_gold_standard_reducer_rr(data, **kwargs):
+    '''
+    See :meth:`panoptes_aggregation.reducers.tess_gold_standard_reducer.tess_gold_standard_reducer`
+    '''
     store = kwargs.pop('store')
     output = {
         '_store': store

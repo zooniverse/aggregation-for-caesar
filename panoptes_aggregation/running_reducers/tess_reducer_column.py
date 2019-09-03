@@ -1,9 +1,18 @@
+'''
+TESS Column Running Reducer
+---------------------------
+This module porvides functions to reduce the column task extracts for the TESS project in running mode.
+Extracts are from :mod:`panoptes_aggregation.extractors.shape_extractor`.
+'''
 from .running_reducer_wrapper import running_reducer_wrapper
 from ..reducers.tess_reducer_column import DEFAULTS, process_data, tess_reducer_column
 
 
 @running_reducer_wrapper(defaults_data=DEFAULTS, user_id=True, relevant_reduction=True)
 def tess_reducer_column_rr(data, **kwargs):
+    '''
+    See :meth:`panoptes_aggregation.reducers.tess_reducer_column.tess_reducer_column`
+    '''
     store = kwargs.pop('store')
     current_data = process_data(data)
     user_id = store.get('user_id', []) + kwargs.pop('user_id')
