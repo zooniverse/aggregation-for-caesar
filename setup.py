@@ -84,7 +84,7 @@ setup(
         'lxml',
         'numpy==1.17.0',
         'nose',
-        'pandas==0.25.0',
+        'pandas==0.25.1',
         'progressbar2',
         'python-levenshtein',
         'python-slugify',
