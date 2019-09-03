@@ -275,7 +275,7 @@ kwargs_extra_data = {
         3,
         4,
         5,
-        6,
+        None,
         7
     ]
 }
@@ -878,7 +878,7 @@ reduced_data = {
             'line_slope': 0.0,
             'slope_label': 0,
             'gold_standard': [False],
-            'user_ids': [6],
+            'user_ids': [None],
             'extract_index': [0]
         }
     ]
@@ -1450,7 +1450,7 @@ reduced_data_by_line = {
             'line_slope': 0.0,
             'slope_label': 0,
             'gold_standard': [False],
-            'user_ids': [6],
+            'user_ids': [None],
             'extract_index': [0]
         }
     ]
@@ -1710,7 +1710,7 @@ reduced_data_min_word = {
             'line_slope': 0.0,
             'slope_label': 0,
             'gold_standard': [False],
-            'user_ids': [6],
+            'user_ids': [None],
             'extract_index': [0]
         }
     ]

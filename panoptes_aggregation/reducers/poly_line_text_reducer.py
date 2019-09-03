@@ -111,5 +111,4 @@ def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
     kwargs_cluster['dot_freq'] = kwargs_dbscan.pop('dot_freq')
     kwargs_cluster['metric'] = kwargs_dbscan.pop('metric')
     kwargs_cluster['min_word_count'] = kwargs_dbscan.pop('min_word_count')
-    user_ids_input = [i if np.isfinite(i) else None for i in user_ids_input]
     return cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan, user_ids_input)
