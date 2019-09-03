@@ -63,3 +63,18 @@ Extractors
 
 .. automodule:: panoptes_aggregation.extractors.dropdown_extractor
   :members:
+
+----
+
+.. automodule:: panoptes_aggregation.extractors.text_extractor
+  :members:
+
+----
+
+.. automodule:: panoptes_aggregation.extractors.i2a_extractor
+  :members:
+
+----
+
+.. automodule:: panoptes_aggregation.extractors.nfn_extractor
+  :members:

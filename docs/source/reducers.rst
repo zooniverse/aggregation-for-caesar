@@ -71,10 +71,20 @@ Reducers
 
 ----
 
+.. automodule:: panoptes_aggregation.reducers.tess_gold_standard_reducer
+  :members:
+
+----
+
 .. automodule:: panoptes_aggregation.reducers.optics_text_utils
   :members:
 
 ----
 
 .. automodule:: panoptes_aggregation.reducers.optics_line_text_reducer
+  :members:
+
+----
+
+.. automodule:: panoptes_aggregation.reducers.text_reducer
   :members:

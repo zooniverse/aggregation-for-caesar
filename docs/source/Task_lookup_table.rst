@@ -53,6 +53,8 @@ Basic task types
 +--------------------+                                                                      |                                                                                       |
 | Fan                |                                                                      |                                                                                       |
 +--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Text               | :mod:`panoptes_aggregation.extractors.text_extractor`                | :mod:`panoptes_aggregation.reducers.text_reducer`                                     |
++--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 
 -----
 
@@ -69,8 +71,8 @@ These are extractors and reducers designed for specific text transcription proje
 +--------------------------------------+-----------------------------------------------------------------+--------------------------------------------------------------------+
 | Shakespeare's World/AnnoTate text    | :mod:`panoptes_aggregation.extractors.sw_extractor`             | :mod:`panoptes_aggregation.reducers.poly_line_text_reducer`        |
 +--------------------------------------+-----------------------------------------------------------------+                                                                    |
-| Line tool with text sub-task         | :mod:`panoptes_aggregation.extractors.line_text_extractor`      |                                                                    |
-+--------------------------------------+-----------------------------------------------------------------+                                                                    |
+| Line tool with text sub-task         | :mod:`panoptes_aggregation.extractors.line_text_extractor`      +--------------------------------------------------------------------+
++--------------------------------------+-----------------------------------------------------------------+ :mod:`panoptes_aggregation.reducers.optics_line_text_reducer`      |
 | Polygon tool with text sub-task      | :mod:`panoptes_aggregation.extractors.poly_line_text_extractor` |                                                                    |
 +--------------------------------------+-----------------------------------------------------------------+--------------------------------------------------------------------+
 
@@ -81,10 +83,16 @@ TESS project
 These reducers were designed for use with the TESS project to handle real-time user weighting of identified column tool clusters.  This process requires proper
 `relevant_reduction` being set for each reducer and several extractors/reducers internal to Caesar.
 
-+-----------------------------------+--------------------------------------------------------+----------------------------------------------------------------+
-| Task Type                         | Extractor                                              | Reducer                                                        |
-+===================================+========================================================+================================================================+
-| TESS Column Tool                  | :mod:`panoptes_aggregation.extractors.shape_extractor` | :mod:`panoptes_aggregation.reducers.tess_reducer_column`       |
-+-----------------------------------+--------------------------------------------------------+----------------------------------------------------------------+
-| TESS Classification of GS subject | Caesar's `PluckFieldExtractor`                         | :mod:`panoptes_aggregation.running_reducers.tess_user_reducer` |
-+-----------------------------------+--------------------------------------------------------+----------------------------------------------------------------+
++-----------------------------------+--------------------------------------------------------+-------------------------------------------------------------------------+
+| Task Type                         | Extractor                                              | Reducer                                                                 |
++===================================+========================================================+=========================================================================+
+| TESS Column Tool                  | :mod:`panoptes_aggregation.extractors.shape_extractor` | :mod:`panoptes_aggregation.reducers.tess_reducer_column`                |
+|                                   |                                                        +-------------------------------------------------------------------------+
+|                                   |                                                        | :mod:`panoptes_aggregation.running_reducers.tess_reducer_column`        |
++-----------------------------------+--------------------------------------------------------+-------------------------------------------------------------------------+
+| TESS User Reducer                 | Caesar's `PluckFieldExtractor`                         | :mod:`panoptes_aggregation.running_reducers.tess_user_reducer`          |
++-----------------------------------+--------------------------------------------------------+-------------------------------------------------------------------------+
+| TESS Gold Standard Reducer        | Caesar's `PluckFieldExtractor`                         | :mod:`panoptes_aggregation.reducers.tess_gold_standard_reducer`         |
+|                                   |                                                        +-------------------------------------------------------------------------+
+|                                   |                                                        | :mod:`panoptes_aggregation.running_reducers.tess_gold_standard_reducer` |
++-----------------------------------+--------------------------------------------------------+-------------------------------------------------------------------------+

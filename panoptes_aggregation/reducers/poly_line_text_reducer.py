@@ -97,10 +97,10 @@ def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
         * `line_slope`: The slope of the line of text in degrees
         * `slope_label` : A label indicating what slope cluster the line is from
         * `number_views` : The number of users that transcribed the line of text
-        * `consensus_score` : The average number of users who's text agreed for the line
-            Note, if `consensus_score` is the same a `number_views` every user agreed with each other
+        * `consensus_score` : The average number of users who's text agreed for the line.
+          Note, if `consensus_score` is the same a `number_views` every user agreed with each other
 
-        Note: the image coordiate system is left handed with y increasing downward.
+        Note: the image coordiate system has y increasing downward.
     '''
     user_ids_input = kwargs_dbscan.pop('user_id')
     kwargs_cluster = {}

@@ -1,6 +1,6 @@
 '''
-Line Tool for Text ExtractorTest
---------------------------------
+Line Tool for Text Extractor
+----------------------------
 This module provides a function to extract panoptes annotations
 from projects using a line tool to mark lines of text in a
 transcribed document and provide the text as a sub-task.
