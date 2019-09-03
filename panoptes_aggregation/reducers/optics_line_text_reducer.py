@@ -10,7 +10,7 @@ from sklearn.cluster import OPTICS
 import numpy as np
 from collections import defaultdict
 import collatex as col
-from .optics_text_utils import get_min_samples, metric, remove_user_duplication, cluster_of_one, order_lines, remove_nans
+from .optics_text_utils import get_min_samples, metric, remove_user_duplication, cluster_of_one, order_lines
 from .text_utils import consensus_score, tokenize, extractor_index
 from .reducer_wrapper import reducer_wrapper
 import warnings
