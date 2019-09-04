@@ -273,7 +273,7 @@ kwargs_extra_data = {
         1,
         2,
         3,
-        4,
+        None,
         5,
         None,
         7
@@ -625,7 +625,7 @@ reduced_data = {
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
             'gold_standard': [False, False, False, False, True, False, False],
-            'user_ids': [1, 2, 3, 3, 4, 5, 5],
+            'user_ids': [1, 2, 3, 3, None, 5, 5],
             'extract_index': [2, 0, 0, 1, 3, 2, 8]
         },
         {
@@ -656,7 +656,7 @@ reduced_data = {
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
             'gold_standard': [False, False, False, True, False],
-            'user_ids': [1, 2, 3, 4, 5],
+            'user_ids': [1, 2, 3, None, 5],
             'extract_index': [0, 1, 6, 2, 3]
         },
         {
@@ -687,7 +687,7 @@ reduced_data = {
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
             'gold_standard': [False, False, False, True, False, False],
-            'user_ids': [1, 2, 3, 4, 5, 5],
+            'user_ids': [1, 2, 3, None, 5, 5],
             'extract_index': [4, 4, 2, 7, 0, 1]
         },
         {
@@ -712,7 +712,7 @@ reduced_data = {
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
             'gold_standard': [False, False, False, True],
-            'user_ids': [1, 2, 3, 4],
+            'user_ids': [1, 2, 3, None],
             'extract_index': [5, 5, 7, 5]
         },
         {
@@ -740,7 +740,7 @@ reduced_data = {
             'line_slope': -40.020044794251575,
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False],
-            'user_ids': [1, 2, 3, 4, 5],
+            'user_ids': [1, 2, 3, None, 5],
             'extract_index': [1, 6, 5, 4, 7]
         },
         {
@@ -768,7 +768,7 @@ reduced_data = {
             'line_slope': -40.020044794251575,
             'slope_label': 1,
             'gold_standard': [False, False, True, False],
-            'user_ids': [1, 2, 4, 5],
+            'user_ids': [1, 2, None, 5],
             'extract_index': [3, 7, 6, 4]
         },
         {
@@ -796,7 +796,7 @@ reduced_data = {
             'line_slope': -40.020044794251575,
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False],
-            'user_ids': [1, 2, 3, 4, 5],
+            'user_ids': [1, 2, 3, None, 5],
             'extract_index': [6, 2, 4, 0, 6]
         },
         {
@@ -824,7 +824,7 @@ reduced_data = {
             'line_slope': -40.020044794251575,
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False, False],
-            'user_ids': [1, 2, 3, 4, 5, 5],
+            'user_ids': [1, 2, 3, None, 5, 5],
             'extract_index': [7, 3, 3, 1, 5, 9]
         }
     ],
@@ -851,7 +851,7 @@ reduced_data = {
             'line_slope': 0.0,
             'slope_label': 0,
             'gold_standard': [False, True],
-            'user_ids': [2, 4],
+            'user_ids': [2, None],
             'extract_index': [0, 0]
         }
     ],
@@ -1244,7 +1244,7 @@ reduced_data_by_line = {
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
             'gold_standard': [False, False, False, False, True, False, False],
-            'user_ids': [1, 2, 3, 3, 4, 5, 5],
+            'user_ids': [1, 2, 3, 3, None, 5, 5],
             'extract_index': [2, 0, 0, 1, 3, 2, 8]
         },
         {
@@ -1269,7 +1269,7 @@ reduced_data_by_line = {
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
             'gold_standard': [False, False, False, True, False],
-            'user_ids': [1, 2, 3, 4, 5],
+            'user_ids': [1, 2, 3, None, 5],
             'extract_index': [0, 1, 6, 2, 3]
         },
         {
@@ -1293,7 +1293,7 @@ reduced_data_by_line = {
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
             'gold_standard': [False, False, False, True, False, False],
-            'user_ids': [1, 2, 3, 4, 5, 5],
+            'user_ids': [1, 2, 3, None, 5, 5],
             'extract_index': [4, 4, 2, 7, 0, 1]
         },
         {
@@ -1316,7 +1316,7 @@ reduced_data_by_line = {
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
             'gold_standard': [False, False, False, True],
-            'user_ids': [1, 2, 3, 4],
+            'user_ids': [1, 2, 3, None],
             'extract_index': [5, 5, 7, 5]
         },
         {
@@ -1339,7 +1339,7 @@ reduced_data_by_line = {
             'line_slope': -40.020044794251575,
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False],
-            'user_ids': [1, 2, 3, 4, 5],
+            'user_ids': [1, 2, 3, None, 5],
             'extract_index': [1, 6, 5, 4, 7]
         },
         {
@@ -1362,7 +1362,7 @@ reduced_data_by_line = {
             'line_slope': -40.020044794251575,
             'slope_label': 1,
             'gold_standard': [False, False, True, False],
-            'user_ids': [1, 2, 4, 5],
+            'user_ids': [1, 2, None, 5],
             'extract_index': [3, 7, 6, 4]
         },
         {
@@ -1385,7 +1385,7 @@ reduced_data_by_line = {
             'line_slope': -40.020044794251575,
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False],
-            'user_ids': [1, 2, 3, 4, 5],
+            'user_ids': [1, 2, 3, None, 5],
             'extract_index': [6, 2, 4, 0, 6]
         },
         {
@@ -1408,7 +1408,7 @@ reduced_data_by_line = {
             'line_slope': -40.020044794251575,
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False, False],
-            'user_ids': [1, 2, 3, 4, 5, 5],
+            'user_ids': [1, 2, 3, None, 5, 5],
             'extract_index': [7, 3, 3, 1, 5, 9]
         }
     ],
@@ -1432,7 +1432,7 @@ reduced_data_by_line = {
             'line_slope': 0.0,
             'slope_label': 0,
             'gold_standard': [False, True],
-            'user_ids': [2, 4],
+            'user_ids': [2, None],
             'extract_index': [0, 0]
         }
     ],
@@ -1504,7 +1504,7 @@ reduced_data_min_word = {
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
             'gold_standard': [False, False, False, False, True, False, False],
-            'user_ids': [1, 2, 3, 3, 4, 5, 5],
+            'user_ids': [1, 2, 3, 3, None, 5, 5],
             'extract_index': [2, 0, 0, 1, 3, 2, 8]
         },
         {
@@ -1529,7 +1529,7 @@ reduced_data_min_word = {
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
             'gold_standard': [False, False, False, True, False],
-            'user_ids': [1, 2, 3, 4, 5],
+            'user_ids': [1, 2, 3, None, 5],
             'extract_index': [0, 1, 6, 2, 3]
         },
         {
@@ -1553,7 +1553,7 @@ reduced_data_min_word = {
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
             'gold_standard': [False, False, False, True, False, False],
-            'user_ids': [1, 2, 3, 4, 5, 5],
+            'user_ids': [1, 2, 3, None, 5, 5],
             'extract_index': [4, 4, 2, 7, 0, 1]
         },
         {
@@ -1576,7 +1576,7 @@ reduced_data_min_word = {
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
             'gold_standard': [False, False, False, True],
-            'user_ids': [1, 2, 3, 4],
+            'user_ids': [1, 2, 3, None],
             'extract_index': [5, 5, 7, 5]
         },
         {
@@ -1599,7 +1599,7 @@ reduced_data_min_word = {
             'line_slope': -40.020044794251575,
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False],
-            'user_ids': [1, 2, 3, 4, 5],
+            'user_ids': [1, 2, 3, None, 5],
             'extract_index': [1, 6, 5, 4, 7]
         },
         {
@@ -1622,7 +1622,7 @@ reduced_data_min_word = {
             'line_slope': -40.020044794251575,
             'slope_label': 1,
             'gold_standard': [False, False, True, False],
-            'user_ids': [1, 2, 4, 5],
+            'user_ids': [1, 2, None, 5],
             'extract_index': [3, 7, 6, 4]
         },
         {
@@ -1645,7 +1645,7 @@ reduced_data_min_word = {
             'line_slope': -40.020044794251575,
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False],
-            'user_ids': [1, 2, 3, 4, 5],
+            'user_ids': [1, 2, 3, None, 5],
             'extract_index': [6, 2, 4, 0, 6]
         },
         {
@@ -1668,7 +1668,7 @@ reduced_data_min_word = {
             'line_slope': -40.020044794251575,
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False, False],
-            'user_ids': [1, 2, 3, 4, 5, 5],
+            'user_ids': [1, 2, 3, None, 5, 5],
             'extract_index': [7, 3, 3, 1, 5, 9]
         }
     ],
@@ -1692,7 +1692,7 @@ reduced_data_min_word = {
             'line_slope': 0.0,
             'slope_label': 0,
             'gold_standard': [False, True],
-            'user_ids': [2, 4],
+            'user_ids': [2, None],
             'extract_index': [0, 0]
         }
     ],
