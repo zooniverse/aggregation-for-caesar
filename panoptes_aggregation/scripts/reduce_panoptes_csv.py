@@ -79,15 +79,16 @@ def reduce_csv(
                 reduced_csv = pandas.read_csv(reduced_file, encoding='utf-8')
                 subjects = np.setdiff1d(subjects, reduced_csv.subject_id)
 
-    blank_reduced_data = OrderedDict([
-        ('subject_id', []),
-        ('workflow_id', []),
-        ('task', []),
-        ('reducer', []),
-        ('data', [])
-    ])
+    # blank_reduced_data = OrderedDict([
+    #     ('subject_id', []),
+    #     ('workflow_id', []),
+    #     ('task', []),
+    #     ('reducer', []),
+    #     ('data', [])
+    # ])
 
-    reduced_data = copy.deepcopy(blank_reduced_data)
+    # reduced_data = copy.deepcopy(blank_reduced_data)
+    reduced_data = []
 
     widgets = [
         'Reducing: ',
@@ -111,23 +112,27 @@ def reduce_csv(
             reduction = reducers.reducers[reducer_name](data, user_id=user_ids, **keywords)
             if isinstance(reduction, list):
                 for r in reduction:
-                    reduced_data['subject_id'].append(subject)
-                    reduced_data['workflow_id'].append(workflow_id)
-                    reduced_data['task'].append(task)
-                    reduced_data['reducer'].append(reducer_name)
-                    reduced_data['data'].append(r)
+                    reduced_data.append(OrderedDict([
+                        ('subject_id', subject),
+                        ('workflow_id', workflow_id),
+                        ('task', task),
+                        ('reducer', reducer_name),
+                        ('data', r)
+                    ]))
             else:
-                reduced_data['subject_id'].append(subject)
-                reduced_data['workflow_id'].append(workflow_id)
-                reduced_data['task'].append(task)
-                reduced_data['reducer'].append(reducer_name)
-                reduced_data['data'].append(reduction)
+                reduced_data.append(OrderedDict([
+                    ('subject_id', subject),
+                    ('workflow_id', workflow_id),
+                    ('task', task),
+                    ('reducer', reducer_name),
+                    ('data', reduction)
+                ]))
         if stream:
             if (sdx == 0) and (not resume):
                 pandas.DataFrame(reduced_data).to_csv(output_path, mode='w', index=False, encoding='utf-8')
             else:
                 pandas.DataFrame(reduced_data).to_csv(output_path, mode='a', index=False, header=False, encoding='utf-8')
-            reduced_data = copy.deepcopy(blank_reduced_data)
+            reduced_data = []
         pbar.update(sdx + 1)
     pbar.finish()
 
@@ -139,7 +144,8 @@ def reduce_csv(
         else:
             return output_path
     else:
-        flat_reduced_data = flatten_data(reduced_data)
+        non_flat_data = pandas.DataFrame(reduced_data)
+        flat_reduced_data = flatten_data(non_flat_data)
     if order:
         flat_reduced_data = order_columns(flat_reduced_data, front=['choice', 'total_vote_count', 'choice_count'])
     flat_reduced_data.to_csv(output_path, index=False, encoding='utf-8')
