@@ -4,7 +4,7 @@ Question Extractor
 This module provides a function to extract question tasks (single and multiple)
 from panoptes annotations.
 '''
-from collections import Counter
+from collections import defaultdict
 from slugify import slugify
 from .extractor_wrapper import extractor_wrapper
 
@@ -50,7 +50,7 @@ def question_extractor(classification, **kwargs):
     {'yes': 1}
     '''
     #: assumes only one task is filtered into the extractor
-    answers = Counter()
+    answers = defaultdict(int)
     if len(classification['annotations']) > 0:
         annotation = classification['annotations'][0]
         if isinstance(annotation['value'], list):

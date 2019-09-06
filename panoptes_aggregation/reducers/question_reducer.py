@@ -12,12 +12,13 @@ DEFAULTS = {
 }
 
 
-def process_data(data, pairs=False):
-    '''Process a list of extracted questions into `Counter` objects
+@reducer_wrapper(defaults_data=DEFAULTS)
+def question_reducer(data_list, pairs=False, **kwargs):
+    '''Reduce a list of extracted questions into a "counter" dict
 
     Parameters
     ----------
-    data : list
+    data_list : list
         A list of extractions created by
         :meth:`panoptes_aggregation.extractors.question_extractor.question_extractor`
     pairs : bool, optional
@@ -26,33 +27,15 @@ def process_data(data, pairs=False):
 
     Returns
     -------
-    processed_data : list
-        A list of `Counter` objects, one for each extraction
-    '''
-    data_out = []
-    for d in data:
-        if pairs:
-            new_key = '+'.join(sorted(d))
-            data_out.append(Counter({new_key: 1}))
-        else:
-            data_out.append(Counter(d))
-    return data_out
-
-
-@reducer_wrapper(process_data=process_data, defaults_process=DEFAULTS)
-def question_reducer(votes_list):
-    '''Reduce a list of `Counter` objects into a single dict
-
-    Parameters
-    ----------
-    votes_list : list
-        A list of `Counter` objects from :meth:`process_data`
-
-    Returns
-    -------
     reduction : dict
         A dictionary (formated as a `Counter`) giving the vote count for each
         `key`
     '''
-    counter_total = sum(votes_list, Counter())
+    answer_list = []
+    for data in data_list:
+        if pairs:
+            answer_list.append('+'.join(sorted(data)))
+        else:
+            answer_list += list(data)
+    counter_total = Counter(answer_list)
     return dict(counter_total)
