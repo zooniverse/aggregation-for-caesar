@@ -1,5 +1,4 @@
 from collections import OrderedDict
-import copy
 import io
 import os
 import progressbar
@@ -37,6 +36,45 @@ def get_file_instance(file):
     if not isinstance(file, io.IOBase):
         file = open(file, 'r', encoding='utf-8')  # pragma: no cover
     return file
+
+
+def reduce_subject(
+    subject,
+    extracted=None,
+    tasks=None,
+    reducer_name=None,
+    workflow_id=None,
+    keywords={}
+):
+    reduced_data_list = []
+    idx = extracted.subject_id == subject
+    for task in tasks:
+        jdx = extracted.task == task
+        classifications = extracted[idx & jdx]
+        classifications = classifications.drop_duplicates()
+        if filter in FILTER_TYPES:
+            classifications = classifications.groupby(['user_name'], group_keys=False).apply(FILTER_TYPES[filter])
+        data = [unflatten_data(c) for cdx, c in classifications.iterrows()]
+        user_ids = [c.user_id for cdx, c in classifications.iterrows()]
+        reduction = reducers.reducers[reducer_name](data, user_id=user_ids, **keywords)
+        if isinstance(reduction, list):
+            for r in reduction:
+                reduced_data_list.append(OrderedDict([
+                    ('subject_id', subject),
+                    ('workflow_id', workflow_id),
+                    ('task', task),
+                    ('reducer', reducer_name),
+                    ('data', r)
+                ]))
+        else:
+            reduced_data_list.append(OrderedDict([
+                ('subject_id', subject),
+                ('workflow_id', workflow_id),
+                ('task', task),
+                ('reducer', reducer_name),
+                ('data', reduction)
+            ]))
+    return reduced_data_list
 
 
 def reduce_csv(
@@ -79,16 +117,20 @@ def reduce_csv(
                 reduced_csv = pandas.read_csv(reduced_file, encoding='utf-8')
                 subjects = np.setdiff1d(subjects, reduced_csv.subject_id)
 
-    # blank_reduced_data = OrderedDict([
-    #     ('subject_id', []),
-    #     ('workflow_id', []),
-    #     ('task', []),
-    #     ('reducer', []),
-    #     ('data', [])
-    # ])
-
-    # reduced_data = copy.deepcopy(blank_reduced_data)
     reduced_data = []
+    sdx = [0]
+
+    def callback(reduced_data_list, reduced_data=reduced_data, sdx=sdx, stream=stream, resume=resume):
+        # reduced_data and sdx must be *mutable* objects passed in (e.g. lists)!
+        reduced_data += reduced_data_list
+        if stream:
+            if (sdx[0] == 0) and (not resume):
+                pandas.DataFrame(reduced_data).to_csv(output_path, mode='w', index=False, encoding='utf-8')
+            else:
+                pandas.DataFrame(reduced_data).to_csv(output_path, mode='a', index=False, header=False, encoding='utf-8')
+            reduced_data.clear()
+        sdx[0] += 1
+        pbar.update(sdx[0])
 
     widgets = [
         'Reducing: ',
@@ -96,44 +138,18 @@ def reduce_csv(
         ' ', progressbar.Bar(),
         ' ', progressbar.ETA()
     ]
-
     pbar = progressbar.ProgressBar(widgets=widgets, max_value=len(subjects))
     pbar.start()
-    for sdx, subject in enumerate(subjects):
-        idx = extracted.subject_id == subject
-        for task in tasks:
-            jdx = extracted.task == task
-            classifications = extracted[idx & jdx]
-            classifications = classifications.drop_duplicates()
-            if filter in FILTER_TYPES:
-                classifications = classifications.groupby(['user_name'], group_keys=False).apply(FILTER_TYPES[filter])
-            data = [unflatten_data(c) for cdx, c in classifications.iterrows()]
-            user_ids = [c.user_id for cdx, c in classifications.iterrows()]
-            reduction = reducers.reducers[reducer_name](data, user_id=user_ids, **keywords)
-            if isinstance(reduction, list):
-                for r in reduction:
-                    reduced_data.append(OrderedDict([
-                        ('subject_id', subject),
-                        ('workflow_id', workflow_id),
-                        ('task', task),
-                        ('reducer', reducer_name),
-                        ('data', r)
-                    ]))
-            else:
-                reduced_data.append(OrderedDict([
-                    ('subject_id', subject),
-                    ('workflow_id', workflow_id),
-                    ('task', task),
-                    ('reducer', reducer_name),
-                    ('data', reduction)
-                ]))
-        if stream:
-            if (sdx == 0) and (not resume):
-                pandas.DataFrame(reduced_data).to_csv(output_path, mode='w', index=False, encoding='utf-8')
-            else:
-                pandas.DataFrame(reduced_data).to_csv(output_path, mode='a', index=False, header=False, encoding='utf-8')
-            reduced_data = []
-        pbar.update(sdx + 1)
+    for subject in subjects:
+        reduced_data_list = reduce_subject(
+            subject,
+            extracted=extracted,
+            tasks=tasks,
+            reducer_name=reducer_name,
+            workflow_id=workflow_id,
+            keywords=keywords
+        )
+        callback(reduced_data_list)
     pbar.finish()
 
     if stream:
