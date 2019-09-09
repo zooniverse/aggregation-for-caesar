@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from multiprocessing import Pool
 import io
 import os
 import progressbar
@@ -84,7 +85,8 @@ def reduce_csv(
     output_name='reductions',
     output_dir=os.path.abspath('.'),
     order=False,
-    stream=False
+    stream=False,
+    cpu_count=os.cpu_count()
 ):
     extracted_csv = get_file_instance(extracted_csv)
     with extracted_csv as extracted_csv_in:
@@ -118,19 +120,15 @@ def reduce_csv(
                 subjects = np.setdiff1d(subjects, reduced_csv.subject_id)
 
     reduced_data = []
-    sdx = [0]
+    sdx = 0
 
-    def callback(reduced_data_list, reduced_data=reduced_data, sdx=sdx, stream=stream, resume=resume):
-        # reduced_data and sdx must be *mutable* objects passed in (e.g. lists)!
-        reduced_data += reduced_data_list
-        if stream:
-            if (sdx[0] == 0) and (not resume):
-                pandas.DataFrame(reduced_data).to_csv(output_path, mode='w', index=False, encoding='utf-8')
-            else:
-                pandas.DataFrame(reduced_data).to_csv(output_path, mode='a', index=False, header=False, encoding='utf-8')
-            reduced_data.clear()
-        sdx[0] += 1
-        pbar.update(sdx[0])
+    apply_keywords = {
+        'extracted': extracted,
+        'tasks': tasks,
+        'reducer_name': reducer_name,
+        'workflow_id': workflow_id,
+        'keywords': keywords
+    }
 
     widgets = [
         'Reducing: ',
@@ -139,17 +137,30 @@ def reduce_csv(
         ' ', progressbar.ETA()
     ]
     pbar = progressbar.ProgressBar(widgets=widgets, max_value=len(subjects))
+
+    def callback(reduced_data_list):
+        nonlocal reduced_data
+        nonlocal sdx
+        nonlocal pbar
+        nonlocal stream
+        reduced_data += reduced_data_list
+        if stream:
+            if (sdx == 0) and (not resume):
+                pandas.DataFrame(reduced_data).to_csv(output_path, mode='w', index=False, encoding='utf-8')
+            else:
+                pandas.DataFrame(reduced_data).to_csv(output_path, mode='a', index=False, header=False, encoding='utf-8')
+            reduced_data.clear()
+        sdx += 1
+        pbar.update(sdx)
+
     pbar.start()
+    pool = Pool(cpu_count)
     for subject in subjects:
-        reduced_data_list = reduce_subject(
-            subject,
-            extracted=extracted,
-            tasks=tasks,
-            reducer_name=reducer_name,
-            workflow_id=workflow_id,
-            keywords=keywords
-        )
-        callback(reduced_data_list)
+        pool.apply_async(reduce_subject, args=(subject,), kwds=apply_keywords, callback=callback)
+        # reduced_data_list = reduce_subject(subject, **apply_keywords)
+        # callback(reduced_data_list)
+    pool.close()
+    pool.join()
     pbar.finish()
 
     if stream:

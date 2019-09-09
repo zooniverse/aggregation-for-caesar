@@ -225,6 +225,13 @@ def main(args=None):
         help="Arrange the data columns in alphabetical order before saving",
         action="store_true"
     )
+    reduce_options.add_argument(
+        "-c",
+        "--cpu_count",
+        help="How many cpu cores to use during reduction",
+        type=int,
+        default=os.cpu_count()
+    )
     reduce_save_files.add_argument(
         "-d",
         "--dir",
@@ -276,7 +283,8 @@ def main(args=None):
             output_name=args.output,
             output_dir=args.dir,
             order=args.order,
-            stream=args.stream
+            stream=args.stream,
+            cpu_count=args.cpu_count
         )
     return 0
 
