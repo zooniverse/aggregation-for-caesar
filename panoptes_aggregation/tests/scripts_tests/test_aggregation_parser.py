@@ -47,5 +47,6 @@ class TestAggregationParser(unittest.TestCase):
             order=False,
             output_dir=os.getcwd(),
             stream=False,
-            output_name='reductions'
+            output_name='reductions',
+            cpu_count=os.cpu_count()
         )
