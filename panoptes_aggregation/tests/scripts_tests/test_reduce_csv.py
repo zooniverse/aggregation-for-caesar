@@ -200,6 +200,8 @@ class TestReduceCSV(unittest.TestCase):
         to_csv_calls = [
             call(output_path, mode='w', index=False, encoding='utf-8'),
             call(output_path, mode='a', index=False, header=False, encoding='utf-8'),
+            call(output_path, mode='a', index=False, header=False, encoding='utf-8'),
+            call(output_path, mode='a', index=False, header=False, encoding='utf-8'),
             call(output_path, index=False, encoding='utf-8')
         ]
         mock_to_csv.assert_has_calls(to_csv_calls, any_order=False)
