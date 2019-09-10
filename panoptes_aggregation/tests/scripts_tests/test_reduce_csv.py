@@ -5,7 +5,6 @@ import os
 import pandas
 from pandas.util.testing import assert_frame_equal
 import panoptes_aggregation.scripts.reduce_panoptes_csv as reduce_panoptes_csv
-import logging
 
 extracted_csv_question = '''classification_id,user_name,user_id,workflow_id,task,created_at,subject_id,extractor,data.blue,data.green,data.no,data.yes
 1,1,1,4249,T0,2017-05-31 12:33:46 UTC,1,question_extractor,,,,1.0
@@ -66,10 +65,6 @@ class CaptureValues(object):
 
 mock_question_reducer = MagicMock()
 mock_question_reducer.side_effect = [
-    {'yes': 1, 'no': 1},
-    {'blue': 1, 'green': 1},
-    {'yes': 1, 'no': 1},
-    {'blue': 1, 'green': 1},
     {'yes': 1, 'no': 1},
     {'blue': 1, 'green': 1},
     {'yes': 1, 'no': 1},
@@ -156,16 +151,27 @@ class TestReduceCSV(unittest.TestCase):
             filter='all',
             cpu_count=1
         )
-        # mock_question_reducer.assert_any_call([{'yes': 1.0}, {'no': 1.0}], user_id=[1, 2])
+        mock_question_reducer.assert_any_call([{'yes': 1.0}, {'no': 1.0}], user_id=[1, 2])
         output_path = os.path.join(os.getcwd(), 'question_reducer_reductions.csv')
         self.assertEqual(output_file_name, output_path)
         result_dataframe = reduce_panoptes_csv.flatten_data.return_values[0]
-        try:
-            assert_frame_equal(result_dataframe, self.reduced_dataframe_question, check_like=True)
-        except:
-            print(result_dataframe)
-            print(self.reduced_dataframe_question)
-            raise
+        assert_frame_equal(result_dataframe, self.reduced_dataframe_question, check_like=True)
+        mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
+
+    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.DataFrame.to_csv')
+    @patch.dict('panoptes_aggregation.scripts.reduce_panoptes_csv.reducers.reducers', mock_reducers_dict)
+    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(reduce_panoptes_csv.flatten_data))
+    def test_reduce_csv_object_multi(self, mock_to_csv, mock_pbar):
+        '''Test object reducer makes one csv file with cpu_count=2'''
+        output_file_name = reduce_panoptes_csv.reduce_csv(
+            self.extracted_csv_question,
+            self.config_yaml_question,
+            filter='all',
+            cpu_count=2
+        )
+        output_path = os.path.join(os.getcwd(), 'question_reducer_reductions.csv')
+        self.assertEqual(output_file_name, output_path)
         mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
 
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.progressbar.ProgressBar')

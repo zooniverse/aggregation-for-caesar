@@ -230,7 +230,7 @@ def main(args=None):
         "--cpu_count",
         help="How many cpu cores to use during reduction",
         type=int,
-        default=os.cpu_count()
+        default=1
     )
     reduce_save_files.add_argument(
         "-d",
