@@ -45,6 +45,7 @@ def reduce_subject(
     tasks=None,
     reducer_name=None,
     workflow_id=None,
+    filter=None,
     keywords={}
 ):
     reduced_data_list = []
@@ -127,6 +128,7 @@ def reduce_csv(
         'tasks': tasks,
         'reducer_name': reducer_name,
         'workflow_id': workflow_id,
+        'filter': filter,
         'keywords': keywords
     }
 
