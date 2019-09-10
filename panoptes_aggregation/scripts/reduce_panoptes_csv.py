@@ -154,13 +154,16 @@ def reduce_csv(
         pbar.update(sdx)
 
     pbar.start()
-    pool = Pool(cpu_count)
-    for subject in subjects:
-        pool.apply_async(reduce_subject, args=(subject,), kwds=apply_keywords, callback=callback)
-        # reduced_data_list = reduce_subject(subject, **apply_keywords)
-        # callback(reduced_data_list)
-    pool.close()
-    pool.join()
+    if cpu_count > 1:
+        pool = Pool(cpu_count)
+        for subject in subjects:
+            pool.apply_async(reduce_subject, args=(subject,), kwds=apply_keywords, callback=callback)
+        pool.close()
+        pool.join()
+    else:
+        for subject in subjects:
+            reduced_data_list = reduce_subject(subject, **apply_keywords)
+            callback(reduced_data_list)
     pbar.finish()
 
     if stream:
