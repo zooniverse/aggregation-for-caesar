@@ -54,7 +54,8 @@ def reduce_subject(
         jdx = extracted.task == task
         classifications = extracted[idx & jdx]
         classifications = classifications.drop_duplicates()
-        if filter in FILTER_TYPES:
+        unique_users = classifications['user_name'].unique().shape[0]
+        if (filter in FILTER_TYPES) and (unique_users < classifications.shape[0]):
             classifications = classifications.groupby(['user_name'], group_keys=False).apply(FILTER_TYPES[filter])
         data = [unflatten_data(c) for cdx, c in classifications.iterrows()]
         user_ids = [c.user_id for cdx, c in classifications.iterrows()]
