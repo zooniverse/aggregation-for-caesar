@@ -41,42 +41,38 @@ def get_file_instance(file):
 
 def reduce_subject(
     subject,
-    extracted=None,
-    tasks=None,
+    classifications,
+    task,
     reducer_name=None,
     workflow_id=None,
     filter=None,
     keywords={}
 ):
     reduced_data_list = []
-    idx = extracted.subject_id == subject
-    for task in tasks:
-        jdx = extracted.task == task
-        classifications = extracted[idx & jdx]
-        classifications = classifications.drop_duplicates()
-        unique_users = classifications['user_name'].unique().shape[0]
-        if (filter in FILTER_TYPES) and (unique_users < classifications.shape[0]):
-            classifications = classifications.groupby(['user_name'], group_keys=False).apply(FILTER_TYPES[filter])
-        data = [unflatten_data(c) for cdx, c in classifications.iterrows()]
-        user_ids = [c.user_id for cdx, c in classifications.iterrows()]
-        reduction = reducers.reducers[reducer_name](data, user_id=user_ids, **keywords)
-        if isinstance(reduction, list):
-            for r in reduction:
-                reduced_data_list.append(OrderedDict([
-                    ('subject_id', subject),
-                    ('workflow_id', workflow_id),
-                    ('task', task),
-                    ('reducer', reducer_name),
-                    ('data', r)
-                ]))
-        else:
+    classifications = classifications.drop_duplicates()
+    unique_users = classifications['user_name'].unique().shape[0]
+    if (filter in FILTER_TYPES) and (unique_users < classifications.shape[0]):
+        classifications = classifications.groupby(['user_name'], group_keys=False).apply(FILTER_TYPES[filter])
+    data = [unflatten_data(c) for cdx, c in classifications.iterrows()]
+    user_ids = [c.user_id for cdx, c in classifications.iterrows()]
+    reduction = reducers.reducers[reducer_name](data, user_id=user_ids, **keywords)
+    if isinstance(reduction, list):
+        for r in reduction:
             reduced_data_list.append(OrderedDict([
                 ('subject_id', subject),
                 ('workflow_id', workflow_id),
                 ('task', task),
                 ('reducer', reducer_name),
-                ('data', reduction)
+                ('data', r)
             ]))
+    else:
+        reduced_data_list.append(OrderedDict([
+            ('subject_id', subject),
+            ('workflow_id', workflow_id),
+            ('task', task),
+            ('reducer', reducer_name),
+            ('data', reduction)
+        ]))
     return reduced_data_list
 
 
@@ -125,8 +121,6 @@ def reduce_csv(
     sdx = 0
 
     apply_keywords = {
-        'extracted': extracted,
-        'tasks': tasks,
         'reducer_name': reducer_name,
         'workflow_id': workflow_id,
         'filter': filter,
@@ -139,7 +133,8 @@ def reduce_csv(
         ' ', progressbar.Bar(),
         ' ', progressbar.ETA()
     ]
-    pbar = progressbar.ProgressBar(widgets=widgets, max_value=len(subjects))
+    number_of_rows = len(subjects) * len(tasks)
+    pbar = progressbar.ProgressBar(widgets=widgets, max_value=number_of_rows)
 
     def callback(reduced_data_list):
         nonlocal reduced_data
@@ -160,13 +155,21 @@ def reduce_csv(
     if cpu_count > 1:
         pool = Pool(cpu_count)
         for subject in subjects:
-            pool.apply_async(reduce_subject, args=(subject,), kwds=apply_keywords, callback=callback)
+            idx = extracted.subject_id == subject
+            for task in tasks:
+                jdx = extracted.task == task
+                classifications = extracted[idx & jdx]
+                pool.apply_async(reduce_subject, args=(subject, classifications, task), kwds=apply_keywords, callback=callback)
         pool.close()
         pool.join()
     else:
         for subject in subjects:
-            reduced_data_list = reduce_subject(subject, **apply_keywords)
-            callback(reduced_data_list)
+            idx = extracted.subject_id == subject
+            for task in tasks:
+                jdx = extracted.task == task
+                classifications = extracted[idx & jdx]
+                reduced_data_list = reduce_subject(subject, classifications, task, **apply_keywords)
+                callback(reduced_data_list)
     pbar.finish()
 
     if stream:
