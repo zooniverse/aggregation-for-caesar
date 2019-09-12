@@ -84,7 +84,7 @@ def reduce_csv(
     output_dir=os.path.abspath('.'),
     order=False,
     stream=False,
-    cpu_count=os.cpu_count()
+    cpu_count=1
 ):
     extracted_csv = get_file_instance(extracted_csv)
     with extracted_csv as extracted_csv_in:
