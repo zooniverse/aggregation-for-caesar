@@ -86,6 +86,10 @@ mock_question_extractor.side_effect = [
     {'blue': 1, 'green': 1},
     {'no': 1},
     {},
+    {'yes': 1},
+    {'blue': 1, 'green': 1},
+    {'no': 1},
+    {},
 ]
 
 mock_shape_extractor = MagicMock()
@@ -154,12 +158,28 @@ class TestExtractCSV(unittest.TestCase):
         '''Test one (object) extractor makes one csv file'''
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_two_tasks,
-            self.config_yaml_question
+            self.config_yaml_question,
+            cpu_count=1
         )
         output_path = os.path.join(os.getcwd(), 'question_extractor_extractions.csv')
         self.assertEqual(output_file_names, [output_path])
         result_dataframe = extract_panoptes_csv.flatten_data.return_values[0]
         assert_frame_equal(result_dataframe, self.extracts_dataframe_question, check_like=True)
+        mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
+
+    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
+    @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
+    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.flatten_data', CaptureValues(extract_panoptes_csv.flatten_data))
+    def test_extract_csv_object_n2(self, mock_to_csv, mock_pbar):
+        '''Test one (object) extractor makes one csv file with cpu_count==2'''
+        output_file_names = extract_panoptes_csv.extract_csv(
+            self.classification_data_dump_two_tasks,
+            self.config_yaml_question,
+            cpu_count=2
+        )
+        output_path = os.path.join(os.getcwd(), 'question_extractor_extractions.csv')
+        self.assertEqual(output_file_names, [output_path])
         mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
 
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.progressbar.ProgressBar')
@@ -171,7 +191,8 @@ class TestExtractCSV(unittest.TestCase):
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_one_task,
             self.config_yaml_survey,
-            order=True
+            order=True,
+            cpu_count=1
         )
         output_path = os.path.join(os.getcwd(), 'survey_extractor_extractions.csv')
         self.assertEqual(output_file_names, [output_path])
@@ -187,7 +208,8 @@ class TestExtractCSV(unittest.TestCase):
         '''Test two (object) extractors makes two csv files'''
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_two_tasks,
-            self.config_yaml_two
+            self.config_yaml_two,
+            cpu_count=1
         )
         output_path_T0 = os.path.join(os.getcwd(), 'shape_extractor_point_extractions.csv')
         output_path_T1 = os.path.join(os.getcwd(), 'shape_extractor_rectangle_extractions.csv')
@@ -215,7 +237,8 @@ class TestExtractCSV(unittest.TestCase):
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_one_task,
             self.config_yaml_fail,
-            verbose=True
+            verbose=True,
+            cpu_count=1
         )
         mock_print.assert_any_call('Incorrectly formatted annotation')
         self.assertEqual(output_file_names, [])
@@ -229,7 +252,8 @@ class TestExtractCSV(unittest.TestCase):
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_one_task,
             self.config_yaml_fail,
-            verbose=False
+            verbose=False,
+            cpu_count=1
         )
         mock_print.assert_not_called()
         self.assertEqual(output_file_names, [])
