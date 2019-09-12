@@ -1,4 +1,5 @@
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
+from multiprocessing import Pool
 import copy
 import json
 import io
@@ -27,13 +28,61 @@ def get_major_version(s):
     return s.split('.')[0]
 
 
+def extract_classification(
+    classification_by_task,
+    classification_info,
+    extractor_key,
+    extractor_name,
+    keyword,
+    verbose
+):
+    try:
+        extract = extractors.extractors[extractor_key](classification_by_task, **keyword)
+        new_extract_row = []
+        if isinstance(extract, list):
+            for e in extract:
+                new_extract_row.append(OrderedDict([
+                    ('classification_id', classification_info['classification_id']),
+                    ('user_name', classification_info['user_name']),
+                    ('user_id', classification_info['user_id']),
+                    ('workflow_id', classification_info['workflow_id']),
+                    ('task', keyword['task']),
+                    ('created_at', classification_info['created_at']),
+                    ('subject_id', classification_info['subject_ids']),
+                    ('extractor', extractor_name),
+                    ('data', e)
+                ]))
+        else:
+            new_extract_row.append(OrderedDict([
+                ('classification_id', classification_info['classification_id']),
+                ('user_name', classification_info['user_name']),
+                ('user_id', classification_info['user_id']),
+                ('workflow_id', classification_info['workflow_id']),
+                ('task', keyword['task']),
+                ('created_at', classification_info['created_at']),
+                ('subject_id', classification_info['subject_ids']),
+                ('extractor', extractor_name),
+                ('data', extract)
+            ]))
+    except:
+        new_extract_row = None
+        if verbose:
+            print()
+            print('Incorrectly formatted annotation')
+            print(classification_info)
+            print(extractor_key)
+            print(classification_by_task)
+    return extractor_name, new_extract_row
+
+
 def extract_csv(
     classification_csv,
     config,
     output_dir=os.path.abspath('.'),
     output_name='extractions',
     order=False,
-    verbose=False
+    verbose=False,
+    cpu_count=1
 ):
     config = get_file_instance(config)
     with config as config_in:
@@ -42,20 +91,9 @@ def extract_csv(
     extractor_config = config_yaml['extractor_config']
     workflow_id = config_yaml['workflow_id']
     version = config_yaml['workflow_version']
+    number_of_extractors = sum([len(value) for key, value in extractor_config.items()])
 
-    blank_extracted_data = OrderedDict([
-        ('classification_id', []),
-        ('user_name', []),
-        ('user_id', []),
-        ('workflow_id', []),
-        ('task', []),
-        ('created_at', []),
-        ('subject_id', []),
-        ('extractor', []),
-        ('data', [])
-    ])
-
-    extracted_data = {}
+    extracted_data = defaultdict(list)
 
     classification_csv = get_file_instance(classification_csv)
     with classification_csv as classification_csv_in:
@@ -77,53 +115,83 @@ def extract_csv(
         ' ', progressbar.Bar(),
         ' ', progressbar.ETA()
     ]
-    pbar = progressbar.ProgressBar(widgets=widgets, max_value=(wdx & vdx).sum())
+    max_pbar = (wdx & vdx).sum() * number_of_extractors
+    pbar = progressbar.ProgressBar(widgets=widgets, max_value=max_pbar)
     counter = 0
-    pbar.start()
-    for cdx, classification in classifications[wdx & vdx].iterrows():
-        classification_by_task = annotation_by_task({'annotations': json.loads(classification.annotations)})
-        for extractor_name, keywords in extractor_config.items():
-            extractor_key = extractor_name
-            if 'shape_extractor' in extractor_name:
-                extractor_key = 'shape_extractor'
-            for keyword in keywords:
-                if extractor_key in extractors.extractors:
-                    try:
-                        extract = extractors.extractors[extractor_key](copy.deepcopy(classification_by_task), **keyword)
-                    except:
-                        if verbose:
-                            print()
-                            print('Incorrectly formatted annotation')
-                            print(classification)
-                            print(extractor_key)
-                            print(classification_by_task)
-                            print(keyword)
-                        continue
-                    if isinstance(extract, list):
-                        for e in extract:
-                            extracted_data.setdefault(extractor_name, copy.deepcopy(blank_extracted_data))
-                            extracted_data[extractor_name]['classification_id'].append(classification.classification_id)
-                            extracted_data[extractor_name]['user_name'].append(classification.user_name)
-                            extracted_data[extractor_name]['user_id'].append(classification.user_id)
-                            extracted_data[extractor_name]['workflow_id'].append(classification.workflow_id)
-                            extracted_data[extractor_name]['task'].append(keyword['task'])
-                            extracted_data[extractor_name]['created_at'].append(classification.created_at)
-                            extracted_data[extractor_name]['subject_id'].append(classification.subject_ids)
-                            extracted_data[extractor_name]['extractor'].append(extractor_name)
-                            extracted_data[extractor_name]['data'].append(e)
-                    else:
-                        extracted_data.setdefault(extractor_name, copy.deepcopy(blank_extracted_data))
-                        extracted_data[extractor_name]['classification_id'].append(classification.classification_id)
-                        extracted_data[extractor_name]['user_name'].append(classification.user_name)
-                        extracted_data[extractor_name]['user_id'].append(classification.user_id)
-                        extracted_data[extractor_name]['workflow_id'].append(classification.workflow_id)
-                        extracted_data[extractor_name]['task'].append(keyword['task'])
-                        extracted_data[extractor_name]['created_at'].append(classification.created_at)
-                        extracted_data[extractor_name]['subject_id'].append(classification.subject_ids)
-                        extracted_data[extractor_name]['extractor'].append(extractor_name)
-                        extracted_data[extractor_name]['data'].append(extract)
+
+    def callback(name_with_row):
+        nonlocal extracted_data
+        nonlocal counter
+        nonlocal pbar
+        extractor_name, new_extract_row = name_with_row
+        if new_extract_row is not None:
+            extracted_data[extractor_name] += new_extract_row
         counter += 1
         pbar.update(counter)
+
+    pbar.start()
+    if cpu_count > 1:
+        pool = Pool(cpu_count)
+        for cdx, classification in classifications[wdx & vdx].iterrows():
+            classification_by_task = annotation_by_task({'annotations': json.loads(classification.annotations)})
+            classification_info = {
+                'classification_id': classification.classification_id,
+                'user_name': classification.user_name,
+                'user_id': classification.user_id,
+                'workflow_id': classification.workflow_id,
+                'created_at': classification.created_at,
+                'subject_ids': classification.subject_ids
+            }
+            for extractor_name, keywords in extractor_config.items():
+                extractor_key = extractor_name
+                if 'shape_extractor' in extractor_name:
+                    extractor_key = 'shape_extractor'
+                for keyword in keywords:
+                    if extractor_key in extractors.extractors:
+                        pool.apply_async(
+                            extract_classification,
+                            args=(
+                                copy.deepcopy(classification_by_task),
+                                classification_info,
+                                extractor_key,
+                                extractor_name,
+                                keyword,
+                                verbose
+                            ),
+                            callback=callback
+                        )
+                    else:
+                        callback((None, None))
+        pool.close()
+        pool.join()
+    else:
+        for cdx, classification in classifications[wdx & vdx].iterrows():
+            classification_by_task = annotation_by_task({'annotations': json.loads(classification.annotations)})
+            classification_info = {
+                'classification_id': classification.classification_id,
+                'user_name': classification.user_name,
+                'user_id': classification.user_id,
+                'workflow_id': classification.workflow_id,
+                'created_at': classification.created_at,
+                'subject_ids': classification.subject_ids
+            }
+            for extractor_name, keywords in extractor_config.items():
+                extractor_key = extractor_name
+                if 'shape_extractor' in extractor_name:
+                    extractor_key = 'shape_extractor'
+                for keyword in keywords:
+                    if extractor_key in extractors.extractors:
+                        name_with_row = extract_classification(
+                            copy.deepcopy(classification_by_task),
+                            classification_info,
+                            extractor_key,
+                            extractor_name,
+                            keyword,
+                            verbose
+                        )
+                        callback(name_with_row)
+                    else:
+                        callback((None, None))
     pbar.finish()
 
     # create one flat csv file for each extractor used
@@ -132,7 +200,8 @@ def extract_csv(
     for extractor_name, data in extracted_data.items():
         output_path = os.path.join(output_dir, '{0}_{1}.csv'.format(extractor_name, output_base_name))
         output_files.append(output_path)
-        flat_extract = flatten_data(data)
+        non_flat_extract = pandas.DataFrame(data)
+        flat_extract = flatten_data(non_flat_extract)
         if order:
             flat_extract = order_columns(flat_extract, front=['choice'])
         flat_extract.to_csv(output_path, index=False, encoding='utf-8')

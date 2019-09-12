@@ -167,6 +167,13 @@ def main(args=None):
         action="store_true"
     )
     extract_options.add_argument(
+        "-c",
+        "--cpu_count",
+        help="How many cpu cores to use during extraction",
+        type=int,
+        default=1
+    )
+    extract_options.add_argument(
         "-vv",
         "--verbose",
         help="increase output verbosity",
@@ -273,7 +280,8 @@ def main(args=None):
             output_name=args.output,
             output_dir=args.dir,
             order=args.order,
-            verbose=args.verbose
+            verbose=args.verbose,
+            cpu_count=args.cpu_count
         )
     elif args.subparser == 'reduce':
         panoptes_aggregation.scripts.reduce_csv(
