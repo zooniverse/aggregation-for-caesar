@@ -39,7 +39,7 @@ pip install panoptes_aggregation[gui]
 If your are using the anaconda version of python some of the dependencies should be installed using the `conda` package manager before installing `panoptes_aggregation`:
 ```bash
 conda install -c conda-forge python-levenshtein hdbscan
-conda install -c ananconda wxpython psutil
+conda install wxpython psutil
 ```
 
 #### Mac Anaconda build
