@@ -59,7 +59,8 @@ setup(
             'panoptes-client',
             'pyyaml',
             'requests',
-            'gunicorn'
+            'gunicorn',
+            'sentry-sdk[flask]'
         ],
         'doc': [
             'recommonmark',

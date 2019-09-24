@@ -2,6 +2,8 @@ try:
     from flask import jsonify, request, Flask
     from flask.json import JSONEncoder
     from panoptes_aggregation import panoptes
+    import sentry_sdk
+    from sentry_sdk.integrations.flask import FlaskIntegration
 except ImportError:  # pragma: no cover
     print('You must install `flask` to use panoptes_aggregation.routes')  # pragma: no cover
     raise  # pragma: no cover
@@ -51,6 +53,15 @@ def request_wrapper(name):
 
 
 def make_application():
+    # setup sentry error reporting with flask integration
+    sentry_key = getenv('SENTRY_KEY', )
+    sentry_project_id = getenv('SENTRY_PROJECT_ID', ),
+    sentry_dsn = "https://{}@sentry.io/{}".format(sentry_key, sentry_project_id)
+    sentry_sdk.init(
+        dsn=sentry_dsn,
+        integrations=[FlaskIntegration()]
+    )
+    # setup the flask app to server web requests
     application = Flask(__name__,
                         instance_relative_config=True,
                         static_url_path='',
