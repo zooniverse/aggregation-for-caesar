@@ -59,7 +59,8 @@ setup(
             'panoptes-client',
             'pyyaml',
             'requests',
-            'gunicorn'
+            'gunicorn',
+            'sentry-sdk[flask]'
         ],
         'doc': [
             'recommonmark',
@@ -71,7 +72,7 @@ setup(
             'nose',
             'coverage',
             'coveralls',
-            'flake8',
+            'flake8'
         ],
         'gui': [
             'Gooey'
