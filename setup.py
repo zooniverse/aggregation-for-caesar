@@ -73,6 +73,7 @@ setup(
             'coverage',
             'coveralls',
             'flake8',
+            'sentry-sdk[flask]'
         ],
         'gui': [
             'Gooey'

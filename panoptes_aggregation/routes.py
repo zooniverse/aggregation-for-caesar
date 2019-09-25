@@ -54,11 +54,9 @@ def request_wrapper(name):
 
 def make_application():
     # setup sentry error reporting with flask integration
-    sentry_key = getenv('SENTRY_KEY', )
-    sentry_project_id = getenv('SENTRY_PROJECT_ID', ),
-    sentry_dsn = "https://{}@sentry.io/{}".format(sentry_key, sentry_project_id)
+    # and the DSN being set via the SENTRY_DSN env var
+    # https://docs.sentry.io/error-reporting/configuration/?platform=python#dsn
     sentry_sdk.init(
-        dsn=sentry_dsn,
         integrations=[FlaskIntegration()]
     )
     # setup the flask app to server web requests
