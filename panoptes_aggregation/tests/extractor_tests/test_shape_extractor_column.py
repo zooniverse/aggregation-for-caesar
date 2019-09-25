@@ -98,3 +98,33 @@ TestShapeColumnOneTool = ExtractorTest(
         'tools': [0]
     }
 )
+
+classification_blank = {
+    'annotations': [
+        {
+            'task': 'T0',
+            'value': [
+                {
+                    'tool': 0,
+                    'frame': 0,
+                    'x': None,
+                    'width': None
+                }
+            ]
+        }
+    ]
+}
+
+expected_blank = {}
+
+TestShapeColumnBlank = ExtractorTest(
+    extractors.shape_extractor,
+    classification_blank,
+    expected_blank,
+    'Test shape column with blank classification',
+    kwargs={
+        'shape': 'column',
+        'task': 'T0',
+        'tools': [0]
+    }
+)
