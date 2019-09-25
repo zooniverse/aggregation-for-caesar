@@ -53,14 +53,14 @@ kwargs_extra_data = {
     'user_id': [
         1,
         2,
-        3,
+        None,
         4,
         5
     ],
     'relevant_reduction': [
         {'data': {'skill': 0.4}},
         {'data': {'skill': 0.8}},
-        {'data': {'skill': 0.1}},
+        None,
         {'data': {'skill': 0.3}},
         None
     ]
@@ -110,14 +110,14 @@ reduced_data = {
     'weighted_counts': [
         1.2000000000000002,
         1.2000000000000002,
-        1.3000000000000003
+        2.2
     ],
     'user_ids': [
         [1, 2],
         [1, 2],
-        [1, 2, 3]
+        [1, 2, None]
     ],
-    'max_weighted_count': 1.3000000000000003
+    'max_weighted_count': 2.2
 }
 
 
