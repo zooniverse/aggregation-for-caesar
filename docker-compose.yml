@@ -4,7 +4,7 @@ services:
     build:
       context: ./
     volumes:
-      - ./:/usr/src/aggregation
+      - ./panoptes_aggregation:/usr/src/aggregation/panoptes_aggregation
       - ~/.aws:/root/.aws
     environment:
       - AWS_REGION=${AWS_REGION}
