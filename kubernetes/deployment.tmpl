@@ -42,5 +42,10 @@ spec:
                 secretKeyRef:
                   name: aggregation-for-caesar-environment
                   key: MAST_PROD_TOKEN
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-for-caesar-environment
+                  key: SENTRY_DSN
           ports:
             - containerPort: 80
