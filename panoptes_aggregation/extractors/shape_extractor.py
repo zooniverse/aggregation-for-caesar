@@ -48,5 +48,9 @@ def shape_extractor(classification, **kwargs):
             if all(param in value for param in shape_params):
                 extract.setdefault(frame, {})
                 for param in shape_params:
-                    extract[frame].setdefault('{0}_{1}'.format(key, param), []).append(value[param])
+                    if value[param] is not None:
+                        extract[frame].setdefault('{0}_{1}'.format(key, param), []).append(value[param])
+                if len(extract[frame]) == 0:
+                    # if the frame is empty remove it
+                    del extract[frame]
     return extract
