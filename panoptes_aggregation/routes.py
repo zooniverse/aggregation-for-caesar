@@ -57,6 +57,7 @@ def make_application():
     # and the DSN being set via the SENTRY_DSN env var
     # https://docs.sentry.io/error-reporting/configuration/?platform=python#dsn
     sentry_sdk.init(
+        request_bodies='always',
         integrations=[FlaskIntegration()]
     )
     # setup the flask app to server web requests
