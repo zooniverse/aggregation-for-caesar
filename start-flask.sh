@@ -6,4 +6,4 @@ if ! [ -f endpoints.yml ]; then
 fi
 
 LISTEN_PORT=${LISTEN_PORT:=80}
-exec gunicorn -b 0.0.0.0:$LISTEN_PORT -w 4 -t 60 "panoptes_aggregation.routes:make_application()"
+exec newrelic-admin run-program gunicorn -b 0.0.0.0:$LISTEN_PORT -w 4 -t 60 "panoptes_aggregation.routes:make_application()"
