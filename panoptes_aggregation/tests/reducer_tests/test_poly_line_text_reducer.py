@@ -1260,11 +1260,10 @@ reduced_data_by_line = {
                 ['words', 'words', 'words', 'words', 'words'],
                 ['on', 'on', '', 'on', ''],
                 ['a', 'a', '', 'a', ''],
-                ['page', 'page', '', 'page', ''],
-                ['.', '.', '', '.', '']
+                ['page.', 'page.', '', 'page.', '']
             ],
             'number_views': 5,
-            'consensus_score': 3.4,
+            'consensus_score': 3.5,
             'gutter_label': 0,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
@@ -1307,11 +1306,10 @@ reduced_data_by_line = {
             ],
             'clusters_text': [
                 ['of', 'of', '', 'of'],
-                ['text', 'text', 'text', 'text'],
-                ['.', '.', '.', '.']
+                ['text.', 'text.', 'text.', 'text.']
             ],
             'number_views': 4,
-            'consensus_score': 3.6666666666666665,
+            'consensus_score': 3.5,
             'gutter_label': 1,
             'line_slope': -1.5696676279703352,
             'slope_label': 0,
@@ -1520,7 +1518,6 @@ reduced_data_min_word = {
                 ['words', 'words', 'words', 'words', 'words'],
                 ['', '', '', '', ''],
                 ['', '', '', '', ''],
-                ['', '', '', '', ''],
                 ['', '', '', '', '']
             ],
             'number_views': 5,
@@ -1567,8 +1564,7 @@ reduced_data_min_word = {
             ],
             'clusters_text': [
                 ['', '', '', ''],
-                ['text', 'text', 'text', 'text'],
-                ['.', '.', '.', '.']
+                ['text.', 'text.', 'text.', 'text.']
             ],
             'number_views': 4,
             'consensus_score': 4.0,

@@ -284,8 +284,7 @@ reduced_data = {
                 ['words', 'words', 'words'],
                 ['on', 'on', 'on'],
                 ['a', 'a', 'a'],
-                ['page', 'page', 'page'],
-                ['.', '.', '.']
+                ['page.', 'page.', 'page.']
             ],
             'clusters_x': [30.157958984375, 984.8629150390625],
             'clusters_y': [402.3798522949219, 395.2015686035156],
@@ -319,8 +318,7 @@ reduced_data = {
         {
             'clusters_text': [
                 ['of', 'of', 'of'],
-                ['text', 'text', 'text'],
-                ['.', '.', '.']
+                ['text.', 'text.', 'text.']
             ],
             'clusters_x': [1118.8565673828125, 1587.8343505859375],
             'clusters_y': [390.4161071777344, 373.6669006347656],
