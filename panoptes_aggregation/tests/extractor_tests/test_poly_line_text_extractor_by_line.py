@@ -72,6 +72,19 @@ classification = {
                         {"value": "This is vertical text"}
                     ],
                     "tool_label": "Tool name"
+                },
+                {
+                    "tool": 0,
+                    "frame": 1,
+                    "closed": True,
+                    "points": [
+                        {"x": 800, "y": 900},
+                        {"x": 800, "y": 900}
+                    ],
+                    "details": [
+                        {"value": "This line has 0 length"}
+                    ],
+                    "tool_label": "Tool name"
                 }
             ]
         }
@@ -135,6 +148,10 @@ expected = {
                     [
                         600,
                         600
+                    ],
+                    [
+                        800,
+                        800
                     ]
                 ],
             'y':
@@ -146,16 +163,22 @@ expected = {
                     [
                         0,
                         100
+                    ],
+                    [
+                        900,
+                        900
                     ]
                 ]
         },
         'text': [
             ['know the prospects on the next page'],
-            ['This is vertical text']
+            ['This is vertical text'],
+            ['This line has 0 length']
         ],
         'slope': [
             1.157333,
-            90
+            90,
+            0
         ],
         'gold_standard': True
     }
