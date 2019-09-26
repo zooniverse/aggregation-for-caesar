@@ -60,7 +60,8 @@ setup(
             'pyyaml',
             'requests',
             'gunicorn',
-            'sentry-sdk[flask]'
+            'sentry-sdk[flask]',
+            'newrelic'
         ],
         'doc': [
             'recommonmark',

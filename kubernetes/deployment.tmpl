@@ -47,5 +47,12 @@ spec:
                 secretKeyRef:
                   name: aggregation-for-caesar-environment
                   key: SENTRY_DSN
+            - name: NEW_RELIC_LICENSE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-for-caesar-environment
+                  key: NEW_RELIC_LICENSE_KEY
+            - name: NEW_RELIC_APP_NAME
+              value: 'Aggregation Caesar'
           ports:
             - containerPort: 80
