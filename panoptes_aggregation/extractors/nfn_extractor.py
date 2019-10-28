@@ -45,7 +45,7 @@ class ClassificationParser(object):
     def get_basic(self, label):
         if label in self.subject_metadata:
             return self.subject_metadata[label]
-        elif label in self.params:
+        else:
             task = self.params[label]
             if task in self.tasks:
                 value = self.tasks[task]
@@ -55,8 +55,6 @@ class ClassificationParser(object):
                     return value
             else:
                 return None
-        else:
-            return None
 
 
 def check_decade(parser):
