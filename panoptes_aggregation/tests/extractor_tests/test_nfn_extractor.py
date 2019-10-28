@@ -138,7 +138,7 @@ classification_bad_year = {
     "created_at": "2019-05-22T06:28:13.667Z",
 }
 
-expected_bad_year = {
+expected_no_year = {
     "workflow": "herbarium",
     "time": "lunchbreak"
 }
@@ -146,7 +146,15 @@ expected_bad_year = {
 TestNfNBadYear = ExtractorTest(
     extractors.nfn_extractor,
     classification_bad_year,
-    expected_bad_year,
+    expected_no_year,
     'Test NfN bare integer year annotation at lunchtime with porly formatted year',
     kwargs={'year': 'T10', 'workflow': 'herbarium'}
+)
+
+TestNfNNoYear = ExtractorTest(
+    extractors.nfn_extractor,
+    classification_1,
+    expected_no_year,
+    'Test NfN bare integer year annotation at lunchtime with no year keyword',
+    kwargs={'workflow': 'herbarium'}
 )
