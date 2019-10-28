@@ -62,7 +62,7 @@ class ClassificationParser(object):
 def check_decade(parser):
     if 'year' in parser.params:
         year = parser.get_basic('year')
-        if year:
+        if year and len(str(year)) == 4:
             return "%s0s" % str(year)[-2]
         else:
             return None

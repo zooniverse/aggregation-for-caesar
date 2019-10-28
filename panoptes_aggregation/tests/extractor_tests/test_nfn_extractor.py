@@ -121,3 +121,32 @@ TestNfNThree = ExtractorTest(
     'Test NfN bare integer year annotation at lunchtime.',
     kwargs={'year': 'T10', 'workflow': 'herbarium'}
 )
+
+classification_bad_year = {
+    "annotations": [
+        {
+            "task": "T10",
+            "value": "n"
+        }
+    ],
+    "metadata": {
+        "utc_offset": "21600",
+    },
+    "subject": {
+        "metadata": {}
+    },
+    "created_at": "2019-05-22T06:28:13.667Z",
+}
+
+expected_bad_year = {
+    "workflow": "herbarium",
+    "time": "lunchbreak"
+}
+
+TestNfNBadYear = ExtractorTest(
+    extractors.nfn_extractor,
+    classification_bad_year,
+    expected_bad_year,
+    'Test NfN bare integer year annotation at lunchtime with porly formatted year',
+    kwargs={'year': 'T10', 'workflow': 'herbarium'}
+)
