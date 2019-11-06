@@ -76,7 +76,7 @@ setup(
             'flake8'
         ],
         'gui': [
-            'Gooey'
+            'Gooey==1.0.3'
         ]
     },
     install_requires=[
