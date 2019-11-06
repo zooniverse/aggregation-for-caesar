@@ -18,6 +18,7 @@ if sys.platform == 'win32':
 
 try:
     import gooey
+    import gooey.gui.components.console
 except ImportError:
     raise ImportError('The GUI component is not installed, reinstall with `pip install -U panoptes_aggregation[gui]`')
 
