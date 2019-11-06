@@ -639,3 +639,54 @@ TestOpticsLTReducerWithDolarSign = ReducerTest(
     okwargs={'min_samples': 'auto'},
     network_kwargs=kwargs_extra_data_with_dolar_sign
 )
+
+# this is a real classification that happened on ASM
+extracted_data_no_length = [
+    {
+        'frame5': {
+            'points': {
+                'x': [
+                    [620.4314017895185, 620.4314017895185]
+                ],
+                'y': [
+                    [142.3093310609288, 142.3093310609288]
+                ]
+            },
+            'text': [
+                ['[ no content]']
+            ],
+            'slope': [0.0],
+            'gold_standard': False
+        }
+    }
+]
+
+kwargs_extra_data_no_length = {
+    'user_id': [
+        1
+    ]
+}
+
+processed_data_no_length = {
+    'frame5': {
+        'X': [],
+        'data': []
+    }
+}
+
+reduced_data_no_length = {'frame5': []}
+
+TestOpticsLTReducerNoLengthLine = ReducerTest(
+    optics_line_text_reducer,
+    process_data,
+    extracted_data_no_length,
+    processed_data_no_length,
+    reduced_data_no_length,
+    'Text optics line-text reducer with a zero length line',
+    okwargs={
+        'min_samples': 'auto',
+        'angle_eps': 30,
+        'gutter_eps': 150
+    },
+    network_kwargs=kwargs_extra_data_no_length
+)
