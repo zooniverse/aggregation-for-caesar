@@ -1736,3 +1736,68 @@ TestPLTReducerWithMinWordCount = ReducerTest(
     },
     network_kwargs=kwargs_extra_data
 )
+
+# this is a real classification that happened on ASM
+extracted_data_no_length = [
+    {
+        'frame5': {
+            'points': {
+                'x': [
+                    [620.4314017895185, 620.4314017895185]
+                ],
+                'y': [
+                    [142.3093310609288, 142.3093310609288]
+                ]
+            },
+            'text': [
+                ['[ no content]']
+            ],
+            'slope': [0.0],
+            'gold_standard': False
+        }
+    }
+]
+
+kwargs_extra_data_no_length = {
+    'user_id': [
+        1
+    ]
+}
+
+processed_data_no_length = {
+    'frame5': {
+        'data_index': [0],
+        'gold_standard': [False],
+        'slope': [0.0],
+        'text': [['[ no content]']],
+        'x': [[620.4314017895185, 620.4314017895185]],
+        'y': [[142.3093310609288, 142.3093310609288]]
+    }
+}
+
+reduced_data_no_length = {'frame5': []}
+
+TestPolyLTReducerNoLengthLine = ReducerTest(
+    poly_line_text_reducer,
+    process_data,
+    extracted_data_no_length,
+    processed_data_no_length,
+    reduced_data_no_length,
+    'Text poly-line-text reducer with a zero length line',
+    okwargs={
+        'metric': 'euclidean',
+        'gutter_tol': 0
+    },
+    pkwargs={
+        'process_by_line': True
+    },
+    kwargs={
+        'eps_slope': 25,
+        'eps_line': 40,
+        'eps_word': 50,
+        'min_samples': 1,
+        'dot_freq': 'line',
+        'min_word_count': 1
+    },
+    network_kwargs=kwargs_extra_data_no_length
+)
