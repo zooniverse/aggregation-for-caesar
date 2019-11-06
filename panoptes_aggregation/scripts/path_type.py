@@ -29,7 +29,7 @@ class PathType(object):
             if not os.path.isfile(string):
                 raise err("path is not a file: '{0}'".format(string))
         elif self._type == 'symlink':
-            if not os.path.symlink(string):
+            if not os.path.islink(string):
                 raise err("path is not a symlink: '{0}'".format(string))
         elif self._type == 'dir':
             if not os.path.isdir(string):
