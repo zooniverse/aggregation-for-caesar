@@ -111,3 +111,6 @@ dist_installer/
 
 # endpoints file
 endpoints.yml
+
+.vscode/
+.noseids
