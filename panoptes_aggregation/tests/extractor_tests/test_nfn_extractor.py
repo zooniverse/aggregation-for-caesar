@@ -121,3 +121,108 @@ TestNfNThree = ExtractorTest(
     'Test NfN bare integer year annotation at lunchtime.',
     kwargs={'year': 'T10', 'workflow': 'herbarium'}
 )
+
+classification_bad_year = {
+    "annotations": [
+        {
+            "task": "T10",
+            "value": "n"
+        }
+    ],
+    "metadata": {
+        "utc_offset": "21600",
+    },
+    "subject": {
+        "metadata": {}
+    },
+    "created_at": "2019-05-22T06:28:13.667Z",
+}
+
+expected_no_year = {
+    "workflow": "herbarium",
+    "time": "lunchbreak"
+}
+
+TestNfNBadYear = ExtractorTest(
+    extractors.nfn_extractor,
+    classification_bad_year,
+    expected_no_year,
+    'Test NfN bare integer year annotation at lunchtime with porly formatted year',
+    kwargs={'year': 'T10', 'workflow': 'herbarium'}
+)
+
+TestNfNNoYear = ExtractorTest(
+    extractors.nfn_extractor,
+    classification_1,
+    expected_no_year,
+    'Test NfN bare integer year annotation at lunchtime with no year keyword',
+    kwargs={'workflow': 'herbarium'}
+)
+
+classification_earlybird = {
+    "annotations": [
+        {
+            "task": "T10",
+            "value": 1976
+        }
+    ],
+    "metadata": {
+        "utc_offset": "21600",
+    },
+    "subject": {
+        "metadata": {}
+    },
+    "created_at": "2019-05-22T22:28:13.667Z",
+}
+
+expected_earlybird = {
+    "workflow": "herbarium",
+    "decade": "70s",
+    "time": "earlybird"
+}
+
+TestNfNEarlybird = ExtractorTest(
+    extractors.nfn_extractor,
+    classification_earlybird,
+    expected_earlybird,
+    'Test NfN bare integer year annotation at earlybird ',
+    kwargs={'year': 'T10', 'workflow': 'herbarium'}
+)
+
+classification_dinnertime = {
+    "annotations": [
+        {
+            "task": "T10",
+            "value": 1976
+        }
+    ],
+    "metadata": {
+        "utc_offset": "21600",
+    },
+    "subject": {
+        "metadata": {}
+    },
+    "created_at": "2019-05-22T10:28:13.667Z",
+}
+
+expected_dinnertime = {
+    "workflow": "herbarium",
+    "decade": "70s",
+    "time": "dinnertime"
+}
+
+TestNfNDinnertime = ExtractorTest(
+    extractors.nfn_extractor,
+    classification_dinnertime,
+    expected_dinnertime,
+    'Test NfN bare integer year annotation at dinnertime',
+    kwargs={'year': 'T10', 'workflow': 'herbarium'}
+)
+
+TestNfNNotInMetadataOrParams = ExtractorTest(
+    extractors.nfn_extractor,
+    classification_dinnertime,
+    expected_dinnertime,
+    'Test NfN bare integer year annotation at dinnertime with no state info in metadata',
+    kwargs={'year': 'T10', 'workflow': 'herbarium', 'state': 'metadata'}
+)
