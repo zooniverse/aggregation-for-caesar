@@ -55,44 +55,42 @@ setup(
     include_package_data=True,
     extras_require={
         'online': [
-            'flask',
-            'panoptes-client',
-            'pyyaml',
-            'requests',
-            'gunicorn',
-            'sentry-sdk[flask]',
-            'newrelic'
+            'flask==1.1.1',
+            'panoptes-client==1.1.1',
+            'requests==2.22.0',
+            'gunicorn==20.0.4',
+            'sentry-sdk[flask]==0.13.5',
+            'newrelic==5.4.0.132'
         ],
         'doc': [
-            'recommonmark',
+            'recommonmark==0.6.0',
             'sphinx==2.2.1',
-            'sphinxcontrib-httpdomain',
-            'sphinx_rtd_theme'
+            'sphinxcontrib-httpdomain==1.7.0',
+            'sphinx_rtd_theme==0.4.3'
         ],
         'test': [
-            'nose',
-            'coverage',
-            'coveralls',
-            'flake8'
+            'nose==1.3.7',
+            'coverage==4.5.4',
+            'coveralls==1.9.2',
+            'flake8==3.7.9'
         ],
         'gui': [
             'Gooey==1.0.3'
         ]
     },
     install_requires=[
-        'beautifulsoup4',
+        'beautifulsoup4==4.8.1',
         'collatex==2.2',
-        'hdbscan',
-        'lxml',
+        'hdbscan==0.8.24',
+        'lxml==4.4.2',
         'numpy==1.17.3',
-        'nose',
         'pandas==0.25.3',
-        'progressbar2',
-        'python-levenshtein',
-        'python-slugify',
-        'pyyaml',
+        'progressbar2==3.47.0',
+        'python-levenshtein==0.12.0',
+        'python-slugify==4.0.0',
+        'pyyaml==5.2',
         'scikit-learn==0.21.3',
-        'scipy>=1.1.0',
-        'werkzeug'
+        'scipy==1.3.3',
+        'werkzeug==0.16.0'
     ]
 )
