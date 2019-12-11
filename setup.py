@@ -64,7 +64,7 @@ setup(
         ],
         'doc': [
             'recommonmark==0.6.0',
-            'sphinx==2.2.1',
+            'sphinx==2.2.2',
             'sphinxcontrib-httpdomain==1.7.0',
             'sphinx_rtd_theme==0.4.3'
         ],
@@ -83,7 +83,7 @@ setup(
         'collatex==2.2',
         'hdbscan==0.8.24',
         'lxml==4.4.2',
-        'numpy==1.17.3',
+        'numpy==1.17.4',
         'pandas==0.25.3',
         'progressbar2==3.47.0',
         'python-levenshtein==0.12.0',
