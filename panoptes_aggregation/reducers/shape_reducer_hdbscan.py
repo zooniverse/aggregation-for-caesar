@@ -4,13 +4,13 @@ Shape Reducer HDBSCAN
 This module provides functions to cluster shapes extracted with
 :mod:`panoptes_aggregation.extractors.shape_extractor`.
 '''
-import numpy as np
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
 from ..shape_tools import SHAPE_LUT
 from .shape_process_data import process_data, DEFAULTS_PROCESS
 from .shape_metric import get_shape_metric_and_avg
+import numpy as np
 from hdbscan import HDBSCAN
 
 DEFAULTS = {

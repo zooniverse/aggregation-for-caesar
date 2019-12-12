@@ -165,7 +165,7 @@ class TextOpticsTextUtils(unittest.TestCase):
         input = [np.nan, 1, 2, 3, np.nan]
         expected = [None, 1, 2, 3, None]
         result = optics_text_utils.remove_nans(input)
-        self.assertEquals(result, expected)
+        self.assertEqual(result, expected)
 
 
 if __name__ == '__main__':

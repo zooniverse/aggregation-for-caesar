@@ -4,7 +4,7 @@ Panoptes Userify
 This module provides a function to Fetch specific information from panoptes
 about all users whose ids appear in the provided object.
 '''
-from collections import Iterable
+from collections.abc import Iterable
 from json import dumps as jsonify
 from os import getenv
 from panoptes_client import Panoptes, User

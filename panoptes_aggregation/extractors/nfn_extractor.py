@@ -6,7 +6,7 @@ annotation for use in their Field Book.
 '''
 from .extractor_wrapper import extractor_wrapper
 
-import collections
+import collections.abc
 from dateutil.parser import parse as dateparse
 from datetime import timedelta
 
@@ -28,7 +28,7 @@ class ClassificationParser(object):
 
     def iterable(self, arg):
         return (
-            isinstance(arg, collections.Iterable)
+            isinstance(arg, collections.abc.Iterable)
             and not isinstance(arg, str)
         )
 

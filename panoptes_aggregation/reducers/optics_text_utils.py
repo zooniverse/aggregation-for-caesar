@@ -27,7 +27,7 @@ def strip_tags(s):
     clean_s : string
         The cleaned string
     '''
-    no_brackets = re.sub('[\[].*?[\]]', '', s)  # noqa: W605
+    no_brackets = re.sub(r'[\[].*?[\]]', '', s)  # noqa: W605
     unify_space = ' '.join(no_brackets.split())
     return unify_space
 
