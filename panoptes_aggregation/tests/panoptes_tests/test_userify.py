@@ -1,7 +1,7 @@
 from importlib import import_module
 
 from unittest.mock import MagicMock, PropertyMock, Mock, patch
-from nose.tools import assert_equals, assert_raises, assert_count_equal
+from nose.tools import assert_equal, assert_raises, assert_count_equal
 from panoptes_client import Panoptes, User
 import requests
 
@@ -36,18 +36,18 @@ def test_userify():
     })
 
     # doesn't choke if nothing to do
-    assert_equals(panoptes.userify({}, {'foo': 'bar'}), '{"foo": "bar"}')
-    assert_equals(panoptes.userify({'login': None}, {'foo': 'bar'}), '{"foo": "bar"}')
-    assert_equals(panoptes.userify({}, {}), '{}')
-    assert_equals(panoptes.userify({'login': None}, {}), '{}')
+    assert_equal(panoptes.userify({}, {'foo': 'bar'}), '{"foo": "bar"}')
+    assert_equal(panoptes.userify({'login': None}, {'foo': 'bar'}), '{"foo": "bar"}')
+    assert_equal(panoptes.userify({}, {}), '{}')
+    assert_equal(panoptes.userify({'login': None}, {}), '{}')
 
     # fills out object correctly
     (User.find) = Mock(return_value=build_mock_user(id=3, login="login 3"))
-    assert_equals(panoptes.userify({'login': None}, {'user_id': 3}), '{"user_id": 3, "users": [{"id": 3, "login": "login 3"}]}')
+    assert_equal(panoptes.userify({'login': None}, {'user_id': 3}), '{"user_id": 3, "users": [{"id": 3, "login": "login 3"}]}')
 
     # forwards appropriately
     requests.post = MagicMock()
-    assert_equals(panoptes.userify({'login': None, 'destination': 'mockable'}, {'user_id': 3}), '{"user_id": 3, "users": [{"id": 3, "login": "login 3"}]}')
+    assert_equal(panoptes.userify({'login': None, 'destination': 'mockable'}, {'user_id': 3}), '{"user_id": 3, "users": [{"id": 3, "login": "login 3"}]}')
     (requests.post).assert_called_once()
 
 
@@ -92,10 +92,10 @@ def test_build_user_hash():
     mock_user = build_mock_user(id=1, login='login', display_name='display_name')
 
     # fetches the specified properties and puts them in a hash
-    assert_equals(panoptes._build_user_hash(mock_user, []), {'id': 1})
-    assert_equals(panoptes._build_user_hash(mock_user, ['login']), {'id': 1, 'login': 'login'})
-    assert_equals(panoptes._build_user_hash(mock_user, ['display_name']), {'id': 1, 'display_name': 'display_name'})
-    assert_equals(panoptes._build_user_hash(mock_user, ['login', 'display_name']), {'id': 1, 'login': 'login', 'display_name': 'display_name'})
+    assert_equal(panoptes._build_user_hash(mock_user, []), {'id': 1})
+    assert_equal(panoptes._build_user_hash(mock_user, ['login']), {'id': 1, 'login': 'login'})
+    assert_equal(panoptes._build_user_hash(mock_user, ['display_name']), {'id': 1, 'display_name': 'display_name'})
+    assert_equal(panoptes._build_user_hash(mock_user, ['login', 'display_name']), {'id': 1, 'login': 'login', 'display_name': 'display_name'})
 
 
 def test_retrieve_user():
@@ -108,15 +108,15 @@ def test_retrieve_user():
     # finds user by calling API
     User.find = Mock(return_value=mock_user1)
     found_user = panoptes._retrieve_user(1)
-    assert_equals(found_user, mock_user1)
-    assert_equals(found_user.id, 1)
+    assert_equal(found_user, mock_user1)
+    assert_equal(found_user.id, 1)
     (User.find).assert_called_once_with(1)
 
     # uses cached user object when possible instead of finding it again
     User.find = Mock(return_value=mock_user2)
     found_user = panoptes._retrieve_user(1)
-    assert_equals(found_user, mock_user1)
-    assert_equals(found_user.id, 1)
+    assert_equal(found_user, mock_user1)
+    assert_equal(found_user.id, 1)
     (User.find).assert_not_called()
 
 
@@ -145,32 +145,32 @@ def test_stuff_object():
     User.find = MagicMock(side_effect=user_find_side_effect)
 
     # doesn't crash on an empty object
-    assert_equals(panoptes._stuff_object({}, []), {})
-    assert_equals(panoptes._stuff_object({}, ['login']), {})
+    assert_equal(panoptes._stuff_object({}, []), {})
+    assert_equal(panoptes._stuff_object({}, ['login']), {})
 
     # maintains existing properties
-    assert_equals(panoptes._stuff_object({'foo': 'bar'}, ['login']), {'foo': 'bar'})
-    assert_equals(panoptes._stuff_object({'foo': 'bar'}, []), {'foo': 'bar'})
+    assert_equal(panoptes._stuff_object({'foo': 'bar'}, ['login']), {'foo': 'bar'})
+    assert_equal(panoptes._stuff_object({'foo': 'bar'}, []), {'foo': 'bar'})
 
     # builds a user even if no fields are requested
-    assert_equals(panoptes._stuff_object({'user_id': 3}, []), {'user_id': 3, 'users': [{'id': 3}]})
+    assert_equal(panoptes._stuff_object({'user_id': 3}, []), {'user_id': 3, 'users': [{'id': 3}]})
 
     # adds requested fields
-    assert_equals(panoptes._stuff_object({'user_id': 3}, ['login']), {'user_id': 3, 'users': [{'id': 3, 'login': 'login 3'}]})
-    assert_equals(panoptes._stuff_object({'user_id': 3}, ['display_name']), {'user_id': 3, 'users': [{'id': 3, 'display_name': 'display_name 3'}]})
-    assert_equals(panoptes._stuff_object({'user_id': 3}, ['login', 'display_name']), {'user_id': 3, 'users': [{'id': 3, 'display_name': 'display_name 3', 'login': 'login 3'}]})
+    assert_equal(panoptes._stuff_object({'user_id': 3}, ['login']), {'user_id': 3, 'users': [{'id': 3, 'login': 'login 3'}]})
+    assert_equal(panoptes._stuff_object({'user_id': 3}, ['display_name']), {'user_id': 3, 'users': [{'id': 3, 'display_name': 'display_name 3'}]})
+    assert_equal(panoptes._stuff_object({'user_id': 3}, ['login', 'display_name']), {'user_id': 3, 'users': [{'id': 3, 'display_name': 'display_name 3', 'login': 'login 3'}]})
 
     # finds fields in nested objects
-    assert_equals(panoptes._stuff_object({'foo': {'user_id': 3}}, ['login', 'display_name']), {'foo': {'user_id': 3, 'users': [{'id': 3, 'display_name': 'display_name 3', 'login': 'login 3'}]}})
+    assert_equal(panoptes._stuff_object({'foo': {'user_id': 3}}, ['login', 'display_name']), {'foo': {'user_id': 3, 'users': [{'id': 3, 'display_name': 'display_name 3', 'login': 'login 3'}]}})
 
     # fetches multiple users if user_ids
-    assert_equals(panoptes._stuff_object({'user_ids': [3, 4]}, []), {'user_ids': [3, 4], 'users': [{'id': 3}, {'id': 4}]})
+    assert_equal(panoptes._stuff_object({'user_ids': [3, 4]}, []), {'user_ids': [3, 4], 'users': [{'id': 3}, {'id': 4}]})
 
     # handles null user ids
-    assert_equals(panoptes._stuff_object({'user_ids': [3, None]}, []), {'user_ids': [3, None], 'users': [{'id': 3}]})
+    assert_equal(panoptes._stuff_object({'user_ids': [3, None]}, []), {'user_ids': [3, None], 'users': [{'id': 3}]})
 
     # finds fields at multiple levels
-    assert_equals(panoptes._stuff_object({'foo': {'user_id': 3}, 'user_id': 4}, []), {'foo': {'user_id': 3, 'users': [{'id': 3}]}, 'user_id': 4, 'users': [{'id': 4}]})
+    assert_equal(panoptes._stuff_object({'foo': {'user_id': 3}, 'user_id': 4}, []), {'foo': {'user_id': 3, 'users': [{'id': 3}]}, 'user_id': 4, 'users': [{'id': 4}]})
 
 
 def test_forward_contents():

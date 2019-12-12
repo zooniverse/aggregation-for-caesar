@@ -86,7 +86,7 @@ class TestTextUtils(unittest.TestCase):
         input = [0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 3]
         expected = [0, 1, 2, 3, 0, 1, 2, 3, 4, 0, 1, 2, 0]
         result = text_utils.extractor_index(input)
-        self.assertEquals(result, expected)
+        self.assertEqual(result, expected)
 
 
 if __name__ == '__main__':
