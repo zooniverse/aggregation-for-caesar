@@ -88,8 +88,8 @@ setup(
         'progressbar2==3.47.0',
         'python-levenshtein==0.12.0',
         'python-slugify==4.0.0',
-        'pyyaml==5.2',
-        'scikit-learn==0.21.3',
+        'pyyaml',
+        'scikit-learn==0.22',
         'scipy==1.3.3',
         'werkzeug==0.16.0'
     ]

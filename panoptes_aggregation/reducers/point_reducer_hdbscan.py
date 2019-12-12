@@ -8,11 +8,7 @@ import numpy as np
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
-import warnings
-
-with warnings.catch_warnings():
-    warnings.filterwarnings('ignore', category=DeprecationWarning)
-    from hdbscan import HDBSCAN
+from hdbscan import HDBSCAN
 
 
 DEFAULTS = {
