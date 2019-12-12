@@ -55,42 +55,42 @@ setup(
     include_package_data=True,
     extras_require={
         'online': [
-            'flask==1.1.1',
-            'panoptes-client==1.1.1',
-            'requests==2.22.0',
-            'gunicorn==20.0.4',
-            'sentry-sdk[flask]==0.13.5',
-            'newrelic==5.4.0.132'
+            'flask>=1.0,<1.2',
+            'panoptes-client>=1.1,<1.2',
+            'requests>=2.4.2,<2.23',
+            'gunicorn>=20.0,<20.1',
+            'sentry-sdk[flask]>=0.13.5,<0.14',
+            'newrelic>=5.4.0,<5.4.1'
         ],
         'doc': [
-            'recommonmark==0.6.0',
-            'sphinx==2.2.2',
-            'sphinxcontrib-httpdomain==1.7.0',
-            'sphinx_rtd_theme==0.4.3'
+            'recommonmark>=0.5.0,<0.7',
+            'sphinx>=2.2.2,<2.3',
+            'sphinxcontrib-httpdomain>=1.7.0,<1.8',
+            'sphinx_rtd_theme>=0.4.3,<0.5'
         ],
         'test': [
-            'nose==1.3.7',
-            'coverage==4.5.4',
-            'coveralls==1.9.2',
-            'flake8==3.7.9'
+            'nose>=1.3.7,<1.4',
+            'coverage>=4.5.3,<4.6',
+            'coveralls>=1.8,<1.9.3',
+            'flake8>=3.7,<3.8'
         ],
         'gui': [
-            'Gooey==1.0.3'
+            'Gooey>=1.0.3,<1.1'
         ]
     },
     install_requires=[
-        'beautifulsoup4==4.8.1',
-        'collatex==2.2',
-        'hdbscan==0.8.24',
-        'lxml==4.4.2',
-        'numpy==1.17.4',
-        'pandas==0.25.3',
-        'progressbar2==3.47.0',
-        'python-levenshtein==0.12.0',
-        'python-slugify==4.0.0',
-        'pyyaml',
-        'scikit-learn==0.22',
-        'scipy==1.3.3',
-        'werkzeug==0.16.0'
+        'beautifulsoup4>=4.8.1,<4.9',
+        'collatex>=2.2,<2.3',
+        'hdbscan>=0.8.20,<0.8.25',
+        'lxml>=4.4,<4.5',
+        'numpy>=1.16.3,<1.18',
+        'pandas>=0.24.2,<0.25.4',
+        'progressbar2>=3.39,<3.48',
+        'python-levenshtein>=0.12.0,<0.13',
+        'python-slugify>=3.0.0,<4.1',
+        'pyyaml>=5.1,<5.3',
+        'scikit-learn>=0.21.1,<0.22.1',
+        'scipy>=1.2,<1.3.4',
+        'werkzeug>=0.14,<0.16.1'
     ]
 )
