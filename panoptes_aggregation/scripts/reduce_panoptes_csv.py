@@ -88,7 +88,12 @@ def reduce_csv(
 ):
     extracted_csv = get_file_instance(extracted_csv)
     with extracted_csv as extracted_csv_in:
-        extracted = pandas.read_csv(extracted_csv_in, infer_datetime_format=True, parse_dates=['created_at'], encoding='utf-8')
+        extracted = pandas.read_csv(
+            extracted_csv_in,
+            infer_datetime_format=True,
+            parse_dates=['created_at'],
+            encoding='utf-8'
+        )
 
     extracted.sort_values(['subject_id', 'created_at'], inplace=True)
     resume = False
@@ -106,7 +111,7 @@ def reduce_csv(
         keywords = value
     assert (reducer_name in reducers.reducers), 'The reducer in the config files does not exist.'
 
-    output_base_name, output_ext = os.path.splitext(output_name)
+    output_base_name, _ = os.path.splitext(output_name)
     output_path = os.path.join(output_dir, '{0}_{1}.csv'.format(reducer_name, output_base_name))
 
     if stream:
@@ -144,9 +149,20 @@ def reduce_csv(
         reduced_data += reduced_data_list
         if stream:
             if (sdx == 0) and (not resume):
-                pandas.DataFrame(reduced_data).to_csv(output_path, mode='w', index=False, encoding='utf-8')
+                pandas.DataFrame(reduced_data).to_csv(
+                    output_path,
+                    mode='w',
+                    index=False,
+                    encoding='utf-8'
+                )
             else:
-                pandas.DataFrame(reduced_data).to_csv(output_path, mode='a', index=False, header=False, encoding='utf-8')
+                pandas.DataFrame(reduced_data).to_csv(
+                    output_path,
+                    mode='a',
+                    index=False,
+                    header=False,
+                    encoding='utf-8'
+                )
             reduced_data.clear()
         sdx += 1
         pbar.update(sdx)
@@ -154,22 +170,33 @@ def reduce_csv(
     pbar.start()
     if cpu_count > 1:
         pool = Pool(cpu_count)
-        for subject in subjects:
-            idx = extracted.subject_id == subject
-            for task in tasks:
-                jdx = extracted.task == task
-                classifications = extracted[idx & jdx]
-                pool.apply_async(reduce_subject, args=(subject, classifications, task), kwds=apply_keywords, callback=callback)
+    for subject in subjects:
+        idx = extracted.subject_id == subject
+        for task in tasks:
+            jdx = extracted.task == task
+            classifications = extracted[idx & jdx]
+            if cpu_count > 1:
+                pool.apply_async(
+                    reduce_subject,
+                    args=(
+                        subject,
+                        classifications,
+                        task
+                    ),
+                    kwds=apply_keywords,
+                    callback=callback
+                )
+            else:
+                reduced_data_list = reduce_subject(
+                    subject,
+                    classifications,
+                    task,
+                    **apply_keywords
+                )
+                callback(reduced_data_list)
+    if cpu_count > 1:
         pool.close()
         pool.join()
-    else:
-        for subject in subjects:
-            idx = extracted.subject_id == subject
-            for task in tasks:
-                jdx = extracted.task == task
-                classifications = extracted[idx & jdx]
-                reduced_data_list = reduce_subject(subject, classifications, task, **apply_keywords)
-                callback(reduced_data_list)
     pbar.finish()
 
     if stream:
