@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch, call
 from io import StringIO
+import os
 import panoptes_aggregation.scripts.config_workflow_panoptes
 
 
@@ -81,9 +82,9 @@ class TestConfigWorkflowCL(unittest.TestCase):
             output_dir='home'
         )
         open_calls = [
-            call('home/Extractor_config_workflow_4249_V14.18.yaml', 'w', encoding='utf-8'),
-            call('home/Reducer_config_workflow_4249_V14.18_question_extractor.yaml', 'w', encoding='utf-8'),
-            call('home/Task_labels_workflow_4249_V14.18.yaml', 'w', encoding='utf-8')
+            call(os.path.join('home', 'Extractor_config_workflow_4249_V14.18.yaml'), 'w', encoding='utf-8'),
+            call(os.path.join('home', 'Reducer_config_workflow_4249_V14.18_question_extractor.yaml'), 'w', encoding='utf-8'),
+            call(os.path.join('home', 'Task_labels_workflow_4249_V14.18.yaml'), 'w', encoding='utf-8')
         ]
         mock_open.assert_has_calls(open_calls, any_order=True)
 
