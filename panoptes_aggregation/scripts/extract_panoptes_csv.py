@@ -132,22 +132,23 @@ def extract_csv(
     pbar.start()
     if cpu_count > 1:
         pool = Pool(cpu_count)
-        for cdx, classification in classifications[wdx & vdx].iterrows():
-            classification_by_task = annotation_by_task({'annotations': json.loads(classification.annotations)})
-            classification_info = {
-                'classification_id': classification.classification_id,
-                'user_name': classification.user_name,
-                'user_id': classification.user_id,
-                'workflow_id': classification.workflow_id,
-                'created_at': classification.created_at,
-                'subject_ids': classification.subject_ids
-            }
-            for extractor_name, keywords in extractor_config.items():
-                extractor_key = extractor_name
-                if 'shape_extractor' in extractor_name:
-                    extractor_key = 'shape_extractor'
-                for keyword in keywords:
-                    if extractor_key in extractors.extractors:
+    for _, classification in classifications[wdx & vdx].iterrows():
+        classification_by_task = annotation_by_task({'annotations': json.loads(classification.annotations)})
+        classification_info = {
+            'classification_id': classification.classification_id,
+            'user_name': classification.user_name,
+            'user_id': classification.user_id,
+            'workflow_id': classification.workflow_id,
+            'created_at': classification.created_at,
+            'subject_ids': classification.subject_ids
+        }
+        for extractor_name, keywords in extractor_config.items():
+            extractor_key = extractor_name
+            if 'shape_extractor' in extractor_name:
+                extractor_key = 'shape_extractor'
+            for keyword in keywords:
+                if extractor_key in extractors.extractors:
+                    if cpu_count > 1:
                         pool.apply_async(
                             extract_classification,
                             args=(
@@ -161,26 +162,6 @@ def extract_csv(
                             callback=callback
                         )
                     else:
-                        callback((None, None))
-        pool.close()
-        pool.join()
-    else:
-        for cdx, classification in classifications[wdx & vdx].iterrows():
-            classification_by_task = annotation_by_task({'annotations': json.loads(classification.annotations)})
-            classification_info = {
-                'classification_id': classification.classification_id,
-                'user_name': classification.user_name,
-                'user_id': classification.user_id,
-                'workflow_id': classification.workflow_id,
-                'created_at': classification.created_at,
-                'subject_ids': classification.subject_ids
-            }
-            for extractor_name, keywords in extractor_config.items():
-                extractor_key = extractor_name
-                if 'shape_extractor' in extractor_name:
-                    extractor_key = 'shape_extractor'
-                for keyword in keywords:
-                    if extractor_key in extractors.extractors:
                         name_with_row = extract_classification(
                             copy.deepcopy(classification_by_task),
                             classification_info,
@@ -190,12 +171,15 @@ def extract_csv(
                             verbose
                         )
                         callback(name_with_row)
-                    else:
-                        callback((None, None))
+                else:
+                    callback((None, None))
+    if cpu_count > 1:
+        pool.close()
+        pool.join()
     pbar.finish()
 
     # create one flat csv file for each extractor used
-    output_base_name, output_ext = os.path.splitext(output_name)
+    output_base_name, _ = os.path.splitext(output_name)
     output_files = []
     for extractor_name, data in extracted_data.items():
         output_path = os.path.join(output_dir, '{0}_{1}.csv'.format(extractor_name, output_base_name))
