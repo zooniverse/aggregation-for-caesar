@@ -64,7 +64,7 @@ setup(
         ],
         'doc': [
             'recommonmark>=0.5.0,<0.7',
-            'sphinx>=2.2.2,<2.3',
+            'sphinx>=2.2.2,<2.4',
             'sphinxcontrib-httpdomain>=1.7.0,<1.8',
             'sphinx_rtd_theme>=0.4.3,<0.5'
         ],
