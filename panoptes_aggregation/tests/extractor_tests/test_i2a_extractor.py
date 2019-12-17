@@ -58,3 +58,43 @@ TestI2A = ExtractorTest(
     expected,
     'Test i2a'
 )
+
+classification_blank = {
+    "annotations": [
+        {
+            "task": "T0",
+            "value": []
+        }
+    ],
+    "metadata": {
+        "subject_dimensions": [
+            {
+                "clientWidth": 444,
+                "clientHeight": 333,
+                "naturalWidth": 1152,
+                "naturalHeight": 864
+            }
+        ]
+    },
+    "subject": {
+        "metadata": {
+            "RA": "121.62522",
+            "Dec": "17.42804",
+            "URL": "http://skyserver.sdss.org/dr12/en/tools/explore/Summary.aspx?ra=121.62522&dec=17.42804",
+            "spiral": "0",
+            "elliptical": "1",
+            "Distance_Mpc": "481.4064706",
+            "SVG_filename": "1237665128518320259.svg",
+            "#Published_Redshift": "0.1091188"
+        }
+    }
+}
+
+expected_blank = {}
+
+TestI2A_blank = ExtractorTest(
+    extractors.i2a_extractor,
+    classification_blank,
+    expected_blank,
+    'Test i2a with blank annotation'
+)
