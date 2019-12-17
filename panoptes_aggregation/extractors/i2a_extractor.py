@@ -9,12 +9,16 @@ from .extractor_wrapper import extractor_wrapper
 
 def get_annotation(classification):
     # Gets the first (only) task's annotation's 'values', pulling the first from lists when required
-    annotation_values = next(iter(classification['annotations']))['value'][0]
+    annotation_values_list = next(iter(classification['annotations']))['value']
+    if len(annotation_values_list) > 0:
+        annotation_values = annotation_values_list[0]
 
-    xleft = annotation_values['x']
-    width = annotation_values['width']
-    nw = classification['metadata']['subject_dimensions'][0]['naturalWidth']
-    return {'xleft': xleft, 'width': width, 'nw': nw}
+        xleft = annotation_values['x']
+        width = annotation_values['width']
+        nw = classification['metadata']['subject_dimensions'][0]['naturalWidth']
+        return {'xleft': xleft, 'width': width, 'nw': nw}
+    else:
+        return {}
 
 
 def get_galaxy_metadata(metadata):
@@ -116,20 +120,21 @@ def i2a_extractor(classification, **kwargs):
     response = {}
     if len(classification['annotations']) > 0:
         annotation = get_annotation(classification)
-        galaxy_metadata = get_galaxy_metadata(classification['subject']['metadata'])
-        lambdacen = calc_lambda_central(annotation)
+        if len(annotation) > 0:
+            galaxy_metadata = get_galaxy_metadata(classification['subject']['metadata'])
+            lambdacen = calc_lambda_central(annotation)
 
-        redshift = (lambdacen - 393.37) / 393.37
-        velocity = 300000 * redshift
-        dist = galaxy_metadata['z'] * 3e5 / 68
+            redshift = (lambdacen - 393.37) / 393.37
+            velocity = 300000 * redshift
+            dist = galaxy_metadata['z'] * 3e5 / 68
 
-        response['galaxy_id'] = galaxy_metadata['galID']
-        response['url'] = galaxy_metadata['url']
-        response['RA'] = galaxy_metadata['ra']
-        response['dec'] = galaxy_metadata['dec']
-        response['dist'] = dist
-        response['redshift'] = redshift
-        response['velocity'] = velocity
-        response['lambdacen'] = lambdacen
+            response['galaxy_id'] = galaxy_metadata['galID']
+            response['url'] = galaxy_metadata['url']
+            response['RA'] = galaxy_metadata['ra']
+            response['dec'] = galaxy_metadata['dec']
+            response['dist'] = dist
+            response['redshift'] = redshift
+            response['velocity'] = velocity
+            response['lambdacen'] = lambdacen
 
     return response
