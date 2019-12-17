@@ -90,7 +90,7 @@ setup(
         'python-slugify>=3.0.0,<4.1',
         'pyyaml>=5.1,<5.3',
         'scikit-learn>=0.21.1,<0.22.1',
-        'scipy>=1.2,<1.3.4',
+        'scipy>=1.2,<1.4.1',
         'werkzeug>=0.14,<0.16.1'
     ]
 )
