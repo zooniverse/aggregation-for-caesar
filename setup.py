@@ -60,7 +60,7 @@ setup(
             'requests>=2.4.2,<2.23',
             'gunicorn>=20.0,<20.1',
             'sentry-sdk[flask]>=0.13.5,<0.14',
-            'newrelic>=5.4.0,<5.4.1'
+            'newrelic>=5.4.0,<5.4.2'
         ],
         'doc': [
             'recommonmark>=0.5.0,<0.7',
@@ -71,7 +71,7 @@ setup(
         'test': [
             'nose>=1.3.7,<1.4',
             'coverage>=4.5.3,<5.1',
-            'coveralls>=1.8,<1.9.3',
+            'coveralls>=1.8,<1.10.1',
             'flake8>=3.7,<3.8'
         ],
         'gui': [
@@ -88,9 +88,9 @@ setup(
         'progressbar2>=3.39,<3.48',
         'python-levenshtein>=0.12.0,<0.13',
         'python-slugify>=3.0.0,<4.1',
-        'pyyaml>=5.1,<5.3',
-        'scikit-learn>=0.21.1,<0.22.1',
-        'scipy>=1.2,<1.4.1',
+        'pyyaml>=5.1,<5.4',
+        'scikit-learn>=0.21.1,<0.22.2',
+        'scipy>=1.2,<1.4.2',
         'werkzeug>=0.14,<0.16.1'
     ]
 )
