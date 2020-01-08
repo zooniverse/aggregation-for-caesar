@@ -121,6 +121,12 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
           gold standard mode
         * `slope_label`: integer indicating what slope cluster the line belongs to
         * `gutter_label`: integer indicating what gutter cluster (i.e. column) the line belongs to
+        * `low_consensus` : True if the `consensus_score` is less than the threshold set by the
+          `low_consensus_threshold` keyword
+
+        For the entire subject the following is also returned:
+        * `low_consensus_lines` : The number of lines with low consensus
+        * `transcribed_lines` : The total number of lines transcribed on the subject
 
         Note: the image coordiate system has y increasing downward.
     '''
