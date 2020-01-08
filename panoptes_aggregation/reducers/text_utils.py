@@ -559,8 +559,16 @@ def cluster_by_slope(
     return frame_slope
 
 
-def cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan, user_ids_input):
+def cluster_by_frame(
+    data_by_frame,
+    kwargs_cluster,
+    kwargs_dbscan,
+    user_ids_input,
+    low_consensus_threshold
+):
     reduced_data = OrderedDict()
+    low_consensus_lines = 0
+    number_of_lines = 0
     for frame, value in data_by_frame.items():
         reduced_data[frame] = []
         gs_frame = np.array(copy.deepcopy(value['gold_standard']))
@@ -585,8 +593,16 @@ def cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan, user_ids_inpu
             kwargs_cluster,
             kwargs_dbscan
         )
+        number_of_lines += len(frame_slope)
         for line in frame_slope:
             data_index = line.pop('data_index')
             line['user_ids'] = [user_ids_input[di] for di in data_index]
+            if line['consensus_score'] < low_consensus_threshold:
+                line['low_consensus'] = True
+                low_consensus_lines += 1
+            else:
+                line['low_consensus'] = False
         reduced_data[frame] += frame_slope
+    reduced_data['low_consensus_lines'] = low_consensus_lines
+    reduced_data['transcribed_lines'] = number_of_lines
     return reduced_data

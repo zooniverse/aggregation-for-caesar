@@ -596,6 +596,8 @@ processed_data = {
 }
 
 reduced_data = {
+    'low_consensus_lines': 5,
+    'transcribed_lines': 10,
     'frame0': [
         {
             'clusters_x': [
@@ -626,7 +628,8 @@ reduced_data = {
             'slope_label': 0,
             'gold_standard': [False, False, False, False, True, False, False],
             'user_ids': [1, 2, 3, 3, None, 5, 5],
-            'extract_index': [2, 0, 0, 1, 3, 2, 8]
+            'extract_index': [2, 0, 0, 1, 3, 2, 8],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -657,7 +660,8 @@ reduced_data = {
             'slope_label': 0,
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
-            'extract_index': [0, 1, 6, 2, 3]
+            'extract_index': [0, 1, 6, 2, 3],
+            'low_consensus': True
         },
         {
             'clusters_x': [
@@ -688,7 +692,8 @@ reduced_data = {
             'slope_label': 0,
             'gold_standard': [False, False, False, True, False, False],
             'user_ids': [1, 2, 3, None, 5, 5],
-            'extract_index': [4, 4, 2, 7, 0, 1]
+            'extract_index': [4, 4, 2, 7, 0, 1],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -713,7 +718,8 @@ reduced_data = {
             'slope_label': 0,
             'gold_standard': [False, False, False, True],
             'user_ids': [1, 2, 3, None],
-            'extract_index': [5, 5, 7, 5]
+            'extract_index': [5, 5, 7, 5],
+            'low_consensus': True
         },
         {
             'clusters_x': [
@@ -741,7 +747,8 @@ reduced_data = {
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
-            'extract_index': [1, 6, 5, 4, 7]
+            'extract_index': [1, 6, 5, 4, 7],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -769,7 +776,8 @@ reduced_data = {
             'slope_label': 1,
             'gold_standard': [False, False, True, False],
             'user_ids': [1, 2, None, 5],
-            'extract_index': [3, 7, 6, 4]
+            'extract_index': [3, 7, 6, 4],
+            'low_consensus': True
         },
         {
             'clusters_x': [
@@ -797,7 +805,8 @@ reduced_data = {
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
-            'extract_index': [6, 2, 4, 0, 6]
+            'extract_index': [6, 2, 4, 0, 6],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -825,7 +834,8 @@ reduced_data = {
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False, False],
             'user_ids': [1, 2, 3, None, 5, 5],
-            'extract_index': [7, 3, 3, 1, 5, 9]
+            'extract_index': [7, 3, 3, 1, 5, 9],
+            'low_consensus': False
         }
     ],
     'frame1': [
@@ -852,7 +862,8 @@ reduced_data = {
             'slope_label': 0,
             'gold_standard': [False, True],
             'user_ids': [2, None],
-            'extract_index': [0, 0]
+            'extract_index': [0, 0],
+            'low_consensus': True
         }
     ],
     'frame2': [
@@ -879,7 +890,8 @@ reduced_data = {
             'slope_label': 0,
             'gold_standard': [False],
             'user_ids': [None],
-            'extract_index': [0]
+            'extract_index': [0],
+            'low_consensus': True
         }
     ]
 }
@@ -893,7 +905,7 @@ TestPLTReducer = ReducerTest(
     'Test poly-line-text reducer by word',
     okwargs={
         'metric': 'euclidean',
-        'gutter_tol': 0,
+        'gutter_tol': 0
     },
     kwargs={
         'eps_slope': 25,
@@ -901,7 +913,8 @@ TestPLTReducer = ReducerTest(
         'eps_word': 50,
         'min_samples': 1,
         'dot_freq': 'word',
-        'min_word_count': 1
+        'min_word_count': 1,
+        'low_consensus_threshold': 4
     },
     network_kwargs=kwargs_extra_data
 )
@@ -1222,6 +1235,8 @@ processed_data_by_line = {
 }
 
 reduced_data_by_line = {
+    'low_consensus_lines': 5,
+    'transcribed_lines': 10,
     'frame0': [
         {
             'clusters_x': [
@@ -1245,7 +1260,8 @@ reduced_data_by_line = {
             'slope_label': 0,
             'gold_standard': [False, False, False, False, True, False, False],
             'user_ids': [1, 2, 3, 3, None, 5, 5],
-            'extract_index': [2, 0, 0, 1, 3, 2, 8]
+            'extract_index': [2, 0, 0, 1, 3, 2, 8],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -1269,7 +1285,8 @@ reduced_data_by_line = {
             'slope_label': 0,
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
-            'extract_index': [0, 1, 6, 2, 3]
+            'extract_index': [0, 1, 6, 2, 3],
+            'low_consensus': True
         },
         {
             'clusters_x': [
@@ -1293,7 +1310,8 @@ reduced_data_by_line = {
             'slope_label': 0,
             'gold_standard': [False, False, False, True, False, False],
             'user_ids': [1, 2, 3, None, 5, 5],
-            'extract_index': [4, 4, 2, 7, 0, 1]
+            'extract_index': [4, 4, 2, 7, 0, 1],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -1315,7 +1333,8 @@ reduced_data_by_line = {
             'slope_label': 0,
             'gold_standard': [False, False, False, True],
             'user_ids': [1, 2, 3, None],
-            'extract_index': [5, 5, 7, 5]
+            'extract_index': [5, 5, 7, 5],
+            'low_consensus': True
         },
         {
             'clusters_x': [
@@ -1338,7 +1357,8 @@ reduced_data_by_line = {
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
-            'extract_index': [1, 6, 5, 4, 7]
+            'extract_index': [1, 6, 5, 4, 7],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -1361,7 +1381,8 @@ reduced_data_by_line = {
             'slope_label': 1,
             'gold_standard': [False, False, True, False],
             'user_ids': [1, 2, None, 5],
-            'extract_index': [3, 7, 6, 4]
+            'extract_index': [3, 7, 6, 4],
+            'low_consensus': True
         },
         {
             'clusters_x': [
@@ -1384,7 +1405,8 @@ reduced_data_by_line = {
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
-            'extract_index': [6, 2, 4, 0, 6]
+            'extract_index': [6, 2, 4, 0, 6],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -1407,7 +1429,8 @@ reduced_data_by_line = {
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False, False],
             'user_ids': [1, 2, 3, None, 5, 5],
-            'extract_index': [7, 3, 3, 1, 5, 9]
+            'extract_index': [7, 3, 3, 1, 5, 9],
+            'low_consensus': False
         }
     ],
     'frame1': [
@@ -1431,7 +1454,8 @@ reduced_data_by_line = {
             'slope_label': 0,
             'gold_standard': [False, True],
             'user_ids': [2, None],
-            'extract_index': [0, 0]
+            'extract_index': [0, 0],
+            'low_consensus': True
         }
     ],
     'frame2': [
@@ -1449,7 +1473,8 @@ reduced_data_by_line = {
             'slope_label': 0,
             'gold_standard': [False],
             'user_ids': [None],
-            'extract_index': [0]
+            'extract_index': [0],
+            'low_consensus': True
         }
     ]
 }
@@ -1474,12 +1499,15 @@ TestPLTReducerByLine = ReducerTest(
         'eps_word': 50,
         'min_samples': 1,
         'dot_freq': 'line',
-        'min_word_count': 1
+        'min_word_count': 1,
+        'low_consensus_threshold': 4
     },
     network_kwargs=kwargs_extra_data
 )
 
 reduced_data_min_word = {
+    'low_consensus_lines': 2,
+    'transcribed_lines': 10,
     'frame0': [
         {
             'clusters_x': [
@@ -1503,7 +1531,8 @@ reduced_data_min_word = {
             'slope_label': 0,
             'gold_standard': [False, False, False, False, True, False, False],
             'user_ids': [1, 2, 3, 3, None, 5, 5],
-            'extract_index': [2, 0, 0, 1, 3, 2, 8]
+            'extract_index': [2, 0, 0, 1, 3, 2, 8],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -1527,7 +1556,8 @@ reduced_data_min_word = {
             'slope_label': 0,
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
-            'extract_index': [0, 1, 6, 2, 3]
+            'extract_index': [0, 1, 6, 2, 3],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -1551,7 +1581,8 @@ reduced_data_min_word = {
             'slope_label': 0,
             'gold_standard': [False, False, False, True, False, False],
             'user_ids': [1, 2, 3, None, 5, 5],
-            'extract_index': [4, 4, 2, 7, 0, 1]
+            'extract_index': [4, 4, 2, 7, 0, 1],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -1573,7 +1604,8 @@ reduced_data_min_word = {
             'slope_label': 0,
             'gold_standard': [False, False, False, True],
             'user_ids': [1, 2, 3, None],
-            'extract_index': [5, 5, 7, 5]
+            'extract_index': [5, 5, 7, 5],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -1596,7 +1628,8 @@ reduced_data_min_word = {
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
-            'extract_index': [1, 6, 5, 4, 7]
+            'extract_index': [1, 6, 5, 4, 7],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -1619,7 +1652,8 @@ reduced_data_min_word = {
             'slope_label': 1,
             'gold_standard': [False, False, True, False],
             'user_ids': [1, 2, None, 5],
-            'extract_index': [3, 7, 6, 4]
+            'extract_index': [3, 7, 6, 4],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -1642,7 +1676,8 @@ reduced_data_min_word = {
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
-            'extract_index': [6, 2, 4, 0, 6]
+            'extract_index': [6, 2, 4, 0, 6],
+            'low_consensus': False
         },
         {
             'clusters_x': [
@@ -1665,7 +1700,8 @@ reduced_data_min_word = {
             'slope_label': 1,
             'gold_standard': [False, False, False, True, False, False],
             'user_ids': [1, 2, 3, None, 5, 5],
-            'extract_index': [7, 3, 3, 1, 5, 9]
+            'extract_index': [7, 3, 3, 1, 5, 9],
+            'low_consensus': False
         }
     ],
     'frame1': [
@@ -1689,7 +1725,8 @@ reduced_data_min_word = {
             'slope_label': 0,
             'gold_standard': [False, True],
             'user_ids': [2, None],
-            'extract_index': [0, 0]
+            'extract_index': [0, 0],
+            'low_consensus': True
         }
     ],
     'frame2': [
@@ -1707,7 +1744,8 @@ reduced_data_min_word = {
             'slope_label': 0,
             'gold_standard': [False],
             'user_ids': [None],
-            'extract_index': [0]
+            'extract_index': [0],
+            'low_consensus': True
         }
     ]
 }
@@ -1732,7 +1770,8 @@ TestPLTReducerWithMinWordCount = ReducerTest(
         'eps_word': 50,
         'min_samples': 1,
         'dot_freq': 'line',
-        'min_word_count': 4
+        'min_word_count': 4,
+        'low_consensus_threshold': 4
     },
     network_kwargs=kwargs_extra_data
 )
@@ -1775,7 +1814,11 @@ processed_data_no_length = {
     }
 }
 
-reduced_data_no_length = {'frame5': []}
+reduced_data_no_length = {
+    'low_consensus_lines': 0,
+    'transcribed_lines': 0,
+    'frame5': []
+}
 
 TestPolyLTReducerNoLengthLine = ReducerTest(
     poly_line_text_reducer,
@@ -1797,7 +1840,8 @@ TestPolyLTReducerNoLengthLine = ReducerTest(
         'eps_word': 50,
         'min_samples': 1,
         'dot_freq': 'line',
-        'min_word_count': 1
+        'min_word_count': 1,
+        'low_consensus_threshold': 4
     },
     network_kwargs=kwargs_extra_data_no_length
 )

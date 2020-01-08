@@ -53,6 +53,8 @@ processed_data = {
 }
 
 reduced_data = {
+    'low_consensus_lines': 1,
+    'transcribed_lines': 1,
     'frame0': [
         {
             'clusters_text': [
@@ -70,7 +72,8 @@ reduced_data = {
             'slope_label': 0,
             'gold_standard': [False],
             'user_ids': [1],
-            'extract_index': [0]
+            'extract_index': [0],
+            'low_consensus': True
         }
     ]
 }
@@ -85,7 +88,8 @@ TestSWReducer = ReducerTest(
     okwargs={
         'metric': 'euclidean',
         'gutter_tol': 0,
-        'min_word_count': 1
+        'min_word_count': 1,
+        'low_consensus_threshold': 3
     },
     kwargs={
         'eps_slope': 0.5,

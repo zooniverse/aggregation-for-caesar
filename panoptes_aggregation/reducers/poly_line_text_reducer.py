@@ -18,7 +18,8 @@ DEFAULTS = {
     'metric': {'default': 'euclidean', 'type': str},
     'algorithm': {'default': 'auto', 'type': str},
     'leaf_size': {'default': 30, 'type': int},
-    'p': {'default': None, 'type': float}
+    'p': {'default': None, 'type': float},
+    'low_consensus_threshold': {'default': 3, 'type': float}
 }
 
 DEFAULTS_PROCESS = {
@@ -80,7 +81,18 @@ def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
     data_by_frame : dict
         A dictionary returned by :meth:`process_data`
     kwargs :
-        `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
+        * `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
+        * `eps_slope` : How close the angle of two lines need to be in order to be placed in the same angle cluster.
+        * `eps_line` : How close vertically two lines need to be in order to be identified as the same line.
+        * `eps_word` : How close horizontally the end points of a line need to be in order to be identified as a single point.
+        * `gutter_tol` : How much neighboring columns can overlap horizontally and still be identified as multiple columns.
+        * `dot_freq` : "line" if dots are drawn at the start and end point of a line, "word" if dots are drawn between each word.
+          Note: "word" was proposed for a project but was never used, I don't expect it ever will.  This will likely be depreciated
+          in a future release.
+        * `min_samples` : For all clustering stages this is how many points need to be close together for a cluster to be identified.
+          Set this to 1 for all annotations to be kept
+        * `min_word_count` : The minimum number of times a word must be identified for it to be kept in the consensus text.
+        * `low_consensus_threshold` : The minimum consensus score allowed to be considered "done"
 
     Returns
     -------
@@ -98,10 +110,17 @@ def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
         * `number_views` : The number of users that transcribed the line of text
         * `consensus_score` : The average number of users who's text agreed for the line.
           Note, if `consensus_score` is the same a `number_views` every user agreed with each other
+        * `low_consensus` : True if the `consensus_score` is less than the threshold set by the
+          `low_consensus_threshold` keyword
+
+        For the entire subject the following is also returned:
+        * `low_consensus_lines` : The number of lines with low consensus
+        * `transcribed_lines` : The total number of lines transcribed on the subject
 
         Note: the image coordiate system has y increasing downward.
     '''
     user_ids_input = kwargs_dbscan.pop('user_id')
+    low_consensus_threshold = kwargs_dbscan.pop('low_consensus_threshold')
     kwargs_cluster = {}
     kwargs_cluster['eps_slope'] = kwargs_dbscan.pop('eps_slope')
     kwargs_cluster['eps_line'] = kwargs_dbscan.pop('eps_line')
@@ -110,4 +129,4 @@ def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
     kwargs_cluster['dot_freq'] = kwargs_dbscan.pop('dot_freq')
     kwargs_cluster['metric'] = kwargs_dbscan.pop('metric')
     kwargs_cluster['min_word_count'] = kwargs_dbscan.pop('min_word_count')
-    return cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan, user_ids_input)
+    return cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan, user_ids_input, low_consensus_threshold)
