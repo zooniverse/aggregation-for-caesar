@@ -260,6 +260,8 @@ processed_data = {
 }
 
 reduced_data = {
+    'low_consensus_lines': 3,
+    'transcribed_lines': 10,
     'frame0': [
         {
             'clusters_text': [
@@ -277,7 +279,8 @@ reduced_data = {
             'extract_index': [2, 0, 3],
             'gold_standard': [False, True, False],
             'slope_label': 0,
-            'gutter_label': 0
+            'gutter_label': 0,
+            'low_consensus': False
         },
         {
             'clusters_text': [
@@ -295,7 +298,8 @@ reduced_data = {
             'extract_index': [0, 1, 2],
             'gold_standard': [False, True, False],
             'slope_label': 0,
-            'gutter_label': 0
+            'gutter_label': 0,
+            'low_consensus': False
         },
         {
             'clusters_text': [
@@ -313,7 +317,8 @@ reduced_data = {
             'extract_index': [4, 4, 7],
             'gold_standard': [False, True, False],
             'slope_label': 0,
-            'gutter_label': 1
+            'gutter_label': 1,
+            'low_consensus': False
         },
         {
             'clusters_text': [
@@ -329,7 +334,8 @@ reduced_data = {
             'extract_index': [5, 5, 5],
             'gold_standard': [False, True, False],
             'slope_label': 0,
-            'gutter_label': 1
+            'gutter_label': 1,
+            'low_consensus': False
         },
         {
             'clusters_text': [
@@ -346,7 +352,8 @@ reduced_data = {
             'extract_index': [1, 6, 4],
             'gold_standard': [False, True, False],
             'slope_label': 1,
-            'gutter_label': 0
+            'gutter_label': 0,
+            'low_consensus': False
         },
         {
             'clusters_text': [
@@ -363,7 +370,8 @@ reduced_data = {
             'extract_index': [3, 7, 6],
             'gold_standard': [False, True, False],
             'slope_label': 1,
-            'gutter_label': 0
+            'gutter_label': 0,
+            'low_consensus': True
         },
         {
             'clusters_text': [
@@ -379,7 +387,8 @@ reduced_data = {
             'extract_index': [6, 2, 0],
             'gold_standard': [False, True, False],
             'slope_label': 1,
-            'gutter_label': 1
+            'gutter_label': 1,
+            'low_consensus': False
         },
         {
             'clusters_text': [
@@ -396,7 +405,8 @@ reduced_data = {
             'extract_index': [7, 3, 1],
             'gold_standard': [False, True, False],
             'slope_label': 1,
-            'gutter_label': 1
+            'gutter_label': 1,
+            'low_consensus': False
         },
         {
             'clusters_text': [
@@ -414,7 +424,8 @@ reduced_data = {
             'extract_index': [0],
             'gold_standard': [False],
             'slope_label': 2,
-            'gutter_label': 0
+            'gutter_label': 0,
+            'low_consensus': True
         }
     ],
     'frame1': [
@@ -432,7 +443,8 @@ reduced_data = {
             'extract_index': [0, 0],
             'gold_standard': [True, False],
             'slope_label': 0,
-            'gutter_label': 0
+            'gutter_label': 0,
+            'low_consensus': True
         }
     ],
     'frame2': [
@@ -450,7 +462,8 @@ reduced_data = {
             'extract_index': [0],
             'gold_standard': [False],
             'slope_label': 0,
-            'gutter_label': 0
+            'gutter_label': 0,
+            'low_consensus': True
         }
     ]
 }
@@ -464,7 +477,8 @@ TestOpticsLTReducer = ReducerTest(
     'Test optics line-text reducer with auto min_samples',
     kwargs={
         'angle_eps': 30,
-        'gutter_eps': 150
+        'gutter_eps': 150,
+        'low_consensus_threshold': 3
     },
     okwargs={
         'min_samples': 'auto'
@@ -482,7 +496,8 @@ TestOpticsLTReducerWithMinSamples = ReducerTest(
     kwargs={
         'min_samples': 2,
         'angle_eps': 30,
-        'gutter_eps': 150
+        'gutter_eps': 150,
+        'low_consensus_threshold': 3
     },
     network_kwargs=kwargs_extra_data
 )
@@ -603,6 +618,8 @@ processed_data_with_dolar_sign = {
 }
 
 reduced_data_with_dolar_sign = {
+    'low_consensus_lines': 0,
+    'transcribed_lines': 1,
     'frame0': [{
         'clusters_x': [0.0, 100.0],
         'clusters_y': [0.0, 0.0],
@@ -621,7 +638,8 @@ reduced_data_with_dolar_sign = {
         'extract_index': [0, 0, 0, 0, 0, 0, 0],
         'gold_standard': [False, False, False, False, False, False, False],
         'slope_label': 0,
-        'gutter_label': 0
+        'gutter_label': 0,
+        'low_consensus': False
     }]
 }
 
@@ -634,7 +652,8 @@ TestOpticsLTReducerWithDolarSign = ReducerTest(
     'Test optics line-text reducer with dolar sign',
     kwargs={
         'angle_eps': 30,
-        'gutter_eps': 150
+        'gutter_eps': 150,
+        'low_consensus_threshold': 3
     },
     okwargs={'min_samples': 'auto'},
     network_kwargs=kwargs_extra_data_with_dolar_sign
@@ -674,7 +693,11 @@ processed_data_no_length = {
     }
 }
 
-reduced_data_no_length = {'frame5': []}
+reduced_data_no_length = {
+    'low_consensus_lines': 0,
+    'transcribed_lines': 0,
+    'frame5': []
+}
 
 TestOpticsLTReducerNoLengthLine = ReducerTest(
     optics_line_text_reducer,
@@ -686,7 +709,8 @@ TestOpticsLTReducerNoLengthLine = ReducerTest(
     okwargs={
         'min_samples': 'auto',
         'angle_eps': 30,
-        'gutter_eps': 150
+        'gutter_eps': 150,
+        'low_consensus_threshold': 3
     },
     network_kwargs=kwargs_extra_data_no_length
 )

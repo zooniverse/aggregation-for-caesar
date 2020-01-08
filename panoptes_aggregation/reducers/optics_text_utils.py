@@ -191,7 +191,8 @@ def cluster_of_one(X, data, user_ids, extract_index):
             'consensus_score': 1.0,
             'user_ids': remove_nans([user_ids[user_index]]),
             'extract_index': [extract_index[rdx]],
-            'gold_standard': [line['gold_standard']]
+            'gold_standard': [line['gold_standard']],
+            'low_consensus': True
         }
         clusters.append(value)
     return clusters
