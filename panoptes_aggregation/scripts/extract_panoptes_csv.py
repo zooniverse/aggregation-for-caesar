@@ -75,10 +75,13 @@ def extract_classification(
     return extractor_name, new_extract_row
 
 
+CURRENT_PATH = os.path.abspath('.')
+
+
 def extract_csv(
     classification_csv,
     config,
-    output_dir=os.path.abspath('.'),
+    output_dir=CURRENT_PATH,
     output_name='extractions',
     order=False,
     verbose=False,

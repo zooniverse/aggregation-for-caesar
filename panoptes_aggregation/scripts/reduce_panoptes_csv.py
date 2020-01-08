@@ -76,12 +76,15 @@ def reduce_subject(
     return reduced_data_list
 
 
+CURRENT_PATH = os.path.abspath('.')
+
+
 def reduce_csv(
     extracted_csv,
     reducer_config,
     filter='first',
     output_name='reductions',
-    output_dir=os.path.abspath('.'),
+    output_dir=CURRENT_PATH,
     order=False,
     stream=False,
     cpu_count=1
