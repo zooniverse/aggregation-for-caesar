@@ -19,7 +19,7 @@ def subtask_wrapper(func):
                         output[frame_key].setdefault(k, [])
                         if k in frame:
                             output[frame_key][k] += frame[k]
-            for frame_key, frame in output.items():
+            for frame_key, _frame in output.items():
                 for kd, kl, kc, df in zip(keys_details, keys_labels, keys_clusters, details_functions.keys()):
                     detail_array = np.array(output[frame_key][kd])
                     if kl in output[frame_key]:

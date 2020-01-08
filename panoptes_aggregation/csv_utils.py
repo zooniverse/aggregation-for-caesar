@@ -15,7 +15,7 @@ def flatten_data(data, json_column='data'):
 
 def unflatten_data(data, json_column='data', renest=True):
     data_dict = {}
-    for name, value in data.iteritems():
+    for name, value in data.items():
         if ('{0}.'.format(json_column) in name) and (pandas.notnull(value)):
             key = name.split('{0}.'.format(json_column))[1]
             try:
