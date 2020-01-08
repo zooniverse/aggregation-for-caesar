@@ -20,7 +20,8 @@ DEFAULTS = {
     'max_eps': {'default': np.inf, 'type': float},
     'xi': {'default': 0.05, 'type': float},
     'angle_eps': {'default': 30, 'type': float},
-    'gutter_eps': {'default': 150, 'type': float}
+    'gutter_eps': {'default': 150, 'type': float},
+    'low_consensus_threshold': {'default': 3, 'type': float}
 }
 
 DEFAULTS_PROCESS = {
@@ -87,7 +88,16 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
         The DBSCAN `eps` value to use for the column clustering (only changes the order of the returned
         lines)
     kwargs :
-        `See OPTICS <https://scikit-learn.org/stable/modules/generated/sklearn.cluster.OPTICS.html>`_
+        * `See OPTICS <https://scikit-learn.org/stable/modules/generated/sklearn.cluster.OPTICS.html>`_
+        * `min_samples` : The smallest number of transcribed lines needed to form a cluster.
+          `auto` will set this value based on the number of volunteers who transcribed on a page within a subject.
+        * `xi` : Determines the minimum steepness on the reachability plot that constitutes a cluster boundary.
+        * `angle_eps` : How close the angle of two lines need to be in order to be placed in the same angle cluster.
+          Note: This will only change the order of the lines.
+        * `gutter_eps` : How close the `x` position of the start of two lines need to be in order to be placed in the same column cluster.
+          Note: This will only change the order of the lines.
+        * `min_line_length` : The minimum length a transcribed line of text needs to be in order to be used in the reduction.
+        * `low_consensus_threshold` : The minimum consensus score allowed to be considered "done".
 
     Returns
     -------
@@ -115,10 +125,13 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
         Note: the image coordiate system has y increasing downward.
     '''
     user_ids_input = np.array(kwargs_optics.pop('user_id'))
+    low_consensus_threshold = kwargs_optics.pop('low_consensus_threshold')
     output = defaultdict(list)
     min_samples_orig = kwargs_optics.pop('min_samples')
     angle_eps = kwargs_optics.pop('angle_eps')
     gutter_eps = kwargs_optics.pop('gutter_eps')
+    low_consensus_lines = 0
+    number_of_lines = 0
     for frame, value in data_by_frame.items():
         frame_unordered = []
         X = np.array(value['X'])
@@ -183,25 +196,36 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                             for key in witness_keys:
                                 word_list.append(str(word_dict.get(key, [''])[0]))
                             clusters_text.append(word_list)
+                    consensus_score_value = consensus_score(clusters_text)
+                    low_consensus = consensus_score_value < low_consensus_threshold
+                    if low_consensus:
+                        low_consensus_lines += 1
                     value = {
                         'clusters_x': xm.tolist(),
                         'clusters_y': ym.tolist(),
                         'clusters_text': clusters_text,
                         'number_views': cdx.sum(),
                         'line_slope': slope,
-                        'consensus_score': consensus_score(clusters_text),
+                        'consensus_score': consensus_score_value,
                         'user_ids': user_ids,
                         'extract_index': ext_index[cdx].tolist(),
-                        'gold_standard': gold_standard
+                        'gold_standard': gold_standard,
+                        'low_consensus': low_consensus
                     }
+                    number_of_lines += 1
                     frame_unordered.append(value)
         else:
             # not enough data to cluster so assign each extract
             # to its own cluster
             frame_unordered += cluster_of_one(X, data, user_ids_input, ext_index.tolist())
+            if len(frame_unordered) > 0:
+                low_consensus_lines += 1
+                number_of_lines += 1
         output[frame] = order_lines(
             frame_unordered,
             angle_eps=angle_eps,
             gutter_eps=gutter_eps
         )
+        output['low_consensus_lines'] = low_consensus_lines
+        output['transcribed_lines'] = number_of_lines
     return dict(output)

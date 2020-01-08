@@ -114,7 +114,8 @@ class TextOpticsTextUtils(unittest.TestCase):
                 'consensus_score': 1.0,
                 'user_ids': [0],
                 'extract_index': [0],
-                'gold_standard': [False]
+                'gold_standard': [False],
+                'low_consensus': True
             },
             {
                 'clusters_x': [1, 3],
@@ -131,7 +132,8 @@ class TextOpticsTextUtils(unittest.TestCase):
                 'consensus_score': 1.0,
                 'user_ids': [0],
                 'extract_index': [0],
-                'gold_standard': [False]
+                'gold_standard': [False],
+                'low_consensus': True
             }
         ]
         result = optics_text_utils.cluster_of_one(X, data, user_ids, ext_index)
