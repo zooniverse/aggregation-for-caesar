@@ -15,7 +15,7 @@ class PathType(object):
             None: don't care
         dash_ok: whether to allow "-" as stdin/stdout
         '''
-        assert type in ('file', 'dir', 'symlink', None) or hasattr(type, '__call__')
+        assert type in ('file', 'dir', 'symlink', None) or callable(type)
         self._type = type
 
     def __call__(self, string):

@@ -42,7 +42,7 @@ def point_extractor(classification, **kwargs):
     extract = OrderedDict()
     for annotation in classification['annotations']:
         task_key = annotation['task']
-        for idx, value in enumerate(annotation['value']):
+        for _, value in enumerate(annotation['value']):
             key = '{0}_tool{1}'.format(task_key, value['tool'])
             if ('x' in value) and ('y' in value):
                 extract.setdefault('{0}_x'.format(key), []).append(value['x'])

@@ -41,7 +41,7 @@ def point_extractor_by_frame(classification, **kwargs):
     extract = OrderedDict()
     for annotation in classification['annotations']:
         task_key = annotation['task']
-        for idx, value in enumerate(annotation['value']):
+        for _, value in enumerate(annotation['value']):
             frame = 'frame{0}'.format(value['frame'])
             extract.setdefault(frame, {})
             key = '{0}_tool{1}'.format(task_key, value['tool'])
