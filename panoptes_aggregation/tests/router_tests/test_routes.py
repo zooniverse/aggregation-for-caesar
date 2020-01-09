@@ -1,5 +1,6 @@
 try:
     import panoptes_aggregation.routes as routes
+    import git
     OFFLINE = False
 except ImportError:
     OFFLINE = True
@@ -31,9 +32,16 @@ class RouterTest(unittest.TestCase):
 
     def test_home_route(self):
         '''Test home page returns version'''
+        repo = git.Repo(search_parent_directories=True)
+        sha = repo.head.object.hexsha
+        home_screen_message = {
+            'status': 'ok',
+            'version': panoptes_aggregation.__version__,
+            'commit_id': sha
+        }
         self.route_exists(
             '/',
-            'Python extractors and reducers for panoptes aggregation. Code version {0}'.format(panoptes_aggregation.__version__)
+            home_screen_message
         )
 
     def test_extractor_routes(self):
