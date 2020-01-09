@@ -4,6 +4,7 @@ try:
     from panoptes_aggregation import panoptes
     import sentry_sdk
     from sentry_sdk.integrations.flask import FlaskIntegration
+    import git
 except ImportError:  # pragma: no cover
     print('You must install `flask` to use panoptes_aggregation.routes')  # pragma: no cover
     raise  # pragma: no cover
@@ -67,7 +68,13 @@ def make_application():
                         static_folder='../docs/build/html')
     application.json_encoder = MyEncoder
 
-    home_screen_message = 'Python extractors and reducers for panoptes aggregation. Code version {0}'.format(__version__)
+    repo = git.Repo(search_parent_directories=True)
+    sha = repo.head.object.hexsha
+    home_screen_message = {
+        'status': 'ok',
+        'version': __version__,
+        'commit_id': sha
+    }
 
     @application.route('/')
     def index():
