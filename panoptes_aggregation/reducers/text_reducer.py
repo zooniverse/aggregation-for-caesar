@@ -55,9 +55,11 @@ def text_reducer(data, **kwargs):
             for key in witness_keys:
                 word_list.append(str(word_dict.get(key, [''])[0]))
             aligned_text.append(word_list)
+        consensus_score_value, consensus_text = consensus_score(aligned_text)
         reduction = {
             'aligned_text': aligned_text,
             'number_views': len(data),
-            'consensus_score': consensus_score(aligned_text)
+            'consensus_score': consensus_score_value,
+            'consensus_text': consensus_text
         }
     return reduction

@@ -189,6 +189,7 @@ def cluster_of_one(X, data, user_ids, extract_index):
             'number_views': 1,
             'line_slope': slope,
             'consensus_score': 1.0,
+            'consensus_text': ' '.join(line['text'][0].split()),
             'user_ids': remove_nans([user_ids[user_index]]),
             'extract_index': [extract_index[rdx]],
             'gold_standard': [line['gold_standard']],

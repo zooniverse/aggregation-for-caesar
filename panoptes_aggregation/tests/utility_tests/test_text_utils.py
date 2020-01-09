@@ -65,7 +65,7 @@ class TestTextUtils(unittest.TestCase):
     def test_no_consensus(self):
         '''Test empty list passed into consensus_score'''
         result = text_utils.consensus_score([])
-        self.assertEqual(result, 0.0)
+        self.assertEqual(result, (0.0, ''))
 
     def test_bad_keyword(self):
         '''Test error is raised if a bad keyword is used for dot_freq'''
