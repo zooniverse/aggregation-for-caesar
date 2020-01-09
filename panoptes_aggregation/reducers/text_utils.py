@@ -185,13 +185,16 @@ def consensus_score(clusters_text):
     -------
     consensus_score : float
         A value indicating the average number of users that agree on the line of text.
+    consensus_text : str
+        A string with the consensus sentence
     '''
     text_filter = [list(filter(('').__ne__, text)) for text in clusters_text if text]
-    max_counts = [Counter(text).most_common(1)[0][1] for text in text_filter if text]
-    if len(max_counts) == 0:
-        return 0.0
+    most_common = [Counter(text).most_common(1)[0] for text in text_filter if text]
+    if len(most_common) == 0:
+        return 0.0, ''
     else:
-        return sum(max_counts) / len(max_counts)
+        common_text, max_counts = zip(*most_common)
+        return sum(max_counts) / len(max_counts), ' '.join(common_text)
 
 
 def cluster_by_word(
@@ -404,12 +407,14 @@ def cluster_by_line(
                 kwargs_cluster,
                 kwargs_dbscan
             )
+        consensus_score_value, consensus_text = consensus_score(clusters_text)
         line_dict = {
             'clusters_x': clusters_x,
             'clusters_y': clusters_y,
             'clusters_text': clusters_text,
             'number_views': ldx.sum(),
-            'consensus_score': consensus_score(clusters_text),
+            'consensus_score': consensus_score_value,
+            'consensus_text': consensus_text,
             'line_slope': float(kwargs_cluster['avg_slope']),
             'slope_label': int(kwargs_cluster['slope_label']),
             'gutter_label': int(kwargs_cluster['gutter_label']),

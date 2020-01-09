@@ -202,7 +202,7 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                             for key in witness_keys:
                                 word_list.append(str(word_dict.get(key, [''])[0]))
                             clusters_text.append(word_list)
-                    consensus_score_value = consensus_score(clusters_text)
+                    consensus_score_value, consensus_text = consensus_score(clusters_text)
                     low_consensus = consensus_score_value < low_consensus_threshold
                     if low_consensus:
                         low_consensus_lines += 1
@@ -213,6 +213,7 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                         'number_views': cdx.sum(),
                         'line_slope': slope,
                         'consensus_score': consensus_score_value,
+                        'consensus_text': consensus_text,
                         'user_ids': user_ids,
                         'extract_index': ext_index[cdx].tolist(),
                         'gold_standard': gold_standard,

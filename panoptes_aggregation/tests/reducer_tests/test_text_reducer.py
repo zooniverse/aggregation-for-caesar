@@ -24,7 +24,8 @@ reduced_data = {
         ['text', 'text', 'text']
     ],
     'number_views': 3,
-    'consensus_score': 2.8
+    'consensus_score': 2.8,
+    'consensus_text': 'this is some test text'
 }
 
 TestTextReducer = ReducerTest(

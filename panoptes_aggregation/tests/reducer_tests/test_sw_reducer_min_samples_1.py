@@ -66,6 +66,7 @@ reduced_data = {
             'clusters_x': [860.71, 1418.89],
             'clusters_y': [267.38, 275.19],
             'consensus_score': 1.0,
+            'consensus_text': 'Gather as many rose',
             'gutter_label': 0,
             'line_slope': 0.80162463698921349,
             'number_views': 1,
