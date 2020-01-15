@@ -12,9 +12,9 @@ from .extractor_wrapper import extractor_wrapper
 from .tool_wrapper import tool_wrapper
 
 
-@extractor_wrapper()
+@extractor_wrapper(gold_standard=True)
 @tool_wrapper
-def line_text_extractor(classification, **kwargs):
+def line_text_extractor(classification, gold_standard=False, **kwargs):
     '''Extract annotations from a line tool with a text sub-task
 
     Parameters
@@ -54,4 +54,5 @@ def line_text_extractor(classification, **kwargs):
             extract[frame]['points']['x'].append(x)
             extract[frame]['points']['y'].append(y)
             extract[frame]['slope'].append(slope)
+            extract[frame]['gold_standard'] = gold_standard
     return extract
