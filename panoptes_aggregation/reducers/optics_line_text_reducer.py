@@ -73,7 +73,13 @@ def process_data(data_list, min_line_length=0.0):
     return data_by_frame
 
 
-@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS, defaults_process=DEFAULTS_PROCESS, user_id=True)
+@reducer_wrapper(
+    process_data=process_data,
+    defaults_data=DEFAULTS,
+    defaults_process=DEFAULTS_PROCESS,
+    user_id=True,
+    output_kwargs=True
+)
 def optics_line_text_reducer(data_by_frame, **kwargs_optics):
     '''Reduce the line-text extracts as a list of lines of text.
 
@@ -81,12 +87,6 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
     ----------
     data_by_frame : dict
         A dictionary returned by :meth:`process_data`
-    angle_eps : float
-        The DBSCAN `eps` value to use for the slope clustering (only changes the order of the returned
-        lines)
-    gutter_eps : float
-        The DBSCAN `eps` value to use for the column clustering (only changes the order of the returned
-        lines)
     kwargs :
         * `See OPTICS <https://scikit-learn.org/stable/modules/generated/sklearn.cluster.OPTICS.html>`_
         * `min_samples` : The smallest number of transcribed lines needed to form a cluster.

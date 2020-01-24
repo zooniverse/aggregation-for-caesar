@@ -37,12 +37,13 @@ def ReducerTest(
     kwargs={},
     network_kwargs={},
     processed_type='dict',
-    add_version=True
+    add_version=True,
+    output_kwargs=False
 ):
-    # pkwargs: keywords passed into the process_data funciton
+    # pkwargs: keywords passed into the process_data function
     # okwargs: keywords only passed into the _original function
     # kwargs: keywords passed into all steps
-    # network_kwargs: keywords passed to the function but included along side `data` in the network reqeust
+    # network_kwargs: keywords passed to the function but included along side `data` in the network request
     class ReducerTest(unittest.TestCase):
         def setUp(self):
             self.maxDiff = None
@@ -52,6 +53,9 @@ def ReducerTest(
                 append_version(self.extracted_with_version)
             self.processed = copy.deepcopy(processed)
             self.reduced = copy.deepcopy(reduced)
+            self.reduced_no_params = copy.deepcopy(reduced)
+            if output_kwargs:
+                del self.reduced_no_params['parameters']
             self.reduced_with_version = copy.deepcopy(reduced)
             append_version(self.reduced_with_version)
 
@@ -69,7 +73,7 @@ def ReducerTest(
         def test_original_reducer(self):
             '''Test the reducer function starting with the processed data'''
             result = reducer._original(self.processed, **okwargs, **kwargs, **network_kwargs)
-            self.assertDictEqual(cast_to_dict(result), self.reduced)
+            self.assertDictEqual(cast_to_dict(result), self.reduced_no_params)
 
         def test_reducer(self):
             '''Test the offline reducer'''
