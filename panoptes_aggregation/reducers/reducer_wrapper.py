@@ -9,7 +9,8 @@ def reducer_wrapper(
     defaults_process=None,
     defaults_data=None,
     user_id=False,
-    relevant_reduction=False
+    relevant_reduction=False,
+    output_kwargs=False
 ):
     def decorator(func):
         @wraps(func)
@@ -53,6 +54,8 @@ def reducer_wrapper(
             reduction = func(data, **kwargs_data, **kwargs_details, **kwargs_extra_data)
             if not no_version:
                 append_version(reduction)
+            if output_kwargs:
+                reduction['parameters'] = {**kwargs_data, **kwargs_process}
             return reduction
         #: keep the orignal function around for testing
         #: and access by other reducers

@@ -1,5 +1,7 @@
 from panoptes_aggregation.reducers.optics_line_text_reducer import process_data, optics_line_text_reducer
 from .base_test_class import ReducerTest
+import numpy as np
+import copy
 
 extracted_data = [
     {
@@ -477,7 +479,16 @@ reduced_data = {
             'gutter_label': 0,
             'low_consensus': True
         }
-    ]
+    ],
+    'parameters': {
+        'min_samples': 'auto',
+        'max_eps': np.inf,
+        'xi': 0.05,
+        'angle_eps': 30.0,
+        'gutter_eps': 150.0,
+        'low_consensus_threshold': 3.0,
+        'min_line_length': 0.0
+    }
 }
 
 TestOpticsLTReducer = ReducerTest(
@@ -488,33 +499,37 @@ TestOpticsLTReducer = ReducerTest(
     reduced_data,
     'Test optics line-text reducer with auto min_samples',
     kwargs={
-        'angle_eps': 30,
-        'gutter_eps': 150,
-        'low_consensus_threshold': 3
+        'angle_eps': 30.0,
+        'gutter_eps': 150.0,
+        'low_consensus_threshold': 3.0
     },
     okwargs={
         'min_samples': 'auto'
     },
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    output_kwargs=True
 )
 
+reduced_data2 = copy.deepcopy(reduced_data)
+reduced_data2['parameters']['min_samples'] = 2
 TestOpticsLTReducerWithMinSamples = ReducerTest(
     optics_line_text_reducer,
     process_data,
     extracted_data,
     processed_data,
-    reduced_data,
+    reduced_data2,
     'Test optics line-text reducer with specified min_samples',
     kwargs={
         'min_samples': 2,
-        'angle_eps': 30,
-        'gutter_eps': 150,
-        'low_consensus_threshold': 3
+        'angle_eps': 30.0,
+        'gutter_eps': 150.0,
+        'low_consensus_threshold': 3.0
     },
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    output_kwargs=True
 )
 
-extracted_data_with_dolar_sign = [
+extracted_data_with_dollar_sign = [
     {
         'frame0': {
             'points': {
@@ -594,7 +609,7 @@ extracted_data_with_dolar_sign = [
     }
 ]
 
-kwargs_extra_data_with_dolar_sign = {
+kwargs_extra_data_with_dollar_sign = {
     'user_id': [
         1,
         2,
@@ -606,7 +621,7 @@ kwargs_extra_data_with_dolar_sign = {
     ]
 }
 
-processed_data_with_dolar_sign = {
+processed_data_with_dollar_sign = {
     'frame0': {
         'X': [
             [0, 0],
@@ -629,7 +644,7 @@ processed_data_with_dolar_sign = {
     }
 }
 
-reduced_data_with_dolar_sign = {
+reduced_data_with_dollar_sign = {
     'reducer': 'optics_line_text_reducer',
     'low_consensus_lines': 0,
     'transcribed_lines': 1,
@@ -654,23 +669,33 @@ reduced_data_with_dolar_sign = {
         'slope_label': 0,
         'gutter_label': 0,
         'low_consensus': False
-    }]
+    }],
+    'parameters': {
+        'min_samples': 'auto',
+        'max_eps': np.inf,
+        'xi': 0.05,
+        'angle_eps': 30.0,
+        'gutter_eps': 150.0,
+        'low_consensus_threshold': 3.0,
+        'min_line_length': 0.0
+    }
 }
 
-TestOpticsLTReducerWithDolarSign = ReducerTest(
+TestOpticsLTReducerWithDollarSign = ReducerTest(
     optics_line_text_reducer,
     process_data,
-    extracted_data_with_dolar_sign,
-    processed_data_with_dolar_sign,
-    reduced_data_with_dolar_sign,
-    'Test optics line-text reducer with dolar sign',
+    extracted_data_with_dollar_sign,
+    processed_data_with_dollar_sign,
+    reduced_data_with_dollar_sign,
+    'Test optics line-text reducer with dollar sign',
     kwargs={
-        'angle_eps': 30,
-        'gutter_eps': 150,
-        'low_consensus_threshold': 3
+        'angle_eps': 30.0,
+        'gutter_eps': 150.0,
+        'low_consensus_threshold': 3.0
     },
     okwargs={'min_samples': 'auto'},
-    network_kwargs=kwargs_extra_data_with_dolar_sign
+    network_kwargs=kwargs_extra_data_with_dollar_sign,
+    output_kwargs=True
 )
 
 # this is a real classification that happened on ASM
@@ -711,7 +736,16 @@ reduced_data_no_length = {
     'reducer': 'optics_line_text_reducer',
     'low_consensus_lines': 0,
     'transcribed_lines': 0,
-    'frame5': []
+    'frame5': [],
+    'parameters': {
+        'min_samples': 'auto',
+        'max_eps': np.inf,
+        'xi': 0.05,
+        'angle_eps': 30.0,
+        'gutter_eps': 150.0,
+        'low_consensus_threshold': 3.0,
+        'min_line_length': 0.0
+    }
 }
 
 TestOpticsLTReducerNoLengthLine = ReducerTest(
@@ -723,9 +757,10 @@ TestOpticsLTReducerNoLengthLine = ReducerTest(
     'Text optics line-text reducer with a zero length line',
     okwargs={
         'min_samples': 'auto',
-        'angle_eps': 30,
-        'gutter_eps': 150,
-        'low_consensus_threshold': 3
+        'angle_eps': 30.0,
+        'gutter_eps': 150.0,
+        'low_consensus_threshold': 3.0
     },
-    network_kwargs=kwargs_extra_data_no_length
+    network_kwargs=kwargs_extra_data_no_length,
+    output_kwargs=True
 )
