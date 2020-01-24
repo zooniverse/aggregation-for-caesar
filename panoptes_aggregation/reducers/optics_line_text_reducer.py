@@ -235,4 +235,5 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
         )
         output['low_consensus_lines'] = low_consensus_lines
         output['transcribed_lines'] = number_of_lines
+        output['reducer'] = 'optics_line_text_reducer'
     return dict(output)

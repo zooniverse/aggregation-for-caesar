@@ -260,6 +260,7 @@ processed_data = {
 }
 
 reduced_data = {
+    'reducer': 'optics_line_text_reducer',
     'low_consensus_lines': 3,
     'transcribed_lines': 10,
     'frame0': [
@@ -629,6 +630,7 @@ processed_data_with_dolar_sign = {
 }
 
 reduced_data_with_dolar_sign = {
+    'reducer': 'optics_line_text_reducer',
     'low_consensus_lines': 0,
     'transcribed_lines': 1,
     'frame0': [{
@@ -706,6 +708,7 @@ processed_data_no_length = {
 }
 
 reduced_data_no_length = {
+    'reducer': 'optics_line_text_reducer',
     'low_consensus_lines': 0,
     'transcribed_lines': 0,
     'frame5': []
