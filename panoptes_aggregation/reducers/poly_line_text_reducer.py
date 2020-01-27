@@ -13,12 +13,8 @@ DEFAULTS = {
     'eps_word': {'default': 40.0, 'type': float},
     'gutter_tol': {'default': 0.0, 'type': float},
     'min_word_count': {'default': 1, 'type': int},
-    'dot_freq': {'default': 'word', 'type': str},
+    'dot_freq': {'default': 'line', 'type': str},
     'min_samples': {'default': 1, 'type': int},
-    'metric': {'default': 'euclidean', 'type': str},
-    'algorithm': {'default': 'auto', 'type': str},
-    'leaf_size': {'default': 30, 'type': int},
-    'p': {'default': None, 'type': float},
     'low_consensus_threshold': {'default': 3, 'type': float}
 }
 
@@ -71,7 +67,13 @@ def process_data(data_list, process_by_line=False):
     return data_by_frame
 
 
-@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS, defaults_process=DEFAULTS_PROCESS, user_id=True)
+@reducer_wrapper(
+    process_data=process_data,
+    defaults_data=DEFAULTS,
+    defaults_process=DEFAULTS_PROCESS,
+    user_id=True,
+    output_kwargs=True
+)
 def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
     '''
     Reduce the polygon-text answers as a list of lines of text.
@@ -127,6 +129,5 @@ def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
     kwargs_cluster['eps_word'] = kwargs_dbscan.pop('eps_word')
     kwargs_cluster['gutter_tol'] = kwargs_dbscan.pop('gutter_tol')
     kwargs_cluster['dot_freq'] = kwargs_dbscan.pop('dot_freq')
-    kwargs_cluster['metric'] = kwargs_dbscan.pop('metric')
     kwargs_cluster['min_word_count'] = kwargs_dbscan.pop('min_word_count')
     return cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan, user_ids_input, low_consensus_threshold)

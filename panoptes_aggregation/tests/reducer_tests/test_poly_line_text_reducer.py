@@ -903,7 +903,18 @@ reduced_data = {
             'extract_index': [0],
             'low_consensus': True
         }
-    ]
+    ],
+    'parameters': {
+        'eps_slope': 25.0,
+        'eps_line': 40.0,
+        'eps_word': 50.0,
+        'gutter_tol': 0.0,
+        'min_samples': 1,
+        'dot_freq': 'word',
+        'min_word_count': 1,
+        'low_consensus_threshold': 4.0,
+        'process_by_line': False
+    }
 }
 
 TestPLTReducer = ReducerTest(
@@ -914,19 +925,19 @@ TestPLTReducer = ReducerTest(
     reduced_data,
     'Test poly-line-text reducer by word',
     okwargs={
-        'metric': 'euclidean',
-        'gutter_tol': 0
+        'gutter_tol': 0.0
     },
     kwargs={
-        'eps_slope': 25,
-        'eps_line': 40,
-        'eps_word': 50,
+        'eps_slope': 25.0,
+        'eps_line': 40.0,
+        'eps_word': 50.0,
         'min_samples': 1,
         'dot_freq': 'word',
         'min_word_count': 1,
-        'low_consensus_threshold': 4
+        'low_consensus_threshold': 4.0
     },
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    output_kwargs=True
 )
 
 processed_data_by_line = {
@@ -1496,7 +1507,18 @@ reduced_data_by_line = {
             'extract_index': [0],
             'low_consensus': True
         }
-    ]
+    ],
+    'parameters': {
+        'eps_slope': 25.0,
+        'eps_line': 40.0,
+        'eps_word': 50.0,
+        'gutter_tol': 0.0,
+        'min_samples': 1,
+        'dot_freq': 'line',
+        'min_word_count': 1,
+        'low_consensus_threshold': 4.0,
+        'process_by_line': True
+    }
 }
 
 TestPLTReducerByLine = ReducerTest(
@@ -1507,22 +1529,22 @@ TestPLTReducerByLine = ReducerTest(
     reduced_data_by_line,
     'Test poly-line-text reducer by line',
     okwargs={
-        'metric': 'euclidean',
-        'gutter_tol': 0
+        'gutter_tol': 0.0
     },
     pkwargs={
         'process_by_line': True
     },
     kwargs={
-        'eps_slope': 25,
-        'eps_line': 40,
-        'eps_word': 50,
+        'eps_slope': 25.0,
+        'eps_line': 40.0,
+        'eps_word': 50.0,
         'min_samples': 1,
         'dot_freq': 'line',
         'min_word_count': 1,
-        'low_consensus_threshold': 4
+        'low_consensus_threshold': 4.0
     },
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    output_kwargs=True
 )
 
 reduced_data_min_word = {
@@ -1777,7 +1799,18 @@ reduced_data_min_word = {
             'extract_index': [0],
             'low_consensus': True
         }
-    ]
+    ],
+    'parameters': {
+        'eps_slope': 25.0,
+        'eps_line': 40.0,
+        'eps_word': 50.0,
+        'gutter_tol': 0.0,
+        'min_samples': 1,
+        'dot_freq': 'line',
+        'min_word_count': 4,
+        'low_consensus_threshold': 4.0,
+        'process_by_line': True
+    }
 }
 
 TestPLTReducerWithMinWordCount = ReducerTest(
@@ -1788,22 +1821,22 @@ TestPLTReducerWithMinWordCount = ReducerTest(
     reduced_data_min_word,
     'Test poly-line-text reducer by line with a min word count',
     okwargs={
-        'metric': 'euclidean',
-        'gutter_tol': 0
+        'gutter_tol': 0.0
     },
     pkwargs={
         'process_by_line': True
     },
     kwargs={
-        'eps_slope': 25,
-        'eps_line': 40,
-        'eps_word': 50,
+        'eps_slope': 25.0,
+        'eps_line': 40.0,
+        'eps_word': 50.0,
         'min_samples': 1,
         'dot_freq': 'line',
         'min_word_count': 4,
         'low_consensus_threshold': 4
     },
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    output_kwargs=True
 )
 
 # this is a real classification that happened on ASM
@@ -1847,7 +1880,18 @@ processed_data_no_length = {
 reduced_data_no_length = {
     'low_consensus_lines': 0,
     'transcribed_lines': 0,
-    'frame5': []
+    'frame5': [],
+    'parameters': {
+        'eps_slope': 25.0,
+        'eps_line': 40.0,
+        'eps_word': 50.0,
+        'gutter_tol': 0.0,
+        'min_samples': 1,
+        'dot_freq': 'line',
+        'min_word_count': 1,
+        'low_consensus_threshold': 4.0,
+        'process_by_line': True
+    }
 }
 
 TestPolyLTReducerNoLengthLine = ReducerTest(
@@ -1858,20 +1902,20 @@ TestPolyLTReducerNoLengthLine = ReducerTest(
     reduced_data_no_length,
     'Text poly-line-text reducer with a zero length line',
     okwargs={
-        'metric': 'euclidean',
-        'gutter_tol': 0
+        'gutter_tol': 0.0
     },
     pkwargs={
         'process_by_line': True
     },
     kwargs={
-        'eps_slope': 25,
-        'eps_line': 40,
-        'eps_word': 50,
+        'eps_slope': 25.0,
+        'eps_line': 40.0,
+        'eps_word': 50.0,
         'min_samples': 1,
         'dot_freq': 'line',
         'min_word_count': 1,
-        'low_consensus_threshold': 4
+        'low_consensus_threshold': 4.0
     },
-    network_kwargs=kwargs_extra_data_no_length
+    network_kwargs=kwargs_extra_data_no_length,
+    output_kwargs=True
 )

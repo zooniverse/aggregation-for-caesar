@@ -76,7 +76,18 @@ reduced_data = {
             'extract_index': [0],
             'low_consensus': True
         }
-    ]
+    ],
+    'parameters': {
+        'eps_slope': 0.5,
+        'eps_line': 15.0,
+        'eps_word': 30.0,
+        'gutter_tol': 0.0,
+        'min_samples': 1,
+        'dot_freq': 'line',
+        'min_word_count': 1,
+        'low_consensus_threshold': 3.0,
+        'process_by_line': False
+    }
 }
 
 TestSWReducer = ReducerTest(
@@ -87,17 +98,17 @@ TestSWReducer = ReducerTest(
     reduced_data,
     'Test SW text reducer with min_samples=1',
     okwargs={
-        'metric': 'euclidean',
-        'gutter_tol': 0,
+        'gutter_tol': 0.0,
         'min_word_count': 1,
-        'low_consensus_threshold': 3
+        'low_consensus_threshold': 3.0
     },
     kwargs={
         'eps_slope': 0.5,
-        'eps_line': 15,
-        'eps_word': 30,
+        'eps_line': 15.0,
+        'eps_word': 30.0,
         'dot_freq': 'line',
         'min_samples': 1
     },
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    output_kwargs=True
 )
