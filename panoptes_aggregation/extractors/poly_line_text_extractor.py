@@ -74,7 +74,8 @@ def poly_line_text_extractor(classification, dot_freq='word', gold_standard=Fals
     blank_frame = OrderedDict([
         ('points', OrderedDict([('x', []), ('y', [])])),
         ('text', []),
-        ('slope', [])
+        ('slope', []),
+        ('gold_standard', gold_standard)
     ])
     extract = OrderedDict()
     if len(classification['annotations']) > 0:
@@ -117,7 +118,6 @@ def poly_line_text_extractor(classification, dot_freq='word', gold_standard=Fals
                         extract[frame]['points']['x'].append(x)
                         extract[frame]['points']['y'].append(y)
                         extract[frame]['slope'].append(slope)
-                        extract[frame]['gold_standard'] = gold_standard
                 elif (dot_freq == 'line'):
                     # NOTE: if there are not two `points` the extract is not used
                     if len(x) == 2:
@@ -125,5 +125,4 @@ def poly_line_text_extractor(classification, dot_freq='word', gold_standard=Fals
                         extract[frame]['points']['x'].append(x)
                         extract[frame]['points']['y'].append(y)
                         extract[frame]['slope'].append(slope)
-                        extract[frame]['gold_standard'] = gold_standard
     return extract
