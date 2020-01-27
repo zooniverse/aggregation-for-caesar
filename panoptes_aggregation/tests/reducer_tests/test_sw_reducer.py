@@ -854,6 +854,7 @@ processed_data = {
 }
 
 reduced_data = {
+    'reducer': 'poly_line_text_reducer',
     'low_consensus_lines': 8,
     'transcribed_lines': 16,
     'frame0': [
@@ -1266,6 +1267,7 @@ processed_data_all_blank = {
 }
 
 reduced_data_all_blank = {
+    'reducer': 'poly_line_text_reducer',
     'low_consensus_lines': 0,
     'transcribed_lines': 0,
     'frame0': [],

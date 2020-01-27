@@ -53,6 +53,7 @@ processed_data = {
 }
 
 reduced_data = {
+    'reducer': 'poly_line_text_reducer',
     'low_consensus_lines': 1,
     'transcribed_lines': 1,
     'frame0': [
