@@ -15,7 +15,7 @@ import warnings
 
 @extractor_wrapper(gold_standard=True)
 @tool_wrapper
-def poly_line_text_extractor(classification, dot_freq='word', gold_standard=False, **kwargs):
+def poly_line_text_extractor(classification, dot_freq='line', gold_standard=False, **kwargs):
     '''Extract annotations from a polygon tool with a text sub-task
 
     Parameters
