@@ -596,6 +596,7 @@ processed_data = {
 }
 
 reduced_data = {
+    'reducer': 'poly_line_text_reducer',
     'low_consensus_lines': 5,
     'transcribed_lines': 10,
     'frame0': [
@@ -1256,6 +1257,7 @@ processed_data_by_line = {
 }
 
 reduced_data_by_line = {
+    'reducer': 'poly_line_text_reducer',
     'low_consensus_lines': 5,
     'transcribed_lines': 10,
     'frame0': [
@@ -1548,6 +1550,7 @@ TestPLTReducerByLine = ReducerTest(
 )
 
 reduced_data_min_word = {
+    'reducer': 'poly_line_text_reducer',
     'low_consensus_lines': 2,
     'transcribed_lines': 10,
     'frame0': [
@@ -1878,6 +1881,7 @@ processed_data_no_length = {
 }
 
 reduced_data_no_length = {
+    'reducer': 'poly_line_text_reducer',
     'low_consensus_lines': 0,
     'transcribed_lines': 0,
     'frame5': [],

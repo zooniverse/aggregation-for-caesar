@@ -610,4 +610,5 @@ def cluster_by_frame(
         reduced_data[frame] += frame_slope
     reduced_data['low_consensus_lines'] = low_consensus_lines
     reduced_data['transcribed_lines'] = number_of_lines
+    reduced_data['reducer'] = 'poly_line_text_reducer'
     return reduced_data
