@@ -219,7 +219,7 @@ def cluster_by_word(
     annotation_labels : np.array
         An nx1 array with a lable indicating what annotaiton each word belongs to.
     kwargs_cluster : dict
-        A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
+        A dictionary containing the `eps_*` and `dot_freq` keywords
     kwargs_dbscan : dict
         A dictionary containing all the other DBSCAN keywords
 
@@ -234,7 +234,7 @@ def cluster_by_word(
         list per cluster. Note: the empty strings that were added to each annotaiton are
         stripped before returning the words.
     '''
-    db_words = DBSCAN(eps=kwargs_cluster['eps_word'], metric=kwargs_cluster['metric'], **kwargs_dbscan).fit(word_line)
+    db_words = DBSCAN(eps=kwargs_cluster['eps_word'], **kwargs_dbscan).fit(word_line)
     word_labels = sort_labels(db_words.labels_, word_line)
     clusters_x = []
     clusters_y = []
@@ -275,7 +275,7 @@ def align_words(
     gs_line : np.array
         An array of bools indicating if the annotation was made in gold standard mode
     kwargs_cluster : dict
-        A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
+        A dictionary containing the `eps_*` and `dot_freq` keywords
     kwargs_dbscan : dict
         A dictionary containing all the other DBSCAN keywords
 
@@ -295,7 +295,7 @@ def align_words(
     clusters_text = []
     # ignore min_samples when trying to find the end points of a line
     min_samples = kwargs_dbscan.pop('min_samples', 1)
-    db_words = DBSCAN(eps=kwargs_cluster['eps_word'], metric=kwargs_cluster['metric'], min_samples=1, **kwargs_dbscan).fit(word_line)
+    db_words = DBSCAN(eps=kwargs_cluster['eps_word'], min_samples=1, **kwargs_dbscan).fit(word_line)
     # put min_samples back in
     kwargs_dbscan['min_samples'] = min_samples
     word_labels = sort_labels(db_words.labels_, word_line)
@@ -365,7 +365,7 @@ def cluster_by_line(
     ext_index_gutter : np.array
         A list of extractor indicies used to map the reduction to the extract
     kwargs_cluster : dict
-        A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
+        A dictionary containing the `eps_*`, and `dot_freq` keywords
     kwargs_dbscan : dict
         A dictionary containing all the other DBSCAN keywords
 
@@ -381,7 +381,7 @@ def cluster_by_line(
     words = xy_rotate[:, 0].reshape(-1, 1)
     a_lables = np.unique(annotation_labels)
     avg_lines = np.array([lines[annotation_labels == a].mean() for a in a_lables]).reshape(-1, 1)
-    db_lines = DBSCAN(eps=kwargs_cluster['eps_line'], metric=kwargs_cluster['metric'], **kwargs_dbscan).fit(avg_lines)
+    db_lines = DBSCAN(eps=kwargs_cluster['eps_line'], **kwargs_dbscan).fit(avg_lines)
     line_labels = sort_labels(db_lines.labels_, avg_lines)
     frame_lines = []
     for line_label in line_labels:
@@ -458,7 +458,7 @@ def cluster_by_gutter(
     ext_index_slope : np.array
         A list of extractor indicies used to map the reduction to the extract
     kwargs_cluster : dict
-        A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
+        A dictionary containing the `eps_*` and `dot_freq` keywords
     kwargs_dbscan : dict
         A dictionary containing all the other DBSCAN keywords
 
@@ -532,7 +532,7 @@ def cluster_by_slope(
     ext_index_frame : np.array
         A list of extractor indicies used to map the reduction to the extract
     kwargs_cluster : dict
-        A dictionary containing the `eps_*`, `metric`, and `dot_freq` keywords
+        A dictionary containing the `eps_*` and `dot_freq` keywords
     kwargs_dbscan : dict
         A dictionary containing all the other DBSCAN keywords
 

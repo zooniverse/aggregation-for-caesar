@@ -1176,7 +1176,18 @@ reduced_data = {
             'extract_index': [7, 12, 17, 15],
             'low_consensus': False
         }
-    ]
+    ],
+    'parameters': {
+        'eps_slope': 0.5,
+        'eps_line': 15.0,
+        'eps_word': 30.0,
+        'gutter_tol': 0.0,
+        'min_samples': 2,
+        'dot_freq': 'line',
+        'min_word_count': 1,
+        'low_consensus_threshold': 3.0,
+        'process_by_line': False
+    }
 }
 
 TestSWReducer = ReducerTest(
@@ -1187,19 +1198,19 @@ TestSWReducer = ReducerTest(
     reduced_data,
     'Test SW text reducer',
     okwargs={
-        'metric': 'euclidean',
-        'gutter_tol': 0,
+        'gutter_tol': 0.0,
         'min_word_count': 1,
-        'low_consensus_threshold': 3
+        'low_consensus_threshold': 3.0
     },
     kwargs={
         'eps_slope': 0.5,
-        'eps_line': 15,
-        'eps_word': 30,
+        'eps_line': 15.0,
+        'eps_word': 30.0,
         'dot_freq': 'line',
         'min_samples': 2
     },
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    output_kwargs=True
 )
 
 extracted_data_all_blank = [
@@ -1257,7 +1268,18 @@ processed_data_all_blank = {
 reduced_data_all_blank = {
     'low_consensus_lines': 0,
     'transcribed_lines': 0,
-    'frame0': []
+    'frame0': [],
+    'parameters': {
+        'eps_slope': 0.5,
+        'eps_line': 15.0,
+        'eps_word': 30.0,
+        'gutter_tol': 0.0,
+        'min_samples': 2,
+        'dot_freq': 'line',
+        'min_word_count': 1,
+        'low_consensus_threshold': 3.0,
+        'process_by_line': False
+    }
 }
 
 TestSWReducerAllBlank = ReducerTest(
@@ -1268,17 +1290,17 @@ TestSWReducerAllBlank = ReducerTest(
     reduced_data_all_blank,
     'Test SW text reducer when all extracts are blank',
     okwargs={
-        'metric': 'euclidean',
-        'gutter_tol': 0,
+        'gutter_tol': 0.0,
         'min_word_count': 1,
-        'low_consensus_threshold': 3
+        'low_consensus_threshold': 3.0
     },
     kwargs={
         'eps_slope': 0.5,
-        'eps_line': 15,
-        'eps_word': 30,
+        'eps_line': 15.0,
+        'eps_word': 30.0,
         'dot_freq': 'line',
         'min_samples': 2
     },
-    network_kwargs=kwargs_extra_data_all_blank
+    network_kwargs=kwargs_extra_data_all_blank,
+    output_kwargs=True
 )
