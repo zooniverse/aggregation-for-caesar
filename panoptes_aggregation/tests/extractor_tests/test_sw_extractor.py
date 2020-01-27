@@ -2,6 +2,7 @@ from panoptes_aggregation import extractors
 from .base_test_class import ExtractorTest, TextExtractorTest
 
 classification = {
+    'gold_standard': False,
     'annotations': [
         {
             "task": "T2",
@@ -138,7 +139,8 @@ expected = {
             -1.15266214742,
             -2.34813657242,
             -2.34813657242
-        ]
+        ],
+        'gold_standard': False
     }
 }
 
@@ -149,7 +151,8 @@ expected_blank = {
             'y': []
         },
         'text': [],
-        'slope': []
+        'slope': [],
+        'gold_standard': False
     }
 }
 

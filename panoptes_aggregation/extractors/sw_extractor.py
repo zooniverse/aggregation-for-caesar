@@ -60,8 +60,8 @@ def clean_text(s):
     return s_out
 
 
-@extractor_wrapper()
-def sw_extractor(classification, **kwargs):
+@extractor_wrapper(gold_standard=True)
+def sw_extractor(classification, gold_standard=False, **kwargs):
     '''Extract text annotations from Shakespeares World and AnnoTate.
 
     Parameters
@@ -84,7 +84,8 @@ def sw_extractor(classification, **kwargs):
     blank_frame = OrderedDict([
         ('points', OrderedDict([('x', []), ('y', [])])),
         ('text', []),
-        ('slope', [])
+        ('slope', []),
+        ('gold_standard', gold_standard)
     ])
     frame = 'frame0'
     extract[frame] = copy.deepcopy(blank_frame)
