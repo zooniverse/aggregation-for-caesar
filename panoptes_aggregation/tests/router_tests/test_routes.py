@@ -100,6 +100,11 @@ class RouterTest(unittest.TestCase):
         result = self.ME.default(np.array([5]))
         self.assertIsInstance(result, list)
 
+    def test_MyEncoder_bool(self):
+        '''Test MyEncoder converts numpy arrays'''
+        result = self.ME.default(np.bool_(True))
+        self.assertIsInstance(result, bool)
+
     def test_MyEncoder_other(self):
         '''Test MyEncoder passes all other data types to base to raise error'''
         with self.assertRaises(TypeError):
