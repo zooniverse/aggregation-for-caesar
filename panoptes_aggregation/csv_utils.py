@@ -19,7 +19,8 @@ def unflatten_data(data, json_column='data', renest=True):
         if ('{0}.'.format(json_column) in name) and (pandas.notnull(value)):
             key = name.split('{0}.'.format(json_column))[1]
             try:
-                data_dict[key] = ast.literal_eval(value)
+                nan = None  # noqa
+                data_dict[key] = eval(value)
             except:
                 data_dict[key] = value
     if renest:

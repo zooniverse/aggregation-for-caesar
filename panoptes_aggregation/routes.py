@@ -25,6 +25,8 @@ class MyEncoder(JSONEncoder):
             return float(obj)
         elif isinstance(obj, np.ndarray):
             return obj.tolist()
+        elif isinstance(obj, np.bool_):
+            return bool(obj)
         else:
             return super(MyEncoder, self).default(obj)
 
