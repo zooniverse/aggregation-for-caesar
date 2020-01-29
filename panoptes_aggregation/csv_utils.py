@@ -20,6 +20,9 @@ def unflatten_data(data, json_column='data', renest=True):
             key = name.split('{0}.'.format(json_column))[1]
             try:
                 nan = None  # noqa
+                false = False  # noqa
+                true = True  # noqa
+                null = None  # noqa
                 data_dict[key] = eval(value)
             except:
                 data_dict[key] = value
