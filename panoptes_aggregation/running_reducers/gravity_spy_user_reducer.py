@@ -38,27 +38,33 @@ def gravity_spy_user_reducer(data, **kwargs):
             should be promoted.
         * `alpha_length`: The number of values in the `alpha` dict, used to make sure the
             user has seen every gold standard class of a level before being promoted
+        * `normalized_confusion_matrix`: The column normalized confusion matrix for the user
         * `_store`: The updated store (see above).
     '''
     store = kwargs.pop('store')
-    store.setdefault('confusion_matrix', {})
-    store.setdefault('column_normalization', {})
+    cm = store.get('confusion_matrix', {})
+    n = store.get('column_normalization', {})
     user_label = data[0]['user_label']
     gold_label = data[0]['gold_label']
-    store['confusion_matrix'].setdefault(user_label, {}).setdefault(gold_label, 0)
-    store['confusion_matrix'][user_label][gold_label] += 1
-    store['column_normalization'].setdefault(user_label, 0)
-    store['column_normalization'][user_label] += 1
-    alpha = {}
-    for column_key, norm_value in store['column_normalization'].items():
-        cm_value = store['confusion_matrix'][column_key].get(column_key, 0)
-        if cm_value > 0:
-            alpha[column_key] = cm_value / norm_value
+    cm.setdefault(user_label, {}).setdefault(gold_label, 0)
+    cm[user_label][gold_label] += 1
+    n.setdefault(user_label, 0)
+    n[user_label] += 1
+    normalized_confusion_matrix = {
+        column_key: {
+            row_key: row_value / n[column_key] for row_key, row_value in column_value.items()
+        } for column_key, column_value in cm.items()
+    }
+    alpha = {key: value[key] for key, value in normalized_confusion_matrix.items() if key in value}
     alpha_length = len(alpha)
     alpha_min = min(alpha.values())
     return {
         'alpha': alpha,
         'alpha_min': alpha_min,
         'alpha_length': alpha_length,
-        '_store': store
+        'normalized_confusion_matrix': normalized_confusion_matrix,
+        '_store': {
+            'confusion_matrix': cm,
+            'column_normalization': n
+        }
     }
