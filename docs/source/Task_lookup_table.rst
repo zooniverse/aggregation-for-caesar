@@ -96,3 +96,18 @@ These reducers were designed for use with the TESS project to handle real-time u
 |                                   |                                                        +-------------------------------------------------------------------------+
 |                                   |                                                        | :mod:`panoptes_aggregation.running_reducers.tess_gold_standard_reducer` |
 +-----------------------------------+--------------------------------------------------------+-------------------------------------------------------------------------+
+
+----
+
+Gravity Spy project
+-------------------
+These reducers were designed for use with the Gravity Spy project to handle real-time user weighting and user promotion between workflows.  This process
+requires proper `relevant_reduction` beins sent from the user reducer into the subject recducer.
+
++-----------------------------------+----------------------------------+--------------------------------------------------------------------------+
+| Task Type                         | Extractor                        | Reducer                                                                  |
++===================================+==================================+==========================================================================+
+| Gravity Spy Survey Task           | Caesar's `PluckFieldExtractor`   | :mod:`panoptes_aggregation.running_reducers.gravity_spy_subject_reducer` |
++-----------------------------------+----------------------------------+--------------------------------------------------------------------------+
+| Gravity Spy User Reducer          | Caesar's `PluckFieldExtractor`   | :mod:`panoptes_aggregation.running_reducers.gravity_spy_user_reducer`    |
++-----------------------------------+----------------------------------+--------------------------------------------------------------------------+
