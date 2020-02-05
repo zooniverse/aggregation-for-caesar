@@ -27,10 +27,10 @@ kwargs_extra_data = {
 
 reduced_data = {
     'alpha': {
-        'BLIP': 6/8,
-        'WHISTLE': 8/11
+        'BLIP': 6 / 8,
+        'WHISTLE': 8 / 11
     },
-    'alpha_min': 8/11,
+    'alpha_min': 8 / 11,
     'alpha_length': 2,
     '_store': {
         'confusion_matrix': {

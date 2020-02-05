@@ -25,13 +25,13 @@ def gravity_spy_user_reducer(data, **kwargs):
             standard label.
         * `column_normalization`: The sum of each of the columns (used for normaliztion).
             i.e. The total number of time the user has vote for each choice.
-    
+
     Returns
     -------
     reduction : dict
         A dictionary with four keys:
 
-        * `alpha`: A dictionary of values indicating how well the user classifies each 
+        * `alpha`: A dictionary of values indicating how well the user classifies each
             catagory they have seen gold standard images for (diagonal of the normalized
             confusion matrix).
         * `alpha_min`: The minimum value of `alpha`, this is used to determin when a user
