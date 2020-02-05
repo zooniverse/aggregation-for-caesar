@@ -18,8 +18,7 @@ def tess_user_reducer(data, **kwargs):
         A list with one item containing the extract with the user's feedback on a
         gold standard subject
     store : keyword, list
-        A list with one item containing the user's current store.  This item is a
-        dictinary with two keys:
+        A dictinary with two keys:
 
         * `seed`: sum of all previous `seed` values
         * `count`: sum of all previous gold standard transits seen
