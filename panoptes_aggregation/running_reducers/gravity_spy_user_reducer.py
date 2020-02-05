@@ -17,7 +17,7 @@ def gravity_spy_user_reducer(data, **kwargs):
     data : list
         A list with one item containing the extract with the user's choice
         and the gold standard label.
-    store : keyword, list
+    store : keyword, dict
         A dictonary with two keys:
 
         * `confusion_matrix`: The confusion matrix for the user (stored as nested dict).
@@ -39,7 +39,7 @@ def gravity_spy_user_reducer(data, **kwargs):
         * `alpha_length`: The number of values in the `alpha` dict, used to make sure the
             user has seen every gold standard class of a level before being promoted
         * `normalized_confusion_matrix`: The column normalized confusion matrix for the user
-        * `_store`: The updated store (see above).
+        * `_store`: The updated store (see above)
     '''
     store = kwargs.pop('store')
     cm = store.get('confusion_matrix', {})

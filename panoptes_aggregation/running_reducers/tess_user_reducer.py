@@ -17,7 +17,7 @@ def tess_user_reducer(data, **kwargs):
     data : list
         A list with one item containing the extract with the user's feedback on a
         gold standard subject
-    store : keyword, list
+    store : keyword, dict
         A dictinary with two keys:
 
         * `seed`: sum of all previous `seed` values
