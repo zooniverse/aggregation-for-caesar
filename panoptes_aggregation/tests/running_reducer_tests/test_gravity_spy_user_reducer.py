@@ -32,6 +32,16 @@ reduced_data = {
     },
     'alpha_min': 8 / 11,
     'alpha_length': 2,
+    'normalized_confusion_matrix': {
+        'BLIP': {
+            'BLIP': 6 / 8,
+            'WHISTLE': 2 / 8
+        },
+        'WHISTLE': {
+            'BLIP': 3 / 11,
+            'WHISTLE': 8 / 11
+        }
+    },
     '_store': {
         'confusion_matrix': {
             'BLIP': {
@@ -68,6 +78,11 @@ reduced_data_no_store = {
     },
     'alpha_min': 1.0,
     'alpha_length': 1,
+    'normalized_confusion_matrix': {
+        'BLIP': {
+            'BLIP': 1
+        }
+    },
     '_store': {
         'confusion_matrix': {
             'BLIP': {
