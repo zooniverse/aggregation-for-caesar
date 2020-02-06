@@ -18,12 +18,12 @@ def gravity_spy_user_reducer(data, **kwargs):
         A list with one item containing the extract with the user's choice
         and the gold standard label.
     store : keyword, dict
-        A dictonary with two keys:
+        A dictionary with two keys:
 
         * `confusion_matrix`: The confusion matrix for the user (stored as nested dict).
-            The frist key is the choice given by the user, the second key is the gold
+            The first key is the choice given by the user, the second key is the gold
             standard label.
-        * `column_normalization`: The sum of each of the columns (used for normaliztion).
+        * `column_normalization`: The sum of each of the columns (used for normalization).
             i.e. The total number of time the user has vote for each choice.
 
     Returns
@@ -32,7 +32,7 @@ def gravity_spy_user_reducer(data, **kwargs):
         A dictionary with four keys:
 
         * `alpha`: A dictionary of values indicating how well the user classifies each
-            catagory they have seen gold standard images for (diagonal of the normalized
+            category they have seen gold standard images for (diagonal of the normalized
             confusion matrix).
         * `alpha_min`: The minimum value of `alpha`, this is used to determin when a user
             should be promoted.

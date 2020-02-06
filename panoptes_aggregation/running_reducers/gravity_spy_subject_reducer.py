@@ -1,8 +1,8 @@
 '''
 Gravity Spy Subject Reducer
 ---------------------------
-This module porvides functions to calculate subject reducions for the Gravity Spy
-project. Extracts are from Ceasars `PluckFieldExtractor`.
+This module provides functions to calculate subject reductions for the Gravity Spy
+project. Extracts are from Ceasar's `PluckFieldExtractor`.
 '''
 from .running_reducer_wrapper import running_reducer_wrapper
 from collections import Counter
@@ -10,7 +10,7 @@ from collections import Counter
 
 @running_reducer_wrapper(relevant_reduction=True)
 def gravity_spy_subject_reducer(data, **kwargs):
-    '''Calculate Gravity Spy catagory weights for a subject using volunteer's
+    '''Calculate Gravity Spy category weights for a subject using volunteer's
     confusion matrices.
 
     Parameters
@@ -19,10 +19,10 @@ def gravity_spy_subject_reducer(data, **kwargs):
         A list with one item containing the extract with the user's choice and
         the resulting weights from the ML code (stored in the subject metadata)
     store : keyword, dict
-        A dictonary with two keys:
+        A dictionary with two keys:
 
         * `number_views`: The number of times the subject has been seen (the ML results count for 1 of these)
-        * `catagory_weights_sum`: The running sum for the weights in each catagory
+        * `category_weights_sum`: The running sum for the weights in each category
     relevant_reduction : keyword, list
         A list with one item containing the results of the current user's confusion matrix reducer
         (see :meth:`panoptes_aggregation.running_reducers.gravity_spy_user_reduce.gravity_spy_user_reduce`)
@@ -30,12 +30,12 @@ def gravity_spy_subject_reducer(data, **kwargs):
     Returns
     -------
     reduction: dict
-        A dictonary with four keys:
+        A dictionary with four keys:
 
         * `number_views`: Number of times the subject has been seen (the ML results count for 1 of these)
-        * `catagory_weights`: A dictonary of values corrisponding to the probability the subject belongs
-            to each listed catagory (all values sum to 1)
-        * `max_catagory_weight`: The max value from the `catagory_weights ` dict, used to retire the subject
+        * `category_weights`: A dictionary of values corresponding to the probability the subject belongs
+            to each listed category (all values sum to 1)
+        * `max_category_weight`: The max value from the `category_weights ` dict, used to retire the subject
         * `_store`: The updated store (see above)
     '''
     store = kwargs.pop('store')
@@ -53,23 +53,23 @@ def gravity_spy_subject_reducer(data, **kwargs):
     number_views = store.get('number_views', 0)
     if number_views == 0:
         # This is the first time the subject has been viewed.
-        # Use the ML weigths as the "first vote"
+        # Use the ML weights as the "first vote"
         number_views += 1
-        catagory_weights_sum = Counter(data[0]['ml_weights'])
+        category_weights_sum = Counter(data[0]['ml_weights'])
     else:
-        catagory_weights_sum = Counter(store['catagory_weights_sum'])
+        category_weights_sum = Counter(store['catagory_weights_sum'])
     if len(user_weight) > 0:
         # Only update values if there is a non-zero weight to add
         number_views += 1
-        catagory_weights_sum += user_weight
-    catagory_weights = {key: value / number_views for key, value in catagory_weights_sum.items()}
-    max_catagory_weight = max(catagory_weights.values())
+        category_weights_sum += user_weight
+    category_weights = {key: value / number_views for key, value in category_weights_sum.items()}
+    max_category_weight = max(category_weights.values())
     return {
         'number_views': number_views,
-        'catagory_weights': catagory_weights,
-        'max_catagory_weight': max_catagory_weight,
+        'category_weights': category_weights,
+        'max_category_weight': max_category_weight,
         '_store': {
             'number_views': number_views,
-            'catagory_weights_sum': dict(catagory_weights_sum)
+            'catagory_weights_sum': dict(category_weights_sum)
         }
     }
