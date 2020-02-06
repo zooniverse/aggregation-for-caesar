@@ -47,7 +47,7 @@ def running_reducer_wrapper(
             if not no_version:
                 append_version(reduction)
             return reduction
-        #: keep the orignal function around for testing
+        #: keep the original function around for testing
         #: and access by other reducers
         wrapper._original = func
         return wrapper

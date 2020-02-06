@@ -32,6 +32,7 @@ kwargs_extra_data = {
     ],
     'store': {
         'number_views': 3,
+        'none_of_the_above_count': 0,
         'category_weights_sum': {
             'BLIP': 2.4,
             'WHISTLE': 0.6
@@ -41,6 +42,7 @@ kwargs_extra_data = {
 
 reduced_data = {
     'number_views': 4,
+    'none_of_the_above_count': 0,
     'category_weights': {
         'BLIP': 0.7875,
         'WHISTLE': 0.2125
@@ -48,6 +50,7 @@ reduced_data = {
     'max_category_weight': 0.7875,
     '_store': {
         'number_views': 4,
+        'none_of_the_above_count': 0,
         'category_weights_sum': {
             'BLIP': 3.15,
             'WHISTLE': 0.85
@@ -89,12 +92,14 @@ kwargs_extra_data_no_store = {
 
 reduced_data_no_store = {
     'number_views': 2,
+    'none_of_the_above_count': 0,
     'category_weights': {
         'BLIP': 0.425,
         'WHISTLE': 0.575
     },
     'max_category_weight': 0.575,
     '_store': {
+        'none_of_the_above_count': 0,
         'number_views': 2,
         'category_weights_sum': {
             'BLIP': 0.85,
@@ -120,6 +125,7 @@ kwargs_extra_data_no_rr = {
 
 reduced_data_no_rr = {
     'number_views': 1,
+    'none_of_the_above_count': 0,
     'category_weights': {
         'BLIP': 0.1,
         'WHISTLE': 0.9
@@ -127,6 +133,7 @@ reduced_data_no_rr = {
     'max_category_weight': 0.9,
     '_store': {
         'number_views': 1,
+        'none_of_the_above_count': 0,
         'category_weights_sum': {
             'BLIP': 0.1,
             'WHISTLE': 0.9
@@ -160,6 +167,7 @@ kwargs_extra_data_no_column = {
     ],
     'store': {
         'number_views': 1,
+        'none_of_the_above_count': 0,
         'category_weights_sum': {
             'BLIP': 0.1,
             'WHISTLE': 0.9
@@ -169,6 +177,7 @@ kwargs_extra_data_no_column = {
 
 reduced_data_no_column = {
     'number_views': 1,
+    'none_of_the_above_count': 0,
     'category_weights': {
         'BLIP': 0.1,
         'WHISTLE': 0.9
@@ -176,6 +185,7 @@ reduced_data_no_column = {
     'max_category_weight': 0.9,
     '_store': {
         'number_views': 1,
+        'none_of_the_above_count': 0,
         'category_weights_sum': {
             'BLIP': 0.1,
             'WHISTLE': 0.9
@@ -189,4 +199,39 @@ TestGravitySpySubjectReducerNoColumn = RunningReducerTestNoProcessing(
     reduced_data_no_column,
     'Test Gravity Spy Subject reducer no confusion matrix',
     network_kwargs=kwargs_extra_data_no_column
+)
+
+extracted_data_none_key = [{
+    'user_label': 'NONE',
+    'ml_weights': {
+        'BLIP': 0.1,
+        'WHISTLE': 0.9
+    }
+}]
+
+reduced_data_none_key = {
+    'number_views': 1,
+    'none_of_the_above_count': 1,
+    'category_weights': {
+        'BLIP': 0.1,
+        'WHISTLE': 0.9
+    },
+    'max_category_weight': 0.9,
+    '_store': {
+        'number_views': 1,
+        'none_of_the_above_count': 1,
+        'category_weights_sum': {
+            'BLIP': 0.1,
+            'WHISTLE': 0.9
+        }
+    }
+}
+
+TestGravitySpySubjectReducerNoneKey = RunningReducerTestNoProcessing(
+    gravity_spy_subject_reducer,
+    extracted_data_none_key,
+    reduced_data_none_key,
+    'Test Gravity Spy Subject reducer none of the above',
+    network_kwargs=kwargs_extra_data_no_rr,
+    kwargs={'none_key': 'NONE'}
 )
