@@ -85,7 +85,7 @@ setup(
         'beautifulsoup4>=4.8.1,<4.9',
         'collatex>=2.2,<2.3',
         'hdbscan>=0.8.20,<0.8.25',
-        'lxml>=4.4,<4.5',
+        'lxml>=4.4,<4.6',
         'numpy>=1.16.3,<1.19',
         'pandas>=0.24.2,<1.0.2',
         'progressbar2>=3.39,<3.48',
