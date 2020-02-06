@@ -32,7 +32,7 @@ kwargs_extra_data = {
     ],
     'store': {
         'number_views': 3,
-        'catagory_weights_sum': {
+        'category_weights_sum': {
             'BLIP': 2.4,
             'WHISTLE': 0.6
         }
@@ -41,14 +41,14 @@ kwargs_extra_data = {
 
 reduced_data = {
     'number_views': 4,
-    'catagory_weights': {
+    'category_weights': {
         'BLIP': 0.7875,
         'WHISTLE': 0.2125
     },
-    'max_catagory_weight': 0.7875,
+    'max_category_weight': 0.7875,
     '_store': {
         'number_views': 4,
-        'catagory_weights_sum': {
+        'category_weights_sum': {
             'BLIP': 3.15,
             'WHISTLE': 0.85
         }
@@ -89,14 +89,14 @@ kwargs_extra_data_no_store = {
 
 reduced_data_no_store = {
     'number_views': 2,
-    'catagory_weights': {
+    'category_weights': {
         'BLIP': 0.425,
         'WHISTLE': 0.575
     },
-    'max_catagory_weight': 0.575,
+    'max_category_weight': 0.575,
     '_store': {
         'number_views': 2,
-        'catagory_weights_sum': {
+        'category_weights_sum': {
             'BLIP': 0.85,
             'WHISTLE': 1.15
         }
@@ -120,14 +120,14 @@ kwargs_extra_data_no_rr = {
 
 reduced_data_no_rr = {
     'number_views': 1,
-    'catagory_weights': {
+    'category_weights': {
         'BLIP': 0.1,
         'WHISTLE': 0.9
     },
-    'max_catagory_weight': 0.9,
+    'max_category_weight': 0.9,
     '_store': {
         'number_views': 1,
-        'catagory_weights_sum': {
+        'category_weights_sum': {
             'BLIP': 0.1,
             'WHISTLE': 0.9
         }
@@ -160,7 +160,7 @@ kwargs_extra_data_no_column = {
     ],
     'store': {
         'number_views': 1,
-        'catagory_weights_sum': {
+        'category_weights_sum': {
             'BLIP': 0.1,
             'WHISTLE': 0.9
         }
@@ -169,14 +169,14 @@ kwargs_extra_data_no_column = {
 
 reduced_data_no_column = {
     'number_views': 1,
-    'catagory_weights': {
+    'category_weights': {
         'BLIP': 0.1,
         'WHISTLE': 0.9
     },
-    'max_catagory_weight': 0.9,
+    'max_category_weight': 0.9,
     '_store': {
         'number_views': 1,
-        'catagory_weights_sum': {
+        'category_weights_sum': {
             'BLIP': 0.1,
             'WHISTLE': 0.9
         }
