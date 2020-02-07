@@ -91,5 +91,6 @@ TestPointsCluster = ReducerTestPoints(
         'min_cluster_size': 5,
         'min_samples': 3
     },
-    atol=2.5
+    atol=2.5,
+    test_name='TestPointsCluster'
 )

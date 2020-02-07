@@ -1211,7 +1211,8 @@ TestSWReducer = ReducerTest(
         'min_samples': 2
     },
     network_kwargs=kwargs_extra_data,
-    output_kwargs=True
+    output_kwargs=True,
+    test_name='TestSWReducer'
 )
 
 extracted_data_all_blank = [
@@ -1304,5 +1305,6 @@ TestSWReducerAllBlank = ReducerTest(
         'min_samples': 2
     },
     network_kwargs=kwargs_extra_data_all_blank,
-    output_kwargs=True
+    output_kwargs=True,
+    test_name='TestSWReducerAllBlank'
 )

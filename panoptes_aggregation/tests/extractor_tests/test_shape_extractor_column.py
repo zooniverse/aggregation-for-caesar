@@ -53,7 +53,8 @@ TestShapeColumn = ExtractorTest(
     classification,
     expected,
     'Test shape column',
-    kwargs={'shape': 'column'}
+    kwargs={'shape': 'column'},
+    test_name='TestShapeColumn'
 )
 
 TestShapeColumnTask = ExtractorTest(
@@ -64,7 +65,8 @@ TestShapeColumnTask = ExtractorTest(
     kwargs={
         'shape': 'column',
         'task': 'T0'
-    }
+    },
+    test_name='TestShapeColumnTask'
 )
 
 TestShapeColumnAllTools = ExtractorTest(
@@ -76,7 +78,8 @@ TestShapeColumnAllTools = ExtractorTest(
         'shape': 'column',
         'task': 'T0',
         'tools': [0, 1]
-    }
+    },
+    test_name='TestShapeColumnAllTools'
 )
 
 expected_0 = {
@@ -96,7 +99,8 @@ TestShapeColumnOneTool = ExtractorTest(
         'shape': 'column',
         'task': 'T0',
         'tools': [0]
-    }
+    },
+    test_name='TestShapeColumnOneTool'
 )
 
 classification_blank = {
@@ -126,5 +130,6 @@ TestShapeColumnBlank = ExtractorTest(
         'shape': 'column',
         'task': 'T0',
         'tools': [0]
-    }
+    },
+    test_name='TestShapeColumnBlank'
 )

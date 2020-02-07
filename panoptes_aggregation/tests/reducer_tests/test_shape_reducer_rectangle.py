@@ -136,7 +136,8 @@ TestShapeReducerRectangle = ReducerTest(
     kwargs={
         'eps': 5,
         'min_samples': 2
-    }
+    },
+    test_name='TestShapeReducerRectangle'
 )
 
 reduced_data_hdbscan = copy.deepcopy(reduced_data)
@@ -160,5 +161,6 @@ TestShapeReducerRectangleHdbscan = ReducerTest(
         'min_cluster_size': 2,
         'min_samples': 1,
         'allow_single_cluster': True
-    }
+    },
+    test_name='TestShapeReducerRectangleHdbscan'
 )

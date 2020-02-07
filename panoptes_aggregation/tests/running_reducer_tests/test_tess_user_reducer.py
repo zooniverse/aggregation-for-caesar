@@ -38,12 +38,13 @@ reduced_data = {
     }
 }
 
-TestTESSUserReduer = RunningReducerTestNoProcessing(
+TestTESSUserReducer = RunningReducerTestNoProcessing(
     tess_user_reducer,
     extracted_data,
     reduced_data,
     'Test TESS User reducer',
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    test_name='TestTESSUserReducer'
 )
 
 kwargs_extra_data_no_rr = {
@@ -61,12 +62,13 @@ reduced_data_no_rr = {
     }
 }
 
-TestTESSUserReduerNoRR = RunningReducerTestNoProcessing(
+TestTESSUserReducerNoRR = RunningReducerTestNoProcessing(
     tess_user_reducer,
     extracted_data,
     reduced_data_no_rr,
     'Test TESS User reducer with no relevant reduction',
-    network_kwargs=kwargs_extra_data_no_rr
+    network_kwargs=kwargs_extra_data_no_rr,
+    test_name='TestTESSUserReducerNoRR'
 )
 
 kwargs_extra_data_no_gs_extract = {
@@ -78,10 +80,11 @@ kwargs_extra_data_no_gs_extract = {
     'store': {}
 }
 
-TestTESSUserReduerNoGSExtract = RunningReducerTestNoProcessing(
+TestTESSUserReducerNoGSExtract = RunningReducerTestNoProcessing(
     tess_user_reducer,
     extracted_data,
     reduced_data_no_rr,
     'Test TESS User reducer with no GS extract',
-    network_kwargs=kwargs_extra_data_no_gs_extract
+    network_kwargs=kwargs_extra_data_no_gs_extract,
+    test_name='TestTESSUserReducerNoGSExtract'
 )

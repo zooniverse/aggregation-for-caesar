@@ -67,7 +67,8 @@ TestShapeTriangle = ExtractorTest(
     classification,
     expected,
     'Test shape triangle',
-    kwargs={'shape': 'triangle'}
+    kwargs={'shape': 'triangle'},
+    test_name='TestShapeTriangle'
 )
 
 TestShapeTriangleTask = ExtractorTest(
@@ -78,7 +79,8 @@ TestShapeTriangleTask = ExtractorTest(
     kwargs={
         'shape': 'triangle',
         'task': 'T0'
-    }
+    },
+    test_name='TestShapeTriangleTask'
 )
 
 TestShapeTriangleAllTools = ExtractorTest(
@@ -90,7 +92,8 @@ TestShapeTriangleAllTools = ExtractorTest(
         'shape': 'triangle',
         'task': 'T0',
         'tools': [0, 1]
-    }
+    },
+    test_name='TestShapeTriangleAllTools'
 )
 
 expected_0 = {
@@ -112,5 +115,6 @@ TestShapeTriangleOneTool = ExtractorTest(
         'shape': 'triangle',
         'task': 'T0',
         'tools': [0]
-    }
+    },
+    test_name='TestShapeTriangleOneTool'
 )

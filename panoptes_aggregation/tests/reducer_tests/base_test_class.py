@@ -38,7 +38,8 @@ def ReducerTest(
     network_kwargs={},
     processed_type='dict',
     add_version=True,
-    output_kwargs=False
+    output_kwargs=False,
+    test_name=None
 ):
     # pkwargs: keywords passed into the process_data function
     # okwargs: keywords only passed into the _original function
@@ -97,10 +98,21 @@ def ReducerTest(
                 result = reducer(flask.request)
                 self.assertDictEqual(cast_to_dict(result), self.reduced_with_version)
 
+    if test_name is None:
+        test_name = '_'.join(name.split())
+    ReducerTest.__name__ = test_name
+    ReducerTest.__qualname__ = test_name
     return ReducerTest
 
 
-def ReducerTestNoProcessing(reducer, extracted, reduced, name, kwargs={}):
+def ReducerTestNoProcessing(
+    reducer,
+    extracted,
+    reduced,
+    name,
+    kwargs={},
+    test_name=None
+):
     class ReducerTestNoProcessing(unittest.TestCase):
         def setUp(self):
             self.maxDiff = None
@@ -135,10 +147,22 @@ def ReducerTestNoProcessing(reducer, extracted, reduced, name, kwargs={}):
                 result = reducer(flask.request)
                 self.assertDictEqual(result, self.reduced_with_version)
 
+    if test_name is None:
+        test_name = '_'.join(name.split())
+    ReducerTestNoProcessing.__name__ = test_name
+    ReducerTestNoProcessing.__qualname__ = test_name
     return ReducerTestNoProcessing
 
 
-def ReducerTestSurvey(reducer, processer, extracted, processed, reduced, name):
+def ReducerTestSurvey(
+    reducer,
+    processer,
+    extracted,
+    processed,
+    reduced,
+    name,
+    test_name=None
+):
     class ReducerTest(unittest.TestCase):
         def setUp(self):
             self.maxDiff = None
@@ -181,10 +205,24 @@ def ReducerTestSurvey(reducer, processer, extracted, processed, reduced, name):
                 result = reducer(flask.request)
                 self.assertCountEqual(result, self.reduced_with_version)
 
+    if test_name is None:
+        test_name = '_'.join(name.split())
+    ReducerTest.__name__ = test_name
+    ReducerTest.__qualname__ = test_name
     return ReducerTest
 
 
-def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, kwargs={}, atol=2):
+def ReducerTestPoints(
+    reducer,
+    processer,
+    extracted,
+    processed,
+    reduced,
+    name,
+    kwargs={},
+    atol=2,
+    test_name=None
+):
     class ReducerTest(unittest.TestCase):
         def setUp(self):
             self.maxDiff = None
@@ -257,4 +295,8 @@ def ReducerTestPoints(reducer, processer, extracted, processed, reduced, name, k
                 result = reducer(flask.request)
                 self.assertPoints(result, self.reduced_with_version)
 
+    if test_name is None:
+        test_name = '_'.join(name.split())
+    ReducerTest.__name__ = test_name
+    ReducerTest.__qualname__ = test_name
     return ReducerTest

@@ -133,7 +133,8 @@ TestTESSReducerColumnLeft = ReducerTest(
         'eps': 50,
         'min_samples': 2
     },
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    test_name='TestTESSReducerColumnLeft'
 )
 
 reduced_data_center = copy.deepcopy(reduced_data)
@@ -155,7 +156,8 @@ TestTESSReducerColumnCenter = ReducerTest(
         'eps': 50,
         'min_samples': 2
     },
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    test_name='TestTESSReducerColumnCenter'
 )
 
 extracted_data_no_cluster = [
@@ -213,5 +215,6 @@ TestTESSReducerNoCluster = ReducerTest(
         'eps': 50,
         'min_samples': 2
     },
-    network_kwargs=kwargs_extra_data_no_cluster
+    network_kwargs=kwargs_extra_data_no_cluster,
+    test_name='TestTESSReducerNoCluster'
 )

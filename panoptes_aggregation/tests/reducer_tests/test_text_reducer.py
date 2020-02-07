@@ -35,7 +35,8 @@ TestTextReducer = ReducerTest(
     processed_data,
     reduced_data,
     'Test text reducer',
-    processed_type='list'
+    processed_type='list',
+    test_name='TestTextReducer'
 )
 
 extracted_data_blank = [
@@ -47,12 +48,13 @@ extracted_data_blank = [
 processed_data_blank = []
 reduced_data_blank = {}
 
-TextBalnkTextReducer = ReducerTest(
+TextBlankTextReducer = ReducerTest(
     text_reducer,
     process_data,
     extracted_data_blank,
     processed_data_blank,
     reduced_data_blank,
-    'Test text reducer all extracts balnk',
-    processed_type='list'
+    'Test text reducer all extracts blank',
+    processed_type='list',
+    test_name='TextBlankTextReducer'
 )

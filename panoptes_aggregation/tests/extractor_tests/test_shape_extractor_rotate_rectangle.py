@@ -74,7 +74,8 @@ TestShapeRotateRectangle = ExtractorTest(
     classification,
     expected,
     'Test shape rotateRectangle',
-    kwargs={'shape': 'rotateRectangle'}
+    kwargs={'shape': 'rotateRectangle'},
+    test_name='TestShapeRotateRectangle'
 )
 
 TestShapeRotateRectangleTask = ExtractorTest(
@@ -85,7 +86,8 @@ TestShapeRotateRectangleTask = ExtractorTest(
     kwargs={
         'shape': 'rotateRectangle',
         'task': 'T0'
-    }
+    },
+    test_name='TestShapeRotateRectangleTask'
 )
 
 TestShapeRotateRectangleAllTools = ExtractorTest(
@@ -97,7 +99,8 @@ TestShapeRotateRectangleAllTools = ExtractorTest(
         'shape': 'rotateRectangle',
         'task': 'T0',
         'tools': [0, 1]
-    }
+    },
+    test_name='TestShapeRotateRectangleAllTools'
 )
 
 expected_0 = {
@@ -120,5 +123,6 @@ TestShapeRotateRectangleOneTool = ExtractorTest(
         'shape': 'rotateRectangle',
         'task': 'T0',
         'tools': [0]
-    }
+    },
+    test_name='TestShapeRotateRectangleOneTool'
 )

@@ -28,5 +28,6 @@ TestSliderReducer = ReducerTest(
     processed_data,
     reduced_data,
     'Test slider reducer',
-    processed_type='list'
+    processed_type='list',
+    test_name='TestSliderReducer'
 )

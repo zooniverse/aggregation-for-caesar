@@ -56,7 +56,8 @@ TestPointsCluster = ReducerTestPoints(
         'eps': 5,
         'min_samples': 3
     },
-    atol=2
+    atol=2,
+    test_name='TestPointsCluster'
 )
 
 extracted_data_one_point = [
@@ -91,5 +92,6 @@ TestOnePointCluster = ReducerTestPoints(
         'eps': 5,
         'min_samples': 1
     },
-    atol=2
+    atol=2,
+    test_name='TestOnePointCluster'
 )

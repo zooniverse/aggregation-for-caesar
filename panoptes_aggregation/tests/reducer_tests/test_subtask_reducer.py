@@ -185,5 +185,6 @@ TestSubtaskReducer = ReducerTestNoProcessing(
                 None
             ]
         }
-    }
+    },
+    test_name='TestSubtaskReducer'
 )

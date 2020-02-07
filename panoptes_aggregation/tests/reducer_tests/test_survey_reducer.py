@@ -95,5 +95,6 @@ TestSurvey = ReducerTestSurvey(
     extracted_data,
     processed_data,
     reduced_data,
-    'Test survey reducer'
+    'Test survey reducer',
+    test_name='TestSurvey'
 )

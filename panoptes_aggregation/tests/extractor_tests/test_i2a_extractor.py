@@ -56,7 +56,8 @@ TestI2A = ExtractorTest(
     extractors.i2a_extractor,
     classification,
     expected,
-    'Test i2a'
+    'Test i2a',
+    test_name='TestI2A'
 )
 
 classification_blank = {
@@ -96,5 +97,6 @@ TestI2A_blank = ExtractorTest(
     extractors.i2a_extractor,
     classification_blank,
     expected_blank,
-    'Test i2a with blank annotation'
+    'Test i2a with blank annotation',
+    test_name='TestI2A_blank'
 )

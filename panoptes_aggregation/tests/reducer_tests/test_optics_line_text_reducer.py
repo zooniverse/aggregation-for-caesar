@@ -506,7 +506,8 @@ TestOpticsLTReducer = ReducerTest(
         'min_samples': 'auto'
     },
     network_kwargs=kwargs_extra_data,
-    output_kwargs=True
+    output_kwargs=True,
+    test_name='TestOpticsLTReducer'
 )
 
 reduced_data2 = copy.deepcopy(reduced_data)
@@ -525,7 +526,8 @@ TestOpticsLTReducerWithMinSamples = ReducerTest(
         'low_consensus_threshold': 3.0
     },
     network_kwargs=kwargs_extra_data,
-    output_kwargs=True
+    output_kwargs=True,
+    test_name='TestOpticsLTReducerWithMinSamples'
 )
 
 extracted_data_with_dollar_sign = [
@@ -694,7 +696,8 @@ TestOpticsLTReducerWithDollarSign = ReducerTest(
     },
     okwargs={'min_samples': 'auto'},
     network_kwargs=kwargs_extra_data_with_dollar_sign,
-    output_kwargs=True
+    output_kwargs=True,
+    test_name='TestOpticsLTReducerWithDollarSign'
 )
 
 # this is a real classification that happened on ASM
@@ -761,5 +764,6 @@ TestOpticsLTReducerNoLengthLine = ReducerTest(
         'low_consensus_threshold': 3.0
     },
     network_kwargs=kwargs_extra_data_no_length,
-    output_kwargs=True
+    output_kwargs=True,
+    test_name='TestOpticsLTReducerNoLengthLine'
 )

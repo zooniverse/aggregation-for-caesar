@@ -19,5 +19,6 @@ TestSWVariantsReducer = ReducerTestNoProcessing(
     reducers.sw_variant_reducer,
     extracted_data,
     reduced_data,
-    'Test SW variants reducer'
+    'Test SW variants reducer',
+    test_name='TestSWVariantsReducer'
 )

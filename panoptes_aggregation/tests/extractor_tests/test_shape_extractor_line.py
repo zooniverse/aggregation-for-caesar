@@ -67,7 +67,8 @@ TestShapeLine = ExtractorTest(
     classification,
     expected,
     'Test shape line',
-    kwargs={'shape': 'line'}
+    kwargs={'shape': 'line'},
+    test_name='TestShapeLine'
 )
 
 TestShapeLineTask = ExtractorTest(
@@ -78,7 +79,8 @@ TestShapeLineTask = ExtractorTest(
     kwargs={
         'shape': 'line',
         'task': 'T0'
-    }
+    },
+    test_name='TestShapeLineTask'
 )
 
 TestShapeLineAllTools = ExtractorTest(
@@ -90,7 +92,8 @@ TestShapeLineAllTools = ExtractorTest(
         'shape': 'line',
         'task': 'T0',
         'tools': [0, 1]
-    }
+    },
+    test_name='TestShapeLineAllTools'
 )
 
 expected_0 = {
@@ -112,5 +115,6 @@ TestShapeLineOneTool = ExtractorTest(
         'shape': 'line',
         'task': 'T0',
         'tools': [0]
-    }
+    },
+    test_name='TestShapeLineOneTool'
 )

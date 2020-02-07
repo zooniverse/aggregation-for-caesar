@@ -141,7 +141,8 @@ TestLineText = TextExtractorTest(
     extractors.line_text_extractor,
     classification,
     expected,
-    'Test line-text extractor'
+    'Test line-text extractor',
+    test_name='TestLineText'
 )
 
 TestLineTextTool = TextExtractorTest(
@@ -149,5 +150,6 @@ TestLineTextTool = TextExtractorTest(
     classification,
     expected,
     'Test line-text extractor with tool specified',
-    kwargs={'tools': [0]}
+    kwargs={'tools': [0]},
+    test_name='TestLineTextTool'
 )

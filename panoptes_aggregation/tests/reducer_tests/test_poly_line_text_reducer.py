@@ -938,7 +938,8 @@ TestPLTReducer = ReducerTest(
         'low_consensus_threshold': 4.0
     },
     network_kwargs=kwargs_extra_data,
-    output_kwargs=True
+    output_kwargs=True,
+    test_name='TestPLTReducer'
 )
 
 processed_data_by_line = {
@@ -1546,7 +1547,8 @@ TestPLTReducerByLine = ReducerTest(
         'low_consensus_threshold': 4.0
     },
     network_kwargs=kwargs_extra_data,
-    output_kwargs=True
+    output_kwargs=True,
+    test_name='TestPLTReducerByLine'
 )
 
 reduced_data_min_word = {
@@ -1839,7 +1841,8 @@ TestPLTReducerWithMinWordCount = ReducerTest(
         'low_consensus_threshold': 4
     },
     network_kwargs=kwargs_extra_data,
-    output_kwargs=True
+    output_kwargs=True,
+    test_name='TestPLTReducerWithMinWordCount'
 )
 
 # this is a real classification that happened on ASM
@@ -1921,5 +1924,6 @@ TestPolyLTReducerNoLengthLine = ReducerTest(
         'low_consensus_threshold': 4.0
     },
     network_kwargs=kwargs_extra_data_no_length,
-    output_kwargs=True
+    output_kwargs=True,
+    test_name='TestPolyLTReducerNoLengthLine'
 )

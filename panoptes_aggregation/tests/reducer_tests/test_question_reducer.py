@@ -18,7 +18,8 @@ TestQuestionReducer = ReducerTestNoProcessing(
     question_reducer,
     extracted_data,
     reduced_data,
-    'Test question reducer'
+    'Test question reducer',
+    test_name='TestQuestionReducer'
 )
 
 reduced_data_pairs = {
@@ -32,5 +33,6 @@ TestQuestionReducerPairs = ReducerTestNoProcessing(
     extracted_data,
     reduced_data_pairs,
     'Test question reducer as pairs',
-    kwargs={'pairs': True}
+    kwargs={'pairs': True},
+    test_name='TestQuestionReducerPairs'
 )

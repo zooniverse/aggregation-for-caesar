@@ -37,7 +37,8 @@ TestTESSGoldStandardRunningReducer = RunningReducerTestNoProcessing(
     extracted_data,
     reduced_data,
     'Test TESS gold standard reducer in running mode',
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    test_name='TestTESSGoldStandardRunningReducer'
 )
 
 kwargs_extra_data_no_store = {
@@ -57,7 +58,8 @@ TestTESSGoldStandardRunningReducerNoStore = RunningReducerTestNoProcessing(
     extracted_data,
     reduced_data_no_store,
     'Test TESS gold standard reducer in running mode with no store',
-    network_kwargs=kwargs_extra_data_no_store
+    network_kwargs=kwargs_extra_data_no_store,
+    test_name='TestTESSGoldStandardRunningReducerNoStore'
 )
 
 extracted_data_empty = []
@@ -75,7 +77,8 @@ TestTESSGoldStandardRunningReducerEmptyExtract = RunningReducerTestNoProcessing(
     extracted_data_empty,
     reduced_data_empty,
     'Test TESS gold standard reducer in running mode with empty extract',
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    test_name='TestTESSGoldStandardRunningReducerEmptyExtract'
 )
 
 reduced_data_empty_no_store = {
@@ -87,5 +90,6 @@ TestTESSGoldStandardRunningReducerEmptyExtractNoStore = RunningReducerTestNoProc
     extracted_data_empty,
     reduced_data_empty_no_store,
     'Test TESS gold standard reducer in running mode with empty extract and no store',
-    network_kwargs=kwargs_extra_data_no_store
+    network_kwargs=kwargs_extra_data_no_store,
+    test_name='TestTESSGoldStandardRunningReducerEmptyExtractNoStore'
 )

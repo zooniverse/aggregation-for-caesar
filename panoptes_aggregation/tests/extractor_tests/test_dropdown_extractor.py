@@ -35,5 +35,6 @@ TestDropdown = ExtractorTest(
     extractors.dropdown_extractor,
     classification,
     expected,
-    'Test dropdown list'
+    'Test dropdown list',
+    test_name='TestDropdown'
 )

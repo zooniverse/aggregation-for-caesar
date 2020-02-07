@@ -91,7 +91,7 @@ reduced_data = {
     }
 }
 
-TestSWReducer = ReducerTest(
+TestSWReducerMinSample = ReducerTest(
     poly_line_text_reducer,
     process_data,
     extracted_data,
@@ -111,5 +111,6 @@ TestSWReducer = ReducerTest(
         'min_samples': 1
     },
     network_kwargs=kwargs_extra_data,
-    output_kwargs=True
+    output_kwargs=True,
+    test_name='TestSWReducerMinSample'
 )

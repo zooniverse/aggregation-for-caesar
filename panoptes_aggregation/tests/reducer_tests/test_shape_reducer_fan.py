@@ -150,7 +150,8 @@ TestShapeReducerFan = ReducerTest(
     kwargs={
         'eps': 5,
         'min_samples': 2
-    }
+    },
+    test_name='TestShapeReducerFan'
 )
 
 reduced_data_hdbscan = copy.deepcopy(reduced_data)
@@ -162,7 +163,7 @@ reduced_data_hdbscan['frame1']['T0_tool0_cluster_probabilities'] = [0.0]
 reduced_data_hdbscan['frame1']['T0_tool1_cluster_probabilities'] = [1.0, 1.0]
 reduced_data_hdbscan['frame1']['T0_tool1_clusters_persistance'] = [1.0]
 
-TestShapeReducerRotateRectangleHdbscan = ReducerTest(
+TestShapeReducerFanHdbscan = ReducerTest(
     shape_reducer_hdbscan,
     process_data_hdbscan,
     extracted_data,
@@ -174,5 +175,6 @@ TestShapeReducerRotateRectangleHdbscan = ReducerTest(
         'min_cluster_size': 2,
         'min_samples': 1,
         'allow_single_cluster': True
-    }
+    },
+    test_name='TestShapeReducerFanHdbscan'
 )
