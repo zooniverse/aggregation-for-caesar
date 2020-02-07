@@ -94,6 +94,6 @@ setup(
         'pyyaml>=5.1,<5.4',
         'scikit-learn>=0.21.1,<0.22.2',
         'scipy>=1.2,<1.4.2',
-        'werkzeug>=0.14,<0.16.2'
+        'werkzeug>=0.14,<1.0.1'
     ]
 )
