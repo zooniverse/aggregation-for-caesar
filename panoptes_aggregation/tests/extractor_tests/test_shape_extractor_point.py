@@ -53,7 +53,8 @@ TestShapePoint = ExtractorTest(
     classification,
     expected,
     'Test shape point',
-    kwargs={'shape': 'point'}
+    kwargs={'shape': 'point'},
+    test_name='TestShapePoint'
 )
 
 TestShapePointTask = ExtractorTest(
@@ -64,7 +65,8 @@ TestShapePointTask = ExtractorTest(
     kwargs={
         'shape': 'point',
         'task': 'T0'
-    }
+    },
+    test_name='TestShapePointTask'
 )
 
 TestShapePointAllTools = ExtractorTest(
@@ -76,7 +78,8 @@ TestShapePointAllTools = ExtractorTest(
         'shape': 'point',
         'task': 'T0',
         'tools': [0, 1]
-    }
+    },
+    test_name='TestShapePointAllTools'
 )
 
 expected_0 = {
@@ -96,5 +99,6 @@ TestShapePointOneTool = ExtractorTest(
         'shape': 'point',
         'task': 'T0',
         'tools': [0]
-    }
+    },
+    test_name='TestShapePointOneTool'
 )

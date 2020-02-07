@@ -124,7 +124,8 @@ TestTESSReducerColumnLeft = RunningReducerTestNoProcessing(
         'eps': 50,
         'min_samples': 2
     },
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    test_name='TestTESSReducerColumnLeft'
 )
 
 kwargs_extra_data_no_store = {
@@ -165,5 +166,6 @@ TestTESSReducerColumnNoStore = RunningReducerTestNoProcessing(
         'eps': 50,
         'min_samples': 2
     },
-    network_kwargs=kwargs_extra_data_no_store
+    network_kwargs=kwargs_extra_data_no_store,
+    test_name='TestTESSReducerColumnNoStore'
 )

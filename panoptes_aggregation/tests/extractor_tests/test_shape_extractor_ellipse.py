@@ -74,7 +74,8 @@ TestShapeEllipse = ExtractorTest(
     classification,
     expected,
     'Test shape ellipse',
-    kwargs={'shape': 'ellipse'}
+    kwargs={'shape': 'ellipse'},
+    test_name='TestShapeEllipse'
 )
 
 TestShapeEllipseTask = ExtractorTest(
@@ -85,7 +86,8 @@ TestShapeEllipseTask = ExtractorTest(
     kwargs={
         'shape': 'ellipse',
         'task': 'T0'
-    }
+    },
+    test_name='TestShapeEllipseTask'
 )
 
 TestShapeEllipseAllTools = ExtractorTest(
@@ -97,7 +99,8 @@ TestShapeEllipseAllTools = ExtractorTest(
         'shape': 'ellipse',
         'task': 'T0',
         'tools': [0, 1]
-    }
+    },
+    test_name='TestShapeEllipseAllTools'
 )
 
 expected_0 = {
@@ -120,5 +123,6 @@ TestShapeEllipseOneTool = ExtractorTest(
         'shape': 'ellipse',
         'task': 'T0',
         'tools': [0]
-    }
+    },
+    test_name='TestShapeEllipseOneTool'
 )

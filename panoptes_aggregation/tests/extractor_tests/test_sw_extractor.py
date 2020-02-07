@@ -160,8 +160,9 @@ TestSW = TextExtractorTest(
     extractors.sw_extractor,
     classification,
     expected,
-    'Test SW/AT text extractor',
-    blank_extract=expected_blank
+    'Test SW AT text extractor',
+    blank_extract=expected_blank,
+    test_name='TestSW'
 )
 
 classification_wrong = {
@@ -177,6 +178,7 @@ TestSWWrong = ExtractorTest(
     extractors.sw_extractor,
     classification_wrong,
     expected_blank,
-    'Test SW/AT wrong input',
-    blank_extract=expected_blank
+    'Test SW AT wrong input',
+    blank_extract=expected_blank,
+    test_name='TestSWWrong'
 )

@@ -16,5 +16,6 @@ TestTextExtractor = ExtractorTest(
     extractors.text_extractor,
     classification,
     expected,
-    'Test text extractor'
+    'Test text extractor',
+    test_name='TestTextExtractor'
 )

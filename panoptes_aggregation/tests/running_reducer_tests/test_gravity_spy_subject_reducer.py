@@ -63,7 +63,8 @@ TestGravitySpySubjectReducer = RunningReducerTestNoProcessing(
     extracted_data,
     reduced_data,
     'Test Gravity Spy Subject reducer',
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    test_name='TestGravitySpySubjectReducer'
 )
 
 kwargs_extra_data_no_store = {
@@ -113,7 +114,8 @@ TestGravitySpySubjectReducerNoStore = RunningReducerTestNoProcessing(
     extracted_data,
     reduced_data_no_store,
     'Test Gravity Spy Subject reducer no store',
-    network_kwargs=kwargs_extra_data_no_store
+    network_kwargs=kwargs_extra_data_no_store,
+    test_name='TestGravitySpySubjectReducerNoStore'
 )
 
 kwargs_extra_data_no_rr = {
@@ -146,7 +148,8 @@ TestGravitySpySubjectReducerNoRR = RunningReducerTestNoProcessing(
     extracted_data,
     reduced_data_no_rr,
     'Test Gravity Spy Subject reducer no confusion matrix',
-    network_kwargs=kwargs_extra_data_no_rr
+    network_kwargs=kwargs_extra_data_no_rr,
+    test_name='TestGravitySpySubjectReducerNoRR'
 )
 
 kwargs_extra_data_no_column = {
@@ -197,8 +200,9 @@ TestGravitySpySubjectReducerNoColumn = RunningReducerTestNoProcessing(
     gravity_spy_subject_reducer,
     extracted_data,
     reduced_data_no_column,
-    'Test Gravity Spy Subject reducer no confusion matrix',
-    network_kwargs=kwargs_extra_data_no_column
+    'Test Gravity Spy Subject reducer no confusion matrix column',
+    network_kwargs=kwargs_extra_data_no_column,
+    test_name='TestGravitySpySubjectReducerNoColumn'
 )
 
 extracted_data_none_key = [{
@@ -233,5 +237,6 @@ TestGravitySpySubjectReducerNoneKey = RunningReducerTestNoProcessing(
     reduced_data_none_key,
     'Test Gravity Spy Subject reducer none of the above',
     network_kwargs=kwargs_extra_data_no_rr,
-    kwargs={'none_key': 'NONE'}
+    kwargs={'none_key': 'NONE'},
+    test_name='TestGravitySpySubjectReducerNoneKey'
 )

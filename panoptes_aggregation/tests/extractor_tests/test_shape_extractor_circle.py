@@ -64,7 +64,8 @@ TestShapeCircle = ExtractorTest(
     classification,
     expected,
     'Test shape circle',
-    kwargs={'shape': 'circle'}
+    kwargs={'shape': 'circle'},
+    test_name='TestShapeCircle'
 )
 
 TestShapeCircleTask = ExtractorTest(
@@ -75,7 +76,8 @@ TestShapeCircleTask = ExtractorTest(
     kwargs={
         'shape': 'circle',
         'task': 'T0'
-    }
+    },
+    test_name='TestShapeCircleTask'
 )
 
 TestShapeCircleAllTools = ExtractorTest(
@@ -87,7 +89,8 @@ TestShapeCircleAllTools = ExtractorTest(
         'shape': 'circle',
         'task': 'T0',
         'tools': [0, 1]
-    }
+    },
+    test_name='TestShapeCircleAllTools'
 )
 
 expected_0 = {
@@ -108,5 +111,6 @@ TestShapeCircleOneTool = ExtractorTest(
         'shape': 'circle',
         'task': 'T0',
         'tools': [0]
-    }
+    },
+    test_name='TestShapeCircleOneTool'
 )

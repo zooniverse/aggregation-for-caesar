@@ -53,7 +53,8 @@ TestSWGraphic = ExtractorTest(
     extractors.sw_graphic_extractor,
     classification_sw,
     expected_sw,
-    'Test SW graphic'
+    'Test SW graphic',
+    test_name='TestSWGraphic'
 )
 
 classification_at = {
@@ -100,7 +101,8 @@ TestATGraphic = ExtractorTest(
     extractors.sw_graphic_extractor,
     classification_at,
     expected_at,
-    'Test AT graphic'
+    'Test AT graphic',
+    test_name='TestATGraphic'
 )
 
 
@@ -114,7 +116,8 @@ TestSWGraphicBlank = ExtractorTest(
     extractors.sw_graphic_extractor,
     classification_blank,
     expected_blank,
-    'Test SW/AT graphic blank input'
+    'Test SW AT graphic blank input',
+    test_name='TestSWGraphicBlank'
 )
 
 classification_wrong = {
@@ -130,5 +133,6 @@ TestSWGraphicWrong = ExtractorTest(
     extractors.sw_graphic_extractor,
     classification_wrong,
     expected_blank,
-    'Test SW/AT graphic wrong input'
+    'Test SW AT graphic wrong input',
+    test_name='TestSWGraphicWrong'
 )

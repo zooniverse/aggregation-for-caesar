@@ -18,7 +18,8 @@ def RunningReducerTestNoProcessing(
     reduced,
     name,
     kwargs={},
-    network_kwargs={}
+    network_kwargs={},
+    test_name=None
 ):
     class RunningReducerTestNoProcessing(unittest.TestCase):
         def setUp(self):
@@ -53,4 +54,8 @@ def RunningReducerTestNoProcessing(
                 result = reducer(flask.request)
                 self.assertDictEqual(result, self.reduced_with_version)
 
+    if test_name is None:
+        test_name = '_'.join(name.split())
+    RunningReducerTestNoProcessing.__name__ = test_name
+    RunningReducerTestNoProcessing.__qualname__ = test_name
     return RunningReducerTestNoProcessing

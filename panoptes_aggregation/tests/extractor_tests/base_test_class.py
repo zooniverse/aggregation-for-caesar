@@ -13,7 +13,16 @@ except ImportError:
     OFFLINE = True
 
 
-def ExtractorTest(function, classification, expected, name, blank_extract={}, kwargs={}, test_type='assertDictEqual'):
+def ExtractorTest(
+    function,
+    classification,
+    expected,
+    name,
+    blank_extract={},
+    kwargs={},
+    test_type='assertDictEqual',
+    test_name=None
+):
     class ExtractorTest(unittest.TestCase):
         def setUp(self):
             self.maxDiff = None
@@ -59,10 +68,22 @@ def ExtractorTest(function, classification, expected, name, blank_extract={}, kw
                 result = function(flask.request)
                 self.assertTestType(result, expected)
 
+    if test_name is None:
+        test_name = '_'.join(name.split())
+    ExtractorTest.__name__ = test_name
+    ExtractorTest.__qualname__ = test_name
     return ExtractorTest
 
 
-def TextExtractorTest(function, classification, expected, name, blank_extract={}, kwargs={}):
+def TextExtractorTest(
+    function,
+    classification,
+    expected,
+    name,
+    blank_extract={},
+    kwargs={},
+    test_name=None
+):
     class TextExtractorTest(unittest.TestCase):
         def setUp(self):
             self.maxDiff = None
@@ -115,10 +136,20 @@ def TextExtractorTest(function, classification, expected, name, blank_extract={}
                 result = function(flask.request)
                 self.assertTextExtractor(result, expected)
 
+    if test_name is None:
+        test_name = '_'.join(name.split())
+    TextExtractorTest.__name__ = test_name
+    TextExtractorTest.__qualname__ = test_name
     return TextExtractorTest
 
 
-def TextExtractorBadKeywordTest(function, classification, expected, name):
+def TextExtractorBadKeywordTest(
+    function,
+    classification,
+    expected,
+    name,
+    test_name=None
+):
     class TextExtractorTestBadKeyword(unittest.TestCase):
         def setUp(self):
             self.maxDiff = None
@@ -131,4 +162,8 @@ def TextExtractorBadKeywordTest(function, classification, expected, name):
             with self.assertRaises(ValueError):
                 function(annotation_by_task(classification), dot_freq='bad_keyword')
 
+    if test_name is None:
+        test_name = '_'.join(name.split())
+    TextExtractorTestBadKeyword.__name__ = test_name
+    TextExtractorTestBadKeyword.__qualname__ = test_name
     return TextExtractorTestBadKeyword

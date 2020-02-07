@@ -46,7 +46,8 @@ TestShapeFullWidthLine = ExtractorTest(
     classification,
     expected,
     'Test shape fullWidthLine',
-    kwargs={'shape': 'fullWidthLine'}
+    kwargs={'shape': 'fullWidthLine'},
+    test_name='TestShapeFullWidthLine'
 )
 
 TestShapeFullWidthLineTask = ExtractorTest(
@@ -57,7 +58,8 @@ TestShapeFullWidthLineTask = ExtractorTest(
     kwargs={
         'shape': 'fullWidthLine',
         'task': 'T0'
-    }
+    },
+    test_name='TestShapeFullWidthLineTask'
 )
 
 TestShapeFullWidthLineAllTools = ExtractorTest(
@@ -69,7 +71,8 @@ TestShapeFullWidthLineAllTools = ExtractorTest(
         'shape': 'fullWidthLine',
         'task': 'T0',
         'tools': [0, 1]
-    }
+    },
+    test_name='TestShapeFullWidthLineAllTools'
 )
 
 expected_0 = {
@@ -88,5 +91,6 @@ TestShapeFullWidthLineOneTool = ExtractorTest(
         'shape': 'fullWidthLine',
         'task': 'T0',
         'tools': [0]
-    }
+    },
+    test_name='TestShapeFullWidthLineOneTool'
 )

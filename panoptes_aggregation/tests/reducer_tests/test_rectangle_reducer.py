@@ -131,7 +131,8 @@ TestRectReducer = ReducerTest(
     kwargs={
         'eps': 5,
         'min_samples': 2
-    }
+    },
+    test_name='TestRectReducer'
 )
 
 extracted_data_sw = [
@@ -209,5 +210,6 @@ TestSWRectReducer = ReducerTest(
     kwargs={
         'eps': 5,
         'min_samples': 2
-    }
+    },
+    test_name='TestSWRectReducer'
 )

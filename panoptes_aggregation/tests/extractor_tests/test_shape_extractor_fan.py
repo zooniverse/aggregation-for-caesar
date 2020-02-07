@@ -74,7 +74,8 @@ TestShapeFan = ExtractorTest(
     classification,
     expected,
     'Test shape fan',
-    kwargs={'shape': 'fan'}
+    kwargs={'shape': 'fan'},
+    test_name='TestShapeFan'
 )
 
 TestShapeFanTask = ExtractorTest(
@@ -85,7 +86,8 @@ TestShapeFanTask = ExtractorTest(
     kwargs={
         'shape': 'fan',
         'task': 'T0'
-    }
+    },
+    test_name='TestShapeFanTask'
 )
 
 TestShapeFanAllTools = ExtractorTest(
@@ -97,7 +99,8 @@ TestShapeFanAllTools = ExtractorTest(
         'shape': 'fan',
         'task': 'T0',
         'tools': [0, 1]
-    }
+    },
+    test_name='TestShapeFanAllTools'
 )
 
 expected_0 = {
@@ -120,5 +123,6 @@ TestShapeFanOneTool = ExtractorTest(
         'shape': 'fan',
         'task': 'T0',
         'tools': [0]
-    }
+    },
+    test_name='TestShapeFanOneTool'
 )

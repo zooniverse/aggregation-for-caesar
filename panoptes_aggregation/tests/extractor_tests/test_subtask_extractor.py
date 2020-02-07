@@ -123,7 +123,8 @@ TestSubtask = ExtractorTest(
                 None
             ]
         }
-    }
+    },
+    test_name='TestSubtask'
 )
 
 TestSubtaskTask = ExtractorTest(
@@ -141,7 +142,8 @@ TestSubtaskTask = ExtractorTest(
                 None
             ]
         }
-    }
+    },
+    test_name='TestSubtaskTask'
 )
 
 TestSubtaskAllTools = ExtractorTest(
@@ -159,7 +161,8 @@ TestSubtaskAllTools = ExtractorTest(
                 None
             ]
         }
-    }
+    },
+    test_name='TestSubtaskAllTools'
 )
 
 expected_0 = {
@@ -208,5 +211,6 @@ TestSubtaskOneTool = ExtractorTest(
                 None
             ]
         }
-    }
+    },
+    test_name='TestSubtaskOneTool'
 )

@@ -14,5 +14,6 @@ TestSlider = ExtractorTest(
     extractors.slider_extractor,
     classification,
     expected,
-    'Test slider'
+    'Test slider',
+    test_name='TestSlider'
 )

@@ -15,7 +15,8 @@ TestSingle = ExtractorTest(
     extractors.question_extractor,
     single_classification,
     single_expected,
-    'Test single question'
+    'Test single question',
+    test_name='TestSingle'
 )
 
 multiple_classification = {
@@ -32,7 +33,8 @@ TestMultiple = ExtractorTest(
     extractors.question_extractor,
     multiple_classification,
     multiple_expected,
-    'Test multiple question'
+    'Test multiple question',
+    test_name='TestMultiple'
 )
 
 null_classification = {
@@ -49,7 +51,8 @@ TestNull = ExtractorTest(
     extractors.question_extractor,
     null_classification,
     null_expected,
-    'Test null question'
+    'Test null question',
+    test_name='TestNull'
 )
 
 single_classification_two_tasks = {
@@ -67,18 +70,20 @@ single_classification_two_tasks = {
 single_expected_1 = {'yes': 1}
 single_expected_2 = {'no': 1}
 
-TestSingleTwoTasks = ExtractorTest(
+TestSingleTwoTasksNoKey = ExtractorTest(
     extractors.question_extractor,
     single_classification_two_tasks,
     single_expected_1,
-    'Test multiple single questions passed in without task keyword'
+    'Test multiple single questions passed in without task keyword',
+    test_name='TestSingleTwoTasksNoKey'
 )
 
 
-TestSingleTwoTasks = ExtractorTest(
+TestSingleTwoTasksKey = ExtractorTest(
     extractors.question_extractor,
     single_classification_two_tasks,
     single_expected_2,
     'Test multiple single questions passed in with task keyword',
-    kwargs={'task': 'T1'}
+    kwargs={'task': 'T1'},
+    test_name='TestSingleTwoTasksKey'
 )

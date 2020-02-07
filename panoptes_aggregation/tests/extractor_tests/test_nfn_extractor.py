@@ -47,7 +47,8 @@ TestNfN = ExtractorTest(
     classification,
     expected,
     'Test NfN with year and country tasks specified done at night',
-    kwargs={'year': 'T10', 'workflow': 'herbarium', 'country': "T1"}
+    kwargs={'year': 'T10', 'workflow': 'herbarium', 'country': "T1"},
+    test_name='TestNfN'
 )
 
 classification_0 = {
@@ -88,8 +89,9 @@ TestNfNTwo = ExtractorTest(
     extractors.nfn_extractor,
     classification_0,
     expected_0,
-    'Test NfN on Earth Day with year as nested task and country from metadata. At lunchtime, local time.',
-    kwargs={'year': 'T11', 'workflow': 'herbarium', 'country': 'metadata'}
+    'Test NfN on Earth Day with year as nested task and country from metadata at lunchtime local time',
+    kwargs={'year': 'T11', 'workflow': 'herbarium', 'country': 'metadata'},
+    test_name='TestNfNTwo'
 )
 
 classification_1 = {
@@ -118,8 +120,9 @@ TestNfNThree = ExtractorTest(
     extractors.nfn_extractor,
     classification_1,
     expected_1,
-    'Test NfN bare integer year annotation at lunchtime.',
-    kwargs={'year': 'T10', 'workflow': 'herbarium'}
+    'Test NfN bare integer year annotation at lunchtime',
+    kwargs={'year': 'T10', 'workflow': 'herbarium'},
+    test_name='TestNfNThree'
 )
 
 classification_bad_year = {
@@ -147,8 +150,9 @@ TestNfNBadYear = ExtractorTest(
     extractors.nfn_extractor,
     classification_bad_year,
     expected_no_year,
-    'Test NfN bare integer year annotation at lunchtime with porly formatted year',
-    kwargs={'year': 'T10', 'workflow': 'herbarium'}
+    'Test NfN bare integer year annotation at lunchtime with poorly formatted year',
+    kwargs={'year': 'T10', 'workflow': 'herbarium'},
+    test_name='TestNfNBadYear'
 )
 
 TestNfNNoYear = ExtractorTest(
@@ -156,7 +160,8 @@ TestNfNNoYear = ExtractorTest(
     classification_1,
     expected_no_year,
     'Test NfN bare integer year annotation at lunchtime with no year keyword',
-    kwargs={'workflow': 'herbarium'}
+    kwargs={'workflow': 'herbarium'},
+    test_name='TestNfNNoYear'
 )
 
 classification_earlybird = {
@@ -186,7 +191,8 @@ TestNfNEarlybird = ExtractorTest(
     classification_earlybird,
     expected_earlybird,
     'Test NfN bare integer year annotation at earlybird ',
-    kwargs={'year': 'T10', 'workflow': 'herbarium'}
+    kwargs={'year': 'T10', 'workflow': 'herbarium'},
+    test_name='TestNfNEarlybird'
 )
 
 classification_dinnertime = {
@@ -216,7 +222,8 @@ TestNfNDinnertime = ExtractorTest(
     classification_dinnertime,
     expected_dinnertime,
     'Test NfN bare integer year annotation at dinnertime',
-    kwargs={'year': 'T10', 'workflow': 'herbarium'}
+    kwargs={'year': 'T10', 'workflow': 'herbarium'},
+    test_name='TestNfNDinnertime'
 )
 
 TestNfNNotInMetadataOrParams = ExtractorTest(
@@ -224,5 +231,6 @@ TestNfNNotInMetadataOrParams = ExtractorTest(
     classification_dinnertime,
     expected_dinnertime,
     'Test NfN bare integer year annotation at dinnertime with no state info in metadata',
-    kwargs={'year': 'T10', 'workflow': 'herbarium', 'state': 'metadata'}
+    kwargs={'year': 'T10', 'workflow': 'herbarium', 'state': 'metadata'},
+    test_name='TestNfNNotInMetadataOrParams'
 )

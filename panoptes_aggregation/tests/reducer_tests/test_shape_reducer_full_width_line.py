@@ -92,7 +92,8 @@ TestShapeReducerFullWidthLine = ReducerTestNoProcessing(
         'eps': 5,
         'min_samples': 2,
         'shape': 'fullWidthLine'
-    }
+    },
+    test_name='TestShapeReducerFullWidthLine'
 )
 
 reduced_data_hdbscan = copy.deepcopy(reduced_data)
@@ -114,5 +115,6 @@ TestShapeReducerFullWidthLineHdbscan = ReducerTestNoProcessing(
         'min_samples': 1,
         'allow_single_cluster': True,
         'shape': 'fullWidthLine'
-    }
+    },
+    test_name='TestShapeReducerFullWidthLineHdbscan'
 )

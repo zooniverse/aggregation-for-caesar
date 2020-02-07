@@ -107,7 +107,8 @@ TestPointByFrame = ExtractorTest(
     extractors.point_extractor_by_frame,
     classification,
     expected,
-    'Test point by frame'
+    'Test point by frame',
+    test_name='TestPointByFrame'
 )
 
 TestPointByFrameTask = ExtractorTest(
@@ -115,7 +116,8 @@ TestPointByFrameTask = ExtractorTest(
     classification,
     expected,
     'Test point by frame with task specified',
-    kwargs={'task': 'T0'}
+    kwargs={'task': 'T0'},
+    test_name='TestPointByFrameTask'
 )
 
 TestPointByFrameAllTools = ExtractorTest(
@@ -127,6 +129,7 @@ TestPointByFrameAllTools = ExtractorTest(
         'task': 'T0',
         'tools': [0, 1]
     },
+    test_name='TestPointByFrameAllTools'
 )
 
 expected_0 = {
@@ -144,5 +147,6 @@ TestPointByFrameOneTool = ExtractorTest(
     kwargs={
         'task': 'T0',
         'tools': [0]
-    }
+    },
+    test_name='TestPointByFrameOneTool'
 )

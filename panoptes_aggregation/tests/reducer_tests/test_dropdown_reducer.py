@@ -59,5 +59,6 @@ TestDropdownReducer = ReducerTest(
     processed_data,
     reduced_data,
     'Test dropdown reducer',
-    processed_type='list'
+    processed_type='list',
+    test_name='TestDropdownReducer'
 )

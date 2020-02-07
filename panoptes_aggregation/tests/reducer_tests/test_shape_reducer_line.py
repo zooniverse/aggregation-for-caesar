@@ -132,7 +132,8 @@ TestShapeReducerLine = ReducerTest(
     kwargs={
         'eps': 5,
         'min_samples': 2
-    }
+    },
+    test_name='TestShapeReducerLine'
 )
 
 processed_data_symmetric = {
@@ -219,7 +220,8 @@ TestShapeReducerLineSymmetric = ReducerTest(
     kwargs={
         'eps': 5,
         'min_samples': 2
-    }
+    },
+    test_name='TestShapeReducerLineSymmetric'
 )
 
 reduced_data_hdbscan = copy.deepcopy(reduced_data)
@@ -250,7 +252,8 @@ TestShapeReducerLineHdbscan = ReducerTest(
         'min_cluster_size': 2,
         'min_samples': 1,
         'allow_single_cluster': True
-    }
+    },
+    test_name='TestShapeReducerLineHdbscan'
 )
 
 reduced_data_hdbscan_symmetric = copy.deepcopy(reduced_data_symmetric)
@@ -277,5 +280,6 @@ TestShapeReducerLineHdbscanSymmetric = ReducerTest(
         'min_cluster_size': 2,
         'min_samples': 1,
         'allow_single_cluster': True
-    }
+    },
+    test_name='TestShapeReducerLineHdbscanSymmetric'
 )

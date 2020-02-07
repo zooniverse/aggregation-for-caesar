@@ -65,7 +65,8 @@ TestGravitySpyUserReducer = RunningReducerTestNoProcessing(
     extracted_data,
     reduced_data,
     'Test Gravity Spy User reducer',
-    network_kwargs=kwargs_extra_data
+    network_kwargs=kwargs_extra_data,
+    test_name='TestGravitySpyUserReducer'
 )
 
 kwargs_extra_data_no_store = {
@@ -101,5 +102,6 @@ TestGravitySpyUserReducerNoStore = RunningReducerTestNoProcessing(
     extracted_data,
     reduced_data_no_store,
     'Test Gravity Spy User reducer with no store',
-    network_kwargs=kwargs_extra_data_no_store
+    network_kwargs=kwargs_extra_data_no_store,
+    test_name='TestGravitySpyUserReducerNoStore'
 )

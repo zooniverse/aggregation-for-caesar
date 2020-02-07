@@ -212,7 +212,8 @@ TestPolyLineText = TextExtractorTest(
     classification,
     expected,
     'Test poly-line-text extractor by word',
-    kwargs={'dot_freq': 'word'}
+    kwargs={'dot_freq': 'word'},
+    test_name='TestPolyLineText'
 )
 
 TestPolyLineTextTool = TextExtractorTest(
@@ -223,12 +224,14 @@ TestPolyLineTextTool = TextExtractorTest(
     kwargs={
         'tools': [0],
         'dot_freq': 'word'
-    }
+    },
+    test_name='TestPolyLineTextTool'
 )
 
 TestPolyLineTextBadKeyword = TextExtractorBadKeywordTest(
     extractors.poly_line_text_extractor,
     classification,
     expected,
-    'Test poly-line-text extractor by word with bad keyword'
+    'Test poly-line-text extractor by word with bad keyword',
+    test_name='TestPolyLineTextBadKeyword'
 )

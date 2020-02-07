@@ -91,7 +91,8 @@ TestSWVariant = ExtractorTest(
     extractors.sw_variant_extractor,
     classification,
     expected,
-    'Test SW variant'
+    'Test SW variant',
+    test_name='TestSWVariant'
 )
 
 classification_blank = {
@@ -104,5 +105,6 @@ TestSWVariantBlank = ExtractorTest(
     extractors.sw_variant_extractor,
     classification_blank,
     expected_blank,
-    'Test SW variant blank input'
+    'Test SW variant blank input',
+    test_name='TestSWVariantBlank'
 )
