@@ -1,3 +1,4 @@
+import ast
 from functools import wraps
 from ..reducers.process_kwargs import process_kwargs
 from ..append_version import append_version, remove_version
@@ -22,6 +23,8 @@ def running_reducer_wrapper(
                 argument_json = argument.get_json()
                 data_in = [d['data'] for d in argument_json['extracts']]
                 store = argument_json['store']
+                if 'level_config' in kwargs:
+                    kwargs['level_config'] = ast.literal_eval(kwargs['level_config'])
                 if user_id:
                     kwargs_extra_data['user_id'] = [d['user_id'] for d in argument_json['extracts']]
                 if relevant_reduction:
