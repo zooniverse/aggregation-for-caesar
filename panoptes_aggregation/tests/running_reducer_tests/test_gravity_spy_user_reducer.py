@@ -21,7 +21,8 @@ kwargs_extra_data = {
         'column_normalization': {
             'BLIP': 7,
             'WHISTLE': 11
-        }
+        },
+        'level': 1
     }
 }
 
@@ -30,8 +31,8 @@ reduced_data = {
         'BLIP': 6 / 8,
         'WHISTLE': 8 / 11
     },
-    'alpha_min': 8 / 11,
-    'alpha_length': 2,
+    'level_up': True,
+    'max_workflow_id': 2,
     'normalized_confusion_matrix': {
         'BLIP': {
             'BLIP': 6 / 8,
@@ -56,7 +57,8 @@ reduced_data = {
         'column_normalization': {
             'BLIP': 8,
             'WHISTLE': 11
-        }
+        },
+        'level': 2
     }
 }
 
@@ -65,6 +67,21 @@ TestGravitySpyUserReducer = RunningReducerTestNoProcessing(
     extracted_data,
     reduced_data,
     'Test Gravity Spy User reducer',
+    kwargs={
+        'level_config': {
+            1: {
+                'workflow_id': 1,
+                'new_categories': [
+                    'BLIP',
+                    'WHISTLE'
+                ],
+                'threshold': 0.7
+            },
+            2: {
+                'workflow_id': 2
+            }
+        }
+    },
     network_kwargs=kwargs_extra_data,
     test_name='TestGravitySpyUserReducer'
 )
@@ -75,13 +92,13 @@ kwargs_extra_data_no_store = {
 
 reduced_data_no_store = {
     'alpha': {
-        'BLIP': 1
+        'BLIP': 1.0
     },
-    'alpha_min': 1.0,
-    'alpha_length': 1,
+    'level_up': False,
+    'max_workflow_id': 1,
     'normalized_confusion_matrix': {
         'BLIP': {
-            'BLIP': 1
+            'BLIP': 1.0
         }
     },
     '_store': {
@@ -92,7 +109,8 @@ reduced_data_no_store = {
         },
         'column_normalization': {
             'BLIP': 1
-        }
+        },
+        'level': 1
     }
 }
 
@@ -102,6 +120,21 @@ TestGravitySpyUserReducerNoStore = RunningReducerTestNoProcessing(
     extracted_data,
     reduced_data_no_store,
     'Test Gravity Spy User reducer with no store',
+    kwargs={
+        'level_config': {
+            1: {
+                'workflow_id': 1,
+                'new_categories': [
+                    'BLIP',
+                    'WHISTLE'
+                ],
+                'threshold': 0.7
+            },
+            2: {
+                'workflow_id': 2
+            }
+        }
+    },
     network_kwargs=kwargs_extra_data_no_store,
     test_name='TestGravitySpyUserReducerNoStore'
 )
