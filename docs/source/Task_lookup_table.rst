@@ -25,9 +25,9 @@ Basic task types
 |                    |                                                                      +---------------------------------------------------------------------------------------+
 |                    |                                                                      | :mod:`panoptes_aggregation.reducers.point_reducer_hdbscan` (includes cov information) |
 |                    +----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-|                    | :mod:`panoptes_aggregation.extractors.shape_extractor`               | :mod:`panoptes_aggregation.reducers.shape_reducer_dbscan` (no cov infromation)        |
+|                    | :mod:`panoptes_aggregation.extractors.shape_extractor`               | :mod:`panoptes_aggregation.reducers.shape_reducer_dbscan` (no cov information)        |
 |                    |                                                                      +---------------------------------------------------------------------------------------+
-|                    |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_hdbscan` (no cov infromation)       |
+|                    |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_hdbscan` (no cov information)       |
 |                    +----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 |                    | :mod:`panoptes_aggregation.extractors.point_extractor` (depreciated) | :mod:`panoptes_aggregation.reducers.point_reducer` (depreciated)                      |
 +--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
@@ -102,7 +102,7 @@ These reducers were designed for use with the TESS project to handle real-time u
 Gravity Spy project
 -------------------
 These reducers were designed for use with the Gravity Spy project to handle real-time user weighting and user promotion between workflows.  This process
-requires proper `relevant_reduction` beins sent from the user reducer into the subject recducer.
+requires proper `relevant_reduction` being sent from the user reducer into the subject reducer.  See :ref:`gravity-spy`
 
 +-----------------------------------+----------------------------------+--------------------------------------------------------------------------+
 | Task Type                         | Extractor                        | Reducer                                                                  |
