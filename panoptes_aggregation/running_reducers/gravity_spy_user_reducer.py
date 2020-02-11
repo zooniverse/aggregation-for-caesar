@@ -7,6 +7,7 @@ project. Extracts are from Ceasars `PluckFieldExtractor`.
 from .running_reducer_wrapper import running_reducer_wrapper
 
 DEFAULTS = {
+    'first_level': {'default': 'level_1', 'type': str},
     'level_config': {'default': None, 'type': dict}
 }
 
@@ -21,24 +22,28 @@ def gravity_spy_user_reducer(data, **kwargs):
     data : list
         A list with one item containing the extract with the user's choice
         and the gold standard label.
+    first_level : str
+        A string containing the key for the first level in the `level_config` object
     level_config : dict
-        This dictionary holds information about each level in the project.  The keys should
-        be intigers for each level, and the values are a dict with up to three keys:
+        This dictionary holds information about each level in the project.  The key must be
+        strings and the values are a dict with up to three keys:
         * `workflow_id`: the workflow ID for the level
         * `new_categories`: the categories added in this level (not included for the final level)
         * `threshold`: the min value of `alpha` these categories need to trigger a level up
             (not included for the final level)
+        * `next_level`: the key for the next level (not included for the final level)
         example:
             level_config = {
-                1: {
+                'level_1': {
                     'workflow_id': 1,
                     'new_categories': [
                         'BLIP',
                         'WHISTLE'
                     ],
-                    'threshold': 0.7
+                    'threshold': 0.7,
+                    'next_level': 'level_2'
                 },
-                2: {
+                'level_2': {
                     'workflow_id': 2
                 }
             }
@@ -51,7 +56,7 @@ def gravity_spy_user_reducer(data, **kwargs):
             standard label.
         * `column_normalization`: The sum of each of the columns (used for normalization).
             i.e. The total number of time the user has vote for each choice.
-        * `level`: the current workflow level of the user
+        * `max_level`: The maximum workflow level of the user
 
     Returns
     -------
@@ -63,16 +68,18 @@ def gravity_spy_user_reducer(data, **kwargs):
             confusion matrix).
         * `level_up`: Bool indicating if the user should level up (used to trigger effect)
         * `max_workflow_id`: The workflow ID for the user's highest unlocked level
+        * `max_level`: The maximum workflow level of the user
         * `alpha_length`: The number of values in the `alpha` dict, used to make sure the
             user has seen every gold standard class of a level before being promoted
         * `normalized_confusion_matrix`: The column normalized confusion matrix for the user
         * `_store`: The updated store (see above)
     '''
+    first_level_key = kwargs.pop('first_level')
     level_config = kwargs.pop('level_config')
     store = kwargs.pop('store')
     cm = store.get('confusion_matrix', {})
     n = store.get('column_normalization', {})
-    level = store.get('level', 1)
+    level = store.get('max_level', first_level_key)
     user_label = data[0]['user_label']
     gold_label = data[0]['gold_label']
     cm.setdefault(user_label, {}).setdefault(gold_label, 0)
@@ -88,21 +95,22 @@ def gravity_spy_user_reducer(data, **kwargs):
     level_up = False
     max_workflow_id = None
     if (level_config is not None) and (level in level_config):
-        if {'workflow_id', 'new_categories', 'threshold'} <= level_config[level].keys():
+        if {'workflow_id', 'new_categories', 'threshold', 'next_level'} <= level_config[level].keys():
             level_up = True
             for key in level_config[level]['new_categories']:
                 level_up &= (alpha.get(key, 0) >= level_config[level]['threshold'])
             if level_up:
-                level += 1
+                level = level_config[level]['next_level']
             max_workflow_id = level_config[level]['workflow_id']
     return {
         'alpha': alpha,
         'level_up': level_up,
         'max_workflow_id': max_workflow_id,
+        'max_level': level,
         'normalized_confusion_matrix': normalized_confusion_matrix,
         '_store': {
             'confusion_matrix': cm,
             'column_normalization': n,
-            'level': level
+            'max_level': level
         }
     }

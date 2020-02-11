@@ -22,7 +22,7 @@ kwargs_extra_data = {
             'BLIP': 7,
             'WHISTLE': 11
         },
-        'level': 1
+        'max_level': 'level_1'
     }
 }
 
@@ -33,6 +33,7 @@ reduced_data = {
     },
     'level_up': True,
     'max_workflow_id': 2,
+    'max_level': 'level_2',
     'normalized_confusion_matrix': {
         'BLIP': {
             'BLIP': 6 / 8,
@@ -58,7 +59,7 @@ reduced_data = {
             'BLIP': 8,
             'WHISTLE': 11
         },
-        'level': 2
+        'max_level': 'level_2'
     }
 }
 
@@ -68,16 +69,18 @@ TestGravitySpyUserReducer = RunningReducerTestNoProcessing(
     reduced_data,
     'Test Gravity Spy User reducer',
     kwargs={
+        'first_level': 'level_1',
         'level_config': {
-            1: {
+            'level_1': {
                 'workflow_id': 1,
                 'new_categories': [
                     'BLIP',
                     'WHISTLE'
                 ],
-                'threshold': 0.7
+                'threshold': 0.7,
+                'next_level': 'level_2'
             },
-            2: {
+            'level_2': {
                 'workflow_id': 2
             }
         }
@@ -96,6 +99,7 @@ reduced_data_no_store = {
     },
     'level_up': False,
     'max_workflow_id': 1,
+    'max_level': 'level_1',
     'normalized_confusion_matrix': {
         'BLIP': {
             'BLIP': 1.0
@@ -110,7 +114,7 @@ reduced_data_no_store = {
         'column_normalization': {
             'BLIP': 1
         },
-        'level': 1
+        'max_level': 'level_1'
     }
 }
 
@@ -122,15 +126,16 @@ TestGravitySpyUserReducerNoStore = RunningReducerTestNoProcessing(
     'Test Gravity Spy User reducer with no store',
     kwargs={
         'level_config': {
-            1: {
+            'level_1': {
                 'workflow_id': 1,
                 'new_categories': [
                     'BLIP',
                     'WHISTLE'
                 ],
-                'threshold': 0.7
+                'threshold': 0.7,
+                'next_level': 'level_2'
             },
-            2: {
+            'level_2': {
                 'workflow_id': 2
             }
         }
