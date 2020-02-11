@@ -26,53 +26,58 @@ def gravity_spy_user_reducer(data, **kwargs):
         A string containing the key for the first level in the `level_config` object
     level_config : dict
         This dictionary holds information about each level in the project.  The key must be
-        strings and the values are a dict with up to three keys:
-        * `workflow_id`: the workflow ID for the level
-        * `new_categories`: the categories added in this level (not included for the final level)
-        * `threshold`: the min value of `alpha` these categories need to trigger a level up
-            (not included for the final level)
-        * `next_level`: the key for the next level (not included for the final level)
-        example:
-            level_config = {
-                'level_1': {
-                    'workflow_id': 1,
-                    'new_categories': [
-                        'BLIP',
-                        'WHISTLE'
-                    ],
-                    'threshold': 0.7,
-                    'next_level': 'level_2'
-                },
-                'level_2': {
-                    'workflow_id': 2
-                }
-            }
+        strings and the values are a dict with up to four keys:
+
+        * `workflow_id` : the workflow ID for the level
+        * `new_categories` : the categories added in this level (not included for the final level)
+        * `threshold` : the min value of `alpha` these categories need to trigger a level up
+          (not included for the final level)
+        * `next_level` : the key for the next level (not included for the final level).
+          Example:
+
+          .. code-block:: python
+
+              level_config = {
+                  'level_1': {
+                      'workflow_id': 1,
+                      'new_categories': [
+                          'BLIP',
+                          'WHISTLE'
+                      ],
+                      'threshold': 0.7,
+                      'next_level': 'level_2'
+                  },
+                  'level_2': {
+                      'workflow_id': 2
+                  }
+              }
 
     store : keyword, dict
-        A dictionary with two keys:
+        A dictionary with three keys:
 
         * `confusion_matrix`: The confusion matrix for the user (stored as nested dict).
-            The first key is the choice given by the user, the second key is the gold
-            standard label.
+          The first key is the choice given by the user, the second key is the gold
+          standard label.
         * `column_normalization`: The sum of each of the columns (used for normalization).
-            i.e. The total number of time the user has vote for each choice.
+          i.e. The total number of time the user has vote for each choice.
         * `max_level`: The maximum workflow level of the user
 
     Returns
     -------
     reduction : dict
-        A dictionary with four keys:
+        A dictionary with the following keys:
 
         * `alpha`: A dictionary of values indicating how well the user classifies each
-            category they have seen gold standard images for (diagonal of the normalized
-            confusion matrix).
+          category they have seen gold standard images for (diagonal of the normalized
+          confusion matrix).
         * `level_up`: Bool indicating if the user should level up (used to trigger effect)
         * `max_workflow_id`: The workflow ID for the user's highest unlocked level
         * `max_level`: The maximum workflow level of the user
         * `alpha_length`: The number of values in the `alpha` dict, used to make sure the
-            user has seen every gold standard class of a level before being promoted
+          user has seen every gold standard class of a level before being promoted
         * `normalized_confusion_matrix`: The column normalized confusion matrix for the user
         * `_store`: The updated store (see above)
+
     '''
     first_level_key = kwargs.pop('first_level')
     level_config = kwargs.pop('level_config')

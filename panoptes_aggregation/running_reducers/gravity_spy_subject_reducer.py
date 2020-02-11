@@ -27,8 +27,9 @@ def gravity_spy_subject_reducer(data, none_key="NONEOFTHEABOVE", **kwargs):
     store : keyword, dict
         A dictionary with two keys:
 
-        * `number_views`: The number of times the subject has been seen (the ML results count for 1 of these)
-        * `category_weights_sum`: The running sum for the weights in each category
+        * `number_views` : The number of times the subject has been seen (the ML results count for 1 of these)
+        * `category_weights_sum` : The running sum for the weights in each category
+
     relevant_reduction : keyword, list
         A list with one item containing the results of the current user's confusion matrix reducer
         (see :meth:`panoptes_aggregation.running_reducers.gravity_spy_user_reduce.gravity_spy_user_reduce`)
@@ -36,13 +37,14 @@ def gravity_spy_subject_reducer(data, none_key="NONEOFTHEABOVE", **kwargs):
     Returns
     -------
     reduction: dict
-        A dictionary with four keys:
+        A dictionary with the following keys:
 
-        * `number_views`: Number of times the subject has been seen (the ML results count for 1 of these)
-        * `category_weights`: A dictionary of values corresponding to the probability the subject belongs
-            to each listed category (all values sum to 1)
-        * `max_category_weight`: The max value from the `category_weights ` dict, used to retire the subject
-        * `_store`: The updated store (see above)
+        * `number_views` : Number of times the subject has been seen (the ML results count for 1 of these)
+        * `category_weights` : A dictionary of values corresponding to the probability the subject belongs
+          to each listed category (all values sum to 1)
+        * `max_category_weight` : The max value from the `category_weights` dict, used to retire the subject
+        * `_store` : The updated store (see above)
+
     '''
     store = kwargs.pop('store')
     relevant_reduction = kwargs.pop('relevant_reduction')[0]
