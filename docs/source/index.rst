@@ -18,6 +18,7 @@ Welcome to panoptes_aggregation's documentation
    reducers
    running_reducers
    panoptes
+   Gravity_Spy
    Contributing
    CODE_OF_CONDUCT
 

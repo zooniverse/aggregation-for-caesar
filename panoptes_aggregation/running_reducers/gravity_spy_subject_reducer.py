@@ -2,7 +2,7 @@
 Gravity Spy Subject Reducer
 ---------------------------
 This module provides functions to calculate subject reductions for the Gravity Spy
-project. Extracts are from Ceasar's `PluckFieldExtractor`.
+project. Extracts are from caesar's `PluckFieldExtractor`.
 '''
 from .running_reducer_wrapper import running_reducer_wrapper
 from collections import Counter
