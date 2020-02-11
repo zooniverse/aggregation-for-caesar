@@ -1,8 +1,8 @@
 '''
 Gravity Spy User Reducer
 ------------------------
-This module porvides functions to calculate uesr weights for the Gravity Spy
-project. Extracts are from Ceasars `PluckFieldExtractor`.
+This module provides functions to calculate user weights for the Gravity Spy
+project. Extracts are from caesar's `PluckFieldExtractor`.
 '''
 from .running_reducer_wrapper import running_reducer_wrapper
 
