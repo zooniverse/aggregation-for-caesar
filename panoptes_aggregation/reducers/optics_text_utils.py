@@ -36,7 +36,7 @@ def metric(a, b, data_in=[]):
     '''Calculate the distance between two drawn lines that have text
     associated with them.  This distance is found by summing the euclidean
     distance between the start points of each line, the euclidean distance
-    between the end poitns of each line, and the Levenshtein distance
+    between the end points of each line, and the Levenshtein distance
     of the text for each line.  The Levenshtein distance is done after
     stripping text tags and consolidating whitespace.
 
@@ -167,7 +167,7 @@ def cluster_of_one(X, data, user_ids, extract_index):
     Returns
     -------
     clusters: list
-        A list with n clusters each containing only one calssification
+        A list with n clusters each containing only one classification
     '''
     clusters = []
     for rdx, row in enumerate(X):

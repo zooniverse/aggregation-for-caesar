@@ -128,7 +128,7 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
         * `low_consensus_lines` : The number of lines with low consensus
         * `transcribed_lines` : The total number of lines transcribed on the subject
 
-        Note: the image coordiate system has y increasing downward.
+        Note: the image coordinate system has y increasing downward.
     '''
     user_ids_input = np.array(kwargs_optics.pop('user_id'))
     low_consensus_threshold = kwargs_optics.pop('low_consensus_threshold')
