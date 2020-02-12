@@ -1,6 +1,5 @@
 from panoptes_aggregation.reducers.optics_line_text_reducer import process_data, optics_line_text_reducer
 from .base_test_class import ReducerTest
-import numpy as np
 import copy
 
 extracted_data = [
