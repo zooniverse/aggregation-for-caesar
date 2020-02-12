@@ -3,7 +3,7 @@ Line Tool with Text Subtask Reducer using OPTICS
 ------------------------------------------------
 This module provides functions to reduce the polygon-text extractions from
 :mod:`panoptes_aggregation.extractors.poly_line_text_extractor` using the
-density indipended clustering algorithm OPTICS.  It is assumed that all
+density independent clustering algorithm OPTICS.  It is assumed that all
 extracts are full lines of text in the document.
 '''
 from sklearn.cluster import OPTICS
@@ -33,7 +33,7 @@ col.core_classes.WordPunctuationTokenizer.tokenize = tokenize
 
 
 def process_data(data_list, min_line_length=0.0):
-    '''Process a list of extractions into a dictinary organized by `frame`
+    '''Process a list of extractions into a dictionary organized by `frame`
 
     Parameters
     ----------
@@ -46,7 +46,7 @@ def process_data(data_list, min_line_length=0.0):
     processed_data : dict
         A dictionary with one key for each frame of the subject. The value for each key
         is a dictionary with two keys `X` and `data`. `X` is a 2D array with each row
-        mapping to the data held in `data`.  The first column contains row indicies
+        mapping to the data held in `data`.  The first column contains row indices
         and the second column is an index assigned to each user. `data` is a list of
         dictionaries of the form `{'x': [start_x, end_x], 'y': [start_y, end_y],
         'text': ['text for line'], 'gold_standard': bool}`.
