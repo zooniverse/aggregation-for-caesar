@@ -179,7 +179,7 @@ kwargs_extra_data = {
         1,
         2,
         3,
-        4,
+        None,
         5
     ]
 }
@@ -432,7 +432,7 @@ reduced_data = {
             'consensus_text': 'not in a cluster',
             'line_slope': 214.875,
             'number_views': 1,
-            'user_ids': [4],
+            'user_ids': [None],
             'extract_index': [0],
             'gold_standard': [False],
             'slope_label': 2,
@@ -472,7 +472,7 @@ reduced_data = {
             'consensus_text': 'some words',
             'line_slope': 0.0,
             'number_views': 1,
-            'user_ids': [4],
+            'user_ids': [None],
             'extract_index': [0],
             'gold_standard': [False],
             'slope_label': 0,
@@ -482,7 +482,7 @@ reduced_data = {
     ],
     'parameters': {
         'min_samples': 'auto',
-        'max_eps': np.inf,
+        'max_eps': None,
         'xi': 0.05,
         'angle_eps': 30.0,
         'gutter_eps': 150.0,
@@ -672,7 +672,7 @@ reduced_data_with_dollar_sign = {
     }],
     'parameters': {
         'min_samples': 'auto',
-        'max_eps': np.inf,
+        'max_eps': None,
         'xi': 0.05,
         'angle_eps': 30.0,
         'gutter_eps': 150.0,
@@ -739,7 +739,7 @@ reduced_data_no_length = {
     'frame5': [],
     'parameters': {
         'min_samples': 'auto',
-        'max_eps': np.inf,
+        'max_eps': None,
         'xi': 0.05,
         'angle_eps': 30.0,
         'gutter_eps': 150.0,

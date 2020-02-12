@@ -147,11 +147,6 @@ def remove_user_duplication(labels_, core_distances_, users):
     return clean_labels
 
 
-def remove_nans(input):
-    '''Remove numpy nan's from a list and replace them with `None`'''
-    return [i if np.isfinite(i) else None for i in input]
-
-
 def cluster_of_one(X, data, user_ids, extract_index):
     '''Create "clusters of one" out of the data passed in. Lines of text
     identified as noise are kept around as clusters of one so they can be
@@ -190,7 +185,7 @@ def cluster_of_one(X, data, user_ids, extract_index):
             'line_slope': slope,
             'consensus_score': 1.0,
             'consensus_text': ' '.join(line['text'][0].split()),
-            'user_ids': remove_nans([user_ids[user_index]]),
+            'user_ids': [user_ids[user_index]],
             'extract_index': [extract_index[rdx]],
             'gold_standard': [line['gold_standard']],
             'low_consensus': True

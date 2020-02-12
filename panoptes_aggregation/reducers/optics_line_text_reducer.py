@@ -17,7 +17,7 @@ import warnings
 
 DEFAULTS = {
     'min_samples': {'default': 'auto', 'type': int},
-    'max_eps': {'default': np.inf, 'type': float},
+    'max_eps': {'default': None, 'type': float},
     'xi': {'default': 0.05, 'type': float},
     'angle_eps': {'default': 30, 'type': float},
     'gutter_eps': {'default': 150, 'type': float},
@@ -136,6 +136,9 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
     min_samples_orig = kwargs_optics.pop('min_samples')
     angle_eps = kwargs_optics.pop('angle_eps')
     gutter_eps = kwargs_optics.pop('gutter_eps')
+    max_eps = kwargs_optics.pop('max_eps', np.inf)
+    if max_eps is None:
+        max_eps = np.inf
     low_consensus_lines = 0
     number_of_lines = 0
     for frame, value in data_by_frame.items():
