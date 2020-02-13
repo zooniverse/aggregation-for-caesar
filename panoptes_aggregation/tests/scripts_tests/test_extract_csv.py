@@ -5,6 +5,12 @@ import os
 import pandas
 from pandas.testing import assert_frame_equal
 import panoptes_aggregation.scripts.extract_panoptes_csv as extract_panoptes_csv
+import platform
+
+if platform.system() == 'Windows':
+    WINDOWS = True
+else:
+    WINDOWS = False
 
 classification_data_dump_two_tasks = '''classification_id,user_name,user_id,workflow_id,workflow_version,created_at,annotations,subject_ids
 1,1,1,4249,14.18,2017-05-31 12:33:46 UTC,"[{""task"":""T0""},{""task"":""T1""}]",1
@@ -167,6 +173,7 @@ class TestExtractCSV(unittest.TestCase):
         assert_frame_equal(result_dataframe, self.extracts_dataframe_question, check_like=True)
         mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
 
+    @unittest.skipIf(WINDOWS, 'Installed on windows, skipping multi core test')
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
     @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
