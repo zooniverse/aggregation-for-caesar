@@ -73,6 +73,9 @@ def gravity_spy_user_reducer(data, **kwargs):
         * `level_up`: Bool indicating if the user should level up (used to trigger effect)
         * `max_workflow_id`: The workflow ID for the user's highest unlocked level
         * `max_level`: The maximum workflow level of the user
+        * `most_useful_category`: The gold standard category the user has the lowest score in
+          (can be used to pick what gold standard category should be shown next to accelerate
+          leveling up)
         * `alpha_length`: The number of values in the `alpha` dict, used to make sure the
           user has seen every gold standard class of a level before being promoted
         * `normalized_confusion_matrix`: The column normalized confusion matrix for the user
@@ -99,12 +102,14 @@ def gravity_spy_user_reducer(data, **kwargs):
     alpha = {key: value[key] for key, value in normalized_confusion_matrix.items() if key in value}
     level_up = False
     max_workflow_id = None
+    most_useful_category = None
     if (level_config is not None) and (level in level_config):
         if {'workflow_id', 'new_categories', 'threshold', 'next_level'} <= level_config[level].keys():
-            level_up = True
-            for key in level_config[level]['new_categories']:
-                level_up &= (alpha.get(key, 0) >= level_config[level]['threshold'])
+            levels_alpha = {key: alpha.get(key, 0) for key in level_config[level]['new_categories']}
+            most_useful_category = min(levels_alpha, key=levels_alpha.get)
+            level_up = min(levels_alpha.values()) >= level_config[level]['threshold']
             if level_up:
+                most_useful_category = None
                 level = level_config[level]['next_level']
             max_workflow_id = level_config[level]['workflow_id']
     return {
@@ -112,6 +117,7 @@ def gravity_spy_user_reducer(data, **kwargs):
         'level_up': level_up,
         'max_workflow_id': max_workflow_id,
         'max_level': level,
+        'most_useful_category': most_useful_category,
         'normalized_confusion_matrix': normalized_confusion_matrix,
         '_store': {
             'confusion_matrix': cm,
