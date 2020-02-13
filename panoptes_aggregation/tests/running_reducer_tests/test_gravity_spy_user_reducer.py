@@ -34,6 +34,7 @@ reduced_data = {
     'level_up': True,
     'max_workflow_id': 2,
     'max_level': 'level_2',
+    'most_useful_category': None,
     'normalized_confusion_matrix': {
         'BLIP': {
             'BLIP': 6 / 8,
@@ -100,6 +101,7 @@ reduced_data_no_store = {
     'level_up': False,
     'max_workflow_id': 1,
     'max_level': 'level_1',
+    'most_useful_category': 'WHISTLE',
     'normalized_confusion_matrix': {
         'BLIP': {
             'BLIP': 1.0
