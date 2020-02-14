@@ -1,6 +1,6 @@
 import ast
 import pandas
-from pandas.io.json import json_normalize
+from pandas import json_normalize
 
 
 def flatten_data(data, json_column='data'):

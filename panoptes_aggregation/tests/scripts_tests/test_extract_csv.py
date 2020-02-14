@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock, call
 from io import StringIO
 import os
 import pandas
-from pandas.util.testing import assert_frame_equal
+from pandas.testing import assert_frame_equal
 import panoptes_aggregation.scripts.extract_panoptes_csv as extract_panoptes_csv
 
 classification_data_dump_two_tasks = '''classification_id,user_name,user_id,workflow_id,workflow_version,created_at,annotations,subject_ids
