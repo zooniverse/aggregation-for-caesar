@@ -1,7 +1,8 @@
 import unittest
 from collections import OrderedDict
+import numpy as np
 import pandas
-from pandas.util.testing import assert_frame_equal
+from pandas.testing import assert_frame_equal
 import panoptes_aggregation.csv_utils as csv_utils
 
 nested_data = {
@@ -34,9 +35,9 @@ json_data = pandas.DataFrame({
         '{"x": 1, "y": 1}',
         '{"x": 2, "y": 2}',
         '{"x": 3, "y": 3}',
-        pandas.np.nan
+        np.nan
     ],
-    'data.text': ['how', 'are', 'you', pandas.np.nan]
+    'data.text': ['how', 'are', 'you', np.nan]
 })
 
 unjson_data = pandas.DataFrame({
@@ -45,9 +46,9 @@ unjson_data = pandas.DataFrame({
         {"x": 1, "y": 1},
         {"x": 2, "y": 2},
         {"x": 3, "y": 3},
-        pandas.np.nan
+        np.nan
     ],
-    'data.text': ['how', 'are', 'you', pandas.np.nan]
+    'data.text': ['how', 'are', 'you', np.nan]
 })
 
 unordered_data = pandas.DataFrame(OrderedDict((
