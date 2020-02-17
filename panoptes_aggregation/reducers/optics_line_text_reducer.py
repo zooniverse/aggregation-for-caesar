@@ -21,7 +21,8 @@ DEFAULTS = {
     'xi': {'default': 0.05, 'type': float},
     'angle_eps': {'default': 30, 'type': float},
     'gutter_eps': {'default': 150, 'type': float},
-    'low_consensus_threshold': {'default': 3, 'type': float}
+    'low_consensus_threshold': {'default': 3, 'type': float},
+    'minimum_views': {'default': 5, 'type': int}
 }
 
 DEFAULTS_PROCESS = {
@@ -132,6 +133,7 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
     '''
     user_ids_input = np.array(kwargs_optics.pop('user_id'))
     low_consensus_threshold = kwargs_optics.pop('low_consensus_threshold')
+    _ = kwargs_optics.pop('minimum_views')
     output = defaultdict(list)
     min_samples_orig = kwargs_optics.pop('min_samples')
     angle_eps = kwargs_optics.pop('angle_eps')

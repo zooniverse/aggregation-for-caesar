@@ -1187,7 +1187,8 @@ reduced_data = {
         'dot_freq': 'line',
         'min_word_count': 1,
         'low_consensus_threshold': 3.0,
-        'process_by_line': False
+        'process_by_line': False,
+        'minimum_views': 5
     }
 }
 
@@ -1201,7 +1202,8 @@ TestSWReducer = ReducerTest(
     okwargs={
         'gutter_tol': 0.0,
         'min_word_count': 1,
-        'low_consensus_threshold': 3.0
+        'low_consensus_threshold': 3.0,
+        'minimum_views': 5
     },
     kwargs={
         'eps_slope': 0.5,
@@ -1281,7 +1283,8 @@ reduced_data_all_blank = {
         'dot_freq': 'line',
         'min_word_count': 1,
         'low_consensus_threshold': 3.0,
-        'process_by_line': False
+        'process_by_line': False,
+        'minimum_views': 5
     }
 }
 
@@ -1295,7 +1298,8 @@ TestSWReducerAllBlank = ReducerTest(
     okwargs={
         'gutter_tol': 0.0,
         'min_word_count': 1,
-        'low_consensus_threshold': 3.0
+        'low_consensus_threshold': 3.0,
+        'minimum_views': 5
     },
     kwargs={
         'eps_slope': 0.5,
