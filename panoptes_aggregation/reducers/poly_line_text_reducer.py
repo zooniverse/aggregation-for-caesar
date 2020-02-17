@@ -15,7 +15,8 @@ DEFAULTS = {
     'min_word_count': {'default': 1, 'type': int},
     'dot_freq': {'default': 'line', 'type': str},
     'min_samples': {'default': 1, 'type': int},
-    'low_consensus_threshold': {'default': 3, 'type': float}
+    'low_consensus_threshold': {'default': 3, 'type': float},
+    'minimum_views': {'default': 5, 'type': int}
 }
 
 DEFAULTS_PROCESS = {
@@ -130,4 +131,5 @@ def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
     kwargs_cluster['gutter_tol'] = kwargs_dbscan.pop('gutter_tol')
     kwargs_cluster['dot_freq'] = kwargs_dbscan.pop('dot_freq')
     kwargs_cluster['min_word_count'] = kwargs_dbscan.pop('min_word_count')
+    _ = kwargs_dbscan.pop('minimum_views')
     return cluster_by_frame(data_by_frame, kwargs_cluster, kwargs_dbscan, user_ids_input, low_consensus_threshold)

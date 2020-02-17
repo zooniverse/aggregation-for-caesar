@@ -486,7 +486,8 @@ reduced_data = {
         'angle_eps': 30.0,
         'gutter_eps': 150.0,
         'low_consensus_threshold': 3.0,
-        'min_line_length': 0.0
+        'min_line_length': 0.0,
+        'minimum_views': 5
     }
 }
 
@@ -500,7 +501,8 @@ TestOpticsLTReducer = ReducerTest(
     kwargs={
         'angle_eps': 30.0,
         'gutter_eps': 150.0,
-        'low_consensus_threshold': 3.0
+        'low_consensus_threshold': 3.0,
+        'minimum_views': 5
     },
     okwargs={
         'min_samples': 'auto'
@@ -523,7 +525,8 @@ TestOpticsLTReducerWithMinSamples = ReducerTest(
         'min_samples': 2,
         'angle_eps': 30.0,
         'gutter_eps': 150.0,
-        'low_consensus_threshold': 3.0
+        'low_consensus_threshold': 3.0,
+        'minimum_views': 5
     },
     network_kwargs=kwargs_extra_data,
     output_kwargs=True,
@@ -678,7 +681,8 @@ reduced_data_with_dollar_sign = {
         'angle_eps': 30.0,
         'gutter_eps': 150.0,
         'low_consensus_threshold': 3.0,
-        'min_line_length': 0.0
+        'min_line_length': 0.0,
+        'minimum_views': 5
     }
 }
 
@@ -692,7 +696,8 @@ TestOpticsLTReducerWithDollarSign = ReducerTest(
     kwargs={
         'angle_eps': 30.0,
         'gutter_eps': 150.0,
-        'low_consensus_threshold': 3.0
+        'low_consensus_threshold': 3.0,
+        'minimum_views': 5
     },
     okwargs={'min_samples': 'auto'},
     network_kwargs=kwargs_extra_data_with_dollar_sign,
@@ -746,7 +751,8 @@ reduced_data_no_length = {
         'angle_eps': 30.0,
         'gutter_eps': 150.0,
         'low_consensus_threshold': 3.0,
-        'min_line_length': 0.0
+        'min_line_length': 0.0,
+        'minimum_views': 5
     }
 }
 
@@ -761,7 +767,8 @@ TestOpticsLTReducerNoLengthLine = ReducerTest(
         'min_samples': 'auto',
         'angle_eps': 30.0,
         'gutter_eps': 150.0,
-        'low_consensus_threshold': 3.0
+        'low_consensus_threshold': 3.0,
+        'minimum_views': 5
     },
     network_kwargs=kwargs_extra_data_no_length,
     output_kwargs=True,

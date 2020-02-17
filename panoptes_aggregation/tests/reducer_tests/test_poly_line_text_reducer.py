@@ -914,7 +914,8 @@ reduced_data = {
         'dot_freq': 'word',
         'min_word_count': 1,
         'low_consensus_threshold': 4.0,
-        'process_by_line': False
+        'process_by_line': False,
+        'minimum_views': 5
     }
 }
 
@@ -935,7 +936,8 @@ TestPLTReducer = ReducerTest(
         'min_samples': 1,
         'dot_freq': 'word',
         'min_word_count': 1,
-        'low_consensus_threshold': 4.0
+        'low_consensus_threshold': 4.0,
+        'minimum_views': 5
     },
     network_kwargs=kwargs_extra_data,
     output_kwargs=True,
@@ -1520,7 +1522,8 @@ reduced_data_by_line = {
         'dot_freq': 'line',
         'min_word_count': 1,
         'low_consensus_threshold': 4.0,
-        'process_by_line': True
+        'process_by_line': True,
+        'minimum_views': 5
     }
 }
 
@@ -1544,7 +1547,8 @@ TestPLTReducerByLine = ReducerTest(
         'min_samples': 1,
         'dot_freq': 'line',
         'min_word_count': 1,
-        'low_consensus_threshold': 4.0
+        'low_consensus_threshold': 4.0,
+        'minimum_views': 5
     },
     network_kwargs=kwargs_extra_data,
     output_kwargs=True,
@@ -1814,7 +1818,8 @@ reduced_data_min_word = {
         'dot_freq': 'line',
         'min_word_count': 4,
         'low_consensus_threshold': 4.0,
-        'process_by_line': True
+        'process_by_line': True,
+        'minimum_views': 5
     }
 }
 
@@ -1838,7 +1843,8 @@ TestPLTReducerWithMinWordCount = ReducerTest(
         'min_samples': 1,
         'dot_freq': 'line',
         'min_word_count': 4,
-        'low_consensus_threshold': 4
+        'low_consensus_threshold': 4,
+        'minimum_views': 5
     },
     network_kwargs=kwargs_extra_data,
     output_kwargs=True,
@@ -1897,7 +1903,8 @@ reduced_data_no_length = {
         'dot_freq': 'line',
         'min_word_count': 1,
         'low_consensus_threshold': 4.0,
-        'process_by_line': True
+        'process_by_line': True,
+        'minimum_views': 5
     }
 }
 
@@ -1921,7 +1928,8 @@ TestPolyLTReducerNoLengthLine = ReducerTest(
         'min_samples': 1,
         'dot_freq': 'line',
         'min_word_count': 1,
-        'low_consensus_threshold': 4.0
+        'low_consensus_threshold': 4.0,
+        'minimum_views': 5
     },
     network_kwargs=kwargs_extra_data_no_length,
     output_kwargs=True,
