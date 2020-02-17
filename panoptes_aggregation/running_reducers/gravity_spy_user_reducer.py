@@ -28,11 +28,11 @@ def gravity_spy_user_reducer(data, **kwargs):
         This dictionary holds information about each level in the project.  The key must be
         strings and the values are a dict with up to four keys:
 
-        * `workflow_id` : the workflow ID for the level
-        * `new_categories` : the categories added in this level (not included for the final level)
-        * `threshold` : the min value of `alpha` these categories need to trigger a level up
+        * `workflow_id`: the workflow ID for the level
+        * `new_categories`: the categories added in this level (not included for the final level)
+        * `threshold`: the min value of `alpha` these categories need to trigger a level up
           (not included for the final level)
-        * `next_level` : the key for the next level (not included for the final level).
+        * `next_level`: the key for the next level (not included for the final level).
           Example:
 
           .. code-block:: python
