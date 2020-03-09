@@ -61,7 +61,7 @@ setup(
             'gunicorn>=20.0,<20.1',
             'sentry-sdk[flask]>=0.13.5,<0.15',
             'newrelic>=5.4.0,<5.8.1',
-            'gitpython>=3.0.0,<3.1'
+            'gitpython>=3.0.0,<3.2'
         ],
         'doc': [
             'recommonmark>=0.5.0,<0.7',
