@@ -73,11 +73,11 @@ def make_application():
     CORS(
         application,
         origins=[
-            r'^https?:\/\/([a-z0-9-.]+zooniverse.org)',
-            r'^https?:\/\/(127\.0\.0\.1|localhost|[a-z0-9-]+\.local)(:\d+)?$'
+            r'^https?:\/\/([a-z0-9-.]+zooniverse.org)(:\d+)?$'
         ],
         methods=[
-            'POST'
+            'POST',
+            'OPTIONS'
         ]
     )
 
