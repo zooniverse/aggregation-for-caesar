@@ -56,6 +56,7 @@ setup(
     extras_require={
         'online': [
             'flask>=1.0,<1.2',
+            'flask-cors>=3.0,<3.1',
             'panoptes-client>=1.1,<1.2',
             'requests>=2.4.2,<2.24',
             'gunicorn>=20.0,<20.1',

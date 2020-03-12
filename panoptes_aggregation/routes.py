@@ -1,6 +1,7 @@
 try:
     from flask import jsonify, request, Flask
     from flask.json import JSONEncoder
+    from flask_cors import CORS
     from panoptes_aggregation import panoptes
     import sentry_sdk
     from sentry_sdk.integrations.flask import FlaskIntegration
@@ -69,6 +70,15 @@ def make_application():
                         static_url_path='',
                         static_folder='../docs/build/html')
     application.json_encoder = MyEncoder
+    CORS(
+        application,
+        origins=[
+            r'^https?:\/\/([a-z0-9-.]+zooniverse.org)'
+        ],
+        methods=[
+            'POST'
+        ]
+    )
 
     repo = git.Repo(search_parent_directories=True)
     sha = repo.head.object.hexsha
