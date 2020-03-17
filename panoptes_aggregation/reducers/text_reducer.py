@@ -15,7 +15,7 @@ col.core_classes.WordPunctuationTokenizer.tokenize = tokenize
 def process_data(data_list):
     '''Flatten list of extracts into a list of strings.  Empty strings
     are not returned'''
-    return [d['text'] for d in data_list if d['text'].strip() != '']
+    return [d['text'] for d in data_list if str(d['text']).strip() != '']
 
 
 @reducer_wrapper(process_data=process_data)
