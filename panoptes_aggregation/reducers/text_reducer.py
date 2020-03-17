@@ -15,16 +15,16 @@ col.core_classes.WordPunctuationTokenizer.tokenize = tokenize
 def process_data(data_list):
     '''Flatten list of extracts into a list of strings.  Empty strings
     are not returned'''
-    return [d['text'] for d in data_list if str(d['text']).strip() != '']
+    return [[idx, d['text'], d['gold_standard']] for idx, d in enumerate(data_list) if str(d['text']).strip() != '']
 
 
-@reducer_wrapper(process_data=process_data)
-def text_reducer(data, **kwargs):
+@reducer_wrapper(process_data=process_data, user_id=True)
+def text_reducer(data_in, **kwargs):
     '''Reduce a list of text into an alignment table
     Parameters
     ----------
     data : list
-        A list of strigs to be aligned
+        A list of strings to be aligned
 
     Returns
     -------
@@ -40,6 +40,9 @@ def text_reducer(data, **kwargs):
             Note, if `consensus_score` is the same a `number_views` every user agreed with each other
     '''
     reduction = {}
+    user_ids_input = kwargs.pop('user_id')
+    idx, data, gold_standard = zip(*data_in)
+    user_ids = [user_ids_input[i] for i in idx]
     if len(data) > 0:
         witness_keys = []
         aligned_text = []
@@ -60,6 +63,8 @@ def text_reducer(data, **kwargs):
             'aligned_text': aligned_text,
             'number_views': len(data),
             'consensus_score': consensus_score_value,
-            'consensus_text': consensus_text
+            'consensus_text': consensus_text,
+            'gold_standard': gold_standard,
+            'user_ids': user_ids
         }
     return reduction
