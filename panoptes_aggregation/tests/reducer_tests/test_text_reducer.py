@@ -93,3 +93,28 @@ TextBlankTextReducer = ReducerTest(
     processed_type='list',
     test_name='TextBlankTextReducer'
 )
+
+extracted_data_no_text = [
+    {'gold_standard': False}
+]
+
+processed_data_no_text = []
+reduced_data_no_text = {}
+
+kwargs_extra_data_no_text = {
+    'user_id': [
+        1
+    ]
+}
+
+TextNoTextReducer = ReducerTest(
+    text_reducer,
+    process_data,
+    extracted_data_no_text,
+    processed_data_no_text,
+    reduced_data_no_text,
+    'Test text reducer no text passed in',
+    network_kwargs=kwargs_extra_data_no_text,
+    processed_type='list',
+    test_name='TextNoTextReducer'
+)
