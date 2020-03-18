@@ -15,7 +15,11 @@ col.core_classes.WordPunctuationTokenizer.tokenize = tokenize
 def process_data(data_list):
     '''Flatten list of extracts into a list of strings.  Empty strings
     are not returned'''
-    return [[idx, d['text'], d['gold_standard']] for idx, d in enumerate(data_list) if str(d['text']).strip() != '']
+    return [
+        [idx, d['text'], d.get('gold_standard', False)]
+        for idx, d in enumerate(data_list)
+        if str(d['text']).strip() != ''
+    ]
 
 
 @reducer_wrapper(process_data=process_data, user_id=True)
@@ -40,10 +44,10 @@ def text_reducer(data_in, **kwargs):
             Note, if `consensus_score` is the same a `number_views` every user agreed with each other
     '''
     reduction = {}
-    user_ids_input = kwargs.pop('user_id')
-    idx, data, gold_standard = zip(*data_in)
-    user_ids = [user_ids_input[i] for i in idx]
-    if len(data) > 0:
+    if len(data_in) > 0:
+        user_ids_input = kwargs.pop('user_id')
+        idx, data, gold_standard = zip(*data_in)
+        user_ids = [user_ids_input[i] for i in idx]
         witness_keys = []
         aligned_text = []
         collation = col.Collation()
@@ -64,7 +68,7 @@ def text_reducer(data_in, **kwargs):
             'number_views': len(data),
             'consensus_score': consensus_score_value,
             'consensus_text': consensus_text,
-            'gold_standard': gold_standard,
+            'gold_standard': list(gold_standard),
             'user_ids': user_ids
         }
     return reduction
