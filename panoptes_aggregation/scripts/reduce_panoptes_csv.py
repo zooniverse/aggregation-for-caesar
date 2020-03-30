@@ -205,7 +205,12 @@ def reduce_csv(
     if stream:
         reduced_csv = pandas.read_csv(output_path, encoding='utf-8')
         if 'data' in reduced_csv:
-            reduced_csv.data = reduced_csv.data.apply(eval)
+            def eval_func(a):
+                # pandas uses a local namespace, make sure it has the correct imports
+                from collections import OrderedDict
+                from numpy import nan
+                return eval(a)
+            reduced_csv.data = reduced_csv.data.apply(eval_func)
             flat_reduced_data = flatten_data(reduced_csv)
         else:
             return output_path
