@@ -207,8 +207,8 @@ def reduce_csv(
         if 'data' in reduced_csv:
             def eval_func(a):
                 # pandas uses a local namespace, make sure it has the correct imports
-                from collections import OrderedDict
-                from numpy import nan
+                from collections import OrderedDict  # noqa
+                from numpy import nan  # noqa
                 return eval(a)
             reduced_csv.data = reduced_csv.data.apply(eval_func)
             flat_reduced_data = flatten_data(reduced_csv)
