@@ -83,7 +83,7 @@ setup(
         ]
     },
     install_requires=[
-        'beautifulsoup4>=4.8.1,<4.9',
+        'beautifulsoup4>=4.8.1,<4.10',
         'collatex>=2.2,<2.3',
         'hdbscan>=0.8.20,<0.8.27',
         'lxml>=4.4,<4.6',
