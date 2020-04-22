@@ -1,3 +1,6 @@
+from panoptes_aggregation import extractors
+from .base_test_class import ExtractorTest
+
 classification = {
     'annotations': [
         {
@@ -94,40 +97,60 @@ classification = {
 }
 
 expected = {
-    'T0_tool0_x': [
-        452.18341064453125,
-        374.23454574576868
-    ],
-    'T0_tool0_y': [
-        202.87478637695312,
-        455.23453656547428
-    ],
-    'T0_tool0_subtask0': [
-        {'0': 1},
-        {'1': 1}
-    ],
-    'T0_tool0_subtask1': [
-        {'value': [
-            {'option-1': 1},
-            {'option-2': 1},
-            {'None': 1}
-        ]},
-        {'value': [
-            {'option-3': 1},
-            {'option-4': 1},
-            {'option-5': 1}
-        ]}
-    ],
-    'T0_tool1_x': [404.61279296875],
-    'T0_tool1_y': [583.4398803710938],
-    'T0_tool1_subtask0': [
-        {'1': 1}
-    ],
-    'T0_tool1_subtask1': [
-        {'value': [
-            {'option-3': 1},
-            {'option-4': 1},
-            {'option-5': 1}
-        ]}
-    ]
+    'classifier_version': 2.0,
+    'frame0': {
+        'T0_tool0_x': [
+            452.18341064453125,
+            374.23454574576868
+        ],
+        'T0_tool0_y': [
+            202.87478637695312,
+            455.23453656547428
+        ],
+        'T0_tool0_subtask0': [
+            {'0': 1},
+            {'1': 1}
+        ],
+        'T0_tool0_subtask1': [
+            {'value': [
+                {'option-1': 1},
+                {'option-2': 1},
+                {'None': 1}
+            ]},
+            {'value': [
+                {'option-3': 1},
+                {'option-4': 1},
+                {'option-5': 1}
+            ]}
+        ],
+        'T0_tool1_x': [404.61279296875],
+        'T0_tool1_y': [583.4398803710938],
+        'T0_tool1_subtask0': [
+            {'1': 1}
+        ],
+        'T0_tool1_subtask1': [
+            {'value': [
+                {'option-3': 1},
+                {'option-4': 1},
+                {'option-5': 1}
+            ]}
+        ]
+    }
 }
+
+TestSubtaskV2 = ExtractorTest(
+    extractors.shape_extractor,
+    classification,
+    expected,
+    'Test subtask v2.0 extraction',
+    kwargs={
+        'shape': 'point',
+        'details': {
+            'T0_tool0_subtask0': 'question_extractor',
+            'T0_tool0_subtask1': 'dropdown_extractor',
+            'T0_tool1_subtask0': 'question_extractor',
+            'T0_tool1_subtask1': 'dropdown_extractor'
+        }
+    },
+    test_name='TestSubtaskV2'
+)
