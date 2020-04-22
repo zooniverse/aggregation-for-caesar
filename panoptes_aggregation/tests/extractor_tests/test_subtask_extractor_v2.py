@@ -1,0 +1,133 @@
+classification = {
+    'annotations': [
+        {
+            'task': 'T0',
+            'taskType': 'drawing',
+            'value': [
+                {
+                    'frame': 0,
+                    'tool': 0,
+                    'toolType': 'point',
+                    'x': 452.18341064453125,
+                    'y': 202.87478637695312,
+                    'details': [
+                        {'task': 'T0.0.0'},
+                        {'task': 'T0.0.1'}
+                    ]
+                },
+                {
+                    'frame': 0,
+                    'tool': 0,
+                    'toolType': 'point',
+                    'x': 374.23454574576868,
+                    'y': 455.23453656547428,
+                    'details': [
+                        {'task': 'T0.0.0'},
+                        {'task': 'T0.0.1'}
+                    ]
+                },
+                {
+                    'frame': 0,
+                    'tool': 1,
+                    'toolType': 'point',
+                    'x': 404.61279296875,
+                    'y': 583.4398803710938,
+                    'details': [
+                        {'task': 'T0.1.0'},
+                        {'task': 'T0.1.1'}
+                    ]
+                }
+            ]
+        },
+        {
+            'task': 'T0.0.0',
+            'taskType': 'single',
+            'markIndex': 0,
+            'value': 0
+        },
+        {
+            'task': 'T0.0.1',
+            'taskType': 'dropdown',
+            'markIndex': 0,
+            'value': [
+                {'value': 'option-1'},
+                {'value': 'option-2'},
+                {'value': None}
+            ]
+        },
+        {
+            'task': 'T0.0.0',
+            'taskType': 'single',
+            'markIndex': 1,
+            'value': 1
+        },
+        {
+            'task': 'T0.0.1',
+            'taskType': 'dropdown',
+            'markIndex': 1,
+            'value': [
+                {'value': 'option-3'},
+                {'value': 'option-4'},
+                {'value': 'option-5'}
+            ]
+        },
+        {
+            'task': 'T0.1.0',
+            'markIndex': 2,
+            'taskType': 'single',
+            'value': 1
+        },
+        {
+            'task': 'T0.1.1',
+            'markIndex': 2,
+            'taskType': 'dropdown',
+            'value': [
+                {'value': 'option-3'},
+                {'value': 'option-4'},
+                {'value': 'option-5'}
+            ]
+        }
+    ],
+    'metadata': {
+        'classifier_version': 2.0
+    }
+}
+
+expected = {
+    'T0_tool0_x': [
+        452.18341064453125,
+        374.23454574576868
+    ],
+    'T0_tool0_y': [
+        202.87478637695312,
+        455.23453656547428
+    ],
+    'T0_tool0_subtask0': [
+        {'0': 1},
+        {'1': 1}
+    ],
+    'T0_tool0_subtask1': [
+        {'value': [
+            {'option-1': 1},
+            {'option-2': 1},
+            {'None': 1}
+        ]},
+        {'value': [
+            {'option-3': 1},
+            {'option-4': 1},
+            {'option-5': 1}
+        ]}
+    ],
+    'T0_tool1_x': [404.61279296875],
+    'T0_tool1_y': [583.4398803710938],
+    'T0_tool1_subtask0': [
+        {'1': 1}
+    ],
+    'T0_tool1_subtask1': [
+        {'value': [
+            {'option-3': 1},
+            {'option-4': 1},
+            {'option-5': 1}
+        ]}
+    ]
+}
