@@ -154,3 +154,21 @@ TestSubtaskV2 = ExtractorTest(
     },
     test_name='TestSubtaskV2'
 )
+
+TestSubtaskV2Task = ExtractorTest(
+    extractors.shape_extractor,
+    classification,
+    expected,
+    'Test subtask v2.0 extraction with task specified',
+    kwargs={
+        'task': 'T0',
+        'shape': 'point',
+        'details': {
+            'T0_tool0_subtask0': 'question_extractor',
+            'T0_tool0_subtask1': 'dropdown_extractor',
+            'T0_tool1_subtask0': 'question_extractor',
+            'T0_tool1_subtask1': 'dropdown_extractor'
+        }
+    },
+    test_name='TestSubtaskV2Task'
+)
