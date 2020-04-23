@@ -92,12 +92,12 @@ classification = {
         }
     ],
     'metadata': {
-        'classifier_version': 2.0
+        'classifier_version': '2.0'
     }
 }
 
 expected = {
-    'classifier_version': 2.0,
+    'classifier_version': '2.0',
     'frame0': {
         'T0_tool0_x': [
             452.18341064453125,
