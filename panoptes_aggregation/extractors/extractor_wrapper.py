@@ -4,12 +4,11 @@ from ..append_version import append_version
 
 
 def unpack_annotations(annotations, task):
-    if task == 'all':
-        annotations_list = []
-        for value in annotations.values():
+    annotations_list = []
+    for key, value in annotations.items():
+        # subtasks are stored as 'T0.0.0' and need to be pulled out with 'T0'
+        if (task == 'all') or (key.split('.')[0] == task):
             annotations_list += value
-    else:
-        annotations_list = annotations.get(task, [])
     return annotations_list
 
 
