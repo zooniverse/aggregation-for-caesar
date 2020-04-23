@@ -22,6 +22,7 @@ def subtask_wrapper(func):
                     subtask_mark = annotation['markIndex']
                     data_subtask[(subtask_key, subtask_mark)] = annotation
             output = func(data_drawing, **kwargs)
+            output['classifier_version'] = str(classifier_version)
         else:
             output = func(data, **kwargs)
         if details_functions is not None:
@@ -47,7 +48,6 @@ def subtask_wrapper(func):
                                     output[frame][key][-1].append('No extractor for this subtask type')
             else:
                 # new classifier version
-                output['classifier_version'] = str(classifier_version)
                 for annotation in data_drawing['annotations']:
                     task_key = annotation['task']
                     for vdx, value in enumerate(annotation['value']):
