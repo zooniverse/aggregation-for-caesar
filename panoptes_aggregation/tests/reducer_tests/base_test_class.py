@@ -129,7 +129,7 @@ def ReducerTestNoProcessing(
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(self.extracted_with_version, **kwargs)
-            self.assertDictEqual(result, self.reduced_with_version)
+            self.assertDictEqual(cast_to_dict(result), self.reduced_with_version)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_request(self):
@@ -145,7 +145,7 @@ def ReducerTestNoProcessing(
                 url_params = ''
             with app.test_request_context(url_params, **request_kwargs):
                 result = reducer(flask.request)
-                self.assertDictEqual(result, self.reduced_with_version)
+                self.assertDictEqual(cast_to_dict(result), self.reduced_with_version)
 
     if test_name is None:
         test_name = '_'.join(name.split())
