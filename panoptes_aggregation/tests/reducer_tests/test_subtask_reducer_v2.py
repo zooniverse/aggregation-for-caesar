@@ -128,11 +128,11 @@ reduced_data = {
                 {'option-5': 1}
             ]}
         ],
-        'T0_tool0_clusters_subtask0': [
+        'T0_tool0_subtask0_clusters': [
             {'0': 1, '1': 1},
             {'1': 2}
         ],
-        'T0_tool0_clusters_subtask1': [
+        'T0_tool0_subtask1_clusters': [
             {'value': [
                 {'option-1': 2},
                 {'option-2': 2},
@@ -147,8 +147,8 @@ reduced_data = {
         'T0_tool1_point_x': [500.0, 500.0, 500.0],
         'T0_tool1_point_y': [500.0, 500.0, 500.0],
         'T0_tool1_cluster_labels': [0, 0, 0],
-        'T0_tool1_cluster_count': [3],
-        'T0_tool1_cluster_x': [500.0],
+        'T0_tool1_clusters_count': [3],
+        'T0_tool1_clusters_x': [500.0],
         'T0_tool1_clusters_y': [500.0],
         'T0_tool1_subtask0': [
             {'1': 1},
@@ -172,10 +172,10 @@ reduced_data = {
                 {'option-5': 1}
             ]}
         ],
-        'T0_tool1_clusters_subtask0': [
+        'T0_tool1_subtask0_clusters': [
             {'0': 1, '1': 2}
         ],
-        'T0_tool1_clusters_subtask1': [
+        'T0_tool1_subtask1_clusters': [
             {'value': [
                 {'option-1': 2, 'option-3': 1},
                 {'option-3': 2, 'option-4': 1},
