@@ -29,14 +29,14 @@ def process_data(data, shape=None, symmetric=False):
     -------
     processed_data : dict
         A dictionary with each key being a `tool` with a list of (`x`, `y`, ...)
-        tuples as a vlaue. Each shape parameter shows up in this list.
+        tuples as a value. Each shape parameter shows up in this list.
     '''
     if shape is None:
         raise KeyError('`shape` must be provided as a keyword')
     if shape not in SHAPE_LUT:
         raise KeyError('`shape` must be one of {0}'.format(list(SHAPE_LUT.keys())))
     shape_params = SHAPE_LUT[shape]
-    unique_frames = set(sum([list(d.keys()) for d in data], []))
+    unique_frames = set(sum([[k for k in d.keys() if k.startswith('frame')] for d in data], []))
     data_by_tool = {
         'shape': shape,
         'symmetric': symmetric
