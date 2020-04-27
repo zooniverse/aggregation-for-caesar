@@ -4,6 +4,7 @@ import copy
 
 extracted_data = [
     {
+        'classifier': '2.0',
         'frame0': {
             'T0_tool0_x': [
                 0.0,
@@ -20,6 +21,7 @@ extracted_data = [
         }
     },
     {
+        'classifier': '2.0',
         'frame0': {
             'T0_tool0_x': [
                 0.0,

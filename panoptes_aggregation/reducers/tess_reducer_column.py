@@ -49,7 +49,7 @@ def process_data(data, **kwargs_extra_data):
         * `index`: A list of lenght N indicating the extract index for each drawn column
     '''
     shape_params = SHAPE_LUT['column']
-    unique_frames = set(sum([list(d.keys()) for d in data], []))
+    unique_frames = set(sum([[k for k in d.keys() if k.startswith('frame')] for d in data], []))
     data_by_tool = []
     index_by_tool = []
     for frame in unique_frames:
