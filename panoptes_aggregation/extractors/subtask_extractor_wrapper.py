@@ -15,7 +15,8 @@ def subtask_wrapper(func):
             data_drawing = {'annotations': []}
             data_subtask = {}
             for annotation in data['annotations']:
-                if annotation['taskType'] == 'drawing':
+                # TESS does not have taskType defined on the column task
+                if annotation.get('taskType', 'drawing') == 'drawing':
                     data_drawing['annotations'].append(annotation)
                 else:
                     subtask_key = annotation['task']
