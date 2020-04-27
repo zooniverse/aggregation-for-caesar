@@ -203,3 +203,33 @@ TestSubtaskReducerV2 = ReducerTestNoProcessing(
     },
     test_name='TestSubtaskReducerV2'
 )
+
+reduced_data_no_details = {
+    'frame0': {
+        'T0_tool0_point_x': [0.0, 100.0, 0.0, 100.0],
+        'T0_tool0_point_y': [0.0, 100.0, 0.0, 100.0],
+        'T0_tool0_cluster_labels': [0, 1, 0, 1],
+        'T0_tool0_clusters_count': [2, 2],
+        'T0_tool0_clusters_x': [0.0, 100.0],
+        'T0_tool0_clusters_y': [0.0, 100.0],
+        'T0_tool1_point_x': [500.0, 500.0, 500.0],
+        'T0_tool1_point_y': [500.0, 500.0, 500.0],
+        'T0_tool1_cluster_labels': [0, 0, 0],
+        'T0_tool1_clusters_count': [3],
+        'T0_tool1_clusters_x': [500.0],
+        'T0_tool1_clusters_y': [500.0],
+    }
+}
+
+TestSubtaskReducerV2NoDetails = ReducerTestNoProcessing(
+    reducers.shape_reducer_dbscan,
+    extracted_data,
+    reduced_data_no_details,
+    'Test subtask reducer with classifier v2 extracts',
+    kwargs={
+        'shape': 'point',
+        'eps': 5,
+        'min_samples': 2
+    },
+    test_name='TestSubtaskReducerV2NoDetails'
+)
