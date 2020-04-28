@@ -170,6 +170,16 @@ TestLineTextV2 = TextExtractorTest(
     test_name='TestLineTextV2'
 )
 
+TestLineTextTaskV2 = TextExtractorTest(
+    extractors.line_text_extractor,
+    classification,
+    expected,
+    'Test line-text extractor with task specified for classifier v2.0',
+    kwargs={'task': 'T0'},
+    test_name='TestLineTextTaskV2'
+)
+
+
 TestLineTextToolV2 = TextExtractorTest(
     extractors.line_text_extractor,
     classification,
