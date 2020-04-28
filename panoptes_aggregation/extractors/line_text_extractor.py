@@ -8,6 +8,7 @@ transcribed document and provide the text as a sub-task.
 from collections import OrderedDict
 import copy
 import numpy as np
+from packaging import version
 from .extractor_wrapper import extractor_wrapper
 from .tool_wrapper import tool_wrapper
 
@@ -40,11 +41,26 @@ def line_text_extractor(classification, gold_standard=False, **kwargs):
     ])
     extract = OrderedDict()
     if len(classification['annotations']) > 0:
-        annotation = classification['annotations'][0]
-        for value in annotation['value']:
+        classification_metadata = classification.get('metadata', {})
+        classifier_version = version.parse(classification_metadata.get('classifier_version', '1.0'))
+        if classifier_version >= version.parse('2.0'):
+            # pull out the line task
+            annotation = [a for a in classification['annotations'] if a['taskType'] == 'drawing'][0]
+            # make subtask look up table
+            annotation_text = {
+                (a['task'], a['markIndex']): a
+                for a in classification['annotations']
+                if a['taskType'] == 'text'
+            }
+        else:
+            annotation = classification['annotations'][0]
+        for vdx, value in enumerate(annotation['value']):
             frame = 'frame{0}'.format(value['frame'])
             extract.setdefault(frame, copy.deepcopy(blank_frame))
-            text = value['details'][0]['value']
+            if classifier_version >= version.parse('2.0'):
+                text = annotation_text[(value['details'][0]['task'], vdx)]['value']
+            else:
+                text = value['details'][0]['value']
             x = [value['x1'], value['x2']]
             y = [value['y1'], value['y2']]
             dx = x[-1] - x[0]

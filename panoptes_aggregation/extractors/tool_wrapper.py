@@ -14,7 +14,11 @@ def tool_wrapper(func):
                 if task_type == 'drawing':
                     new_value = []
                     for v in annotation['value']:
-                        if v['tool'] in tools:
+                        # v1 classifier
+                        if ('tool' in v) and (v['tool'] in tools):
+                            new_value.append(v)
+                        # v2 classifier
+                        if ('toolIndex' in v) and (v['toolIndex'] in tools):
                             new_value.append(v)
                     annotation['value'] = new_value
         return func(data, **kwargs)
