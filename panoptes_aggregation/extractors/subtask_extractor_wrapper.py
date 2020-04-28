@@ -15,7 +15,7 @@ def subtask_wrapper(func):
             data_drawing = {'annotations': []}
             data_subtask = {}
             for annotation in data['annotations']:
-                # TESS does not have taskType defined on the column task
+                # `dataVisAnnotation` is used for graph subjects
                 if annotation.get('taskType', 'drawing') in ['drawing', 'dataVisAnnotation']:
                     data_drawing['annotations'].append(annotation)
                 else:
