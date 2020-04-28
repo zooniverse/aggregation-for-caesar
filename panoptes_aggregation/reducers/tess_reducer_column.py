@@ -1,7 +1,7 @@
 '''
 TESS Column Reducer
 -------------------
-This module porvides functions to reduce the column task extracts for the TESS project.
+This module provides functions to reduce the column task extracts for the TESS project.
 Extracts are from :mod:`panoptes_aggregation.extractors.shape_extractor`.
 '''
 from .reducer_wrapper import reducer_wrapper
@@ -46,7 +46,7 @@ def process_data(data, **kwargs_extra_data):
         A dictionary with two keys
 
         * `data`: An Nx2 numpy array containing the *center* and width of each column drawn
-        * `index`: A list of lenght N indicating the extract index for each drawn column
+        * `index`: A list of length N indicating the extract index for each drawn column
     '''
     shape_params = SHAPE_LUT['column']
     unique_frames = set(sum([[k for k in d.keys() if k.startswith('frame')] for d in data], []))
@@ -81,7 +81,7 @@ def tess_reducer_column(data_by_tool, **kwargs):
     x : keyword, str
         Either `"center"` or `"left"` and indicates if the `x` value of the classification
         is the center or left side of the column
-    kwrgs :
+    kwargs :
         `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
 
     Returns
@@ -100,8 +100,10 @@ def tess_reducer_column(data_by_tool, **kwargs):
     relevant_reduction = kwargs.pop('relevant_reduction')
     skill = np.array([rr['data']['skill'] if rr else 1.0 for rr in relevant_reduction])
     clusters = OrderedDict()
-    loc = np.array(data_by_tool['data'])
-    index = np.array(data_by_tool['index'])
+    # filter out any rows with None values
+    fdx = [None not in d for d in data_by_tool['data']]
+    loc = np.array(data_by_tool['data'])[fdx].astype(np.float64)
+    index = np.array(data_by_tool['index'])[fdx]
     number_users = len(np.unique(index))
     x = kwargs.pop('x')
     if x == 'left':
