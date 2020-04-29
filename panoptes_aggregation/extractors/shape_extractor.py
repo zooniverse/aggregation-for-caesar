@@ -43,7 +43,15 @@ def shape_extractor(classification, **kwargs):
     for annotation in classification['annotations']:
         task_key = annotation['task']
         for value in annotation['value']:
-            key = '{0}_tool{1}'.format(task_key, value['tool'])
+            if 'tool' in value:
+                # classifier v1.0
+                tool_index = value['tool']
+            elif 'toolIndex' in value:
+                # classifier v2.0
+                tool_index = value['toolIndex']
+            else:
+                raise KeyError('Neither `tool` or `toolIndex` are in the annotation')
+            key = '{0}_tool{1}'.format(task_key, tool_index)
             frame = 'frame{0}'.format(value.get('frame', 0))
             if all(param in value for param in shape_params):
                 extract.setdefault(frame, {})
