@@ -9,7 +9,7 @@ classification = {
             'value': [
                 {
                     'frame': 0,
-                    'tool': 0,
+                    'toolIndex': 0,
                     'toolType': 'point',
                     'x': 452.18341064453125,
                     'y': 202.87478637695312,
@@ -20,7 +20,7 @@ classification = {
                 },
                 {
                     'frame': 0,
-                    'tool': 0,
+                    'toolIndex': 0,
                     'toolType': 'point',
                     'x': 374.23454574576868,
                     'y': 455.23453656547428,
@@ -31,7 +31,7 @@ classification = {
                 },
                 {
                     'frame': 0,
-                    'tool': 1,
+                    'toolIndex': 1,
                     'toolType': 'point',
                     'x': 404.61279296875,
                     'y': 583.4398803710938,
