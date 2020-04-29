@@ -16,7 +16,7 @@ def process_data(data_list):
     '''Flatten list of extracts into a list of strings.  Empty strings
     are not returned'''
     return [
-        [idx, d.get('text', ''), d.get('gold_standard', False)]
+        [idx, str(d.get('text', '')), d.get('gold_standard', False)]
         for idx, d in enumerate(data_list)
         if str(d.get('text', '')).strip() != ''
     ]

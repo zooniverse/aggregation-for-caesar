@@ -18,13 +18,16 @@ def unflatten_data(data, json_column='data', renest=True):
     for name, value in data.items():
         if ('{0}.'.format(json_column) in name) and (pandas.notnull(value)):
             key = name.split('{0}.'.format(json_column))[1]
-            try:
-                nan = None  # noqa
-                false = False  # noqa
-                true = True  # noqa
-                null = None  # noqa
-                data_dict[key] = eval(value)
-            except:
+            if isinstance(value, str) and (('{' in value) or ('[' in value)):
+                try:
+                    nan = None  # noqa
+                    false = False  # noqa
+                    true = True  # noqa
+                    null = None  # noqa
+                    data_dict[key] = eval(value)
+                except:
+                    data_dict[key] = value
+            else:
                 data_dict[key] = value
     if renest:
         return renest_dict(data_dict)
