@@ -29,6 +29,15 @@ flat_row = flat_data.iloc[0]
 expected_unflatten_renest = {'a': 1, 'b': 0, 'c': {'d': 0, 'e': 1}}
 expected_unflatten = {'a': 1, 'b': 0, 'c.d': 0, 'c.e': 1}
 
+flat_data_text = pandas.DataFrame({
+    'classification_id': [1, 2, 3],
+    'user_id': [1, 2, 3],
+    'data.text': ['1', '10', '10-12']
+})
+
+flat_row_text = flat_data_text.iloc[2]
+expected_unflatten_text = {'text': '10-12'}
+
 json_data = pandas.DataFrame({
     'classification_id': [1, 2, 3, 4],
     'data.points': [
@@ -78,6 +87,11 @@ class TestCSVUtils(unittest.TestCase):
         '''Test unflattening of data with the renest keyword'''
         result = csv_utils.unflatten_data(flat_row, renest=True)
         self.assertDictEqual(result, expected_unflatten_renest)
+
+    def test_unflatten_text(self):
+        '''Test unflattening of data with numbers as text'''
+        result = csv_utils.unflatten_data(flat_row_text)
+        self.assertDictEqual(result, expected_unflatten_text)
 
     def test_unflatten_data(self):
         '''Test unflattening of data with out the renest keyword'''
