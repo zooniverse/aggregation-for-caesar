@@ -9,7 +9,7 @@ classification = {
     'annotations': [
         {
             'task': 'T0',
-            'taskType': 'drawing',
+            'taskType': 'transcription',
             'task_label': 'draw a line under the text',
             'value': [
                 {

@@ -45,7 +45,7 @@ def line_text_extractor(classification, gold_standard=False, **kwargs):
         classifier_version = version.parse(classification_metadata.get('classifier_version', '1.0'))
         if classifier_version >= version.parse('2.0'):
             # pull out the line task
-            annotation = [a for a in classification['annotations'] if a['taskType'] == 'drawing'][0]
+            annotation = [a for a in classification['annotations'] if a['taskType'] == 'transcription'][0]
             # make subtask look up table
             annotation_text = {
                 (a['task'], a['markIndex']): a
