@@ -55,7 +55,7 @@ def subtask_wrapper(func):
                         frame = 'frame{0}'.format(value['frame'])
                         for detail in value['details']:
                             subtask = detail['task']
-                            subtask_key = '{0}_tool{1}_subtask{2}'.format(*subtask.split('.'))
+                            subtask_key = '{0}_toolIndex{1}_subtask{2}'.format(*subtask.split('.'))
                             if subtask_key in details_functions:
                                 output[frame].setdefault(subtask_key, [])
                                 extractor = extractors.extractors[details_functions[subtask_key]]
