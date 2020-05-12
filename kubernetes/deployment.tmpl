@@ -17,6 +17,13 @@ spec:
       containers:
         - name: aggregation-caesar-app
           image: zooniverse/aggregation-for-caesar:__IMAGE_TAG__
+          resources:
+            requests:
+              memory: "600Mi"
+              cpu: "20m"
+            limits:
+              memory: "600Mi"
+              cpu: "20m"
           env:
             - name: FLASK_ENV
               value: production
