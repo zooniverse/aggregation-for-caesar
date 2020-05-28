@@ -74,8 +74,8 @@ setup(
             'nose>=1.3.7,<1.4',
             'coverage>=4.5.3,<5.2',
             'coveralls>=1.8,<2.0.1',
-            'flake8>=3.7,<3.8',
-            'flake8-black>=0.1.1,<0.2',
+            'flake8>=3.7,<3.9',
+            'flake8-black>=0.1.1,<0.3',
             'flake8-bugbear>=20.1.2,<20.2'
         ],
         'gui': [
@@ -88,13 +88,13 @@ setup(
         'hdbscan>=0.8.20,<0.8.27',
         'lxml>=4.4,<4.6',
         'numpy>=1.16.3,<1.19',
-        'packaging>=20.1,<20.4',
+        'packaging>=20.1,<20.5',
         'pandas>=0.24.2,<1.0.4',
         'progressbar2>=3.39,<3.52',
         'python-levenshtein>=0.12.0,<0.13',
         'python-slugify>=3.0.0,<4.1',
         'pyyaml>=5.1,<5.4',
-        'scikit-learn>=0.21.1,<0.22.3',
+        'scikit-learn>=0.21.1,<0.23.2',
         'scipy>=1.2,<1.4.2',
         'werkzeug>=0.14,<1.0.2'
     ]
