@@ -1,8 +1,9 @@
 from importlib import import_module
 
 from unittest.mock import MagicMock, PropertyMock, Mock, patch
-from nose.tools import assert_equal, assert_raises, assert_count_equal
+from nose.tools import assert_equal, assert_raises, assert_count_equal, assert_is_instance
 from panoptes_client import Panoptes, User
+from panoptes_client.panoptes import PanoptesAPIException
 import requests
 
 import os
@@ -118,6 +119,15 @@ def test_retrieve_user():
     assert_equal(found_user, mock_user1)
     assert_equal(found_user.id, 1)
     (User.find).assert_not_called()
+
+
+def test_retrieve_user_error():
+    # simulate User.find raising a PanoptesAPIException
+    Panoptes.connect = Mock()
+    User.find = MagicMock(side_effect=[PanoptesAPIException('test')])
+    found_user = panoptes._retrieve_user(10)
+    assert_is_instance(found_user, panoptes.CantFindUser)
+    assert_equal(found_user.id, 10)
 
 
 def test_discover_user_ids():
