@@ -41,6 +41,16 @@ extracted_data = [
     {}
 ]
 
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4,
+        5
+    ]
+}
+
 processed_data = {
     'shape': 'point',
     'symmetric': False,
@@ -104,6 +114,7 @@ TestShapeReducerPoint = ReducerTest(
     processed_data,
     reduced_data,
     'Test shape point reducer with DBSCAN',
+    network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'point'},
     kwargs={
         'eps': 5,
@@ -128,6 +139,7 @@ TestShapeReducerPointHdbscan = ReducerTest(
     processed_data,
     reduced_data_hdbscan,
     'Test shape point reducer with HDBSCAN',
+    network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'point'},
     kwargs={
         'min_cluster_size': 2,

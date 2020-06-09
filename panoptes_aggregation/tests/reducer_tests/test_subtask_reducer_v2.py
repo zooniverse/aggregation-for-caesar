@@ -91,6 +91,14 @@ extracted_data = [
     }
 ]
 
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3
+    ]
+}
+
 reduced_data = {
     'classifier_version': '2.0',
     'frame0': {
@@ -190,6 +198,7 @@ TestSubtaskReducerV2 = ReducerTestNoProcessing(
     extracted_data,
     reduced_data,
     'Test subtask reducer with classifier v2 extracts',
+    network_kwargs=kwargs_extra_data,
     kwargs={
         'shape': 'point',
         'eps': 5,
@@ -226,6 +235,7 @@ TestSubtaskReducerV2NoDetails = ReducerTestNoProcessing(
     extracted_data,
     reduced_data_no_details,
     'Test subtask reducer with classifier v2 extracts',
+    network_kwargs=kwargs_extra_data,
     kwargs={
         'shape': 'point',
         'eps': 5,

@@ -34,7 +34,7 @@ def process_data(data):
     -------
     processed_data : dict
         A dictionary with each key being a `frame` dictionary values with keys being
-        `tool` with a list of (`x`, `y`, `width`, `height`) tuples as a vlaue
+        `tool` with a list of (`x`, `y`, `width`, `height`) tuples as a value
     '''
     unique_frames = set(sum([list(d.keys()) for d in data], []))
     data_by_tool = {}
@@ -60,7 +60,7 @@ def process_data(data):
     return data_by_tool
 
 
-@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
+@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS, user_id=True)
 @subtask_wrapper
 def rectangle_reducer(data_by_tool, **kwargs):
     '''Cluster a list of rectangles by tool and frame
@@ -69,13 +69,13 @@ def rectangle_reducer(data_by_tool, **kwargs):
     ----------
     data_by_tool : dict
         A dictionary returned by :meth:`process_data`
-    kwrgs :
+    kwargs :
         `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
 
     Returns
     -------
     reduction : dict
-        A dictinary with the following keys for each frame
+        A dictionary with the following keys for each frame
 
         * `tool*_rec_x` : A list of `x` positions for **all** rectangles drawn with `tool*`
         * `tool*_rec_y` : A list of `y` positions for **all** rectangles drawn with `tool*`
@@ -85,7 +85,7 @@ def rectangle_reducer(data_by_tool, **kwargs):
         * `tool*_clusters_count` : The number of points in each **cluster** found
         * `tool*_clusters_x` : The `x` position for each **cluster** found
         * `tool*_clusters_y` : The `y` position for each **cluster** found
-        * `tool*_clusters_width` : The `widht` value for each **cluster** found
+        * `tool*_clusters_width` : The `width` value for each **cluster** found
         * `tool*_clusters_height` : The `height` value for each **cluster** found
 
     '''

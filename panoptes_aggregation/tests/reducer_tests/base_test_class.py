@@ -111,6 +111,7 @@ def ReducerTestNoProcessing(
     reduced,
     name,
     kwargs={},
+    network_kwargs={},
     test_name=None
 ):
     class ReducerTestNoProcessing(unittest.TestCase):
@@ -128,14 +129,14 @@ def ReducerTestNoProcessing(
 
         def test_reducer(self):
             '''Test the offline reducer'''
-            result = reducer(self.extracted_with_version, **kwargs)
+            result = reducer(self.extracted_with_version, **kwargs, **network_kwargs)
             self.assertDictEqual(cast_to_dict(result), self.reduced_with_version)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_request(self):
             '''Test the online reducer'''
             request_kwargs = {
-                'data': json.dumps(extract_in_data(self.extracted_with_version)),
+                'data': json.dumps(extract_in_data(self.extracted_with_version, **network_kwargs)),
                 'content_type': 'application/json'
             }
             app = flask.Flask(__name__)
@@ -220,6 +221,7 @@ def ReducerTestPoints(
     reduced,
     name,
     kwargs={},
+    network_kwargs={},
     atol=2,
     test_name=None
 ):
@@ -260,17 +262,17 @@ def ReducerTestPoints(
 
         def test_original_reducer(self):
             '''Test the reducer function starting with the processed data'''
-            result = reducer._original(self.processed, **kwargs)
+            result = reducer._original(self.processed, **kwargs, **network_kwargs)
             self.assertPoints(result, self.reduced)
 
         def test_reducer(self):
             '''Test the offline reducer'''
-            result = reducer(self.extracted_with_version, **kwargs)
+            result = reducer(self.extracted_with_version, **kwargs, **network_kwargs)
             self.assertPoints(result, self.reduced_with_version)
 
         def test_keys(self):
             '''Test the keys match up'''
-            result = reducer(self.extracted_with_version, **kwargs)
+            result = reducer(self.extracted_with_version, **kwargs, **network_kwargs)
             for i in self.reduced_with_version.keys():
                 with self.subTest(i=i):
                     self.assertIn(i, result)
@@ -284,7 +286,7 @@ def ReducerTestPoints(
             '''Test the online reducer'''
             app = flask.Flask(__name__)
             request_kwargs = {
-                'data': json.dumps(extract_in_data(self.extracted_with_version)),
+                'data': json.dumps(extract_in_data(self.extracted_with_version, **network_kwargs)),
                 'content_type': 'application/json'
             }
             if len(kwargs) > 0:

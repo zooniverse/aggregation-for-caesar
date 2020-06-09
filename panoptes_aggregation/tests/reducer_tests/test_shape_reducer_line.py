@@ -55,6 +55,16 @@ extracted_data = [
     {}
 ]
 
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4,
+        5
+    ]
+}
+
 processed_data = {
     'shape': 'line',
     'symmetric': False,
@@ -128,6 +138,7 @@ TestShapeReducerLine = ReducerTest(
     processed_data,
     reduced_data,
     'Test shape line reducer with DBSCAN',
+    network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'line'},
     kwargs={
         'eps': 5,
@@ -213,6 +224,7 @@ TestShapeReducerLineSymmetric = ReducerTest(
     processed_data_symmetric,
     reduced_data_symmetric,
     'Test shape line reducer with DBSCAN with symmetries',
+    network_kwargs=kwargs_extra_data,
     pkwargs={
         'shape': 'line',
         'symmetric': True
@@ -247,6 +259,7 @@ TestShapeReducerLineHdbscan = ReducerTest(
     processed_data,
     reduced_data_hdbscan,
     'Test shape line reducer with HDBSCAN',
+    network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'line'},
     kwargs={
         'min_cluster_size': 2,
@@ -272,6 +285,7 @@ TestShapeReducerLineHdbscanSymmetric = ReducerTest(
     processed_data_symmetric,
     reduced_data_hdbscan_symmetric,
     'Test shape line reducer with HDBSCAN with symmetries',
+    network_kwargs=kwargs_extra_data,
     pkwargs={
         'shape': 'line',
         'symmetric': True

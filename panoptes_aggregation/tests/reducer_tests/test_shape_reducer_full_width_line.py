@@ -34,6 +34,16 @@ extracted_data = [
     {}
 ]
 
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4,
+        5
+    ]
+}
+
 processed_data = {
     'shape': 'fullWidthLine',
     'symmetric': False,
@@ -88,6 +98,7 @@ TestShapeReducerFullWidthLine = ReducerTestNoProcessing(
     extracted_data,
     reduced_data,
     'Test shape fullWidthLine reducer with DBSCAN',
+    network_kwargs=kwargs_extra_data,
     kwargs={
         'eps': 5,
         'min_samples': 2,
@@ -110,6 +121,7 @@ TestShapeReducerFullWidthLineHdbscan = ReducerTestNoProcessing(
     extracted_data,
     reduced_data_hdbscan,
     'Test shape fullWidthLine reducer with HDBSCAN',
+    network_kwargs=kwargs_extra_data,
     kwargs={
         'min_cluster_size': 2,
         'min_samples': 1,

@@ -36,7 +36,7 @@ def process_data(data):
     -------
     processed_data : dict
         A dictionary with each key being a `tool` with a list of (`x`, `y`)
-        tuples as a vlaue
+        tuples as a value
     '''
     unique_frames = set(sum([list(d.keys()) for d in data], []))
     data_by_tool = {}
@@ -52,7 +52,7 @@ def process_data(data):
     return data_by_tool
 
 
-@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
+@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS, user_id=True)
 @subtask_wrapper
 def point_reducer_hdbscan(data_by_tool, **kwargs):
     '''Cluster a list of points by tool using HDBSCAN
@@ -61,25 +61,25 @@ def point_reducer_hdbscan(data_by_tool, **kwargs):
     ----------
     data_by_tool : dict
         A dictionary returned by :meth:`process_data`
-    kwrgs :
+    kwargs :
         `See HDBSCAN <http://hdbscan.readthedocs.io/en/latest/api.html#hdbscan>`_
 
     Returns
     -------
     reduction : dict
-        A dictinary with one key per subject `frame`.  Each frame has the following keys
+        A dictionary with one key per subject `frame`.  Each frame has the following keys
 
         * `tool*_points_x` : A list of `x` positions for **all** points drawn with `tool*`
         * `tool*_points_y` : A list of `y` positions for **all** points drawn with `tool*`
         * `tool*_cluster_labels` : A list of cluster labels for **all** points drawn with `tool*`
         * `tool*_cluster_probabilities`: A list of cluster probabilities for **all** points drawn with `tool*`
-        * `tool*_clusters_persistance`: A mesure for how persistent each **cluster** is (1.0 = stable, 0.0 = unstable)
+        * `tool*_clusters_persistance`: A measure for how persistent each **cluster** is (1.0 = stable, 0.0 = unstable)
         * `tool*_clusters_count` : The number of points in each **cluster** found
         * `tool*_clusters_x` : The weighted `x` position for each **cluster** found
         * `tool*_clusters_y` : The weighted `y` position for each **cluster** found
-        * `tool*_clusters_var_x` : The weighted `x` varaince of points in each **cluster** found
-        * `tool*_clusters_var_y` : The weighted `y` varaince of points in each **cluster** found
-        * `tool*_clusters_var_x_y` : The weighted `x-y` covaraince of points in each **cluster** found
+        * `tool*_clusters_var_x` : The weighted `x` variance of points in each **cluster** found
+        * `tool*_clusters_var_y` : The weighted `y` variance of points in each **cluster** found
+        * `tool*_clusters_var_x_y` : The weighted `x-y` covariance of points in each **cluster** found
 
     '''
     clusters = OrderedDict()
@@ -89,7 +89,7 @@ def point_reducer_hdbscan(data_by_tool, **kwargs):
             # clean `None` values for the list
             loc_list_clean = [xy for xy in loc_list if None not in xy]
             loc = np.array(loc_list_clean)
-            # orignal data points in order used by cluster code
+            # original data points in order used by cluster code
             clusters[frame]['{0}_points_x'.format(tool)] = list(loc[:, 0])
             clusters[frame]['{0}_points_y'.format(tool)] = list(loc[:, 1])
             # default each point in no cluster

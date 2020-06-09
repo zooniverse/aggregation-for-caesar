@@ -48,6 +48,16 @@ extracted_data = [
     {}
 ]
 
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4,
+        5
+    ]
+}
+
 processed_data = {
     'shape': 'circle',
     'symmetric': False,
@@ -118,6 +128,7 @@ TestShapeReducerCircle = ReducerTest(
     processed_data,
     reduced_data,
     'Test shape circle reducer with DBSCAN',
+    network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'circle'},
     kwargs={
         'eps': 5,
@@ -142,6 +153,7 @@ TestShapeReducerCircleHdbscan = ReducerTest(
     processed_data,
     reduced_data_hdbscan,
     'Test shape circle reducer with HDBSCAN',
+    network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'circle'},
     kwargs={
         'min_cluster_size': 2,

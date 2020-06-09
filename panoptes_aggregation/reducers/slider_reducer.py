@@ -1,7 +1,7 @@
 '''
 Slider Reducer
 --------------
-This module porvides functions to reduce the slider task extracts from
+This module provides functions to reduce the slider task extracts from
 :mod:`panoptes_aggregation.extractors.slider_extractor`.
 '''
 from .reducer_wrapper import reducer_wrapper

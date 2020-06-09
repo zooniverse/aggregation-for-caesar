@@ -29,6 +29,14 @@ extracted_data = [
         }
     }
 ]
+
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2
+    ]
+}
+
 processed_data = {
     'frame0': {
         'tool1': [tuple(z) for z in list(xy)],
@@ -87,6 +95,7 @@ TestPointsCluster = ReducerTestPoints(
     processed_data,
     reduced_data,
     'Test point reducer HDBSCAN',
+    network_kwargs=kwargs_extra_data,
     kwargs={
         'min_cluster_size': 5,
         'min_samples': 3

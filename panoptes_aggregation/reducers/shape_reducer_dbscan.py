@@ -23,7 +23,12 @@ DEFAULTS = {
 }
 
 
-@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS, defaults_process=DEFAULTS_PROCESS)
+@reducer_wrapper(
+    process_data=process_data,
+    defaults_data=DEFAULTS,
+    defaults_process=DEFAULTS_PROCESS,
+    user_id=True
+)
 @subtask_wrapper
 def shape_reducer_dbscan(data_by_tool, **kwargs):
     '''Cluster a shape by tool using DBSCAN
@@ -32,15 +37,15 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
     ----------
     data_by_tool : dict
         A dictionary returned by :meth:`process_data`
-    kwrgs :
+    kwargs :
         `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
 
     Returns
     -------
     reduction : dict
-        A dictinary with the following keys for each frame
+        A dictionary with the following keys for each frame
 
-        * `tool*_<shape>_<param>` : A list of **all** `param` for the `sahpe` drawn with `tool*`
+        * `tool*_<shape>_<param>` : A list of **all** `param` for the `shape` drawn with `tool*`
         * `tool*_cluster_labels` : A list of cluster labels for **all** shapes drawn with `tool*`
         * `tool*_clusters_count` : The number of points in each **cluster** found
         * `tool*_clusters_<param>` : The `param` value for each **cluster** found
@@ -57,7 +62,7 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
             loc = np.array(loc_list)
             if len(shape_params) == 1:
                 loc = loc.reshape(-1, 1)
-            # orignal data points in order used by cluster code
+            # original data points in order used by cluster code
             for pdx, param in enumerate(shape_params):
                 clusters[frame]['{0}_{1}_{2}'.format(tool, shape, param)] = loc[:, pdx].tolist()
             # default each point in no cluster

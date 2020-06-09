@@ -57,7 +57,7 @@ def reducer_wrapper(
             if output_kwargs:
                 reduction['parameters'] = {**kwargs_data, **kwargs_process}
             return reduction
-        #: keep the orignal function around for testing
+        #: keep the original function around for testing
         #: and access by other reducers
         wrapper._original = func
         return wrapper
