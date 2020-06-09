@@ -53,6 +53,16 @@ extracted_data = [
     {}
 ]
 
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4,
+        5
+    ]
+}
+
 processed_data = {
     'frame0': {
         'T0_tool0': [
@@ -128,6 +138,7 @@ TestRectReducer = ReducerTest(
     processed_data,
     reduced_data,
     'Test rectangle reducer',
+    network_kwargs=kwargs_extra_data,
     kwargs={
         'eps': 5,
         'min_samples': 2
@@ -161,6 +172,13 @@ extracted_data_sw = [
         }
     }
 ]
+
+kwargs_extra_data_sw = {
+    'user_id': [
+        1,
+        2
+    ]
+}
 
 processed_data_sw = {
     'frame0': {
@@ -207,6 +225,7 @@ TestSWRectReducer = ReducerTest(
     processed_data_sw,
     reduced_data_sw,
     'Test SW rectangle reducer',
+    network_kwargs=kwargs_extra_data_sw,
     kwargs={
         'eps': 5,
         'min_samples': 2

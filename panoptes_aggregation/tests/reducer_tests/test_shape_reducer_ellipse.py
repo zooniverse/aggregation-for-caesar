@@ -62,6 +62,16 @@ extracted_data = [
     {}
 ]
 
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4,
+        5
+    ]
+}
+
 processed_data = {
     'shape': 'ellipse',
     'symmetric': False,
@@ -146,6 +156,7 @@ TestShapeReducerEllipse = ReducerTest(
     processed_data,
     reduced_data,
     'Test shape ellipse reducer with DBSCAN',
+    network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'ellipse'},
     kwargs={
         'eps': 5,
@@ -170,6 +181,7 @@ TestShapeReducerEllipseHdbscan = ReducerTest(
     processed_data,
     reduced_data_hdbscan,
     'Test shape ellipse reducer with HDBSCAN',
+    network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'ellipse'},
     kwargs={
         'min_cluster_size': 2,

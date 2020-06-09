@@ -1,4 +1,4 @@
-'''Unility used for transforming a list of extracted data for use in tests'''
+'''Utility used for transforming a list of extracted data for use in tests'''
 import copy
 
 

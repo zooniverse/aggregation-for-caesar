@@ -50,7 +50,7 @@ def process_data(data):
     return data_by_tool
 
 
-@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS)
+@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS, user_id=True)
 @subtask_wrapper
 def point_reducer_dbscan(data_by_tool, **kwargs):
     '''Cluster a list of points by tool using DBSCAN
@@ -59,13 +59,13 @@ def point_reducer_dbscan(data_by_tool, **kwargs):
     ----------
     data_by_tool : dict
         A dictionary returned by :meth:`process_data`
-    kwrgs :
+    kwargs :
         `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
 
     Returns
     -------
     reduction : dict
-        A dictinary with one key per subject `frame`.  Each frame has the following keys
+        A dictionary with one key per subject `frame`.  Each frame has the following keys
 
         * `tool*_points_x` : A list of `x` positions for **all** points drawn with `tool*`
         * `tool*_points_y` : A list of `y` positions for **all** points drawn with `tool*`
@@ -73,9 +73,9 @@ def point_reducer_dbscan(data_by_tool, **kwargs):
         * `tool*_clusters_count` : The number of points in each **cluster** found
         * `tool*_clusters_x` : The `x` position for each **cluster** found
         * `tool*_clusters_y` : The `y` position for each **cluster** found
-        * `tool*_clusters_var_x` : The `x` varaince of points in each **cluster** found
-        * `tool*_clusters_var_y` : The `y` varaince of points in each **cluster** found
-        * `tool*_clusters_var_x_y` : The `x-y` covaraince of points in each **cluster** found
+        * `tool*_clusters_var_x` : The `x` variance of points in each **cluster** found
+        * `tool*_clusters_var_y` : The `y` variance of points in each **cluster** found
+        * `tool*_clusters_var_x_y` : The `x-y` covariance of points in each **cluster** found
 
     '''
     clusters = OrderedDict()
@@ -85,7 +85,7 @@ def point_reducer_dbscan(data_by_tool, **kwargs):
             # clean `None` values for the list
             loc_list_clean = [xy for xy in loc_list if None not in xy]
             loc = np.array(loc_list_clean)
-            # orignal data points in order used by cluster code
+            # original data points in order used by cluster code
             clusters[frame]['{0}_points_x'.format(tool)] = list(loc[:, 0])
             clusters[frame]['{0}_points_y'.format(tool)] = list(loc[:, 1])
             # default each point in no cluster

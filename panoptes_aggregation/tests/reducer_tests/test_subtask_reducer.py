@@ -80,6 +80,14 @@ extracted_data = [
     }
 ]
 
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3
+    ]
+}
+
 reduced_data = {
     'frame0': {
         'T0_tool0_rec_x': [0.0, 100.0, 0.0, 100.0],
@@ -174,6 +182,7 @@ TestSubtaskReducer = ReducerTestNoProcessing(
     extracted_data,
     reduced_data,
     'Test subtask reducer',
+    network_kwargs=kwargs_extra_data,
     kwargs={
         'eps': 5,
         'min_samples': 2,

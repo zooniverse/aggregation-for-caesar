@@ -29,6 +29,14 @@ extracted_data = [
         }
     }
 ]
+
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2
+    ]
+}
+
 processed_data = {
     'frame0': {
         'tool1': [tuple(z) for z in list(xy)],
@@ -60,6 +68,7 @@ TestPointsCluster = ReducerTestPoints(
     processed_data,
     reduced_data,
     'Test point reducer DBSCAN',
+    network_kwargs=kwargs_extra_data,
     kwargs={
         'eps': 5,
         'min_samples': 3
@@ -76,6 +85,11 @@ extracted_data_one_point = [
         }
     }
 ]
+kwargs_extra_data_one_point = {
+    'user_id': [
+        1
+    ]
+}
 processed_data_one_point = {
     'frame0': {
         'tool1': [(0, 0)]
@@ -102,6 +116,7 @@ TestOnePointCluster = ReducerTestPoints(
     processed_data_one_point,
     reduced_data_one_point,
     'Test point reducer DBSCAN with one data point',
+    network_kwargs=kwargs_extra_data_one_point,
     kwargs={
         'eps': 5,
         'min_samples': 1

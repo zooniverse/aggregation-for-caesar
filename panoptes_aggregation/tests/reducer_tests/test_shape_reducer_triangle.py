@@ -55,6 +55,16 @@ extracted_data = [
     {}
 ]
 
+kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4,
+        5
+    ]
+}
+
 processed_data = {
     'shape': 'triangle',
     'symmetric': False,
@@ -132,6 +142,7 @@ TestShapeReducerTriangle = ReducerTest(
     processed_data,
     reduced_data,
     'Test shape triangle reducer with DBSCAN',
+    network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'triangle'},
     kwargs={
         'eps': 5,
@@ -156,6 +167,7 @@ TestShapeReducerTriangleHdbscan = ReducerTest(
     processed_data,
     reduced_data_hdbscan,
     'Test shape triangle reducer with HDBSCAN',
+    network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'triangle'},
     kwargs={
         'min_cluster_size': 2,

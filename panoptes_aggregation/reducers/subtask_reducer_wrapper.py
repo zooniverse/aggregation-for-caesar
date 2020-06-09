@@ -8,6 +8,7 @@ def subtask_wrapper(func):
     @wraps(func)
     def wrapper(data, **kwargs):
         details_functions = kwargs.pop('details', None)
+        user_id = kwargs.pop('user_id', None)
         # data_in is the list of original extracts
         # data is the `processed` data_in
         data_in = kwargs.pop('data_in', None)
@@ -39,7 +40,9 @@ def subtask_wrapper(func):
                                             detail_reduced.append('No reducer for this subtask type')
                                         else:
                                             reducer = reducers.reducers[details_functions[df][ddx]]
-                                            detail_reduced.append(reducer(detail, no_version=True))
+                                            detail_reduced.append(
+                                                reducer(detail, no_version=True, user_id=user_id)
+                                            )
                                     output[frame_key].setdefault(kc, []).append(detail_reduced)
             elif all(classifier_versions >= version.parse('2.0')):
                 # classifier version 2.0 and up
@@ -61,7 +64,9 @@ def subtask_wrapper(func):
                                 if label > -1:
                                     subtask_cluster = subtask_array[cluster_labels == label]
                                     reducer = reducers.reducers[details_functions[subtask]]
-                                    subtask_reduced.append(reducer(subtask_cluster, no_version=True))
+                                    subtask_reduced.append(
+                                        reducer(subtask_cluster, no_version=True, user_id=user_id)
+                                    )
                             frame['{0}_clusters'.format(subtask)] = subtask_reduced
                 output['classifier_version'] = str(classifier_versions.max())
             else:
