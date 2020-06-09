@@ -19,6 +19,7 @@ extracted_data = [
             ]
         }
     },
+    {'classifier_version': '2.0'},
     {
         'classifier_version': '2.0',
         'frame0': {
@@ -41,6 +42,7 @@ extracted_data = [
 kwargs_extra_data = {
     'user_id': [
         1,
+        3,
         2
     ]
 }
