@@ -18,6 +18,7 @@ extracted_data = [
             }]
         ]
     }},
+    {},
     {'frame0': {
         'T0_tool0_x': [0.0, 100.0],
         'T0_tool0_y': [0.0, 100.0],
@@ -39,6 +40,7 @@ extracted_data = [
 kwargs_extra_data = {
     'user_id': [
         1,
+        3,
         2
     ]
 }
