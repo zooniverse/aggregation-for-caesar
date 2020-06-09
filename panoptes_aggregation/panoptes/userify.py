@@ -8,6 +8,7 @@ from collections.abc import Iterable
 from json import dumps as jsonify
 from os import getenv
 from panoptes_client import Panoptes, User
+from panoptes_client.panoptes import PanoptesAPIException
 from yaml import safe_load
 import requests
 
@@ -142,7 +143,9 @@ def _discover_user_ids(target_object):
 def _build_user_hash(user, find_fields):
     user_hash = {'id': user.id}
     for key in find_fields:
-        user_hash[key] = getattr(user, key)
+        # add a default return for user that are not found
+        # in panoptes
+        user_hash[key] = getattr(user, key, "None")
     return user_hash
 
 
@@ -158,6 +161,11 @@ def _flatten(l):
             yield el
 
 
+class CantFindUser():
+    def __init__(self, id):
+        self.id = id
+
+
 def _retrieve_user(user_id):
     if user_id in users:
         user = users[user_id]
@@ -167,8 +175,12 @@ def _retrieve_user(user_id):
             client_id=getenv('PANOPTES_CLIENT_ID'),
             client_secret=getenv('PANOPTES_CLIENT_SECRET')
         )
-
-        user = User.find(user_id)
+        try:
+            user = User.find(user_id)
+        except PanoptesAPIException:
+            # some users are not found in panoptes
+            # return an empty class with an `id` attribute
+            user = CantFindUser(user_id)
         users[user_id] = user
 
     return user
