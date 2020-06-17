@@ -283,7 +283,8 @@ reduced_data = {
             'gold_standard': [False, True, False],
             'slope_label': 0,
             'gutter_label': 0,
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_text': [
@@ -303,7 +304,8 @@ reduced_data = {
             'gold_standard': [False, True, False],
             'slope_label': 0,
             'gutter_label': 0,
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_text': [
@@ -323,7 +325,8 @@ reduced_data = {
             'gold_standard': [False, True, False],
             'slope_label': 0,
             'gutter_label': 1,
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_text': [
@@ -341,7 +344,8 @@ reduced_data = {
             'gold_standard': [False, True, False],
             'slope_label': 0,
             'gutter_label': 1,
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_text': [
@@ -360,7 +364,8 @@ reduced_data = {
             'gold_standard': [False, True, False],
             'slope_label': 1,
             'gutter_label': 0,
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_text': [
@@ -379,7 +384,8 @@ reduced_data = {
             'gold_standard': [False, True, False],
             'slope_label': 1,
             'gutter_label': 0,
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         },
         {
             'clusters_text': [
@@ -397,7 +403,8 @@ reduced_data = {
             'gold_standard': [False, True, False],
             'slope_label': 1,
             'gutter_label': 1,
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_text': [
@@ -416,7 +423,8 @@ reduced_data = {
             'gold_standard': [False, True, False],
             'slope_label': 1,
             'gutter_label': 1,
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_text': [
@@ -436,7 +444,8 @@ reduced_data = {
             'gold_standard': [False],
             'slope_label': 2,
             'gutter_label': 0,
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         }
     ],
     'frame1': [
@@ -456,7 +465,8 @@ reduced_data = {
             'gold_standard': [True, False],
             'slope_label': 0,
             'gutter_label': 0,
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         }
     ],
     'frame2': [
@@ -476,7 +486,8 @@ reduced_data = {
             'gold_standard': [False],
             'slope_label': 0,
             'gutter_label': 0,
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         }
     ],
     'parameters': {
@@ -672,7 +683,8 @@ reduced_data_with_dollar_sign = {
         'gold_standard': [False, False, False, False, False, False, False],
         'slope_label': 0,
         'gutter_label': 0,
-        'low_consensus': False
+        'low_consensus': False,
+        'flagged': False
     }],
     'parameters': {
         'min_samples': 'auto',

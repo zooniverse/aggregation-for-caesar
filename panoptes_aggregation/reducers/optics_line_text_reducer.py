@@ -222,7 +222,8 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                         'user_ids': user_ids,
                         'extract_index': ext_index[cdx].tolist(),
                         'gold_standard': gold_standard,
-                        'low_consensus': low_consensus
+                        'low_consensus': low_consensus,
+                        'flagged': low_consensus
                     }
                     number_of_lines += 1
                     frame_unordered.append(value)

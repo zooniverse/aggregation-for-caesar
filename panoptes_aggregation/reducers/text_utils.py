@@ -604,9 +604,11 @@ def cluster_by_frame(
             line['user_ids'] = [user_ids_input[di] for di in data_index]
             if line['consensus_score'] < low_consensus_threshold:
                 line['low_consensus'] = True
+                line['flagged'] = True
                 low_consensus_lines += 1
             else:
                 line['low_consensus'] = False
+                line['flagged'] = False
         reduced_data[frame] += frame_slope
     reduced_data['low_consensus_lines'] = low_consensus_lines
     reduced_data['transcribed_lines'] = number_of_lines

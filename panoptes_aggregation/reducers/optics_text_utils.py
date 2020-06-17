@@ -188,7 +188,8 @@ def cluster_of_one(X, data, user_ids, extract_index):
             'user_ids': [user_ids[user_index]],
             'extract_index': [extract_index[rdx]],
             'gold_standard': [line['gold_standard']],
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         }
         clusters.append(value)
     return clusters
