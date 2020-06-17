@@ -631,7 +631,8 @@ reduced_data = {
             'gold_standard': [False, False, False, False, True, False, False],
             'user_ids': [1, 2, 3, 3, None, 5, 5],
             'extract_index': [2, 0, 0, 1, 3, 2, 8],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -664,7 +665,8 @@ reduced_data = {
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
             'extract_index': [0, 1, 6, 2, 3],
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         },
         {
             'clusters_x': [
@@ -697,7 +699,8 @@ reduced_data = {
             'gold_standard': [False, False, False, True, False, False],
             'user_ids': [1, 2, 3, None, 5, 5],
             'extract_index': [4, 4, 2, 7, 0, 1],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -724,7 +727,8 @@ reduced_data = {
             'gold_standard': [False, False, False, True],
             'user_ids': [1, 2, 3, None],
             'extract_index': [5, 5, 7, 5],
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         },
         {
             'clusters_x': [
@@ -754,7 +758,8 @@ reduced_data = {
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
             'extract_index': [1, 6, 5, 4, 7],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -784,7 +789,8 @@ reduced_data = {
             'gold_standard': [False, False, True, False],
             'user_ids': [1, 2, None, 5],
             'extract_index': [3, 7, 6, 4],
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         },
         {
             'clusters_x': [
@@ -814,7 +820,8 @@ reduced_data = {
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
             'extract_index': [6, 2, 4, 0, 6],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -844,7 +851,8 @@ reduced_data = {
             'gold_standard': [False, False, False, True, False, False],
             'user_ids': [1, 2, 3, None, 5, 5],
             'extract_index': [7, 3, 3, 1, 5, 9],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         }
     ],
     'frame1': [
@@ -873,7 +881,8 @@ reduced_data = {
             'gold_standard': [False, True],
             'user_ids': [2, None],
             'extract_index': [0, 0],
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         }
     ],
     'frame2': [
@@ -902,7 +911,8 @@ reduced_data = {
             'gold_standard': [False],
             'user_ids': [None],
             'extract_index': [0],
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         }
     ],
     'parameters': {
@@ -1288,7 +1298,8 @@ reduced_data_by_line = {
             'gold_standard': [False, False, False, False, True, False, False],
             'user_ids': [1, 2, 3, 3, None, 5, 5],
             'extract_index': [2, 0, 0, 1, 3, 2, 8],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -1314,7 +1325,8 @@ reduced_data_by_line = {
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
             'extract_index': [0, 1, 6, 2, 3],
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         },
         {
             'clusters_x': [
@@ -1340,7 +1352,8 @@ reduced_data_by_line = {
             'gold_standard': [False, False, False, True, False, False],
             'user_ids': [1, 2, 3, None, 5, 5],
             'extract_index': [4, 4, 2, 7, 0, 1],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -1364,7 +1377,8 @@ reduced_data_by_line = {
             'gold_standard': [False, False, False, True],
             'user_ids': [1, 2, 3, None],
             'extract_index': [5, 5, 7, 5],
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         },
         {
             'clusters_x': [
@@ -1389,7 +1403,8 @@ reduced_data_by_line = {
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
             'extract_index': [1, 6, 5, 4, 7],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -1414,7 +1429,8 @@ reduced_data_by_line = {
             'gold_standard': [False, False, True, False],
             'user_ids': [1, 2, None, 5],
             'extract_index': [3, 7, 6, 4],
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         },
         {
             'clusters_x': [
@@ -1439,7 +1455,8 @@ reduced_data_by_line = {
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
             'extract_index': [6, 2, 4, 0, 6],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -1464,7 +1481,8 @@ reduced_data_by_line = {
             'gold_standard': [False, False, False, True, False, False],
             'user_ids': [1, 2, 3, None, 5, 5],
             'extract_index': [7, 3, 3, 1, 5, 9],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         }
     ],
     'frame1': [
@@ -1490,7 +1508,8 @@ reduced_data_by_line = {
             'gold_standard': [False, True],
             'user_ids': [2, None],
             'extract_index': [0, 0],
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         }
     ],
     'frame2': [
@@ -1510,7 +1529,8 @@ reduced_data_by_line = {
             'gold_standard': [False],
             'user_ids': [None],
             'extract_index': [0],
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         }
     ],
     'parameters': {
@@ -1584,7 +1604,8 @@ reduced_data_min_word = {
             'gold_standard': [False, False, False, False, True, False, False],
             'user_ids': [1, 2, 3, 3, None, 5, 5],
             'extract_index': [2, 0, 0, 1, 3, 2, 8],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -1610,7 +1631,8 @@ reduced_data_min_word = {
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
             'extract_index': [0, 1, 6, 2, 3],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -1636,7 +1658,8 @@ reduced_data_min_word = {
             'gold_standard': [False, False, False, True, False, False],
             'user_ids': [1, 2, 3, None, 5, 5],
             'extract_index': [4, 4, 2, 7, 0, 1],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -1660,7 +1683,8 @@ reduced_data_min_word = {
             'gold_standard': [False, False, False, True],
             'user_ids': [1, 2, 3, None],
             'extract_index': [5, 5, 7, 5],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -1685,7 +1709,8 @@ reduced_data_min_word = {
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
             'extract_index': [1, 6, 5, 4, 7],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -1710,7 +1735,8 @@ reduced_data_min_word = {
             'gold_standard': [False, False, True, False],
             'user_ids': [1, 2, None, 5],
             'extract_index': [3, 7, 6, 4],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -1735,7 +1761,8 @@ reduced_data_min_word = {
             'gold_standard': [False, False, False, True, False],
             'user_ids': [1, 2, 3, None, 5],
             'extract_index': [6, 2, 4, 0, 6],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         },
         {
             'clusters_x': [
@@ -1760,7 +1787,8 @@ reduced_data_min_word = {
             'gold_standard': [False, False, False, True, False, False],
             'user_ids': [1, 2, 3, None, 5, 5],
             'extract_index': [7, 3, 3, 1, 5, 9],
-            'low_consensus': False
+            'low_consensus': False,
+            'flagged': False
         }
     ],
     'frame1': [
@@ -1786,7 +1814,8 @@ reduced_data_min_word = {
             'gold_standard': [False, True],
             'user_ids': [2, None],
             'extract_index': [0, 0],
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         }
     ],
     'frame2': [
@@ -1806,7 +1835,8 @@ reduced_data_min_word = {
             'gold_standard': [False],
             'user_ids': [None],
             'extract_index': [0],
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         }
     ],
     'parameters': {

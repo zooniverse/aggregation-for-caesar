@@ -75,7 +75,8 @@ reduced_data = {
             'gold_standard': [False],
             'user_ids': [1],
             'extract_index': [0],
-            'low_consensus': True
+            'low_consensus': True,
+            'flagged': True
         }
     ],
     'parameters': {
