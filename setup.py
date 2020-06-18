@@ -68,7 +68,7 @@ setup(
             'recommonmark>=0.5.0,<0.7',
             'sphinx>=2.2.2,<3.2',
             'sphinxcontrib-httpdomain>=1.7.0,<1.8',
-            'sphinx_rtd_theme>=0.4.3,<0.5'
+            'sphinx_rtd_theme>=0.4.3,<0.6'
         ],
         'test': [
             'nose>=1.3.7,<1.4',
