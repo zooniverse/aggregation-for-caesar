@@ -58,17 +58,17 @@ setup(
             'flask>=1.0,<1.2',
             'flask-cors>=3.0,<3.1',
             'panoptes-client>=1.1,<1.2',
-            'requests>=2.4.2,<2.24',
+            'requests>=2.4.2,<2.25',
             'gunicorn>=20.0,<20.1',
             'sentry-sdk[flask]>=0.13.5,<0.16',
-            'newrelic>=5.4.0,<5.14.1',
+            'newrelic>=5.4.0,<5.14.2',
             'gitpython>=3.0.0,<3.2'
         ],
         'doc': [
             'recommonmark>=0.5.0,<0.7',
             'sphinx>=2.2.2,<3.2',
             'sphinxcontrib-httpdomain>=1.7.0,<1.8',
-            'sphinx_rtd_theme>=0.4.3,<0.5'
+            'sphinx_rtd_theme>=0.4.3,<0.6'
         ],
         'test': [
             'nose>=1.3.7,<1.4',
@@ -89,7 +89,7 @@ setup(
         'lxml>=4.4,<4.6',
         'numpy>=1.16.3,<1.19',
         'packaging>=20.1,<20.5',
-        'pandas>=0.24.2,<1.0.5',
+        'pandas>=0.24.2,<1.0.6',
         'progressbar2>=3.39,<3.52',
         'python-levenshtein>=0.12.0,<0.13',
         'python-slugify>=3.0.0,<4.1',
