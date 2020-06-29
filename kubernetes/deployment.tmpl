@@ -17,6 +17,8 @@ spec:
       containers:
         - name: aggregation-caesar-app
           image: zooniverse/aggregation-for-caesar:__IMAGE_TAG__
+          ports:
+            - containerPort: 80
           resources:
             requests:
               memory: "600Mi"
@@ -24,6 +26,16 @@ spec:
             limits:
               memory: "600Mi"
               cpu: "1500m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
           env:
             - name: FLASK_ENV
               value: production
@@ -61,5 +73,3 @@ spec:
                   key: NEW_RELIC_LICENSE_KEY
             - name: NEW_RELIC_APP_NAME
               value: 'Aggregation Caesar'
-          ports:
-            - containerPort: 80
