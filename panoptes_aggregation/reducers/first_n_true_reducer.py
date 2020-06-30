@@ -5,7 +5,6 @@ This module is designed to reduce boolean-valued extracts e.g.
 :mod:`panoptes_aggregation.extractors.all_tasks_empty_extractor`.
 It returns true if and only if the first N extracts are `True`.
 """
-from collections import Counter
 from .reducer_wrapper import reducer_wrapper
 import numpy as np
 
