@@ -88,3 +88,8 @@ Reducers
 
 .. automodule:: panoptes_aggregation.reducers.text_reducer
   :members:
+
+----
+
+.. automodule:: panoptes_aggregation.reducers.first_n_true_reducer
+  :members:

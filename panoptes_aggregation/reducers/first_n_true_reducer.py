@@ -12,8 +12,6 @@ DEFAULTS = {"n": {"default": 0, "type": int}}
 
 
 def extractResultKey(extract):
-    if not isinstance(extract, dict):
-        return False
     return extract["result"] if "result" in extract else False
 
 
