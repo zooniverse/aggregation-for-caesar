@@ -76,5 +76,10 @@ Extractors
 
 ----
 
+.. automodule:: panoptes_aggregation.extractors.nfn_extractor
+  :members:
+
+----
+
 .. automodule:: panoptes_aggregation.extractors.all_tasks_empty_extractor
   :members:
