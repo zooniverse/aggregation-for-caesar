@@ -15,6 +15,7 @@ from .tess_reducer_column import tess_reducer_column
 from .tess_gold_standard_reducer import tess_gold_standard_reducer
 from .text_reducer import text_reducer
 from .optics_line_text_reducer import optics_line_text_reducer
+from .first_n_true_reducer import first_n_true_reducer
 from ..copy_function import copy_function
 
 shortcut_reducer = copy_function(question_reducer, 'shortcut_reducer')
@@ -36,5 +37,6 @@ reducers = {
     'slider_reducer': slider_reducer,
     'tess_reducer_column': tess_reducer_column,
     'tess_gold_standard_reducer': tess_gold_standard_reducer,
-    'text_reducer': text_reducer
+    'text_reducer': text_reducer,
+    'first_n_true_reducer' : first_n_true_reducer
 }

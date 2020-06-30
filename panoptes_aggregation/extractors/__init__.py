@@ -14,6 +14,7 @@ from .slider_extractor import slider_extractor
 from .nfn_extractor import nfn_extractor
 from .i2a_extractor import i2a_extractor
 from .text_extractor import text_extractor
+from .all_tasks_empty_extractor import all_tasks_empty_extractor
 from ..copy_function import copy_function
 
 shortcut_extractor = copy_function(question_extractor, 'shortcut_extractor')
@@ -35,5 +36,6 @@ extractors = {
     'slider_extractor': slider_extractor,
     'i2a_extractor': i2a_extractor,
     'nfn_extractor': nfn_extractor,
-    'text_extractor': text_extractor
+    'text_extractor': text_extractor,
+    'all_tasks_empty_extractor': all_tasks_empty_extractor
 }
