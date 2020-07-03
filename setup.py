@@ -60,7 +60,7 @@ setup(
             'panoptes-client>=1.1,<1.2',
             'requests>=2.4.2,<2.25',
             'gunicorn>=20.0,<20.1',
-            'sentry-sdk[flask]>=0.13.5,<0.15',
+            'sentry-sdk[flask]>=0.13.5,<0.17',
             'newrelic>=5.4.0,<5.14.2',
             'gitpython>=3.0.0,<3.2'
         ],
