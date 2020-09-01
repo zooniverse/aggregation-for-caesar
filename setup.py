@@ -61,7 +61,7 @@ setup(
             'requests>=2.4.2,<2.25',
             'gunicorn>=20.0,<20.1',
             'sentry-sdk[flask]>=0.13.5,<0.18',
-            'newrelic>=5.4.0,<5.16.2',
+            'newrelic>=5.4.0,<5.18.1',
             'gitpython>=3.0.0,<3.2'
         ],
         'doc': [
@@ -89,8 +89,8 @@ setup(
         'lxml>=4.4,<4.6',
         'numpy>=1.16.3,<1.20',
         'packaging>=20.1,<20.5',
-        'pandas>=0.24.2,<1.1.1',
-        'progressbar2>=3.39,<3.52',
+        'pandas>=0.24.2,<1.1.2',
+        'progressbar2>=3.39,<3.53',
         'python-levenshtein>=0.12.0,<0.13',
         'python-slugify>=3.0.0,<4.1',
         'pyyaml>=5.1,<5.4',
