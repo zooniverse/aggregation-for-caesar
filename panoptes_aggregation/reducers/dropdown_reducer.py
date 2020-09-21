@@ -28,9 +28,11 @@ def process_data(data):
     data_out = []
     for extract in data:
         values = []
-        for value in extract['value']:
-            values.append(Counter(value))
-        data_out.append(values)
+        if 'value' in extract:
+            # if the task was left blank there will be no "value" key
+            for value in extract['value']:
+                values.append(Counter(value))
+            data_out.append(values)
     return data_out
 
 
@@ -49,9 +51,11 @@ def dropdown_reducer(votes_list):
         A dictionary with one key `value` the contains a list of dictionaries
         (one for each dropdown in the task) giving the vote count for each `key`
     '''
-    value = np.array(votes_list).sum(axis=0).tolist()
-    value = list(map(dict, value))
-    output = {
-        'value': value
-    }
+    output = {}
+    if len(votes_list) > 0:
+        value = np.array(votes_list).sum(axis=0).tolist()
+        value = list(map(dict, value))
+        output = {
+            'value': value
+        }
     return output
