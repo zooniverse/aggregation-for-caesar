@@ -62,3 +62,22 @@ TestDropdownReducer = ReducerTest(
     processed_type='list',
     test_name='TestDropdownReducer'
 )
+
+# This example comes from an example project where
+# the task in question is not required
+extracted_data_blank = [{}, {}, {}, {}]
+
+processed_data_blank = []
+
+reduced_data_blank = {}
+
+TestDropdownReducerBlank = ReducerTest(
+    dropdown_reducer,
+    process_data,
+    extracted_data_blank,
+    processed_data_blank,
+    reduced_data_blank,
+    'Test dropdown reducer with blank extracts',
+    processed_type='list',
+    test_name='TestDropdownReducerBlank'
+)
