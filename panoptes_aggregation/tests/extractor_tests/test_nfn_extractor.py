@@ -155,7 +155,7 @@ expected_we_dig_bio = {
     "workflow": "herbarium",
     "decade": "00s",
     "time": "lunchbreak",
-    "we_dig_bio": True,
+    "we_dig_bio": 2020,
     "country": "United States"
 }
 
