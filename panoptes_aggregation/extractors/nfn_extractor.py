@@ -87,6 +87,14 @@ def earth_day(parser):
         return None
 
 
+def we_dig_bio(parser):
+    date = dateparse(parser.created_at)
+    if (date.year == 2020) and (15 <= date.day <= 18):
+        return 2020
+    else:
+        return None
+
+
 @extractor_wrapper()
 def nfn_extractor(classification, **kwargs):
     response = {}
@@ -104,5 +112,6 @@ def nfn_extractor(classification, **kwargs):
 
         response['time'] = check_time(parser)
         response['earth_day'] = earth_day(parser)
+        response['we_dig_bio'] = we_dig_bio(parser)
 
     return {k: v for k, v in response.items() if v is not None}
