@@ -73,3 +73,16 @@ spec:
                   key: NEW_RELIC_LICENSE_KEY
             - name: NEW_RELIC_APP_NAME
               value: 'Aggregation Caesar'
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: aggregation-caesar-app
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: aggregation-caesar-app
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
