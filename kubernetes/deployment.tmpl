@@ -77,12 +77,12 @@ spec:
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: aggregation-caesar-app
+  name: aggregation-caesar
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: aggregation-caesar-app
+    name: aggregation-caesar
   minReplicas: 1
   maxReplicas: 3
   targetCPUUtilizationPercentage: 80
