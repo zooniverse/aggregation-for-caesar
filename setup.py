@@ -89,7 +89,7 @@ setup(
         'lxml>=4.4,<4.6',
         'numpy>=1.16.3,<1.20',
         'packaging>=20.1,<20.5',
-        'pandas>=0.24.2,<1.1.3',
+        'pandas>=0.24.2,<1.1.5',
         'progressbar2>=3.39,<3.54',
         'python-levenshtein>=0.12.0,<0.13',
         'python-slugify>=3.0.0,<4.1',
