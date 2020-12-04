@@ -4,7 +4,7 @@ Question Reducer
 This module provides functions to reduce the question task extracts from
 :mod:`panoptes_aggregation.extractors.question_extractor`.
 '''
-from collections import Counter, defaultdict
+from collections import defaultdict
 from .reducer_wrapper import reducer_wrapper
 
 DEFAULTS = {
