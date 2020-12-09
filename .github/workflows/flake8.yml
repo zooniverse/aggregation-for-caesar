@@ -1,0 +1,25 @@
+name: Code Style
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  flake8:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Setup Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8
+    - name: Run flake8
+      run:
+        flake8 panoptes_aggregation
