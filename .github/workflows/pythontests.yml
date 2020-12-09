@@ -28,6 +28,6 @@ jobs:
       env:
         TRAVIS: true  # one test is skipped on CI and looks for this env value
     - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        GITHUB-TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: coveralls
