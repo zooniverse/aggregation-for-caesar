@@ -99,6 +99,7 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
           Note: This will only change the order of the lines.
         * `min_line_length` : The minimum length a transcribed line of text needs to be in order to be used in the reduction.
         * `low_consensus_threshold` : The minimum consensus score allowed to be considered "done".
+        * `minimum_views` : A value that is passed along to the font-end to set when lines should turn grey (has no effect on aggregation)
 
     Returns
     -------
