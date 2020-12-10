@@ -1,0 +1,29 @@
+name: Python tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.9]  # 3.8 is used for the coverage test
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install panoptes aggregation
+      run: |
+        pip install -U pip
+        pip install -U .[online,test,doc]
+    - name: Run tests
+      env:
+        TRAVIS: true  # one test is skipped on CI and looks for this env value
+      run: nosetests
