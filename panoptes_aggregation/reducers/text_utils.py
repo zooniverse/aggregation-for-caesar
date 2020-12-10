@@ -48,8 +48,8 @@ def overlap(x, y, tol=0):
         A list with the start and end point of the second line segment
     tol : float
         The tolerance to consider lines overlapping. Default 0, positive
-        value indicate small overlaps are not considered, negitive values
-        idicate small gaps are not considered.
+        value indicate small overlaps are not considered, negative values
+        indicate small gaps are not considered.
 
     Returns
     -------
@@ -73,7 +73,7 @@ def gutter(lines_in, tol=0):
     -------
     gutter_index : array
         A numpy array containing the cluster label for each input line. This label
-        idicates what side of the gutter(s) the input line segment is on.
+        indicates what side of the gutter(s) the input line segment is on.
     '''
     if len(lines_in) > 0:
         lines = np.array([[min(l), max(l)] for l in lines_in])
@@ -122,7 +122,7 @@ def angle_metric(t1, t2):
 
 
 def avg_angle(theta):
-    '''A function that finds the avage of an array of angles that are
+    '''A function that finds the average of an array of angles that are
     in the range [-180, 180].
 
     Parameters
@@ -147,11 +147,11 @@ def sort_labels(db_labels, data, reducer=np.mean, descending=False):
     Parameters
     ----------
     db_labels : list
-        A list of cluster lables, one labele for each data point.
+        A list of cluster lables, one label for each data point.
     data : np.array
         The data the lables belong to
     reducer : function (optional)
-        The function used to combine the data for each label.  Defualt: np.mean
+        The function used to combine the data for each label.  Default: np.mean
     descending : bool (optional)
         A flag indicating if the lables should be sorted in descending order.
         Default: False
@@ -211,13 +211,13 @@ def cluster_by_word(
     Parameters
     ----------
     word_line : np.array
-        An nx1 array with the x-position of each dot in the rotated coordiate frame.
+        An nx1 array with the x-position of each dot in the rotated coordinate frame.
     xy_line : np.array
         An nx2 array with the non-rotated (x, y) positions of each dot.
     text_line : np.array
         An nx1 array with the text for each dot.
     annotation_labels : np.array
-        An nx1 array with a lable indicating what annotaiton each word belongs to.
+        An nx1 array with a label indicating what annotaiton each word belongs to.
     kwargs_cluster : dict
         A dictionary containing the `eps_*` and `dot_freq` keywords
     kwargs_dbscan : dict
@@ -267,7 +267,7 @@ def align_words(
     Parameters
     ----------
     word_line : np.array
-        An nx1 array with the x-position of each dot in the rotated coordiate frame.
+        An nx1 array with the x-position of each dot in the rotated coordinate frame.
     xy_line : np.array
         An nx2 array with the non-rotated (x, y) positions of each dot.
     text_line : np.array
@@ -347,7 +347,7 @@ def cluster_by_line(
     ----------
     xy_rotate : np.array
         An array of shape nx2 containing the (x, y) positions of *each* dot drawn in the
-        rotate coordiate frame.
+        rotate coordinate frame.
     xy_gutter : np.array
         An array of shape nx2 containing the (x, y) positions for *each* dot drawn.
     text_gutter : np.array
@@ -355,15 +355,15 @@ def cluster_by_line(
         annotation has an empty string added to the end so this array has the same
         shape as `xy_slope`.
     annotation_labels : np.array
-        An array of shape nx1 containing a unique lable indicating what annotation
+        An array of shape nx1 containing a unique label indicating what annotation
         each position/text came from.  This information is used to ensure one annotation
         does not span multiple lines.
     gs_gutter : np.array
         An array of bools indicating if the annotation was made in gold standard mode
     data_index_gutter : np.array
-        An array of indicies indicating what calssification each classification came from
+        An array of indices indicating what classification each classification came from
     ext_index_gutter : np.array
-        A list of extractor indicies used to map the reduction to the extract
+        A list of extractor indices used to map the reduction to the extract
     kwargs_cluster : dict
         A dictionary containing the `eps_*`, and `dot_freq` keywords
     kwargs_dbscan : dict
@@ -454,9 +454,9 @@ def cluster_by_gutter(
     gs_slope : np.array
         A list of bools indicating if the annotation was made in gold standard mode
     data_index_slope : np.array
-        A list of indicies indicating what calssification each classification came from
+        A list of indices indicating what classification each classification came from
     ext_index_slope : np.array
-        A list of extractor indicies used to map the reduction to the extract
+        A list of extractor indices used to map the reduction to the extract
     kwargs_cluster : dict
         A dictionary containing the `eps_*` and `dot_freq` keywords
     kwargs_dbscan : dict
@@ -528,9 +528,9 @@ def cluster_by_slope(
     gs_frame : np.array
         A list of bools indicating if the annotation was made in gold standard mode
     data_index_frame : np.array
-        A list of indicies indicating what calssification each classification came from
+        A list of indices indicating what classification each classification came from
     ext_index_frame : np.array
-        A list of extractor indicies used to map the reduction to the extract
+        A list of extractor indices used to map the reduction to the extract
     kwargs_cluster : dict
         A dictionary containing the `eps_*` and `dot_freq` keywords
     kwargs_dbscan : dict
