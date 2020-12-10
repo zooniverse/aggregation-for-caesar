@@ -1,6 +1,6 @@
 """
 All Tasks Empty Extractor
--------------------
+-------------------------
 Extractor determines whether all task values are empty.
 """
 from .extractor_wrapper import extractor_wrapper
