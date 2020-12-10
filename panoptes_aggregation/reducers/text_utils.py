@@ -469,8 +469,8 @@ def cluster_by_gutter(
     '''
     c = np.cos(np.deg2rad(-kwargs_cluster['avg_slope']))
     s = np.sin(np.deg2rad(-kwargs_cluster['avg_slope']))
-    x_rotate = np.array([np.array(x) * c - np.array(y) * s for x, y in zip(x_slope, y_slope)])
-    y_rotate = np.array([np.array(y) * c + np.array(x) * s for x, y in zip(x_slope, y_slope)])
+    x_rotate = np.array([np.array(x) * c - np.array(y) * s for x, y in zip(x_slope, y_slope)], dtype=object)
+    y_rotate = np.array([np.array(y) * c + np.array(x) * s for x, y in zip(x_slope, y_slope)], dtype=object)
     gutter_labels = gutter(x_rotate, tol=kwargs_cluster['gutter_tol'])
     gutter_labels_sorted = sort_labels(np.array(gutter_labels), np.array([np.mean(x) for x in x_rotate]))
     frame_gutter = []
@@ -579,14 +579,14 @@ def cluster_by_frame(
         gs_frame = np.array(copy.deepcopy(value['gold_standard']))
         data_index_frame = np.array(copy.deepcopy(value['data_index']))
         slope_frame = np.array(copy.deepcopy(value['slope'])).reshape(-1, 1)
-        x_frame = np.array(copy.deepcopy(value['x']))
-        y_frame = np.array(copy.deepcopy(value['y']))
+        x_frame = np.array(copy.deepcopy(value['x']), dtype=object)
+        y_frame = np.array(copy.deepcopy(value['y']), dtype=object)
         text_frame = copy.deepcopy(value['text'])
         ext_index_frame = np.array(extractor_index(value['data_index']))
         # pad with empty strings to keep array sizes the same
         for t in text_frame:
             t.append('')
-        text_frame = np.array(text_frame)
+        text_frame = np.array(text_frame, dtype=object)
         frame_slope = cluster_by_slope(
             x_frame,
             y_frame,
