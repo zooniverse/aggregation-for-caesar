@@ -96,6 +96,7 @@ def poly_line_text_reducer(data_by_frame, **kwargs_dbscan):
           Set this to 1 for all annotations to be kept
         * `min_word_count` : The minimum number of times a word must be identified for it to be kept in the consensus text.
         * `low_consensus_threshold` : The minimum consensus score allowed to be considered "done"
+        * `minimum_views` : A value that is passed along to the font-end to set when lines should turn grey (has no effect on aggregation)
 
     Returns
     -------
