@@ -19,6 +19,15 @@ expected_angle_avg_factor_1 = [
     30
 ]
 
+expected_angle_avg_factor_1_180 = [
+    0,
+    180,
+    90,
+    -90,
+    30,
+    30
+]
+
 test_angle_factor_2 = [
     [1, 179],
     [0, 45, 90],
@@ -54,10 +63,10 @@ class AvgAngle(unittest.TestCase):
     def setUp(self):
         self.maxDiff = None
 
-    def avgCheck(self, test, expected, factor=1):
+    def avgCheck(self, test, expected, **kwargs):
         for i, j in zip(test, expected):
             with self.subTest(i=i):
-                result = avg_angle(i, factor=factor)
+                result = avg_angle(i, **kwargs)
                 self.assertEqual(result, j)
 
     def testFactor1(self):
@@ -67,6 +76,20 @@ class AvgAngle(unittest.TestCase):
             expected_angle_avg_factor_1,
             factor=1
         )
+
+    def testFactor1_180(self):
+        '''Test average angle with factor=1 limit="180"'''
+        self.avgCheck(
+            test_angle_factor_1,
+            expected_angle_avg_factor_1_180,
+            factor=1,
+            limit='180'
+        )
+
+    def testBadLimit(self):
+        '''Test average angle with incorrect limit keyword'''
+        with self.assertRaises(ValueError):
+            avg_angle([1, 359], limit='270')
 
     def testFactor2(self):
         '''Test average angle with factor=2'''
