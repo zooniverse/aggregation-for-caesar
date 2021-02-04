@@ -104,13 +104,16 @@ def poly_line_text_extractor(classification, dot_freq='line', gold_standard=Fals
                             y_fit = np.polyval(fit, [x_tmp[0], x_tmp[-1]])
                             dx = x_tmp[-1] - x_tmp[0]
                             dy = y_fit[-1] - y_fit[0]
-                            # rotate by -90 to bring back into correct coordiates
+                            if dy.round(6) == 0:
+                                # convert -0 into 0 so `arctan2` gives the expect results for horizontal lines
+                                dy = 0.0
+                            # rotate by -90 to bring back into correct coordinates
                             slope = np.rad2deg(np.arctan2(dy, dx)) - 90
                         except np.RankWarning:
                             # this is the case where dx = dy = 0 (a line of zero length)
                             slope = 0
                 if dot_freq == 'word':
-                    # NOTE: if `words` + 1 and `points` are differnt lengths
+                    # NOTE: if `words` + 1 and `points` are different lengths
                     # the extract is not used
                     words = text.split(' ')
                     if len(words) + 1 == len(x):
