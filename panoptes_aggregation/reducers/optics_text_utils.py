@@ -230,7 +230,7 @@ def order_lines(frame_in, angle_eps=30, gutter_eps=150):
     distance_to_zero = []
     for l in np.unique(db_angle.labels_):
         cdx = db_angle.labels_ == l
-        a = avg_angle(slope[cdx])
+        a = avg_angle(slope[cdx], limit='180')
         distance_to_zero.append([l, a, angle_distance(a, 0)])
     distance_to_zero = np.array(distance_to_zero)
     distance_to_zero = distance_to_zero[distance_to_zero[:, 2].argsort()]

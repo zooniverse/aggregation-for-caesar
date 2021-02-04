@@ -17,7 +17,10 @@ def get_angle_metric(factor=1):
     return angle_euclidean_metric
 
 
-def avg_angle(theta, factor=1):
+def avg_angle(theta, factor=1, limit='360'):
+    if limit not in ['360', '180']:
+        raise ValueError('limit must be "360" or "180" (as strings)')
+
     def sum_distance(x):
         return sum([angle_distance(x, t, factor=factor)**2 for t in theta])
     m = minimize_scalar(
@@ -25,7 +28,10 @@ def avg_angle(theta, factor=1):
         bounds=(0, 360 / factor),
         method='Bounded'
     )
-    return np.round(m.x, 3) % (360 / factor)
+    output = np.round(m.x, 3) % (360 / factor)
+    if (limit == '180') and (output > 180):
+        output = output - 360
+    return output
 
 
 def get_avg_function(factor=None):
