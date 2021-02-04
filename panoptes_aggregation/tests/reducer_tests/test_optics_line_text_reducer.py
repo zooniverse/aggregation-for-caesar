@@ -761,7 +761,7 @@ reduced_data_no_length = {
         'max_eps': None,
         'xi': 0.05,
         'angle_eps': 30.0,
-        'gutter_eps': 150.0,
+        'gutter_eps': 300.0,
         'low_consensus_threshold': 3.0,
         'min_line_length': 0.0,
         'minimum_views': 5
