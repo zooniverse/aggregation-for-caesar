@@ -4,10 +4,9 @@ ENV LANG=C.UTF-8
 
 WORKDIR /usr/src/aggregation
 
-RUN pip install --upgrade pip
-
 # install dependencies
 COPY setup.py .
+RUN pip install --upgrade pip
 RUN pip install .[test]
 
 # install package
