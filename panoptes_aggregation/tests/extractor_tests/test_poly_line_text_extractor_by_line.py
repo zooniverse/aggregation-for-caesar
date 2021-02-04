@@ -85,7 +85,46 @@ classification = {
                         {"value": "This line has 0 length"}
                     ],
                     "tool_label": "Tool name"
-                }
+                },
+                {
+                    "tool": 0,
+                    "frame": 1,
+                    "closed": True,
+                    "points": [
+                        {"x": 0, "y": 600},
+                        {"x": 100, "y": 600}
+                    ],
+                    "details": [
+                        {"value": "This is horizontal text"}
+                    ],
+                    "tool_label": "Tool name"
+                },
+                {
+                    "tool": 0,
+                    "frame": 1,
+                    "closed": True,
+                    "points": [
+                        {"x": 100, "y": 600},
+                        {"x": 0, "y": 600}
+                    ],
+                    "details": [
+                        {"value": "This is upsidedown text"}
+                    ],
+                    "tool_label": "Tool name"
+                },
+                {
+                    "tool": 0,
+                    "frame": 1,
+                    "closed": True,
+                    "points": [
+                        {"x": 600, "y": 100},
+                        {"x": 600, "y": 0}
+                    ],
+                    "details": [
+                        {"value": "This is upsidedown and vertical text"}
+                    ],
+                    "tool_label": "Tool name"
+                },
             ]
         }
     ]
@@ -152,6 +191,18 @@ expected = {
                     [
                         800,
                         800
+                    ],
+                    [
+                        0,
+                        100
+                    ],
+                    [
+                        100,
+                        0
+                    ],
+                    [
+                        600,
+                        600
                     ]
                 ],
             'y':
@@ -167,18 +218,36 @@ expected = {
                     [
                         900,
                         900
+                    ],
+                    [
+                        600,
+                        600
+                    ],
+                    [
+                        600,
+                        600
+                    ],
+                    [
+                        100,
+                        0
                     ]
                 ]
         },
         'text': [
             ['know the prospects on the next page'],
             ['This is vertical text'],
-            ['This line has 0 length']
+            ['This line has 0 length'],
+            ['This is horizontal text'],
+            ['This is upsidedown text'],
+            ['This is upsidedown and vertical text']
         ],
         'slope': [
             1.157333,
             90,
-            0
+            0,
+            0,
+            180,
+            -90
         ],
         'gold_standard': True
     }
