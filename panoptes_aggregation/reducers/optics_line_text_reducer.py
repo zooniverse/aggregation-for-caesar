@@ -19,9 +19,9 @@ DEFAULTS = {
     'min_samples': {'default': 'auto', 'type': int},
     'max_eps': {'default': None, 'type': float},
     'xi': {'default': 0.05, 'type': float},
-    'angle_eps': {'default': 30, 'type': float},
-    'gutter_eps': {'default': 300, 'type': float},
-    'low_consensus_threshold': {'default': 3, 'type': float},
+    'angle_eps': {'default': 30.0, 'type': float},
+    'gutter_eps': {'default': 300.0, 'type': float},
+    'low_consensus_threshold': {'default': 3.0, 'type': float},
     'minimum_views': {'default': 5, 'type': int}
 }
 
