@@ -89,8 +89,12 @@ def earth_day(parser):
 
 def we_dig_bio(parser):
     date = dateparse(parser.created_at)
-    if (date.year == 2020) and (15 <= date.day <= 18):
+    if (date.year == 2020) and (date.month == 10) and (15 <= date.day <= 18):
         return 2020
+    elif (date.year == 2021) and (date.month == 4) and (8 <= date.day <= 11):
+        return 2021
+    elif (date.year == 2021) and (date.month == 10) and (14 <= date.day <= 17):
+        return 2021
     else:
         return None
 
