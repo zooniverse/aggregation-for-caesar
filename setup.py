@@ -76,7 +76,7 @@ setup(
             'coveralls>=3.0.0,<3.0.2',
             'flake8>=3.7,<3.10',
             'flake8-black>=0.1.1,<0.3',
-            'flake8-bugbear>=20.1.2,<21.4'
+            'flake8-bugbear>=20.1.2,<21.5'
         ],
         'gui': [
             'Gooey>=1.0.3,<1.1'
