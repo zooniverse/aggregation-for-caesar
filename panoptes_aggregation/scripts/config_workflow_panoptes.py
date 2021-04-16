@@ -80,11 +80,20 @@ def config_workflow(
             task_set.add(task['task'])
     # make the task string look up table
     strings = eval(workflow.strings)
-    stirngs_extract = {key: value for key, value in strings.items() for task in task_set if (key.startswith(task) and ('help' not in key))}
+    strings_extract = {key: value for key, value in strings.items() for task in task_set if (key.startswith(task) and ('help' not in key))}
+    if 'dropdown_extractor' in extractor_config:
+        for dropdown_task in extractor_config['dropdown_extractor']:
+            dropdown_task_id = dropdown_task['task']
+            dropdown_string_keys = [key for key in strings_extract.keys() if key.startswith(f'{dropdown_task_id}.selects')]
+            for dropdown_string_key in dropdown_string_keys:
+                task_id, selects, selects_idx, options, star, star_idx, _ = dropdown_string_key.split('.')
+                dropdown_label_hash = workflow_tasks[task_id][selects][int(selects_idx)][options][star][int(star_idx)]['value']
+                dropdown_label = strings_extract[dropdown_string_key]
+                strings_extract[dropdown_string_key] = {dropdown_label_hash: dropdown_label}
     filename = 'Task_labels_workflow_{0}_V{1}.yaml'.format(workflow_id, workflow_version)
     if output_dir is not None:
         filename = os.path.join(output_dir, filename)
     with open(filename, 'w', encoding='utf-8') as stream:
-        yaml.dump(stirngs_extract, stream=stream, default_flow_style=False, indent=4)
+        yaml.dump(strings_extract, stream=stream, default_flow_style=False, indent=4)
         print('Saving task key look up table to:\n{0}'.format(filename))
-    return config, reducer_config_list, stirngs_extract
+    return config, reducer_config_list, strings_extract
