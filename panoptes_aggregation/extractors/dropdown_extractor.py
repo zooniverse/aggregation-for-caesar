@@ -5,6 +5,7 @@ This module provides a function to extract dropdown selections from panoptes ann
 '''
 from .extractor_wrapper import extractor_wrapper
 from .question_extractor import slugify_or_null
+from packaging import version
 
 
 @extractor_wrapper()
@@ -24,12 +25,17 @@ def dropdown_extractor(classification, **kwargs):
         Counter dictionaries, one entry for each dropdown list in the
         task
     '''
+    classification_metadata = classification.get('metadata', {})
+    classifier_version = version.parse(classification_metadata.get('classifier_version', '1.0'))
     answers = {}
     if len(classification['annotations']) > 0:
         annotation = classification['annotations'][0]
         answers = {
             'value': []
         }
-        for value in annotation['value']:
-            answers['value'].append({slugify_or_null(value['value']): 1})
+        if classifier_version < version.parse('2.0'):
+            for value in annotation['value']:
+                answers['value'].append({slugify_or_null(value['value']): 1})
+        elif annotation.get('taskType', None) == 'dropdown-simple':
+            answers['value'].append({slugify_or_null(annotation['value']['selection']): 1})
     return answers
