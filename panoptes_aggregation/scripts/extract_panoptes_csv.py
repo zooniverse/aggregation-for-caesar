@@ -136,7 +136,10 @@ def extract_csv(
     if cpu_count > 1:
         pool = Pool(cpu_count)
     for _, classification in classifications[wdx & vdx].iterrows():
-        classification_by_task = annotation_by_task({'annotations': json.loads(classification.annotations)})
+        classification_by_task = annotation_by_task({
+            'annotations': json.loads(classification.annotations),
+            'metadata': json.loads(classification.metadata)
+        })
         classification_info = {
             'classification_id': classification.classification_id,
             'user_name': classification.user_name,

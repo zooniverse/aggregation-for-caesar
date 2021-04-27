@@ -12,9 +12,9 @@ if platform.system() == 'Windows':
 else:
     WINDOWS = False
 
-classification_data_dump_two_tasks = '''classification_id,user_name,user_id,workflow_id,workflow_version,created_at,annotations,subject_ids
-1,1,1,4249,14.18,2017-05-31 12:33:46 UTC,"[{""task"":""T0""},{""task"":""T1""}]",1
-2,2,2,4249,14.18,2017-05-31 12:33:51 UTC,"[{""task"":""T0""},{""task"":""T1""}]",1
+classification_data_dump_two_tasks = '''classification_id,user_name,user_id,workflow_id,workflow_version,created_at,annotations,subject_ids,metadata
+1,1,1,4249,14.18,2017-05-31 12:33:46 UTC,"[{""task"":""T0""},{""task"":""T1""}]",1,"{}"
+2,2,2,4249,14.18,2017-05-31 12:33:51 UTC,"[{""task"":""T0""},{""task"":""T1""}]",1,"{}"
 '''
 
 extractor_config_yaml_question = '''{
@@ -30,9 +30,9 @@ extracted_csv_question = '''classification_id,user_name,user_id,workflow_id,task
 2,2,2,4249,T1,2017-05-31 12:33:51 UTC,1,question_extractor,,,,
 '''
 
-classification_data_dump_one_task = '''classification_id,user_name,user_id,workflow_id,workflow_version,created_at,annotations,subject_ids
-1,1,1,4249,14.18,2017-05-31 12:33:46 UTC,"[{""task"":""T0""}]",1
-2,2,2,4249,14.18,2017-05-31 12:33:51 UTC,"[{""task"":""T0""}]",1
+classification_data_dump_one_task = '''classification_id,user_name,user_id,workflow_id,workflow_version,created_at,annotations,subject_ids,metadata
+1,1,1,4249,14.18,2017-05-31 12:33:46 UTC,"[{""task"":""T0""}]",1,"{}"
+2,2,2,4249,14.18,2017-05-31 12:33:51 UTC,"[{""task"":""T0""}]",1,"{}"
 '''
 
 extractor_config_yaml_survey = '''{
