@@ -36,9 +36,14 @@ def dropdown_extractor(classification, **kwargs):
         if classifier_version < version.parse('2.0'):
             for value in annotation['value']:
                 answers['value'].append({slugify_or_null(value['value']): 1})
-        elif annotation.get('taskType', None) == 'dropdown-simple':
+        elif (annotation.get('taskType', None) == 'dropdown-simple') or (annotation.get('task_type', None) == 'dropdown-simple'):
             key = annotation['value']
             if key is not None:
-                key = key['selection']
+                if 'selection' in key:
+                    key = key['selection']
+                elif 'value' in key:
+                    key = key['value']
+                else:
+                    key = None
             answers['value'].append({slugify_or_null(key): 1})
     return answers
