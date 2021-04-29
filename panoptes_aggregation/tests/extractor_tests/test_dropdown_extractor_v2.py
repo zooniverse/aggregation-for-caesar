@@ -23,8 +23,33 @@ TestSimpleDropdown = ExtractorTest(
     extractors.dropdown_extractor,
     classification,
     expected,
-    'Test simple-dropdown task for classifier v2.0',
+    'Test simple-dropdown task for classifier v2.0 with API style input',
     test_name='TestSimpleDropdown'
+)
+
+classification_csv = {
+    'metadata': {
+        'classifier_version': '2.0'
+    },
+    'annotations': [
+        {
+            'task': 'T0',
+            'task_type': 'dropdown-simple',
+            'value': {
+                'value': 6,
+                'option': True
+            }
+        }
+    ]
+}
+
+
+TestSimpleDropdownCSV = ExtractorTest(
+    extractors.dropdown_extractor,
+    classification_csv,
+    expected,
+    'Test simple-dropdown task for classifier v2.0 with CSV style input',
+    test_name='TestSimpleDropdownCSV'
 )
 
 classification_null = {
