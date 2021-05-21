@@ -85,3 +85,13 @@ spec:
   minReplicas: 1
   maxReplicas: 3
   targetCPUUtilizationPercentage: 80
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+   name: aggregation-caesar
+spec:
+  minAvailable: 50%
+  selector:
+    matchLabels:
+      app: aggregation-caesar
