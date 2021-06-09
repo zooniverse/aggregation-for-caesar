@@ -40,14 +40,18 @@ def question_consensus_reducer(data_list, pairs=False, **kwargs):
             answer_list += list(data)
     counter_total = Counter(answer_list)
     reduced_data = dict(counter_total)
-    max_key = max(reduced_data, key=lambda k: reduced_data[k])
-    summed_vals = sum(reduced_data.values())
-    if reduced_data[max_key] > 0:
-        return {
-            "most_likely": max_key,
-            "num_votes": reduced_data[max_key],
-            "agreement": reduced_data[max_key] / summed_vals
-        }
-    return {
+    result = {
         "num_votes": 0,
     }
+    try:
+        max_key = max(reduced_data, key=lambda k: reduced_data[k])
+        summed_vals = sum(reduced_data.values())
+        if reduced_data[max_key] > 0:
+            result = {
+                "most_likely": max_key,
+                "num_votes": reduced_data[max_key],
+                "agreement": reduced_data[max_key] / summed_vals
+            }
+    except ValueError:
+        pass
+    return result
