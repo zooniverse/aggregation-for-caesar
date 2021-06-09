@@ -1,6 +1,6 @@
 '''
-Question Reducer
-----------------
+Question Consensus Reducer
+--------------------------
 This module porvides functions to reduce the question task extracts from
 :mod:`panoptes_aggregation.extractors.question_extractor`.
 '''
@@ -14,7 +14,7 @@ DEFAULTS = {
 
 @reducer_wrapper(defaults_data=DEFAULTS)
 def question_consensus_reducer(data_list, pairs=False, **kwargs):
-    '''Reduce a list of extracted questions into a "counter" dict
+    '''Reduce a list of extracted questions into a consensus description dict
 
     Parameters
     ----------
@@ -28,9 +28,12 @@ def question_consensus_reducer(data_list, pairs=False, **kwargs):
     Returns
     -------
     reduction : dict
-        most_likely = `key` with greatest number of classifications/votes
-        num_votes = vote count for mostly likely `key`
-        agreement = fraction of total votes held by most likely `key`.
+        A dictinary with the following keys
+
+        * `most_likely` : `key` with greatest number of classifications/votes
+        * `num_votes` : vote count for mostly likely `key`
+        * `agreement` : fraction of total votes held by most likely `key`.
+
     '''
     answer_list = []
     for data in data_list:
