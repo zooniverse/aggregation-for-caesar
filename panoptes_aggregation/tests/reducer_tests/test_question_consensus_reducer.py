@@ -44,7 +44,7 @@ reduced_data_no_votes = {
 
 TestQuestionReducerPairsNoVotes = ReducerTestNoProcessing(
     question_consensus_reducer,
-    extracted_data,
+    [],
     reduced_data_no_votes,
     'Test question consensus reducer with no votes',
     test_name='TestQuestionConsensusReducerNoVotes'
@@ -56,7 +56,7 @@ reduced_data_no_votes_pairs = {
 
 TestQuestionReducerPairsNoVotesPairs = ReducerTestNoProcessing(
     question_consensus_reducer,
-    extracted_data,
+    [],
     reduced_data_no_votes_pairs,
     'Test question consensus reducer with no votes as pairs',
     kwargs={'pairs': True},
