@@ -6,7 +6,6 @@ This module porvides functions to reduce the question task extracts from
 '''
 from collections import Counter
 from .reducer_wrapper import reducer_wrapper
-from .question_reducer import question_reducer
 
 DEFAULTS = {
     'pairs': {'default': False, 'type': bool}
@@ -33,7 +32,14 @@ def question_consensus_reducer(data_list, pairs=False, **kwargs):
         num_votes = vote count for mostly likely `key`
         agreement = fraction of total votes held by most likely `key`.
     '''
-    reduced_data = question_reducer(data_list, pairs, **kwargs)
+    answer_list = []
+    for data in data_list:
+        if pairs:
+            answer_list.append('+'.join(sorted(data)))
+        else:
+            answer_list += list(data)
+    counter_total = Counter(answer_list)
+    reduced_data = dict(counter_total)
     max_key = max(reduced_data, key=lambda k: reduced_data[k])
     summed_vals = sum(reduced_data.values())
     if reduced_data[max_key] > 0:
