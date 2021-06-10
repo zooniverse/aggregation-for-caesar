@@ -35,6 +35,7 @@ def question_consensus_reducer(data_list, pairs=False, **kwargs):
         * `agreement` : fraction of total votes held by most likely `key`.
 
     '''
+    # reduce data (similar to question_reducer)
     answer_list = []
     for data in data_list:
         if pairs:
@@ -42,19 +43,20 @@ def question_consensus_reducer(data_list, pairs=False, **kwargs):
         else:
             answer_list += list(data)
     counter_total = Counter(answer_list)
-    reduced_data = dict(counter_total)
+
+    # default return value
     result = {
         "num_votes": 0,
     }
-    try:
-        max_key = max(reduced_data, key=lambda k: reduced_data[k])
-        summed_vals = sum(reduced_data.values())
-        if reduced_data[max_key] > 0:
-            result = {
-                "most_likely": max_key,
-                "num_votes": reduced_data[max_key],
-                "agreement": reduced_data[max_key] / summed_vals
-            }
-    except ValueError:
-        pass
+    most_common = counter_total.most_common(1)
+    # if there exists a most common element (i.e. keys are not empty)
+    if len(most_common) > 0 and len(most_common[0]) == 2 and most_common[0][1] > 0:
+        max_key = most_common[0][0]
+        # sum the values of every key iff there's a max key that has a value > 0
+        summed_counts = sum(dict(counter_total).values())
+        result = {
+            "most_likely": max_key,
+            "num_votes": most_common[0][1],
+            "agreement": most_common[0][1] / summed_counts
+        }
     return result
