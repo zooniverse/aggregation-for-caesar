@@ -1,4 +1,3 @@
-from typing import IO
 import unittest
 import numpy
 import shapely.geometry
@@ -40,7 +39,7 @@ class TestIoUMetric(unittest.TestCase):
     def test_panoptes_to_geometry_other(self):
         '''Test panoptes_to_geometry with unsupported shape'''
         with self.assertRaises(ValueError):
-            result = IoU.panoptes_to_geometry([1], 'not_a_supported_shape')
+            IoU.panoptes_to_geometry([1], 'not_a_supported_shape')
 
     def test_IoU_metric(self):
         '''Test the IoU metric'''
@@ -80,7 +79,7 @@ class TestIoUMetric(unittest.TestCase):
         result = IoU.average_bounds(params_list, 'rectangle')
         self.assertEqual(result, expected)
 
-    def test_average_bounds_rect(self):
+    def test_average_bounds_rot_rect(self):
         '''Test finding the average bounds for rotating rectangles'''
         params_list = [
             [0, 0, 2, 2, 180],
@@ -158,7 +157,7 @@ class TestIoUMetric(unittest.TestCase):
     def test_scale_shape_other(self):
         '''Test scale_shape with unsupported shape'''
         with self.assertRaises(ValueError):
-            result = IoU.scale_shape([1], 2, 'not_a_supported_shape')
+            IoU.scale_shape([1], 2, 'not_a_supported_shape')
 
     def test_average_shapes(self):
         '''Test taking the average of four rectangles'''

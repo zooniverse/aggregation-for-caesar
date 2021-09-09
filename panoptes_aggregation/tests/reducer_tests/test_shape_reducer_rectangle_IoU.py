@@ -1,8 +1,6 @@
 from panoptes_aggregation.reducers.shape_reducer_dbscan import process_data as process_data_dbscan, shape_reducer_dbscan
-from panoptes_aggregation.reducers.shape_reducer_hdbscan import process_data as process_data_hdbscan, shape_reducer_hdbscan
 from .base_test_class import ReducerTest
-import copy
-import numpy
+
 
 extracted_data = [
     {
