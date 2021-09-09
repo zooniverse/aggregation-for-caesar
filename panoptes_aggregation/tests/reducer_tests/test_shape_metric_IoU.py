@@ -171,12 +171,18 @@ class TestIoUMetric(unittest.TestCase):
         ]
         expected_avg = [1, 1, 2, 2]
         expected_sigma = 4 / numpy.sqrt(27)
-        gamma = numpy.sqrt(1 - expected_sigma)
-        expected_avg_minus_sigma = IoU.scale_shape(expected_avg, shape, gamma)
-        expected_avg_plus_sigma = IoU.scale_shape(expected_avg, shape, 1 / gamma)
         result = IoU.average_shape(params, shape)
-        result_avg, result_avg_plus_sigma, result_avg_minus_sigma, result_sigma = result
+        result_avg, result_sigma = result
         numpy.testing.assert_allclose(result_avg, expected_avg, 3)
         numpy.testing.assert_almost_equal(result_sigma, expected_sigma, 3)
-        numpy.testing.assert_allclose(result_avg_minus_sigma, expected_avg_minus_sigma, 3)
-        numpy.testing.assert_allclose(result_avg_plus_sigma, expected_avg_plus_sigma, 3)
+
+    def test_sigma_shape(self):
+        '''Test making 1-sigma scaled rectangle'''
+        shape = 'rectangle'
+        params = [1, 1, 2, 2]
+        sigma = 0.5
+        expected_avg_minus_sigma = IoU.scale_shape(params, shape, 1 / numpy.sqrt(2))
+        expected_avg_plus_sigma = IoU.scale_shape(params, shape, numpy.sqrt(2))
+        result_plus_sigma, result_minus_sigma = IoU.sigma_shape(params, shape, sigma)
+        numpy.testing.assert_allclose(result_minus_sigma, expected_avg_minus_sigma, 3)
+        numpy.testing.assert_allclose(result_plus_sigma, expected_avg_plus_sigma, 3)

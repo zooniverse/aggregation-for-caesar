@@ -193,7 +193,7 @@ def scale_shape(params, shape, gamma):
 
 
 def average_shape(params_list, shape):
-    '''Find the average shape from a list of parameters with respect
+    '''Find the average shape and standard deviation from a list of parameters with respect
     to the IoU metric.
 
     Parameters
@@ -208,10 +208,7 @@ def average_shape(params_list, shape):
     -------
     average_shape : list
         A list of shape parameters for the average shape
-    average_plus_sigma : list
-        A list of shape parameters for the 1-sigma scaled up average
-    average_minus_sigma : list
-        A list of shape parameters for the 1-sigma scaled down average
+   
     sigma : float
         The standard deviation of the input shapes with respect to the IoU metric
     '''
@@ -224,11 +221,32 @@ def average_shape(params_list, shape):
         bounds=average_bounds(params_list, shape)
     )
     # find the 1-sigma value
-    s = numpy.sqrt(m.fun / (len(params_list) - 1))
-    # find the 1-sigma scaling factor
-    gamma = numpy.sqrt(1 - s)
-    # scale the average shape up and down by this factor
-    avg_plus_s = scale_shape(m.x, shape, 1 / gamma)
-    avg_minus_s = scale_shape(m.x, shape, gamma)
-    # return the mean and 1-sigma scaled shapes
-    return list(m.x), avg_plus_s, avg_minus_s, s
+    sigma = numpy.sqrt(m.fun / (len(params_list) - 1))
+    return list(m.x), sigma
+
+
+def sigma_shape(params, shape, sigma):
+    '''Return the plus and minus one sigma shape given the starting parameters
+    and sigma value.
+
+    Parameters
+    ----------
+    params : list
+        A list of the parameters for the shape (as defined by PFE)
+    shape : string
+        The name of the shape these parameters belong to (see :meth:`panoptes_to_geometry` for
+        supported shapes)
+    sigma : float
+        The standard deviation used to scale up and down the input shape
+
+    Returns
+    -------
+    plus_sigma : list
+        A list of shape parameters for the 1-sigma scaled up average
+    minus_sigma : list
+        A list of shape parameters for the 1-sigma scaled down average
+    '''
+    gamma = numpy.sqrt(1 - sigma)
+    plus_sigma = scale_shape(params, shape, 1 / gamma)
+    minus_sigma = scale_shape(params, shape, gamma)
+    return plus_sigma, minus_sigma
