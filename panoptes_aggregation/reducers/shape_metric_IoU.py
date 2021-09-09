@@ -2,8 +2,7 @@
 Intersection of Union Metric
 ----------------------------
 This module provides a custom intersection of union (IoU) metric
-to be used with `panoptes_aggregation.reducers.shape_reducer_dbscan`
-or `panoptes_aggregation.reducers.shape_reducer_hdbscan`.
+to be used with `panoptes_aggregation.reducers.shape_reducer_dbscan`.
 '''
 import shapely.geometry
 import shapely.affinity
@@ -192,7 +191,7 @@ def scale_shape(params, shape, gamma):
         raise ValueError('The IoU metric only works with the following shapes: rectangle, rotateing rectangle, circle, or ellipse')
 
 
-def average_shape(params_list, shape):
+def average_shape_IoU(params_list, shape):
     '''Find the average shape and standard deviation from a list of parameters with respect
     to the IoU metric.
 
@@ -208,7 +207,7 @@ def average_shape(params_list, shape):
     -------
     average_shape : list
         A list of shape parameters for the average shape
-   
+
     sigma : float
         The standard deviation of the input shapes with respect to the IoU metric
     '''

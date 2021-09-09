@@ -170,8 +170,8 @@ class TestIoUMetric(unittest.TestCase):
             [1, 2, 2, 2]
         ]
         expected_avg = [1, 1, 2, 2]
-        expected_sigma = 4 / numpy.sqrt(27)
-        result = IoU.average_shape(params, shape)
+        expected_sigma = 4.0 / numpy.sqrt(27)
+        result = IoU.average_shape_IoU(params, shape)
         result_avg, result_sigma = result
         numpy.testing.assert_allclose(result_avg, expected_avg, 3)
         numpy.testing.assert_almost_equal(result_sigma, expected_sigma, 3)
