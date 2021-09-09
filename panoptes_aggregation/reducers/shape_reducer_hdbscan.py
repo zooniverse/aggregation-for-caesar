@@ -38,18 +38,18 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
     ----------
     data_by_tool : dict
         A dictionary returned by :meth:`process_data`
-    kwrgs :
+    kwargs :
         `See HDBSCAN <http://hdbscan.readthedocs.io/en/latest/api.html#hdbscan>`_
 
     Returns
     -------
     reduction : dict
-        A dictinary with the following keys for each frame
+        A dictionary with the following keys for each frame
 
-        * `tool*_<shape>_<param>` : A list of **all** `param` for the `sahpe` drawn with `tool*`
+        * `tool*_<shape>_<param>` : A list of **all** `param` for the `shape` drawn with `tool*`
         * `tool*_cluster_labels` : A list of cluster labels for **all** shapes drawn with `tool*`
         * `tool*_cluster_probabilities`: A list of cluster probabilities for **all** points drawn with `tool*`
-        * `tool*_clusters_persistance`: A mesure for how persistent each **cluster** is (1.0 = stable, 0.0 = unstable)
+        * `tool*_clusters_persistance`: A measure for how persistent each **cluster** is (1.0 = stable, 0.0 = unstable)
         * `tool*_clusters_count` : The number of points in each **cluster** found
         * `tool*_clusters_<param>` : The `param` value for each **cluster** found
     '''
