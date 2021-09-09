@@ -20,10 +20,11 @@ def panoptes_to_geometry(params, shape):
         A list of the parameters for the shape (as defined by PFE)
     shape : string
         The name of the shape these parameters belong to.  Supported shapes are:
-        - rectangle
-        - rotateRectangle
-        - circle
-        - ellipse
+
+        * rectangle
+        * rotateRectangle
+        * circle
+        * ellipse
 
     Returns
     -------

@@ -41,7 +41,14 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
         A dictionary returned by :meth:`process_data`
     metric_type : str
         Either "euclidean" to use a euclidean metric in the N-dimension shape parameter space
-        or "IoU" for the intersection of union metric based on shape overlap.
+        or "IoU" for the intersection of union metric based on shape overlap.  The IoU metric
+        can only be used with the following shape:
+
+        * rectangle
+        * rotateRectangle
+        * circle
+        * ellipse
+
     kwargs :
         `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
 
