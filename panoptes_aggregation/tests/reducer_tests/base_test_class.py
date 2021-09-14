@@ -25,6 +25,16 @@ def cast_to_dict(result):
     return result_out
 
 
+def round_dict(dictionary, ndigits):
+    if isinstance(dictionary, dict):
+        return {key: round_dict(value, ndigits) for key, value in dictionary.items()}
+    elif isinstance(dictionary, list):
+        return [round_dict(value, ndigits) for value in dictionary]
+    elif isinstance(dictionary, float):
+        return round(dictionary, ndigits)
+    return dictionary
+
+
 def ReducerTest(
     reducer,
     processer,
@@ -39,7 +49,8 @@ def ReducerTest(
     processed_type='dict',
     add_version=True,
     output_kwargs=False,
-    test_name=None
+    test_name=None,
+    round=None
 ):
     # pkwargs: keywords passed into the process_data function
     # okwargs: keywords only passed into the _original function
@@ -67,19 +78,28 @@ def ReducerTest(
             '''Test data processing function'''
             result = processer(self.extracted, **pkwargs)
             if processed_type == 'dict':
-                self.assertDictEqual(cast_to_dict(result), self.processed)
+                result = cast_to_dict(result)
+                if round:
+                    result = round_dict(result, round)
+                self.assertDictEqual(result, self.processed)
             else:
                 self.assertCountEqual(result, self.processed)
 
         def test_original_reducer(self):
             '''Test the reducer function starting with the processed data'''
             result = reducer._original(self.processed, **okwargs, **kwargs, **network_kwargs)
-            self.assertDictEqual(cast_to_dict(result), self.reduced_no_params)
+            result = cast_to_dict(result)
+            if round is not None:
+                result = round_dict(result, round)
+            self.assertDictEqual(result, self.reduced_no_params)
 
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(self.extracted_with_version, **kwargs, **pkwargs, **network_kwargs)
-            self.assertDictEqual(cast_to_dict(result), self.reduced_with_version)
+            result = cast_to_dict(result)
+            if round is not None:
+                result = round_dict(result, round)
+            self.assertDictEqual(result, self.reduced_with_version)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_reducer_request(self):
@@ -96,7 +116,10 @@ def ReducerTest(
                 url_params = ''
             with app.test_request_context(url_params, **request_kwargs):
                 result = reducer(flask.request)
-                self.assertDictEqual(cast_to_dict(result), self.reduced_with_version)
+                result = cast_to_dict(result)
+                if round is not None:
+                    result = round_dict(result, round)
+                self.assertDictEqual(result, self.reduced_with_version)
 
     if test_name is None:
         test_name = '_'.join(name.split())
@@ -112,7 +135,8 @@ def ReducerTestNoProcessing(
     name,
     kwargs={},
     network_kwargs={},
-    test_name=None
+    test_name=None,
+    round=None
 ):
     class ReducerTestNoProcessing(unittest.TestCase):
         def setUp(self):
@@ -130,7 +154,10 @@ def ReducerTestNoProcessing(
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(self.extracted_with_version, **kwargs, **network_kwargs)
-            self.assertDictEqual(cast_to_dict(result), self.reduced_with_version)
+            result = cast_to_dict(result)
+            if round is not None:
+                result = round_dict(result, round)
+            self.assertDictEqual(result, self.reduced_with_version)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_request(self):
@@ -146,7 +173,10 @@ def ReducerTestNoProcessing(
                 url_params = ''
             with app.test_request_context(url_params, **request_kwargs):
                 result = reducer(flask.request)
-                self.assertDictEqual(cast_to_dict(result), self.reduced_with_version)
+                result = cast_to_dict(result)
+                if round is not None:
+                    result = round_dict(result, round)
+                self.assertDictEqual(result, self.reduced_with_version)
 
     if test_name is None:
         test_name = '_'.join(name.split())

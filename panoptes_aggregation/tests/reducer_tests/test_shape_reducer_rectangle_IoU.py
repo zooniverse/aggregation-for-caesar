@@ -69,11 +69,11 @@ reduced_data = {
         'T0_tool0_rectangle_height': [2.0, 2.0, 2.0, 2.0],
         'T0_tool0_cluster_labels': [0, 0, 0, 0],
         'T0_tool0_clusters_count': [4],
-        'T0_tool0_clusters_x': [0.9999999787875631],
-        'T0_tool0_clusters_y': [0.9999882857512434],
-        'T0_tool0_clusters_width': [2.000064394291397],
-        'T0_tool0_clusters_height': [2.0000350726482767],
-        'T0_tool0_clusters_sigma': [0.7698003590643796],
+        'T0_tool0_clusters_x': [1.0],
+        'T0_tool0_clusters_y': [1.0],
+        'T0_tool0_clusters_width': [2.0],
+        'T0_tool0_clusters_height': [2.0],
+        'T0_tool0_clusters_sigma': [0.77],
     }
 }
 
@@ -91,5 +91,6 @@ TestShapeReducerRectangle = ReducerTest(
         'min_samples': 2,
         'metric_type': 'IoU'
     },
-    test_name='TestShapeReducerRectangleIoU'
+    test_name='TestShapeReducerRectangleIoU',
+    round=3
 )
