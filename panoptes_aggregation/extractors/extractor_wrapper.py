@@ -1,6 +1,7 @@
 import ast
 from functools import wraps
 from ..append_version import append_version
+from .utilities import pluck_fields
 
 
 def unpack_annotations(annotations, task):
@@ -37,6 +38,21 @@ def extractor_wrapper(gold_standard=False):
             # add package version to the extracted content
             if not no_version:
                 append_version(extraction)
+
+            ## RS 2021/09/14
+            ## if the pluck parameter exists
+            ## append the required data from the pluckfield extractor
+            ## to the output data
+            pluck = kwargs.get('pluck', None)
+            if pluck is not None:
+                ## get the data and corresponding keys
+                pluck_values = pluck_fields(data, pluck)
+
+                ## append the data with its corresponding
+                ## key to the output data
+                for key in pluck_values.keys():
+                    extraction[key] = pluck_values[key]
+
             return extraction
         wrapper._original = func
         return wrapper
