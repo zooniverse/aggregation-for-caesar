@@ -1,3 +1,4 @@
+from math import exp
 import unittest
 import numpy
 import shapely.geometry
@@ -34,6 +35,18 @@ class TestIoUMetric(unittest.TestCase):
         expected = shapely.affinity.scale(expected, 3, 5)
         expected = shapely.affinity.rotate(expected, -45)
         result = IoU.panoptes_to_geometry([10, 12, 3, 5, 45], 'ellipse')
+        self.assertEqual(result, expected)
+
+    def test_panoptes_to_geometry_triangle(self):
+        '''Test panoptes_to_geometry with triangle'''
+        expected = shapely.geometry.Polygon([
+            [0, -3],
+            [3 * numpy.sqrt(3) / 2, 3 / 2],
+            [-3 * numpy.sqrt(3) / 2, 3 / 2]
+        ])
+        expected = shapely.affinity.rotate(expected, -30, origin=(0, 0))
+        expected = shapely.affinity.translate(expected, xoff=5, yoff=10)
+        result = IoU.panoptes_to_geometry([5, 10, 3, 30], 'triangle')
         self.assertEqual(result, expected)
 
     def test_panoptes_to_geometry_other(self):
@@ -128,26 +141,44 @@ class TestIoUMetric(unittest.TestCase):
         result = IoU.average_bounds(params_list, 'circle')
         self.assertEqual(result, expected)
 
+    def test_average_bounds_triangle(self):
+        params_list = [
+            [0, 0, 2, 0],
+            [0, 2, 2, 60],
+            [0, 1, 2, 120]
+        ]
+        expected = [
+            (-numpy.sqrt(3), numpy.sqrt(3)),
+            (-2.0, 4.0),
+            (1, 6.0),
+            (0, 120)
+        ]
+        result = IoU.average_bounds(params_list, 'triangle')
+        numpy.testing.assert_allclose(result, expected)
+
     def test_scale_shape(self):
         '''Test scale_shape for various shapes'''
         shapes = [
             'rectangle',
             'rotateRectangle',
             'circle',
-            'ellipse'
+            'ellipse',
+            'triangle'
         ]
         gamma = 2
         params = [
             [10, 10, 2, 4],
             [10, 10, 2, 4, 45],
             [5, 5, 2],
-            [10, 10, 3, 2, 30]
+            [10, 10, 3, 2, 30],
+            [5, 5, 2, 30]
         ]
         expectations = [
             [9, 8, 4, 8],
             [9, 8, 4, 8, 45],
             [5, 5, 4],
-            [10, 10, 6, 4, 30]
+            [10, 10, 6, 4, 30],
+            [5, 5, 4, 30]
         ]
         for shape, param, expected in zip(shapes, params, expectations):
             with self.subTest(shape=shape, params=params):

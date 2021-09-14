@@ -25,6 +25,7 @@ def panoptes_to_geometry(params, shape):
         * rotateRectangle
         * circle
         * ellipse
+        * triangle
 
     Returns
     -------
@@ -50,8 +51,18 @@ def panoptes_to_geometry(params, shape):
         ellipse = shapely.affinity.scale(ellipse, rx, ry)
         ellipse = shapely.affinity.rotate(ellipse, -angle)
         return ellipse
+    elif shape == 'triangle':
+        x, y, r, angle = params
+        triangle = shapely.geometry.Polygon([
+            [0, -r],
+            [r * numpy.sqrt(3) / 2, r / 2],
+            [-r * numpy.sqrt(3) / 2, r / 2]
+        ])
+        triangle = shapely.affinity.rotate(triangle, -angle, origin=(0, 0))
+        triangle = shapely.affinity.translate(triangle, xoff=x, yoff=y)
+        return triangle
     else:
-        raise ValueError('The IoU metric only works with the following shapes: rectangle, rotateing rectangle, circle, or ellipse')
+        raise ValueError('The IoU metric only works with the following shapes: rectangle, rotateing rectangle, circle, ellipse, or triangle')
 
 
 def IoU_metric(params1, params2, shape):
@@ -124,9 +135,12 @@ def average_bounds(params_list, shape):
         if shape in ['rotateRectangle', 'ellipse']:
             # bound on angle (capped at 180 due to symmetry)
             bound.append((0, 180))
-    elif shape == 'circle':
+    elif shape in ['circle', 'triangle']:
         # bound on radius
         bound.append((1, max(dx, dy)))
+        if shape == 'triangle':
+            # triangle has three fold symmetry
+            bound.append((0, 120))
     return bound
 
 
@@ -188,8 +202,15 @@ def scale_shape(params, shape, gamma):
             # angle does not change
             params[4]
         ]
+    elif shape == 'triangle':
+        return [
+            params[0],
+            params[1],
+            gamma * params[2],
+            params[3]
+        ]
     else:
-        raise ValueError('The IoU metric only works with the following shapes: rectangle, rotateing rectangle, circle, or ellipse')
+        raise ValueError('The IoU metric only works with the following shapes: rectangle, rotateing rectangle, circle, ellipse, or triangle')
 
 
 def average_shape_IoU(params_list, shape):
