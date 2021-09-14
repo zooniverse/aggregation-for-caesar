@@ -12,6 +12,7 @@ def annotation_by_task(classification_in):
     classification['annotations'] = dict(ann_by_task)
     return classification
 
+<<<<<<< HEAD
 
 def pluck_fields(classification, pluck_keys):
     '''
@@ -51,6 +52,22 @@ def pluck_fields(classification, pluck_keys):
     answers = {}
 
     for key, value in pluck_keys.items():
+=======
+def pluck_fields(classification, pluck_keys):
+    '''
+        Main function that is called by the pluck_extractor. 
+        Functions similarly to the PluckFieldExtractor
+        on Caesar, where given a mapping between a key and
+        location of the data on the classification JSON,
+        this extractor returns a dictionary with each extracted
+        value given by the corresponding key
+
+    '''
+    answers = defaultdict(list)
+    pluck_key_list = pluck_keys.replace('[','').replace(']','').split(',')
+    for entry in pluck_key_list:
+        key, value = entry.split(':')
+>>>>>>> 4c48fd4 (added pluck field extractor)
         key_path = value.strip().split('.')
 
         try:
@@ -58,7 +75,11 @@ def pluck_fields(classification, pluck_keys):
             for keyi in key_path:
                 last_value = last_value[keyi.strip()]
 
+<<<<<<< HEAD
             answers["pluck." + key.strip()] = last_value
+=======
+            answers[key.strip()] = last_value
+>>>>>>> 4c48fd4 (added pluck field extractor)
         except KeyError:
             continue
 
