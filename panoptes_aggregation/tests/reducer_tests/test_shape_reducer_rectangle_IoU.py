@@ -73,7 +73,7 @@ reduced_data = {
         'T0_tool0_clusters_y': [1.0],
         'T0_tool0_clusters_width': [2.0],
         'T0_tool0_clusters_height': [2.0],
-        'T0_tool0_clusters_sigma': [0.77],
+        'T0_tool0_clusters_sigma': [0.8],
     }
 }
 
@@ -92,5 +92,5 @@ TestShapeReducerRectangle = ReducerTest(
         'metric_type': 'IoU'
     },
     test_name='TestShapeReducerRectangleIoU',
-    round=3
+    round=1
 )
