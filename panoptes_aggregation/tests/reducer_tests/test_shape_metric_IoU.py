@@ -1,4 +1,3 @@
-from math import exp
 import unittest
 import numpy
 import shapely.geometry
