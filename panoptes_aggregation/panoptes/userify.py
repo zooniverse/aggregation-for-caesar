@@ -18,8 +18,10 @@ class ConfigurationError(Exception):
     '''
     pass
 
-
-known_params = ['destination']
+# arg fields that contain non user lookup fields, i.e. the destination service 'mast'
+reserved_params = ['destination']
+# allow list of allowed fields args for API user resource lookups
+allowed_user_fields = ['credited_name', 'display_name', 'id', 'login']
 
 users = {}
 
@@ -68,10 +70,11 @@ def userify(all_args, target_object):
     }
     '''
     global users
-    find_fields = _discover_fields(all_args)
+
+    allowed_user_lookup_fields = _discover_user_lookup_fields(all_args)
     destination = all_args.get('destination')
 
-    _stuff_object(target_object, find_fields)
+    _stuff_object(target_object, allowed_user_lookup_fields)
     users = {}
 
     if destination:
@@ -125,9 +128,11 @@ def _stuff_object(target_object, find_fields):
     return target_object
 
 
-def _discover_fields(request_args):
-    raw_list = request_args.keys()
-    return [i for i in raw_list if i not in known_params]
+def _discover_user_lookup_fields(request_args):
+    request_args = request_args.keys()
+    # filter any reserved params and only allow specific user fields for the API lookup
+    # e.g. avoid leaking the email field if we can read it from the API
+    return [i for i in request_args if i not in reserved_params and i in allowed_user_fields]
 
 
 def _discover_user_ids(target_object):
@@ -173,11 +178,11 @@ class CantFindUser():
 
 def connect_api_client():
   # connect to the API only once for this function request
-        Panoptes.connect(
-            endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
-            client_id=getenv('PANOPTES_CLIENT_ID'),
-            client_secret=getenv('PANOPTES_CLIENT_SECRET')
-        )
+  Panoptes.connect(
+      endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
+      client_id=getenv('PANOPTES_CLIENT_ID'),
+      client_secret=getenv('PANOPTES_CLIENT_SECRET')
+  )
 
 def _retrieve_user(user_id):
     if user_id in users:
