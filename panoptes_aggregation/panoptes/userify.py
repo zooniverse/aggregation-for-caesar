@@ -137,7 +137,13 @@ def _discover_user_ids(target_object):
     if 'user_id' in target_object:
         user_ids.append(target_object['user_id'])
 
-    return _unique(_flatten(user_ids))
+    flattened_user_ids = _unique(_flatten(user_ids))
+    if flattened_user_ids:
+      # if we found some user_ids then we should connect the API client
+      # for the user lookups
+      connect_api_client()
+
+    return flattened_user_ids
 
 
 def _build_user_hash(user, find_fields):
@@ -165,16 +171,18 @@ class CantFindUser():
     def __init__(self, id):
         self.id = id
 
-
-def _retrieve_user(user_id):
-    if user_id in users:
-        user = users[user_id]
-    else:
+def connect_api_client():
+  # connect to the API only once for this function request
         Panoptes.connect(
             endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
             client_id=getenv('PANOPTES_CLIENT_ID'),
             client_secret=getenv('PANOPTES_CLIENT_SECRET')
         )
+
+def _retrieve_user(user_id):
+    if user_id in users:
+        user = users[user_id]
+    else:
         try:
             user = User.find(user_id)
         except PanoptesAPIException:
