@@ -35,9 +35,6 @@ def extractor_wrapper(gold_standard=False):
             if gold_standard:
                 kwargs['gold_standard'] = data.get('gold_standard', False)
             extraction = func(data, **kwargs)
-            # add package version to the extracted content
-            if not no_version:
-                append_version(extraction)
 
             ## RS 2021/09/14
             ## if the pluck parameter exists
@@ -52,6 +49,10 @@ def extractor_wrapper(gold_standard=False):
                 ## key to the output data
                 for key in pluck_values.keys():
                     extraction[key] = pluck_values[key]
+            
+            # add package version to the extracted content
+            if not no_version:
+                append_version(extraction)
 
             return extraction
         wrapper._original = func
