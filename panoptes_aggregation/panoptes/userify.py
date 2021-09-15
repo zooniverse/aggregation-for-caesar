@@ -18,6 +18,7 @@ class ConfigurationError(Exception):
     '''
     pass
 
+
 # arg fields that contain non user lookup fields, i.e. the destination service 'mast'
 reserved_params = ['destination']
 # allow list of allowed fields args for API user resource lookups
@@ -79,7 +80,7 @@ def userify(all_args, service_payload):
     # remove restricted payload data before sending to destination (mast)
     # https://github.com/zooniverse/caesar/pull/1342#issuecomment-917096083
     for restriced_key in restricted_payload_keys:
-      service_payload.pop(restriced_key, None)
+        service_payload.pop(restriced_key, None)
 
     _stuff_object(service_payload, allowed_user_lookup_fields)
     users = {}
@@ -151,9 +152,9 @@ def _discover_user_ids(service_payload):
 
     flattened_user_ids = _unique(_flatten(user_ids))
     if flattened_user_ids:
-      # if we found some user_ids then we should connect the API client
-      # for the user lookups
-      connect_api_client()
+        # if we found some user_ids then we should connect the API client
+        # for the user lookups
+        connect_api_client()
 
     return flattened_user_ids
 
@@ -183,13 +184,15 @@ class CantFindUser():
     def __init__(self, id):
         self.id = id
 
+
 def connect_api_client():
-  # connect to the API only once for this function request
-  Panoptes.connect(
-      endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
-      client_id=getenv('PANOPTES_CLIENT_ID'),
-      client_secret=getenv('PANOPTES_CLIENT_SECRET')
-  )
+    # connect to the API only once for this function request
+    Panoptes.connect(
+        endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
+        client_id=getenv('PANOPTES_CLIENT_ID'),
+        client_secret=getenv('PANOPTES_CLIENT_SECRET')
+    )
+
 
 def _retrieve_user(user_id):
     if user_id in users:
