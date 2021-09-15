@@ -31,6 +31,5 @@ def pluck_extractor(classification, pluck, **kwargs):
     .utilities.pluck_fields
 
     '''
-    
     if pluck is not None:
         return pluck_fields(classification, pluck)
