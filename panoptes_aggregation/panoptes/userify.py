@@ -22,6 +22,8 @@ class ConfigurationError(Exception):
 reserved_params = ['destination']
 # allow list of allowed fields args for API user resource lookups
 allowed_user_fields = ['credited_name', 'display_name', 'id', 'login']
+# restricted service_payload key value pairs
+restricted_payload_keys = ['reducer_key']
 
 users = {}
 
@@ -73,6 +75,11 @@ def userify(all_args, service_payload):
 
     allowed_user_lookup_fields = _discover_user_lookup_fields(all_args)
     destination = all_args.get('destination')
+
+    # remove restricted payload data before sending to destination (mast)
+    # https://github.com/zooniverse/caesar/pull/1342#issuecomment-917096083
+    for restriced_key in restricted_payload_keys:
+      service_payload.pop(restriced_key, None)
 
     _stuff_object(service_payload, allowed_user_lookup_fields)
     users = {}

@@ -43,6 +43,9 @@ def test_userify():
     assert_equal(panoptes.userify({}, {}), '{}')
     assert_equal(panoptes.userify({'login': None}, {}), '{}')
 
+    # removes restricted payload key/value pairs
+    assert_equal(panoptes.userify({'login': None}, {'reducer_key': 'T0', 'id': '1'}), '{"id": "1"}')
+
     # fills out object correctly
     (User.find) = Mock(return_value=build_mock_user(id=3, login="login 3"))
     assert_equal(panoptes.userify({'login': None}, {'user_id': 3}), '{"user_id": 3, "users": [{"id": 3, "login": "login 3"}]}')
