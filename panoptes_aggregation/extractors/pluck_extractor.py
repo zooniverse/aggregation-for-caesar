@@ -11,7 +11,7 @@ def slugify_or_null(s):
         return slugify(s, separator='-')
 
 @extractor_wrapper()
-def pluck_extractor(classification, **kwargs):
+def pluck_extractor(classification, pluck, **kwargs):
     '''Extract annotations from a question task into a Counter object
 
     Parameters
@@ -23,12 +23,14 @@ def pluck_extractor(classification, **kwargs):
     Returns
     -------
     extraction : dict
-        A dictionary (formated like a counter) indicating what annotations were
-        made
-    '''
+        A dictionary with the entries defined by the `pluck` argument
 
-    pluck_keys = kwargs.get('pluck', None)
+    See also
+    --------
+    .utilities.pluck_fields
+
+    '''
     
-    if pluck_keys is not None:
-        return pluck_fields(classification, pluck_keys)
+    if pluck is not None:
+        return pluck_fields(classification, pluck)
 
