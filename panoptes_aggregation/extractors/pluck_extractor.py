@@ -1,7 +1,7 @@
-from collections import defaultdict
 from slugify import slugify
 from .extractor_wrapper import extractor_wrapper
 from .utilities import pluck_fields
+
 
 def slugify_or_null(s):
     '''Slugify value while casting `null` as a string fisrt'''
@@ -9,6 +9,7 @@ def slugify_or_null(s):
         return str(s)
     else:
         return slugify(s, separator='-')
+
 
 @extractor_wrapper()
 def pluck_extractor(classification, pluck, **kwargs):
@@ -33,4 +34,3 @@ def pluck_extractor(classification, pluck, **kwargs):
     
     if pluck is not None:
         return pluck_fields(classification, pluck)
-
