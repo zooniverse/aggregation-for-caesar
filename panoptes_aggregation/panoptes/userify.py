@@ -28,8 +28,8 @@ users = {}
 destinations = None
 
 
-def userify(all_args, target_object):
-    '''Augment `target_object` with panoptes user data specified in `all_args` and post it to the specified endpoint
+def userify(all_args, service_payload):
+    '''Augment `service_payload` with panoptes user data specified in `all_args` and post it to the specified endpoint
 
     Parameters
     ----------
@@ -38,7 +38,7 @@ def userify(all_args, target_object):
         these represent either certain predefined fields like destination
         or the names of fields to be retrieved from the `User` objects
 
-    target_object : dict
+    service_payload : dict
         A dictionary containing an object vivified from a JSON string in
         the request body. This entire object graph will be searched for
         all occurrences of `user_id` and `user_ids` and any object that has
@@ -47,8 +47,8 @@ def userify(all_args, target_object):
 
     Returns
     -------
-    target_object : dict
-        The original object, augmented with User arrays for each object
+    service_payload : dict
+        The original service_payload object, augmented with User arrays for each object
         in the object graph with a `user_id` or `user_ids` field.
 
     Examples
@@ -74,13 +74,13 @@ def userify(all_args, target_object):
     allowed_user_lookup_fields = _discover_user_lookup_fields(all_args)
     destination = all_args.get('destination')
 
-    _stuff_object(target_object, allowed_user_lookup_fields)
+    _stuff_object(service_payload, allowed_user_lookup_fields)
     users = {}
 
     if destination:
-        _forward_contents(target_object, destination)
+        _forward_contents(service_payload, destination)
 
-    return jsonify(target_object)
+    return jsonify(service_payload)
 
 
 def _read_config():  # pragma: no cover
@@ -111,21 +111,21 @@ def _forward_contents(payload, destination):
     return requests.post(**request_args)
 
 
-def _stuff_object(target_object, find_fields):
-    for key in target_object.keys():
-        if type(target_object[key]) is dict:
-            _stuff_object(target_object[key], find_fields)
+def _stuff_object(service_payload, find_fields):
+    for key in service_payload.keys():
+        if type(service_payload[key]) is dict:
+            _stuff_object(service_payload[key], find_fields)
 
-    user_ids = _discover_user_ids(target_object)
+    user_ids = _discover_user_ids(service_payload)
     for user_id in user_ids:
         if not user_id:
             continue
 
         user = _retrieve_user(user_id)
-        target_object['users'] = target_object.get('users', [])
-        target_object['users'].append(_build_user_hash(user, find_fields))
+        service_payload['users'] = service_payload.get('users', [])
+        service_payload['users'].append(_build_user_hash(user, find_fields))
 
-    return target_object
+    return service_payload
 
 
 def _discover_user_lookup_fields(request_args):
@@ -135,12 +135,12 @@ def _discover_user_lookup_fields(request_args):
     return [i for i in request_args if i not in reserved_params and i in allowed_user_fields]
 
 
-def _discover_user_ids(target_object):
+def _discover_user_ids(service_payload):
     user_ids = []
-    if 'user_ids' in target_object:
-        user_ids = target_object['user_ids']
-    if 'user_id' in target_object:
-        user_ids.append(target_object['user_id'])
+    if 'user_ids' in service_payload:
+        user_ids = service_payload['user_ids']
+    if 'user_id' in service_payload:
+        user_ids.append(service_payload['user_id'])
 
     flattened_user_ids = _unique(_flatten(user_ids))
     if flattened_user_ids:
