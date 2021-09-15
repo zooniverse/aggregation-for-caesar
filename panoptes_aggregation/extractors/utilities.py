@@ -15,12 +15,12 @@ def annotation_by_task(classification_in):
 
 def pluck_fields(classification, pluck_keys):
     '''
-    Main function that is called by the pluck_extractor. 
+    Main function that is called by the pluck_extractor.
     Functions similarly to the PluckFieldExtractor
     on Caesar, where given a mapping between a key and
     location of the data on the classification JSON,
     this extractor returns a dictionary with each extracted
-    value given by the corresponding key. 
+    value given by the corresponding key.
 
     Input
     -----
@@ -29,7 +29,7 @@ def pluck_fields(classification, pluck_keys):
         panoptes annotations
 
     pluck_keys : string
-        String with a list-like formatting that maps the output key to 
+        String with a list-like formatting that maps the output key to
         the location of the value in the classification dict. Must begin
         with a `[` and end with `]`, with each key map separated by a `,`.
         Each entry should be in the form key:location (see examples below).
