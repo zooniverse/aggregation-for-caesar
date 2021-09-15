@@ -68,7 +68,7 @@ setup(
             'recommonmark>=0.5.0,<0.8',
             'sphinx>=2.2.2,<4.2',
             'sphinxcontrib-httpdomain>=1.7.0,<1.8',
-            'sphinx_rtd_theme>=0.4.3,<0.6'
+            'sphinx_rtd_theme>=0.4.3,<1.1'
         ],
         'test': [
             'nose>=1.3.7,<1.4',
@@ -89,7 +89,7 @@ setup(
         'lxml>=4.4,<4.7',
         'numpy>=1.20.0,<1.21.3',
         'packaging>=20.1,<21.1',
-        'pandas>=1.0.0,<1.3.3',
+        'pandas>=1.0.0,<1.3.4',
         'progressbar2>=3.39,<3.54',
         'python-levenshtein>=0.12.0,<0.13',
         'python-slugify>=3.0.0,<5.1',
