@@ -16,6 +16,7 @@ panoptes = import_module('panoptes_aggregation.panoptes', __name__).panoptes_tes
 # make the API client connect call a no-op for all tests
 Panoptes.connect = Mock()
 
+
 def build_mock_user(**kwargs):
     mock_user = MagicMock()
     for key, value in kwargs.items():
@@ -110,7 +111,6 @@ def test_build_user_hash():
 def test_retrieve_user():
     mock_user1 = build_mock_user(id=1, login='login', display_name='display_name')
     mock_user2 = build_mock_user(id=2, login='login', display_name='display_name')
-
 
     # finds user by calling API
     User.find = Mock(return_value=mock_user1)
