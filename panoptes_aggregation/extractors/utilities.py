@@ -12,6 +12,7 @@ def annotation_by_task(classification_in):
     classification['annotations'] = dict(ann_by_task)
     return classification
 
+
 def pluck_fields(classification, pluck_keys):
     '''
     Main function that is called by the pluck_extractor. 
@@ -49,7 +50,7 @@ def pluck_fields(classification, pluck_keys):
     defaultdict(<class 'list'>, {'gold_standard': 'False', 'true_value': '4'})
     '''
     answers = defaultdict(list)
-    pluck_key_list = pluck_keys.replace('[','').replace(']','').split(',')
+    pluck_key_list = pluck_keys.replace('[', '').replace(']', '').split(',')
     for entry in pluck_key_list:
         key, value = entry.split(':')
         key_path = value.strip().split('.')
@@ -59,7 +60,7 @@ def pluck_fields(classification, pluck_keys):
             for keyi in key_path:
                 last_value = last_value[keyi.strip()]
 
-            answers["pluck."+key.strip()] = last_value
+            answers["pluck." + key.strip()] = last_value
         except KeyError:
             continue
 
