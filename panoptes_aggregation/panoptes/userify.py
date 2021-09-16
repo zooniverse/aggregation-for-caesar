@@ -19,15 +19,20 @@ class ConfigurationError(Exception):
     pass
 
 
-known_params = ['destination']
+# arg fields that contain non user lookup fields, i.e. the destination service 'mast'
+reserved_params = ['destination']
+# allow list of allowed fields args for API user resource lookups
+allowed_user_fields = ['credited_name', 'display_name', 'id', 'login']
+# restricted service_payload key value pairs
+restricted_payload_keys = ['reducer_key']
 
 users = {}
 
 destinations = None
 
 
-def userify(all_args, target_object):
-    '''Augment `target_object` with panoptes user data specified in `all_args` and post it to the specified endpoint
+def userify(all_args, service_payload):
+    '''Augment `service_payload` with panoptes user data specified in `all_args` and post it to the specified endpoint
 
     Parameters
     ----------
@@ -36,7 +41,7 @@ def userify(all_args, target_object):
         these represent either certain predefined fields like destination
         or the names of fields to be retrieved from the `User` objects
 
-    target_object : dict
+    service_payload : dict
         A dictionary containing an object vivified from a JSON string in
         the request body. This entire object graph will be searched for
         all occurrences of `user_id` and `user_ids` and any object that has
@@ -45,8 +50,8 @@ def userify(all_args, target_object):
 
     Returns
     -------
-    target_object : dict
-        The original object, augmented with User arrays for each object
+    service_payload : dict
+        The original service_payload object, augmented with User arrays for each object
         in the object graph with a `user_id` or `user_ids` field.
 
     Examples
@@ -68,16 +73,22 @@ def userify(all_args, target_object):
     }
     '''
     global users
-    find_fields = _discover_fields(all_args)
+
+    allowed_user_lookup_fields = _discover_user_lookup_fields(all_args)
     destination = all_args.get('destination')
 
-    _stuff_object(target_object, find_fields)
+    # remove restricted payload data before sending to destination (mast)
+    # https://github.com/zooniverse/caesar/pull/1342#issuecomment-917096083
+    for restriced_key in restricted_payload_keys:
+        service_payload.pop(restriced_key, None)
+
+    _stuff_object(service_payload, allowed_user_lookup_fields)
     users = {}
 
     if destination:
-        _forward_contents(target_object, destination)
+        _forward_contents(service_payload, destination)
 
-    return jsonify(target_object)
+    return jsonify(service_payload)
 
 
 def _read_config():  # pragma: no cover
@@ -108,36 +119,44 @@ def _forward_contents(payload, destination):
     return requests.post(**request_args)
 
 
-def _stuff_object(target_object, find_fields):
-    for key in target_object.keys():
-        if type(target_object[key]) is dict:
-            _stuff_object(target_object[key], find_fields)
+def _stuff_object(service_payload, find_fields):
+    for key in service_payload.keys():
+        if type(service_payload[key]) is dict:
+            _stuff_object(service_payload[key], find_fields)
 
-    user_ids = _discover_user_ids(target_object)
+    user_ids = _discover_user_ids(service_payload)
     for user_id in user_ids:
         if not user_id:
             continue
 
         user = _retrieve_user(user_id)
-        target_object['users'] = target_object.get('users', [])
-        target_object['users'].append(_build_user_hash(user, find_fields))
+        service_payload['users'] = service_payload.get('users', [])
+        service_payload['users'].append(_build_user_hash(user, find_fields))
 
-    return target_object
-
-
-def _discover_fields(request_args):
-    raw_list = request_args.keys()
-    return [i for i in raw_list if i not in known_params]
+    return service_payload
 
 
-def _discover_user_ids(target_object):
+def _discover_user_lookup_fields(request_args):
+    request_args = request_args.keys()
+    # filter any reserved params and only allow specific user fields for the API lookup
+    # e.g. avoid leaking the email field if we can read it from the API
+    return [i for i in request_args if i not in reserved_params and i in allowed_user_fields]
+
+
+def _discover_user_ids(service_payload):
     user_ids = []
-    if 'user_ids' in target_object:
-        user_ids = target_object['user_ids']
-    if 'user_id' in target_object:
-        user_ids.append(target_object['user_id'])
+    if 'user_ids' in service_payload:
+        user_ids = service_payload['user_ids']
+    if 'user_id' in service_payload:
+        user_ids.append(service_payload['user_id'])
 
-    return _unique(_flatten(user_ids))
+    flattened_user_ids = _unique(_flatten(user_ids))
+    if flattened_user_ids:
+        # if we found some user_ids then we should connect the API client
+        # for the user lookups
+        connect_api_client()
+
+    return flattened_user_ids
 
 
 def _build_user_hash(user, find_fields):
@@ -166,15 +185,19 @@ class CantFindUser():
         self.id = id
 
 
+def connect_api_client():
+    # connect to the API only once for this function request
+    Panoptes.connect(
+        endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
+        client_id=getenv('PANOPTES_CLIENT_ID'),
+        client_secret=getenv('PANOPTES_CLIENT_SECRET')
+    )
+
+
 def _retrieve_user(user_id):
     if user_id in users:
         user = users[user_id]
     else:
-        Panoptes.connect(
-            endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
-            client_id=getenv('PANOPTES_CLIENT_ID'),
-            client_secret=getenv('PANOPTES_CLIENT_SECRET')
-        )
         try:
             user = User.find(user_id)
         except PanoptesAPIException:
