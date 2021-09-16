@@ -13,6 +13,8 @@ environ.setdefault('AGGREGATION_PANOPTES_ID', 'TEST')
 environ.setdefault('AGGREGATION_PANOPTES_SECRET', 'TEST')
 
 panoptes = import_module('panoptes_aggregation.panoptes', __name__).panoptes_testing
+# make the API client connect call a no-op for all tests
+Panoptes.connect = Mock()
 
 
 def build_mock_user(**kwargs):
@@ -41,6 +43,9 @@ def test_userify():
     assert_equal(panoptes.userify({'login': None}, {'foo': 'bar'}), '{"foo": "bar"}')
     assert_equal(panoptes.userify({}, {}), '{}')
     assert_equal(panoptes.userify({'login': None}, {}), '{}')
+
+    # removes restricted payload key/value pairs
+    assert_equal(panoptes.userify({'login': None}, {'reducer_key': 'T0', 'id': '1'}), '{"id": "1"}')
 
     # fills out object correctly
     (User.find) = Mock(return_value=build_mock_user(id=3, login="login 3"))
@@ -77,16 +82,20 @@ def test_flatten():
     assert_count_equal(list(panoptes._flatten([[1], [], 2])), [1, 2])
 
 
-def test_discover_fields():
-    # can find simple list of properties
-    assert_count_equal(panoptes._discover_fields({}), [])
-    assert_count_equal(panoptes._discover_fields({'f1': 'v1'}), ['f1'])
-    assert_count_equal(panoptes._discover_fields({'f1': 'v1', 'f2': 'v2'}), ['f1', 'f2'])
-    assert_count_equal(panoptes._discover_fields({'f1': 'v1', 'destination': 'd1', 'f2': 'v2'}), ['f1', 'f2'])
+def test_discover_user_lookup_fields():
+    # can find list of allowd user fields
+    allowed_user_fields = {'login': '', 'credited_name': '', 'display_name': '', 'id': ''}
+    assert_count_equal(panoptes._discover_user_lookup_fields(allowed_user_fields), ['login', 'credited_name', 'display_name', 'id'])
+
+    # ignores missing or not allowed known user fields
+    assert_count_equal(panoptes._discover_user_lookup_fields({}), [])
+    assert_count_equal(panoptes._discover_user_lookup_fields({'email': ''}), [])
+    assert_count_equal(panoptes._discover_user_lookup_fields({'f1': 'v1', 'created_at': 'v2'}), [])
+    assert_count_equal(panoptes._discover_user_lookup_fields({'f1': 'v1', 'destination': 'd1', 'f2': 'v2'}), [])
 
     # ignores known fields
-    assert_count_equal(panoptes._discover_fields({'destination': 'v1'}), [])
-    assert_count_equal(panoptes._discover_fields({'destination': 'v1', 'f2': 'v2'}), ['f2'])
+    assert_count_equal(panoptes._discover_user_lookup_fields({'destination': 'v1'}), [])
+    assert_count_equal(panoptes._discover_user_lookup_fields({'destination': 'v1', 'f2': 'v2'}), [])
 
 
 def test_build_user_hash():
@@ -102,9 +111,6 @@ def test_build_user_hash():
 def test_retrieve_user():
     mock_user1 = build_mock_user(id=1, login='login', display_name='display_name')
     mock_user2 = build_mock_user(id=2, login='login', display_name='display_name')
-
-    # make this a no-op
-    Panoptes.connect = Mock()
 
     # finds user by calling API
     User.find = Mock(return_value=mock_user1)
@@ -122,8 +128,6 @@ def test_retrieve_user():
 
 
 def test_retrieve_user_error():
-    # simulate User.find raising a PanoptesAPIException
-    Panoptes.connect = Mock()
     User.find = MagicMock(side_effect=[PanoptesAPIException('test')])
     found_user = panoptes._retrieve_user(10)
     assert_is_instance(found_user, panoptes.CantFindUser)

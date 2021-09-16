@@ -66,7 +66,7 @@ setup(
         ],
         'doc': [
             'recommonmark>=0.5.0,<0.8',
-            'sphinx>=2.2.2,<4.2',
+            'sphinx>=2.2.2,<4.3',
             'sphinxcontrib-httpdomain>=1.7.0,<1.8',
             'sphinx_rtd_theme>=0.4.3,<1.1'
         ],
@@ -76,7 +76,7 @@ setup(
             'coveralls>=3.0.0,<3.2.1',
             'flake8>=3.7,<3.10',
             'flake8-black>=0.1.1,<0.3',
-            'flake8-bugbear>=20.1.2,<21.5'
+            'flake8-bugbear>=20.1.2,<21.10'
         ],
         'gui': [
             'Gooey>=1.0.3,<1.1'
