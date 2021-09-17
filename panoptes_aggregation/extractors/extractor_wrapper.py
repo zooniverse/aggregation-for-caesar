@@ -96,6 +96,11 @@ def extractor_wrapper(gold_standard=False):
                     kwargs['details'] = ast.literal_eval(kwargs['details'])
                 if 'tools' in kwargs:
                     kwargs['tools'] = ast.literal_eval(kwargs['tools'])
+                if 'pluck' in kwargs:
+                    pluck_key_dict = ast.literal_eval(kwargs['pluck'])
+                else:
+                    pluck_key_dict = None
+
                 data = argument.get_json()
             else:
                 data = argument
@@ -113,11 +118,7 @@ def extractor_wrapper(gold_standard=False):
             append the required data from the pluckfield extractor
             to the output data
             '''
-            pluck = kwargs.get('pluck', None)
-            if pluck is not None:
-                # parse the string as a dictionary
-                pluck_key_dict = ast.literal_eval(pluck.strip())
-
+            if pluck_key_dict is not None:
                 # get the data and corresponding keys
                 pluck_values = pluck_fields(data, pluck_key_dict)
 
