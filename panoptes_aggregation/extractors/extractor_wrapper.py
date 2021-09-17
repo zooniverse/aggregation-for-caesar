@@ -90,6 +90,11 @@ def extractor_wrapper(gold_standard=False):
         @wraps(func)
         def wrapper(argument, **kwargs):
             #: check if argument is a flask request
+
+            # create a default value so that
+            # we can process entries without the `pluck` parameter
+            pluck_key_dict = None
+
             if hasattr(argument, 'get_json'):
                 kwargs = argument.args.copy().to_dict()
                 if 'details' in kwargs:
@@ -98,8 +103,6 @@ def extractor_wrapper(gold_standard=False):
                     kwargs['tools'] = ast.literal_eval(kwargs['tools'])
                 if 'pluck' in kwargs:
                     pluck_key_dict = ast.literal_eval(kwargs['pluck'])
-                else:
-                    pluck_key_dict = None
 
                 data = argument.get_json()
             else:
