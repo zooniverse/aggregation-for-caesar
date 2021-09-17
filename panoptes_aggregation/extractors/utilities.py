@@ -1,7 +1,6 @@
 '''Utility functions used to transform data for filtering'''
 import copy
 from collections import defaultdict
-import ast
 
 
 def annotation_by_task(classification_in):
@@ -29,12 +28,10 @@ def pluck_fields(classification, pluck_keys):
         A dictionary containing an `annotations` key that is a list of
         panoptes annotations
 
-    pluck_keys : string
-        String with a dictionary-like formatting that maps the output key to
-        the location of the value in the classification dict. Must begin
-        with a `{` and end with `}`, with each key map separated by a `,`.
+    pluck_keys : dict
+        Dictionary that maps the output key to
+        the location of the value in the classification dict.
         Each entry should be in the form 'key':'location' (see examples below).
-
 
     Examples
     --------
@@ -46,16 +43,16 @@ def pluck_fields(classification, pluck_keys):
               "is_gold_standard": "False" \
             }, \
         }}
-    >>> pluck_keys = '{"gold_standard":"subject.metadata.is_gold_standard", "true_value":"subject.metadata.uber_flag_digit"}'
+    >>> pluck_keys = {"gold_standard":"subject.metadata.is_gold_standard", "true_value":"subject.metadata.uber_flag_digit"}
     >>> pluck_fields(classification, pluck_keys)
-    defaultdict(<class 'list'>, {'pluck.gold_standard': 'False', 'pluck.true_value': '4'})
+    {'pluck.gold_standard': 'False', 'pluck.true_value': '4'}
     '''
+
     answers = {}
 
-    pluck_key_dict = ast.literal_eval(pluck_keys)
-
-    for key, value in pluck_key_dict.items():
+    for key, value in pluck_keys.items():
         key_path = value.strip().split('.')
+
         try:
             last_value = classification
             for keyi in key_path:

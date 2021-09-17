@@ -88,7 +88,8 @@ TestSingleTwoTasksKey = ExtractorTest(
     test_name='TestSingleTwoTasksKey'
 )
 
-single_pluck_classification = {"id": 359841171,
+single_pluck_classification = {
+    "id": 359841171,
     "annotations": [{
         "task": "T0",
         "value": "0"
@@ -103,13 +104,20 @@ single_pluck_classification = {"id": 359841171,
     }
 }
 
-single_pluck_keys = '{"gold_standard": "subject.metadata.is_gold_standard", "true_value": "subject.metadata.uber_flag_digit"}'
+single_pluck_keys = '{\
+    "gold_standard": "subject.metadata.is_gold_standard",\
+    "true_value": "subject.metadata.uber_flag_digit"\
+}'
 
-single_pluck_expected = {"0": 1, "pluck.gold_standard": "False", "pluck.true_value": "4"}
+single_pluck_expected = {
+    "0": 1,
+    "pluck.gold_standard": "False",
+    "pluck.true_value": "4"
+}
 
 TestSinglePluck = ExtractorTest(extractors.question_extractor,
-                        single_pluck_classification,
-                        single_pluck_expected,
-                        "Test pluck field functionality with a question extractor",
-                        kwargs={'pluck': single_pluck_keys},
-                        test_name='TestSinglePluck')
+    single_pluck_classification,
+    single_pluck_expected,
+    "Test pluck field functionality with a question extractor",
+    kwargs={'pluck': single_pluck_keys},
+    test_name='TestSinglePluck')
