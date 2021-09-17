@@ -115,12 +115,17 @@ def extractor_wrapper(gold_standard=False):
             '''
             pluck = kwargs.get('pluck', None)
             if pluck is not None:
+                # parse the string as a dictionary
+                pluck_key_dict = ast.literal_eval(pluck.strip())
+
                 # get the data and corresponding keys
-                pluck_values = pluck_fields(data, pluck)
+                pluck_values = pluck_fields(data, pluck_key_dict)
+
                 # append the data with its corresponding
                 # key to the output data
                 for key in pluck_values.keys():
                     extraction[key] = pluck_values[key]
+
             # add package version to the extracted content
             if not no_version:
                 append_version(extraction)

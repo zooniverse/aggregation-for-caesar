@@ -1,7 +1,6 @@
 '''Utility functions used to transform data for filtering'''
 import copy
 from collections import defaultdict
-import ast
 
 
 def annotation_by_task(classification_in):
@@ -54,8 +53,6 @@ def pluck_fields(classification, pluck_keys):
     for key, value in pluck_keys.items():
         key_path = value.strip().split('.')
 
-    for key, value in pluck_key_dict.items():
-        key_path = value.strip().split('.')
         try:
             last_value = classification
             for keyi in key_path:
