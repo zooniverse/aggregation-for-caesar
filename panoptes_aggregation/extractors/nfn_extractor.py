@@ -30,6 +30,7 @@ class ClassificationParser(object):
         return (
             isinstance(arg, collections.abc.Iterable)
             and not isinstance(arg, str)
+            and not isinstance(arg, int)
         )
 
     def flatten(self, anno):
@@ -38,7 +39,7 @@ class ClassificationParser(object):
             f[a['task']] = a['value']
             if (self.iterable(a['value'])):
                 for subanno in a['value']:
-                    if 'task' in subanno:
+                    if isinstance(subanno, dict) and 'task' in subanno:
                         f[subanno['task']] = subanno['value']
         return f
 
