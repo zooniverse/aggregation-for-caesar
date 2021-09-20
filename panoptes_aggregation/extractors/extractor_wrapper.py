@@ -35,6 +35,8 @@ def extractor_wrapper(gold_standard=False):
                 data = argument.get_json()
             else:
                 data = argument
+                pluck_key_dict = kwargs.pop('pluck', None)
+
             task = kwargs.pop('task', 'all')
             no_version = kwargs.pop('no_version', False)
             annotations = data['annotations']

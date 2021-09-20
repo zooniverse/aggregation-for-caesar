@@ -104,10 +104,10 @@ single_pluck_classification = {
     }
 }
 
-single_pluck_keys = '{\
-    "gold_standard": "subject.metadata.is_gold_standard",\
-    "true_value": "subject.metadata.uber_flag_digit"\
-}'
+single_pluck_keys = {
+    "gold_standard": "subject.metadata.is_gold_standard",
+    "true_value": "subject.metadata.uber_flag_digit"
+}
 
 single_pluck_expected = {
     "0": 1,
