@@ -30,7 +30,6 @@ class ClassificationParser(object):
         return (
             isinstance(arg, collections.abc.Iterable)
             and not isinstance(arg, str)
-            and not isinstance(arg, int)
         )
 
     def flatten(self, anno):
