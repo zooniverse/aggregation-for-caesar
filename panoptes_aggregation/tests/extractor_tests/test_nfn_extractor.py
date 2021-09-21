@@ -447,3 +447,33 @@ TestNfNNotInMetadataOrParams = ExtractorTest(
     kwargs={'year': 'T10', 'workflow': 'herbarium', 'state': 'metadata'},
     test_name='TestNfNNotInMetadataOrParams'
 )
+
+classification_multiselect = {
+    "annotations": [
+        {
+            "task": "T1",
+            "value": [4]
+        }
+    ],
+    "metadata": {
+        "utc_offset": "21600",
+    },
+    "subject": {
+        "metadata": {}
+    },
+    "created_at": "2019-05-22T10:28:13.667Z",
+}
+
+expected_multiselect = {
+    "workflow": "labs",
+    "time": "dinnertime"
+}
+
+TestNfNMultiselect = ExtractorTest(
+    extractors.nfn_extractor,
+    classification_multiselect,
+    expected_multiselect,
+    'Test NfN multiselect (array of ints) in a single task',
+    kwargs={'workflow': 'labs'},
+    test_name='TestNfNMultiselect'
+)
