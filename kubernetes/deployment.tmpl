@@ -25,16 +25,27 @@ spec:
             limits:
               memory: "1000Mi"
               cpu: "1000m"
+          startupProbe:
+            httpGet:
+              path: /
+              port: 80
+            # wait 6 * 10 seconds(default periodSeconds) for the container to start
+            # after this succeeds once the liveness probe takes over
+            failureThreshold: 6
           livenessProbe:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 10
+            # allow a longer response time than 1s
+            timeoutSeconds: 10
           readinessProbe:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 10
+            # start checking for readiness after 20s (to serve traffic)
+            initialDelaySeconds: 20
+            # allow a longer response time than 1s
+            timeoutSeconds: 10
           env:
             - name: FLASK_ENV
               value: production
