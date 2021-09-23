@@ -7,10 +7,11 @@ node {
     def stackName = 'aggregation-caesar'
 
     def dockerImageName = "${dockerRepoName}:${BRANCH_NAME}"
+    def buildArgs = "--build-arg REVISION='${scmVars.GIT_COMMIT}' ."
     def newImage = null
 
     stage('Build Docker image') {
-        newImage = docker.build(dockerImageName)
+        newImage = docker.build(dockerImageName, buildArgs)
         newImage.push()
         newImage.push(scmVars.GIT_COMMIT)
     }
