@@ -5,7 +5,6 @@ try:
     from panoptes_aggregation import panoptes
     import sentry_sdk
     from sentry_sdk.integrations.flask import FlaskIntegration
-    import git
 except ImportError:  # pragma: no cover
     print('You must install `flask` to use panoptes_aggregation.routes')  # pragma: no cover
     raise  # pragma: no cover
@@ -81,12 +80,10 @@ def make_application():
         ]
     )
 
-    repo = git.Repo(search_parent_directories=True)
-    sha = repo.head.object.hexsha
     home_screen_message = {
         'status': 'ok',
         'version': __version__,
-        'commit_id': sha
+        'commit_id': getenv('REVISION', ''),
     }
 
     @application.route('/')
