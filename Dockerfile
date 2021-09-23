@@ -21,5 +21,8 @@ RUN pip install -U .[online,test,doc]
 # make documentation
 RUN /bin/bash -lc ./make_docs.sh
 
+ARG REVISION=''
+ENV REVISION=$REVISION
+
 # load configs and start flask app
 CMD ["bash", "./start-flask.sh"]
