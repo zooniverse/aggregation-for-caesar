@@ -3,6 +3,8 @@ services:
   aggregation:
     build:
       context: ./
+      args:
+        REVISION: fake-git-sha-id
     volumes:
       - ./panoptes_aggregation:/usr/src/aggregation/panoptes_aggregation
       - ~/.aws:/root/.aws
