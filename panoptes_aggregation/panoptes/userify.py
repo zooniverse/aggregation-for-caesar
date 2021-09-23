@@ -116,7 +116,7 @@ def _forward_contents(payload, destination):
             endpoint['auth-header']: getenv(endpoint['auth-token'])
         }
 
-    return requests.post(**request_args)
+    return requests.post(**request_args, timeout=5)
 
 
 def _stuff_object(service_payload, find_fields):
