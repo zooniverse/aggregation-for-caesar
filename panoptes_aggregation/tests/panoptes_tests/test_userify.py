@@ -211,13 +211,14 @@ def test_forward_contents():
     # sends to known endpoints correctly
     requests.post = MagicMock()
     panoptes._forward_contents({'foo': 'bar'}, 'mockable')
-    (requests.post).assert_called_once_with(url='https://demo1580318.mockable.io/mast', json={'foo': 'bar'})
+    (requests.post).assert_called_once_with(timeout=5, url='https://demo1580318.mockable.io/mast', json={'foo': 'bar'})
 
     requests.post = MagicMock()
     with patch.dict(os.environ, {'MAST_AUTH_TOKEN': 'foo'}):
         panoptes._forward_contents({'foo': 'bar'}, 'mast')
 
     (requests.post).assert_called_once_with(
+        timeout=5,
         url='https://mast-forwarder.zooniverse.org/',
         json={'foo': 'bar'},
         headers={'X-ASB-AUTH': 'foo'}
