@@ -11,3 +11,7 @@ SHAPE_LUT = {
     'triangle': ['x', 'y', 'r', 'angle'],
     'fan': ['x', 'y', 'radius', 'spread', 'rotation']
 }
+
+FEEDBACK_STRATEGIES = {
+    'graph2drange': ['x', 'width']
+}
