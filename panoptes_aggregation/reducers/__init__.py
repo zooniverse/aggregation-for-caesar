@@ -17,6 +17,7 @@ from .tess_gold_standard_reducer import tess_gold_standard_reducer
 from .text_reducer import text_reducer
 from .optics_line_text_reducer import optics_line_text_reducer
 from .first_n_true_reducer import first_n_true_reducer
+from .subject_difficulty_reducer import subject_difficulty_reducer
 from ..copy_function import copy_function
 
 shortcut_reducer = copy_function(question_reducer, 'shortcut_reducer')
@@ -40,5 +41,6 @@ reducers = {
     'tess_reducer_column': tess_reducer_column,
     'tess_gold_standard_reducer': tess_gold_standard_reducer,
     'text_reducer': text_reducer,
-    'first_n_true_reducer': first_n_true_reducer
+    'first_n_true_reducer': first_n_true_reducer,
+    'subject_difficulty_reducer': subject_difficulty_reducer
 }

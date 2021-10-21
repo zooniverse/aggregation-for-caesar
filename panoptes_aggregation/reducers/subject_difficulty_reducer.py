@@ -1,7 +1,9 @@
 '''
-TESS Gold Standard Reducer
---------------------------
-This module porvides functions to reduce the gold standard task extracts for the TESS project.
+Subject Gold Standard Reducer for difficulty calculation
+---------------------------------------------------------
+This module provides functions to reduce the gold standard task extracts
+to determine a `difficulty' score per subject (defined as the fraction
+of succesful classification by all users for that subject)
 '''
 from .reducer_wrapper import reducer_wrapper
 import numpy as np
@@ -31,7 +33,7 @@ def process_data(extracts):
 
 
 @reducer_wrapper(process_data=process_data)
-def tess_gold_standard_reducer(data):
+def subject_difficulty_reducer(data):
     '''
     Calculate the difficulty of a gold standard TESS subject
 

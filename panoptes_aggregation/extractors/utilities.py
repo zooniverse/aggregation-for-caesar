@@ -1,6 +1,7 @@
 '''Utility functions used to transform data for filtering'''
 import copy
 from collections import defaultdict
+from ..shape_tools import FEEDBACK_STRATEGIES
 
 
 def annotation_by_task(classification_in):
@@ -57,8 +58,64 @@ def pluck_fields(classification, pluck_keys):
             last_value = classification
             for keyi in key_path:
                 last_value = last_value[keyi.strip()]
-            answers["pluck." + key.strip()] = last_value
+            if(key == 'feedback'):
+                feedback_val = get_feedback_info(last_value)
+                if feedback_val is not None:
+                    answers['feedback'] = feedback_val
+            else:
+                answers["pluck." + key.strip()] = last_value
         except KeyError:
             continue
 
     return answers
+
+
+def get_feedback_info(feedback_dict):
+    '''
+    
+    '''
+
+    if not isinstance(feedback_dict, list):
+        return None
+
+    if len(feedback_dict) == 0:
+        return None
+
+    ''' returning feedback_data as dict of lists
+    feedback_data = {}
+    feedback_data['success'] = []
+
+    key_list = FEEDBACK_STRATEGIES[feedback_dict[0]['strategy']]
+
+    for key in key_list:
+        feedback_data["true_"+key] = []
+        feedback_data["user_"+key] = []
+
+    for classification in feedback_dict:
+        feedback_data['success'].append(classification['success'])
+        for key in key_list:
+            feedback_data["true_"+key].append(classification[key])
+            successfulClassifications = classification['successfulClassifications']
+            if len(successfulClassifications) > 0:
+                feedback_data["user_"+key].append(successfulClassifications[0][key])
+            else:
+                feedback_data["user_"+key].append(None)
+
+    feedback_data['agreement_score'] = sum(feedback_data['success'])/len(feedback_data['success'])
+    '''
+
+    key_list = FEEDBACK_STRATEGIES[feedback_dict[0]['strategy']]
+    feedback_data = []
+
+    for classification in feedback_dict:
+        classi = {}
+        classi['success'] = classification['success']
+        classi["gold_standard"] = {}
+        classi["user_classification"] = {}
+        for key in key_list:
+            classi['gold_standard'][key] = classification[key]
+            successfulClassifications = classification['successfulClassifications']
+            classi["user_classification"][key] = [sclasses[key] for sclasses in successfulClassifications]
+        feedback_data.append(classi)
+
+    return feedback_data
