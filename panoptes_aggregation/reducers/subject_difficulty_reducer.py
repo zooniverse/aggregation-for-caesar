@@ -4,53 +4,35 @@ Subject Gold Standard Reducer for difficulty calculation
 This module provides functions to reduce the gold standard task extracts
 to determine a `difficulty' score per subject (defined as the fraction
 of succesful classification by all users for that subject)
+
+See also: tess_gold_standard_reducer
 '''
 from .reducer_wrapper import reducer_wrapper
 import numpy as np
 
 
-def process_data(extracts):
-    '''
-    Process the `feedback` extracts
-
-    Parameters
-    ----------
-    extracts : list
-        A list of extracts from Caesar's pluck field extractor
-
-    Returns
-    -------
-    success : list
-        A list-of-lists, one list for each classification with booleans indicating the volunteer's success at
-        finding each gold standard transit in a subject.
-    '''
-    success = []
-    for extract in extracts:
-        if extract['feedback']:
-            li = [transit['success'] for transit in extract['feedback']]
-            success.append(li)
-    return success
-
-
-@reducer_wrapper(process_data=process_data)
-def subject_difficulty_reducer(data):
+@reducer_wrapper()
+def subject_difficulty_reducer(extracts):
     '''
     Calculate the difficulty of a gold standard TESS subject
 
     Parameters
     ----------
-    data : list
-        The results of :meth:`process_data`
+    extracts : list
+        The list of extracted data including the feedback metadata
 
     Returns
     -------
     output : dict
         A dictinary with one key `difficulty` that is a list with the fraction of volunteers who
-        successfully found each gold standard transit in a subject.
+        successfully found each gold standard entry in a subject.
     '''
+
+    feedback_data = [extracti['feedback'] for extracti in extracts if extracti['feedback'] is not None]
+
     output = {}
-    if len(data) > 0:
-        data = np.array(data)
-        difficulty = data.sum(axis=0) / len(data)
+    if len(feedback_data) > 0:
+        success = np.asarray([feedback['success'] for feedback in feedback_data])
+        difficulty = np.sum(success, axis=0) / len(success)
         output['difficulty'] = difficulty.tolist()
     return output
