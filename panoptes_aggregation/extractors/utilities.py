@@ -77,13 +77,13 @@ def pluck_fields(classification, pluck_keys):
 
 def get_feedback_info(feedback_dict):
     '''
-    Extracts and processes classification success information from 
+    Extracts and processes classification success information from
     the 'feedback' metadata
 
     Inputs
     ------
     feedback_dict : list
-        List of dictionaries, where each entry correspond to 
+        List of dictionaries, where each entry correspond to
         a feedback metadata in the classification JSON
 
     Outputs
@@ -94,8 +94,8 @@ def get_feedback_info(feedback_dict):
             - 'success': which is a list of boolean success/failure keys
                 for each subtask in the classification
             - 'agreement_score': The ratio of successful classifications
-                to the total number of subtasks. 
-        and also the true values depending on the task type 
+                to the total number of subtasks.
+        and also the true values depending on the task type
         (see `shape_tools.py`)
 
     >>> feedback_dict = [{"id":100001,"answer":"3","success":True,"strategy":"singleAnswerQuestion",\
@@ -117,13 +117,13 @@ def get_feedback_info(feedback_dict):
     key_list = FEEDBACK_STRATEGIES[feedback_dict[0]['strategy']]
 
     for key in key_list:
-        feedback_data["true_"+key] = []
-        #feedback_data["user_"+key] = []
+        feedback_data["true_" + key] = []
+        # feedback_data["user_"+key] = []
 
     for classification in feedback_dict:
         feedback_data['success'].append(classification['success'])
         for key in key_list:
-            feedback_data["true_"+key].append(classification[key])
+            feedback_data["true_" + key].append(classification[key])
 
             '''
             successfulClassifications = classification['successfulClassifications']
@@ -133,8 +133,9 @@ def get_feedback_info(feedback_dict):
                 feedback_data["user_"+key].append(None)
             '''
 
-    feedback_data['agreement_score'] = sum(feedback_data['success'])/len(feedback_data['success'])
-    
+    feedback_data['agreement_score'] = sum(feedback_data['success']) / \
+        len(feedback_data['success'])
+
     ''' returning feedback_data as list of dicts
     feedback_data = []
 
@@ -149,6 +150,6 @@ def get_feedback_info(feedback_dict):
                 successfulClassifications = classification['successfulClassifications']
                 classi["user_classification"][key] = [sclasses[key] for sclasses in successfulClassifications]
         feedback_data.append(classi)
-    ''' 
+    '''
 
     return feedback_data
