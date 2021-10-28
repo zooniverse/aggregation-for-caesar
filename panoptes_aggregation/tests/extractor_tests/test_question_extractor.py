@@ -121,3 +121,54 @@ TestSinglePluck = ExtractorTest(extractors.question_extractor,
     "Test pluck field functionality with a question extractor",
     kwargs={'pluck': single_pluck_keys},
     test_name='TestSinglePluck')
+
+
+feedback_pluck_classification = {
+    "id": 359841171,
+    "annotations": [{
+        "task": "T0",
+        "value": "0",
+        "taskType": "single"
+    }],
+    "metadata": {    
+        "feedback": {
+          "T0": [
+            {
+              "answer": "0",
+              "success": True,
+              "strategy": "singleAnswerQuestion"
+            }
+          ]
+        }
+    },
+    "subject": {
+        "id": 68561182,
+        "metadata": {
+            "filename": "uds_H.gf19767.png",
+        }
+    }
+}
+
+feedback_pluck_keys = {
+    "feedback": "metadata.feedback.T0"
+}
+
+feedback_pluck_expected = {
+    "0": 1,
+    "feedback": {
+        "agreement_score": 1.0,
+        "success": [
+            True
+        ],
+        "true_answer": [
+            "0"
+        ]
+    }
+}
+
+TestFeedbackPluck = ExtractorTest(extractors.question_extractor,
+    feedback_pluck_classification,
+    feedback_pluck_expected,
+    "Test pluck field functionality for feedback data with a question extractor",
+    kwargs={'pluck': feedback_pluck_keys},
+    test_name='TestFeedbackPluck')

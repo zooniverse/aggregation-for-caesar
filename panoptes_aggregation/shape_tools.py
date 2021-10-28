@@ -13,5 +13,6 @@ SHAPE_LUT = {
 }
 
 FEEDBACK_STRATEGIES = {
-    'graph2drange': ['x', 'width']
+    'graph2drange': ['x', 'width'],
+    'singleAnswerQuestion': ['answer']
 }
