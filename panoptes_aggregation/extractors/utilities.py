@@ -72,7 +72,26 @@ def pluck_fields(classification, pluck_keys):
 
 def get_feedback_info(feedback_dict):
     '''
-    
+    Extracts and processes classification success information from 
+    the 'feedback' metadata
+
+    Inputs
+    ------
+    feedback_dict : dict
+        Dictionary corresponding to the feedback metadata in
+        the classification JSON
+
+    Outputs
+    -------
+    feedback_data : dict
+        Dictionary containing information about
+        classification success, with the default keys being:
+            - 'success': which is a list of boolean success/failure keys
+                for each subtask in the classification
+            - 'agreement_score': The ratio of successful classifications
+                to the total number of subtasks. 
+        and also the true values depending on the task type 
+        (see `shape_tools.py`)
     '''
 
     if not isinstance(feedback_dict, list):
@@ -81,7 +100,6 @@ def get_feedback_info(feedback_dict):
     if len(feedback_dict) == 0:
         return None
 
-    ''' returning feedback_data as dict of lists
     feedback_data = {}
     feedback_data['success'] = []
 
@@ -89,22 +107,24 @@ def get_feedback_info(feedback_dict):
 
     for key in key_list:
         feedback_data["true_"+key] = []
-        feedback_data["user_"+key] = []
+        #feedback_data["user_"+key] = []
 
     for classification in feedback_dict:
         feedback_data['success'].append(classification['success'])
         for key in key_list:
             feedback_data["true_"+key].append(classification[key])
+
+            '''
             successfulClassifications = classification['successfulClassifications']
             if len(successfulClassifications) > 0:
                 feedback_data["user_"+key].append(successfulClassifications[0][key])
             else:
                 feedback_data["user_"+key].append(None)
+            '''
 
     feedback_data['agreement_score'] = sum(feedback_data['success'])/len(feedback_data['success'])
-    '''
-
-    key_list = FEEDBACK_STRATEGIES[feedback_dict[0]['strategy']]
+    
+    ''' returning feedback_data as list of dicts
     feedback_data = []
 
     for classification in feedback_dict:
@@ -114,8 +134,10 @@ def get_feedback_info(feedback_dict):
         classi["user_classification"] = {}
         for key in key_list:
             classi['gold_standard'][key] = classification[key]
-            successfulClassifications = classification['successfulClassifications']
-            classi["user_classification"][key] = [sclasses[key] for sclasses in successfulClassifications]
+            if 'successfulClassifications' in classification.keys():
+                successfulClassifications = classification['successfulClassifications']
+                classi["user_classification"][key] = [sclasses[key] for sclasses in successfulClassifications]
         feedback_data.append(classi)
+    ''' 
 
     return feedback_data
