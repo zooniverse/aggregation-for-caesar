@@ -130,15 +130,15 @@ feedback_pluck_classification = {
         "value": "0",
         "taskType": "single"
     }],
-    "metadata": {    
+    "metadata": {
         "feedback": {
-          "T0": [
-            {
-              "answer": "0",
-              "success": True,
-              "strategy": "singleAnswerQuestion"
-            }
-          ]
+            "T0": [
+                {
+                    "answer": "0",
+                    "success": True,
+                    "strategy": "singleAnswerQuestion"
+                }
+            ]
         }
     },
     "subject": {
