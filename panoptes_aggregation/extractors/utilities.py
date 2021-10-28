@@ -77,9 +77,9 @@ def get_feedback_info(feedback_dict):
 
     Inputs
     ------
-    feedback_dict : dict
-        Dictionary corresponding to the feedback metadata in
-        the classification JSON
+    feedback_dict : list
+        List of dictionaries, where each entry correspond to 
+        a feedback metadata in the classification JSON
 
     Outputs
     -------
@@ -92,6 +92,12 @@ def get_feedback_info(feedback_dict):
                 to the total number of subtasks. 
         and also the true values depending on the task type 
         (see `shape_tools.py`)
+
+    >>> feedback_dict = [{"id":100001,"answer":"3","success":True,"strategy":"singleAnswerQuestion",\
+            "failureEnabled":True,"failureMessage":"You got it wrong!",\
+            "successEnabled":True,"successMessage":"Congrats!"}]
+    >>> get_feedback_info(feedback_dict)
+    {'success': [True], 'true_answer': ['3'], 'agreement_score': 1.0}
     '''
 
     if not isinstance(feedback_dict, list):
