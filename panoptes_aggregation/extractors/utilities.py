@@ -23,10 +23,10 @@ def pluck_fields(classification, pluck_keys):
     location of the data on the classification JSON,
     this extractor returns a dictionary with each extracted
     value given by the corresponding key.
-    Note: passing `feedback` in `pluck_keys` is reserved for 
+    Note: passing `feedback` in `pluck_keys` is reserved for
     getting feedback metadata from the FEM's feedback tool. This
     will automatically call `get_feedback_info` which cleans up the
-    feedback (subject gold standard) metadata. 
+    feedback (subject gold standard) metadata.
 
     Input
     -----
@@ -65,9 +65,9 @@ def pluck_fields(classification, pluck_keys):
     for key, value in pluck_keys.items():
         key_path = value.strip().split('.')
 
-        # walk down the nested dictionaries in 
-        # the JSON file until we reach the 
-        # element we are looking for 
+        # walk down the nested dictionaries in
+        # the JSON file until we reach the
+        # element we are looking for
         try:
             last_value = classification
             for keyi in key_path:
@@ -130,7 +130,7 @@ def get_feedback_info(feedback_dict):
 
     feedback_data = {}
 
-    # each feedback tool has a unique set of keys which 
+    # each feedback tool has a unique set of keys which
     # hold the gold standard data (see feedback_strategies.py)
     key_list = FEEDBACK_STRATEGIES[feedback_dict[0]['strategy']]
 
@@ -141,7 +141,7 @@ def get_feedback_info(feedback_dict):
         feedback_data.setdefault('success', []).append(classification['success'])
         for key in key_list:
             # also get the true values defined for each subject
-            # the keys depend on the type of feedback strategy used in the 
+            # the keys depend on the type of feedback strategy used in the
             # front end
             feedback_data.setdefault(f"true_{key}", []).append(classification[key])
 
