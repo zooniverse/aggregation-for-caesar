@@ -1,7 +1,7 @@
 '''Utility functions used to transform data for filtering'''
 import copy
 from collections import defaultdict
-from ..shape_tools import FEEDBACK_STRATEGIES
+from ..feedback_strategies import FEEDBACK_STRATEGIES
 
 
 def annotation_by_task(classification_in):
@@ -107,44 +107,15 @@ def get_feedback_info(feedback_dict):
         return None
 
     feedback_data = {}
-    feedback_data['success'] = []
 
     key_list = FEEDBACK_STRATEGIES[feedback_dict[0]['strategy']]
 
-    for key in key_list:
-        feedback_data["true_" + key] = []
-        # feedback_data["user_"+key] = []
-
     for classification in feedback_dict:
-        feedback_data['success'].append(classification['success'])
+        feedback_data.setdefault('success', []).append(classification['success'])
         for key in key_list:
-            feedback_data["true_" + key].append(classification[key])
-
-            '''
-            successfulClassifications = classification['successfulClassifications']
-            if len(successfulClassifications) > 0:
-                feedback_data["user_"+key].append(successfulClassifications[0][key])
-            else:
-                feedback_data["user_"+key].append(None)
-            '''
+            feedback_data.setdefault(f"true_{key}", []).append(classification[key])
 
     feedback_data['agreement_score'] = sum(feedback_data['success']) / \
         len(feedback_data['success'])
-
-    ''' returning feedback_data as list of dicts
-    feedback_data = []
-
-    for classification in feedback_dict:
-        classi = {}
-        classi['success'] = classification['success']
-        classi["gold_standard"] = {}
-        classi["user_classification"] = {}
-        for key in key_list:
-            classi['gold_standard'][key] = classification[key]
-            if 'successfulClassifications' in classification.keys():
-                successfulClassifications = classification['successfulClassifications']
-                classi["user_classification"][key] = [sclasses[key] for sclasses in successfulClassifications]
-        feedback_data.append(classi)
-    '''
 
     return feedback_data

@@ -166,9 +166,46 @@ feedback_pluck_expected = {
     }
 }
 
-TestFeedbackPluck = ExtractorTest(extractors.question_extractor,
+TestFeedbackPluck = ExtractorTest(
+    extractors.question_extractor,
     feedback_pluck_classification,
     feedback_pluck_expected,
     "Test pluck field functionality for feedback data with a question extractor",
     kwargs={'pluck': feedback_pluck_keys},
-    test_name='TestFeedbackPluck')
+    test_name='TestFeedbackPluck'
+)
+
+feedback_empty_pluck_classification = {
+    "id": 359841171,
+    "annotations": [{
+        "task": "T0",
+        "value": "0",
+        "taskType": "single"
+    }],
+    "metadata": {
+        "feedback": {}
+    },
+    "subject": {
+        "id": 68561182,
+        "metadata": {
+            "filename": "uds_H.gf19767.png",
+        }
+    }
+}
+
+feedback_empty_pluck_keys = {
+    "feedback": "metadata.feedback.T0"
+}
+
+feedback_empty_pluck_expected = {
+    "0": 1,
+}
+
+TestFeedbackEmptyPluck = ExtractorTest(
+    extractors.question_extractor,
+    feedback_empty_pluck_classification,
+    feedback_empty_pluck_expected,
+    "Test pluck field functionality for question extractor with empty feedback fields",
+    kwargs={'pluck': feedback_empty_pluck_keys},
+    test_name='TestFeedbackEmptyPluck'
+)

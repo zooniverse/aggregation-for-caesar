@@ -37,9 +37,7 @@ extracted_data = [
                 ]
             }
     },
-    {
-        'feedback': None
-    }
+    {}
 ]
 
 

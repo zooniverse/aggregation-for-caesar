@@ -25,8 +25,7 @@ def process_data(extracts):
     success = []
     for extract in extracts:
         if extract['feedback']:
-            li = [transit['success'] for transit in extract['feedback']]
-            success.append(li)
+            success.append([transit['success'] for transit in extract['feedback']])
     return success
 
 
