@@ -28,11 +28,11 @@ def subject_difficulty_reducer(extracts):
         successfully found each gold standard entry in a subject.
     '''
 
-    feedback_data = [extracti['feedback'] for extracti in extracts if extracti['feedback'] is not None]
+    feedback_data = [extracti['feedback'] for extracti in extracts if 'feedback' in extracti.keys()]
 
     output = {}
     if len(feedback_data) > 0:
-        success = np.asarray([feedback['success'] for feedback in feedback_data])
-        difficulty = np.sum(success, axis=0) / len(success)
+        success = [feedback['success'] for feedback in feedback_data]
+        difficulty = np.mean(success, axis=0)
         output['difficulty'] = difficulty.tolist()
     return output
