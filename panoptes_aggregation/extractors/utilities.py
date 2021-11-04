@@ -123,12 +123,6 @@ def get_feedback_info(feedback_dict):
     {'success': [True], 'true_answer': ['3'], 'agreement_score': 1.0}
     '''
 
-    if not isinstance(feedback_dict, list):
-        return None
-
-    if len(feedback_dict) == 0:
-        return None
-
     feedback_data = {}
 
     # each feedback tool has a unique set of keys which
