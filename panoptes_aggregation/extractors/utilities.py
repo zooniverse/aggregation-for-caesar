@@ -144,3 +144,4 @@ def get_feedback_info(feedback_dict):
     feedback_data['agreement_score'] = np.mean(feedback_data['success'])
 
     return feedback_data
+
