@@ -68,4 +68,3 @@ def extractor_wrapper(gold_standard=False):
         wrapper._original = func
         return wrapper
     return decorator
-
