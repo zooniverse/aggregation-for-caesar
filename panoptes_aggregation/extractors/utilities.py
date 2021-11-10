@@ -84,7 +84,6 @@ def pluck_fields(classification, pluck_keys):
             else:
                 # all other keywords use the pluck.[keyname] format
                 answers["pluck." + key.strip()] = last_value
->>>>>>> 17f8244 (added feedback pluck and moved difficulty to separate reducer)
         except KeyError:
             # if the requested keyword doesn't exist in the JSON data
             # we ignore it and move on to the next one
