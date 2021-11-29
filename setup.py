@@ -72,7 +72,7 @@ setup(
         ],
         'test': [
             'nose>=1.3.7,<1.4',
-            'coverage>=4.5.3,<5.6',
+            'coverage>=4.5.3,<6.3',
             'coveralls>=3.0.0,<3.2.1',
             'flake8>=3.7,<3.10',
             'flake8-black>=0.1.1,<0.3',
