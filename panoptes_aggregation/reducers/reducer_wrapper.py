@@ -42,6 +42,9 @@ def reducer_wrapper(
                     kwargs_extra_data['user_id'] = kwargs['user_id']
                 if relevant_reduction:
                     kwargs_extra_data['relevant_reduction'] = kwargs['relevant_reduction']
+
+            if 'binary' in kwargs.keys():
+                kwargs_details['binary'] = kwargs['binary']
             no_version = kwargs.pop('no_version', False)
             if defaults_process is not None:
                 kwargs_process = process_kwargs(kwargs, defaults_process)

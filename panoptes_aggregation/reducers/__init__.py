@@ -20,6 +20,7 @@ from .optics_line_text_reducer import optics_line_text_reducer
 from .first_n_true_reducer import first_n_true_reducer
 from .first_n_false_reducer import first_n_false_reducer
 from .subject_difficulty_reducer import subject_difficulty_reducer
+from .test_user_skill import test_user_skill_reducer
 from ..copy_function import copy_function
 
 shortcut_reducer = copy_function(question_reducer, "shortcut_reducer")
@@ -47,4 +48,5 @@ reducers = {
     "first_n_true_reducer": first_n_true_reducer,
     "first_n_false_reducer": first_n_false_reducer,
     "subject_difficulty_reducer": subject_difficulty_reducer,
+    'test_user_skill_reducer': test_user_skill_reducer
 }
