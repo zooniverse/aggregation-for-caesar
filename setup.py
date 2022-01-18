@@ -60,21 +60,21 @@ setup(
             'panoptes-client>=1.1,<1.5',
             'requests>=2.4.2,<2.27',
             'gunicorn>=20.0,<20.2',
-            'sentry-sdk[flask]>=0.13.5,<1.4',
-            'newrelic>=5.4.0,<6.8.2',
+            'sentry-sdk[flask]>=0.13.5,<1.6',
+            'newrelic>=5.4.0,<7.2.5',
             'gitpython>=3.0.0,<3.2'
         ],
         'doc': [
             'recommonmark>=0.5.0,<0.8',
             'sphinx>=2.2.2,<4.3',
-            'sphinxcontrib-httpdomain>=1.7.0,<1.8',
+            'sphinxcontrib-httpdomain>=1.7.0,<1.9',
             'sphinx_rtd_theme>=0.4.3,<1.1'
         ],
         'test': [
             'nose>=1.3.7,<1.4',
-            'coverage>=4.5.3,<5.6',
+            'coverage>=4.5.3,<6.3',
             'coveralls>=3.0.0,<3.2.1',
-            'flake8>=3.7,<3.10',
+            'flake8>=3.7,<4.1',
             'flake8-black>=0.1.1,<0.3',
             'flake8-bugbear>=20.1.2,<21.10'
         ],
@@ -87,15 +87,15 @@ setup(
         'collatex>=2.2,<2.3',
         'hdbscan>=0.8.20,<0.8.28',
         'lxml>=4.4,<4.7',
-        'numpy>=1.22.1,<1.22.2',
+        'numpy>=1.21.5,<1.22.2',
         'packaging>=20.1,<21.1',
-        'pandas>=1.0.0,<1.3.4',
-        'progressbar2>=3.39,<3.54',
+        'pandas>=1.0.0,<1.3.6',
+        'progressbar2>=3.39,<4.1',
         'python-levenshtein>=0.12.0,<0.13',
         'python-slugify>=3.0.0,<5.1',
-        'pyyaml>=5.1,<5.5',
-        'scikit-learn>=0.21.1,<0.24.3',
-        'scipy>=1.2,<1.7.2',
-        'werkzeug>=0.14,<2.0.2'
+        'pyyaml>=5.1,<6.1',
+        'scikit-learn>=1.0.0,<1.0.3',
+        'scipy>=1.2,<1.7.4',
+        'werkzeug>=0.14,<2.0.3'
     ]
 )
