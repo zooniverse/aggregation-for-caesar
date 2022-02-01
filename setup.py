@@ -88,7 +88,7 @@ setup(
         'hdbscan>=0.8.20,<0.8.28',
         'lxml>=4.4,<4.8',
         'numpy>=1.21.5,<1.22.2',
-        'packaging>=20.1,<21.1',
+        'packaging>=20.1,<21.4',
         'pandas>=1.0.0,<1.4.1',
         'progressbar2>=3.39,<4.1',
         'python-levenshtein>=0.12.0,<0.13',
