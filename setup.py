@@ -58,10 +58,10 @@ setup(
             'flask>=1.0,<2.1',
             'flask-cors>=3.0,<3.1',
             'panoptes-client>=1.1,<1.5',
-            'requests>=2.4.2,<2.27',
+            'requests>=2.4.2,<2.28',
             'gunicorn>=20.0,<20.2',
             'sentry-sdk[flask]>=0.13.5,<1.6',
-            'newrelic>=5.4.0,<7.2.5',
+            'newrelic>=5.4.0,<7.4.1',
             'gitpython>=3.0.0,<3.2'
         ],
         'doc': [
@@ -72,11 +72,11 @@ setup(
         ],
         'test': [
             'nose>=1.3.7,<1.4',
-            'coverage>=4.5.3,<6.3',
+            'coverage>=4.5.3,<6.4',
             'coveralls>=3.0.0,<3.2.1',
             'flake8>=3.7,<4.1',
             'flake8-black>=0.1.1,<0.3',
-            'flake8-bugbear>=20.1.2,<21.10'
+            'flake8-bugbear>=20.1.2,<22.2'
         ],
         'gui': [
             'Gooey>=1.0.3,<1.1'
@@ -89,7 +89,7 @@ setup(
         'lxml>=4.4,<4.8',
         'numpy>=1.21.5,<1.22.2',
         'packaging>=20.1,<21.1',
-        'pandas>=1.0.0,<1.3.6',
+        'pandas>=1.0.0,<1.4.1',
         'progressbar2>=3.39,<4.1',
         'python-levenshtein>=0.12.0,<0.13',
         'python-slugify>=3.0.0,<5.1',
