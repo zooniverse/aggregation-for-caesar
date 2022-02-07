@@ -38,7 +38,7 @@ FirstTwoTrueTestReducer = ReducerTestNoProcessing(
     first_n_true_reducer,
     extracted_data_first_two_true,
     reduced_false,
-    "Test with first three extracts True",
+    "Test with first two extracts True",
     kwargs={"n": 3},
     test_name="FirstTwoTrueTestReducer",
 )
