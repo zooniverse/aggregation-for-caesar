@@ -37,5 +37,5 @@ def first_n_false_reducer(data_list, n=0, **kwargs):
     return {
         "result": n > 0
         and len(data_list) >= n
-        and ~np.any(list(map(extractResultKey, data_list[:n])))
+        and not np.any(list(map(extractResultKey, data_list[:n])))
     }
