@@ -92,7 +92,7 @@ setup(
         'pandas>=1.0.0,<1.4.2',
         'progressbar2>=3.39,<4.1',
         'python-levenshtein>=0.12.0,<0.13',
-        'python-slugify>=3.0.0,<5.1',
+        'python-slugify>=3.0.0,<6.1',
         'pyyaml>=5.1,<6.1',
         'scikit-learn>=1.0.0,<1.0.3',
         'scipy>=1.2,<1.8.1',
