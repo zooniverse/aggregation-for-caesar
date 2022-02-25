@@ -41,7 +41,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon',
-    'recommonmark'
+    'myst_nb'
 ]
 napoleon_google_docstring = False
 napoleon_use_param = False
@@ -55,7 +55,9 @@ templates_path = ['_templates']
 #
 source_suffix = {
     '.rst': 'restructuredtext',
-    '.md': 'markdown'
+    '.md': 'myst-nb',
+    '.ipynb': 'myst-nb',
+    '.myst': 'myst-nb',
 }
 # source_suffix = '.rst'
 

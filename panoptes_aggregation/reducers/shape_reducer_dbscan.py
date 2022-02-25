@@ -65,7 +65,7 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
 
         If the "IoU" metric type is used there is also
 
-        * `tool*_clusters_sigma : The standard deviation of the average shape under the IoU metric
+        * `tool*_clusters_sigma` : The standard deviation of the average shape under the IoU metric
     '''
     shape = data_by_tool.pop('shape')
     shape_params = SHAPE_LUT[shape]
