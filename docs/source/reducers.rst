@@ -26,6 +26,11 @@ Reducers
 
 ----
 
+.. automodule:: panoptes_aggregation.reducers.point_reducer_optics
+  :members:
+
+----
+
 .. automodule:: panoptes_aggregation.reducers.point_reducer_hdbscan
   :members:
 
