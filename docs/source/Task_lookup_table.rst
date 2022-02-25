@@ -27,6 +27,8 @@ Basic task types
 |                    +----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 |                    | :mod:`panoptes_aggregation.extractors.shape_extractor`               | :mod:`panoptes_aggregation.reducers.shape_reducer_dbscan` (no cov information)        |
 |                    |                                                                      +---------------------------------------------------------------------------------------+
+|                    |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_optics` (no cov information)        |
+|                    |                                                                      +---------------------------------------------------------------------------------------+
 |                    |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_hdbscan` (no cov information)       |
 |                    +----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 |                    | :mod:`panoptes_aggregation.extractors.point_extractor` (depreciated) | :mod:`panoptes_aggregation.reducers.point_reducer` (depreciated)                      |
@@ -35,20 +37,22 @@ Basic task types
 |                    +----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 |                    | :mod:`panoptes_aggregation.extractors.shape_extractor`               | :mod:`panoptes_aggregation.reducers.shape_reducer_dbscan`                             |
 |                    |                                                                      +---------------------------------------------------------------------------------------+
+|                    |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_optics`                             |
+|                    |                                                                      +---------------------------------------------------------------------------------------+
 |                    |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_hdbscan`                            |
 +--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 | Circle             | :mod:`panoptes_aggregation.extractors.shape_extractor`               | :mod:`panoptes_aggregation.reducers.shape_reducer_dbscan`                             |
 +--------------------+                                                                      |                                                                                       |
 | Column             |                                                                      |                                                                                       |
 +--------------------+                                                                      |                                                                                       |
-| Full Width Line    |                                                                      |                                                                                       |
-+--------------------+                                                                      |                                                                                       |
+| Full Width Line    |                                                                      +---------------------------------------------------------------------------------------+
++--------------------+                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_optics`                             |
 | Full Height Line   |                                                                      |                                                                                       |
-+--------------------+                                                                      +---------------------------------------------------------------------------------------+
-| Line               |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_hdbscan`                            |
 +--------------------+                                                                      |                                                                                       |
-| Rotating Rectangle |                                                                      |                                                                                       |
+| Line               |                                                                      |                                                                                       |
 +--------------------+                                                                      |                                                                                       |
+| Rotating Rectangle |                                                                      +---------------------------------------------------------------------------------------+
++--------------------+                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_hdbscan`                            |
 | Triangle           |                                                                      |                                                                                       |
 +--------------------+                                                                      |                                                                                       |
 | Fan                |                                                                      |                                                                                       |

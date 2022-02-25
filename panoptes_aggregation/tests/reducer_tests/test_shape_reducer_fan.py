@@ -1,5 +1,6 @@
 from panoptes_aggregation.reducers.shape_reducer_dbscan import process_data as process_data_dbscan, shape_reducer_dbscan
 from panoptes_aggregation.reducers.shape_reducer_hdbscan import process_data as process_data_hdbscan, shape_reducer_hdbscan
+from panoptes_aggregation.reducers.shape_reducer_optics import process_data as process_data_optics, shape_reducer_optics
 from .base_test_class import ReducerTest
 import copy
 
@@ -163,6 +164,21 @@ TestShapeReducerFan = ReducerTest(
         'min_samples': 2
     },
     test_name='TestShapeReducerFan'
+)
+
+TestShapeReducerFanOptics = ReducerTest(
+    shape_reducer_optics,
+    process_data_optics,
+    extracted_data,
+    processed_data,
+    reduced_data,
+    'Test shape fan reducer with OPTICS',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'fan'},
+    kwargs={
+        'min_samples': 2
+    },
+    test_name='TestShapeReducerFanOptics'
 )
 
 reduced_data_hdbscan = copy.deepcopy(reduced_data)

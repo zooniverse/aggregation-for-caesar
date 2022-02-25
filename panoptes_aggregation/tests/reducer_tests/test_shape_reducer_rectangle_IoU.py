@@ -1,4 +1,5 @@
 from panoptes_aggregation.reducers.shape_reducer_dbscan import process_data as process_data_dbscan, shape_reducer_dbscan
+from panoptes_aggregation.reducers.shape_reducer_optics import process_data as process_data_optics, shape_reducer_optics
 from .base_test_class import ReducerTest
 
 
@@ -77,7 +78,7 @@ reduced_data = {
     }
 }
 
-TestShapeReducerRectangle = ReducerTest(
+TestShapeReducerRectangleIoU = ReducerTest(
     shape_reducer_dbscan,
     process_data_dbscan,
     extracted_data,
@@ -88,6 +89,23 @@ TestShapeReducerRectangle = ReducerTest(
     pkwargs={'shape': 'rectangle'},
     kwargs={
         'eps': 0.9,
+        'min_samples': 2,
+        'metric_type': 'IoU'
+    },
+    test_name='TestShapeReducerRectangleIoU',
+    round=1
+)
+
+TestShapeReducerRectangleIoUOptics = ReducerTest(
+    shape_reducer_optics,
+    process_data_optics,
+    extracted_data,
+    processed_data,
+    reduced_data,
+    'Test shape rectangle reducer with OPTICS and IoU metric',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'rectangle'},
+    kwargs={
         'min_samples': 2,
         'metric_type': 'IoU'
     },
