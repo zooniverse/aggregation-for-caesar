@@ -6,6 +6,7 @@ This module provides functions to cluster shapes extracted with
 '''
 import numpy as np
 import warnings
+
 from sklearn.cluster import OPTICS
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper

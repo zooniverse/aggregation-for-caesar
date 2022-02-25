@@ -5,6 +5,7 @@ This module provides functions to cluster shapes extracted with
 :mod:`panoptes_aggregation.extractors.shape_extractor`.
 '''
 import numpy as np
+
 from sklearn.cluster import DBSCAN
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
