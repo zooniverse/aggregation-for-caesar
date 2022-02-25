@@ -109,7 +109,7 @@ TestShapeReducerFullWidthLine = ReducerTestNoProcessing(
 )
 
 TestShapeReducerFullWidthLineOptics = ReducerTestNoProcessing(
-    shape_reducer_dbscan,
+    shape_reducer_optics,
     extracted_data,
     reduced_data,
     'Test shape fullWidthLine reducer with OPTICS',
