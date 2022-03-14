@@ -46,12 +46,13 @@ def shape_extractor(classification, **kwargs):
             if 'tool' in value:
                 # classifier v1.0
                 tool_index = value['tool']
+                key = '{0}_tool{1}'.format(task_key, tool_index)
             elif 'toolIndex' in value:
                 # classifier v2.0
                 tool_index = value['toolIndex']
+                key = '{0}_toolIndex{1}'.format(task_key, tool_index)
             else:
                 raise KeyError('Neither `tool` or `toolIndex` are in the annotation')
-            key = '{0}_tool{1}'.format(task_key, tool_index)
             frame = 'frame{0}'.format(value.get('frame', 0))
             if all(param in value for param in shape_params):
                 extract.setdefault(frame, {})

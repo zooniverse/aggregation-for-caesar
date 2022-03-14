@@ -1,5 +1,6 @@
+import unittest
 from panoptes_aggregation import extractors
-from .base_test_class import ExtractorTest
+from .base_test_class import ExtractorTest, annotation_by_task
 
 classification = {
     "annotations": [{
@@ -150,3 +151,25 @@ TestPointByFrameOneTool = ExtractorTest(
     },
     test_name='TestPointByFrameOneTool'
 )
+
+
+classification_v2 = {
+    'annotations': [{
+        'task': 'T0',
+        'taskType': 'drawing',
+        'value': [{
+            'frame': 0,
+            'toolIndex': 0,
+            'toolType': 'point',
+            'x': 452.18341064453125,
+            'y': 202.87478637695312,
+            'details': []
+        }]
+    }]
+}
+
+
+class PointExtractorByFrameDeprecation(unittest.TestCase):
+    def test_deprecation(self):
+        with self.assertRaises(DeprecationWarning):
+            extractors.point_extractor_by_frame(annotation_by_task(classification_v2), task='T0', tools=[0])

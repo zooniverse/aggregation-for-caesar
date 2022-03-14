@@ -42,6 +42,11 @@ def point_extractor_by_frame(classification, **kwargs):
     for annotation in classification['annotations']:
         task_key = annotation['task']
         for _, value in enumerate(annotation['value']):
+            if 'toolIndex' in value:
+                # classifier v2.0
+                raise DeprecationWarning(
+                    'point_extractor_by_frame does not support classifier v2.0, use the shape_extractor instead'
+                )
             frame = 'frame{0}'.format(value['frame'])
             extract.setdefault(frame, {})
             key = '{0}_tool{1}'.format(task_key, value['tool'])

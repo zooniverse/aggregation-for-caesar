@@ -43,6 +43,11 @@ def point_extractor(classification, **kwargs):
     for annotation in classification['annotations']:
         task_key = annotation['task']
         for _, value in enumerate(annotation['value']):
+            if 'toolIndex' in value:
+                # classifier v2.0
+                raise DeprecationWarning(
+                    'point_extractor does not support classifier v2.0, use the shape_extractor instead'
+                )
             key = '{0}_tool{1}'.format(task_key, value['tool'])
             if ('x' in value) and ('y' in value):
                 extract.setdefault('{0}_x'.format(key), []).append(value['x'])
