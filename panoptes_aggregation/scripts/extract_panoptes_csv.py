@@ -1,5 +1,6 @@
 from collections import OrderedDict, defaultdict
 from multiprocessing import Pool
+import packaging.version
 import copy
 import json
 import io
@@ -25,7 +26,8 @@ def get_file_instance(file):
 
 
 def get_major_version(s):
-    return s.split('.')[0]
+    v = packaging.version.parse(s)
+    return str(v.major)
 
 
 def extract_classification(
