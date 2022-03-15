@@ -25,11 +25,6 @@ def get_file_instance(file):
     return file
 
 
-def get_major_version(s):
-    v = packaging.version.parse(s)
-    return str(v.major)
-
-
 def extract_classification(
     classification_by_task,
     classification_info,
@@ -95,7 +90,7 @@ def extract_csv(
 
     extractor_config = config_yaml['extractor_config']
     workflow_id = config_yaml['workflow_id']
-    version = config_yaml['workflow_version']
+    version = packaging.version.parse(config_yaml['workflow_version'])
     number_of_extractors = sum([len(value) for key, value in extractor_config.items()])
 
     extracted_data = defaultdict(list)
@@ -106,12 +101,15 @@ def extract_csv(
 
     wdx = classifications.workflow_id == workflow_id
     assert (wdx.sum() > 0), 'There are no classifications matching the configured workflow ID'
-    if '.' in version:
+
+    classifications.workflow_version = classifications.workflow_version.apply(packaging.version.parse)
+    if version.minor > 0:
         vdx = classifications.workflow_version == version
     else:
-        vdx = classifications.workflow_version.apply(get_major_version) == version
+        next_version = packaging.version.parse(str(version.major + 1))
+        vdx = (classifications.workflow_version >= version) & (classifications.workflow_version < next_version)
 
-    assert (vdx.sum() > 0), 'There are no classificaitons matching the configured version number'
+    assert (vdx.sum() > 0), 'There are no classifications matching the configured version number'
     assert ((vdx & wdx).sum() > 0), 'There are no classifications matching the combined workflow ID and version number'
 
     widgets = [
