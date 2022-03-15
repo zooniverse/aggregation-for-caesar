@@ -52,11 +52,11 @@ def config_workflow(
         if min_version is not None:
             workflow_version['min'] = min_version
             min_version = packaging.version.parse(min_version)
-            wdx &= (workflow.version_parse >= min_version)
+            wdx &= (workflows.version_parse >= min_version)
         if max_version is not None:
             workflow_version['max'] = max_version
             max_version = packaging.version.parse(max_version)
-            wdx &= (workflow.version_parse <= max_version)
+            wdx &= (workflows.version_parse <= max_version)
     else:
         # version is given
         workflow_version = version
