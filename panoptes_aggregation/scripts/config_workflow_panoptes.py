@@ -3,6 +3,8 @@ import os
 import yaml
 import json
 import warnings
+import packaging.version
+import numpy as np
 
 warnings.filterwarnings("ignore", message="numpy.dtype size changed")
 warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
@@ -21,7 +23,8 @@ def config_workflow(
     workflow_csv,
     workflow_id,
     version=None,
-    minor_version=None,
+    min_version=None,
+    max_version=None,
     keywords={},
     output_dir=None,
     verbose=False
@@ -30,32 +33,52 @@ def config_workflow(
     with workflow_csv as workflow_csv_in:
         workflows = pandas.read_csv(workflow_csv_in, encoding='utf-8')
 
+    workflows['version_parse'] = np.array([
+        packaging.version.parse('{0}.{1}'.format(v, m))
+        for v, m in zip(workflows.version, workflows.minor_version)
+    ])
+
     wdx = (workflows.workflow_id == workflow_id)
-    if version is None:
-        version = workflows[wdx].version.max()
+    if (version is None) and (min_version is None) and (max_version is None):
+        # no version specified, take the latest version of the workflow
+        version = workflows[wdx].version_parse.max()
+        workflow_version = str(version)
         if verbose:
-            warnings.warn('No major workflow version was specified, defaulting to version {0}'.format(version))
+            warnings.warn('No workflow version was specified, defaulting to version {0}'.format(version))
+        wdx &= (workflows.version_parse == version)
+    elif (version is None):
+        # either min or max version is given
+        workflow_version = {}
+        if min_version is not None:
+            workflow_version['min'] = min_version
+            min_version = packaging.version.parse(min_version)
+            wdx &= (workflow.version_parse >= min_version)
+        if max_version is not None:
+            workflow_version['max'] = max_version
+            max_version = packaging.version.parse(max_version)
+            wdx &= (workflow.version_parse <= max_version)
+    else:
+        # version is given
+        workflow_version = version
+        version = packaging.version.parse(version)
+        wdx &= (workflows.version_parse == version)
 
-    wdx &= (workflows.version == version)
-    if minor_version is None:
-        minor_version = workflows[wdx].minor_version.max()
-        if verbose:
-            warnings.warn('No minor workflow version was specified, defaulting to version {0}'.format(minor_version))
-
-    wdx &= (workflows.minor_version == minor_version)
-    assert (wdx.sum() > 0), 'workflow ID and workflow version combination does not exist'
-    assert (wdx.sum() == 1), 'workflow ID and workflow version combination is not unique'
-    workflow = workflows[wdx].iloc[0]
+    assert (wdx.sum() > 0), 'workflow ID and workflow version(s) combination does not exist'
+    # configure off of the latest workflow when given a range
+    configure_version = workflows[wdx].version_parse.max()
+    configure_version_loc = workflows[wdx].version_parse.argmax()
+    if wdx.sum() > 1:
+        warnings.warn('A workflow range was specified, configuration is based on {0}'.format(configure_version))
+    workflow = workflows[wdx].iloc[configure_version_loc]
     workflow_tasks = json.loads(workflow.tasks)
     extractor_config = workflow_extractor_config(workflow_tasks, keywords=keywords)
-    workflow_version = '{0}.{1}'.format(version, minor_version)
     config = {
         'workflow_id': workflow_id,
         'workflow_version': workflow_version,
         'extractor_config': extractor_config
     }
     # configure the extractors
-    filename = 'Extractor_config_workflow_{0}_V{1}.yaml'.format(workflow_id, workflow_version)
+    filename = 'Extractor_config_workflow_{0}_V{1}.yaml'.format(workflow_id, configure_version)
     if output_dir is not None:
         filename = os.path.join(output_dir, filename)
     with open(filename, 'w', encoding='utf-8') as stream:
@@ -69,7 +92,7 @@ def config_workflow(
         reducer_config = {
             'reducer_config': reducer
         }
-        filename = 'Reducer_config_workflow_{0}_V{1}_{2}.yaml'.format(workflow_id, workflow_version, extractor)
+        filename = 'Reducer_config_workflow_{0}_V{1}_{2}.yaml'.format(workflow_id, configure_version, extractor)
         if output_dir is not None:
             filename = os.path.join(output_dir, filename)
         with open(filename, 'w', encoding='utf-8') as stream:
@@ -90,7 +113,7 @@ def config_workflow(
                 dropdown_label_hash = workflow_tasks[task_id][selects][int(selects_idx)][options][star][int(star_idx)]['value']
                 dropdown_label = strings_extract[dropdown_string_key]
                 strings_extract[dropdown_string_key] = {dropdown_label_hash: dropdown_label}
-    filename = 'Task_labels_workflow_{0}_V{1}.yaml'.format(workflow_id, workflow_version)
+    filename = 'Task_labels_workflow_{0}_V{1}.yaml'.format(workflow_id, configure_version)
     if output_dir is not None:
         filename = os.path.join(output_dir, filename)
     with open(filename, 'w', encoding='utf-8') as stream:
