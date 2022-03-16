@@ -160,7 +160,7 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
     @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.flatten_data', CaptureValues(extract_panoptes_csv.flatten_data))
-    def test_extract_csv_object(self, mock_to_csv, mock_pbar):
+    def test_extract_csv_object(self, mock_to_csv, *_):
         '''Test one (object) extractor makes one csv file'''
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_two_tasks,
@@ -178,7 +178,7 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
     @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.flatten_data', CaptureValues(extract_panoptes_csv.flatten_data))
-    def test_extract_csv_object_n2(self, mock_to_csv, mock_pbar):
+    def test_extract_csv_object_n2(self, mock_to_csv, *_):
         '''Test one (object) extractor makes one csv file with cpu_count==2'''
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_two_tasks,
@@ -193,7 +193,7 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
     @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.order_columns', CaptureValues(extract_panoptes_csv.order_columns))
-    def test_extract_csv_list(self, mock_to_csv, mock_pbar):
+    def test_extract_csv_list(self, mock_to_csv, *_):
         '''Test one (list) extractor makes one csv file'''
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_one_task,
@@ -211,7 +211,7 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
     @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.flatten_data', CaptureValues(extract_panoptes_csv.flatten_data))
-    def test_extract_csv_object_shape(self, mock_to_csv, mock_pbar):
+    def test_extract_csv_object_shape(self, mock_to_csv, *_):
         '''Test two (object) extractors makes two csv files'''
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_two_tasks,
@@ -239,7 +239,7 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
     @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.print')
-    def test_extract_csv_bad_classification_verbose(self, mock_print, mock_to_csv, mock_pbar):
+    def test_extract_csv_bad_classification_verbose(self, mock_print, *_):
         '''Test bad classification with verbose on'''
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_one_task,
@@ -254,7 +254,7 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
     @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.print')
-    def test_extract_csv_bad_classification_no_verbose(self, mock_print, mock_to_csv, mock_pbar):
+    def test_extract_csv_bad_classification_no_verbose(self, mock_print, *_):
         '''Test bad classification with verbose off'''
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_one_task,
