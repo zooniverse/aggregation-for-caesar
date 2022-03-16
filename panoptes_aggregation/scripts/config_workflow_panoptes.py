@@ -61,13 +61,18 @@ def config_workflow(
         # version is given
         workflow_version = version
         version = packaging.version.parse(version)
-        wdx &= (workflows.version_parse == version)
+        if version.minor == 0:
+            next_version = packaging.version.parse(str(version.major + 1))
+            wdx &= (workflows.version_parse >= version)
+            wdx &= (workflows.version_parse < next_version)
+        else:
+            wdx &= (workflows.version_parse == version)
 
     assert (wdx.sum() > 0), 'workflow ID and workflow version(s) combination does not exist'
     # configure off of the latest workflow when given a range
     configure_version = workflows[wdx].version_parse.max()
-    configure_version_loc = workflows[wdx].version_parse.argmax()
-    if wdx.sum() > 1:
+    configure_version_loc = np.argmax(workflows[wdx].version_parse)
+    if (wdx.sum() > 1) and verbose:
         warnings.warn('A workflow range was specified, configuration is based on {0}'.format(configure_version))
     workflow = workflows[wdx].iloc[configure_version_loc]
     workflow_tasks = json.loads(workflow.tasks)

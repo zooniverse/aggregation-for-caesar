@@ -272,7 +272,8 @@ def main(args=None):
             args.workflow_csv,
             args.workflow_id,
             version=args.version,
-            minor_version=args.minor_version,
+            min_version=args.min_version,
+            max_version=args.max_version,
             keywords=args.keywords,
             output_dir=args.dir,
             verbose=args.verbose
