@@ -1,4 +1,3 @@
-from tabnanny import verbose
 import unittest
 from unittest.mock import patch, call
 from io import StringIO
