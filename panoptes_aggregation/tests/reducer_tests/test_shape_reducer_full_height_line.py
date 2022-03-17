@@ -1,5 +1,6 @@
 from panoptes_aggregation.reducers.shape_reducer_dbscan import shape_reducer_dbscan
 from panoptes_aggregation.reducers.shape_reducer_hdbscan import shape_reducer_hdbscan
+from panoptes_aggregation.reducers.shape_reducer_optics import shape_reducer_optics
 from .base_test_class import ReducerTestNoProcessing
 import copy
 
@@ -105,6 +106,19 @@ TestShapeReducerFullHeightLine = ReducerTestNoProcessing(
         'shape': 'fullHeightLine'
     },
     test_name='TestShapeReducerFullHeightLine'
+)
+
+TestShapeReducerFullHeightLineOptics = ReducerTestNoProcessing(
+    shape_reducer_optics,
+    extracted_data,
+    reduced_data,
+    'Test shape fullHeightLine reducer with OPTICS',
+    network_kwargs=kwargs_extra_data,
+    kwargs={
+        'min_samples': 2,
+        'shape': 'fullHeightLine'
+    },
+    test_name='TestShapeReducerFullHeightLineOptics'
 )
 
 reduced_data_hdbscan = copy.deepcopy(reduced_data)

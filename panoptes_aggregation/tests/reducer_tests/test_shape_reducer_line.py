@@ -1,5 +1,6 @@
 from panoptes_aggregation.reducers.shape_reducer_dbscan import process_data as process_data_dbscan, shape_reducer_dbscan
 from panoptes_aggregation.reducers.shape_reducer_hdbscan import process_data as process_data_hdbscan, shape_reducer_hdbscan
+from panoptes_aggregation.reducers.shape_reducer_optics import process_data as process_data_optics, shape_reducer_optics
 from .base_test_class import ReducerTest
 import copy
 
@@ -147,6 +148,29 @@ TestShapeReducerLine = ReducerTest(
     test_name='TestShapeReducerLine'
 )
 
+reduced_data_optics = copy.deepcopy(reduced_data)
+reduced_data_optics['frame1']['T0_tool1_cluster_labels'] = [0, 0]
+reduced_data_optics['frame1']['T0_tool1_clusters_count'] = [2]
+reduced_data_optics['frame1']['T0_tool1_clusters_x1'] = [60.0]
+reduced_data_optics['frame1']['T0_tool1_clusters_x2'] = [60.0]
+reduced_data_optics['frame1']['T0_tool1_clusters_y1'] = [60.0]
+reduced_data_optics['frame1']['T0_tool1_clusters_y2'] = [60.0]
+
+TestShapeReducerLineOptics = ReducerTest(
+    shape_reducer_optics,
+    process_data_optics,
+    extracted_data,
+    processed_data,
+    reduced_data_optics,
+    'Test shape line reducer with OPTICS',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'line'},
+    kwargs={
+        'min_samples': 2
+    },
+    test_name='TestShapeReducerLineOptics'
+)
+
 processed_data_symmetric = {
     'shape': 'line',
     'symmetric': True,
@@ -234,6 +258,24 @@ TestShapeReducerLineSymmetric = ReducerTest(
         'min_samples': 2
     },
     test_name='TestShapeReducerLineSymmetric'
+)
+
+TestShapeReducerLineSymmetricOptics = ReducerTest(
+    shape_reducer_optics,
+    process_data_optics,
+    extracted_data,
+    processed_data_symmetric,
+    reduced_data_symmetric,
+    'Test shape line reducer with OPTICS with symmetries',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={
+        'shape': 'line',
+        'symmetric': True
+    },
+    kwargs={
+        'min_samples': 2
+    },
+    test_name='TestShapeReducerLineSymmetricOptics'
 )
 
 reduced_data_hdbscan = copy.deepcopy(reduced_data)

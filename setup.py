@@ -65,7 +65,8 @@ setup(
             'gitpython>=3.0.0,<3.2'
         ],
         'doc': [
-            'recommonmark>=0.5.0,<0.8',
+            'matplotlib>=3.5.1,<3.6',
+            'myst-nb>=0.13.2,<0.14',
             'sphinx>=2.2.2,<4.5',
             'sphinxcontrib-httpdomain>=1.7.0,<1.9',
             'sphinx_rtd_theme>=0.4.3,<1.1'
@@ -96,6 +97,7 @@ setup(
         'pyyaml>=5.1,<6.1',
         'scikit-learn>=1.0.0,<1.0.3',
         'scipy>=1.2,<1.8.1',
-        'werkzeug>=0.14,<2.0.4'
+        'werkzeug>=0.14,<2.0.4',
+        'shapely>=1.7.1,<1.7.2',
     ]
 )
