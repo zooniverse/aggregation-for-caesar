@@ -121,43 +121,9 @@ class CaptureValues(object):
 
 
 mock_question_extractor = MagicMock()
-# side effects defined for each test to ensure they are used in the correct order
-
 mock_shape_extractor = MagicMock()
-mock_shape_extractor.side_effect = [
-    {'yes': 1},
-    {'yes': 1},
-    {'no': 1},
-    {'no': 1},
-]
-
 mock_survey_extractor = MagicMock()
-mock_survey_extractor.side_effect = [
-    [
-        {
-            'choice': 'dog',
-            'answers_howmany': {'1': 1}
-        },
-        {
-            'choice': 'cat',
-            'answers_howmany': {'3': 1}
-        },
-    ],
-    [
-        {
-            'choice': 'cat',
-            'answers_howmany': {'4': 1}
-        },
-    ]
-]
-
 mock_bad_extractor = MagicMock()
-mock_bad_extractor.side_effect = [
-    Exception(),
-    Exception(),
-    Exception(),
-    Exception()
-]
 
 mock_extractors_dict = {
     'question_extractor': mock_question_extractor,
@@ -289,6 +255,24 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.order_columns', CaptureValues(extract_panoptes_csv.order_columns))
     def test_extract_csv_list(self, mock_to_csv, *_):
         '''Test one (list) extractor makes one csv file'''
+        mock_survey_extractor.side_effect = [
+            [
+                {
+                    'choice': 'dog',
+                    'answers_howmany': {'1': 1}
+                },
+                {
+                    'choice': 'cat',
+                    'answers_howmany': {'3': 1}
+                },
+            ],
+            [
+                {
+                    'choice': 'cat',
+                    'answers_howmany': {'4': 1}
+                },
+            ]
+        ]
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_one_task,
             self.config_yaml_survey,
@@ -307,6 +291,12 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.flatten_data', CaptureValues(extract_panoptes_csv.flatten_data))
     def test_extract_csv_object_shape(self, mock_to_csv, *_):
         '''Test two (object) extractors makes two csv files'''
+        mock_shape_extractor.side_effect = [
+            {'yes': 1},
+            {'yes': 1},
+            {'no': 1},
+            {'no': 1},
+        ]
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_two_tasks,
             self.config_yaml_two,
@@ -335,6 +325,10 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.print')
     def test_extract_csv_bad_classification_verbose(self, mock_print, *_):
         '''Test bad classification with verbose on'''
+        mock_bad_extractor.side_effect = [
+            Exception(),
+            Exception()
+        ]
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_one_task,
             self.config_yaml_fail,
@@ -350,6 +344,10 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.print')
     def test_extract_csv_bad_classification_no_verbose(self, mock_print, *_):
         '''Test bad classification with verbose off'''
+        mock_bad_extractor.side_effect = [
+            Exception(),
+            Exception()
+        ]
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_one_task,
             self.config_yaml_fail,
