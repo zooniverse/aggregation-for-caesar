@@ -33,7 +33,7 @@ def main(args=None):
     )
     config_numbers = config_parser.add_argument_group(
         'Workflow ID and version numbers',
-        'Enter the workflow ID, major version number, and minor version number',
+        'Enter the workflow ID with a version number or version range',
         gooey_options={
             'show_border': False,
             'columns': 1

@@ -41,7 +41,9 @@ Use the command line tool to make configuration `yaml` files that are used to se
 
 ```bash
 usage: panoptes_aggregation config [-h] [-d DIR] [-v VERSION]
-                                   [-m MINOR_VERSION] [-k KEYWORDS] [-vv]
+                                   [--min_version MIN_VERSION]
+                                   [--max_version MAX_VERSION] [-k KEYWORDS]
+                                   [-vv]
                                    workflow_csv workflow_id
 
 Make configuration files for panoptes data extraction and reduction based on a
@@ -60,10 +62,23 @@ Workflow ID and version numbers:
 
   workflow_id           the workflow ID you would like to extract
   -v VERSION, --version VERSION
-                        The major workflow version to extract
-  -m MINOR_VERSION, --minor_version MINOR_VERSION
-                        The minor workflow version used to create the lookup
-                        table for the workflow content
+                        The workflow version to extract. If only a major
+                        version is given (e.g. -v 3) all minor versions will
+                        be extracted at once. If a minor version is provided
+                        (e.g. -v 3.14) only that specific version will be
+                        extracted.
+  --min_version MIN_VERSION
+                        The minimum workflow version to extract (inclusive).
+                        This can be provided as either a major version (e.g.
+                        --min_version 3) or a major version with a minor
+                        version (e.g. --min_version 3.14). If this flag is
+                        provided the --version flag will be ignored.
+  --max_version MAX_VERSION
+                        The maximum workflow version to extract (inclusive).
+                        This can be provided as either a major version (e.g.
+                        --max_version 3) or a major version with a minor
+                        version (e.g. --max_version 3.14). If this flag is
+                        provided the --version flag will be ignored.
 
 Other keywords:
   Additional keywords to be passed into the configuration files
@@ -85,7 +100,7 @@ Other options:
 
 ### Example: Penguin Watch
 ```bash
-panoptes_aggregation config penguin-watch-workflows.csv 6465 -v 52 -m 76
+panoptes_aggregation config penguin-watch-workflows.csv 6465 -v 52.76
 ```
 
 This creates four files:
@@ -103,6 +118,7 @@ Use the command line tool to extract your data into one flat `csv` file for each
 
 ```bash
 usage: panoptes_aggregation extract [-h] [-d DIR] [-o OUTPUT] [-O]
+                                    [-c CPU_COUNT] [-vv]
                                     classification_csv extractor_config
 
 Extract data from panoptes classifications based on the workflow
@@ -125,6 +141,10 @@ What directory and base name should be used for the extractions:
 Other options:
   -O, --order           Arrange the data columns in alphabetical order before
                         saving
+  -c CPU_COUNT, --cpu_count CPU_COUNT
+                        How many cpu cores to use during extraction
+  -vv, --verbose        increase output verbosity
+
 ```
 
 ### Example: Penguin Watch
@@ -165,8 +185,8 @@ This creates two `csv` files (one for each extractor listed in the config file):
 Note: this only works for some task types, see the [documentation](https://aggregation-caesar.zooniverse.org/docs) for a full list of supported task types.
 
 ```bash
-usage: panoptes_aggregation reduce [-h] [-F {first,last,all}] [-O] [-d DIR]
-                                   [-o OUTPUT] [-s]
+usage: panoptes_aggregation reduce [-h] [-F {first,last,all}] [-O]
+                                   [-c CPU_COUNT] [-d DIR] [-o OUTPUT] [-s]
                                    extracted_csv reducer_config
 
 reduce data from panoptes classifications based on the extracted data
@@ -192,6 +212,8 @@ Reducer options:
                         for one subject
   -O, --order           Arrange the data columns in alphabetical order before
                         saving
+  -c CPU_COUNT, --cpu_count CPU_COUNT
+                        How many cpu cores to use during reduction
 ```
 
 ### Example: Penguin Watch
