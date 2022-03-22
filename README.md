@@ -19,20 +19,25 @@ Instal the latest stable release:
 pip install panoptes_aggregation
 ```
 
-Or for development or testing, you can install the development version directly from GitHub:
-```bash
-pip install -U git+git://github.com/zooniverse/aggregation-for-caesar.git
-```
-
 Upgrade and existing installation:
 ```bash
 pip install -U panoptes_aggregation
+```
+
+Or for development or testing, you can install the latest development version directly from GitHub:
+```bash
+pip install -U git+https://github.com/zooniverse/aggregation-for-caesar.git
 ```
 
 #### Install the Graphical User Interface (GUI)
 If you would like to use the GUI instead of the command line install the package with:
 ```bash
 pip install "panoptes_aggregation[gui]"
+```
+
+Or for the latest development build from GitHub:
+```bash
+pip install -U git+https://github.com/zooniverse/aggregation-for-caesar.git#egg=panoptes-aggregation[gui]
 ```
 
 #### Anaconda build of python
