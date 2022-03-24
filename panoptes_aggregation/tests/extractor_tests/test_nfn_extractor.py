@@ -338,6 +338,134 @@ TestNfNNotWeDigBio2021 = ExtractorTest(
     test_name='TestNfNNotWeDigBio2021'
 )
 
+classification_we_dig_bio_april_2022 = {
+    "annotations": [{
+        "task": "T99",
+        "value": [
+            {
+                "task": "T11",
+                "value": [
+                    {
+                        "value": 2001,
+                        "option": True
+                    }
+                ]
+            }
+        ]
+    }],
+    "metadata": {
+        "utc_offset": "18000",
+    },
+    "subject": {
+        "metadata": {
+            "country": "United States",
+        }
+    },
+    "created_at": "2022-04-09T05:30:00.000Z",
+}
+
+expected_we_dig_bio_april_2022 = {
+    "workflow": "herbarium",
+    "decade": "00s",
+    "time": "lunchbreak",
+    "we_dig_bio": 2022,
+    "country": "United States"
+}
+
+TestNfNWeDigBioApril2022 = ExtractorTest(
+    extractors.nfn_extractor,
+    classification_we_dig_bio_april_2022,
+    expected_we_dig_bio_april_2022,
+    'Test NfN during April, 2022, WeDigBio event with year as nested task and country from metadata at lunchtime local time',
+    kwargs={'year': 'T11', 'workflow': 'herbarium', 'country': 'metadata'},
+    test_name='TestNfNWeDigBioApril2022'
+)
+
+classification_we_dig_bio_october_2022 = {
+    "annotations": [{
+        "task": "T99",
+        "value": [
+            {
+                "task": "T11",
+                "value": [
+                    {
+                        "value": 2001,
+                        "option": True
+                    }
+                ]
+            }
+        ]
+    }],
+    "metadata": {
+        "utc_offset": "18000",
+    },
+    "subject": {
+        "metadata": {
+            "country": "United States",
+        }
+    },
+    "created_at": "2022-10-14T05:30:00.000Z",
+}
+
+expected_we_dig_bio_october_2022 = {
+    "workflow": "herbarium",
+    "decade": "00s",
+    "time": "lunchbreak",
+    "we_dig_bio": 2022,
+    "country": "United States"
+}
+
+TestNfNWeDigBioOctober2022 = ExtractorTest(
+    extractors.nfn_extractor,
+    classification_we_dig_bio_october_2022,
+    expected_we_dig_bio_october_2022,
+    'Test NfN during October, 2022, WeDigBio event with year as nested task and country from metadata at lunchtime local time',
+    kwargs={'year': 'T11', 'workflow': 'herbarium', 'country': 'metadata'},
+    test_name='TestNfNWeDigBioOctober2022'
+)
+
+classification_not_we_dig_bio_2022 = {
+    "annotations": [{
+        "task": "T99",
+        "value": [
+            {
+                "task": "T11",
+                "value": [
+                    {
+                        "value": 2001,
+                        "option": True
+                    }
+                ]
+            }
+        ]
+    }],
+    "metadata": {
+        "utc_offset": "18000",
+    },
+    "subject": {
+        "metadata": {
+            "country": "United States",
+        }
+    },
+    "created_at": "2022-07-16T05:30:00.000Z",
+}
+
+expected_not_we_dig_bio_2022 = {
+    "workflow": "herbarium",
+    "decade": "00s",
+    "time": "lunchbreak",
+    "country": "United States"
+}
+
+TestNfNNotWeDigBio2022 = ExtractorTest(
+    extractors.nfn_extractor,
+    classification_not_we_dig_bio_2022,
+    expected_not_we_dig_bio_2022,
+    'Test NfN during 2022, not during a WeDigBio event, with year as nested task and country from metadata at lunchtime local time',
+    kwargs={'year': 'T11', 'workflow': 'herbarium', 'country': 'metadata'},
+    test_name='TestNfNNotWeDigBio2022'
+)
+
 classification_bad_year = {
     "annotations": [
         {
