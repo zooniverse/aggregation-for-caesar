@@ -128,9 +128,9 @@ def get_feedback_info(feedback_dict):
     # hold the gold standard data (see feedback_strategies.py)
     try:
         key_list = FEEDBACK_STRATEGIES[feedback_dict[0]['strategy']]
-    except IndexError: # feedback_dict is empty, so return empty dict
+    except IndexError:
+        # feedback_dict is empty, so return empty dict
         return {}
-
 
     for classification in feedback_dict:
         # retrieve the success/failure flag for each classification
