@@ -1,5 +1,9 @@
 #!/bin/bash -e
 
+# set REVISION env var from commit_id.txt or default
+export COMMIT_ID=$(cat commit_id.txt 2> /dev/null)
+export REVISION="${COMMIT_ID:-asdf123jkl456}"
+
 # if there is no endpoints file create it
 if ! [ -f endpoints.yml ]; then
   cp endpoints.yml.template endpoints.yml
