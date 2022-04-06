@@ -14,6 +14,7 @@ jobs:
       repo_name: aggregation-for-caesar
       commit_id: ${{ github.sha }}
       latest: true
+      build-args: "REVISION=${{ github.sha }}"
 
   deploy_production:
     name: Deploy to Production
