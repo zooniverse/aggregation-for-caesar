@@ -1,4 +1,4 @@
-name: Deploy to Staging
+name: Deploy to Production
 
 on:
   push:
@@ -15,8 +15,8 @@ jobs:
       commit_id: ${{ github.sha }}
       latest: true
 
-  deploy_staging:
-    name: Deploy to Staging
+  deploy_production:
+    name: Deploy to Production
     uses: zooniverse/ci-cd/.github/workflows/deploy_app.yaml@main
     needs: build_and_push_image
     with:
@@ -31,12 +31,12 @@ jobs:
   slack_notification:
     name: Slack notification
     uses: zooniverse/ci-cd/.github/workflows/slack_notification.yaml@main
-    needs: deploy_staging
+    needs: deploy_production
     if: always()
     with:
       commit_id: ${{ github.sha }}
-      job_name: Deploy to Staging / deploy_app
-      status: ${{ needs.deploy_staging.result }}
+      job_name: Deploy to Production / deploy_app
+      status: ${{ needs.deploy_production.result }}
       title: "Aggregation deploy complete"
       title_link: "https://aggregation-caesar.zooniverse.org"
     secrets:
