@@ -106,3 +106,15 @@ spec:
   selector:
     matchLabels:
       app: aggregation-caesar
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aggregation-caesar
+spec:
+  selector:
+    app: aggregation-caesar
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
