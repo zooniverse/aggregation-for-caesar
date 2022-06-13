@@ -58,7 +58,7 @@ setup(
             'flask>=1.0,<2.2',
             'flask-cors>=3.0,<3.1',
             'panoptes-client>=1.1,<1.5',
-            'requests>=2.4.2,<2.28',
+            'requests>=2.4.2,<2.29',
             'gunicorn>=20.0,<20.2',
             'sentry-sdk[flask]>=0.13.5,<1.6',
             'newrelic>=5.4.0,<7.12.1',
