@@ -1,20 +1,25 @@
 from importlib import import_module
-
 from unittest.mock import MagicMock, PropertyMock, Mock, patch
 from nose.tools import assert_equal, assert_raises, assert_count_equal, assert_is_instance
-from panoptes_client import Panoptes, User
-from panoptes_client.panoptes import PanoptesAPIException
 import requests
+import unittest
 
 import os
 from os import environ
 
+try:
+    from panoptes_client import Panoptes, User
+    from panoptes_client.panoptes import PanoptesAPIException
+    panoptes = import_module('panoptes_aggregation.panoptes', __name__).panoptes_testing
+    # make the API client connect call a no-op for all tests
+    Panoptes.connect = Mock()
+    OFFLINE = False
+except ImportError:
+    OFFLINE = True
+
+
 environ.setdefault('AGGREGATION_PANOPTES_ID', 'TEST')
 environ.setdefault('AGGREGATION_PANOPTES_SECRET', 'TEST')
-
-panoptes = import_module('panoptes_aggregation.panoptes', __name__).panoptes_testing
-# make the API client connect call a no-op for all tests
-Panoptes.connect = Mock()
 
 
 def build_mock_user(**kwargs):
@@ -24,6 +29,7 @@ def build_mock_user(**kwargs):
     return mock_user
 
 
+@unittest.skipIf(OFFLINE, 'Installed in offline mode')
 def test_userify():
     panoptes._read_config = Mock(return_value={
         'endpoints': {
@@ -57,6 +63,7 @@ def test_userify():
     (requests.post).assert_called_once()
 
 
+@unittest.skipIf(OFFLINE, 'Installed in offline mode')
 def test_unique():
     # removes duplicate elements
     assert_count_equal(panoptes._unique([]), [])
@@ -68,6 +75,7 @@ def test_unique():
     assert_count_equal(panoptes._unique([1, 2, 3, 1]), [1, 2, 3])
 
 
+@unittest.skipIf(OFFLINE, 'Installed in offline mode')
 def test_flatten():
     # makes any combination of lists and not-lists into a single flat list
     assert_count_equal(list(panoptes._flatten([])), [])
@@ -82,6 +90,7 @@ def test_flatten():
     assert_count_equal(list(panoptes._flatten([[1], [], 2])), [1, 2])
 
 
+@unittest.skipIf(OFFLINE, 'Installed in offline mode')
 def test_discover_user_lookup_fields():
     # can find list of allowd user fields
     allowed_user_fields = {'login': '', 'credited_name': '', 'display_name': '', 'id': ''}
@@ -98,6 +107,7 @@ def test_discover_user_lookup_fields():
     assert_count_equal(panoptes._discover_user_lookup_fields({'destination': 'v1', 'f2': 'v2'}), [])
 
 
+@unittest.skipIf(OFFLINE, 'Installed in offline mode')
 def test_build_user_hash():
     mock_user = build_mock_user(id=1, login='login', display_name='display_name')
 
@@ -108,6 +118,7 @@ def test_build_user_hash():
     assert_equal(panoptes._build_user_hash(mock_user, ['login', 'display_name']), {'id': 1, 'login': 'login', 'display_name': 'display_name'})
 
 
+@unittest.skipIf(OFFLINE, 'Installed in offline mode')
 def test_retrieve_user():
     mock_user1 = build_mock_user(id=1, login='login', display_name='display_name')
     mock_user2 = build_mock_user(id=2, login='login', display_name='display_name')
@@ -127,6 +138,7 @@ def test_retrieve_user():
     (User.find).assert_not_called()
 
 
+@unittest.skipIf(OFFLINE, 'Installed in offline mode')
 def test_retrieve_user_error():
     User.find = MagicMock(side_effect=[PanoptesAPIException('test')])
     found_user = panoptes._retrieve_user(10)
@@ -134,6 +146,7 @@ def test_retrieve_user_error():
     assert_equal(found_user.id, 10)
 
 
+@unittest.skipIf(OFFLINE, 'Installed in offline mode')
 def test_discover_user_ids():
     # finds user_id if present
     assert_count_equal(panoptes._discover_user_ids({'foo': 'bar'}), [])
@@ -150,11 +163,13 @@ def test_discover_user_ids():
     assert_count_equal(panoptes._discover_user_ids({'user_ids': [3, 4], 'user_id': 5}), [3, 4, 5])
 
 
+@unittest.skipIf(OFFLINE, 'Installed in offline mode')
 def user_find_side_effect(*args, **_):
     user_id = args[0]
     return build_mock_user(id=user_id, login='login {0}'.format(user_id), display_name='display_name {0}'.format(user_id))
 
 
+@unittest.skipIf(OFFLINE, 'Installed in offline mode')
 def test_stuff_object():
     User.find = MagicMock(side_effect=user_find_side_effect)
 
@@ -187,6 +202,7 @@ def test_stuff_object():
     assert_equal(panoptes._stuff_object({'foo': {'user_id': 3}, 'user_id': 4}, []), {'foo': {'user_id': 3, 'users': [{'id': 3}]}, 'user_id': 4, 'users': [{'id': 4}]})
 
 
+@unittest.skipIf(OFFLINE, 'Installed in offline mode')
 def test_forward_contents():
     panoptes._read_config = Mock(return_value={
         'endpoints': {
