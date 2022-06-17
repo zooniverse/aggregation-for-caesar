@@ -57,7 +57,7 @@ setup(
         'online': [
             'flask>=1.0,<2.2',
             'flask-cors>=3.0,<3.1',
-            'panoptes-client>=1.1,<1.5',
+            'panoptes-client>=1.1,<1.6',
             'requests>=2.4.2,<2.29',
             'gunicorn>=20.0,<20.2',
             'sentry-sdk[flask]>=0.13.5,<1.6',
