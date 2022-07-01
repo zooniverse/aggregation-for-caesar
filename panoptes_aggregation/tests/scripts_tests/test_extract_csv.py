@@ -6,6 +6,7 @@ import pandas
 from pandas.testing import assert_frame_equal
 import panoptes_aggregation.scripts.extract_panoptes_csv as extract_panoptes_csv
 import platform
+import multiprocessing
 
 if platform.system() == 'Windows':
     WINDOWS = True
@@ -106,7 +107,6 @@ mock_shape_extractor.side_effect = [
     {'no': 1},
 ]
 
-
 mock_survey_extractor = MagicMock()
 mock_survey_extractor.side_effect = [
     [
@@ -160,7 +160,7 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
     @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.flatten_data', CaptureValues(extract_panoptes_csv.flatten_data))
-    def test_extract_csv_object(self, mock_to_csv, mock_pbar):
+    def test_extract_csv_object(self, mock_to_csv, *_):
         '''Test one (object) extractor makes one csv file'''
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_two_tasks,
@@ -178,22 +178,29 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
     @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.flatten_data', CaptureValues(extract_panoptes_csv.flatten_data))
-    def test_extract_csv_object_n2(self, mock_to_csv, mock_pbar):
+    def test_extract_csv_object_n2(self, mock_to_csv, *_):
         '''Test one (object) extractor makes one csv file with cpu_count==2'''
+        # on Mac's the multiprocessing start method needs to be set to 'fork' rather than 'spawn'
+        # https://stackoverflow.com/a/70440892/1052418
+        start_method = multiprocessing.get_start_method()
+        multiprocessing.set_start_method('fork', force=True)
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_two_tasks,
             self.config_yaml_question,
-            cpu_count=2
+            cpu_count=2,
+            verbose=True
         )
         output_path = os.path.join(os.getcwd(), 'question_extractor_extractions.csv')
         self.assertEqual(output_file_names, [output_path])
         mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
+        # set back to default
+        multiprocessing.set_start_method(start_method, force=True)
 
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
     @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.order_columns', CaptureValues(extract_panoptes_csv.order_columns))
-    def test_extract_csv_list(self, mock_to_csv, mock_pbar):
+    def test_extract_csv_list(self, mock_to_csv, *_):
         '''Test one (list) extractor makes one csv file'''
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_one_task,
@@ -211,7 +218,7 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
     @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.flatten_data', CaptureValues(extract_panoptes_csv.flatten_data))
-    def test_extract_csv_object_shape(self, mock_to_csv, mock_pbar):
+    def test_extract_csv_object_shape(self, mock_to_csv, *_):
         '''Test two (object) extractors makes two csv files'''
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_two_tasks,
@@ -239,7 +246,7 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
     @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.print')
-    def test_extract_csv_bad_classification_verbose(self, mock_print, mock_to_csv, mock_pbar):
+    def test_extract_csv_bad_classification_verbose(self, mock_print, *_):
         '''Test bad classification with verbose on'''
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_one_task,
@@ -254,7 +261,7 @@ class TestExtractCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
     @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.print')
-    def test_extract_csv_bad_classification_no_verbose(self, mock_print, mock_to_csv, mock_pbar):
+    def test_extract_csv_bad_classification_no_verbose(self, mock_print, *_):
         '''Test bad classification with verbose off'''
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_one_task,
