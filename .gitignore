@@ -91,6 +91,7 @@ celerybeat-schedule
 .venv
 venv/
 ENV/
+__pypackages__/
 
 # Spyder project settings
 .spyderproject
@@ -115,3 +116,6 @@ endpoints.yml
 
 .vscode/
 .noseids
+.pdm.toml
+.pytest_cache
+.idea
