@@ -2,8 +2,3 @@
 format = pylint
 exclude = dist/*,cover/*,build/*,.ropeproject/*,docs/*,__init__.py
 ignore = E402,E501,E722,E741,W503,E128,BLK100,B006,B001
-
-[nosetests]
-with-coverage = 1
-cover-package = panoptes_aggregation
-cover-erase = 1
