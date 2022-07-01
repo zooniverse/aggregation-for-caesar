@@ -43,17 +43,17 @@ online = [
     "gunicorn>=20.0",
     "sentry-sdk[flask]>=0.13.5",
     "newrelic>=5.4.0",
-    "gitpython>=3.0.0"
+    "gitpython>=3.0.0",
 ]
 gui = [
-    "Gooey>=1.0.3"
+    "Gooey>=1.0.8.1",
 ]
 doc = [
     "matplotlib>=3.5.1",
     "myst-nb>=0.13.2",
     "sphinx>=2.2.2",
     "sphinxcontrib-httpdomain>=1.7.0",
-    "sphinx_rtd_theme>=0.4.3"
+    "sphinx_rtd_theme>=0.4.3",
 ]
 test = [
     "coverage>=4.5.3",
@@ -62,7 +62,7 @@ test = [
     "flake8-black>=0.1.1",
     "flake8-bugbear>=20.1.2",
     "pytest>=7.1.2",
-    "pytest-subtests>=0.8.0"
+    "pytest-subtests>=0.8.0",
 ]
 
 [project.scripts]
@@ -88,6 +88,7 @@ source-includes = [
     "panoptes_aggregation/scripts/icons/*.ico"
 ]
 
+[tool.pdm.dev-dependencies]
 [tool.coverage.run]
 omit = [
     "*test*",

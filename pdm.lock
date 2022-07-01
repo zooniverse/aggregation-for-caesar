@@ -318,7 +318,7 @@ summary = "Internationalized Domain Names in Applications (IDNA)"
 
 [[package]]
 name = "imagesize"
-version = "1.4.0"
+version = "1.4.1"
 requires_python = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 summary = "Getting image size from png/jpeg/jpeg2000/gif file"
 
@@ -1124,9 +1124,8 @@ summary = ""
 
 [[package]]
 name = "typing-extensions"
-version = "4.2.0"
-requires_python = ">=3.7"
-summary = "Backported and Experimental Type Hints for Python 3.7+"
+version = "3.10.0.2"
+summary = "Backported and Experimental Type Hints for Python 3.5+"
 
 [[package]]
 name = "urllib3"
@@ -1169,7 +1168,7 @@ summary = "Backport of pathlib-compatible object wrapper for zip files"
 
 [metadata]
 lock_version = "3.1"
-content_hash = "sha256:89648a1396cb128c0678bc1bf61ca42015a71e3304974680fd7f9382b008eb6a"
+content_hash = "sha256:328d3cf2bbd4f1103dc83e8723d23ae17325f4ababadd10a4bd244276df5f10c"
 
 [metadata.files]
 "alabaster 0.7.12" = [
@@ -1564,9 +1563,9 @@ content_hash = "sha256:89648a1396cb128c0678bc1bf61ca42015a71e3304974680fd7f9382b
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
     {file = "idna-3.3.tar.gz", hash = "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"},
 ]
-"imagesize 1.4.0" = [
-    {file = "imagesize-1.4.0-py2.py3-none-any.whl", hash = "sha256:4d19f022f0e38e0391e6cdebd8a28b0a7733a787482490e9d056457b97eff861"},
-    {file = "imagesize-1.4.0.tar.gz", hash = "sha256:6ed6ac091716f0a6f1f60f3743069c6dc4c1d8a8e8817f4d7a6976cf3fbb2548"},
+"imagesize 1.4.1" = [
+    {file = "imagesize-1.4.1-py2.py3-none-any.whl", hash = "sha256:0d8d18d08f840c19d0ee7ca1fd82490fdc3729b7ac93f49870406ddde8ef8d8b"},
+    {file = "imagesize-1.4.1.tar.gz", hash = "sha256:69150444affb9cb0d5cc5a92b3676f0b2fb7cd9ae39e947a5e11a36b4497cd4a"},
 ]
 "importlib-metadata 4.12.0" = [
     {file = "importlib_metadata-4.12.0-py3-none-any.whl", hash = "sha256:7401a975809ea1fdc658c3aa4f78cc2195a0e019c5cbc4c06122884e9ae80c23"},
@@ -2495,9 +2494,10 @@ content_hash = "sha256:89648a1396cb128c0678bc1bf61ca42015a71e3304974680fd7f9382b
     {file = "traitlets-5.3.0-py3-none-any.whl", hash = "sha256:65fa18961659635933100db8ca120ef6220555286949774b9cfc106f941d1c7a"},
     {file = "traitlets-5.3.0.tar.gz", hash = "sha256:0bb9f1f9f017aa8ec187d8b1b2a7a6626a2a1d877116baba52a129bfa124f8e2"},
 ]
-"typing-extensions 4.2.0" = [
-    {file = "typing_extensions-4.2.0-py3-none-any.whl", hash = "sha256:6657594ee297170d19f67d55c05852a874e7eb634f4f753dbd667855e07c1708"},
-    {file = "typing_extensions-4.2.0.tar.gz", hash = "sha256:f1c24655a0da0d1b67f07e17a5e6b2a105894e6824b92096378bb3668ef02376"},
+"typing-extensions 3.10.0.2" = [
+    {file = "typing_extensions-3.10.0.2-py2-none-any.whl", hash = "sha256:d8226d10bc02a29bcc81df19a26e56a9647f8b0a6d4a83924139f4a8b01f17b7"},
+    {file = "typing_extensions-3.10.0.2-py3-none-any.whl", hash = "sha256:f1d25edafde516b146ecd0613dabcc61409817af4766fbbcfb8d1ad4ec441a34"},
+    {file = "typing_extensions-3.10.0.2.tar.gz", hash = "sha256:49f75d16ff11f1cd258e1b988ccff82a3ca5570217d7ad8c5f48205dd99a677e"},
 ]
 "urllib3 1.26.9" = [
     {file = "urllib3-1.26.9-py2.py3-none-any.whl", hash = "sha256:44ece4d53fb1706f667c9bd1c648f5469a2ec925fcf3a776667042d645472c14"},
