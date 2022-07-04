@@ -10,6 +10,7 @@ import scipy.optimize
 import numpy
 from functools import lru_cache
 
+
 @lru_cache(maxsize=100)
 def panoptes_to_geometry(params, shape):
     '''Convert shapes created with the Panoptes Front End (PFE) to shapely
