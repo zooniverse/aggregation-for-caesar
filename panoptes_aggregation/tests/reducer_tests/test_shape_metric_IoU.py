@@ -12,20 +12,20 @@ class TestIoUMetric(unittest.TestCase):
     def test_panoptes_to_geometry_rect(self):
         '''Test panoptes_to_geometry with rectangle'''
         expected = shapely.geometry.box(3, 5, 8, 8)
-        result = IoU.panoptes_to_geometry([3, 5, 5, 3], 'rectangle')
+        result = IoU.panoptes_to_geometry(tuple([3, 5, 5, 3]), 'rectangle')
         self.assertEqual(result, expected)
 
     def test_panoptes_to_geometry_rot_rect(self):
         '''Test panoptes_to_geometry with rotating rectangle'''
         expected = shapely.geometry.box(3, 5, 8, 8)
         expected = shapely.affinity.rotate(expected, 45)
-        result = IoU.panoptes_to_geometry([3, 5, 5, 3, 45], 'rotateRectangle')
+        result = IoU.panoptes_to_geometry(tuple([3, 5, 5, 3, 45]), 'rotateRectangle')
         self.assertEqual(result, expected)
 
     def test_panoptes_to_geometry_circle(self):
         '''Test panoptes_to_geometry with circle'''
         expected = shapely.geometry.Point(10, 12).buffer(5)
-        result = IoU.panoptes_to_geometry([10, 12, 5], 'circle')
+        result = IoU.panoptes_to_geometry(tuple([10, 12, 5]), 'circle')
         self.assertEqual(result, expected)
 
     def test_panoptes_to_geometry_ellipse(self):
@@ -33,7 +33,7 @@ class TestIoUMetric(unittest.TestCase):
         expected = shapely.geometry.Point(10, 12).buffer(1)
         expected = shapely.affinity.scale(expected, 3, 5)
         expected = shapely.affinity.rotate(expected, -45)
-        result = IoU.panoptes_to_geometry([10, 12, 3, 5, 45], 'ellipse')
+        result = IoU.panoptes_to_geometry(tuple([10, 12, 3, 5, 45]), 'ellipse')
         self.assertEqual(result, expected)
 
     def test_panoptes_to_geometry_triangle(self):
@@ -45,13 +45,13 @@ class TestIoUMetric(unittest.TestCase):
         ])
         expected = shapely.affinity.rotate(expected, -30, origin=(0, 0))
         expected = shapely.affinity.translate(expected, xoff=5, yoff=10)
-        result = IoU.panoptes_to_geometry([5, 10, 3, 30], 'triangle')
+        result = IoU.panoptes_to_geometry(tuple([5, 10, 3, 30]), 'triangle')
         self.assertEqual(result, expected)
 
     def test_panoptes_to_geometry_other(self):
         '''Test panoptes_to_geometry with unsupported shape'''
         with self.assertRaises(ValueError):
-            IoU.panoptes_to_geometry([1], 'not_a_supported_shape')
+            IoU.panoptes_to_geometry(tuple([1]), 'not_a_supported_shape')
 
     def test_IoU_metric(self):
         '''Test the IoU metric'''
