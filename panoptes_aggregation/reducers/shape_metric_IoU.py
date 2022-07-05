@@ -18,8 +18,8 @@ def panoptes_to_geometry(params, shape):
 
     Parameters
     ----------
-    params : list
-        A list of the parameters for the shape (as defined by PFE)
+    params : tuple
+        A tuple of the parameters for the shape (as defined by PFE)
     shape : string
         The name of the shape these parameters belong to.  Supported shapes are:
 
