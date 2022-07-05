@@ -11,6 +11,12 @@ import numpy
 from functools import lru_cache
 
 
+def tupleize(func):
+    def wrapper(params, shape):
+        return func(tuple(params), shape)
+    return wrapper
+
+@tupleize
 @lru_cache(maxsize=100)
 def panoptes_to_geometry(params, shape):
     '''Convert shapes created with the Panoptes Front End (PFE) to shapely
@@ -87,8 +93,8 @@ def IoU_metric(params1, params2, shape):
         1 means the shapes don't overlap, values in the middle mean partial
         overlap.
     '''
-    geo1 = panoptes_to_geometry(tuple(params1), shape)
-    geo2 = panoptes_to_geometry(tuple(params2), shape)
+    geo1 = panoptes_to_geometry(params1, shape)
+    geo2 = panoptes_to_geometry(params2, shape)
     intersection = geo1.intersection(geo2).area
     union = geo1.union(geo2).area
     if union == 0:
@@ -115,10 +121,10 @@ def average_bounds(params_list, shape):
         This is a list of tuples giving the min and max bounds for
         each shape parameter.
     '''
-    geo = panoptes_to_geometry(tuple(params_list[0]), shape)
+    geo = panoptes_to_geometry(params_list[0], shape)
     # Use the union of all shapes to find the bounding box
     for params in params_list[1:]:
-        geo = geo.union(panoptes_to_geometry(tuple(params), shape))
+        geo = geo.union(panoptes_to_geometry(params, shape))
     # bound on x
     bx = (geo.bounds[0], geo.bounds[2])
     # bound on y
