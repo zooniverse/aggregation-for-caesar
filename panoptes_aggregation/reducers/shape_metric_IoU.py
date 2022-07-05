@@ -16,6 +16,7 @@ def tupleize(func):
         return func(tuple(params), shape)
     return wrapper
 
+
 @tupleize
 @lru_cache(maxsize=100)
 def panoptes_to_geometry(params, shape):
