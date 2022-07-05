@@ -8,16 +8,25 @@ import shapely.geometry
 import shapely.affinity
 import scipy.optimize
 import numpy
+from functools import lru_cache
 
 
+def tupleize(func):
+    def wrapper(params, shape):
+        return func(tuple(params), shape)
+    return wrapper
+
+
+@tupleize
+@lru_cache(maxsize=100)
 def panoptes_to_geometry(params, shape):
     '''Convert shapes created with the Panoptes Front End (PFE) to shapely
     geometry objects.
 
     Parameters
     ----------
-    params : list
-        A list of the parameters for the shape (as defined by PFE)
+    params : tuple
+        A tuple of the parameters for the shape (as defined by PFE)
     shape : string
         The name of the shape these parameters belong to.  Supported shapes are:
 
