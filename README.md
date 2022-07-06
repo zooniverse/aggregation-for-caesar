@@ -21,7 +21,7 @@ pip install panoptes_aggregation
 
 Or for development or testing, you can install the development version directly from GitHub:
 ```bash
-pip install -U git+git://github.com/zooniverse/aggregation-for-caesar.git
+pip install -U git+https://github.com/zooniverse/aggregation-for-caesar.git
 ```
 
 Upgrade and existing installation:
