@@ -1,0 +1,77 @@
+# Describes an automatic update with PDM using gitlab actions
+# source https://gist.github.com/carstencodes/bdf6c1664f49f387b6994a02965e787c
+
+name: Automatic update released versions
+on:
+  schedule:
+    - cron:  '0 18 * * *' # Each day at 6 pm - set according to your own needs. See https://crontab.guru for explanations, if needed
+  workflow_dispatch: # Do nothing at all
+jobs:
+  auto-update:
+    name: Perform automatic update
+    runs-on: ubuntu-latest
+    steps:
+      # In order to create a pull request, a personalized TOKEN is needed.
+      - name: Ensure PAT is set
+        env:
+          CI_CD_ACTION_AUTO_UPDATE_TOKEN: ${{ secrets.AUTO_UPDATE_TOKEN }}
+        run: |
+          if [ -z "${CI_CD_ACTION_AUTO_UPDATE_TOKEN}" ];
+          then
+            echo "Set repository secret AUTO_UPDATE_TOKEN to a non-empty value." >&2
+            exit 1
+          fi
+      # Checkout the repository
+      - name: Checkout this repository
+        uses: actions/checkout@v2
+      # Install PDM
+      - uses: pdm-project/setup-pdm@main
+        name: Setup PDM
+        with:
+          python-version: "3.10"
+          architecture: x64
+          prerelease: true
+          enable-pep582: false
+      # Install dependencies in the first place
+      - name: Install dependencies from pdm.lock
+        run: pdm install --no-editable --no-isolation -G online -G doc -G test
+      # Update Packages
+      - name: Update dependencies to latest versions
+        id: pdm_update
+        run: |
+          message=$(pdm update) # If you only want to check if there newer versions, use PDM outdated
+          # Preserve whitespace characters 
+          message="${message//'%'/'%25'}" 
+          message="${message//$'\n'/'%0A'}"
+          message="${message//$'\r'/'%0D'}"
+          echo ::set-output name=message::${message} 
+      # Check if lock file has been modified
+      - name: Get all files changed
+        id: changed_files
+        run: |
+          modified_version_files=$(git status --porcelain --untracked-files=no pdm.lock | sed 's/^ M //g')
+          echo ::set-output name=modified_files::${modified_version_files}
+          if [ -n "${modified_version_files}" ];
+          then
+            echo ::set-output name=any_modified::true
+          else
+            echo ::set-output name=any_modified::false
+          fi
+      # Create a new pull request, if changed files are present
+      - name: Commit and create Pull request
+        id: create-pr
+        uses: peter-evans/create-pull-request@v3 # Refer to marketplace for documentation
+        if: ${{ steps.changed_files.outputs.any_modified == 'true' }}
+        with:
+          token: ${{ secrets.AUTO_UPDATE_TOKEN }}
+          add-paths: |
+            pdm.lock
+          commit-message: "dep: Updating dependent packages"
+          committer: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
+          author: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
+          signoff: false
+          branch: auto-update/dependencies # The branch to use
+          branch-suffix: timestamp
+          delete-branch: true
+          title: "Automatic update of dependent packages"
+          body: ${{ steps.pdm_update.outputs.message }}
