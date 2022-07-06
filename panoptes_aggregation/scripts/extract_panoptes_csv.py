@@ -35,10 +35,14 @@ def extract_classification(
     verbose
 ):
     try:
+        recursive_subject_ids = keyword.get('recursive_subject_ids', False)
         extract = extractors.extractors[extractor_key](classification_by_task, **keyword)
         new_extract_row = []
         if isinstance(extract, list):
-            for e in extract:
+            for edx, e in enumerate(extract):
+                subject_id = classification_info['subject_ids']
+                if recursive_subject_ids:
+                    subject_id = f'{subject_id}_{edx}'
                 new_extract_row.append(OrderedDict([
                     ('classification_id', classification_info['classification_id']),
                     ('user_name', classification_info['user_name']),
@@ -46,7 +50,7 @@ def extract_classification(
                     ('workflow_id', classification_info['workflow_id']),
                     ('task', keyword['task']),
                     ('created_at', classification_info['created_at']),
-                    ('subject_id', classification_info['subject_ids']),
+                    ('subject_id', subject_id),
                     ('extractor', extractor_name),
                     ('data', e)
                 ]))
