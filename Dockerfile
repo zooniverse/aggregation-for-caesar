@@ -1,4 +1,4 @@
-FROM python:3.7-slim
+FROM python:3.10-slim
 
 ENV LANG=C.UTF-8
 
@@ -10,15 +10,23 @@ RUN apt-get update && apt-get -y upgrade && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # install dependencies
-COPY setup.py .
+COPY pyproject.toml pdm.lock README.md ./
+COPY panoptes_aggregation/version/__init__.py ./panoptes_aggregation/version/
 RUN pip install --upgrade pip
-RUN pip install .[online,test,doc]
+RUN pip install --pre pdm
+RUN pdm config python.use_venv True
+RUN pdm sync --no-editable --no-isolation --no-self -G online -G test -G doc
 
 # install package
 COPY . .
-RUN pip install -U .[online,test,doc]
+RUN pdm install -G online -G test -G doc
+
+# activate venv
+ENV VIRTUAL_ENV=/usr/src/aggregation/.venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # make documentation
+RUN chmod +x make_docs
 RUN /bin/bash -lc ./make_docs.sh
 
 ARG REVISION=''
