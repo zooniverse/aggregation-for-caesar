@@ -1,0 +1,4 @@
+.pdm.toml
+.coverage
+.hound.yml
+panoptes_aggregation.egg-info/*
