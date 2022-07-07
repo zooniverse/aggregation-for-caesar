@@ -4,9 +4,15 @@ Text Tool Reducer
 This module provides functions to reducer the panoptes text tool into an
 alignment table.
 '''
-import collatex as col
 from .text_utils import consensus_score, tokenize
 from .reducer_wrapper import reducer_wrapper
+import warnings
+
+with warnings.catch_warnings():
+    # collatex is a bit old, we can safely ignore this message as the display
+    # functions are optional and never used in this code
+    warnings.filterwarnings('ignore', category=DeprecationWarning, message='Importing display')
+    import collatex as col
 
 # override the built-in tokenize
 col.core_classes.WordPunctuationTokenizer.tokenize = tokenize
