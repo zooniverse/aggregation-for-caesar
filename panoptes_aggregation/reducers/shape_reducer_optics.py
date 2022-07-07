@@ -96,7 +96,9 @@ def shape_reducer_optics(data_by_tool, **kwargs):
             # default each point in no cluster
             clusters[frame]['{0}_cluster_labels'.format(tool)] = [-1] * loc.shape[0]
             if loc.shape[0] >= kwargs['min_samples']:
-                db = OPTICS(**kwargs).fit(loc)
+                with warnings.catch_warnings():
+                    warnings.filterwarnings('ignore', category=RuntimeWarning)
+                    db = OPTICS(**kwargs).fit(loc)
                 # what cluster each point belongs to
                 clusters[frame]['{0}_cluster_labels'.format(tool)] = db.labels_.tolist()
                 for k in set(db.labels_):
