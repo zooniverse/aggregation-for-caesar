@@ -6,6 +6,9 @@ import unittest
 import os
 from os import environ
 
+import logging
+panoptes_client_logger = logging.getLogger('panoptes_client').setLevel(logging.ERROR)
+
 try:
     from panoptes_client import Panoptes, User
     from panoptes_client.panoptes import PanoptesAPIException
