@@ -1,0 +1,13 @@
+.pdm.toml
+.coverage
+.hound.yml
+endpoints.yml
+.venv/*
+.github/*
+.idea/*
+.pytest_cache/*
+.vscode/*
+.ropeproject/*
+build/*
+docs/build/*
+panoptes_aggregation.egg-info/*

@@ -3,6 +3,7 @@ services:
   local_scripts:
     build:
       context: ./
-      dockerfile: Dockerfile.bin_cmds
+      dockerfile: bin_cmds.Dockerfile
     volumes:
-      - ./:/usr/src/aggregation
+      - ./panoptes_aggregation:/usr/src/aggregation/panoptes_aggregation
+      - ./docker_local_scripts:/usr/src/aggregation/docker_local_scripts
