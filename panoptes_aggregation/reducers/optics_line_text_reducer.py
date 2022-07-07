@@ -9,11 +9,16 @@ extracts are full lines of text in the document.
 from sklearn.cluster import OPTICS
 import numpy as np
 from collections import defaultdict
-import collatex as col
 from .optics_text_utils import get_min_samples, metric, remove_user_duplication, cluster_of_one, order_lines
 from .text_utils import consensus_score, tokenize, extractor_index
 from .reducer_wrapper import reducer_wrapper
 import warnings
+
+with warnings.catch_warnings():
+    # collatex is a bit old, we can safely ignore this message as the display
+    # functions are optional and never used in this code
+    warnings.filterwarnings('ignore', category=DeprecationWarning, message='Importing display')
+    import collatex as col
 
 DEFAULTS = {
     'min_samples': {'default': 'auto', 'type': int},
