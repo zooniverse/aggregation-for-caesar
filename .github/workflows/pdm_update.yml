@@ -4,26 +4,16 @@
 name: Automatic update released versions
 on:
   schedule:
-    - cron:  '0 18 * * *' # Each day at 6 pm - set according to your own needs. See https://crontab.guru for explanations, if needed
+    - cron:  '0 10 * * 1-5' # Each weekday at 10 am
   workflow_dispatch: # Do nothing at all
 jobs:
   auto-update:
     name: Perform automatic update
     runs-on: ubuntu-latest
     steps:
-      # In order to create a pull request, a personalized TOKEN is needed.
-      - name: Ensure PAT is set
-        env:
-          CI_CD_ACTION_AUTO_UPDATE_TOKEN: ${{ secrets.AUTO_UPDATE_TOKEN }}
-        run: |
-          if [ -z "${CI_CD_ACTION_AUTO_UPDATE_TOKEN}" ];
-          then
-            echo "Set repository secret AUTO_UPDATE_TOKEN to a non-empty value." >&2
-            exit 1
-          fi
       # Checkout the repository
       - name: Checkout this repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       # Install PDM
       - uses: pdm-project/setup-pdm@main
         name: Setup PDM
@@ -34,12 +24,14 @@ jobs:
           enable-pep582: false
       # Install dependencies in the first place
       - name: Install dependencies from pdm.lock
-        run: pdm install --no-editable --no-isolation -G online -G doc -G test
+        env:
+          PDM_USE_VENV: True
+        run: pdm sync --no-isolation --no-self -G online -G test -G doc
       # Update Packages
       - name: Update dependencies to latest versions
         id: pdm_update
         run: |
-          message=$(pdm update) # If you only want to check if there newer versions, use PDM outdated
+          message=$(pdm update)
           # Preserve whitespace characters 
           message="${message//'%'/'%25'}" 
           message="${message//$'\n'/'%0A'}"
@@ -60,18 +52,15 @@ jobs:
       # Create a new pull request, if changed files are present
       - name: Commit and create Pull request
         id: create-pr
-        uses: peter-evans/create-pull-request@v3 # Refer to marketplace for documentation
+        uses: peter-evans/create-pull-request@v4 # Refer to marketplace for documentation
         if: ${{ steps.changed_files.outputs.any_modified == 'true' }}
         with:
-          token: ${{ secrets.AUTO_UPDATE_TOKEN }}
+          base: master
           add-paths: |
             pdm.lock
           commit-message: "dep: Updating dependent packages"
-          committer: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
-          author: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
           signoff: false
-          branch: auto-update/dependencies # The branch to use
-          branch-suffix: timestamp
+          branch: auto-update/dependencies
           delete-branch: true
           title: "Automatic update of dependent packages"
           body: ${{ steps.pdm_update.outputs.message }}
