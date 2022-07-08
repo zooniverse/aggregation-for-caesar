@@ -78,16 +78,6 @@ Source = "https://github.com/zooniverse/aggregation-for-caesar"
 [tool.pdm]
 version = { source = "file", path = "panoptes_aggregation/version/__init__.py" }
 
-[tool.pdm.build]
-includes = [
-    "panoptes_aggregation/scripts/icons/*.png",
-    "panoptes_aggregation/scripts/icons/*.ico"
-]
-source-includes = [
-    "panoptes_aggregation/scripts/icons/*.png",
-    "panoptes_aggregation/scripts/icons/*.ico"
-]
-
 [tool.pdm.dev-dependencies]
 [tool.coverage.run]
 omit = [
