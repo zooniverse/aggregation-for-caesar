@@ -14,7 +14,7 @@ jobs:
         python-version: [3.8, 3.9, "3.10"]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup PDM
       uses: pdm-project/setup-pdm@main
       with:
@@ -23,15 +23,16 @@ jobs:
         prerelease: true
         enable-pep582: false
     - name: Install dependencies
+      env:
+        PDM_USE_VENV: True
       run: |
-        pdm config python.use_venv True
-        pdm install --no-editable --no-isolation -G online -G doc -G test
+        pdm sync --no-isolation --no-self -G online -G test -G doc
     - name: Run tests
       env:
         TRAVIS: true  # one test is skipped on CI and looks for this env value
       run: |
-        coverage run
-        coverage report
+        pdm run coverage run
+        pdm run coverage report
     - name: Coveralls
       if: ${{ matrix.python-version == "3.10" }}
-      run: coveralls --service=github
+      run: pdm run coveralls --service=github

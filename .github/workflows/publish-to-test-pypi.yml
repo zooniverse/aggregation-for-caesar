@@ -7,7 +7,7 @@ jobs:
     name: Build python package and publish to Test PyPi
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v3
     - name: Setup PDM
       uses: pdm-project/setup-pdm@main
       with:
