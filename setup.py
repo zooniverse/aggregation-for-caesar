@@ -55,7 +55,7 @@ setup(
     include_package_data=True,
     extras_require={
         'online': [
-            'flask>=1.0,<2.2',
+            'flask>=1.0,<2.3',
             'flask-cors>=3.0,<3.1',
             'panoptes-client>=1.1,<1.6',
             'requests>=2.4.2,<2.29',
@@ -67,7 +67,7 @@ setup(
         'doc': [
             'matplotlib>=3.5.1,<3.6',
             'myst-nb>=0.13.2,<0.17',
-            'sphinx>=2.2.2,<5.1',
+            'sphinx>=2.2.2,<5.2',
             'sphinxcontrib-httpdomain>=1.7.0,<1.9',
             'sphinx_rtd_theme>=0.4.3,<1.1'
         ],
@@ -75,7 +75,7 @@ setup(
             'nose>=1.3.7,<1.4',
             'coverage>=4.5.3,<6.5',
             'coveralls>=3.0.0,<3.3.2',
-            'flake8>=3.7,<4.1',
+            'flake8>=3.7,<5.1',
             'flake8-black>=0.1.1,<0.4',
             'flake8-bugbear>=20.1.2,<22.8'
         ],
