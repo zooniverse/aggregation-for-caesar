@@ -75,7 +75,7 @@ def pluck_fields(classification, pluck_keys):
             # if the key is feedback, we want to process
             # the feedback metadata in the classification
             # and retrieve gold standard data
-            if(key == 'feedback'):
+            if (key == 'feedback'):
                 feedback_val = get_feedback_info(last_value)
 
                 # ensure that the classification has feedback data
