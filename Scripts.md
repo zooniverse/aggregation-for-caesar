@@ -109,6 +109,43 @@ This creates four files:
  - `Reducer_config_workflow_6465_V52.76_question_extractor.yaml`: The configuration for the reducer used for the question task
  - `Task_labels_workflow_6465_V52.76.yaml`: A lookup table to translate the column names used in the extractor/reducer output files into the text originally used on the workflow.
 
+
+````{note}
+If you have a recursive workflow you will need to edit the configuration `yaml` file by hand.  For example, if you have a workflow with three question tasks `T0`, `T1`, and `T2` with an option in `T2` leading back to `T0` the `extractor_config` section of the `yaml` file would be:
+
+```yaml
+extractor_config:
+    question_extractor:
+    -   task: T0
+        recursive: true
+    -   task: T1
+        recursive: true
+    -   task: T2
+        recursive: true
+```
+
+In this setup every instance of `T0` will be extracted with the same subject ID and will be reduced together (`-F all` will need to be set in the reducer for this to work).  
+
+Instead, if each recursion through the workflow should be treated as a **different** subject (e.g. each loop through the questions is for a different row in a data table), the config should be set up as:
+
+```yaml
+extractor_config:
+    question_extractor:
+    -   task: T0
+        recursive: true
+        recursive_subject_ids: true
+    -   task: T1
+        recursive: true
+        recursive_subject_ids: true
+    -   task: T2
+        recursive: true
+        recursive_subject_ids: true
+```
+
+This will adjust the subject ID with a suffix identifying what "loop" it was classified in.  In effect, this will reduce together each pass through the workflow separately.  It also makes the underlying assumption that every volunteer classified the subject in the same order (e.g. for the data table example, each volunteer classified the rows in the same order without skipping any).
+
+These can values be set with the `panoptes_aggregation config` command using the `--keywords` flag (e.g. `--keywords '{"T0": {"recursive": true, "recursive_subject_ids": true}}'`).
+````
 ---
 
 ## Extracting data
