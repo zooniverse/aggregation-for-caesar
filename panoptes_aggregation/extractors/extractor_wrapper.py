@@ -1,4 +1,5 @@
 import ast
+import copy
 from functools import wraps
 from ..append_version import append_version
 from .utilities import pluck_fields
@@ -37,14 +38,27 @@ def extractor_wrapper(gold_standard=False):
                 data = argument
                 pluck_key_dict = kwargs.pop('pluck', None)
 
+            # the task key to extract
             task = kwargs.pop('task', 'all')
+            # if the task is recursive (i.e. there will be more than one instance of the task per classification)
+            recursive = kwargs.pop('recursive', False)
             no_version = kwargs.pop('no_version', False)
             annotations = data['annotations']
             annotations_list = unpack_annotations(annotations, task)
-            data['annotations'] = annotations_list
             if gold_standard:
                 kwargs['gold_standard'] = data.get('gold_standard', False)
-            extraction = func(data, **kwargs)
+            if recursive:
+                # run each annotation through the code as if it was submitted on its own
+                # return the list of resulting extracts
+                # the extract code will write each item in a new row
+                extraction = []
+                for annotation in annotations_list:
+                    data_recursive = copy.deepcopy(data)
+                    data_recursive['annotations'] = [annotation]
+                    extraction.append(func(data_recursive, **kwargs))
+            else:
+                data['annotations'] = annotations_list
+                extraction = func(data, **kwargs)
 
             ''' RS 2021/09/14
             if the pluck parameter exists
