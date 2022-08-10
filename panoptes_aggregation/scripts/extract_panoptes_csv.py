@@ -1,5 +1,7 @@
 from collections import OrderedDict, defaultdict
 from multiprocessing import Pool
+import numpy as np
+import packaging.version
 import copy
 import json
 import io
@@ -22,10 +24,6 @@ def get_file_instance(file):
     if not isinstance(file, io.IOBase):
         file = open(file, 'r', encoding='utf-8')  # pragma: no cover
     return file
-
-
-def get_major_version(s):
-    return s.split('.')[0]
 
 
 def extract_classification(
@@ -93,8 +91,26 @@ def extract_csv(
 
     extractor_config = config_yaml['extractor_config']
     workflow_id = config_yaml['workflow_id']
-    version = config_yaml['workflow_version']
-    number_of_extractors = sum([len(value) for key, value in extractor_config.items()])
+    if isinstance(config_yaml['workflow_version'], dict):
+        # a version range was given
+        version_range = config_yaml['workflow_version']
+        for key, value in version_range.items():
+            version_range[key] = packaging.version.parse(value)
+    else:
+        # a single version is given
+        version = packaging.version.parse(config_yaml['workflow_version'])
+        if version.minor == 0:
+            # only a major version given, take all rows with the same major version
+            # note, the max is inclusive, but there are no workflows with a minor
+            # version of 0, so that is OK here
+            next_version = packaging.version.parse(str(version.major + 1))
+        else:
+            next_version = version
+        version_range = {
+            'min': version,
+            'max': next_version
+        }
+    number_of_extractors = sum([len(value) for _, value in extractor_config.items()])
 
     extracted_data = defaultdict(list)
 
@@ -104,13 +120,16 @@ def extract_csv(
 
     wdx = classifications.workflow_id == workflow_id
     assert (wdx.sum() > 0), 'There are no classifications matching the configured workflow ID'
-    if '.' in version:
-        vdx = classifications.workflow_version == version
-    else:
-        vdx = classifications.workflow_version.apply(get_major_version) == version
 
-    assert (vdx.sum() > 0), 'There are no classificaitons matching the configured version number'
-    assert ((vdx & wdx).sum() > 0), 'There are no classifications matching the combined workflow ID and version number'
+    classifications.workflow_version = classifications.workflow_version.apply(packaging.version.parse)
+    vdx = np.ones_like(classifications.workflow_version, dtype=bool)
+    if 'min' in version_range:
+        vdx &= classifications.workflow_version >= version_range['min']
+    if 'max' in version_range:
+        vdx &= classifications.workflow_version <= version_range['max']
+
+    assert (vdx.sum() > 0), 'There are no classifications matching the configured version number(s)'
+    assert ((vdx & wdx).sum() > 0), 'There are no classifications matching the combined workflow ID and version number(s)'
 
     widgets = [
         'Extracting: ',

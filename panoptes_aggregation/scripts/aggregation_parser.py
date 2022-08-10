@@ -33,7 +33,7 @@ def main(args=None):
     )
     config_numbers = config_parser.add_argument_group(
         'Workflow ID and version numbers',
-        'Enter the workflow ID, major version number, and minor version number',
+        'Enter the workflow ID with a version number or version range',
         gooey_options={
             'show_border': False,
             'columns': 1
@@ -84,14 +84,18 @@ def main(args=None):
     config_numbers.add_argument(
         "-v",
         "--version",
-        help="The major workflow version to extract",
-        type=int
+        help="The workflow version to extract.  If only a major version is given (e.g. -v 3) all minor versions will be extracted at once.  If a minor version is provided (e.g. -v 3.14) only that specific version will be extracted.",
+        type=str
     )
     config_numbers.add_argument(
-        "-m",
-        "--minor_version",
-        help="The minor workflow version used to create the lookup table for the workflow content",
-        type=int
+        "--min_version",
+        help="The minimum workflow version to extract (inclusive).  This can be provided as either a major version (e.g. --min_version 3) or a major version with a minor version (e.g. --min_version 3.14).  If this flag is provided the --version flag will be ignored.",
+        type=str
+    )
+    config_numbers.add_argument(
+        "--max_version",
+        help="The maximum workflow version to extract (inclusive).  This can be provided as either a major version (e.g. --max_version 3) or a major version with a minor version (e.g. --max_version 3.14).  If this flag is provided the --version flag will be ignored.",
+        type=str
     )
     config_keywords.add_argument(
         "-k",
@@ -268,7 +272,8 @@ def main(args=None):
             args.workflow_csv,
             args.workflow_id,
             version=args.version,
-            minor_version=args.minor_version,
+            min_version=args.min_version,
+            max_version=args.max_version,
             keywords=args.keywords,
             output_dir=args.dir,
             verbose=args.verbose

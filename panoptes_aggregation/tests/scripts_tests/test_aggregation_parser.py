@@ -15,8 +15,9 @@ class TestAggregationParser(unittest.TestCase):
             mock_FileType.return_value.return_value,
             123,
             keywords={},
-            minor_version=None,
             version=None,
+            min_version=None,
+            max_version=None,
             output_dir=os.getcwd(),
             verbose=False
         )
