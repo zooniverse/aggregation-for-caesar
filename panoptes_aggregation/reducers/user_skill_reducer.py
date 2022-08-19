@@ -15,7 +15,7 @@ import ast
 
 
 @reducer_wrapper(relevant_reduction=True)
-def test_user_skill_reducer(extracts, relevant_reduction=[], binary=False, null_class='NONE'):
+def user_skill_reducer(extracts, relevant_reduction=[], binary=False, null_class='NONE'):
     if isinstance(binary, str):
         binary = ast.literal_eval(binary)
     if binary:
