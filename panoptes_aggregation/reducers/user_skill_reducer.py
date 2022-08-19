@@ -29,7 +29,10 @@ def user_skill_reducer(extracts, relevant_reduction=[], binary=False, null_class
     weight_per_class_skill = (confusion_subject.diagonal()) / (np.sum(confusion_subject, axis=0) + 1.e-16)
     per_class_skill = (confusion_simple.diagonal()) / (np.sum(confusion_simple, axis=0) + 1.e-16)
 
-    return {'skill': per_class_skill, 'weighted_skill': weight_per_class_skill, 'classes': classes, 'confusion_simple': confusion_simple}
+    return {'skill': per_class_skill.tolist(),
+            'weighted_skill': weight_per_class_skill.tolist(),
+            'classes': classes,
+            'confusion_simple': confusion_simple.tolist()}
 
 
 def get_confusion_matrix(extracts, relevant_reduction, binary, null_class):
@@ -71,7 +74,7 @@ def get_confusion_matrix(extracts, relevant_reduction, binary, null_class):
         # create the confusion matrix from the list of success/failures
         confusion_simple[0, 0] = np.sum(true_mask)
         confusion_simple[1, 0] = np.sum(false_mask)
-        confusion_simple[:, 1] = np.nan
+        confusion_simple[:, 1] = 0
 
         # the true score is the sum of difficulties of the correct classifications
         # so hard subjects give you a boost in score and the easy subjects
@@ -83,7 +86,7 @@ def get_confusion_matrix(extracts, relevant_reduction, binary, null_class):
         neg_difficulty = 1. - difficulties[false_mask]
         neg_difficulty[neg_difficulty == 0] = difficulty_min
         confusion_subject[1, 0] = np.sum(neg_difficulty)
-        confusion_subject[:, 1] = np.nan
+        confusion_subject[:, 1] = 0
 
         return (confusion_simple, confusion_subject)
     else:
