@@ -111,7 +111,7 @@ def get_confusion_matrix(extracts, relevant_reduction, binary, null_class):
             # for survey simple, the idea is the same
             # except that the keys have a value of 1 when the
             # user selects that class
-            for j, extracti in enumerate(extracts):
+            for extracti in extracts:
                 user_classifications += [key for key in extracti.keys() if isinstance(extracti[key], int) & (extracti[key] == 1)]
                 classes += [key for key in extracti.keys() if isinstance(extracti[key], int)]
                 true_values.extend(extracti['feedback'][true_key])
