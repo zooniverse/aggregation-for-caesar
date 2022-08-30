@@ -44,7 +44,10 @@ def reducer_wrapper(
                     kwargs_extra_data['relevant_reduction'] = kwargs['relevant_reduction']
 
             if 'binary' in kwargs.keys():
-                kwargs_details['binary'] = kwargs['binary']
+                binary = kwargs['binary']
+                if isinstance(binary, str):
+                    binary = ast.literal_eval(binary)
+                kwargs_details['binary'] = binary
             no_version = kwargs.pop('no_version', False)
             if defaults_process is not None:
                 kwargs_process = process_kwargs(kwargs, defaults_process)

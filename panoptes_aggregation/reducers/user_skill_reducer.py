@@ -11,13 +11,10 @@ from .reducer_wrapper import reducer_wrapper
 import numpy as np
 from ..feedback_strategies import FEEDBACK_STRATEGIES
 from sklearn.metrics import confusion_matrix
-import ast
 
 
 @reducer_wrapper(relevant_reduction=True)
 def user_skill_reducer(extracts, relevant_reduction=[], binary=False, null_class='NONE'):
-    if isinstance(binary, str):
-        binary = ast.literal_eval(binary)
     if binary:
         classes = ['True', 'False']
         confusion_simple, confusion_subject = get_confusion_matrix(extracts, relevant_reduction, binary, None)
