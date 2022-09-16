@@ -43,6 +43,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'myst_nb'
 ]
+myst_enable_extensions = ["dollarmath", "amsmath"]
 napoleon_google_docstring = False
 napoleon_use_param = False
 napoleon_use_ivar = True
