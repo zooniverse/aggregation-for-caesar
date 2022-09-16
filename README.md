@@ -100,13 +100,13 @@ The documentation will be built and available on the `/docs` route.
 ### Build/run the app in docker locally
 To run a local version use:
 ```bash
-docker-compose build
-docker-compose up
+docker compose build
+docker compose up
 ```
 and listen on `localhost:5000`.
 
 ### Running tests in the docker container
 To run the tests use:
 ```bash
-docker compose run --rm aggregation coverage run
+docker compose run --rm aggregation coverage run -m pytest
 ```
