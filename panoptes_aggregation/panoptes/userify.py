@@ -7,10 +7,14 @@ about all users whose ids appear in the provided object.
 from collections.abc import Iterable
 from json import dumps as jsonify
 from os import getenv
-from panoptes_client import Panoptes, User
-from panoptes_client.panoptes import PanoptesAPIException
 from yaml import safe_load
 import requests
+
+import logging
+panoptes_client_logger = logging.getLogger('panoptes_client').setLevel(logging.ERROR)
+
+from panoptes_client import Panoptes, User
+from panoptes_client.panoptes import PanoptesAPIException
 
 
 class ConfigurationError(Exception):

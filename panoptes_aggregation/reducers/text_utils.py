@@ -4,12 +4,18 @@ Text aggregation utilities
 This module provides utility functions used in the polyton-as-line-text-reducer code from
 :mod:`panoptes_aggregation.reducers.poly_line_text_reducer`.
 '''
-import collatex as col
 from collections import OrderedDict, Counter
 import copy
 import numpy as np
 from sklearn.cluster import DBSCAN
 import re
+import warnings
+
+with warnings.catch_warnings():
+    # collatex is a bit old, we can safely ignore this message as the display
+    # functions are optional and never used in this code
+    warnings.filterwarnings('ignore', category=DeprecationWarning, message='Importing display')
+    import collatex as col
 
 
 def tokenize(self, contents):

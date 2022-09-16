@@ -5,6 +5,7 @@ import os
 import pandas
 from pandas.testing import assert_frame_equal
 import panoptes_aggregation.scripts.reduce_panoptes_csv as reduce_panoptes_csv
+import multiprocessing
 
 extracted_csv_question = '''classification_id,user_name,user_id,workflow_id,task,created_at,subject_id,extractor,data.blue,data.green,data.no,data.yes
 1,1,1,4249,T0,2017-05-31 12:33:46 UTC,1,question_extractor,,,,1.0
@@ -164,6 +165,10 @@ class TestReduceCSV(unittest.TestCase):
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(reduce_panoptes_csv.flatten_data))
     def test_reduce_csv_object_multi(self, mock_to_csv, mock_pbar):
         '''Test object reducer makes one csv file with cpu_count=2'''
+        # on Mac's the multiprocessing start method needs to be set to 'fork' rather than 'spawn'
+        # https://stackoverflow.com/a/70440892/1052418
+        start_method = multiprocessing.get_start_method()
+        multiprocessing.set_start_method('fork', force=True)
         output_file_name = reduce_panoptes_csv.reduce_csv(
             self.extracted_csv_question,
             self.config_yaml_question,
@@ -173,6 +178,8 @@ class TestReduceCSV(unittest.TestCase):
         output_path = os.path.join(os.getcwd(), 'question_reducer_reductions.csv')
         self.assertEqual(output_file_name, output_path)
         mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
+        # set back to default
+        multiprocessing.set_start_method(start_method, force=True)
 
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.DataFrame.to_csv')

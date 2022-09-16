@@ -6,6 +6,7 @@ import pandas
 from pandas.testing import assert_frame_equal
 import panoptes_aggregation.scripts.extract_panoptes_csv as extract_panoptes_csv
 import platform
+import multiprocessing
 
 if platform.system() == 'Windows':
     WINDOWS = True
@@ -192,14 +193,21 @@ class TestExtractCSV(unittest.TestCase):
             {'no': 1},
             {}
         ]
+        # on Mac's the multiprocessing start method needs to be set to 'fork' rather than 'spawn'
+        # https://stackoverflow.com/a/70440892/1052418
+        start_method = multiprocessing.get_start_method()
+        multiprocessing.set_start_method('fork', force=True)
         output_file_names = extract_panoptes_csv.extract_csv(
             self.classification_data_dump_two_tasks,
             self.config_yaml_question,
-            cpu_count=2
+            cpu_count=2,
+            verbose=True
         )
         output_path = os.path.join(os.getcwd(), 'question_extractor_extractions.csv')
         self.assertEqual(output_file_names, [output_path])
         mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
+        # set back to default
+        multiprocessing.set_start_method(start_method, force=True)
 
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
