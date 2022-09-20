@@ -108,5 +108,5 @@ and listen on `localhost:5000`.
 ### Running tests in the docker container
 To run the tests use:
 ```bash
-docker compose run --rm aggregation coverage run -m pytest
+docker compose run --rm aggregation coverage run -m pytest && coverage report
 ```
