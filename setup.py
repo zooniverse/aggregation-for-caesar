@@ -65,7 +65,7 @@ setup(
             'gitpython>=3.0.0,<3.2'
         ],
         'doc': [
-            'matplotlib>=3.5.1,<3.6',
+            'matplotlib>=3.5.1,<3.7',
             'myst-nb>=0.13.2,<0.17',
             'sphinx>=2.2.2,<5.2',
             'sphinxcontrib-httpdomain>=1.7.0,<1.9',
