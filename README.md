@@ -72,11 +72,11 @@ conda install python.app
 
 **Using docker-compose** [https://docs.docker.com/compose/](https://docs.docker.com/compose/)
 ```
-docker-compose -f docker-compose.local_scripts.yml build local_scripts
+docker compose -f docker-compose.local_scripts.yml build local_scripts
 ```
 From the root directory of this repository, run the desired python scripts using the docker image, e.g. `config_workflow_panoptes --help`
 ```
-docker-compose -f docker-compose.local_scripts.yml run --rm local_scripts panoptes_aggregation --help
+docker compose -f docker-compose.local_scripts.yml run --rm local_scripts panoptes_aggregation --help
 ```
 
 **Or directly via docker**
@@ -100,13 +100,13 @@ The documentation will be built and available on the `/docs` route.
 ### Build/run the app in docker locally
 To run a local version use:
 ```bash
-docker-compose build
-docker-compose up
+docker compose build
+docker compose up
 ```
 and listen on `localhost:5000`.
 
 ### Running tests in the docker container
 To run the tests use:
 ```bash
-docker-compose run --rm aggregation nosetests
+docker compose run --rm aggregation coverage run -m pytest && coverage report
 ```

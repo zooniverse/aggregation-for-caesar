@@ -43,6 +43,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'myst_nb'
 ]
+myst_enable_extensions = ["dollarmath", "amsmath"]
 napoleon_google_docstring = False
 napoleon_use_param = False
 napoleon_use_ivar = True
@@ -83,7 +84,7 @@ version = '.'.join(release.split('.')[:2])
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
