@@ -93,7 +93,7 @@ setup(
         'packaging>=20.1,<21.4',
         'pandas>=1.0.0,<1.5.1',
         'progressbar2>=3.39,<4.1',
-        'python-levenshtein>=0.12.0,<0.13',
+        'python-levenshtein>=0.12.0,<0.21',
         'python-slugify>=3.0.0,<6.2',
         'pyyaml>=5.1,<6.1',
         'scikit-learn>=1.0.0,<1.1.3',
