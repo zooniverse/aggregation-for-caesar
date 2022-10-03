@@ -1,5 +1,4 @@
 FROM python:3.9-slim
-
 ENV LANG=C.UTF-8
 
 WORKDIR /usr/src/aggregation
