@@ -10,3 +10,8 @@ updates:
   - dependency-name: numpy
     versions:
     - 1.20.0
+- directory: "/"
+  package-ecosystem: "github-actions"
+  schedule:
+    interval: weekly
+    time: "10:00"
