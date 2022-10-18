@@ -67,7 +67,7 @@ setup(
         'doc': [
             'matplotlib>=3.5.1,<3.7',
             'myst-nb>=0.13.2,<0.18',
-            'sphinx>=2.2.2,<5.3',
+            'sphinx>=2.2.2,<5.4',
             'sphinxcontrib-httpdomain>=1.7.0,<1.9',
             'sphinx_rtd_theme>=0.4.3,<1.1'
         ],
