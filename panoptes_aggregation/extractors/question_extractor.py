@@ -10,7 +10,7 @@ from .extractor_wrapper import extractor_wrapper
 
 
 def slugify_or_null(s):
-    '''Slugify value while casting `null` as a string fisrt'''
+    '''Slugify value while casting `null` as a string first'''
     if (s is None) or (isinstance(s, bool)) or (isinstance(s, int)):
         return str(s)
     else:
@@ -37,14 +37,14 @@ def question_extractor(classification, **kwargs):
     --------
     >>> classification_multiple = {'annotations': [
         {
-            'vlaue': ['Blue', 'Green']
+            'value': ['Blue', 'Green']
         }
     ]}
     >>> question_extractor(classification_multiple)
     {'blue': 1, 'green': 1}
 
     >>> classification_single = {'annotations': [
-        {'vlaue': 'Yes'}
+        {'value': 'Yes'}
     ]}
     >>> question_extractor(classification_single)
     {'yes': 1}
