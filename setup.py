@@ -87,7 +87,7 @@ setup(
         'joblib==1.1.0',
         'beautifulsoup4>=4.8.1,<4.11',
         'collatex>=2.2,<2.3',
-        'hdbscan>=0.8.20,<0.8.29',
+        'hdbscan>=0.8.20,<0.8.30',
         'lxml>=4.4,<4.10',
         'numpy>=1.21.5,<1.23.5',
         'packaging>=20.1,<21.4',
