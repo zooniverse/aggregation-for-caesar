@@ -84,7 +84,6 @@ setup(
         ]
     },
     install_requires=[
-        'joblib==1.1.0',
         'beautifulsoup4>=4.8.1,<4.11',
         'collatex>=2.2,<2.3',
         'hdbscan>=0.8.20,<0.8.30',
