@@ -12,7 +12,7 @@ extracted_data = [
         "WILDEBEEST": 1,
         "ZEBRA": 1,
         "feedback": {
-            "true_choice": [
+            "true_choiceIds": [
                 "WILDEBEEST",
                 "ZEBRA"
             ],
@@ -23,7 +23,7 @@ extracted_data = [
         "WILDEBEEST": 1,
         "CHEETAH": 1,
         "feedback": {
-            "true_choice": [
+            "true_choiceIds": [
                 "WILDEBEEST",
                 "ZEBRA"
             ],
