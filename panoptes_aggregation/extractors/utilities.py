@@ -119,7 +119,7 @@ def get_feedback_info(feedback_dict):
             "failureEnabled":True,"failureMessage":"You got it wrong!",\
             "successEnabled":True,"successMessage":"Congrats!"}]
     >>> get_feedback_info(feedback_dict)
-    {'success': [True], 'true_answer': ['3'], 'agreement_score': 1.0}
+    {'success': [True], 'true_answer': ['3'], 'strategy': 'singleAnswerQuestion', 'agreement_score': 1.0}
     '''
 
     feedback_data = {}
@@ -137,11 +137,15 @@ def get_feedback_info(feedback_dict):
         # success is True if the volunteer matched the gold standard
         # and False otherwise
         feedback_data.setdefault('success', []).append(classification['success'])
+
         for key in key_list:
             # also get the true values defined for each subject
             # the keys depend on the type of feedback strategy used in the
             # front end
             feedback_data.setdefault(f"true_{key}", []).append(classification[key])
+
+    # assume that all strategies are the same for this feedback entry
+    feedback_data['strategy'] = feedback_dict[0]['strategy']
 
     # calculate an agreement score for this classification
     # (ratio of successful classifications to number of gold standards)
