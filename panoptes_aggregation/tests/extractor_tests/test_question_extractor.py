@@ -157,6 +157,7 @@ feedback_pluck_expected = {
     "0": 1,
     "feedback": {
         "agreement_score": 1.0,
+        "strategy": "singleAnswerQuestion",
         "success": [
             True
         ],
