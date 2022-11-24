@@ -75,7 +75,7 @@ setup(
             'nose>=1.3.7,<1.4',
             'coverage>=4.5.3,<6.6',
             'coveralls>=3.0.0,<3.3.2',
-            'flake8>=3.7,<5.1',
+            'flake8>=3.7,<6.1',
             'flake8-black>=0.1.1,<0.4',
             'flake8-bugbear>=20.1.2,<22.11'
         ],
