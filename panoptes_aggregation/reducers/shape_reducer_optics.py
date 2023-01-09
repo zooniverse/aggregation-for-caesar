@@ -24,7 +24,7 @@ DEFAULTS = {
     'min_cluster_size': {'default': 2, 'type': int},
     'algorithm': {'default': 'auto', 'type': str},
     'leaf_size': {'default': 30, 'type': int},
-    'p': {'default': None, 'type': float},
+    'p': {'default': 2, 'type': float},
     'metric_type': {'default': 'euclidean', 'type': str}
 }
 
