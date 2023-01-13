@@ -56,9 +56,9 @@ kwargs_extra_data = {
 
 reduced_data = {
     "classes": [
-        "CHEETAH",
-        "WILDEBEEST",
-        "ZEBRA",
+        "cheetah",
+        "wildebeest",
+        "zebra",
         "NONE"
     ],
     "confusion_simple": [
