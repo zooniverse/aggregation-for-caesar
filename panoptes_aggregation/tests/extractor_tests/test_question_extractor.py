@@ -116,11 +116,11 @@ single_pluck_expected = {
 }
 
 TestSinglePluck = ExtractorTest(extractors.question_extractor,
-    single_pluck_classification,
-    single_pluck_expected,
-    "Test pluck field functionality with a question extractor",
-    kwargs={'pluck': single_pluck_keys},
-    test_name='TestSinglePluck')
+                                single_pluck_classification,
+                                single_pluck_expected,
+                                "Test pluck field functionality with a question extractor",
+                                kwargs={'pluck': single_pluck_keys},
+                                test_name='TestSinglePluck')
 
 
 feedback_pluck_classification = {
@@ -209,4 +209,27 @@ TestFeedbackEmptyPluck = ExtractorTest(
     "Test pluck field functionality for question extractor with empty feedback fields",
     kwargs={'pluck': feedback_empty_pluck_keys},
     test_name='TestFeedbackEmptyPluck'
+)
+
+# Test the additional functionality to use
+# survey task classifications using question extractor
+single_survey_classification = {
+    'annotations': [{
+        "task": "T0",
+        "task_label": "A single survey question",
+        "value": [
+            {"choice": "cheetah"},
+            {"choice": "leopard"}
+        ]
+    }]
+}
+
+single_survey_expected = {'cheetah': 1, "leopard": 1}
+
+TestSingle = ExtractorTest(
+    extractors.question_extractor,
+    single_survey_classification,
+    single_survey_expected,
+    'Test single survey question',
+    test_name='TestSingleSurvey'
 )

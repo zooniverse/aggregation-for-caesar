@@ -55,7 +55,15 @@ def question_extractor(classification, **kwargs):
         annotation = classification['annotations'][0]
         if isinstance(annotation['value'], list):
             for answer in annotation['value']:
-                answers[slugify_or_null(answer)] += 1
+                # allow survey tasks to be extracted using the
+                # question extractor for the purpose of
+                # calculating user skill
+                if isinstance(answer, dict):
+                    answers[slugify_or_null(answer['choice'])] += 1
+                else:
+                    # if extracting from a question task
+                    # use the traditional option
+                    answers[slugify_or_null(answer)] += 1
         else:
             answers[slugify_or_null(annotation['value'])] += 1
     return dict(answers)
