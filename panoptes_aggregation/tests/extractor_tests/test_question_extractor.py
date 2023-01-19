@@ -115,12 +115,14 @@ single_pluck_expected = {
     "pluck.true_value": "4"
 }
 
-TestSinglePluck = ExtractorTest(extractors.question_extractor,
-                                single_pluck_classification,
-                                single_pluck_expected,
-                                "Test pluck field functionality with a question extractor",
-                                kwargs={'pluck': single_pluck_keys},
-                                test_name='TestSinglePluck')
+TestSinglePluck = ExtractorTest(
+    extractors.question_extractor,
+    single_pluck_classification,
+    single_pluck_expected,
+    "Test pluck field functionality with a question extractor",
+    kwargs={'pluck': single_pluck_keys},
+    test_name='TestSinglePluck'
+)
 
 
 feedback_pluck_classification = {
