@@ -110,8 +110,10 @@ def get_confusion_matrix(extracts, relevant_reduction, binary, null_class):
             # user selects that class
             for extracti in extracts:
                 user_classifications += [key for key in extracti.keys() if isinstance(extracti[key], int) & (extracti[key] == 1)]
-                classes += [key for key in extracti.keys() if isinstance(extracti[key], int)]
-                true_values.extend(extracti['feedback'][true_key])
+
+                # convert all answers to lower case to be consistent across both lists
+                classes += [key.lower() for key in extracti.keys() if isinstance(extracti[key], int)]
+                true_values.extend(list(map(lambda e: e.lower(), extracti['feedback'][true_key])))
 
         # get a full list of classes as the union of the two sets of labels
         classes = np.sort(np.unique([*np.unique(classes), *np.unique(true_values)]))
@@ -144,10 +146,11 @@ def get_confusion_matrix(extracts, relevant_reduction, binary, null_class):
         for j, extract in enumerate(extracts):
 
             # find a list of user classified labels in this extract
-            user_class_i = [key for key in extract.keys() if isinstance(extract[key], int) & (extract[key] == 1)]
+            user_class_i = [key.lower() for key in extract.keys() if isinstance(extract[key], int) & (extract[key] == 1)]
+            true_keys = [key.lower() for key in extract['feedback'][true_key]]
 
             # get a full list of classifications
-            classi = np.sort(np.unique([*np.unique(extract['feedback'][true_key]),
+            classi = np.sort(np.unique([*np.unique(true_keys),
                                         *np.unique(user_class_i)]))
             classi = classi.tolist()
 
@@ -158,7 +161,7 @@ def get_confusion_matrix(extracts, relevant_reduction, binary, null_class):
 
             # loop through the true classes and populate the corresponding
             # indices in the list
-            for value in extract['feedback'][true_key]:
+            for value in true_keys:
                 true_count_i[classi.index(value)] = value
 
             # do the same for the user classifications
