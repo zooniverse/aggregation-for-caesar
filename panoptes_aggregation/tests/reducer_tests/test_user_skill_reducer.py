@@ -87,18 +87,25 @@ reduced_data = {
             0
         ]
     ],
-    "skill": [
-        0.0,
-        1.0,
-        0.5,
-        0.0
-    ],
-    "weighted_skill": [
-        0.0,
-        0.9999999999999999,
-        0.4347826086956522,
-        0.0
-    ]
+    "skill": {
+        "cheetah": 0.0,
+        "wildebeest": 1.0,
+        "zebra": 0.5,
+        "NONE": 0.0
+    },
+    "weighted_skill": {
+        "cheetah": 0.0,
+        "wildebeest": 0.9999999999999999,
+        "zebra": 0.4347826086956522,
+        "NONE": 0.0
+    },
+    "count": {
+        "cheetah": 0,
+        "wildebeest": 2,
+        "zebra": 2,
+        "NONE": 1
+    },
+    'mean_skill': 0.47826086956521735
 }
 
 
@@ -255,12 +262,18 @@ kwargs_extra_data = {
 
 
 reduced_data = {
-    "skill": np.asarray([
-        0.6923076923076923, 0
-    ]).tolist(),
-    "weighted_skill": np.asarray([
-        0.844106463878327, 0
-    ]).tolist(),
+    "skill": {
+        "True": 0.6923076923076923,
+        "False": 0
+    },
+    "weighted_skill": {
+        "True": 0.844106463878327,
+        "False": 0
+    },
+    "count": {
+        "True": 13.0,
+        "False": 0.0
+    },
     "classes": [
         "True",
         "False"
@@ -273,6 +286,7 @@ reduced_data = {
             4.0, 0
         ]
     ]).tolist(),
+    'mean_skill': 0.4220532319391635
 }
 
 TestBinaryUserSkillReducer = ReducerTest(
