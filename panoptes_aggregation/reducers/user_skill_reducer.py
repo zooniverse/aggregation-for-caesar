@@ -26,10 +26,16 @@ def user_skill_reducer(extracts, relevant_reduction=[], binary=False, null_class
     weight_per_class_skill = (confusion_subject.diagonal()) / (np.sum(confusion_subject, axis=0) + 1.e-16)
     per_class_skill = (confusion_simple.diagonal()) / (np.sum(confusion_simple, axis=0) + 1.e-16)
 
-    return {'skill': per_class_skill.tolist(),
-            'weighted_skill': weight_per_class_skill.tolist(),
-            'classes': classes,
-            'confusion_simple': confusion_simple.tolist()}
+    weighted_per_class_skill_dict = {key: value for key, value in zip(classes, weight_per_class_skill)}
+    per_class_skill_dict = {key: value for key, value in zip(classes, per_class_skill)}
+    per_class_count = {key: value for key, value in zip(classes, np.sum(confusion_simple, axis=0))}
+
+    return {'classes': classes,
+            'confusion_simple': confusion_simple.tolist(),
+            'weighted_skill_dict': weighted_per_class_skill_dict,
+            'skill_dict': per_class_skill_dict,
+            'count': per_class_count
+            }
 
 
 def get_confusion_matrix(extracts, relevant_reduction, binary, null_class):
