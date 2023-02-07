@@ -39,6 +39,36 @@ def user_skill_reducer(extracts, relevant_reduction=[], binary=False, null_class
 
 
 def get_confusion_matrix(extracts, relevant_reduction, binary, null_class):
+    '''
+        Returns two confusion matrices (both unweighted and weighted by subject difficulty),
+        and the list of classes (for a k-class run). Note: confusion matrix for the k-class
+        version is a pseudo-confusion matrix since there can be multiple true classes and multiple
+        chosen classes per classification. This will require a many-to-many comparison which is
+        inherently impossible. Therefore, we compare all incorrectly chosen classes with the "null"
+        class instead.
+
+        Parameters
+        ----------
+        extracts : list
+            List of extracts for a given user
+        relevant_reduction : dict
+            Dictionary containing the `subject_difficulty` array that gives
+            the difficulty of the all the subjects seen by the user
+        binary : bool
+            Whether to run the reducer in binary (True/False) mode or k-class mode
+        null_class : string
+            The value of the null/non-existant class
+
+        Returns
+        -------
+        confusion_simple : list
+            Simple confusion matrix without subject difficulty weighting
+        confusion_subject : list
+            Confusion matrix with subject difficulty weighting
+        classes : list
+            List of unique classes corresponding to indices of the confusion matrix.
+            Only returned for k-class mode
+    '''
     if binary:
         # binary always defaults to 2x2 where the second column
         # (gold standard = False) is NaN
