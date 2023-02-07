@@ -30,11 +30,15 @@ def user_skill_reducer(extracts, relevant_reduction=[], binary=False, null_class
     per_class_skill_dict = {key: value for key, value in zip(classes, per_class_skill)}
     per_class_count = {key: value for key, value in zip(classes, np.sum(confusion_simple, axis=0))}
 
+    null_removed_classes = [classi for classi in classes if classi != null_class]
+    mean_skill = np.sum([weighted_per_class_skill_dict[key] for key in null_removed_classes]) / (len(null_removed_classes) + 1.e-16)
+
     return {'classes': classes,
             'confusion_simple': confusion_simple.tolist(),
-            'weighted_skill_dict': weighted_per_class_skill_dict,
-            'skill_dict': per_class_skill_dict,
-            'count': per_class_count
+            'weighted_skill': weighted_per_class_skill_dict,
+            'skill': per_class_skill_dict,
+            'count': per_class_count,
+            'mean_skill': mean_skill
             }
 
 
