@@ -105,7 +105,8 @@ reduced_data = {
         "zebra": 2,
         "NONE": 1
     },
-    'mean_skill': 0.47826086956521735
+    'mean_skill': 0.47826086956521735,
+    'level_up': False
 }
 
 
@@ -118,6 +119,77 @@ TestkClassUserSkillReducer = ReducerTest(
     'Test k-class user skill reducer',
     network_kwargs=kwargs_extra_data,
     add_version=False,
+    processed_type='list',
+    test_name='TestkClassUserSkillReducer'
+)
+
+
+reduced_data_strategy_all = {
+    "classes": [
+        "cheetah",
+        "wildebeest",
+        "zebra",
+        "NONE"
+    ],
+    "confusion_simple": [
+        [
+            0,
+            0,
+            0,
+            1
+        ],
+        [
+            0,
+            2,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            1,
+            0
+        ],
+        [
+            0,
+            0,
+            1,
+            0
+        ]
+    ],
+    "skill": {
+        "cheetah": 0.0,
+        "wildebeest": 1.0,
+        "zebra": 0.5,
+        "NONE": 0.0
+    },
+    "weighted_skill": {
+        "cheetah": 0.0,
+        "wildebeest": 0.9999999999999999,
+        "zebra": 0.4347826086956522,
+        "NONE": 0.0
+    },
+    "count": {
+        "cheetah": 0,
+        "wildebeest": 2,
+        "zebra": 2,
+        "NONE": 1
+    },
+    'mean_skill': 0.47826086956521735,
+    'level_up': False
+}
+
+
+TestkClassUserSkillReducerStrategyAll = ReducerTest(
+    user_skill_reducer,
+    process,
+    extracted_data,
+    extracted_data,
+    reduced_data,
+    'Test k-class user skill reducer',
+    network_kwargs=kwargs_extra_data,
+    add_version=False,
+    kwargs={'strategy': 'all', 'skill_threshold': 0.5, 'count_threshold': 1},
     processed_type='list',
     test_name='TestkClassUserSkillReducer'
 )
@@ -264,11 +336,11 @@ kwargs_extra_data = {
 reduced_data = {
     "skill": {
         "True": 0.6923076923076923,
-        "False": 0
+        "False": 0.0
     },
     "weighted_skill": {
         "True": 0.844106463878327,
-        "False": 0
+        "False": 0.0
     },
     "count": {
         "True": 13.0,
@@ -286,7 +358,8 @@ reduced_data = {
             4.0, 0
         ]
     ]).tolist(),
-    'mean_skill': 0.4220532319391635
+    'mean_skill': 0.844106463878327,
+    'level_up': True
 }
 
 TestBinaryUserSkillReducer = ReducerTest(
