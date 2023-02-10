@@ -14,7 +14,49 @@ from sklearn.metrics import confusion_matrix
 
 
 @reducer_wrapper(relevant_reduction=True)
-def user_skill_reducer(extracts, relevant_reduction=[], binary=False, null_class='NONE'):
+def user_skill_reducer(extracts, relevant_reduction=[], binary=False, null_class='NONE',
+                       skill_threshold=0.7, count_threshold=10, strategy='mean'):
+    '''
+        Parameters
+        ----------
+        extracts : list
+            List of extracts
+        relevant_reduction : list
+            List of subject difficulty values attached as `relevant_reduction` on Caesar
+        binary : boolean
+            Flag for whether to use the binary (True/False for success) vs k-class method
+            to calculate user skill [default: True]
+        null_class : str
+            Value for the NULL class for k-class method [default: 'NONE']
+        skill_threshold : float
+            Threshold for user skill to toggle the `level_up` flag [default: 0.7]
+        count_threshold : int
+            Threshold for the number of classifications done by the volunteer to get an accurate
+            measurement of skill [default: 10]
+        strategy : str
+            Strategy to use to calculate the leveling up toggle:
+             - `mean` : use the mean skill (excluding the NULL class) compared to the skill threshold
+             - `all` : check every class against the threshold skill (all classes must be greater than the threshold)
+
+        Returns
+        -------
+        data : dict
+            A dictionary with the following keys:
+                - classes : list
+                    a list of classes (in the case of binary, this is [True, False])
+                - confusion_simple : list
+                    a confusion matrix using the raw counts (without subject difficulty weighting)
+                - weighted_skill : dict
+                    the subject difficulty weighted user skill per class
+                - skill : dict
+                    the simple (non-subject difficulty weighted) user skill per class
+                - count : dict
+                    the count of classifications per class
+                - mean_skill : float
+                    the average skill excluding the NULL class
+                - level_up : bool
+                    flag to show whether the user should be leveled up using the input thresholds
+    '''
     if binary:
         classes = ['True', 'False']
         confusion_simple, confusion_subject = get_confusion_matrix(extracts, relevant_reduction, binary, None)
@@ -30,15 +72,29 @@ def user_skill_reducer(extracts, relevant_reduction=[], binary=False, null_class
     per_class_skill_dict = {key: value for key, value in zip(classes, per_class_skill)}
     per_class_count = {key: value for key, value in zip(classes, np.sum(confusion_simple, axis=0))}
 
-    null_removed_classes = [classi for classi in classes if classi != null_class]
-    mean_skill = np.sum([weighted_per_class_skill_dict[key] for key in null_removed_classes]) / (len(null_removed_classes) + 1.e-16)
+    # remove the null class from the skill array to calculate the mean skill
+    if binary:
+        null_removed_classes = [classi for classi in classes if classi != 'False']
+        null_removed_counts = [ci for classi, ci in per_class_count.items() if classi != 'False']
+        mean_skill = np.sum([weighted_per_class_skill_dict[key] for key in null_removed_classes]) / (len(null_removed_classes) + 1.e-16)
+    else:
+        null_removed_classes = [classi for classi in classes if classi != null_class]
+        null_removed_counts = [ci for classi, ci in per_class_count.items() if classi != null_class]
+        mean_skill = np.sum([weighted_per_class_skill_dict[key] for key in null_removed_classes]) / (len(null_removed_classes) + 1.e-16)
+
+    # check the leveling up value
+    if strategy == 'mean':
+        level_up = (mean_skill > skill_threshold) & all([c > count_threshold for c in null_removed_counts])
+    elif strategy == 'all':
+        level_up = all([weighted_per_class_skill_dict[s] > skill_threshold for s in null_removed_classes]) & all([c > count_threshold for c in null_removed_counts])
 
     return {'classes': classes,
             'confusion_simple': confusion_simple.tolist(),
             'weighted_skill': weighted_per_class_skill_dict,
             'skill': per_class_skill_dict,
             'count': per_class_count,
-            'mean_skill': mean_skill
+            'mean_skill': mean_skill,
+            'level_up': level_up
             }
 
 
