@@ -84,9 +84,9 @@ def user_skill_reducer(extracts, relevant_reduction=[], binary=False, null_class
 
     # check the leveling up value
     if strategy == 'mean':
-        level_up = (mean_skill > skill_threshold) & all([c > count_threshold for c in null_removed_counts])
+        level_up = (mean_skill >= skill_threshold) & all([c >= count_threshold for c in null_removed_counts])
     elif strategy == 'all':
-        level_up = all([weighted_per_class_skill_dict[s] > skill_threshold for s in null_removed_classes]) & all([c > count_threshold for c in null_removed_counts])
+        level_up = all([weighted_per_class_skill_dict[s] >= skill_threshold for s in null_removed_classes]) & all([c >= count_threshold for c in null_removed_counts])
 
     return {'classes': classes,
             'confusion_simple': confusion_simple.tolist(),
