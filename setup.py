@@ -69,7 +69,7 @@ setup(
             'myst-nb>=0.13.2,<0.18',
             'sphinx>=2.2.2,<6.2',
             'sphinxcontrib-httpdomain>=1.7.0,<1.9',
-            'sphinx_rtd_theme>=0.4.3,<1.2'
+            'sphinx_rtd_theme>=0.4.3,<1.3'
         ],
         'test': [
             'nose>=1.3.7,<1.4',
