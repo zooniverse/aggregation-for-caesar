@@ -29,7 +29,7 @@ def user_skill_reducer(extracts, relevant_reduction=[], mode='binary', null_clas
             List of extracts
         relevant_reduction : list
             List of subject difficulty values attached as `relevant_reduction` on Caesar
-        binary : boolean
+        mode : str
             Flag for whether to use the binary (True/False for success) vs k-class method
             to calculate user skill [default: True]
         null_class : str
@@ -63,12 +63,8 @@ def user_skill_reducer(extracts, relevant_reduction=[], mode='binary', null_clas
                 - level_up : bool
                     flag to show whether the user should be leveled up using the input thresholds
     '''
-    if mode == 'binary':
-        classes = ['True', 'False']
-        confusion_simple, confusion_subject = get_confusion_matrix(extracts, relevant_reduction, mode, None)
-    else:
-        confusion_simple, confusion_subject, classes = \
-            get_confusion_matrix(extracts, relevant_reduction, mode, null_class)
+    # confusion_simple, confusion_subject = get_confusion_matrix(extracts, relevant_reduction, mode, None)
+    confusion_simple, confusion_subject, classes = get_confusion_matrix(extracts, relevant_reduction, mode, null_class)
 
     # get both the weighted and non-weighted skill
     weight_per_class_skill = (confusion_subject.diagonal()) / (np.sum(confusion_subject, axis=1) + 1.e-16)
@@ -136,7 +132,9 @@ def get_confusion_matrix(extracts, relevant_reduction, mode, null_class):
             Only returned for k-class mode
     '''
     if mode == 'binary':
-        return get_user_skill_binary(extracts, relevant_reduction)
+        class_counts, subject_difficulties = get_user_skill_binary(extracts, relevant_reduction)
+        true_counts = ['True'] * len(class_counts)
+        classes = ['True', 'False']
     else:
         strategy = extracts[0]['feedback']['strategy']
 
@@ -166,15 +164,6 @@ def get_confusion_matrix(extracts, relevant_reduction, mode, null_class):
 
         subject_difficulty = 1 - np.asarray(difficulties)
 
-        # find the easiest subject in the set and set all fully successful
-        # subjects to this "easy" score. limit the easy score to 0.05 so that
-        # we don't have a runaway growth of easy weights
-        difficulty_min = np.max([np.min(subject_difficulty[subject_difficulty > 0], initial=0), DIFFICULTY_FLOOR])
-
-        # limit the difficulty to a mininum of 0.05 so that
-        # easy subjects still have some weight
-        subject_difficulty[subject_difficulty == 0] = difficulty_min
-
         # we will loop through all the extracts and create a list
         # of user classified label and a corresponding gold standard
         # label. then, the confusion matrix is just determined using
@@ -185,21 +174,25 @@ def get_confusion_matrix(extracts, relevant_reduction, mode, null_class):
             true_counts, class_counts, subject_difficulties = get_multi_class(extracts, subject_difficulty, true_key, null_class)
             classes.append(null_class)
 
-        # get the simple confusion matrix without the subject difficulty
-        confusion_simple = confusion_matrix(true_counts, class_counts, labels=classes)
+    # limit the difficulty to a mininum of 0.05 so that
+    # easy subjects still have some weight
+    subject_difficulties = np.clip(subject_difficulties, DIFFICULTY_FLOOR, 1)
 
-        # get the more complicated confusion matrix accounting for subject difficulty
-        confusion_subject = confusion_matrix(true_counts, class_counts, sample_weight=subject_difficulties,
-                                             labels=classes)
+    # get the simple confusion matrix without the subject difficulty
+    confusion_simple = confusion_matrix(true_counts, class_counts, labels=classes)
 
-        return (confusion_simple, confusion_subject, classes)
+    # get the more complicated confusion matrix accounting for subject difficulty
+    confusion_subject = confusion_matrix(true_counts, class_counts, sample_weight=subject_difficulties,
+                                         labels=classes)
+
+    return (confusion_simple, confusion_subject, classes)
 
 
 def get_user_skill_binary(extracts, relevant_reduction):
     # binary always defaults to 2x2 where the second column
     # (gold standard = False) is NaN
-    confusion_simple = np.zeros((2, 2))
-    confusion_subject = np.zeros((2, 2))
+    # confusion_simple = np.zeros((2, 2))
+    # confusion_subject = np.zeros((2, 2))
 
     successes = []
     difficulties = []
@@ -218,6 +211,10 @@ def get_user_skill_binary(extracts, relevant_reduction):
     successes = np.asarray(successes)
     difficulties = np.asarray(difficulties)
 
+    true_mask = successes == 1
+    false_mask = successes == 0
+
+    '''
     # find the easiest subject in the set and set all fully successful
     # subjects to this "easy" score. limit the easy score to 0.05 so that
     # we don't have a runaway growth of easy weights
@@ -227,8 +224,6 @@ def get_user_skill_binary(extracts, relevant_reduction):
     # easy subjects still have some weight
     difficulties[difficulties == 0] = difficulty_min
 
-    true_mask = successes == 1
-    false_mask = successes == 0
 
     # create the confusion matrix from the list of success/failures
     confusion_simple[0, 0] = np.sum(true_mask)
@@ -247,7 +242,19 @@ def get_user_skill_binary(extracts, relevant_reduction):
     confusion_subject[1, 0] = np.sum(neg_difficulty)
     confusion_subject[:, 1] = 0
 
+    print(difficulties.tolist(), file=sys.stderr)
+
     return (confusion_simple.T, confusion_subject.T)
+    '''
+
+    weights = np.zeros_like(difficulties)
+
+    weights[true_mask] = difficulties[true_mask]
+    weights[false_mask] = 1 - difficulties[false_mask]
+
+    class_counts = [str(s == 1) for s in successes]
+
+    return class_counts, weights
 
 
 def get_multi_class(extracts, subject_difficulty, true_key, null_class):
@@ -296,7 +303,7 @@ def get_multi_class(extracts, subject_difficulty, true_key, null_class):
         subject_difficulty_i = [subject_difficulty[j]] * len(classi)
         for class_ind in range(len(classi)):
             if true_count_i[class_ind] != class_count_i[class_ind]:
-                subject_difficulty_i[class_ind] = max([1. - subject_difficulty[j], DIFFICULTY_FLOOR])
+                subject_difficulty_i[class_ind] = 1. - subject_difficulty[j]
 
         subject_difficulties.extend(subject_difficulty_i)
 
@@ -322,9 +329,9 @@ def get_one_to_one(extracts, subject_difficulty, true_key):
         # do the opposite for failure scores: easy subject failures should be
         # penalized more strongly compared to difficulty failures
         if user_class_i == true_keys:
-            subject_difficulties.append(max([subject_difficulty[j], DIFFICULTY_FLOOR]))
+            subject_difficulties.append(subject_difficulty[j])
         else:
-            subject_difficulties.append(max([1 - subject_difficulty[j], DIFFICULTY_FLOOR]))
+            subject_difficulties.append(1 - subject_difficulty[j])
 
         true_counts.extend(true_keys)
         class_counts.extend(user_class_i)
