@@ -43,11 +43,13 @@ def reducer_wrapper(
                 if relevant_reduction:
                     kwargs_extra_data['relevant_reduction'] = kwargs['relevant_reduction']
 
-            if 'binary' in kwargs.keys():
-                binary = kwargs['binary']
-                if isinstance(binary, str):
-                    binary = ast.literal_eval(binary)
-                kwargs_details['binary'] = binary
+            if 'mode' in kwargs.keys():
+                skill_mode = kwargs['mode']
+                try:
+                    skill_mode = ast.literal_eval(skill_mode)
+                except ValueError:
+                    pass
+                kwargs_details['mode'] = skill_mode
             if 'count_threshold' in kwargs.keys():
                 count_threshold = kwargs['count_threshold']
                 if isinstance(count_threshold, str):
