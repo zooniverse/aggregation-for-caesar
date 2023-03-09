@@ -30,8 +30,11 @@ def user_skill_reducer(extracts, relevant_reduction=[], mode='binary', null_clas
         relevant_reduction : list
             List of subject difficulty values attached as `relevant_reduction` on Caesar
         mode : str
-            Flag for whether to use the binary (True/False for success) vs k-class method
-            to calculate user skill [default: True]
+            The type of confusion matrix to return. Possible options are:
+              - binary: (True/False) mode
+              - one-to-one: k-class mode where individual classifications are compared against corresponding gold standard values
+              - many-to-many mode: k-class mode where several volunteer classifications are compared against several gold standard values.
+                In this case, incorrect classifications are compared against a `null_class` and therefore, the function returns a pseudo-confusion matrix.
         null_class : str
             Value for the NULL class for k-class method [default: 'NONE']
         skill_threshold : float
@@ -117,7 +120,11 @@ def get_confusion_matrix(extracts, relevant_reduction, mode, null_class):
             Dictionary containing the `subject_difficulty` array that gives
             the difficulty of the all the subjects seen by the user
         mode : str
-            Whether to run the reducer in binary (True/False) mode or k-class mode
+            The type of confusion matrix to return. Possible options are:
+              - binary: (True/False) mode
+              - one-to-one: k-class mode where individual classifications are compared against corresponding gold standard values
+              - many-to-many mode: k-class mode where several volunteer classifications are compared against several gold standard values.
+                In this case, incorrect classifications are compared against a `null_class` and therefore, the function returns a pseudo-confusion matrix.
         null_class : string
             The value of the null/non-existant class for the many-to-many k-class mode
 
@@ -173,6 +180,8 @@ def get_confusion_matrix(extracts, relevant_reduction, mode, null_class):
         elif mode == 'many-to-many':
             true_counts, class_counts, subject_difficulties = get_multi_class(extracts, subject_difficulty, true_key, null_class)
             classes.append(null_class)
+        else:
+            raise ValueError(f"Mode must be 'binary', 'one-to-one' or 'many-to-many' not '{mode}'")
 
     # limit the difficulty to a mininum of 0.05 so that
     # easy subjects still have some weight
@@ -189,11 +198,24 @@ def get_confusion_matrix(extracts, relevant_reduction, mode, null_class):
 
 
 def get_user_skill_binary(extracts, relevant_reduction):
-    # binary always defaults to 2x2 where the second column
-    # (gold standard = False) is NaN
-    # confusion_simple = np.zeros((2, 2))
-    # confusion_subject = np.zeros((2, 2))
+    '''
+        Get the confusion matrix for a binary (True/False) case.
+        This function is used to create a 2x2 confusion matrix where the second column (gold standard = False) is NaN.
 
+        Inputs
+        ------
+        extracts : list
+            List of extracts for a given user
+        relevant_reduction : dict
+            Dictionary containing the `subject_difficulty` array that gives
+            the difficulty of the all the subjects seen by the user
+        Returns
+        -------
+        class_counts : list
+            List containing successful or incorrect classifications
+        weights : list
+            Corresponding weight for each classification based on the subject difficulty score
+    '''
     successes = []
     difficulties = []
 
@@ -214,39 +236,6 @@ def get_user_skill_binary(extracts, relevant_reduction):
     true_mask = successes == 1
     false_mask = successes == 0
 
-    '''
-    # find the easiest subject in the set and set all fully successful
-    # subjects to this "easy" score. limit the easy score to 0.05 so that
-    # we don't have a runaway growth of easy weights
-    difficulty_min = np.max([np.min(difficulties[difficulties > 0], initial=0), DIFFICULTY_FLOOR])
-
-    # limit the difficulty to a mininum of 0.05 so that
-    # easy subjects still have some weight
-    difficulties[difficulties == 0] = difficulty_min
-
-
-    # create the confusion matrix from the list of success/failures
-    confusion_simple[0, 0] = np.sum(true_mask)
-    confusion_simple[1, 0] = np.sum(false_mask)
-    confusion_simple[:, 1] = 0
-
-    # the true score is the sum of difficulties of the correct classifications
-    # so hard subjects give you a boost in score and the easy subjects
-    # give you a small increase
-    confusion_subject[0, 0] = np.sum(difficulties[true_mask])
-
-    # do the opposite for failure scores: easy subject failures should be
-    # penalized more strongly compared to difficulty failures
-    neg_difficulty = 1. - difficulties[false_mask]
-    neg_difficulty[neg_difficulty == 0] = difficulty_min
-    confusion_subject[1, 0] = np.sum(neg_difficulty)
-    confusion_subject[:, 1] = 0
-
-    print(difficulties.tolist(), file=sys.stderr)
-
-    return (confusion_simple.T, confusion_subject.T)
-    '''
-
     weights = np.zeros_like(difficulties)
 
     weights[true_mask] = difficulties[true_mask]
@@ -258,6 +247,34 @@ def get_user_skill_binary(extracts, relevant_reduction):
 
 
 def get_multi_class(extracts, subject_difficulty, true_key, null_class):
+    '''
+        Get the confusion matrix for a k-class many-to-many comparison.
+        This function is used to create a (k + 1) x (k + 1) confusion matrix for
+        `k` real classes and one additional `null_class`. In this case, it is not
+        possible to get an accurate confusion between classes since many classes are
+        compared simultaneously. Therefore, incorrect classifications are instead
+        compared with the `null_class`.
+
+        Inputs
+        ------
+        extracts : list
+            List of extracts for a given user
+        relevant_reduction : dict
+            Dictionary containing the `subject_difficulty` array that gives
+            the difficulty of the all the subjects seen by the user
+        true_key : str
+            Dictionary key to get the true choice from the extracts
+        null_class : str
+            Class name for the null class to be used for incorrect classifications
+        Returns
+        -------
+        true_counts : list
+            List containing the gold standard classes per classification
+        class_counts : list
+            List containing volunteer labels per classifications.
+        weights : list
+            Corresponding weight for each classification based on the subject difficulty score
+    '''
     true_counts = []
     class_counts = []
     subject_difficulties = []
@@ -311,6 +328,29 @@ def get_multi_class(extracts, subject_difficulty, true_key, null_class):
 
 
 def get_one_to_one(extracts, subject_difficulty, true_key):
+    '''
+        Get the confusion matrix for a k-class one-to-one comparison.
+        This function is used to create a k x k confusion matrix for
+        `k` real classes.
+
+        Inputs
+        ------
+        extracts : list
+            List of extracts for a given user
+        relevant_reduction : dict
+            Dictionary containing the `subject_difficulty` array that gives
+            the difficulty of the all the subjects seen by the user
+        true_key : str
+            Dictionary key to get the true choice from the extracts
+        Returns
+        -------
+        true_counts : list
+            List containing the gold standard classes per classification
+        class_counts : list
+            List containing volunteer labels per classifications.
+        weights : list
+            Corresponding weight for each classification based on the subject difficulty score
+    '''
     true_counts = []
     class_counts = []
     subject_difficulties = []
