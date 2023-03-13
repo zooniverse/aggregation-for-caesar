@@ -66,7 +66,7 @@ reduced_data = {
             0,
             0,
             0,
-            1
+            0
         ],
         [
             0,
@@ -78,12 +78,12 @@ reduced_data = {
             0,
             0,
             1,
-            0
+            1
         ],
         [
-            0,
-            0,
             1,
+            0,
+            0,
             0
         ]
     ],
@@ -118,6 +118,7 @@ TestkClassUserSkillReducer = ReducerTest(
     reduced_data,
     'Test k-class user skill reducer',
     network_kwargs=kwargs_extra_data,
+    kwargs={'mode': 'many-to-many'},
     add_version=False,
     processed_type='list',
     test_name='TestkClassUserSkillReducer'
@@ -136,7 +137,7 @@ reduced_data_strategy_all = {
             0,
             0,
             0,
-            1
+            0
         ],
         [
             0,
@@ -148,12 +149,12 @@ reduced_data_strategy_all = {
             0,
             0,
             1,
-            0
+            1
         ],
         [
-            0,
-            0,
             1,
+            0,
+            0,
             0
         ]
     ],
@@ -189,7 +190,7 @@ TestkClassUserSkillReducerStrategyAll = ReducerTest(
     'Test k-class user skill reducer',
     network_kwargs=kwargs_extra_data,
     add_version=False,
-    kwargs={'strategy': 'all', 'skill_threshold': 0.5, 'count_threshold': 1},
+    kwargs={'mode': 'many-to-many', 'strategy': 'all', 'skill_threshold': 0.5, 'count_threshold': 1},
     processed_type='list',
     test_name='TestkClassUserSkillReducer'
 )
@@ -207,6 +208,7 @@ extracted_data = [
             0.43849207646830024
         ],
         "feedback": {
+            "strategy": "graph2drange",
             "success": [
                 True,
                 True,
@@ -238,6 +240,7 @@ extracted_data = [
             0.4384719554333891
         ],
         "feedback": {
+            "strategy": "graph2drange",
             "success": [
                 True,
                 True,
@@ -268,6 +271,7 @@ extracted_data = [
             0.37096065137496126
         ],
         "feedback": {
+            "strategy": "graph2drange",
             "success": [
                 False,
                 True,
@@ -352,10 +356,10 @@ reduced_data = {
     ],
     "confusion_simple": np.asarray([
         [
-            9.0, 0
+            9.0, 4.0
         ],
         [
-            4.0, 0
+            0.0, 0.0
         ]
     ]).tolist(),
     'mean_skill': 0.844106463878327,
@@ -370,8 +374,134 @@ TestBinaryUserSkillReducer = ReducerTest(
     reduced_data,
     'Test binary user skill reducer',
     network_kwargs=kwargs_extra_data,
-    kwargs={'binary': True},
+    kwargs={'mode': 'binary'},
     add_version=False,
     processed_type='list',
     test_name='TestBinaryUserSkillReducer'
+)
+
+
+extracted_data = [
+    {
+        "BLIP": 1,
+        "feedback": {
+            "true_choiceIds": [
+                "BLIP",
+            ],
+            "strategy": "surveySimple"
+        },
+    },
+    {
+        "WHISTLE": 1,
+        "feedback": {
+            "true_choiceIds": [
+                "WHISTLE",
+            ],
+            "strategy": "surveySimple"
+        },
+    },
+    {
+        "NONEOFTHEABOVE": 1,
+        "feedback": {
+            "true_choiceIds": [
+                "CHIRP",
+            ],
+            "strategy": "surveySimple"
+        },
+    }
+]
+
+kwargs_extra_data = {
+    "relevant_reduction": [
+        {
+            "data": {
+                "difficulty": [
+                    1
+                ]
+            }
+        },
+        {
+            "data": {
+                "difficulty": [
+                    0.5,
+                ]
+            }
+        },
+        {
+            "data": {
+                "difficulty": [
+                    0.99,
+                ]
+            }
+        }
+    ]
+}
+
+reduced_data = {
+    "classes": [
+        "blip",
+        "chirp",
+        "noneoftheabove",
+        "whistle"
+    ],
+    "confusion_simple": [
+        [
+            1,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            1,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            1
+        ]
+    ],
+    "count": {
+        "blip": 1,
+        "chirp": 1,
+        "noneoftheabove": 0,
+        "whistle": 1
+    },
+    "level_up": False,
+    "mean_skill": 0.49999999999999944,
+    "skill": {
+        "blip": 1.0,
+        "chirp": 0.0,
+        "noneoftheabove": 0.0,
+        "whistle": 1.0
+    },
+    "weighted_skill": {
+        "blip": 0.9999999999999981,
+        "chirp": 0.0,
+        "noneoftheabove": 0.0,
+        "whistle": 0.9999999999999998
+    }
+}
+
+TestOneToOneUserSkillReducer = ReducerTest(
+    user_skill_reducer,
+    process,
+    extracted_data,
+    extracted_data,
+    reduced_data,
+    'Test one-to-one user skill reducer',
+    network_kwargs=kwargs_extra_data,
+    kwargs={'mode': 'one-to-one'},
+    add_version=False,
+    processed_type='list',
+    test_name='TestOneToOneUserSkillReducer'
 )

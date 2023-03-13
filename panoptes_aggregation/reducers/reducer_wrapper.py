@@ -43,11 +43,6 @@ def reducer_wrapper(
                 if relevant_reduction:
                     kwargs_extra_data['relevant_reduction'] = kwargs['relevant_reduction']
 
-            if 'binary' in kwargs.keys():
-                binary = kwargs['binary']
-                if isinstance(binary, str):
-                    binary = ast.literal_eval(binary)
-                kwargs_details['binary'] = binary
             if 'count_threshold' in kwargs.keys():
                 count_threshold = kwargs['count_threshold']
                 if isinstance(count_threshold, str):
@@ -58,13 +53,10 @@ def reducer_wrapper(
                 if isinstance(skill_threshold, str):
                     skill_threshold = ast.literal_eval(skill_threshold)
                 kwargs_details['skill_threshold'] = skill_threshold
-            if 'strategy' in kwargs.keys():
-                strategy = kwargs['strategy']
-                try:
-                    strategy = ast.literal_eval(strategy)
-                except ValueError:
-                    pass
-                kwargs_details['strategy'] = strategy
+            if 'mode' in kwargs:
+                kwargs_details['mode'] = kwargs['mode'].strip("\'")
+            if 'strategy' in kwargs:
+                kwargs_details['strategy'] = kwargs['strategy'].strip("\'")
 
             no_version = kwargs.pop('no_version', False)
             if defaults_process is not None:
