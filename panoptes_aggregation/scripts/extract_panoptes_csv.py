@@ -100,6 +100,8 @@ def extract_csv(
         version_range = config_yaml['workflow_version']
         for key, value in version_range.items():
             version_range[key] = packaging.version.parse(value)
+            if key == 'max' and version_range[key].minor == 0:
+                version_range[key] = packaging.version.parse(str(version_range[key].major + 1))
     else:
         # a single version is given
         version = packaging.version.parse(config_yaml['workflow_version'])
