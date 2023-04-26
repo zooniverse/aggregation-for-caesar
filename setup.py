@@ -55,7 +55,7 @@ setup(
     include_package_data=True,
     extras_require={
         'online': [
-            'flask>=1.0,<2.3',
+            'flask>=1.0,<2.4',
             'flask-cors>=3.0,<3.1',
             'panoptes-client>=1.1,<1.7',
             'requests>=2.4.2,<2.29',
