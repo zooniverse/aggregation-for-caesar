@@ -50,6 +50,12 @@ def panoptes_to_geometry(params, shape):
         rot_rectangle = shapely.geometry.box(x, y, x + width, y + height)
         rot_rectangle = shapely.affinity.rotate(rot_rectangle, angle)
         return rot_rectangle
+    elif shape == 'temporalRotateRectangle':
+        xc, yc, width, height, angle, _ = params
+        x, y = xc - 0.5 * width, yc - 0.5 * height
+        rot_rectangle = shapely.geometry.box(x, y, x + width, y + height)
+        rot_rectangle = shapely.affinity.rotate(rot_rectangle, angle)
+        return rot_rectangle
     elif shape == 'circle':
         x, y, r = params
         circle = shapely.geometry.Point(x, y).buffer(r)
@@ -101,7 +107,12 @@ def IoU_metric(params1, params2, shape):
     if union == 0:
         # catch divide by zero (i.e. cases when neither shape has an area)
         return numpy.inf
-    return 1 - intersection / union
+
+    if 'temporal' in shape:
+        # scale the distribution by the time difference
+        return (1 - intersection / union)  * numpy.abs(params1[-1] - params2[-1])
+    else:
+        return 1 - intersection / union
 
 
 def average_bounds(params_list, shape):
@@ -136,12 +147,12 @@ def average_bounds(params_list, shape):
     dy = by[1] - by[0]
     # bound is a list of tuples giving (min, max) values for each paramters of the shape
     bound = [bx, by]
-    if shape in ['rectangle', 'rotateRectangle', 'ellipse']:
+    if shape in ['rectangle', 'rotateRectangle', 'temporalRotateRectangle', 'ellipse']:
         # bound on width or radius_x, min set to 1 pixel
         bound.append((1, dx))
         # bound on height or radius_y, min set to 1 pixel
         bound.append((1, dy))
-        if shape in ['rotateRectangle', 'ellipse']:
+        if shape in ['rotateRectangle', 'ellipse', 'temporalRotateRectangle']:
             # bound on angle (capped at 180 due to symmetry)
             bound.append((0, 180))
     elif shape in ['circle', 'triangle']:
@@ -150,6 +161,10 @@ def average_bounds(params_list, shape):
         if shape == 'triangle':
             # triangle has three fold symmetry
             bound.append((0, 120))
+
+    if 'temporal' in shape:
+        bound.append((0, 1))
+
     return bound
 
 
@@ -191,6 +206,19 @@ def scale_shape(params, shape, gamma):
             gamma * params[3],
             # angle does not change
             params[4]
+        ]
+    elif shape == 'temporalRotateRectangle':
+        return [
+            # center point does not change
+            params[0],
+            params[1],
+            # width and height scale
+            gamma * params[2],
+            gamma * params[3],
+            # angle does not change
+            params[4],
+            # time does not change
+            params[5]
         ]
     elif shape == 'circle':
         return [
