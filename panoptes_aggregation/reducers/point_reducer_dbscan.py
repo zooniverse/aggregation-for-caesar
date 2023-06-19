@@ -9,6 +9,7 @@ from sklearn.cluster import DBSCAN
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
+from .point_process_data import process_data_by_frame
 
 
 DEFAULTS = {
@@ -21,36 +22,7 @@ DEFAULTS = {
 }
 
 
-def process_data(data):
-    '''Process a list of extractions into lists of `x` and `y` sorted by `tool`
-
-    Parameters
-    ----------
-    data : list
-        A list of extractions crated by
-        :meth:`panoptes_aggregation.extractors.point_extractor.point_extractor`
-
-    Returns
-    -------
-    processed_data : dict
-        A dictionary with each key being a `tool` with a list of (`x`, `y`)
-        tuples as a vlaue
-    '''
-    unique_frames = set(sum([list(d.keys()) for d in data], []))
-    data_by_tool = {}
-    for frame in unique_frames:
-        data_by_tool[frame] = {}
-        unique_tools = set(sum([['_'.join(k.split('_')[:-1]) for k in d.get(frame, {}).keys()] for d in data], []))
-        for tool in unique_tools:
-            for d in data:
-                if frame in d:
-                    data_by_tool[frame].setdefault(tool, [])
-                    if ('{0}_x'.format(tool) in d[frame]) and ('{0}_y'.format(tool) in d[frame]):
-                        data_by_tool[frame][tool] += list(zip(d[frame]['{0}_x'.format(tool)], d[frame]['{0}_y'.format(tool)]))
-    return data_by_tool
-
-
-@reducer_wrapper(process_data=process_data, defaults_data=DEFAULTS, user_id=True)
+@reducer_wrapper(process_data=process_data_by_frame, defaults_data=DEFAULTS, user_id=True)
 @subtask_wrapper
 def point_reducer_dbscan(data_by_tool, **kwargs):
     '''Cluster a list of points by tool using DBSCAN
