@@ -9,5 +9,7 @@ SHAPE_LUT = {
     'rectangle': ['x', 'y', 'width', 'height'],
     'rotateRectangle': ['x', 'y', 'width', 'height', 'angle'],
     'triangle': ['x', 'y', 'r', 'angle'],
-    'fan': ['x', 'y', 'radius', 'spread', 'rotation']
+    'fan': ['x', 'y', 'radius', 'spread', 'rotation'],
+    'temporalRotateRectangle': ['xcenter', 'ycenter', 'width', 'height', 'angle', 'displayTime'],
+    'temporalPoint': ['x', 'y', 'displayTime']
 }
