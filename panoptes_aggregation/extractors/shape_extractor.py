@@ -8,6 +8,8 @@ from .extractor_wrapper import extractor_wrapper
 from .subtask_extractor_wrapper import subtask_wrapper
 from .tool_wrapper import tool_wrapper
 from ..shape_tools import SHAPE_LUT
+import datetime
+import time
 
 
 @extractor_wrapper()
@@ -53,6 +55,12 @@ def shape_extractor(classification, **kwargs):
                 key = '{0}_toolIndex{1}'.format(task_key, tool_index)
             else:
                 raise KeyError('Neither `tool` or `toolIndex` are in the annotation')
+
+            if shape == 'temporalRotateRectangle':
+                # remove the _center so that it doesn't conflict later on
+                value['xcenter'] = value.pop('x_center')
+                value['ycenter'] = value.pop('y_center')
+
             frame = 'frame{0}'.format(value.get('frame', 0))
             if all(param in value for param in shape_params):
                 extract.setdefault(frame, {})
