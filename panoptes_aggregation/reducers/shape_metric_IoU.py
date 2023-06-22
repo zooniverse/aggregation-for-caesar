@@ -110,7 +110,7 @@ def IoU_metric(params1, params2, shape):
 
     if 'temporal' in shape:
         # scale the distribution by the time difference
-        return (1 - intersection / union)  * numpy.abs(params1[-1] - params2[-1])
+        return (1 - intersection / union) * numpy.abs(params1[-1] - params2[-1])
     else:
         return 1 - intersection / union
 

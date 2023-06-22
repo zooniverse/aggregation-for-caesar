@@ -100,4 +100,3 @@ def temporal_point_reducer_hdbscan(data_by_tool, **kwargs):
                         clusters[frame].setdefault('{0}_clusters_var_y'.format(tool), []).append(float(k_cov[1, 1]))
                         clusters[frame].setdefault('{0}_clusters_var_x_y'.format(tool), []).append(float(k_cov[0, 1]))
     return clusters
-

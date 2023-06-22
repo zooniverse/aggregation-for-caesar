@@ -62,4 +62,3 @@ def point_extractor_temporal(classification, **kwargs):
                 timestamp_seconds = datetime.timedelta(hours=timestamp.tm_hour, minutes=timestamp.tm_min, seconds=timestamp.tm_sec).total_seconds()
                 extract[frame].setdefault('{0}_timestamp'.format(key), []).append(timestamp_seconds)
     return extract
-
