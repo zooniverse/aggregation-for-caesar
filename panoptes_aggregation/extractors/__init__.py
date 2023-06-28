@@ -15,7 +15,6 @@ from .nfn_extractor import nfn_extractor
 from .i2a_extractor import i2a_extractor
 from .text_extractor import text_extractor
 from .all_tasks_empty_extractor import all_tasks_empty_extractor
-from .point_extractor_temporal import point_extractor_temporal
 from ..copy_function import copy_function
 
 shortcut_extractor = copy_function(question_extractor, 'shortcut_extractor')
@@ -23,7 +22,6 @@ shortcut_extractor = copy_function(question_extractor, 'shortcut_extractor')
 extractors = {
     'point_extractor': point_extractor,
     'point_extractor_by_frame': point_extractor_by_frame,
-    'point_extractor_temporal': point_extractor_temporal,
     'rectangle_extractor': rectangle_extractor,
     'question_extractor': question_extractor,
     'shortcut_extractor': shortcut_extractor,
