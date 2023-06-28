@@ -2,12 +2,12 @@
 Temporal Point Reducer HDBSCAN
 ---------------------
 This module provides functions to cluster points extracted with
-:mod:`panoptes_aggregation.extractors.point_extractor`.
+:mod:`panoptes_aggregation.extractors.shape_extractor` with `shape=temporalPoint`.
 '''
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
-from .point_process_data import process_temporal_data
+from .point_process_data import process_temporal_data, temporal_metric
 import numpy as np
 from hdbscan import HDBSCAN
 
@@ -22,13 +22,6 @@ DEFAULTS = {
     'cluster_selection_method': {'default': 'eom', 'type': str},
     'allow_single_cluster': {'default': False, 'type': bool}
 }
-
-
-def temporal_metric(point1, point2):
-    x1, y1, displayTime1 = point1
-    x2, y2, displayTime2 = point2
-
-    return ((x1 - x2)**2. + (y1 - y2)**2.) * np.abs(displayTime1 - displayTime2)
 
 
 @reducer_wrapper(process_data=process_temporal_data, defaults_data=DEFAULTS, user_id=True)
@@ -50,12 +43,14 @@ def temporal_point_reducer_hdbscan(data_by_tool, **kwargs):
 
         * `tool*_points_x` : A list of `x` positions for **all** points drawn with `tool*`
         * `tool*_points_y` : A list of `y` positions for **all** points drawn with `tool*`
+        * `tool*_points_displayTime` : A list of `time` values for **all** points drawn with `tool*`
         * `tool*_cluster_labels` : A list of cluster labels for **all** points drawn with `tool*`
         * `tool*_cluster_probabilities`: A list of cluster probabilities for **all** points drawn with `tool*`
         * `tool*_clusters_persistance`: A measure for how persistent each **cluster** is (1.0 = stable, 0.0 = unstable)
         * `tool*_clusters_count` : The number of points in each **cluster** found
         * `tool*_clusters_x` : The weighted `x` position for each **cluster** found
         * `tool*_clusters_y` : The weighted `y` position for each **cluster** found
+        * `tool*_clusters_displayTime` : The `time` value for each **cluster** found
         * `tool*_clusters_var_x` : The weighted `x` variance of points in each **cluster** found
         * `tool*_clusters_var_y` : The weighted `y` variance of points in each **cluster** found
         * `tool*_clusters_var_x_y` : The weighted `x-y` covariance of points in each **cluster** found

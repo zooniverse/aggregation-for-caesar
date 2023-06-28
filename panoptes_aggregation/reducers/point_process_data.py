@@ -58,3 +58,18 @@ def process_temporal_data(data):
                     if (f'{tool}_x' in d[frame]) and (f'{tool}_y' in d[frame]) and (f'{tool}_displayTime' in d[frame]):
                         data_by_tool[frame][tool] += list(zip(d[frame][f'{tool}_x'], d[frame][f'{tool}_y'], d[frame][f'{tool}_displayTime']))
     return data_by_tool
+
+
+def temporal_metric(point1, point2):
+    '''
+        Metric for points that contain (x, y) as well as temporal data.
+        This metric weights individual coordinates by the time coordinate.
+    '''
+    x1, y1, displayTime1 = point1
+    x2, y2, displayTime2 = point2
+
+    # adjust the time by a small epsilon so that we don't zero out the metric
+    displayTime1 += 1
+    displayTime2 += 1
+
+    return ((x1 * displayTime1 - x2 * displayTime2)**2. + (y1 * displayTime1 - y2 * displayTime2)**2.)
