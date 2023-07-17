@@ -11,8 +11,8 @@ extracted_data = [
             "T0_toolIndex0_displayTime": [0.1],
             "T0_toolIndex0_height": [50.0],
             "T0_toolIndex0_width": [150.0],
-            "T0_toolIndex0_xcenter": [510.0],
-            "T0_toolIndex0_ycenter": [500.0],
+            "T0_toolIndex0_x_center": [510.0],
+            "T0_toolIndex0_y_center": [500.0],
         }
     },
     {
@@ -21,8 +21,8 @@ extracted_data = [
             "T0_toolIndex0_displayTime": [0.1],
             "T0_toolIndex0_height": [60.0],
             "T0_toolIndex0_width": [160.0],
-            "T0_toolIndex0_xcenter": [490.0],
-            "T0_toolIndex0_ycenter": [515.0],
+            "T0_toolIndex0_x_center": [490.0],
+            "T0_toolIndex0_y_center": [515.0],
         }
     },
     {
@@ -31,8 +31,8 @@ extracted_data = [
             "T0_toolIndex0_displayTime": [0.1],
             "T0_toolIndex0_height": [60.0],
             "T0_toolIndex0_width": [120.0],
-            "T0_toolIndex0_xcenter": [510.0],
-            "T0_toolIndex0_ycenter": [500.0],
+            "T0_toolIndex0_x_center": [510.0],
+            "T0_toolIndex0_y_center": [500.0],
         }
     },
     {
@@ -41,8 +41,8 @@ extracted_data = [
             "T0_toolIndex0_displayTime": [0.7],
             "T0_toolIndex0_height": [120.0],
             "T0_toolIndex0_width": [110.0],
-            "T0_toolIndex0_xcenter": [360.0],
-            "T0_toolIndex0_ycenter": [570.0],
+            "T0_toolIndex0_x_center": [360.0],
+            "T0_toolIndex0_y_center": [570.0],
         }
     },
     {
@@ -51,8 +51,8 @@ extracted_data = [
             "T0_toolIndex0_displayTime": [0.9],
             "T0_toolIndex0_height": [50.0],
             "T0_toolIndex0_width": [140.0],
-            "T0_toolIndex0_xcenter": [520.0],
-            "T0_toolIndex0_ycenter": [510.0],
+            "T0_toolIndex0_x_center": [520.0],
+            "T0_toolIndex0_y_center": [510.0],
         }
     },
     {
@@ -61,8 +61,8 @@ extracted_data = [
             "T0_toolIndex0_displayTime": [1.0],
             "T0_toolIndex0_height": [50.0],
             "T0_toolIndex0_width": [120.0],
-            "T0_toolIndex0_xcenter": [520.0],
-            "T0_toolIndex0_ycenter": [510.0],
+            "T0_toolIndex0_x_center": [520.0],
+            "T0_toolIndex0_y_center": [510.0],
         }
     },
     {
@@ -71,8 +71,8 @@ extracted_data = [
             "T0_toolIndex0_displayTime": [0.9],
             "T0_toolIndex0_height": [50.0],
             "T0_toolIndex0_width": [150.0],
-            "T0_toolIndex0_xcenter": [530.0],
-            "T0_toolIndex0_ycenter": [500.0],
+            "T0_toolIndex0_x_center": [530.0],
+            "T0_toolIndex0_y_center": [500.0],
         }
     },
     {
@@ -81,8 +81,8 @@ extracted_data = [
             "T0_toolIndex0_displayTime": [0.6],
             "T0_toolIndex0_height": [80.0],
             "T0_toolIndex0_width": [100.0],
-            "T0_toolIndex0_xcenter": [350.0],
-            "T0_toolIndex0_ycenter": [620.0],
+            "T0_toolIndex0_x_center": [350.0],
+            "T0_toolIndex0_y_center": [620.0],
         }
     },
     {
@@ -91,8 +91,8 @@ extracted_data = [
             "T0_toolIndex0_displayTime": [0.9],
             "T0_toolIndex0_height": [140.0],
             "T0_toolIndex0_width": [80.0],
-            "T0_toolIndex0_xcenter": [350.0],
-            "T0_toolIndex0_ycenter": [580.0],
+            "T0_toolIndex0_x_center": [350.0],
+            "T0_toolIndex0_y_center": [580.0],
         }
     },
 ]
@@ -138,14 +138,14 @@ reduced_data_dbscan = {
         "T0_toolIndex0_clusters_height": [60.7, 104.5],
         "T0_toolIndex0_clusters_sigma": [0.2, 0.5],
         "T0_toolIndex0_clusters_width": [138.0, 102.8],
-        "T0_toolIndex0_clusters_xcenter": [502.2, 352.3],
-        "T0_toolIndex0_clusters_ycenter": [503.9, 604.9],
+        "T0_toolIndex0_clusters_x_center": [502.2, 352.3],
+        "T0_toolIndex0_clusters_y_center": [503.9, 604.9],
         "T0_toolIndex0_temporalRotateRectangle_angle": [10.0, 12.0, 15.0, 30.0, 10.0, 10.0, 12.0, 25.0, 20.0],
         "T0_toolIndex0_temporalRotateRectangle_displayTime": [0.1, 0.1, 0.1, 0.7, 0.9, 1.0, 0.9, 0.6, 0.9],
         "T0_toolIndex0_temporalRotateRectangle_height": [50.0, 60.0, 60.0, 120.0, 50.0, 50.0, 50.0, 80.0, 140.0],
         "T0_toolIndex0_temporalRotateRectangle_width": [150.0, 160.0, 120.0, 110.0, 140.0, 120.0, 150.0, 100.0, 80.0],
-        "T0_toolIndex0_temporalRotateRectangle_xcenter": [510.0, 490.0, 510.0, 360.0, 520.0, 520.0, 530.0, 350.0, 350.0],
-        "T0_toolIndex0_temporalRotateRectangle_ycenter": [500.0, 515.0, 500.0, 570.0, 510.0, 510.0, 500.0, 620.0, 580.0]
+        "T0_toolIndex0_temporalRotateRectangle_x_center": [510.0, 490.0, 510.0, 360.0, 520.0, 520.0, 530.0, 350.0, 350.0],
+        "T0_toolIndex0_temporalRotateRectangle_y_center": [500.0, 515.0, 500.0, 570.0, 510.0, 510.0, 500.0, 620.0, 580.0]
     }
 }
 
@@ -176,14 +176,14 @@ reduced_data_optics = {
         "T0_toolIndex0_clusters_height": [60.7, 51.4, 143.7],
         "T0_toolIndex0_clusters_sigma": [0.2, 0.2, 0.3],
         "T0_toolIndex0_clusters_width": [138.0, 137.4, 92.1],
-        "T0_toolIndex0_clusters_xcenter": [502.2, 522.5, 355.0],
-        "T0_toolIndex0_clusters_ycenter": [503.9, 509.1, 583.8],
+        "T0_toolIndex0_clusters_x_center": [502.2, 522.5, 355.0],
+        "T0_toolIndex0_clusters_y_center": [503.9, 509.1, 583.8],
         "T0_toolIndex0_temporalRotateRectangle_angle": [10.0, 12.0, 15.0, 30.0, 10.0, 10.0, 12.0, 25.0, 20.0],
         "T0_toolIndex0_temporalRotateRectangle_displayTime": [0.1, 0.1, 0.1, 0.7, 0.9, 1.0, 0.9, 0.6, 0.9],
         "T0_toolIndex0_temporalRotateRectangle_height": [50.0, 60.0, 60.0, 120.0, 50.0, 50.0, 50.0, 80.0, 140.0],
         "T0_toolIndex0_temporalRotateRectangle_width": [150.0, 160.0, 120.0, 110.0, 140.0, 120.0, 150.0, 100.0, 80.0],
-        "T0_toolIndex0_temporalRotateRectangle_xcenter": [510.0, 490.0, 510.0, 360.0, 520.0, 520.0, 530.0, 350.0, 350.0],
-        "T0_toolIndex0_temporalRotateRectangle_ycenter": [500.0, 515.0, 500.0, 570.0, 510.0, 510.0, 500.0, 620.0, 580.0]
+        "T0_toolIndex0_temporalRotateRectangle_x_center": [510.0, 490.0, 510.0, 360.0, 520.0, 520.0, 530.0, 350.0, 350.0],
+        "T0_toolIndex0_temporalRotateRectangle_y_center": [500.0, 515.0, 500.0, 570.0, 510.0, 510.0, 500.0, 620.0, 580.0]
     }
 }
 
@@ -216,14 +216,14 @@ reduced_data_hdbscan = {
         "T0_toolIndex0_clusters_persistance": [0.5, 0.6, 0.1],
         "T0_toolIndex0_clusters_sigma": [0.2, 0.2, 0.3],
         "T0_toolIndex0_clusters_width": [138.0, 137.4, 92.1],
-        "T0_toolIndex0_clusters_xcenter": [502.2, 522.5, 355.0],
-        "T0_toolIndex0_clusters_ycenter": [503.9, 509.1, 583.8],
+        "T0_toolIndex0_clusters_x_center": [502.2, 522.5, 355.0],
+        "T0_toolIndex0_clusters_y_center": [503.9, 509.1, 583.8],
         "T0_toolIndex0_temporalRotateRectangle_angle": [10.0, 12.0, 15.0, 30.0, 10.0, 10.0, 12.0, 25.0, 20.0],
         "T0_toolIndex0_temporalRotateRectangle_displayTime": [0.1, 0.1, 0.1, 0.7, 0.9, 1.0, 0.9, 0.6, 0.9],
         "T0_toolIndex0_temporalRotateRectangle_height": [50.0, 60.0, 60.0, 120.0, 50.0, 50.0, 50.0, 80.0, 140.0],
         "T0_toolIndex0_temporalRotateRectangle_width": [150.0, 160.0, 120.0, 110.0, 140.0, 120.0, 150.0, 100.0, 80.0],
-        "T0_toolIndex0_temporalRotateRectangle_xcenter": [510.0, 490.0, 510.0, 360.0, 520.0, 520.0, 530.0, 350.0, 350.0],
-        "T0_toolIndex0_temporalRotateRectangle_ycenter": [500.0, 515.0, 500.0, 570.0, 510.0, 510.0, 500.0, 620.0, 580.0]
+        "T0_toolIndex0_temporalRotateRectangle_x_center": [510.0, 490.0, 510.0, 360.0, 520.0, 520.0, 530.0, 350.0, 350.0],
+        "T0_toolIndex0_temporalRotateRectangle_y_center": [500.0, 515.0, 500.0, 570.0, 510.0, 510.0, 500.0, 620.0, 580.0]
     }
 }
 

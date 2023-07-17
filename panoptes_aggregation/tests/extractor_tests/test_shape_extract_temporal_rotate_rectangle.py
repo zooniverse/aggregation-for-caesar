@@ -32,8 +32,8 @@ expected = {
         "T0_toolIndex2_displayTime": [0.361],
         "T0_toolIndex2_height": [471.2629543273978],
         "T0_toolIndex2_width": [87.22731096735055],
-        "T0_toolIndex2_xcenter": [214.2397181088975],
-        "T0_toolIndex2_ycenter": [441.21555066032676],
+        "T0_toolIndex2_x_center": [214.2397181088975],
+        "T0_toolIndex2_y_center": [441.21555066032676],
     },
 }
 
