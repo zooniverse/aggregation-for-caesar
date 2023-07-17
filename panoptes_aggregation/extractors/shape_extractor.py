@@ -54,11 +54,6 @@ def shape_extractor(classification, **kwargs):
             else:
                 raise KeyError('Neither `tool` or `toolIndex` are in the annotation')
 
-            if shape == 'temporalRotateRectangle':
-                # remove the _center so that it doesn't conflict later on
-                value['xcenter'] = value.pop('x_center')
-                value['ycenter'] = value.pop('y_center')
-
             frame = 'frame{0}'.format(value.get('frame', 0))
             if all(param in value for param in shape_params):
                 extract.setdefault(frame, {})

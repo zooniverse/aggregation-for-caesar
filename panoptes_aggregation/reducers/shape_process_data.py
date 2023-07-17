@@ -2,6 +2,7 @@ from ..shape_tools import SHAPE_LUT
 from .shape_normalization import SHAPE_NORMALIZATION
 
 import numpy as np
+import re
 
 DEFAULTS_PROCESS = {
     'shape': {'default': None, 'type': str},
@@ -41,9 +42,12 @@ def process_data(data, shape=None, symmetric=False):
         'shape': shape,
         'symmetric': symmetric
     }
+
+    pattern = r'(T[0-9]+)_(tool[Index]*[0-9]+)'
+
     for frame in unique_frames:
         data_by_tool[frame] = {}
-        unique_tools = set(sum([['_'.join(k.split('_')[:-1]) for k in d.get(frame, {}).keys()] for d in data], []))
+        unique_tools = set(sum([["_".join(re.findall(pattern, k)[0]) for k in d.get(frame, {}).keys()] for d in data], []))
         for tool in unique_tools:
             for d in data:
                 if frame in d:
