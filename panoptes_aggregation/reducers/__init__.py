@@ -3,7 +3,6 @@ from .point_reducer_dbscan import point_reducer_dbscan
 from .point_reducer_hdbscan import point_reducer_hdbscan
 from .temporal_point_reducer_dbscan import temporal_point_reducer_dbscan
 from .temporal_point_reducer_hdbscan import temporal_point_reducer_hdbscan
-from .temporal_point_reducer_dbscan import temporal_point_reducer_dbscan
 from .rectangle_reducer import rectangle_reducer
 from .question_reducer import question_reducer
 from .question_consensus_reducer import question_consensus_reducer
