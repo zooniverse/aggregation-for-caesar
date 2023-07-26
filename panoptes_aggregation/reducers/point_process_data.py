@@ -72,4 +72,4 @@ def temporal_metric(point1, point2):
     displayTime1 += 1
     displayTime2 += 1
 
-    return ((x1 * displayTime1 - x2 * displayTime2)**2. + (y1 * displayTime1 - y2 * displayTime2)**2.)
+    return ((x1 * displayTime1 - x2 * displayTime2)**2 + (y1 * displayTime1 - y2 * displayTime2)**2)
