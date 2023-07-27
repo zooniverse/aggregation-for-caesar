@@ -66,6 +66,11 @@ def user_skill_reducer(extracts, relevant_reduction=[], mode='binary', null_clas
                 - level_up : bool
                     flag to show whether the user should be leveled up using the input thresholds
     '''
+    extracts = [extracti for extracti in extracts if 'feedback' in extracti.keys()]
+    relevant_reduction = [redi for redi in relevant_reduction if 'difficulty' in redi['data'].keys()]
+
+    assert len(extracts) == len(relevant_reduction), f"mismatch in length of extract ({len(extracts)}) and subject difficulty ({len(relevant_reduction)}) arrays!"
+
     # confusion_simple, confusion_subject = get_confusion_matrix(extracts, relevant_reduction, mode, None)
     confusion_simple, confusion_subject, classes = get_confusion_matrix(extracts, relevant_reduction, mode, null_class)
 
