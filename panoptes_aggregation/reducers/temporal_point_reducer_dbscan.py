@@ -1,15 +1,15 @@
 '''
-Point Reducer DBSCAN
+Temporal Point Reducer DBSCAN
 --------------------
 This module provides functions to cluster points extracted with
-:mod:`panoptes_aggregation.extractors.point_extractor`.
+:mod:`panoptes_aggregation.extractors.shape_extractor` with `shape=temporalPoint`.
 '''
 import numpy as np
 from sklearn.cluster import DBSCAN
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
-from .point_process_data import process_data_by_frame
+from .point_process_data import process_temporal_data, temporal_metric
 
 
 DEFAULTS = {
@@ -22,9 +22,9 @@ DEFAULTS = {
 }
 
 
-@reducer_wrapper(process_data=process_data_by_frame, defaults_data=DEFAULTS, user_id=True)
+@reducer_wrapper(process_data=process_temporal_data, defaults_data=DEFAULTS, user_id=True)
 @subtask_wrapper
-def point_reducer_dbscan(data_by_tool, **kwargs):
+def temporal_point_reducer_dbscan(data_by_tool, **kwargs):
     '''Cluster a list of points by tool using DBSCAN
 
     Parameters
@@ -41,10 +41,12 @@ def point_reducer_dbscan(data_by_tool, **kwargs):
 
         * `tool*_points_x` : A list of `x` positions for **all** points drawn with `tool*`
         * `tool*_points_y` : A list of `y` positions for **all** points drawn with `tool*`
+        * `tool*_points_displayTime` : A list of `time` values for **all** points drawn with `tool*`
         * `tool*_cluster_labels` : A list of cluster labels for **all** points drawn with `tool*`
         * `tool*_clusters_count` : The number of points in each **cluster** found
         * `tool*_clusters_x` : The `x` position for each **cluster** found
         * `tool*_clusters_y` : The `y` position for each **cluster** found
+        * `tool*_clusters_displayTime` : The `time` value for each **cluster** found
         * `tool*_clusters_var_x` : The `x` variance of points in each **cluster** found
         * `tool*_clusters_var_y` : The `y` variance of points in each **cluster** found
         * `tool*_clusters_var_x_y` : The `x-y` covariance of points in each **cluster** found
@@ -60,9 +62,11 @@ def point_reducer_dbscan(data_by_tool, **kwargs):
             # original data points in order used by cluster code
             clusters[frame]['{0}_points_x'.format(tool)] = list(loc[:, 0])
             clusters[frame]['{0}_points_y'.format(tool)] = list(loc[:, 1])
+            clusters[frame]['{0}_points_displayTime'.format(tool)] = list(loc[:, 2])
             # default each point in no cluster
             clusters[frame]['{0}_cluster_labels'.format(tool)] = [-1] * loc.shape[0]
             if loc.shape[0] >= kwargs['min_samples']:
+                kwargs['metric'] = temporal_metric
                 db = DBSCAN(**kwargs).fit(loc)
                 # what cluster each point belongs to
                 clusters[frame]['{0}_cluster_labels'.format(tool)] = list(db.labels_)
@@ -75,6 +79,7 @@ def point_reducer_dbscan(data_by_tool, **kwargs):
                         k_loc = loc[idx].mean(axis=0)
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(float(k_loc[0]))
                         clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(float(k_loc[1]))
+                        clusters[frame].setdefault('{0}_clusters_displayTime'.format(tool), []).append(float(k_loc[2]))
                         # cov matrix of the cluster
                         if idx.sum() > 1:
                             k_cov = np.cov(loc[idx].T)

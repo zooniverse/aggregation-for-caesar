@@ -1,13 +1,13 @@
 '''
-Point Reducer HDBSCAN
+Temporal Point Reducer HDBSCAN
 ---------------------
 This module provides functions to cluster points extracted with
-:mod:`panoptes_aggregation.extractors.point_extractor`.
+:mod:`panoptes_aggregation.extractors.shape_extractor` with `shape=temporalPoint`.
 '''
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
-from .point_process_data import process_data_by_frame
+from .point_process_data import process_temporal_data, temporal_metric
 import numpy as np
 from hdbscan import HDBSCAN
 
@@ -15,7 +15,7 @@ from hdbscan import HDBSCAN
 DEFAULTS = {
     'min_cluster_size': {'default': 5, 'type': int},
     'min_samples': {'default': 3, 'type': int},
-    'metric': {'default': 'euclidean', 'type': str},
+    'metric': {'default': 'auto', 'type': str},
     'algorithm': {'default': 'best', 'type': str},
     'leaf_size': {'default': 40, 'type': int},
     'p': {'default': None, 'type': float},
@@ -24,9 +24,9 @@ DEFAULTS = {
 }
 
 
-@reducer_wrapper(process_data=process_data_by_frame, defaults_data=DEFAULTS, user_id=True)
+@reducer_wrapper(process_data=process_temporal_data, defaults_data=DEFAULTS, user_id=True)
 @subtask_wrapper
-def point_reducer_hdbscan(data_by_tool, **kwargs):
+def temporal_point_reducer_hdbscan(data_by_tool, **kwargs):
     '''Cluster a list of points by tool using HDBSCAN
 
     Parameters
@@ -43,12 +43,14 @@ def point_reducer_hdbscan(data_by_tool, **kwargs):
 
         * `tool*_points_x` : A list of `x` positions for **all** points drawn with `tool*`
         * `tool*_points_y` : A list of `y` positions for **all** points drawn with `tool*`
+        * `tool*_points_displayTime` : A list of `time` values for **all** points drawn with `tool*`
         * `tool*_cluster_labels` : A list of cluster labels for **all** points drawn with `tool*`
         * `tool*_cluster_probabilities`: A list of cluster probabilities for **all** points drawn with `tool*`
         * `tool*_clusters_persistance`: A measure for how persistent each **cluster** is (1.0 = stable, 0.0 = unstable)
         * `tool*_clusters_count` : The number of points in each **cluster** found
         * `tool*_clusters_x` : The weighted `x` position for each **cluster** found
         * `tool*_clusters_y` : The weighted `y` position for each **cluster** found
+        * `tool*_clusters_displayTime` : The `time` value for each **cluster** found
         * `tool*_clusters_var_x` : The weighted `x` variance of points in each **cluster** found
         * `tool*_clusters_var_y` : The weighted `y` variance of points in each **cluster** found
         * `tool*_clusters_var_x_y` : The weighted `x-y` covariance of points in each **cluster** found
@@ -64,10 +66,12 @@ def point_reducer_hdbscan(data_by_tool, **kwargs):
             # original data points in order used by cluster code
             clusters[frame]['{0}_points_x'.format(tool)] = list(loc[:, 0])
             clusters[frame]['{0}_points_y'.format(tool)] = list(loc[:, 1])
+            clusters[frame]['{0}_points_displayTime'.format(tool)] = list(loc[:, 2])
             # default each point in no cluster
             clusters[frame]['{0}_cluster_labels'.format(tool)] = [-1] * loc.shape[0]
             clusters[frame]['{0}_cluster_probabilities'.format(tool)] = [0] * loc.shape[0]
             if loc.shape[0] >= kwargs['min_cluster_size']:
+                kwargs['metric'] = temporal_metric
                 db = HDBSCAN(**kwargs).fit(loc)
                 # what cluster each point belongs to
                 clusters[frame]['{0}_cluster_labels'.format(tool)] = list(db.labels_)
@@ -84,6 +88,7 @@ def point_reducer_hdbscan(data_by_tool, **kwargs):
                         k_loc = loc[idx].mean(axis=0)
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(float(k_loc[0]))
                         clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(float(k_loc[1]))
+                        clusters[frame].setdefault('{0}_clusters_displayTime'.format(tool), []).append(float(k_loc[2]))
                         # cov matrix of the cluster
                         k_cov = np.cov(loc[idx].T, aweights=weights)
                         clusters[frame].setdefault('{0}_clusters_var_x'.format(tool), []).append(float(k_cov[0, 0]))

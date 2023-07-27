@@ -1,5 +1,5 @@
 import numpy as np
-from panoptes_aggregation.reducers.point_reducer_dbscan import process_data, point_reducer_dbscan
+from panoptes_aggregation.reducers.point_reducer_dbscan import process_data_by_frame, point_reducer_dbscan
 from .base_test_class import ReducerTestPoints
 
 c0_cov = np.array([[3, 0.5], [0.5, 4]])
@@ -63,7 +63,7 @@ reduced_data = {
 
 TestPointsCluster = ReducerTestPoints(
     point_reducer_dbscan,
-    process_data,
+    process_data_by_frame,
     extracted_data,
     processed_data,
     reduced_data,
@@ -111,7 +111,7 @@ reduced_data_one_point = {
 
 TestOnePointCluster = ReducerTestPoints(
     point_reducer_dbscan,
-    process_data,
+    process_data_by_frame,
     extracted_data_one_point,
     processed_data_one_point,
     reduced_data_one_point,

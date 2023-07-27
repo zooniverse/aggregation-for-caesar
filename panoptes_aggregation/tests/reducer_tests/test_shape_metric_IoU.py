@@ -162,7 +162,8 @@ class TestIoUMetric(unittest.TestCase):
             'rotateRectangle',
             'circle',
             'ellipse',
-            'triangle'
+            'triangle',
+            'temporalRotateRectangle'
         ]
         gamma = 2
         params = [
@@ -170,14 +171,16 @@ class TestIoUMetric(unittest.TestCase):
             [10, 10, 2, 4, 45],
             [5, 5, 2],
             [10, 10, 3, 2, 30],
-            [5, 5, 2, 30]
+            [5, 5, 2, 30],
+            [10, 10, 2, 4, 45, 0.5]
         ]
         expectations = [
             [9, 8, 4, 8],
             [9, 8, 4, 8, 45],
             [5, 5, 4],
             [10, 10, 6, 4, 30],
-            [5, 5, 4, 30]
+            [5, 5, 4, 30],
+            [10, 10, 4, 8, 45, 0.5]
         ]
         for shape, param, expected in zip(shapes, params, expectations):
             with self.subTest(shape=shape, params=params):

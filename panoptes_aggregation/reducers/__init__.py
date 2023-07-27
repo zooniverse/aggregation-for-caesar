@@ -1,6 +1,8 @@
 from .point_reducer import point_reducer
 from .point_reducer_dbscan import point_reducer_dbscan
 from .point_reducer_hdbscan import point_reducer_hdbscan
+from .temporal_point_reducer_dbscan import temporal_point_reducer_dbscan
+from .temporal_point_reducer_hdbscan import temporal_point_reducer_hdbscan
 from .rectangle_reducer import rectangle_reducer
 from .question_reducer import question_reducer
 from .question_consensus_reducer import question_consensus_reducer
@@ -29,6 +31,8 @@ reducers = {
     "point_reducer": point_reducer,
     "point_reducer_dbscan": point_reducer_dbscan,
     "point_reducer_hdbscan": point_reducer_hdbscan,
+    "temporal_point_reducer_dbscan": temporal_point_reducer_dbscan,
+    "temporal_point_reducer_hdbscan": temporal_point_reducer_hdbscan,
     "rectangle_reducer": rectangle_reducer,
     "question_reducer": question_reducer,
     "question_consensus_reducer": question_consensus_reducer,
