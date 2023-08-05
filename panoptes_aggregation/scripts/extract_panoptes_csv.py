@@ -1,13 +1,8 @@
-from collections import OrderedDict, defaultdict
-from multiprocessing import Pool
 import numpy as np
 import packaging.version
-import copy
-import json
 import io
 import yaml
 import os
-import progressbar
 import warnings
 
 warnings.filterwarnings("ignore", message="numpy.dtype size changed")
@@ -15,182 +10,14 @@ warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
 warnings.filterwarnings("ignore", message="Polyfit may be poorly conditioned")
 
 import pandas
-from panoptes_aggregation import extractors
-from panoptes_aggregation.csv_utils import flatten_data, order_columns
-from panoptes_aggregation.extractors.utilities import annotation_by_task
+from .batch_utils import batch_extract
+from panoptes_aggregation.csv_utils import order_columns
 
 
 def get_file_instance(file):
     if not isinstance(file, io.IOBase):
         file = open(file, 'r', encoding='utf-8')  # pragma: no cover
     return file
-
-
-def extract_all_classifications(
-    classifications,
-    extractor_config,
-    cpu_count=1,
-    verbose=False
-):
-    '''
-        Extracts the values given a list of classifications and a corresponding
-        set of extractors
-
-        Inputs
-        ------
-        classifications: pandas.DataFrame
-            A pandas DataFrame with the following columns:
-                - classification_id: int
-                    ID for the classification on Zooniverse
-                - user_name: str
-                    Zooniverse user name for person who did the classification
-                - user_id: int
-                    Zooniverse user ID for the person who did the classification
-                - workflow_id: int
-                    Zooniverse workflow ID for the classification
-                - created_at: str
-                    Time of classification
-                - subject_ids: int
-                    Subject ID for the subject which corresponds to the classification
-                - annotations: str
-                    A JSON formatted string for the classification output
-                - metadata: str
-                    A JSON formatted string for the subject metadata
-        extractor_config: dict
-            A dictionary defining the configuration for the extractor
-    '''
-    extracted_data = defaultdict(list)
-    widgets = [
-        'Extracting: ',
-        progressbar.Percentage(),
-        ' ', progressbar.Bar(),
-        ' ', progressbar.ETA()
-    ]
-    number_of_extractors = sum([len(value) for _, value in extractor_config.items()])
-    max_pbar = len(classifications) * number_of_extractors
-    pbar = progressbar.ProgressBar(widgets=widgets, max_value=max_pbar)
-    counter = 0
-
-    extracted_data = defaultdict(list)
-    def callback(name_with_row):
-        nonlocal extracted_data
-        nonlocal counter
-        nonlocal pbar
-        extractor_name, new_extract_row = name_with_row
-        if new_extract_row is not None:
-            extracted_data[extractor_name] += new_extract_row
-        counter += 1
-        pbar.update(counter)
-
-    pbar.start()
-    if cpu_count > 1:
-        pool = Pool(cpu_count)
-    for _, classification in classifications.iterrows():
-        classification_by_task = annotation_by_task({
-            'annotations': json.loads(classification.annotations),
-            'metadata': json.loads(classification.metadata)
-        })
-        classification_info = {
-            'classification_id': classification.classification_id,
-            'user_name': classification.user_name,
-            'user_id': classification.user_id,
-            'workflow_id': classification.workflow_id,
-            'created_at': classification.created_at,
-            'subject_ids': classification.subject_ids
-        }
-        for extractor_name, keywords in extractor_config.items():
-            extractor_key = extractor_name
-            if 'shape_extractor' in extractor_name:
-                extractor_key = 'shape_extractor'
-            for keyword in keywords:
-                if extractor_key in extractors.extractors:
-                    if cpu_count > 1:
-                        pool.apply_async(
-                            extract_classification,
-                            args=(
-                                copy.deepcopy(classification_by_task),
-                                classification_info,
-                                extractor_key,
-                                extractor_name,
-                                keyword,
-                                verbose
-                            ),
-                            callback=callback
-                        )
-                    else:
-                        name_with_row = extract_classification(
-                            copy.deepcopy(classification_by_task),
-                            classification_info,
-                            extractor_key,
-                            extractor_name,
-                            keyword,
-                            verbose
-                        )
-                        callback(name_with_row)
-                else:
-                    callback((None, None))
-    if cpu_count > 1:
-        pool.close()
-        pool.join()
-    pbar.finish()
-
-    flat_extracts = defaultdict(list)
-    for extractor_name, data in extracted_data.items():
-        non_flat_extract = pandas.DataFrame(data)
-        flat_extract = flatten_data(non_flat_extract)
-        flat_extracts[extractor_name] = flat_extract
-    return flat_extracts
-
-
-def extract_classification(
-    classification_by_task,
-    classification_info,
-    extractor_key,
-    extractor_name,
-    keyword,
-    verbose
-):
-    try:
-        recursive_subject_ids = keyword.get('recursive_subject_ids', False)
-        extract = extractors.extractors[extractor_key](classification_by_task, **keyword)
-        new_extract_row = []
-        if isinstance(extract, list):
-            for edx, e in enumerate(extract):
-                subject_id = classification_info['subject_ids']
-                if recursive_subject_ids:
-                    subject_id = f'{subject_id}_{edx}'
-                new_extract_row.append(OrderedDict([
-                    ('classification_id', classification_info['classification_id']),
-                    ('user_name', classification_info['user_name']),
-                    ('user_id', classification_info['user_id']),
-                    ('workflow_id', classification_info['workflow_id']),
-                    ('task', keyword['task']),
-                    ('created_at', classification_info['created_at']),
-                    ('subject_id', subject_id),
-                    ('extractor', extractor_name),
-                    ('data', e)
-                ]))
-        else:
-            new_extract_row.append(OrderedDict([
-                ('classification_id', classification_info['classification_id']),
-                ('user_name', classification_info['user_name']),
-                ('user_id', classification_info['user_id']),
-                ('workflow_id', classification_info['workflow_id']),
-                ('task', keyword['task']),
-                ('created_at', classification_info['created_at']),
-                ('subject_id', classification_info['subject_ids']),
-                ('extractor', extractor_name),
-                ('data', extract)
-            ]))
-    except:
-        new_extract_row = None
-        if verbose:
-            print()
-            print('Incorrectly formatted annotation')
-            print(classification_info)
-            print(extractor_key)
-            print(classification_by_task)
-    return extractor_name, new_extract_row
 
 
 CURRENT_PATH = os.path.abspath('.')
@@ -253,7 +80,7 @@ def extract_csv(
     assert (vdx.sum() > 0), 'There are no classifications matching the configured version number(s)'
     assert ((vdx & wdx).sum() > 0), 'There are no classifications matching the combined workflow ID and version number(s)'
 
-    extracted_data = extract_all_classifications(classifications[vdx & wdx], extractor_config, cpu_count, verbose)
+    extracted_data = batch_extract(classifications[vdx & wdx], extractor_config, cpu_count, verbose)
 
     # create one flat csv file for each extractor used
     output_base_name, _ = os.path.splitext(output_name)
