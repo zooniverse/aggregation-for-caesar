@@ -3,9 +3,20 @@ import warnings
 # warnings.filterwarnings("always")
 warnings.filterwarnings("ignore", message="numpy.dtype size changed")
 warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
-from . import extractors
-from . import reducers
-from . import running_reducers
-from . import scripts
-from . import version
-__version__ = version.__version__
+from .version import __version__
+
+
+# work around until https://github.com/pypa/flit/pull/382 (or similar) is merged into flit
+def within_flit():
+    import traceback
+    for frame in traceback.extract_stack():
+        if frame.name == "get_docstring_and_version_via_import":
+            return True
+    return False
+
+
+if not within_flit():
+    from . import extractors
+    from . import reducers
+    from . import running_reducers
+    from . import scripts
