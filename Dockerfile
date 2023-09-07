@@ -9,7 +9,10 @@ RUN apt-get update && apt-get -y upgrade && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # install dependencies
-COPY setup.py .
+RUN mkdir -p panoptes_aggregation/version
+COPY pyproject.toml README.md ./
+COPY panoptes_aggregation/__init__.py ./panoptes_aggregation/
+COPY panoptes_aggregation/version/__init__.py ./panoptes_aggregation/version/
 RUN pip install --upgrade pip
 RUN pip install .[online,test,doc]
 
