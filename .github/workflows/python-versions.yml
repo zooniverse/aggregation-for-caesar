@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9] # , "3.10"] include 3.10 later on (requires test runner update)
+        python-version: [3.7, 3.8, 3.9, "3.10", "3.11"]
 
     steps:
     - uses: actions/checkout@v3
@@ -30,9 +30,11 @@ jobs:
     - name: Run tests
       env:
         TRAVIS: true  # one test is skipped on CI and looks for this env value
-      run: nosetests
+      run: |
+        coverage run
+        coverage report
     - name: Coveralls
-      if: ${{ matrix.python-version == 3.9 }}
+      if: ${{ matrix.python-version == "3.10" }}
       env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: coveralls --service=github
