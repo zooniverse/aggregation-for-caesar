@@ -112,7 +112,6 @@ class TestReduceCSV(unittest.TestCase):
         self.extracted_csv_question = StringIO(extracted_csv_question)
         self.extracted_dataframe_question = pandas.read_csv(
             StringIO(extracted_csv_question),
-            infer_datetime_format=True,
             parse_dates=['created_at'],
             encoding='utf-8'
         )
@@ -125,7 +124,7 @@ class TestReduceCSV(unittest.TestCase):
         self.reduced_dataframe_survey = pandas.read_csv(StringIO(reduced_csv_survey))
 
     def test_first_filter(self):
-        '''Test frist filter'''
+        '''Test first filter'''
         extracted_dataframe = pandas.read_csv(self.extracted_csv_question, parse_dates=['created_at'])
         task_T0_csv = extracted_dataframe[(extracted_dataframe.task == 'T0') & (extracted_dataframe.subject_id == 1)]
         expected = task_T0_csv[[True, False]]
