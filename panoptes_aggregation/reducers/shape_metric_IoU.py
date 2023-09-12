@@ -102,7 +102,9 @@ def IoU_metric(params1, params2, shape):
     '''
     geo1 = panoptes_to_geometry(params1, shape)
     geo2 = panoptes_to_geometry(params2, shape)
-    intersection = geo1.intersection(geo2).area
+    intersection = 0
+    if geo1.intersects(geo2):
+        intersection = geo1.intersection(geo2).area
     union = geo1.union(geo2).area
     if union == 0:
         # catch divide by zero (i.e. cases when neither shape has an area)
