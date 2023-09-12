@@ -13,7 +13,7 @@ You can find the [latest documentation](https://aggregation-caesar.zooniverse.or
 ---
 
 ## Installing for offline use
-### With your own python install (python 3 only)
+### With your own python install (python 3.8 or higher only)
 Instal the latest stable release:
 ```bash
 pip install panoptes_aggregation
@@ -38,33 +38,6 @@ pip install "panoptes_aggregation[gui]"
 Or for the latest development build from GitHub:
 ```bash
 pip install -U git+https://github.com/zooniverse/aggregation-for-caesar.git#egg=panoptes-aggregation[gui]
-```
-
-#### Anaconda build of python
-If your are using the anaconda version of python some of the dependencies should be installed using the `conda` package manager before installing `panoptes_aggregation`:
-```bash
-conda install -c conda-forge python-levenshtein hdbscan wxpython
-conda install psutil
-```
-
-#### Mac Anaconda build
-If you are installing this code on a Mac using the anaconda build of python and you want to use the GUI instead of the command line you will have to update one line of the of code in the `panoptes_aggregation_gui` script.  Change the first line from:
-```python
-#!/path/to/anaconda/python/bin/python
-```
-to:
-```python
-#!/bin/bash /path/to/anaconda/python/bin/python.app
-```
-
-You can find the location of this file with the command:
-```bash
-which panoptes_aggregation_gui
-```
-
-You will also need to run:
-```bash
-conda install python.app
 ```
 
 ### With Docker
