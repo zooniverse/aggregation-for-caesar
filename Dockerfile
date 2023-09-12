@@ -5,7 +5,7 @@ WORKDIR /usr/src/aggregation
 
 RUN apt-get update && apt-get -y upgrade && \
     apt-get install --no-install-recommends -y \
-    build-essential libgeos-dev && \
+    build-essential libgeos-dev git && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # install dependencies
