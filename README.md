@@ -66,7 +66,7 @@ docker run -it --rm --name config_workflow_panoptes -v "$PWD":/usr/src/aggregati
 ---
 
 ## Installing for online use
-The docker file included is ready to be deployed on any server.  Once deployed, the extractors will be available on the `/extractors/<name of extractor function>` routes and the reducers will be available on the `/reducers/<name of reducer function>` routes.  Any keywords passed into these functions should be included as url parameters on the route (e.g. `https://aggregation-caesar.zooniverse.org/extractors/point_extractor_by_frame?task=T0`).  For more complex keywords (e.g. `detals` for subtasks), python's [urllib.parse.urlencode](https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlencode) can be used to translate a keyword list into the proper url encoding.
+The docker file included is ready to be deployed on any server.  Once deployed, the extractors will be available on the `/extractors/<name of extractor function>` routes and the reducers will be available on the `/reducers/<name of reducer function>` routes.  Any keywords passed into these functions should be included as url parameters on the route (e.g. `https://aggregation-caesar.zooniverse.org/extractors/point_extractor_by_frame?task=T0`).  For more complex keywords (e.g. `details` for subtasks), python's [urllib.parse.urlencode](https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlencode) can be used to translate a keyword list into the proper url encoding.
 
 The documentation will be built and available on the `/docs` route.
 
