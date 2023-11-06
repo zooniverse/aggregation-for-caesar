@@ -19,6 +19,7 @@ from .shape_metric_IoU import IoU_metric, average_shape_IoU
 DEFAULTS = {
     'min_cluster_size': {'default': 5, 'type': int},
     'min_samples': {'default': 3, 'type': int},
+    'eps_t': {'default': 0.5, 'type': float},
     'algorithm': {'default': 'best', 'type': str},
     'leaf_size': {'default': 40, 'type': int},
     'p': {'default': None, 'type': float},
@@ -72,6 +73,7 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
         * `tool*_clusters_sigma` : The standard deviation of the average shape under the IoU metric
     '''
     shape = data_by_tool.pop('shape')
+    eps_t = kwargs.pop('eps_t', None)
     shape_params = SHAPE_LUT[shape]
     metric_type = kwargs.pop('metric_type', 'euclidean').lower()
     symmetric = data_by_tool.pop('symmetric')
@@ -80,6 +82,7 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
         kwargs['metric'] = metric
     elif metric_type == 'iou':
         kwargs['metric'] = IoU_metric
+        kwargs['metric_params'] = {'shape': shape, 'eps_t': eps_t}
         kwargs['shape'] = shape
         avg = average_shape_IoU
     else:

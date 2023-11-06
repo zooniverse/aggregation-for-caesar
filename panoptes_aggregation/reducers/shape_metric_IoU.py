@@ -9,6 +9,7 @@ import shapely.affinity
 import scipy.optimize
 import numpy
 from functools import lru_cache
+import sys
 
 
 def tupleize(func):
@@ -80,7 +81,7 @@ def panoptes_to_geometry(params, shape):
         raise ValueError('The IoU metric only works with the following shapes: rectangle, rotateing rectangle, circle, ellipse, or triangle')
 
 
-def IoU_metric(params1, params2, shape):
+def IoU_metric(params1, params2, shape, eps_t=None):
     '''Find the Intersection of Union distance between two shapes.
 
     Parameters
@@ -92,6 +93,9 @@ def IoU_metric(params1, params2, shape):
     shape : string
         The shape these parameters belong to (see :meth:`panoptes_to_geometry` for
         supported shapes)
+    eps_t : float
+        For temporal tools, this defines the temporal width of the rectangle.
+        Two shapes are connected if the displayTime parameters are within eps_t.
 
     Returns
     -------
@@ -105,16 +109,29 @@ def IoU_metric(params1, params2, shape):
     intersection = 0
     if geo1.intersects(geo2):
         intersection = geo1.intersection(geo2).area
-    union = geo1.union(geo2).area
+
+    if 'temporal' in shape:
+        # combine the shape IoU with the time difference and normalize
+        # build two boxes in the time domain with width eps_t and height 1
+        # centered at (t - eps_t/2, 0.5) and calculate the intersection in time
+        time_params1 = (params1[5] - eps_t / 2, 0, eps_t, 1)
+        time_params2 = (params2[5] - eps_t / 2, 0, eps_t, 1)
+        time_geo1 = panoptes_to_geometry(time_params1, 'rectangle')
+        time_geo2 = panoptes_to_geometry(time_params2, 'rectangle')
+        time_intersection = 0
+        if time_geo1.intersects(time_geo2):
+            time_intersection = time_geo1.intersection(time_geo2).area
+
+        intersection = intersection * time_intersection
+        union = ((geo1.area + geo2.area) * eps_t - intersection)
+    else:
+        union = geo1.union(geo2).area
+
     if union == 0:
         # catch divide by zero (i.e. cases when neither shape has an area)
         return numpy.inf
 
-    if 'temporal' in shape:
-        # combine the shape IoU with the time difference and normalize
-        return 0.5 * ((1 - intersection / union) + numpy.abs(params1[-1] - params2[-1]))
-    else:
-        return 1 - intersection / union
+    return 1 - intersection / union
 
 
 def average_bounds(params_list, shape):
@@ -252,7 +269,7 @@ def scale_shape(params, shape, gamma):
         raise ValueError('The IoU metric only works with the following shapes: rectangle, rotateing rectangle, circle, ellipse, or triangle')
 
 
-def average_shape_IoU(params_list, shape):
+def average_shape_IoU(params_list, shape, eps_t=None):
     '''Find the average shape and standard deviation from a list of parameters with respect
     to the IoU metric.
 
@@ -273,7 +290,7 @@ def average_shape_IoU(params_list, shape):
         The standard deviation of the input shapes with respect to the IoU metric
     '''
     def sum_distance(x):
-        return sum([IoU_metric(x, p, shape)**2 for p in params_list])
+        return sum([IoU_metric(x, p, shape, eps_t)**2 for p in params_list])
     # find shape that minimizes the variance in the IoU metric using bounds
     m = scipy.optimize.shgo(
         sum_distance,
