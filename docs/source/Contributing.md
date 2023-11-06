@@ -55,8 +55,8 @@ The code is auto-documented using [sphinx](http://www.sphinx-doc.org/en/stable/i
 4. Build the docs with the `make_docs.sh` bash script
 
 ### 5. Make sure everything still works
-1. run `nosetests` and ensure all tests still pass
-2. (optional) `nosetests --cover-html` to compile an html page for checking what parts of the code are not covered
+1. run `coverage run` and ensure all tests still pass
+2. (optional) run `coverage report` to check tests coverage in each file
 
 ---
 
@@ -99,8 +99,8 @@ The code is auto-documented using [sphinx](http://www.sphinx-doc.org/en/stable/i
 4. Build the docs with the `make_docs.sh` bash script
 
 ### 4. Make sure everything still works
-1. run `nosetests` and ensure all tests still pass (coverage is automatically reported)
-2. (optional) `nosetests --cover-html` to compile an html page for checking what parts of the code are not covered
+1. run `coverage run` and ensure all tests still pass
+2. (optional) `coverage report` to checking what parts of the code are not covered
 
 ---
 

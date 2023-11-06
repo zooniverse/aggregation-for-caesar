@@ -13,7 +13,7 @@ You can find the [latest documentation](https://aggregation-caesar.zooniverse.or
 ---
 
 ## Installing for offline use
-### With your own python install (python 3 only)
+### With your own python install (python 3.8 or higher only)
 Instal the latest stable release:
 ```bash
 pip install panoptes_aggregation
@@ -40,31 +40,9 @@ Or for the latest development build from GitHub:
 pip install -U git+https://github.com/zooniverse/aggregation-for-caesar.git#egg=panoptes-aggregation[gui]
 ```
 
-#### Anaconda build of python
-If your are using the anaconda version of python some of the dependencies should be installed using the `conda` package manager before installing `panoptes_aggregation`:
+On linux systems you may need to install GTK3:
 ```bash
-conda install -c conda-forge python-levenshtein hdbscan wxpython
-conda install psutil
-```
-
-#### Mac Anaconda build
-If you are installing this code on a Mac using the anaconda build of python and you want to use the GUI instead of the command line you will have to update one line of the of code in the `panoptes_aggregation_gui` script.  Change the first line from:
-```python
-#!/path/to/anaconda/python/bin/python
-```
-to:
-```python
-#!/bin/bash /path/to/anaconda/python/bin/python.app
-```
-
-You can find the location of this file with the command:
-```bash
-which panoptes_aggregation_gui
-```
-
-You will also need to run:
-```bash
-conda install python.app
+sudo apt-get install build-essential libgtk-3-dev
 ```
 
 ### With Docker
@@ -93,7 +71,7 @@ docker run -it --rm --name config_workflow_panoptes -v "$PWD":/usr/src/aggregati
 ---
 
 ## Installing for online use
-The docker file included is ready to be deployed on any server.  Once deployed, the extractors will be available on the `/extractors/<name of extractor function>` routes and the reducers will be available on the `/reducers/<name of reducer function>` routes.  Any keywords passed into these functions should be included as url parameters on the route (e.g. `https://aggregation-caesar.zooniverse.org/extractors/point_extractor_by_frame?task=T0`).  For more complex keywords (e.g. `detals` for subtasks), python's [urllib.parse.urlencode](https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlencode) can be used to translate a keyword list into the proper url encoding.
+The docker file included is ready to be deployed on any server.  Once deployed, the extractors will be available on the `/extractors/<name of extractor function>` routes and the reducers will be available on the `/reducers/<name of reducer function>` routes.  Any keywords passed into these functions should be included as url parameters on the route (e.g. `https://aggregation-caesar.zooniverse.org/extractors/point_extractor_by_frame?task=T0`).  For more complex keywords (e.g. `details` for subtasks), python's [urllib.parse.urlencode](https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlencode) can be used to translate a keyword list into the proper url encoding.
 
 The documentation will be built and available on the `/docs` route.
 

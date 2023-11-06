@@ -1,7 +1,0 @@
-[report]
-show_missing = true
-omit =
-  panoptes_aggregation/tests/*
-  panoptes_aggregation/scripts/gui*.py
-  panoptes_aggregation/scripts/no_gooey.py
-  panoptes_aggregation/scripts/path_type.py
