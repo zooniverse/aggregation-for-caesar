@@ -1,0 +1,4 @@
+[flake8]
+format = pylint
+exclude = dist/*,cover/*,build/*,.ropeproject/*,docs/*,__init__.py
+ignore = E402,E501,E722,E741,W503,E128,BLK100,B006,B001,B023,B028

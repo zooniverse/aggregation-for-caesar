@@ -1,7 +1,9 @@
 try:
     from flask import jsonify, request, Flask
-    from flask.json import JSONEncoder
+    from flask.json.provider import JSONProvider
     from flask_cors import CORS
+    from json import JSONEncoder
+    import json
     from panoptes_aggregation import panoptes
     import sentry_sdk
     from sentry_sdk.integrations.flask import FlaskIntegration
@@ -17,6 +19,7 @@ from panoptes_aggregation import __version__
 import numpy as np
 
 
+# see https://stackoverflow.com/a/75666126
 class MyEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, np.integer):
@@ -29,6 +32,15 @@ class MyEncoder(JSONEncoder):
             return bool(obj)
         else:
             return super(MyEncoder, self).default(obj)
+
+
+# see https://stackoverflow.com/a/75666126
+class CustomJSONProvider(JSONProvider):
+    def dumps(self, obj, **kwargs):
+        return json.dumps(obj, **kwargs, cls=MyEncoder)
+
+    def loads(self, s, **kwargs):
+        return json.loads(s, **kwargs)
 
 
 def request_wrapper(name):
@@ -68,7 +80,8 @@ def make_application():
                         instance_relative_config=True,
                         static_url_path='',
                         static_folder='../docs/build/html')
-    application.json_encoder = MyEncoder
+    application.json_provider_class = CustomJSONProvider
+    application.json = CustomJSONProvider(application)
     CORS(
         application,
         origins=[

@@ -125,7 +125,7 @@ class TestReduceCSV(unittest.TestCase):
         self.reduced_dataframe_survey = pandas.read_csv(StringIO(reduced_csv_survey))
 
     def test_first_filter(self):
-        '''Test frist filter'''
+        '''Test first filter'''
         extracted_dataframe = pandas.read_csv(self.extracted_csv_question, parse_dates=['created_at'])
         task_T0_csv = extracted_dataframe[(extracted_dataframe.task == 'T0') & (extracted_dataframe.subject_id == 1)]
         expected = task_T0_csv[[True, False]]
