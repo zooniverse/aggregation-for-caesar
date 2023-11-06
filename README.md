@@ -40,6 +40,11 @@ Or for the latest development build from GitHub:
 pip install -U git+https://github.com/zooniverse/aggregation-for-caesar.git#egg=panoptes-aggregation[gui]
 ```
 
+On linux systems you may need to install GTK3:
+```bash
+sudo apt-get install build-essential libgtk-3-dev
+```
+
 ### With Docker
 [https://docs.docker.com/get-started/](https://docs.docker.com/get-started/)
 
