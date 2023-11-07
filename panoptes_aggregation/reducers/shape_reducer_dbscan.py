@@ -13,7 +13,6 @@ from ..shape_tools import SHAPE_LUT
 from .shape_process_data import process_data, DEFAULTS_PROCESS
 from .shape_metric import get_shape_metric_and_avg
 from .shape_metric_IoU import IoU_metric, average_shape_IoU
-import sys
 
 DEFAULTS = {
     'eps': {'default': 5.0, 'type': float},

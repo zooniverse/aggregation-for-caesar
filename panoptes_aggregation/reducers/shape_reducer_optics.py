@@ -112,7 +112,7 @@ def shape_reducer_optics(data_by_tool, **kwargs):
                         if metric_type == 'euclidean':
                             k_loc = avg(loc[idx])
                         elif metric_type == 'iou':
-                            k_loc, sigma = avg(loc[idx], shape)
+                            k_loc, sigma = avg(loc[idx], shape, eps_t)
                             clusters[frame].setdefault('{0}_clusters_sigma'.format(tool), []).append(float(sigma))
                         for pdx, param in enumerate(shape_params):
                             clusters[frame].setdefault('{0}_clusters_{1}'.format(tool, param), []).append(float(k_loc[pdx]))

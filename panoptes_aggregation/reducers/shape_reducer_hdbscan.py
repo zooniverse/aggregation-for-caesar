@@ -82,8 +82,8 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
         kwargs['metric'] = metric
     elif metric_type == 'iou':
         kwargs['metric'] = IoU_metric
-        kwargs['metric_params'] = {'shape': shape, 'eps_t': eps_t}
         kwargs['shape'] = shape
+        kwargs['eps_t'] = eps_t
         avg = average_shape_IoU
     else:
         raise ValueError('metric_type must be either "euclidean" or "IoU".')
@@ -115,7 +115,7 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
                         if metric_type == 'euclidean':
                             k_loc = avg(loc[idx])
                         elif metric_type == 'iou':
-                            k_loc, sigma = avg(loc[idx], shape)
+                            k_loc, sigma = avg(loc[idx], shape, eps_t)
                             clusters[frame].setdefault('{0}_clusters_sigma'.format(tool), []).append(float(sigma))
                         for pdx, param in enumerate(shape_params):
                             clusters[frame].setdefault('{0}_clusters_{1}'.format(tool, param), []).append(float(k_loc[pdx]))
