@@ -9,7 +9,6 @@ import shapely.affinity
 import scipy.optimize
 import numpy
 from functools import lru_cache
-import sys
 
 
 def tupleize(func):
@@ -113,9 +112,9 @@ def IoU_metric(params1, params2, shape, eps_t=None):
     if 'temporal' in shape:
         # combine the shape IoU with the time difference and normalize
         # build two boxes in the time domain with width eps_t and height 1
-        # centered at (t - eps_t/2, 0.5) and calculate the intersection in time
-        time_params1 = (params1[5] - eps_t / 2, 0, eps_t, 1)
-        time_params2 = (params2[5] - eps_t / 2, 0, eps_t, 1)
+        # centered at (t - eps_t / 2, 0.5) and calculate the intersection in time
+        time_params1 = (params1[-1] - eps_t, 0, eps_t, 1)
+        time_params2 = (params2[-1] - eps_t, 0, eps_t, 1)
         time_geo1 = panoptes_to_geometry(time_params1, 'rectangle')
         time_geo2 = panoptes_to_geometry(time_params2, 'rectangle')
         time_intersection = 0
@@ -292,9 +291,9 @@ def average_shape_IoU(params_list, shape, eps_t=None):
     def sum_distance(x):
         return sum([IoU_metric(x, p, shape, eps_t)**2 for p in params_list])
     # find shape that minimizes the variance in the IoU metric using bounds
-    m = scipy.optimize.shgo(
+    m = scipy.optimize.direct(
         sum_distance,
-        sampling_method='sobol',
+        locally_biased=False,
         bounds=average_bounds(params_list, shape)
     )
     # find the 1-sigma value
