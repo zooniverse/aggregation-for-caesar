@@ -19,6 +19,7 @@ from .shape_metric_IoU import IoU_metric, average_shape_IoU
 DEFAULTS = {
     'min_cluster_size': {'default': 5, 'type': int},
     'min_samples': {'default': 3, 'type': int},
+    'eps_t': {'default': 0.5, 'type': float},
     'algorithm': {'default': 'best', 'type': str},
     'leaf_size': {'default': 40, 'type': int},
     'p': {'default': None, 'type': float},
@@ -72,6 +73,7 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
         * `tool*_clusters_sigma` : The standard deviation of the average shape under the IoU metric
     '''
     shape = data_by_tool.pop('shape')
+    eps_t = kwargs.pop('eps_t', None)
     shape_params = SHAPE_LUT[shape]
     metric_type = kwargs.pop('metric_type', 'euclidean').lower()
     symmetric = data_by_tool.pop('symmetric')
@@ -81,6 +83,7 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
     elif metric_type == 'iou':
         kwargs['metric'] = IoU_metric
         kwargs['shape'] = shape
+        kwargs['eps_t'] = eps_t
         avg = average_shape_IoU
     else:
         raise ValueError('metric_type must be either "euclidean" or "IoU".')
@@ -112,7 +115,7 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
                         if metric_type == 'euclidean':
                             k_loc = avg(loc[idx])
                         elif metric_type == 'iou':
-                            k_loc, sigma = avg(loc[idx], shape)
+                            k_loc, sigma = avg(loc[idx], shape, eps_t)
                             clusters[frame].setdefault('{0}_clusters_sigma'.format(tool), []).append(float(sigma))
                         for pdx, param in enumerate(shape_params):
                             clusters[frame].setdefault('{0}_clusters_{1}'.format(tool, param), []).append(float(k_loc[pdx]))
