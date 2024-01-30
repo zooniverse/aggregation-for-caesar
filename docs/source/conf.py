@@ -19,9 +19,6 @@
 #
 import os
 import sys
-from docutils.parsers.rst.directives.admonitions import BaseAdmonition
-from sphinx.util import compat
-compat.make_admonition = BaseAdmonition
 sys.path.insert(0, os.path.abspath('../../panoptes_aggregation'))
 sys.path.insert(0, os.path.abspath('../..'))
 from panoptes_aggregation import __version__
