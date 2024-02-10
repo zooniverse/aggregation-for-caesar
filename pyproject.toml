@@ -36,6 +36,9 @@ dependencies = [
 
 [project.optional-dependencies]
 online = [
+    "celery>=5.3,<5.4",
+    "redis>=5,<6",
+    "flower>2,<3",
     "flask>=2.3,<3.1",
     "flask-cors>=3.0,<4.1",
     "panoptes-client>=1.6,<1.7",
@@ -83,7 +86,7 @@ include = [
 exclude = [
     "docs/",
     "kubernetes",
-    "make_docs.sh"
+    "scripts/make_docs.sh"
 ]
 
 [tool.coverage.run]
