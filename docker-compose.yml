@@ -21,8 +21,8 @@ services:
       - LISTEN_PORT=4000
     ports:
       - "4000:4000"
-    depends_on:
-      - redis
+    links:
+      - redis:redis
 
   worker:
     build:
@@ -38,8 +38,9 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - FLASK_ENV=development
+    links:
+      - redis:redis
     depends_on:
-      - aggregation
       - redis
 
   dashboard:
@@ -52,8 +53,9 @@ services:
       - APP_SETTINGS=project.server.config.DevelopmentConfig
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    links:
+      - redis:redis
     depends_on:
-      - aggregation
       - redis
       - worker
 
