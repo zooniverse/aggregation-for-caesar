@@ -5,6 +5,7 @@ import os
 import pandas
 from pandas.testing import assert_frame_equal
 import panoptes_aggregation.scripts.extract_panoptes_csv as extract_panoptes_csv
+import panoptes_aggregation.scripts.batch_utils as batch_utils
 import platform
 import multiprocessing
 
@@ -157,10 +158,10 @@ class TestExtractCSV(unittest.TestCase):
 
         self.config_yaml_fail = StringIO(extractor_config_yaml_fail)
 
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
-    @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.flatten_data', CaptureValues(extract_panoptes_csv.flatten_data))
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.extractors.extractors', mock_extractors_dict)
+    @patch('panoptes_aggregation.scripts.batch_utils.flatten_data', CaptureValues(batch_utils.flatten_data))
     def test_extract_csv_object(self, mock_to_csv, *_):
         '''Test one (object) extractor makes one csv file'''
         mock_question_extractor.side_effect = [
@@ -176,15 +177,15 @@ class TestExtractCSV(unittest.TestCase):
         )
         output_path = os.path.join(os.getcwd(), 'question_extractor_extractions.csv')
         self.assertEqual(output_file_names, [output_path])
-        result_dataframe = extract_panoptes_csv.flatten_data.return_values[0]
+        result_dataframe = batch_utils.flatten_data.return_values[0]
         assert_frame_equal(result_dataframe, self.extracts_dataframe_question, check_like=True)
         mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
 
     @unittest.skipIf(WINDOWS, 'Installed on windows, skipping multi core test')
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
-    @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.flatten_data', CaptureValues(extract_panoptes_csv.flatten_data))
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.extractors.extractors', mock_extractors_dict)
+    @patch('panoptes_aggregation.scripts.batch_utils.flatten_data', CaptureValues(batch_utils.flatten_data))
     def test_extract_csv_object_n2(self, mock_to_csv, *_):
         '''Test one (object) extractor makes one csv file with cpu_count==2'''
         mock_question_extractor.side_effect = [
@@ -209,10 +210,10 @@ class TestExtractCSV(unittest.TestCase):
         # set back to default
         multiprocessing.set_start_method(start_method, force=True)
 
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
-    @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.flatten_data', CaptureValues(extract_panoptes_csv.flatten_data))
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.extractors.extractors', mock_extractors_dict)
+    @patch('panoptes_aggregation.scripts.batch_utils.flatten_data', CaptureValues(batch_utils.flatten_data))
     def test_extract_csv_object_min_version(self, mock_to_csv, *_):
         '''Test one (object) extractor makes one csv file with min_version'''
         mock_question_extractor.side_effect = [
@@ -230,14 +231,14 @@ class TestExtractCSV(unittest.TestCase):
         )
         output_path = os.path.join(os.getcwd(), 'question_extractor_extractions.csv')
         self.assertEqual(output_file_names, [output_path])
-        result_dataframe = extract_panoptes_csv.flatten_data.return_values[0]
+        result_dataframe = batch_utils.flatten_data.return_values[0]
         assert_frame_equal(result_dataframe, self.extracts_dataframe_question_min, check_like=True)
         mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
 
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
-    @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.flatten_data', CaptureValues(extract_panoptes_csv.flatten_data))
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.extractors.extractors', mock_extractors_dict)
+    @patch('panoptes_aggregation.scripts.batch_utils.flatten_data', CaptureValues(batch_utils.flatten_data))
     def test_extract_csv_object_max_version(self, mock_to_csv, *_):
         '''Test one (object) extractor makes one csv file with max_version'''
         mock_question_extractor.side_effect = [
@@ -253,13 +254,13 @@ class TestExtractCSV(unittest.TestCase):
         )
         output_path = os.path.join(os.getcwd(), 'question_extractor_extractions.csv')
         self.assertEqual(output_file_names, [output_path])
-        result_dataframe = extract_panoptes_csv.flatten_data.return_values[0]
+        result_dataframe = batch_utils.flatten_data.return_values[0]
         assert_frame_equal(result_dataframe, self.extracts_dataframe_question_max, check_like=True)
         mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
 
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
-    @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.extractors.extractors', mock_extractors_dict)
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.order_columns', CaptureValues(extract_panoptes_csv.order_columns))
     def test_extract_csv_list(self, mock_to_csv, *_):
         '''Test one (list) extractor makes one csv file'''
@@ -293,10 +294,10 @@ class TestExtractCSV(unittest.TestCase):
         assert_frame_equal(result_dataframe, self.extracts_dataframe_survey)
         mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
 
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
-    @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.flatten_data', CaptureValues(extract_panoptes_csv.flatten_data))
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.extractors.extractors', mock_extractors_dict)
+    @patch('panoptes_aggregation.scripts.batch_utils.flatten_data', CaptureValues(batch_utils.flatten_data))
     def test_extract_csv_object_shape(self, mock_to_csv, *_):
         '''Test two (object) extractors makes two csv files'''
         mock_shape_extractor.side_effect = [
@@ -313,12 +314,12 @@ class TestExtractCSV(unittest.TestCase):
         output_path_T0 = os.path.join(os.getcwd(), 'shape_extractor_point_extractions.csv')
         output_path_T1 = os.path.join(os.getcwd(), 'shape_extractor_rectangle_extractions.csv')
         self.assertCountEqual(output_file_names, [output_path_T0, output_path_T1])
-        if extract_panoptes_csv.flatten_data.return_values[0].task.iloc[0] == 'T0':
-            result_dataframe_T0 = extract_panoptes_csv.flatten_data.return_values[0]
-            result_dataframe_T1 = extract_panoptes_csv.flatten_data.return_values[1]
+        if batch_utils.flatten_data.return_values[0].task.iloc[0] == 'T0':
+            result_dataframe_T0 = batch_utils.flatten_data.return_values[0]
+            result_dataframe_T1 = batch_utils.flatten_data.return_values[1]
         else:
-            result_dataframe_T1 = extract_panoptes_csv.flatten_data.return_values[0]
-            result_dataframe_T0 = extract_panoptes_csv.flatten_data.return_values[1]
+            result_dataframe_T1 = batch_utils.flatten_data.return_values[0]
+            result_dataframe_T0 = batch_utils.flatten_data.return_values[1]
         assert_frame_equal(result_dataframe_T0, self.extracts_dataframe_two_T0, check_like=True)
         assert_frame_equal(result_dataframe_T1, self.extracts_dataframe_two_T1, check_like=True)
         to_csv_calls = [
@@ -327,10 +328,10 @@ class TestExtractCSV(unittest.TestCase):
         ]
         mock_to_csv.assert_has_calls(to_csv_calls, any_order=True)
 
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
-    @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.print')
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.extractors.extractors', mock_extractors_dict)
+    @patch('panoptes_aggregation.scripts.batch_utils.print')
     def test_extract_csv_bad_classification_verbose(self, mock_print, *_):
         '''Test bad classification with verbose on'''
         mock_bad_extractor.side_effect = [
@@ -346,10 +347,10 @@ class TestExtractCSV(unittest.TestCase):
         mock_print.assert_any_call('Incorrectly formatted annotation')
         self.assertEqual(output_file_names, [])
 
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
-    @patch.dict('panoptes_aggregation.scripts.extract_panoptes_csv.extractors.extractors', mock_extractors_dict)
-    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.print')
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.extractors.extractors', mock_extractors_dict)
+    @patch('panoptes_aggregation.scripts.batch_utils.print')
     def test_extract_csv_bad_classification_no_verbose(self, mock_print, *_):
         '''Test bad classification with verbose off'''
         mock_bad_extractor.side_effect = [
