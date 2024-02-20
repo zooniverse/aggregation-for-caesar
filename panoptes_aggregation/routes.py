@@ -15,7 +15,7 @@ from os import getenv
 from panoptes_aggregation import reducers
 from panoptes_aggregation import extractors
 from panoptes_aggregation import running_reducers
-from panoptes_aggregation.tasks import create_task
+from panoptes_aggregation import tasks
 from panoptes_aggregation import __version__
 import numpy as np
 from celery.result import AsyncResult
@@ -117,12 +117,12 @@ def make_application():
     for route, route_function in panoptes.panoptes.items():
         application.route('/panoptes/{0}'.format(route), methods=['POST', 'PUT'])(lambda: route_function(request.args.to_dict(), request.get_json()))
 
-
     @application.route('/tasks', methods=['POST'])
     def run_task():
         content = request.json
-        task_type = content["type"]
-        task = create_task.delay(int(task_type))
+        xx = content['x']
+        yy = content['y']
+        task = tasks.add.delay(xx, yy)
         return jsonify({"task_id": task.id}), 202
 
     @application.route("/tasks/<task_id>", methods=["GET"])
