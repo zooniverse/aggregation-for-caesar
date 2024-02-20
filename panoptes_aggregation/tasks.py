@@ -10,4 +10,4 @@ celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://lo
 @celery.task(name="add")
 def add(x, y):
     time.sleep(5)
-    return x+y
+    return x + y
