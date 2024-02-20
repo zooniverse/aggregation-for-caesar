@@ -4,7 +4,7 @@ try:
 except ImportError:
     OFFLINE = True
 import unittest
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import patch, MagicMock
 import numpy as np
 import os
 import panoptes_aggregation
@@ -68,14 +68,14 @@ class RouterTest(unittest.TestCase):
                     running_reducer_name
                 )
 
-    @patch("panoptes_aggregation.tasks.create_task.run")
+    @patch("panoptes_aggregation.tasks.add.run")
     def test_mock_task(self, mock_run):
         '''Test that the bg task gets called'''
-        assert panoptes_aggregation.tasks.create_task.run(1)
+        assert panoptes_aggregation.tasks.add.run(x=1, y=2)
         with self.application.test_client() as client:
-            response = client.post('/tasks', json={'type': 10})
+            response = client.post('/tasks', json={'x': 1, 'y': 2})
             self.assertEqual(response.status_code, 202)
-        panoptes_aggregation.tasks.create_task.run.assert_called_once_with(1)
+        panoptes_aggregation.tasks.add.run.assert_called_once_with(1)
 
     @unittest.skipIf("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true", "Skipping this test on Travis CI.")
     def test_docs_route(self):
