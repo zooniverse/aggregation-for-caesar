@@ -5,6 +5,7 @@ import os
 import pandas
 from pandas.testing import assert_frame_equal
 import panoptes_aggregation.scripts.reduce_panoptes_csv as reduce_panoptes_csv
+import panoptes_aggregation.scripts.batch_utils as batch_utils
 import multiprocessing
 
 extracted_csv_question = '''classification_id,user_name,user_id,workflow_id,task,created_at,subject_id,extractor,data.blue,data.green,data.no,data.yes
@@ -129,7 +130,7 @@ class TestReduceCSV(unittest.TestCase):
         extracted_dataframe = pandas.read_csv(self.extracted_csv_question, parse_dates=['created_at'])
         task_T0_csv = extracted_dataframe[(extracted_dataframe.task == 'T0') & (extracted_dataframe.subject_id == 1)]
         expected = task_T0_csv[[True, False]]
-        result = reduce_panoptes_csv.first_filter(task_T0_csv)
+        result = batch_utils.first_filter(task_T0_csv)
         assert_frame_equal(result, expected)
 
     def test_last_filter(self):
@@ -137,13 +138,13 @@ class TestReduceCSV(unittest.TestCase):
         extracted_dataframe = pandas.read_csv(self.extracted_csv_question, parse_dates=['created_at'])
         task_T0_csv = extracted_dataframe[(extracted_dataframe.task == 'T0') & (extracted_dataframe.subject_id == 1)]
         expected = task_T0_csv[[False, True]]
-        result = reduce_panoptes_csv.last_filter(task_T0_csv)
+        result = batch_utils.last_filter(task_T0_csv)
         assert_frame_equal(result, expected)
 
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.DataFrame.to_csv')
-    @patch.dict('panoptes_aggregation.scripts.reduce_panoptes_csv.reducers.reducers', mock_reducers_dict)
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(reduce_panoptes_csv.flatten_data))
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.reducers.reducers', mock_reducers_dict)
+    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(batch_utils.flatten_data))
     def test_reduce_csv_object(self, mock_to_csv, mock_pbar):
         '''Test object reducer makes one csv file'''
         output_file_name = reduce_panoptes_csv.reduce_csv(
@@ -159,10 +160,10 @@ class TestReduceCSV(unittest.TestCase):
         assert_frame_equal(result_dataframe, self.reduced_dataframe_question, check_like=True)
         mock_to_csv.assert_called_once_with(output_path, index=False, encoding='utf-8')
 
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.DataFrame.to_csv')
-    @patch.dict('panoptes_aggregation.scripts.reduce_panoptes_csv.reducers.reducers', mock_reducers_dict)
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(reduce_panoptes_csv.flatten_data))
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.reducers.reducers', mock_reducers_dict)
+    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(batch_utils.flatten_data))
     def test_reduce_csv_object_multi(self, mock_to_csv, mock_pbar):
         '''Test object reducer makes one csv file with cpu_count=2'''
         # on Mac's the multiprocessing start method needs to be set to 'fork' rather than 'spawn'
@@ -181,12 +182,12 @@ class TestReduceCSV(unittest.TestCase):
         # set back to default
         multiprocessing.set_start_method(start_method, force=True)
 
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.DataFrame.to_csv')
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.read_csv')
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.os.path.isfile')
-    @patch.dict('panoptes_aggregation.scripts.reduce_panoptes_csv.reducers.reducers', mock_reducers_dict)
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(reduce_panoptes_csv.flatten_data))
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.reducers.reducers', mock_reducers_dict)
+    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(batch_utils.flatten_data))
     def test_reduce_csv_stream(self, mock_is_file, mock_read_csv, mock_to_csv, mock_pbar):
         '''Test streaming object reducer makes one csv file'''
         mock_is_file.return_value = False
@@ -216,13 +217,13 @@ class TestReduceCSV(unittest.TestCase):
         result_dataframe = reduce_panoptes_csv.flatten_data.return_values[0]
         assert_frame_equal(result_dataframe, self.reduced_dataframe_question, check_like=True)
 
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.DataFrame.to_csv')
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.read_csv')
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.os.path.isfile')
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.open')
-    @patch.dict('panoptes_aggregation.scripts.reduce_panoptes_csv.reducers.reducers', mock_reducers_dict)
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(reduce_panoptes_csv.flatten_data))
+    @patch('panoptes_aggregation.scripts.batch_utils.os.path.isfile')
+    @patch('panoptes_aggregation.scripts.batch_utils.open')
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.reducers.reducers', mock_reducers_dict)
+    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(batch_utils.flatten_data))
     def test_reduce_csv_stream_resume(self, mock_open, mock_is_file, mock_read_csv, mock_to_csv, mock_pbar):
         '''Test resuming works'''
         mock_is_file.return_value = True
@@ -250,13 +251,13 @@ class TestReduceCSV(unittest.TestCase):
         result_dataframe = reduce_panoptes_csv.flatten_data.return_values[0]
         assert_frame_equal(result_dataframe, self.reduced_dataframe_question, check_like=True)
 
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.DataFrame.to_csv')
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.read_csv')
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.os.path.isfile')
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.open')
-    @patch.dict('panoptes_aggregation.scripts.reduce_panoptes_csv.reducers.reducers', mock_reducers_dict)
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(reduce_panoptes_csv.flatten_data))
+    @patch('panoptes_aggregation.scripts.batch_utils.os.path.isfile')
+    @patch('panoptes_aggregation.scripts.batch_utils.open')
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.reducers.reducers', mock_reducers_dict)
+    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(batch_utils.flatten_data))
     def test_reduce_csv_stream_resume_nothing_new_to_do(self, mock_open, mock_is_file, mock_read_csv, mock_to_csv, mock_pbar):
         '''Test resuming a finished file does not change it'''
         mock_is_file.return_value = True
@@ -278,9 +279,9 @@ class TestReduceCSV(unittest.TestCase):
         mock_read_csv.assert_has_calls([call(output_path, encoding='utf-8')])
         mock_to_csv.assert_not_called()
 
-    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.progressbar.ProgressBar')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.DataFrame.to_csv')
-    @patch.dict('panoptes_aggregation.scripts.reduce_panoptes_csv.reducers.reducers', mock_reducers_dict)
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.reducers.reducers', mock_reducers_dict)
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.order_columns', CaptureValues(reduce_panoptes_csv.order_columns))
     def test_reduce_csv_list(self, mock_to_csv, mock_pbar):
         '''Test list reducer makes one csv file'''
