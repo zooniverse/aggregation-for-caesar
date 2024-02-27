@@ -83,7 +83,6 @@ class BatchAggregator:
 
     def _connect_api_client(self):
         # connect to the API only once for this function request
-        Panoptes.connect(username='zwolf', password='@U^rNtC*o8q2', admin=True)
         # Panoptes.connect(
             # endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
             # client_id=getenv('PANOPTES_CLIENT_ID'),
