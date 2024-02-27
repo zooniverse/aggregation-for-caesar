@@ -113,3 +113,4 @@ endpoints.yml
 
 .vscode/
 .noseids
+tmp/*
