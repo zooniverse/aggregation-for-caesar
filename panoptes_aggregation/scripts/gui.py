@@ -22,8 +22,7 @@ try:
 except ImportError:
     raise ImportError('The GUI component is not installed, reinstall with `pip install -U panoptes_aggregation[gui]`')
 
-panoptes_aggregation.scripts.pbar_override(panoptes_aggregation.scripts.pbe)
-panoptes_aggregation.scripts.pbar_override(panoptes_aggregation.scripts.pbr)
+panoptes_aggregation.scripts.pbar_override(panoptes_aggregation.scripts.pb)
 panoptes_aggregation.scripts.gui_override(gooey)
 
 current_folder = os.path.dirname(os.path.abspath(__file__))
