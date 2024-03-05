@@ -18,7 +18,7 @@ dynamic = ["version"]
 requires-python = ">=3.8,<3.12"
 dependencies = [
     "beautifulsoup4>=4.8.1,<4.13",
-    "collatex>=2.3<2.4",
+    "collatex>=2.3,<2.4",
     "hdbscan>=0.8.20,<=0.8.33",
     "lxml>=4.4,<4.10",
     "numpy>=1.22.0,<1.26.3",

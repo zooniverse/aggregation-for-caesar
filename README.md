@@ -45,6 +45,26 @@ On linux systems you may need to install GTK3:
 sudo apt-get install build-essential libgtk-3-dev
 ```
 
+#### Mac Anaconda build
+If you are installing this code on a Mac using the anaconda build of python and you want to use the GUI instead of the command line you will have to update one line of the of code in the `panoptes_aggregation_gui` script.  Change the first line from:
+```python
+#!/path/to/anaconda/python/bin/python
+```
+to:
+```python
+#!/bin/bash /path/to/anaconda/python/bin/python.app
+```
+
+You can find the location of this file with the command:
+```bash
+which panoptes_aggregation_gui
+```
+
+You will also need to run:
+```bash
+conda install python.app
+```
+
 ### With Docker
 [https://docs.docker.com/get-started/](https://docs.docker.com/get-started/)
 
