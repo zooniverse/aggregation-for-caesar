@@ -3,7 +3,7 @@ import json
 import pandas as pd
 import os
 import urllib3
-import pandas as pd
+from os import getenv
 
 from panoptes_client import Panoptes, Project, Workflow
 from panoptes_aggregation.workflow_config import workflow_extractor_config, workflow_reducer_config
@@ -12,8 +12,6 @@ from panoptes_client.panoptes import PanoptesAPIException
 
 import logging
 panoptes_client_logger = logging.getLogger('panoptes_client').setLevel(logging.ERROR)
-
-from panoptes_client import Panoptes, Project, Workflow
 
 celery = Celery(__name__)
 celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
@@ -83,8 +81,8 @@ class BatchAggregator:
 
     def _connect_api_client(self):
         # connect to the API only once for this function request
-        # Panoptes.connect(
-            # endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
-            # client_id=getenv('PANOPTES_CLIENT_ID'),
-            # client_secret=getenv('PANOPTES_CLIENT_SECRET')
-        # )
+        Panoptes.connect(
+            endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
+            client_id=getenv('PANOPTES_CLIENT_ID'),
+            client_secret=getenv('PANOPTES_CLIENT_SECRET')
+        )
