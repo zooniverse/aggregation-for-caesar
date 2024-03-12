@@ -124,15 +124,14 @@ def make_application():
         workflow_id = content['workflow_id']
         user_id = content['user_id']
         task = batch_aggregation.run_aggregation.delay(project_id, workflow_id, user_id)
-        return jsonify({"task_id": task.id}), 202
+        return json.dumps({"task_id": task.id}), 202
 
     @application.route('/tasks/<task_id>', methods=['GET'])
     def get_status(task_id):
         task_result = AsyncResult(task_id)
         result = {
             'task_id': task_id,
-            'task_status': task_result.status,
-            'task_result': task_result.result
+            'task_status': task_result.status
         }
         return jsonify(result), 200
 
