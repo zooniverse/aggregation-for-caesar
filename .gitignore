@@ -113,3 +113,5 @@ endpoints.yml
 
 .vscode/
 .noseids
+tmp/*
+.DS_Store
