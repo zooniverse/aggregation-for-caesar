@@ -3,12 +3,14 @@ import json
 import pandas as pd
 import os
 import urllib3
-from os import getenv
+from shutil import make_archive
+import uuid
+
+from azure.storage.blob import BlobServiceClient
 
 from panoptes_client import Panoptes, Project, Workflow
-from panoptes_aggregation.workflow_config import workflow_extractor_config, workflow_reducer_config
+from panoptes_aggregation.workflow_config import workflow_extractor_config
 from panoptes_aggregation.scripts import batch_utils
-from panoptes_client.panoptes import PanoptesAPIException
 
 import logging
 panoptes_client_logger = logging.getLogger('panoptes_client').setLevel(logging.ERROR)
@@ -20,15 +22,34 @@ celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://lo
 @celery.task(name="run_aggregation")
 def run_aggregation(project_id, workflow_id, user_id):
     ba = BatchAggregator(project_id, workflow_id, user_id)
-    exports = ba.save_exports()
+    ba.save_exports()
+
     wf_df = ba.process_wf_export(ba.wf_csv)
     cls_df = ba.process_cls_export(ba.cls_csv)
 
     extractor_config = workflow_extractor_config(ba.tasks)
     extracted_data = batch_utils.batch_extract(cls_df, extractor_config)
 
-    reducer_config = workflow_reducer_config(extractor_config)
-    reduced_data = batch_utils.batch_reduce(extracted_data, reducer_config)
+    batch_standard_reducers = {
+        'question_extractor': ['question_reducer', 'question_consensus_reducer'],
+        'survey_extractor': ['survey_reducer']
+    }
+
+    for task_type, extract_df in extracted_data.items():
+        extract_df.to_csv(f'{ba.output_path}/{ba.workflow_id}_{task_type}.csv')
+        reducer_list = batch_standard_reducers[task_type]
+        reduced_data = {}
+
+        for reducer in reducer_list:
+            # This is an override. The workflow_reducer_config method returns a config object
+            # that is incompatible with the batch_utils batch_reduce method
+            reducer_config = {'reducer_config': {reducer: {}}}
+            reduced_data[reducer] = batch_utils.batch_reduce(extract_df, reducer_config)
+            filename = f'{ba.output_path}/{ba.workflow_id}_reductions.csv'
+            reduced_data[reducer].to_csv(filename, mode='a')
+    ba.upload_files()
+
+    # hit up panoptes, let em know you're done
 
 class BatchAggregator:
     """
@@ -39,20 +60,26 @@ class BatchAggregator:
         self.project_id = project_id
         self.workflow_id = workflow_id
         self.user_id = user_id
+        self._generate_uuid()
         self._connect_api_client()
 
     def save_exports(self):
+        self.output_path = f'tmp/{self.workflow_id}'
+        os.mkdir(self.output_path)
+
         cls_export = Workflow(self.workflow_id).describe_export('classifications')
         full_cls_url = cls_export['media'][0]['src']
+        cls_file = f'{self.output_path}/{self.workflow_id}_cls_export.csv'
+        self._download_export(full_cls_url, cls_file)
+
         wf_export = Project(self.project_id).describe_export('workflows')
         full_wf_url = wf_export['media'][0]['src']
-        cls_file = f'tmp/{self.workflow_id}_cls_export.csv'
-        self._download_export(full_cls_url, cls_file)
-        wf_file = f'tmp/{self.project_id}_workflow_export.csv'
+        wf_file = f'{self.output_path}/{self.workflow_id}_workflow_export.csv'
         self._download_export(full_wf_url, wf_file)
+
         self.cls_csv = cls_file
         self.wf_csv = wf_file
-        return {'cls_csv': cls_file, 'wf_csv': wf_file}
+        return {'classifications': cls_file, 'workflows': wf_file}
 
     def process_wf_export(self, wf_csv):
         self.wf_df = pd.read_csv(wf_csv)
@@ -68,6 +95,27 @@ class BatchAggregator:
         self.cls_df = cls_df.query(f'workflow_version == {self.workflow_version}')
         return self.cls_df
 
+    def connect_blob_storage(self):
+        connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+        self.blob_service_client = BlobServiceClient.from_connection_string(connect_str)
+        self.blob_service_client.create_container(name=self.id)
+
+    def upload_file_to_storage(self, container_name, filepath):
+        blob = filepath.split('/')[-1]
+        blob_client = self.blob_service_client.get_blob_client(container=container_name, blob=blob)
+        with open(file=filepath, mode="rb") as data:
+            blob_client.upload_blob(data, overwrite=True)
+
+    def upload_files(self):
+        self.connect_blob_storage()
+        reductions_file = f'{self.output_path}/{self.workflow_id}_reductions.csv'
+        self.upload_file_to_storage(self.id, reductions_file)
+        zipfile = make_archive(f'tmp/{self.id}', 'zip', self.output_path)
+        self.upload_file_to_storage(self.id, zipfile)
+
+    def _generate_uuid(self):
+        self.id = uuid.uuid4().hex
+
     def _download_export(self, url, filepath):
         http = urllib3.PoolManager()
         r = http.request('GET', url, preload_content=False)
@@ -82,7 +130,7 @@ class BatchAggregator:
     def _connect_api_client(self):
         # connect to the API only once for this function request
         Panoptes.connect(
-            endpoint=getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
-            client_id=getenv('PANOPTES_CLIENT_ID'),
-            client_secret=getenv('PANOPTES_CLIENT_SECRET')
+            endpoint=os.getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
+            client_id=os.getenv('PANOPTES_CLIENT_ID'),
+            client_secret=os.getenv('PANOPTES_CLIENT_SECRET')
         )
