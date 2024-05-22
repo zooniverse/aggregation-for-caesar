@@ -70,6 +70,7 @@ class RouterTest(unittest.TestCase):
 
     # Override json.dumps() for this test so it doesn't try to jsonify the mock
     import json
+
     @patch("panoptes_aggregation.batch_aggregation.json.dumps", return_value=json.dumps({'project_id': 1, 'workflow_id': 10, 'user_id': 100, 'task_id': 'asdf'}))
     @patch("panoptes_aggregation.batch_aggregation.run_aggregation.delay")
     def test_run_aggregation_route(self, mocked_task, mocked_json):

@@ -1,11 +1,12 @@
 import unittest
-from unittest.mock import patch, Mock, MagicMock, call
+from unittest.mock import patch, MagicMock, call
 from panoptes_aggregation.scripts import batch_utils
 from panoptes_aggregation.batch_aggregation import run_aggregation
 from panoptes_aggregation import batch_aggregation as batch_agg
 
-wf_export = f'panoptes_aggregation/tests/batch_aggregation/wf_export.csv'
-cls_export = f'panoptes_aggregation/tests/batch_aggregation/cls_export.csv'
+wf_export = 'panoptes_aggregation/tests/batch_aggregation/wf_export.csv'
+cls_export = 'panoptes_aggregation/tests/batch_aggregation/cls_export.csv'
+
 
 @patch("panoptes_aggregation.batch_aggregation.BatchAggregator._connect_api_client", new=MagicMock())
 class TestBatchAggregation(unittest.TestCase):
@@ -16,7 +17,7 @@ class TestBatchAggregation(unittest.TestCase):
         mock_aggregator.process_cls_export.return_value = MagicMock()
 
         mock_df = MagicMock()
-        test_extracts = { 'question_extractor': mock_df }
+        test_extracts = {'question_extractor': mock_df}
         batch_utils.batch_extract = MagicMock(return_value=test_extracts)
         mock_reducer = MagicMock()
         batch_utils.batch_reduce = mock_reducer
@@ -49,7 +50,7 @@ class TestBatchAggregation(unittest.TestCase):
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.connect")
     def test_save_exports(self, mock_client, mock_project, mock_workflow, mock_mkdir):
         # Test that Panoptes calls are made and files are saved
-        csv_dict = {'media': [ {'src': 'http://zooniverse.org/123.csv'} ] }
+        csv_dict = {'media': [{'src': 'http://zooniverse.org/123.csv'}]}
         mock_project.return_value.describe_export.return_value = csv_dict
         mock_workflow.return_value.describe_export.return_value = csv_dict
         ba = batch_agg.BatchAggregator(1, 10, 100)

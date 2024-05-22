@@ -19,12 +19,13 @@ celery = Celery(__name__)
 celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
 celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379")
 
+
 @celery.task(name="run_aggregation")
 def run_aggregation(project_id, workflow_id, user_id):
     ba = BatchAggregator(project_id, workflow_id, user_id)
     ba.save_exports()
 
-    wf_df = ba.process_wf_export(ba.wf_csv)
+    ba.process_wf_export(ba.wf_csv)
     cls_df = ba.process_cls_export(ba.cls_csv)
 
     extractor_config = workflow_extractor_config(ba.tasks)
@@ -50,6 +51,7 @@ def run_aggregation(project_id, workflow_id, user_id):
     ba.upload_files()
 
     # hit up panoptes, let em know you're done
+
 
 class BatchAggregator:
     """
