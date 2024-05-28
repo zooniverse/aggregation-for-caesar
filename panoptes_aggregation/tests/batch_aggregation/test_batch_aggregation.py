@@ -108,6 +108,12 @@ class TestBatchAggregation(unittest.TestCase):
         ba.upload_file_to_storage('container', cls_export)
         mock_client.upload_blob.assert_called_once
 
+    @patch("panoptes_aggregation.batch_aggregation.Panoptes.post")
+    def test_create_run_in_panoptes(self, mock_poster):
+        ba = batch_agg.BatchAggregator(1, 10, 100)
+        ba.create_run_in_panoptes()
+        mock_poster.assert_called_with('/aggregations/', json={ 'aggregations': { 'uuid': ba.id, 'status': 'completed', 'links': { 'workflow': 10, 'user': 100 } } })
+
     @patch("panoptes_aggregation.batch_aggregation.BlobServiceClient")
     def test_connect_blob_storage(self, mock_client):
         ba = batch_agg.BatchAggregator(1, 10, 100)

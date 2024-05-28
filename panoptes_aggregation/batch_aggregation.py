@@ -51,6 +51,9 @@ def run_aggregation(project_id, workflow_id, user_id):
     ba.upload_files()
 
     # hit up panoptes, let em know you're done
+    # This could catch PanoptesAPIException, but what to do if it fails?
+    ba.create_run_in_panoptes()
+
 
 
 class BatchAggregator:
@@ -114,6 +117,21 @@ class BatchAggregator:
         self.upload_file_to_storage(self.id, reductions_file)
         zipfile = make_archive(f'tmp/{self.id}', 'zip', self.output_path)
         self.upload_file_to_storage(self.id, zipfile)
+
+    def create_run_in_panoptes(self):
+        Panoptes.client().post(
+            '/aggregations/',
+            json={
+                'aggregations': {
+                    'uuid': self.id,
+                    'status': 'completed',
+                    'links': {
+                        'workflow': self.workflow_id,
+                        'user': self.user_id
+                    }
+                }
+            }
+        )
 
     def _generate_uuid(self):
         self.id = uuid.uuid4().hex
