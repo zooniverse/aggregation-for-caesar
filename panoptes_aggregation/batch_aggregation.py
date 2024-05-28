@@ -55,7 +55,6 @@ def run_aggregation(project_id, workflow_id, user_id):
     ba.create_run_in_panoptes()
 
 
-
 class BatchAggregator:
     """
     Bunch of stuff to manage a batch aggregation run
