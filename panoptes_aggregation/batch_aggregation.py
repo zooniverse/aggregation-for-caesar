@@ -50,9 +50,8 @@ def run_aggregation(project_id, workflow_id, user_id):
             reduced_data[reducer].to_csv(filename, mode='a')
     ba.upload_files()
 
-    # hit up panoptes, let em know you're done
     # This could catch PanoptesAPIException, but what to do if it fails?
-    ba.create_run_in_panoptes()
+    ba.update_panoptes()
 
 
 class BatchAggregator:
@@ -117,17 +116,19 @@ class BatchAggregator:
         zipfile = make_archive(f'tmp/{self.id}', 'zip', self.output_path)
         self.upload_file_to_storage(self.id, zipfile)
 
-    def create_run_in_panoptes(self):
-        Panoptes.client().post(
+    def update_panoptes(self):
+        # An Aggregation class can be added to the python client to avoid doing this manually
+        params = {'workflow_id': self.workflow_id, 'user_id': self.user_id}
+        response = Panoptes.client().get('/aggregations/', params=params)
+        fresh_etag = response[1]
+
+        Panoptes.client().put(
             '/aggregations/',
+            etag=fresh_etag,
             json={
                 'aggregations': {
                     'uuid': self.id,
-                    'status': 'completed',
-                    'links': {
-                        'workflow': self.workflow_id,
-                        'user': self.user_id
-                    }
+                    'status': 'completed'
                 }
             }
         )
