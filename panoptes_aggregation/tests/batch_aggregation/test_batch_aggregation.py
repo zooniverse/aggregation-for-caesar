@@ -112,7 +112,7 @@ class TestBatchAggregation(unittest.TestCase):
     def test_create_run_in_panoptes(self, mock_poster):
         ba = batch_agg.BatchAggregator(1, 10, 100)
         ba.create_run_in_panoptes()
-        mock_poster.assert_called_with('/aggregations/', json={'aggregations': {'uuid': ba.id, 'status': 'completed', 'links': {'workflow': 10, 'user': 100 }}})
+        mock_poster.assert_called_with('/aggregations/', json={'aggregations': {'uuid': ba.id, 'status': 'completed', 'links': {'workflow': 10, 'user': 100}}})
 
     @patch("panoptes_aggregation.batch_aggregation.BlobServiceClient")
     def test_connect_blob_storage(self, mock_client):
