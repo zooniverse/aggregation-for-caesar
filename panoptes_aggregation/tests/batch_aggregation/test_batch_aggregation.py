@@ -13,9 +13,6 @@ class TestBatchAggregation(unittest.TestCase):
     @patch("panoptes_aggregation.batch_aggregation.workflow_extractor_config")
     @patch("panoptes_aggregation.batch_aggregation.BatchAggregator")
     def test_run_aggregation(self, mock_aggregator, mock_wf_ext_conf):
-        mock_aggregator.process_wf_export.return_value = MagicMock()
-        mock_aggregator.process_cls_export.return_value = MagicMock()
-
         mock_df = MagicMock()
         test_extracts = {'question_extractor': mock_df}
         batch_utils.batch_extract = MagicMock(return_value=test_extracts)
