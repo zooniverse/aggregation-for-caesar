@@ -1,4 +1,5 @@
 import unittest
+import os
 from unittest.mock import patch, MagicMock, call
 from panoptes_aggregation.scripts import batch_utils
 from panoptes_aggregation.batch_aggregation import run_aggregation
@@ -85,8 +86,8 @@ class TestBatchAggregation(unittest.TestCase):
         archive_mock.return_value = zipped_mock
         ba = batch_agg.BatchAggregator(1, 10, 100)
         ba.upload_file_to_storage = MagicMock()
-        ba.output_path = 'tmp/10'
-        reductions_file = 'tmp/10/10_reductions.csv'
+        ba.output_path = os.path.join('tmp', '10')
+        reductions_file = os.path.join('tmp', '10', '10_reductions.csv')
         ba.upload_files()
         client_mock.assert_called_once()
         archive_mock.assert_called_once()

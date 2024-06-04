@@ -50,7 +50,8 @@ def run_aggregation(project_id, workflow_id, user_id):
             # that is incompatible with the batch_utils batch_reduce method
             reducer_config = {'reducer_config': {reducer: {}}}
             reduced_data[reducer] = batch_utils.batch_reduce(extract_df, reducer_config)
-            filename = f'{ba.output_path}/{ba.workflow_id}_reductions.csv'
+            # filename = f'{ba.output_path}/{ba.workflow_id}_reductions.csv'
+            filename = os.path.join(ba.output_path, ba.workflow_id, '_reductions.csv')
             reduced_data[reducer].to_csv(filename, mode='a')
 
     # Upload zip & reduction files to blob storage
@@ -77,17 +78,18 @@ class BatchAggregator:
         self._connect_api_client()
 
     def save_exports(self):
-        self.output_path = f'tmp/{self.workflow_id}'
+        self.output_path = os.path.join('tmp', str(self.workflow_id))
         os.mkdir(self.output_path)
 
         cls_export = Workflow(self.workflow_id).describe_export('classifications')
         full_cls_url = cls_export['media'][0]['src']
-        cls_file = f'{self.output_path}/{self.workflow_id}_cls_export.csv'
+        cls_file = os.path.join(self.output_path, f'{self.workflow_id}_cls_export.csv')
+
         self._download_export(full_cls_url, cls_file)
 
         wf_export = Project(self.project_id).describe_export('workflows')
         full_wf_url = wf_export['media'][0]['src']
-        wf_file = f'{self.output_path}/{self.workflow_id}_workflow_export.csv'
+        wf_file = os.path.join(self.output_path, f'{self.workflow_id}_workflow_export.csv')
         self._download_export(full_wf_url, wf_file)
 
         self.cls_csv = cls_file
@@ -121,9 +123,10 @@ class BatchAggregator:
 
     def upload_files(self):
         self.connect_blob_storage()
-        reductions_file = f'{self.output_path}/{self.workflow_id}_reductions.csv'
+        reductions_file = os.path.join(self.output_path, f'{self.workflow_id}_reductions.csv')
         self.upload_file_to_storage(self.id, reductions_file)
-        zipfile = make_archive(f'tmp/{self.id}', 'zip', self.output_path)
+        zippath = os.path.join('tmp', self.id)
+        zipfile = make_archive(zippath, 'zip', self.output_path)
         self.upload_file_to_storage(self.id, zipfile)
 
     def update_panoptes(self, body_attributes):
