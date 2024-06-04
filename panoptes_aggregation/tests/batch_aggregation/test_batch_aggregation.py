@@ -51,8 +51,6 @@ class TestBatchAggregation(unittest.TestCase):
         mock_workflow.return_value.describe_export.return_value = csv_dict
         ba = batch_agg.BatchAggregator(1, 10, 100)
         batch_agg.BatchAggregator._download_export = MagicMock(side_effect=['./cls_export.csv', './wf_export.csv'])
-        mock_uuidgen = MagicMock(side_effect=ba._generate_uuid())
-        ba._generate_uuid = mock_uuidgen
         expected_response = {'classifications': 'tmp/10/10_cls_export.csv', 'workflows': 'tmp/10/10_workflow_export.csv'}
 
         response = ba.save_exports()
