@@ -44,8 +44,7 @@ class TestBatchAggregation(unittest.TestCase):
     @patch("panoptes_aggregation.batch_aggregation.os.mkdir")
     @patch("panoptes_aggregation.batch_aggregation.Workflow")
     @patch("panoptes_aggregation.batch_aggregation.Project")
-    @patch("panoptes_aggregation.batch_aggregation.Panoptes.connect")
-    def test_save_exports(self, mock_client, mock_project, mock_workflow, mock_mkdir):
+    def test_save_exports(self, mock_project, mock_workflow, mock_mkdir):
         # Test that Panoptes calls are made and files are saved
         csv_dict = {'media': [{'src': 'http://zooniverse.org/123.csv'}]}
         mock_project.return_value.describe_export.return_value = csv_dict
@@ -58,11 +57,7 @@ class TestBatchAggregation(unittest.TestCase):
 
         response = ba.save_exports()
 
-        # Why do these mocked methods called in __init__ not get counted as called?
-        # They are def getting called as the attributes are set
-        # mock_uuidgen.assert_called_once()
-        # mock_client.assert_called_once()
-
+        assert ba.id is not None
         self.assertEqual(response, expected_response)
         mock_mkdir.assert_called_once()
         mock_project.assert_called_once_with(1)
