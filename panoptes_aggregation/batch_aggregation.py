@@ -2,6 +2,7 @@ from celery import Celery
 import json
 import pandas as pd
 import os
+import sys
 import urllib3
 from shutil import make_archive
 import uuid
@@ -12,9 +13,6 @@ from panoptes_client import Panoptes, Project, Workflow
 from panoptes_aggregation.workflow_config import workflow_extractor_config
 from panoptes_aggregation.scripts import batch_utils
 
-import logging
-panoptes_client_logger = logging.getLogger('panoptes_client').setLevel(logging.ERROR)
-
 celery = Celery(__name__)
 celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
 celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379")
@@ -23,6 +21,12 @@ celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://lo
 @celery.task(name="run_aggregation")
 def run_aggregation(project_id, workflow_id, user_id):
     ba = BatchAggregator(project_id, workflow_id, user_id)
+
+    if not ba.check_permission():
+        print(f'Batch Aggregation: Unauthorized attempt by user {user_id} to aggregate workflow {workflow_id}')
+        # Exit the task gracefully without retrying or erroring
+        sys.exit()
+
     ba.save_exports()
 
     ba.process_wf_export(ba.wf_csv)
@@ -48,11 +52,16 @@ def run_aggregation(project_id, workflow_id, user_id):
             reduced_data[reducer] = batch_utils.batch_reduce(extract_df, reducer_config)
             filename = f'{ba.output_path}/{ba.workflow_id}_reductions.csv'
             reduced_data[reducer].to_csv(filename, mode='a')
+
+    # Upload zip & reduction files to blob storage
     ba.upload_files()
 
     # This could catch PanoptesAPIException, but what to do if it fails?
-    ba.update_panoptes()
+    success_attrs = {'uuid': ba.id, 'status': 'completed'}
+    ba.update_panoptes(success_attrs)
 
+    # STDOUT messages get printed to kubernetes logs
+    print(f'Batch Aggregation: Run successful for workflow {workflow_id} by user {user_id}')
 
 class BatchAggregator:
     """
@@ -116,22 +125,26 @@ class BatchAggregator:
         zipfile = make_archive(f'tmp/{self.id}', 'zip', self.output_path)
         self.upload_file_to_storage(self.id, zipfile)
 
-    def update_panoptes(self):
+    def update_panoptes(self, body_attributes):
         # An Aggregation class can be added to the python client to avoid doing this manually
-        params = {'workflow_id': self.workflow_id, 'user_id': self.user_id}
-        response = Panoptes.client().get('/aggregations/', params=params)
+        params = {'workflow_id': self.workflow_id}
+        response = Panoptes.client().get('/aggregations', params=params)
+        agg_id = response[0]['aggregations'][0]['id']
         fresh_etag = response[1]
 
         Panoptes.client().put(
-            '/aggregations/',
+            f'/aggregations/{agg_id}',
             etag=fresh_etag,
-            json={
-                'aggregations': {
-                    'uuid': self.id,
-                    'status': 'completed'
-                }
-            }
+            json={'aggregations': body_attributes}
         )
+
+    def check_permission(self):
+        project = Project.find(self.project_id)
+        permission = False
+        for user in project.collaborators():
+            if user.id == self.user_id:
+                permission = True
+        return permission
 
     def _generate_uuid(self):
         self.id = uuid.uuid4().hex
