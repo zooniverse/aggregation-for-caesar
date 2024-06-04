@@ -63,6 +63,7 @@ def run_aggregation(project_id, workflow_id, user_id):
     # STDOUT messages get printed to kubernetes logs
     print(f'Batch Aggregation: Run successful for workflow {workflow_id} by user {user_id}')
 
+
 class BatchAggregator:
     """
     Bunch of stuff to manage a batch aggregation run

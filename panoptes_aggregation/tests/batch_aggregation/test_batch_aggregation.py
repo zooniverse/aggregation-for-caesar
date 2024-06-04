@@ -15,7 +15,7 @@ class TestBatchAggregation(unittest.TestCase):
         mock_aggregator_instance = mock_aggregator.return_value
         mock_aggregator_instance.check_permission.return_value = False
 
-        with self.assertRaises(SystemExit) as leaver:
+        with self.assertRaises(SystemExit):
             run_aggregation(1, 10, 100)
         mock_aggregator_instance.update_panoptes.assert_not_called()
 
@@ -135,7 +135,7 @@ class TestBatchAggregation(unittest.TestCase):
         body = {'uuid': ba.id, 'status': 'completed'}
         ba.update_panoptes(body)
         mock_get.assert_called_with('/aggregations', params={'workflow_id': 10})
-        mock_put.assert_called_with('/aggregations/5555', etag='thisisanetag', json={'aggregations': body })
+        mock_put.assert_called_with('/aggregations/5555', etag='thisisanetag', json={'aggregations': body})
 
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.put")
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.get")
@@ -145,7 +145,7 @@ class TestBatchAggregation(unittest.TestCase):
         body = {'status': 'failure'}
         ba.update_panoptes(body)
         mock_get.assert_called_with('/aggregations', params={'workflow_id': 10})
-        mock_put.assert_called_with('/aggregations/5555', etag='thisisanetag', json={'aggregations': body })
+        mock_put.assert_called_with('/aggregations/5555', etag='thisisanetag', json={'aggregations': body})
 
     @patch("panoptes_aggregation.batch_aggregation.BlobServiceClient")
     def test_connect_blob_storage(self, mock_client):
