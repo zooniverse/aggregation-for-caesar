@@ -23,15 +23,20 @@ def run_aggregation(project_id, workflow_id, user_id):
     ba = BatchAggregator(project_id, workflow_id, user_id)
 
     if not ba.check_permission():
-        print(f'Batch Aggregation: Unauthorized attempt by user {user_id} to aggregate workflow {workflow_id}')
+        print(f'[Batch Aggregation] Unauthorized attempt by user {user_id} to aggregate workflow {workflow_id}')
         # Exit the task gracefully without retrying or erroring
         sys.exit()
 
+    print(f'[Batch Aggregation] Run beginning for workflow {workflow_id} by user {user_id}')
+
+    print(f'[Batch Aggregation] Saving exports for workflow {workflow_id})')
     ba.save_exports()
 
+    print(f'[Batch Aggregation] Processing exports for workflow {workflow_id})')
     ba.process_wf_export(ba.wf_csv)
     cls_df = ba.process_cls_export(ba.cls_csv)
 
+    print(f'[Batch Aggregation] Extacting workflow {workflow_id})')
     extractor_config = workflow_extractor_config(ba.tasks)
     extracted_data = batch_utils.batch_extract(cls_df, extractor_config)
 
@@ -40,6 +45,7 @@ def run_aggregation(project_id, workflow_id, user_id):
         'survey_extractor': ['survey_reducer']
     }
 
+    print(f'[Batch Aggregation] Reducing workflow {workflow_id})')
     for task_type, extract_df in extracted_data.items():
         extract_df.to_csv(f'{ba.output_path}/{ba.workflow_id}_{task_type}.csv')
         reducer_list = batch_standard_reducers[task_type]
@@ -55,14 +61,16 @@ def run_aggregation(project_id, workflow_id, user_id):
             reduced_data[reducer].to_csv(filename, mode='a')
 
     # Upload zip & reduction files to blob storage
+    print(f'[Batch Aggregation] Uploading results for {workflow_id})')
     ba.upload_files()
 
     # This could catch PanoptesAPIException, but what to do if it fails?
+    print(f'[Batch Aggregation] Updating Panoptes for {workflow_id})')
     success_attrs = {'uuid': ba.id, 'status': 'completed'}
     ba.update_panoptes(success_attrs)
 
     # STDOUT messages get printed to kubernetes logs
-    print(f'Batch Aggregation: Run successful for workflow {workflow_id} by user {user_id}')
+    print(f'[Batch Aggregation] Run successful for workflow {workflow_id} by user {user_id}')
 
 
 class BatchAggregator:
