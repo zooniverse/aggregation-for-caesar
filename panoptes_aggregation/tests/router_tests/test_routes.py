@@ -68,6 +68,30 @@ class RouterTest(unittest.TestCase):
                     running_reducer_name
                 )
 
+    # Override json.dumps() for this test so it doesn't try to jsonify the mock
+    import json
+
+    @patch("panoptes_aggregation.batch_aggregation.json.dumps", return_value=json.dumps({'project_id': 1, 'workflow_id': 10, 'user_id': 100, 'task_id': 'asdf'}))
+    @patch("panoptes_aggregation.batch_aggregation.run_aggregation.delay")
+    def test_run_aggregation_route(self, mocked_task, mocked_json):
+        '''Test that the bg task gets called on batch aggregation route'''
+        with routes.make_application().test_client() as client:
+            mocked_task.id = 'asdf'
+            response = client.post('/run_aggregation', json={'project_id': 1, 'workflow_id': 10, 'user_id': 100})
+            mocked_task.assert_called_once_with(1, 10, 100)
+            self.assertEqual(response.status_code, 202)
+            self.assertIn('"task_id": "asdf"', response.text)
+
+    @patch("celery.result.AsyncResult")
+    def test_get_status(self, asyncresult):
+        '''Test task status works'''
+        with self.application.test_client() as client:
+            result = '"task_id": "asdf", "task_status": "PENDING"'
+            asyncresult.get = result
+            response = client.get('/tasks/asdf')
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(result, response.text)
+
     @unittest.skipIf("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true", "Skipping this test on Travis CI.")
     def test_docs_route(self):
         '''Test docs route works'''
