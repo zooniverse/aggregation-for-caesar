@@ -29,7 +29,7 @@ services:
       context: ./
       args:
         REVISION: fake-git-sha-id
-    command: celery --app panoptes_aggregation.tasks.celery worker --loglevel=info
+    command: celery --app panoptes_aggregation.batch_aggregation.celery worker --loglevel=info
     volumes:
       - ./:/usr/src/aggregation
     environment:
@@ -45,7 +45,7 @@ services:
 
   dashboard:
     build: .
-    command: celery --app panoptes_aggregation.tasks.celery flower --port=5555 --broker=redis://redis:6379/0
+    command: celery --app panoptes_aggregation.batch_aggregation.celery flower --port=5555 --broker=redis://redis:6379/0
     ports:
       - 5556:5555
     environment:
