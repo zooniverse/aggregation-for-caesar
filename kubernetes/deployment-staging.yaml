@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aggregation-caesar-staging
+  name: aggregation-staging
   labels:
-    app: aggregation-caesar-staging
+    app: aggregation-staging
 spec:
   selector:
     matchLabels:
-      app: aggregation-caesar-staging
+      app: aggregation-staging
   template:
     metadata:
       labels:
-        app: aggregation-caesar-staging
+        app: aggregation-staging
     spec:
       containers:
-        - name: aggregation-caesar-app-staging
+        - name: aggregation-staging-app
           image: ghcr.io/zooniverse/aggregation-for-caesar:batch-aggregation-staging
           ports:
             - containerPort: 80
@@ -98,10 +98,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: aggregation-caesar-staging
+  name: aggregation-staging
 spec:
   selector:
-    app: aggregation-caesar-staging
+    app: aggregation-staging
   ports:
     - protocol: TCP
       port: 80
@@ -110,20 +110,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aggregation-caesar-staging-celery
+  name: aggregation-staging-celery
   labels:
-    app: aggregation-caesar-staging-celery
+    app: aggregation-staging-celery
 spec:
   selector:
     matchLabels:
-      app: aggregation-caesar-staging-celery
+      app: aggregation-staging-celery
   template:
     metadata:
       labels:
-        app: aggregation-caesar-staging-celery
+        app: aggregation-staging-celery
     spec:
       containers:
-        - name: aggregation-caesar-app-staging-celery
+        - name: aggregation-staging-celery
           image: ghcr.io/zooniverse/aggregation-for-caesar:batch-aggregation-staging
           resources:
             requests:
@@ -203,10 +203,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: aggregation-caesar-staging
+  name: aggregation-staging-celery
 spec:
   selector:
-    app: aggregation-caesar-staging
+    app: aggregation-staging-celery
   ports:
     - protocol: TCP
       port: 80
