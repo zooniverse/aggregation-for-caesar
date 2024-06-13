@@ -103,7 +103,8 @@ class TestBatchAggregation(unittest.TestCase):
     @patch("panoptes_aggregation.batch_aggregation.Project")
     def test_check_permission_success(self, mock_project):
         mock_user = MagicMock()
-        mock_user.id = 100
+        # Panoptes responses return strings
+        mock_user.id = '100'
         mock_project.find().collaborators.return_value = [mock_user]
 
         ba = batch_agg.BatchAggregator(1, 10, 100)
