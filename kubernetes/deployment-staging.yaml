@@ -171,7 +171,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: aggregation-for-caesar-environment
-                  key: PANOPTES_CLIENT_STAGING_SECRET
+                  key: PANOPTES_STAGING_CLIENT_SECRET
             - name: MAST_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
