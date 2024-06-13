@@ -154,7 +154,7 @@ class BatchAggregator:
         project = Project.find(self.project_id)
         permission = False
         for user in project.collaborators():
-            if user.id == self.user_id:
+            if user.id == str(self.user_id):
                 permission = True
         return permission
 
