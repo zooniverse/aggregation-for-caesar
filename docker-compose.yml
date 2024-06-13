@@ -1,10 +1,11 @@
-version: '2'
+version: '3'
 services:
   aggregation:
     build:
       context: ./
       args:
         REVISION: fake-git-sha-id
+    image: aggregation-for-caesar:local
     volumes:
       - ./:/usr/src/aggregation
       - ~/.aws:/root/.aws
@@ -25,10 +26,7 @@ services:
       - redis:redis
 
   worker:
-    build:
-      context: ./
-      args:
-        REVISION: fake-git-sha-id
+    image: aggregation-for-caesar:local
     command: celery --app panoptes_aggregation.batch_aggregation.celery worker --loglevel=info
     volumes:
       - ./:/usr/src/aggregation
@@ -44,7 +42,7 @@ services:
       - redis
 
   dashboard:
-    build: .
+    image: aggregation-for-caesar:local
     command: celery --app panoptes_aggregation.batch_aggregation.celery flower --port=5555 --broker=redis://redis:6379/0
     ports:
       - 5556:5555
