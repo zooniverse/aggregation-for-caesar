@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aggregation-staging
+  name: aggregation-staging-app
   labels:
-    app: aggregation-staging
+    app: aggregation-staging-app
 spec:
   selector:
     matchLabels:
-      app: aggregation-staging
+      app: aggregation-staging-app
   template:
     metadata:
       labels:
-        app: aggregation-staging
+        app: aggregation-staging-app
     spec:
       containers:
         - name: aggregation-staging-app
@@ -53,18 +53,18 @@ spec:
               value: redis://aggregation-staging-redis:6379/0
             - name: CELERY_RESULT_BACKEND
               value: redis://aggregation-staging-redis:6379/0
-            - name: PANOPTES_URL
-              value: https://panoptes.zooniverse.org/
-            - name: PANOPTES_CLIENT_ID
+            - name: PANOPTES_STAGING_URL
+              value: https://panoptes-staging.zooniverse.org/
+            - name: PANOPTES_STAGING_CLIENT_ID
               valueFrom:
                 secretKeyRef:
                   name: aggregation-for-caesar-environment
-                  key: PANOPTES_CLIENT_ID
-            - name: PANOPTES_CLIENT_SECRET
+                  key: PANOPTES_STAGING_CLIENT_ID
+            - name: PANOPTES_STAGING_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: aggregation-for-caesar-environment
-                  key: PANOPTES_CLIENT_SECRET
+                  key: PANOPTES_STAGING_CLIENT_SECRET
             - name: MAST_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -86,7 +86,7 @@ spec:
                   name: aggregation-for-caesar-environment
                   key: NEW_RELIC_LICENSE_KEY
             - name: NEW_RELIC_APP_NAME
-              value: 'Aggregation Caesar Staging'
+              value: 'Aggregation Caesar (Staging)'
           volumeMounts:
             - name: aggregation-staging-volume
               mountPath: /usr/src/aggregation/tmp
@@ -98,10 +98,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: aggregation-staging
+  name: aggregation-staging-app
 spec:
   selector:
-    app: aggregation-staging
+    app: aggregation-staging-app
   ports:
     - protocol: TCP
       port: 80
@@ -139,7 +139,8 @@ spec:
                 - -c
                 - celery inspect ping -d celery@$(hostname) | grep -q OK
             initialDelaySeconds: 30
-            periodSeconds: 15
+            periodSeconds: 30
+            timeoutSeconds: 10
             failureThreshold: 3
           readinessProbe:
             exec:
@@ -148,7 +149,8 @@ spec:
                 - -c
                 - celery inspect ping -d celery@$(hostname) | grep -q OK
             initialDelaySeconds: 60
-            periodSeconds: 15
+            periodSeconds: 30
+            timeoutSeconds: 10
             failureThreshold: 3
           args: ["/usr/src/aggregation/scripts/start-celery.sh"]
           env:
@@ -158,18 +160,18 @@ spec:
               value: redis://aggregation-staging-redis:6379/0
             - name: CELERY_RESULT_BACKEND
               value: redis://aggregation-staging-redis:6379/0
-            - name: PANOPTES_URL
-              value: https://panoptes.zooniverse.org/
-            - name: PANOPTES_CLIENT_ID
+            - name: PANOPTES_STAGING_URL
+              value: https://panoptes-staging.zooniverse.org/
+            - name: PANOPTES_STAGING_CLIENT_ID
               valueFrom:
                 secretKeyRef:
                   name: aggregation-for-caesar-environment
-                  key: PANOPTES_CLIENT_ID
-            - name: PANOPTES_CLIENT_SECRET
+                  key: PANOPTES_STAGING_CLIENT_ID
+            - name: PANOPTES_STAGING_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: aggregation-for-caesar-environment
-                  key: PANOPTES_CLIENT_SECRET
+                  key: PANOPTES_CLIENT_STAGING_SECRET
             - name: MAST_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -304,7 +306,7 @@ kind: Ingress
 metadata:
   name: aggregation-staging-ingress
   annotations:
-    ingressClassName: nginx
+    kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
     nginx.ingress.kubernetes.io/proxy-body-size: 20m
