@@ -177,5 +177,6 @@ class BatchAggregator:
         Panoptes.connect(
             endpoint=os.getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
             client_id=os.getenv('PANOPTES_CLIENT_ID'),
-            client_secret=os.getenv('PANOPTES_CLIENT_SECRET')
+            client_secret=os.getenv('PANOPTES_CLIENT_SECRET'),
+            admin='true'
         )
