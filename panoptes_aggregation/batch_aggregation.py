@@ -47,7 +47,8 @@ def run_aggregation(project_id, workflow_id, user_id):
 
     print(f'[Batch Aggregation] Reducing workflow {workflow_id})')
     for task_type, extract_df in extracted_data.items():
-        extract_df.to_csv(f'{ba.output_path}/{ba.workflow_id}_{task_type}.csv')
+        csv_filepath =  os.path.join(ba.output_path, f'{ba.workflow_id}_{task_type}.csv')
+        extract_df.to_csv(csv_filepath)
         reducer_list = batch_standard_reducers[task_type]
         reduced_data = {}
 
@@ -57,7 +58,7 @@ def run_aggregation(project_id, workflow_id, user_id):
             reducer_config = {'reducer_config': {reducer: {}}}
             reduced_data[reducer] = batch_utils.batch_reduce(extract_df, reducer_config)
             # filename = f'{ba.output_path}/{ba.workflow_id}_reductions.csv'
-            filename = os.path.join(ba.output_path, ba.workflow_id, '_reductions.csv')
+            filename = os.path.join(ba.output_path, f'{ba.workflow_id}_reductions.csv')
             reduced_data[reducer].to_csv(filename, mode='a')
 
     # Upload zip & reduction files to blob storage
@@ -87,7 +88,7 @@ class BatchAggregator:
 
     def save_exports(self):
         self.output_path = os.path.join('tmp', str(self.workflow_id))
-        os.mkdir(self.output_path)
+        os.makedirs(self.output_path, exist_ok=True)
 
         cls_export = Workflow(self.workflow_id).describe_export('classifications')
         full_cls_url = cls_export['media'][0]['src']
