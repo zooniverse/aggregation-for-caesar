@@ -118,7 +118,7 @@ class TestBatchAggregation(unittest.TestCase):
         mock_user = MagicMock()
 
         # List of collaborators does not include initiating user
-        mock_user.id = 999
+        mock_user.id = '999'
         mock_project.find().collaborators.return_value = [mock_user]
 
         ba = batch_agg.BatchAggregator(1, 10, 100)
