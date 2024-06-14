@@ -87,8 +87,8 @@ class BatchAggregator:
         self._connect_api_client()
 
     def save_exports(self):
-        self.output_path = os.path.join('tmp', str(self.workflow_id))
-        os.makedirs(self.output_path, exist_ok=True)
+        self.output_path = os.path.join('tmp', str(self.id))
+        os.makedirs(self.output_path)
 
         cls_export = Workflow(self.workflow_id).describe_export('classifications')
         full_cls_url = cls_export['media'][0]['src']
