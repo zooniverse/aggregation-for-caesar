@@ -132,7 +132,7 @@ class TestBatchAggregation(unittest.TestCase):
 
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.put")
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.get")
-    def test_update_panoptes_success(self, mock_get, mock_put):
+    def test_update_panoptes_run_success(self, mock_get, mock_put):
         ba = batch_agg.BatchAggregator(1, 10, 100)
         mock_get.return_value = ({'aggregations': [{'id': 5555}]}, 'thisisanetag')
         body = {'uuid': ba.id, 'status': 'completed'}
@@ -142,7 +142,7 @@ class TestBatchAggregation(unittest.TestCase):
 
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.put")
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.get")
-    def test_update_panoptes_put_failure(self, mock_get, mock_put):
+    def test_update_panoptes_run_failure(self, mock_get, mock_put):
         ba = batch_agg.BatchAggregator(1, 10, 100)
         mock_get.return_value = ({'aggregations': [{'id': 5555}]}, 'thisisanetag')
         body = {'status': 'failure'}
@@ -154,7 +154,7 @@ class TestBatchAggregation(unittest.TestCase):
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.get")
     def test_update_panoptes_get_failure(self, mock_get, mock_put):
         ba = batch_agg.BatchAggregator(1, 10, 100)
-        mock_get.return_value = (None, None)
+        mock_get.return_value = ({'aggregations': []}, 'etag')
         body = {'status': 'failure'}
         ba.update_panoptes(body)
         mock_get.assert_called_with('/aggregations', params={'workflow_id': 10})

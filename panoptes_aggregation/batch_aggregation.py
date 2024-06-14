@@ -142,7 +142,7 @@ class BatchAggregator:
         # An Aggregation class can be added to the python client to avoid doing this manually
         params = {'workflow_id': self.workflow_id}
         response = Panoptes.client().get('/aggregations', params=params)
-        if response[0] is None:
+        if not response[0]['aggregations']:
             print(f'[Batch Aggregation] Panoptes Aggregation resource not found. Unable to update.')
             return False
         agg_id = response[0]['aggregations'][0]['id']
