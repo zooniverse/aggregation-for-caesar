@@ -80,9 +80,9 @@ class BatchAggregator:
     """
 
     def __init__(self, project_id, workflow_id, user_id):
-        self.project_id = project_id
-        self.workflow_id = workflow_id
-        self.user_id = user_id
+        self.project_id = int(project_id)
+        self.workflow_id = int(workflow_id)
+        self.user_id = int(user_id)
         self._generate_uuid()
         self._connect_api_client()
 
