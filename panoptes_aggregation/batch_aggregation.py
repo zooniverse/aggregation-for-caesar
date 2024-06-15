@@ -122,7 +122,7 @@ class BatchAggregator:
     def connect_blob_storage(self):
         connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
         self.blob_service_client = BlobServiceClient.from_connection_string(connect_str)
-        self.blob_service_client.create_container(name=self.id)
+        self.blob_service_client.create_container(name=self.id, public_access='container')
 
     def upload_file_to_storage(self, container_name, filepath):
         blob = filepath.split('/')[-1]
