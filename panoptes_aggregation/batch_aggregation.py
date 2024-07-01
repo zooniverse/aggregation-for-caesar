@@ -47,7 +47,7 @@ def run_aggregation(project_id, workflow_id, user_id):
 
     print(f'[Batch Aggregation] Reducing workflow {workflow_id})')
     for task_type, extract_df in extracted_data.items():
-        csv_filepath =  os.path.join(ba.output_path, f'{ba.workflow_id}_{task_type}.csv')
+        csv_filepath = os.path.join(ba.output_path, f'{ba.workflow_id}_{task_type}.csv')
         extract_df.to_csv(csv_filepath)
         reducer_list = batch_standard_reducers[task_type]
         reduced_data = {}
