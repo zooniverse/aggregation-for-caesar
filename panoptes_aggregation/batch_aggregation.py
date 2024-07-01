@@ -143,7 +143,7 @@ class BatchAggregator:
         params = {'workflow_id': self.workflow_id}
         response = Panoptes.client().get('/aggregations', params=params)
         if not response[0]['aggregations']:
-            print(f'[Batch Aggregation] Panoptes Aggregation resource not found. Unable to update.')
+            print('[Batch Aggregation] Panoptes Aggregation resource not found. Unable to update.')
             return False
         agg_id = response[0]['aggregations'][0]['id']
         fresh_etag = response[1]
