@@ -23,15 +23,20 @@ def run_aggregation(project_id, workflow_id, user_id):
     ba = BatchAggregator(project_id, workflow_id, user_id)
 
     if not ba.check_permission():
-        print(f'Batch Aggregation: Unauthorized attempt by user {user_id} to aggregate workflow {workflow_id}')
+        print(f'[Batch Aggregation] Unauthorized attempt by user {user_id} to aggregate workflow {workflow_id}')
         # Exit the task gracefully without retrying or erroring
         sys.exit()
 
+    print(f'[Batch Aggregation] Run beginning for workflow {workflow_id} by user {user_id}')
+
+    print(f'[Batch Aggregation] Saving exports for workflow {workflow_id})')
     ba.save_exports()
 
+    print(f'[Batch Aggregation] Processing exports for workflow {workflow_id})')
     ba.process_wf_export(ba.wf_csv)
     cls_df = ba.process_cls_export(ba.cls_csv)
 
+    print(f'[Batch Aggregation] Extacting workflow {workflow_id})')
     extractor_config = workflow_extractor_config(ba.tasks)
     extracted_data = batch_utils.batch_extract(cls_df, extractor_config)
 
@@ -40,8 +45,10 @@ def run_aggregation(project_id, workflow_id, user_id):
         'survey_extractor': ['survey_reducer']
     }
 
+    print(f'[Batch Aggregation] Reducing workflow {workflow_id})')
     for task_type, extract_df in extracted_data.items():
-        extract_df.to_csv(f'{ba.output_path}/{ba.workflow_id}_{task_type}.csv')
+        csv_filepath = os.path.join(ba.output_path, f'{ba.workflow_id}_{task_type}.csv')
+        extract_df.to_csv(csv_filepath)
         reducer_list = batch_standard_reducers[task_type]
         reduced_data = {}
 
@@ -51,18 +58,20 @@ def run_aggregation(project_id, workflow_id, user_id):
             reducer_config = {'reducer_config': {reducer: {}}}
             reduced_data[reducer] = batch_utils.batch_reduce(extract_df, reducer_config)
             # filename = f'{ba.output_path}/{ba.workflow_id}_reductions.csv'
-            filename = os.path.join(ba.output_path, ba.workflow_id, '_reductions.csv')
+            filename = os.path.join(ba.output_path, f'{ba.workflow_id}_reductions.csv')
             reduced_data[reducer].to_csv(filename, mode='a')
 
     # Upload zip & reduction files to blob storage
+    print(f'[Batch Aggregation] Uploading results for {workflow_id})')
     ba.upload_files()
 
     # This could catch PanoptesAPIException, but what to do if it fails?
+    print(f'[Batch Aggregation] Updating Panoptes for {workflow_id})')
     success_attrs = {'uuid': ba.id, 'status': 'completed'}
     ba.update_panoptes(success_attrs)
 
     # STDOUT messages get printed to kubernetes logs
-    print(f'Batch Aggregation: Run successful for workflow {workflow_id} by user {user_id}')
+    print(f'[Batch Aggregation] Run successful for workflow {workflow_id} by user {user_id}')
 
 
 class BatchAggregator:
@@ -71,15 +80,15 @@ class BatchAggregator:
     """
 
     def __init__(self, project_id, workflow_id, user_id):
-        self.project_id = project_id
-        self.workflow_id = workflow_id
-        self.user_id = user_id
+        self.project_id = int(project_id)
+        self.workflow_id = int(workflow_id)
+        self.user_id = int(user_id)
         self._generate_uuid()
         self._connect_api_client()
 
     def save_exports(self):
-        self.output_path = os.path.join('tmp', str(self.workflow_id))
-        os.mkdir(self.output_path)
+        self.output_path = os.path.join('tmp', str(self.id))
+        os.makedirs(self.output_path)
 
         cls_export = Workflow(self.workflow_id).describe_export('classifications')
         full_cls_url = cls_export['media'][0]['src']
@@ -113,7 +122,7 @@ class BatchAggregator:
     def connect_blob_storage(self):
         connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
         self.blob_service_client = BlobServiceClient.from_connection_string(connect_str)
-        self.blob_service_client.create_container(name=self.id)
+        self.blob_service_client.create_container(name=self.id, public_access='container')
 
     def upload_file_to_storage(self, container_name, filepath):
         blob = filepath.split('/')[-1]
@@ -133,6 +142,9 @@ class BatchAggregator:
         # An Aggregation class can be added to the python client to avoid doing this manually
         params = {'workflow_id': self.workflow_id}
         response = Panoptes.client().get('/aggregations', params=params)
+        if not response[0]['aggregations']:
+            print('[Batch Aggregation] Panoptes Aggregation resource not found. Unable to update.')
+            return False
         agg_id = response[0]['aggregations'][0]['id']
         fresh_etag = response[1]
 
@@ -146,7 +158,7 @@ class BatchAggregator:
         project = Project.find(self.project_id)
         permission = False
         for user in project.collaborators():
-            if user.id == self.user_id:
+            if user.id == str(self.user_id):
                 permission = True
         return permission
 
@@ -169,5 +181,6 @@ class BatchAggregator:
         Panoptes.connect(
             endpoint=os.getenv('PANOPTES_URL', 'https://panoptes.zooniverse.org/'),
             client_id=os.getenv('PANOPTES_CLIENT_ID'),
-            client_secret=os.getenv('PANOPTES_CLIENT_SECRET')
+            client_secret=os.getenv('PANOPTES_CLIENT_SECRET'),
+            admin='true'
         )

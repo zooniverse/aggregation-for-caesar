@@ -43,23 +43,24 @@ class TestBatchAggregation(unittest.TestCase):
         mock_aggregator_instance.upload_files.assert_called_once()
         mock_aggregator_instance.update_panoptes.assert_called_once()
 
-    @patch("panoptes_aggregation.batch_aggregation.os.mkdir")
+    @patch("panoptes_aggregation.batch_aggregation.os.makedirs")
     @patch("panoptes_aggregation.batch_aggregation.Workflow")
     @patch("panoptes_aggregation.batch_aggregation.Project")
-    def test_save_exports(self, mock_project, mock_workflow, mock_mkdir):
+    def test_save_exports(self, mock_project, mock_workflow, mock_makedirs):
         # Test that Panoptes calls are made and files are saved
         csv_dict = {'media': [{'src': 'http://zooniverse.org/123.csv'}]}
         mock_project.return_value.describe_export.return_value = csv_dict
         mock_workflow.return_value.describe_export.return_value = csv_dict
         ba = batch_agg.BatchAggregator(1, 10, 100)
+        ba.id = 'asdf123asdf'
         batch_agg.BatchAggregator._download_export = MagicMock(side_effect=['./cls_export.csv', './wf_export.csv'])
-        expected_response = {'classifications': 'tmp/10/10_cls_export.csv', 'workflows': 'tmp/10/10_workflow_export.csv'}
+        expected_response = {'classifications': 'tmp/asdf123asdf/10_cls_export.csv', 'workflows': 'tmp/asdf123asdf/10_workflow_export.csv'}
 
         response = ba.save_exports()
 
         assert ba.id is not None
         self.assertEqual(response, expected_response)
-        mock_mkdir.assert_called_once()
+        mock_makedirs.assert_called_once()
         mock_project.assert_called_once_with(1)
         mock_workflow.assert_called_once_with(10)
         mock_project.return_value.describe_export.assert_called_once_with('workflows')
@@ -103,7 +104,8 @@ class TestBatchAggregation(unittest.TestCase):
     @patch("panoptes_aggregation.batch_aggregation.Project")
     def test_check_permission_success(self, mock_project):
         mock_user = MagicMock()
-        mock_user.id = 100
+        # Panoptes responses return strings
+        mock_user.id = '100'
         mock_project.find().collaborators.return_value = [mock_user]
 
         ba = batch_agg.BatchAggregator(1, 10, 100)
@@ -117,7 +119,7 @@ class TestBatchAggregation(unittest.TestCase):
         mock_user = MagicMock()
 
         # List of collaborators does not include initiating user
-        mock_user.id = 999
+        mock_user.id = '999'
         mock_project.find().collaborators.return_value = [mock_user]
 
         ba = batch_agg.BatchAggregator(1, 10, 100)
@@ -130,7 +132,7 @@ class TestBatchAggregation(unittest.TestCase):
 
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.put")
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.get")
-    def test_update_panoptes_success(self, mock_get, mock_put):
+    def test_update_panoptes_run_success(self, mock_get, mock_put):
         ba = batch_agg.BatchAggregator(1, 10, 100)
         mock_get.return_value = ({'aggregations': [{'id': 5555}]}, 'thisisanetag')
         body = {'uuid': ba.id, 'status': 'completed'}
@@ -140,7 +142,7 @@ class TestBatchAggregation(unittest.TestCase):
 
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.put")
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.get")
-    def test_update_panoptes_failure(self, mock_get, mock_put):
+    def test_update_panoptes_run_failure(self, mock_get, mock_put):
         ba = batch_agg.BatchAggregator(1, 10, 100)
         mock_get.return_value = ({'aggregations': [{'id': 5555}]}, 'thisisanetag')
         body = {'status': 'failure'}
@@ -148,8 +150,18 @@ class TestBatchAggregation(unittest.TestCase):
         mock_get.assert_called_with('/aggregations', params={'workflow_id': 10})
         mock_put.assert_called_with('/aggregations/5555', etag='thisisanetag', json={'aggregations': body})
 
+    @patch("panoptes_aggregation.batch_aggregation.Panoptes.put")
+    @patch("panoptes_aggregation.batch_aggregation.Panoptes.get")
+    def test_update_panoptes_get_failure(self, mock_get, mock_put):
+        ba = batch_agg.BatchAggregator(1, 10, 100)
+        mock_get.return_value = ({'aggregations': []}, 'etag')
+        body = {'status': 'failure'}
+        ba.update_panoptes(body)
+        mock_get.assert_called_with('/aggregations', params={'workflow_id': 10})
+        mock_put.assert_not_called()
+
     @patch("panoptes_aggregation.batch_aggregation.BlobServiceClient")
     def test_connect_blob_storage(self, mock_client):
         ba = batch_agg.BatchAggregator(1, 10, 100)
         ba.connect_blob_storage()
-        ba.blob_service_client.create_container.assert_called_once_with(name=ba.id)
+        ba.blob_service_client.create_container.assert_called_once_with(name=ba.id, public_access='container')
