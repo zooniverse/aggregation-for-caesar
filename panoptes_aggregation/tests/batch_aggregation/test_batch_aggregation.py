@@ -43,10 +43,10 @@ class TestBatchAggregation(unittest.TestCase):
         mock_aggregator_instance.upload_files.assert_called_once()
         mock_aggregator_instance.update_panoptes.assert_called_once()
 
-    @patch("panoptes_aggregation.batch_aggregation.os.mkdir")
+    @patch("panoptes_aggregation.batch_aggregation.os.makedirs")
     @patch("panoptes_aggregation.batch_aggregation.Workflow")
     @patch("panoptes_aggregation.batch_aggregation.Project")
-    def test_save_exports(self, mock_project, mock_workflow, mock_mkdir):
+    def test_save_exports(self, mock_project, mock_workflow, mock_makedirs):
         # Test that Panoptes calls are made and files are saved
         csv_dict = {'media': [{'src': 'http://zooniverse.org/123.csv'}]}
         mock_project.return_value.describe_export.return_value = csv_dict
@@ -60,7 +60,7 @@ class TestBatchAggregation(unittest.TestCase):
 
         assert ba.id is not None
         self.assertEqual(response, expected_response)
-        mock_mkdir.assert_called_once()
+        mock_makedirs.assert_called_once()
         mock_project.assert_called_once_with(1)
         mock_workflow.assert_called_once_with(10)
         mock_project.return_value.describe_export.assert_called_once_with('workflows')
@@ -164,4 +164,4 @@ class TestBatchAggregation(unittest.TestCase):
     def test_connect_blob_storage(self, mock_client):
         ba = batch_agg.BatchAggregator(1, 10, 100)
         ba.connect_blob_storage()
-        ba.blob_service_client.create_container.assert_called_once_with(name=ba.id)
+        ba.blob_service_client.create_container.assert_called_once_with(name=ba.id, public_access='container')
