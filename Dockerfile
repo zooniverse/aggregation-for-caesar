@@ -21,10 +21,12 @@ COPY . .
 RUN pip install -U .[online,test,doc]
 
 # make documentation
-RUN /bin/bash -lc ./make_docs.sh
+RUN /bin/bash -lc ./scripts/make_docs.sh
+
+ADD ./ /usr/src/aggregation
 
 ARG REVISION=''
 ENV REVISION=$REVISION
 
 # load configs and start flask app
-CMD ["bash", "./start-flask.sh"]
+CMD ["bash", "./scripts/start-flask.sh"]

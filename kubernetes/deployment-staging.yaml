@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aggregation-production-app
+  name: aggregation-staging-app
   labels:
-    app: aggregation-production-app
+    app: aggregation-staging-app
 spec:
   selector:
     matchLabels:
-      app: aggregation-production-app
+      app: aggregation-staging-app
   template:
     metadata:
       labels:
-        app: aggregation-production-app
+        app: aggregation-staging-app
     spec:
       containers:
-        - name: aggregation-production-app
-          image: ghcr.io/zooniverse/aggregation-for-caesar:__IMAGE_TAG__
+        - name: aggregation-staging-app
+          image: ghcr.io/zooniverse/aggregation-for-caesar:batch-aggregation-staging
           ports:
             - containerPort: 80
           resources:
@@ -49,87 +49,59 @@ spec:
           env:
             - name: FLASK_ENV
               value: production
-            - name: PANOPTES_URL
-              value: https://panoptes.zooniverse.org/
             - name: CELERY_BROKER_URL
-              value: redis://aggregation-production-redis:6379/0
+              value: redis://aggregation-staging-redis:6379/0
             - name: CELERY_RESULT_BACKEND
-              value: redis://aggregation-production-redis:6379/0
+              value: redis://aggregation-staging-redis:6379/0
+            - name: PANOPTES_URL
+              value: https://panoptes-staging.zooniverse.org/
             - name: PANOPTES_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: PANOPTES_CLIENT_ID
             - name: PANOPTES_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: PANOPTES_CLIENT_SECRET
-            - name: AZURE_STORAGE_CONNECTION_STRING
-              valueFrom:
-                secretKeyRef:
-                  name: aggregation-for-caesar-environment
-                  key: AZURE_STORAGE_CONNECTION_STRING
             - name: MAST_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: MAST_AUTH_TOKEN
             - name: MAST_PROD_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: MAST_PROD_TOKEN
             - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: SENTRY_DSN
             - name: NEW_RELIC_LICENSE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: NEW_RELIC_LICENSE_KEY
             - name: NEW_RELIC_APP_NAME
-              value: 'Aggregation Caesar'
+              value: 'Aggregation Caesar (Staging)'
           volumeMounts:
-            - name: aggregation-production-volume
+            - name: aggregation-staging-volume
               mountPath: /usr/src/aggregation/tmp
       volumes:
-        - name: aggregation-production-volume
+        - name: aggregation-staging-volume
           persistentVolumeClaim:
-            claimName: aggregation-production-data-storage
----
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: aggregation-production-app
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: aggregation-production-app
-  minReplicas: 2
-  maxReplicas: 3
-  targetCPUUtilizationPercentage: 80
----
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
-   name: aggregation-production-app
-spec:
-  minAvailable: 50%
-  selector:
-    matchLabels:
-      app: aggregation-production-app
+            claimName: aggregation-staging-data-storage
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: aggregation-production-app
+  name: aggregation-staging-app
 spec:
   selector:
-    app: aggregation-production-app
+    app: aggregation-staging-app
   ports:
     - protocol: TCP
       port: 80
@@ -138,21 +110,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aggregation-production-celery
+  name: aggregation-staging-celery
   labels:
-    app: aggregation-production-celery
+    app: aggregation-staging-celery
 spec:
   selector:
     matchLabels:
-      app: aggregation-production-celery
+      app: aggregation-staging-celery
   template:
     metadata:
       labels:
-        app: aggregation-production-celery
+        app: aggregation-staging-celery
     spec:
       containers:
-        - name: aggregation-production-celery
-          image: ghcr.io/zooniverse/aggregation-for-caesar:__IMAGE_TAG__
+        - name: aggregation-staging-celery
+          image: ghcr.io/zooniverse/aggregation-for-caesar:batch-aggregation-staging
           resources:
             requests:
               memory: "500Mi"
@@ -185,58 +157,58 @@ spec:
             - name: FLASK_ENV
               value: production
             - name: CELERY_BROKER_URL
-              value: redis://aggregation-production-redis:6379/0
+              value: redis://aggregation-staging-redis:6379/0
             - name: CELERY_RESULT_BACKEND
-              value: redis://aggregation-production-redis:6379/0
+              value: redis://aggregation-staging-redis:6379/0
             - name: PANOPTES_URL
-              value: https://panoptes.zooniverse.org/
+              value: https://panoptes-staging.zooniverse.org/
             - name: PANOPTES_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: PANOPTES_CLIENT_ID
             - name: PANOPTES_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: PANOPTES_CLIENT_SECRET
             - name: MAST_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: MAST_AUTH_TOKEN
             - name: MAST_PROD_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: MAST_PROD_TOKEN
             - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: SENTRY_DSN
             - name: NEW_RELIC_LICENSE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: NEW_RELIC_LICENSE_KEY
             - name: NEW_RELIC_APP_NAME
-              value: 'Aggregation Caesar (Production)'
+              value: 'Aggregation Caesar (Staging)'
           volumeMounts:
-            - name: aggregation-production-volume
+            - name: aggregation-staging-volume
               mountPath: /usr/src/aggregation/tmp
       volumes:
-        - name: aggregation-production-volume
+        - name: aggregation-staging-volume
           persistentVolumeClaim:
-            claimName: aggregation-production-data-storage
+            claimName: aggregation-staging-data-storage
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: aggregation-production-celery
+  name: aggregation-staging-celery
 spec:
   selector:
-    app: aggregation-production-celery
+    app: aggregation-staging-celery
   ports:
     - protocol: TCP
       port: 80
@@ -245,7 +217,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: aggregation-production-redis
+  name: aggregation-staging-redis
 spec:
   accessModes:
     - ReadWriteOnce
@@ -257,7 +229,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: aggregation-production-data-storage
+  name: aggregation-staging-data-storage
 spec:
   accessModes:
     - ReadWriteOnce
@@ -269,20 +241,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aggregation-production-redis
+  name: aggregation-staging-redis
   labels:
-    app: aggregation-production-redis
+    app: aggregation-staging-redis
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: aggregation-production-redis
+      app: aggregation-staging-redis
   template:
     metadata:
       labels:
-        app: aggregation-production-redis
+        app: aggregation-staging-redis
     spec:
       tolerations:
       - key: "servicelife"
@@ -299,7 +271,7 @@ spec:
                 values:
                 - longlife
       containers:
-        - name: aggregation-production-redis
+        - name: aggregation-staging-redis
           image: redis
           resources:
             requests:
@@ -309,22 +281,49 @@ spec:
               memory: "100Mi"
               cpu: "500m"
           volumeMounts:
-          - name: aggregation-production-redis-data
+          - name: aggregation-staging-redis-data
             mountPath: "/data"
       volumes:
-        - name: aggregation-production-redis-data
+        - name: aggregation-staging-redis-data
           persistentVolumeClaim:
-            claimName: aggregation-production-redis
+            claimName: aggregation-staging-redis
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: aggregation-production-redis
+  name: aggregation-staging-redis
 spec:
   selector:
-    app: aggregation-production-redis
+    app: aggregation-staging-redis
   ports:
     - protocol: TCP
       port: 6379
       targetPort: 6379
   type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aggregation-staging-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+    nginx.ingress.kubernetes.io/proxy-body-size: 20m
+    nginx.ingress.kubernetes.io/set-real-ip-from: "10.0.0.0/8"
+spec:
+  tls:
+  - hosts:
+    - aggregation-staging.zooniverse.org
+    secretName: aggregation-staging-tls-secret
+  rules:
+  - host: aggregation-staging.zooniverse.org
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: aggregation-staging-app
+            port:
+              number: 80

@@ -1,12 +1,13 @@
-version: '2'
+version: '3'
 services:
   aggregation:
     build:
       context: ./
       args:
         REVISION: fake-git-sha-id
+    image: aggregation-for-caesar:local
     volumes:
-      - ./panoptes_aggregation:/usr/src/aggregation/panoptes_aggregation
+      - ./:/usr/src/aggregation
       - ~/.aws:/root/.aws
     environment:
       - AWS_REGION=${AWS_REGION}
@@ -14,6 +15,48 @@ services:
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
       - AWS_SECURITY_TOKEN=${AWS_SECURITY_TOKEN}
-      - LISTEN_PORT=5000
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - FLASK_DEBUG=1
+      - FLASK_ENV=development
+      - LISTEN_PORT=4000
     ports:
-      - "5000:5000"
+      - "4000:4000"
+    links:
+      - redis:redis
+
+  worker:
+    image: aggregation-for-caesar:local
+    command: celery --app panoptes_aggregation.batch_aggregation.celery worker --loglevel=info
+    volumes:
+      - ./:/usr/src/aggregation
+    environment:
+      - FLASK_DEBUG=1
+      - APP_SETTINGS=project.server.config.DevelopmentConfig
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - FLASK_ENV=development
+    links:
+      - redis:redis
+    depends_on:
+      - redis
+
+  dashboard:
+    image: aggregation-for-caesar:local
+    command: celery --app panoptes_aggregation.batch_aggregation.celery flower --port=5555 --broker=redis://redis:6379/0
+    ports:
+      - 5556:5555
+    environment:
+      - FLASK_DEBUG=1
+      - APP_SETTINGS=project.server.config.DevelopmentConfig
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    links:
+      - redis:redis
+    depends_on:
+      - redis
+      - worker
+
+  redis:
+    image: redis
+    command: redis-server --appendonly yes
