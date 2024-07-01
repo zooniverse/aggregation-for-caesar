@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aggregation-caesar
+  name: aggregation-production-app
   labels:
-    app: aggregation-caesar
+    app: aggregation-production-app
 spec:
   selector:
     matchLabels:
-      app: aggregation-caesar
+      app: aggregation-production-app
   template:
     metadata:
       labels:
-        app: aggregation-caesar
+        app: aggregation-production-app
     spec:
       containers:
-        - name: aggregation-caesar-app
+        - name: aggregation-production-app
           image: ghcr.io/zooniverse/aggregation-for-caesar:__IMAGE_TAG__
           ports:
             - containerPort: 80
@@ -51,6 +51,145 @@ spec:
               value: production
             - name: PANOPTES_URL
               value: https://panoptes.zooniverse.org/
+            - name: CELERY_BROKER_URL
+              value: redis://aggregation-production-redis:6379/0
+            - name: CELERY_RESULT_BACKEND
+              value: redis://aggregation-production-redis:6379/0
+            - name: PANOPTES_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-for-caesar-environment
+                  key: PANOPTES_CLIENT_ID
+            - name: PANOPTES_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-for-caesar-environment
+                  key: PANOPTES_CLIENT_SECRET
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-for-caesar-environment
+                  key: AZURE_STORAGE_CONNECTION_STRING
+            - name: MAST_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-for-caesar-environment
+                  key: MAST_AUTH_TOKEN
+            - name: MAST_PROD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-for-caesar-environment
+                  key: MAST_PROD_TOKEN
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-for-caesar-environment
+                  key: SENTRY_DSN
+            - name: NEW_RELIC_LICENSE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-for-caesar-environment
+                  key: NEW_RELIC_LICENSE_KEY
+            - name: NEW_RELIC_APP_NAME
+              value: 'Aggregation Caesar'
+          volumeMounts:
+            - name: aggregation-production-volume
+              mountPath: /usr/src/aggregation/tmp
+      volumes:
+        - name: aggregation-production-volume
+          persistentVolumeClaim:
+            claimName: aggregation-production-data-storage
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: aggregation-production-app
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: aggregation-production-app
+  minReplicas: 2
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+   name: aggregation-production-app
+spec:
+  minAvailable: 50%
+  selector:
+    matchLabels:
+      app: aggregation-production-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aggregation-production-app
+spec:
+  selector:
+    app: aggregation-production-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aggregation-production-celery
+  labels:
+    app: aggregation-production-celery
+spec:
+  selector:
+    matchLabels:
+      app: aggregation-production-celery
+  template:
+    metadata:
+      labels:
+        app: aggregation-production-celery
+    spec:
+      containers:
+        - name: aggregation-production-celery
+          image: ghcr.io/zooniverse/aggregation-for-caesar:__IMAGE_TAG__
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "500m"
+            limits:
+              memory: "1000Mi"
+              cpu: "1000m"
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - celery inspect ping -d celery@$(hostname) | grep -q OK
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - celery inspect ping -d celery@$(hostname) | grep -q OK
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          args: ["/usr/src/aggregation/scripts/start-celery.sh"]
+          env:
+            - name: FLASK_ENV
+              value: production
+            - name: CELERY_BROKER_URL
+              value: redis://aggregation-production-redis:6379/0
+            - name: CELERY_RESULT_BACKEND
+              value: redis://aggregation-production-redis:6379/0
+            - name: PANOPTES_URL
+              value: https://panoptes.zooniverse.org/
             - name: PANOPTES_CLIENT_ID
               valueFrom:
                 secretKeyRef:
@@ -82,39 +221,110 @@ spec:
                   name: aggregation-for-caesar-environment
                   key: NEW_RELIC_LICENSE_KEY
             - name: NEW_RELIC_APP_NAME
-              value: 'Aggregation Caesar'
----
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: aggregation-caesar
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: aggregation-caesar
-  minReplicas: 2
-  maxReplicas: 3
-  targetCPUUtilizationPercentage: 80
----
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
-   name: aggregation-caesar
-spec:
-  minAvailable: 50%
-  selector:
-    matchLabels:
-      app: aggregation-caesar
+              value: 'Aggregation Caesar (Production)'
+          volumeMounts:
+            - name: aggregation-production-volume
+              mountPath: /usr/src/aggregation/tmp
+      volumes:
+        - name: aggregation-production-volume
+          persistentVolumeClaim:
+            claimName: aggregation-production-data-storage
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: aggregation-caesar
+  name: aggregation-production-celery
 spec:
   selector:
-    app: aggregation-caesar
+    app: aggregation-production-celery
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: aggregation-production-redis
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: azurefile
+  resources:
+    requests:
+      storage: 1Gi
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: aggregation-production-data-storage
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: azurefile
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aggregation-production-redis
+  labels:
+    app: aggregation-production-redis
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: aggregation-production-redis
+  template:
+    metadata:
+      labels:
+        app: aggregation-production-redis
+    spec:
+      tolerations:
+      - key: "servicelife"
+        operator: "Equal"
+        value: "longlife"
+        effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: servicelife
+                operator: In
+                values:
+                - longlife
+      containers:
+        - name: aggregation-production-redis
+          image: redis
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "10m"
+            limits:
+              memory: "100Mi"
+              cpu: "500m"
+          volumeMounts:
+          - name: aggregation-production-redis-data
+            mountPath: "/data"
+      volumes:
+        - name: aggregation-production-redis-data
+          persistentVolumeClaim:
+            claimName: aggregation-production-redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aggregation-production-redis
+spec:
+  selector:
+    app: aggregation-production-redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+  type: NodePort
