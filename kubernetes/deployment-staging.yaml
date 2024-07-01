@@ -53,37 +53,37 @@ spec:
               value: redis://aggregation-staging-redis:6379/0
             - name: CELERY_RESULT_BACKEND
               value: redis://aggregation-staging-redis:6379/0
-            - name: PANOPTES_STAGING_URL
+            - name: PANOPTES_URL
               value: https://panoptes-staging.zooniverse.org/
-            - name: PANOPTES_STAGING_CLIENT_ID
+            - name: PANOPTES_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
-                  key: PANOPTES_STAGING_CLIENT_ID
-            - name: PANOPTES_STAGING_CLIENT_SECRET
+                  name: aggregation-staging-env
+                  key: PANOPTES_CLIENT_ID
+            - name: PANOPTES_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
-                  key: PANOPTES_STAGING_CLIENT_SECRET
+                  name: aggregation-staging-env
+                  key: PANOPTES_CLIENT_SECRET
             - name: MAST_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: MAST_AUTH_TOKEN
             - name: MAST_PROD_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: MAST_PROD_TOKEN
             - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: SENTRY_DSN
             - name: NEW_RELIC_LICENSE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: NEW_RELIC_LICENSE_KEY
             - name: NEW_RELIC_APP_NAME
               value: 'Aggregation Caesar (Staging)'
@@ -160,37 +160,37 @@ spec:
               value: redis://aggregation-staging-redis:6379/0
             - name: CELERY_RESULT_BACKEND
               value: redis://aggregation-staging-redis:6379/0
-            - name: PANOPTES_STAGING_URL
+            - name: PANOPTES_URL
               value: https://panoptes-staging.zooniverse.org/
-            - name: PANOPTES_STAGING_CLIENT_ID
+            - name: PANOPTES_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
-                  key: PANOPTES_STAGING_CLIENT_ID
-            - name: PANOPTES_STAGING_CLIENT_SECRET
+                  name: aggregation-staging-env
+                  key: PANOPTES_CLIENT_ID
+            - name: PANOPTES_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
-                  key: PANOPTES_STAGING_CLIENT_SECRET
+                  name: aggregation-staging-env
+                  key: PANOPTES_CLIENT_SECRET
             - name: MAST_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: MAST_AUTH_TOKEN
             - name: MAST_PROD_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: MAST_PROD_TOKEN
             - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: SENTRY_DSN
             - name: NEW_RELIC_LICENSE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: NEW_RELIC_LICENSE_KEY
             - name: NEW_RELIC_APP_NAME
               value: 'Aggregation Caesar (Staging)'
