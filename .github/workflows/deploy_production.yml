@@ -2,8 +2,8 @@ name: Deploy to Production
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - production-release
   workflow_dispatch:
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
     uses: zooniverse/ci-cd/.github/workflows/deploy_app.yaml@main
     needs: build_and_push_image
     with:
-      app_name: aggregation-caesar
+      app_name: aggregation
       repo_name: aggregation-for-caesar
       commit_id: ${{ github.sha }}
       environment: production
@@ -38,7 +38,7 @@ jobs:
       commit_id: ${{ github.sha }}
       job_name: Deploy to Production / deploy_app
       status: ${{ needs.deploy_production.result }}
-      title: "Aggregation deploy complete"
+      title: "Aggregation Production deploy complete"
       title_link: "https://aggregation-caesar.zooniverse.org"
     secrets:
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
