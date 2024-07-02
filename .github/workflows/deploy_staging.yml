@@ -1,4 +1,4 @@
-name: Deploy to Production
+name: Deploy to Staging
 
 on:
   push:
@@ -16,15 +16,15 @@ jobs:
       latest: true
       build_args: "REVISION=${{ github.sha }}"
 
-  deploy_production:
-    name: Deploy to Production
+  deploy_staging:
+    name: Deploy to Staging
     uses: zooniverse/ci-cd/.github/workflows/deploy_app.yaml@main
     needs: build_and_push_image
     with:
-      app_name: aggregation-caesar
+      app_name: aggregation
       repo_name: aggregation-for-caesar
       commit_id: ${{ github.sha }}
-      environment: production
+      environment: staging
       deploy_check: false
     secrets:
       creds: ${{ secrets.AZURE_AKS }}
@@ -32,13 +32,13 @@ jobs:
   slack_notification:
     name: Slack notification
     uses: zooniverse/ci-cd/.github/workflows/slack_notification.yaml@main
-    needs: deploy_production
+    needs: deploy_staging
     if: always()
     with:
       commit_id: ${{ github.sha }}
-      job_name: Deploy to Production / deploy_app
-      status: ${{ needs.deploy_production.result }}
-      title: "Aggregation deploy complete"
-      title_link: "https://aggregation-caesar.zooniverse.org"
+      job_name: Deploy to Staging / deploy_app
+      status: ${{ needs.deploy_staging.result }}
+      title: "Aggregation Staging deploy complete"
+      title_link: "https://aggregation-staging.zooniverse.org"
     secrets:
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
