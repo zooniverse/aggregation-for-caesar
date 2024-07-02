@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: aggregation-staging-app
-          image: ghcr.io/zooniverse/aggregation-for-caesar:batch-aggregation-staging
+          image: ghcr.io/zooniverse/aggregation-for-caesar:__IMAGE_TAG__
           ports:
             - containerPort: 80
           resources:
@@ -124,7 +124,7 @@ spec:
     spec:
       containers:
         - name: aggregation-staging-celery
-          image: ghcr.io/zooniverse/aggregation-for-caesar:batch-aggregation-staging
+          image: ghcr.io/zooniverse/aggregation-for-caesar:__IMAGE_TAG__
           resources:
             requests:
               memory: "500Mi"
