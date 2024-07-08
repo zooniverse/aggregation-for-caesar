@@ -68,7 +68,7 @@ spec:
             - name: AZURE_STORAGE_CONNECTION_STRING
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: AZURE_STORAGE_CONNECTION_STRING
             - name: MAST_AUTH_TOKEN
               valueFrom:
@@ -180,7 +180,7 @@ spec:
             - name: AZURE_STORAGE_CONNECTION_STRING
               valueFrom:
                 secretKeyRef:
-                  name: aggregation-for-caesar-environment
+                  name: aggregation-staging-env
                   key: AZURE_STORAGE_CONNECTION_STRING
             - name: MAST_AUTH_TOKEN
               valueFrom:
