@@ -200,6 +200,11 @@ spec:
                 secretKeyRef:
                   name: aggregation-for-caesar-environment
                   key: PANOPTES_CLIENT_SECRET
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-for-caesar-environment
+                  key: AZURE_STORAGE_CONNECTION_STRING
             - name: MAST_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
