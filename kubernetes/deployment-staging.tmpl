@@ -65,6 +65,11 @@ spec:
                 secretKeyRef:
                   name: aggregation-staging-env
                   key: PANOPTES_CLIENT_SECRET
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-staging-env
+                  key: AZURE_STORAGE_CONNECTION_STRING
             - name: MAST_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -172,6 +177,11 @@ spec:
                 secretKeyRef:
                   name: aggregation-staging-env
                   key: PANOPTES_CLIENT_SECRET
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: aggregation-staging-env
+                  key: AZURE_STORAGE_CONNECTION_STRING
             - name: MAST_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
