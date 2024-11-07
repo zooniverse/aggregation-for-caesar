@@ -58,7 +58,10 @@ def reducer_wrapper(
             if 'strategy' in kwargs:
                 kwargs_details['strategy'] = kwargs['strategy'].strip("\'")
             if 'focus_classes' in kwargs:
-                kwargs_details['focus_classes'] = ast.literal_eval(kwargs['focus_classes'])
+                focus_classes = kwargs['focus_classes']
+                if isinstance(focus_classes, str):
+                    focus_classes = ast.literal_eval(focus_classes)
+                kwargs_details['focus_classes'] = focus_classes
 
             no_version = kwargs.pop('no_version', False)
             if defaults_process is not None:
