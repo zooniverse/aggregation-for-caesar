@@ -505,3 +505,133 @@ TestOneToOneUserSkillReducer = ReducerTest(
     processed_type='list',
     test_name='TestOneToOneUserSkillReducer'
 )
+
+
+extracted_data = [
+    {
+        "1": 1,
+        "feedback": {
+            "strategy": "singleAnswerQuestion",
+            "true_answer": [
+                "1"
+            ],
+            "agreement_score": 1
+        },
+        "aggregation_version": "4.1.0"
+    },
+    {
+        "7": 1,
+        "aggregation_version": "4.1.0"
+    },
+    {
+        "1": 1,
+        "feedback": {
+            "strategy": "singleAnswerQuestion",
+            "true_answer": [
+                "2"
+            ],
+            "agreement_score": 0
+        },
+        "aggregation_version": "4.1.0"
+    },
+    {
+        "1": 1,
+        "aggregation_version": "4.1.0"
+    },
+    {
+        "1": 1,
+        "feedback": {
+            "strategy": "singleAnswerQuestion",
+            "true_answer": [
+                "1"
+            ],
+            "agreement_score": 1
+        },
+        "aggregation_version": "4.1.0"
+    }
+]
+
+kwargs_extra_data = {
+    "relevant_reduction": [
+        {
+            "data": {
+                "difficulty": [
+                    1
+                ],
+                "aggregation_version": "4.1.0"
+            }
+        },
+        {
+            "data": {
+                "aggregation_version": "4.1.0"
+            }
+        },
+        {
+            "data": {
+                "difficulty": [
+                    0
+                ],
+                "aggregation_version": "4.1.0"
+            }
+        },
+        {
+            "data": {
+                "aggregation_version": "4.1.0"
+            }
+        },
+        {
+            "data": {
+                "difficulty": [
+                    1
+                ],
+                "aggregation_version": "4.1.0"
+            }
+        }
+    ]
+}
+
+
+reduced_data = {
+    "classes": [
+        "1",
+        "2"
+    ],
+    "confusion_simple": [
+        [
+            2,
+            0
+        ],
+        [
+            1,
+            0
+        ]
+    ],
+    "weighted_skill": {
+        "1": 0.999999999999999,
+        "2": 0.0
+    },
+    "skill": {
+        "1": 1.0,
+        "2": 0.0
+    },
+    "count": {
+        "1": 2,
+        "2": 1
+    },
+    "mean_skill": 0.999999999999999,
+    "level_up": True
+}
+
+TestSubclassUserSkillReducer = ReducerTest(
+    user_skill_reducer,
+    process,
+    extracted_data,
+    extracted_data,
+    reduced_data,
+    'Test user skill reducer with class subsetting',
+    network_kwargs=kwargs_extra_data,
+    kwargs={'mode': 'one-to-one', 'strategy': 'all', 'skill_threshold': 0.2, 'count_threshold': 1, 'focus_classes': ["1"]},
+    add_version=False,
+    processed_type='list',
+    test_name='TestUserSkillReducer_SubsetClass'
+)

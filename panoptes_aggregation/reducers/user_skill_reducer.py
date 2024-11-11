@@ -12,7 +12,6 @@ import numpy as np
 from ..feedback_strategies import FEEDBACK_STRATEGIES
 from sklearn.metrics import confusion_matrix
 
-
 # smallest possible value for difficulty so that
 # subjects have a non-negligible effect on user skill
 # in extreme cases
@@ -21,7 +20,7 @@ DIFFICULTY_FLOOR = 0.05
 
 @reducer_wrapper(relevant_reduction=True)
 def user_skill_reducer(extracts, relevant_reduction=[], mode='binary', null_class='NONE',
-                       skill_threshold=0.7, count_threshold=10, strategy='mean'):
+                       skill_threshold=0.7, count_threshold=10, strategy='mean', focus_classes=None):
     '''
         Parameters
         ----------
@@ -84,12 +83,18 @@ def user_skill_reducer(extracts, relevant_reduction=[], mode='binary', null_clas
 
     # remove the null class from the skill array to calculate the mean skill
     if mode == 'binary':
-        null_removed_classes = [classi for classi in classes if classi != 'False']
-        null_removed_counts = [ci for classi, ci in per_class_count.items() if classi != 'False']
-        mean_skill = np.sum([weighted_per_class_skill_dict[key] for key in null_removed_classes]) / (len(null_removed_classes) + 1.e-16)
+        null_class = 'False'
     else:
+        null_class = null_class
+
+    # compute either on user-specified classes or perform mean skill calculation on all detected classes
+    if focus_classes is None:
         null_removed_classes = [classi for classi in classes if classi != null_class]
         null_removed_counts = [ci for classi, ci in per_class_count.items() if classi != null_class]
+        mean_skill = np.sum([weighted_per_class_skill_dict[key] for key in null_removed_classes]) / (len(null_removed_classes) + 1.e-16)
+    else:
+        null_removed_classes = [classi for classi in focus_classes if classi != null_class]
+        null_removed_counts = [ci for classi, ci in per_class_count.items() if classi in null_removed_classes]
         mean_skill = np.sum([weighted_per_class_skill_dict[key] for key in null_removed_classes]) / (len(null_removed_classes) + 1.e-16)
 
     # check the leveling up value
