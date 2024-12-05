@@ -493,7 +493,7 @@ reduced_data = {
     'parameters': {
         'min_samples': 'auto',
         'max_eps': None,
-        'xi': 0.05,
+        'xi': 0.11,
         'angle_eps': 30.0,
         'gutter_eps': 150.0,
         'low_consensus_threshold': 3.0,
@@ -513,7 +513,8 @@ TestOpticsLTReducer = ReducerTest(
         'angle_eps': 30.0,
         'gutter_eps': 150.0,
         'low_consensus_threshold': 3.0,
-        'minimum_views': 5
+        'minimum_views': 5,
+        'xi': 0.11
     },
     okwargs={
         'min_samples': 'auto'
@@ -537,7 +538,8 @@ TestOpticsLTReducerWithMinSamples = ReducerTest(
         'angle_eps': 30.0,
         'gutter_eps': 150.0,
         'low_consensus_threshold': 3.0,
-        'minimum_views': 5
+        'minimum_views': 5,
+        'xi': 0.11
     },
     network_kwargs=kwargs_extra_data,
     output_kwargs=True,

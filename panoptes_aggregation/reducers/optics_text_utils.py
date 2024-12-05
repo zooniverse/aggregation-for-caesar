@@ -75,7 +75,7 @@ def metric(a, b, data_in=[]):
         strip_tags(data_a['text'][0]),
         strip_tags(data_b['text'][0])
     )
-    return np.sqrt(dx + dy).sum() + dt
+    return (np.sqrt(dx + dy).sum() + dt).item()
 
 
 def get_min_samples(N):
@@ -182,7 +182,7 @@ def cluster_of_one(X, data, user_ids, extract_index):
             'clusters_y': line['y'],
             'clusters_text': [[w] for w in line['text'][0].split()],
             'number_views': 1,
-            'line_slope': slope,
+            'line_slope': slope.item(),
             'consensus_score': 1.0,
             'consensus_text': ' '.join(line['text'][0].split()),
             'user_ids': [user_ids[user_index]],
@@ -268,7 +268,7 @@ def order_lines(frame_in, angle_eps=30, gutter_eps=150):
             # append to final list
             new_frames = list(frame[cdx][mdx][y_order])
             for nf in new_frames:
-                nf['line_slope'] = angle_row[1]
+                nf['line_slope'] = angle_row[1].item()
                 nf['slope_label'] = slope_label
                 nf['gutter_label'] = gutter_label
             frame_ordered += new_frames
