@@ -33,7 +33,6 @@ def reduce_csv(
     with extracted_csv as extracted_csv_in:
         extracted = pandas.read_csv(
             extracted_csv_in,
-            infer_datetime_format=True,
             parse_dates=['created_at'],
             encoding='utf-8'
         )
