@@ -5,6 +5,9 @@ from panoptes_aggregation.scripts import batch_utils
 from panoptes_aggregation.batch_aggregation import run_aggregation
 from panoptes_aggregation import batch_aggregation as batch_agg
 
+batch_agg.celery.conf.update(CELERY_BROKER_URL='memory://')
+batch_agg.celery.conf.update(CELERY_RESULT_BACKEND='cache+memory://')
+
 wf_export = 'panoptes_aggregation/tests/batch_aggregation/wf_export.csv'
 cls_export = 'panoptes_aggregation/tests/batch_aggregation/cls_export.csv'
 
