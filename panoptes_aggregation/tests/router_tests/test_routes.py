@@ -1,5 +1,8 @@
 try:
     import panoptes_aggregation.routes as routes
+    from panoptes_aggregation.batch_aggregation import celery as celeryapp
+    celeryapp.conf.update(CELERY_BROKER_URL='memory://')
+    celeryapp.conf.update(CELERY_RESULT_BACKEND='cache+memory://')
     OFFLINE = False
 except ImportError:
     OFFLINE = True
