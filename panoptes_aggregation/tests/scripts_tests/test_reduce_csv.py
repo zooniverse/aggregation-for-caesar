@@ -113,7 +113,6 @@ class TestReduceCSV(unittest.TestCase):
         self.extracted_csv_question = StringIO(extracted_csv_question)
         self.extracted_dataframe_question = pandas.read_csv(
             StringIO(extracted_csv_question),
-            infer_datetime_format=True,
             parse_dates=['created_at'],
             encoding='utf-8'
         )
