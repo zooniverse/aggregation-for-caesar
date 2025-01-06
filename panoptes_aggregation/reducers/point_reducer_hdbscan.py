@@ -9,7 +9,7 @@ from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
 from .point_process_data import process_data_by_frame
 import numpy as np
-from hdbscan import HDBSCAN
+from sklearn.cluster import HDBSCAN
 
 
 DEFAULTS = {

@@ -6,7 +6,7 @@ This module provides functions to cluster shapes extracted with
 '''
 import numpy as np
 
-from hdbscan import HDBSCAN
+from sklearn.cluster import HDBSCAN
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
