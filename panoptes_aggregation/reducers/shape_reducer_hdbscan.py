@@ -80,8 +80,7 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
         kwargs['metric'] = metric
     elif metric_type == 'iou':
         kwargs['metric'] = IoU_metric
-        kwargs['shape'] = shape
-        kwargs['eps_t'] = eps_t
+        kwargs['metric_params'] = {'shape': shape, 'eps_t': eps_t}
         avg = average_shape_IoU
     else:
         raise ValueError('metric_type must be either "euclidean" or "IoU".')
