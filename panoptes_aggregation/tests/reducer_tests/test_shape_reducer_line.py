@@ -280,15 +280,12 @@ TestShapeReducerLineSymmetricOptics = ReducerTest(
 
 reduced_data_hdbscan = copy.deepcopy(reduced_data)
 reduced_data_hdbscan['frame0']['T0_tool0_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
-reduced_data_hdbscan['frame0']['T0_tool0_clusters_persistance'] = [1.0, 1.0]
 reduced_data_hdbscan['frame0']['T0_tool1_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
-reduced_data_hdbscan['frame0']['T0_tool1_clusters_persistance'] = [1.0, 1.0]
 reduced_data_hdbscan['frame1']['T0_tool0_cluster_probabilities'] = [0.0]
 
 reduced_data_hdbscan['frame1']['T0_tool1_cluster_labels'] = [0, 0]
 reduced_data_hdbscan['frame1']['T0_tool1_cluster_probabilities'] = [1.0, 1.0]
 reduced_data_hdbscan['frame1']['T0_tool1_clusters_count'] = [2]
-reduced_data_hdbscan['frame1']['T0_tool1_clusters_persistance'] = [1.0]
 reduced_data_hdbscan['frame1']['T0_tool1_clusters_x1'] = [60.0]
 reduced_data_hdbscan['frame1']['T0_tool1_clusters_y1'] = [60.0]
 reduced_data_hdbscan['frame1']['T0_tool1_clusters_x2'] = [60.0]
@@ -313,12 +310,9 @@ TestShapeReducerLineHdbscan = ReducerTest(
 
 reduced_data_hdbscan_symmetric = copy.deepcopy(reduced_data_symmetric)
 reduced_data_hdbscan_symmetric['frame0']['T0_tool0_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
-reduced_data_hdbscan_symmetric['frame0']['T0_tool0_clusters_persistance'] = [1.0, 1.0]
 reduced_data_hdbscan_symmetric['frame0']['T0_tool1_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
-reduced_data_hdbscan_symmetric['frame0']['T0_tool1_clusters_persistance'] = [1.0, 1.0]
 reduced_data_hdbscan_symmetric['frame1']['T0_tool0_cluster_probabilities'] = [0.0]
 reduced_data_hdbscan_symmetric['frame1']['T0_tool1_cluster_probabilities'] = [1.0, 1.0]
-reduced_data_hdbscan_symmetric['frame1']['T0_tool1_clusters_persistance'] = [1.0]
 
 TestShapeReducerLineHdbscanSymmetric = ReducerTest(
     shape_reducer_hdbscan,

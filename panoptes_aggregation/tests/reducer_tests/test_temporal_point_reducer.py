@@ -99,7 +99,6 @@ reduced_data_hdbscan = {
         "T0_toolIndex0_points_displayTime": [0.0, 0.1, 0.2, 0.9, 0.8, 0.9, 0.4, 0.6, 0.5],
         "T0_toolIndex0_cluster_labels": [-1, 1, 1, 2, 2, 2, 0, 0, 0],
         "T0_toolIndex0_cluster_probabilities": [0.0, 1.0, 1.0, 1.0, 0.18389844323090718, 1.0, 1.0, 0.9941176470588245, 1.0],
-        "T0_toolIndex0_clusters_persistance": [0.3707046401878472, 0.9673200096315916, 0.5146860238796042],
         "T0_toolIndex0_clusters_count": [3, 2, 3],
         "T0_toolIndex0_clusters_x": [45.0, 11.0, 12.333333333333334],
         "T0_toolIndex0_clusters_y": [25.0, 42.5, 55.0],

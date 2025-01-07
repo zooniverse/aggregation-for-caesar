@@ -45,7 +45,6 @@ def point_reducer_hdbscan(data_by_tool, **kwargs):
         * `tool*_points_y` : A list of `y` positions for **all** points drawn with `tool*`
         * `tool*_cluster_labels` : A list of cluster labels for **all** points drawn with `tool*`
         * `tool*_cluster_probabilities`: A list of cluster probabilities for **all** points drawn with `tool*`
-        * `tool*_clusters_persistance`: A measure for how persistent each **cluster** is (1.0 = stable, 0.0 = unstable)
         * `tool*_clusters_count` : The number of points in each **cluster** found
         * `tool*_clusters_x` : The weighted `x` position for each **cluster** found
         * `tool*_clusters_y` : The weighted `y` position for each **cluster** found
@@ -72,7 +71,6 @@ def point_reducer_hdbscan(data_by_tool, **kwargs):
                 # what cluster each point belongs to
                 clusters[frame]['{0}_cluster_labels'.format(tool)] = list(db.labels_)
                 clusters[frame]['{0}_cluster_probabilities'.format(tool)] = list(db.probabilities_)
-                clusters[frame]['{0}_clusters_persistance'.format(tool)] = list(db.cluster_persistence_)
                 for k in set(db.labels_):
                     if k > -1:
                         idx = db.labels_ == k
