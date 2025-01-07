@@ -16,7 +16,7 @@ DEFAULTS = {
     'min_cluster_size': {'default': 5, 'type': int},
     'min_samples': {'default': 3, 'type': int},
     'metric': {'default': 'euclidean', 'type': str},
-    'algorithm': {'default': 'best', 'type': str},
+    'algorithm': {'default': 'auto', 'type': str},
     'leaf_size': {'default': 40, 'type': int},
     'cluster_selection_method': {'default': 'eom', 'type': str},
     'allow_single_cluster': {'default': False, 'type': bool}
