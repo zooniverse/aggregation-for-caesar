@@ -64,7 +64,6 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
         * `tool*_<shape>_<param>` : A list of **all** `param` for the `shape` drawn with `tool*`
         * `tool*_cluster_labels` : A list of cluster labels for **all** shapes drawn with `tool*`
         * `tool*_cluster_probabilities`: A list of cluster probabilities for **all** points drawn with `tool*`
-        * `tool*_clusters_persistance`: A measure for how persistent each **cluster** is (1.0 = stable, 0.0 = unstable)
         * `tool*_clusters_count` : The number of points in each **cluster** found
         * `tool*_clusters_<param>` : The `param` value for each **cluster** found
 
@@ -105,7 +104,6 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
                 # what cluster each point belongs to
                 clusters[frame]['{0}_cluster_labels'.format(tool)] = db.labels_.tolist()
                 clusters[frame]['{0}_cluster_probabilities'.format(tool)] = list(db.probabilities_)
-                clusters[frame]['{0}_clusters_persistance'.format(tool)] = list(db.cluster_persistence_)
                 for k in set(db.labels_):
                     if k > -1:
                         idx = db.labels_ == k

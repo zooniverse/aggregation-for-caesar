@@ -73,7 +73,6 @@ reduced_data = {
             1.0,
             1.0
         ],
-        'tool1_clusters_persistance': [0.1, 0.6],
         'tool1_clusters_count': [c1_count, c0_count],
         'tool1_clusters_x': [c1_loc[0], c0_loc[0]],
         'tool1_clusters_y': [c1_loc[1], c0_loc[1]],
