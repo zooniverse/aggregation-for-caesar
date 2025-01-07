@@ -22,7 +22,6 @@ DEFAULTS = {
     'eps_t': {'default': 0.5, 'type': float},
     'algorithm': {'default': 'best', 'type': str},
     'leaf_size': {'default': 40, 'type': int},
-    'p': {'default': None, 'type': float},
     'cluster_selection_method': {'default': 'eom', 'type': str},
     'allow_single_cluster': {'default': False, 'type': bool},
     'metric_type': {'default': 'euclidean', 'type': str}

@@ -18,7 +18,6 @@ DEFAULTS = {
     'metric': {'default': 'auto', 'type': str},
     'algorithm': {'default': 'best', 'type': str},
     'leaf_size': {'default': 40, 'type': int},
-    'p': {'default': None, 'type': float},
     'cluster_selection_method': {'default': 'eom', 'type': str},
     'allow_single_cluster': {'default': False, 'type': bool}
 }
