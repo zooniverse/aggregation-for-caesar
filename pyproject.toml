@@ -19,17 +19,16 @@ requires-python = ">=3.8,<3.12"
 dependencies = [
     "beautifulsoup4>=4.8.1,<4.13",
     "collatex>=2.3,<2.4",
-    "hdbscan>=0.8.20,<=0.8.41",
     "lxml>=4.4,<5.4",
-    "numpy>=2.0,<2.2",
+    "numpy>=2.0",
     "packaging>=20.1,<24.3",
-    "pandas>=2.0,<2.3",
+    "pandas>=2.0",
     "progressbar2>=3.39,<4.6",
     "python-levenshtein>=0.21.0,<0.27",
     "python-slugify>=7.0.0,<8.1",
     "pyyaml>=6.0,<6.1",
-    "scikit-learn>=1.2.0,<1.6",
-    "scipy>=1.10.0,<1.15",
+    "scikit-learn>=1.5.0",
+    "scipy>=1.10.0",
     "werkzeug>=2.3.0,<3.2",
     "shapely>=2.0,<2.1"
 ]
