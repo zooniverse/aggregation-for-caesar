@@ -23,6 +23,7 @@ DEFAULTS = {
     'min_samples': {'default': 3, 'type': int},
     'eps_t': {'default': 0.5, 'type': float},
     'min_cluster_size': {'default': 2, 'type': int},
+    'xi': {'default': 0.15, 'type': float},
     'algorithm': {'default': 'auto', 'type': str},
     'leaf_size': {'default': 30, 'type': int},
     'p': {'default': 2, 'type': float},
