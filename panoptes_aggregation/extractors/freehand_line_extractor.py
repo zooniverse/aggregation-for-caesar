@@ -5,15 +5,15 @@ This module provides a function to extract free-hand drawn lines from panoptes a
 '''
 from collections import OrderedDict
 import copy
-from .extractors.extractor_wrapper import extractor_wrapper
-from .extractors.subtask_extractor_wrapper import subtask_wrapper
-from .extractors.tool_wrapper import tool_wrapper
+from .extractor_wrapper import extractor_wrapper
+from .subtask_extractor_wrapper import subtask_wrapper
+from .tool_wrapper import tool_wrapper
 
 
 @extractor_wrapper(gold_standard=True)
 @tool_wrapper
 @subtask_wrapper
-def free_hand_line_extractor(classification, gold_standard=False, **kwargs):
+def freehand_line_extractor(classification, gold_standard=False, **kwargs):
     '''Extact rectangle data from annotation
 
     Parameters

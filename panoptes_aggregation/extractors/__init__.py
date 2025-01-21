@@ -1,5 +1,5 @@
 from .point_extractor import point_extractor
-from .free_hand_line_extractor import free_hand_line_extractor
+from .freehand_line_extractor import freehand_line_extractor
 from .point_extractor_by_frame import point_extractor_by_frame
 from .rectangle_extractor import rectangle_extractor
 from .question_extractor import question_extractor
@@ -39,5 +39,5 @@ extractors = {
     'nfn_extractor': nfn_extractor,
     'text_extractor': text_extractor,
     'all_tasks_empty_extractor': all_tasks_empty_extractor,
-    'free_hand_line_extractor': free_hand_line_extractor,
+    'freehand_line_extractor': freehand_line_extractor,
 }
