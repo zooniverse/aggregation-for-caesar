@@ -53,7 +53,7 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
         * ellipse
 
     kwargs :
-        `See HDBSCAN <http://hdbscan.readthedocs.io/en/latest/api.html#hdbscan>`_
+        `See HDBSCAN <https://scikit-learn.org/stable/modules/generated/sklearn.cluster.HDBSCAN.html>`_
 
     Returns
     -------
