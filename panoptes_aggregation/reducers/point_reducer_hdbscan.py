@@ -33,7 +33,7 @@ def point_reducer_hdbscan(data_by_tool, **kwargs):
     data_by_tool : dict
         A dictionary returned by :meth:`process_data`
     kwargs :
-        `See HDBSCAN <http://hdbscan.readthedocs.io/en/latest/api.html#hdbscan>`_
+        `See HDBSCAN <https://scikit-learn.org/stable/modules/generated/sklearn.cluster.HDBSCAN.html>`_
 
     Returns
     -------
