@@ -117,7 +117,6 @@ TestShapeReducerRectangleIoUOptics = ReducerTest(
 
 reduced_data_hdbscan = copy.deepcopy(reduced_data)
 reduced_data_hdbscan['frame0']['T0_tool0_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
-reduced_data_hdbscan['frame0']['T0_tool0_clusters_persistance'] = [1.0]
 
 TestShapeReducerRectangleIoUHdbscan = ReducerTest(
     shape_reducer_hdbscan,

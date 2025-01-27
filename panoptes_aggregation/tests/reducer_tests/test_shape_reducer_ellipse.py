@@ -183,12 +183,9 @@ TestShapeReducerEllipseOptics = ReducerTest(
 
 reduced_data_hdbscan = copy.deepcopy(reduced_data)
 reduced_data_hdbscan['frame0']['T0_tool0_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
-reduced_data_hdbscan['frame0']['T0_tool0_clusters_persistance'] = [0.9868693567140278, 0.9868693567140278]
 reduced_data_hdbscan['frame0']['T0_tool1_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
-reduced_data_hdbscan['frame0']['T0_tool1_clusters_persistance'] = [0.9868693567140278, 0.9868693567140278]
 reduced_data_hdbscan['frame1']['T0_tool0_cluster_probabilities'] = [0]
 reduced_data_hdbscan['frame1']['T0_tool1_cluster_probabilities'] = [1.0, 1.0]
-reduced_data_hdbscan['frame1']['T0_tool1_clusters_persistance'] = [1.0]
 
 TestShapeReducerEllipseHdbscan = ReducerTest(
     shape_reducer_hdbscan,

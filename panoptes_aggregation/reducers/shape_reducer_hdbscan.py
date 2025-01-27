@@ -6,7 +6,7 @@ This module provides functions to cluster shapes extracted with
 '''
 import numpy as np
 
-from hdbscan import HDBSCAN
+from sklearn.cluster import HDBSCAN
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
@@ -20,9 +20,8 @@ DEFAULTS = {
     'min_cluster_size': {'default': 5, 'type': int},
     'min_samples': {'default': 3, 'type': int},
     'eps_t': {'default': 0.5, 'type': float},
-    'algorithm': {'default': 'best', 'type': str},
+    'algorithm': {'default': 'auto', 'type': str},
     'leaf_size': {'default': 40, 'type': int},
-    'p': {'default': None, 'type': float},
     'cluster_selection_method': {'default': 'eom', 'type': str},
     'allow_single_cluster': {'default': False, 'type': bool},
     'metric_type': {'default': 'euclidean', 'type': str}
@@ -54,7 +53,7 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
         * ellipse
 
     kwargs :
-        `See HDBSCAN <http://hdbscan.readthedocs.io/en/latest/api.html#hdbscan>`_
+        `See HDBSCAN <https://scikit-learn.org/stable/modules/generated/sklearn.cluster.HDBSCAN.html>`_
 
     Returns
     -------
@@ -64,7 +63,6 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
         * `tool*_<shape>_<param>` : A list of **all** `param` for the `shape` drawn with `tool*`
         * `tool*_cluster_labels` : A list of cluster labels for **all** shapes drawn with `tool*`
         * `tool*_cluster_probabilities`: A list of cluster probabilities for **all** points drawn with `tool*`
-        * `tool*_clusters_persistance`: A measure for how persistent each **cluster** is (1.0 = stable, 0.0 = unstable)
         * `tool*_clusters_count` : The number of points in each **cluster** found
         * `tool*_clusters_<param>` : The `param` value for each **cluster** found
 
@@ -82,8 +80,7 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
         kwargs['metric'] = metric
     elif metric_type == 'iou':
         kwargs['metric'] = IoU_metric
-        kwargs['shape'] = shape
-        kwargs['eps_t'] = eps_t
+        kwargs['metric_params'] = {'shape': shape, 'eps_t': eps_t}
         avg = average_shape_IoU
     else:
         raise ValueError('metric_type must be either "euclidean" or "IoU".')
@@ -105,7 +102,6 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
                 # what cluster each point belongs to
                 clusters[frame]['{0}_cluster_labels'.format(tool)] = db.labels_.tolist()
                 clusters[frame]['{0}_cluster_probabilities'.format(tool)] = list(db.probabilities_)
-                clusters[frame]['{0}_clusters_persistance'.format(tool)] = list(db.cluster_persistence_)
                 for k in set(db.labels_):
                     if k > -1:
                         idx = db.labels_ == k

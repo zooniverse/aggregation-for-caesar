@@ -9,16 +9,15 @@ from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
 from .point_process_data import process_temporal_data, temporal_metric
 import numpy as np
-from hdbscan import HDBSCAN
+from sklearn.cluster import HDBSCAN
 
 
 DEFAULTS = {
     'min_cluster_size': {'default': 5, 'type': int},
     'min_samples': {'default': 3, 'type': int},
     'metric': {'default': 'auto', 'type': str},
-    'algorithm': {'default': 'best', 'type': str},
+    'algorithm': {'default': 'auto', 'type': str},
     'leaf_size': {'default': 40, 'type': int},
-    'p': {'default': None, 'type': float},
     'cluster_selection_method': {'default': 'eom', 'type': str},
     'allow_single_cluster': {'default': False, 'type': bool}
 }
@@ -34,7 +33,7 @@ def temporal_point_reducer_hdbscan(data_by_tool, **kwargs):
     data_by_tool : dict
         A dictionary returned by :meth:`process_data`
     kwargs :
-        `See HDBSCAN <http://hdbscan.readthedocs.io/en/latest/api.html#hdbscan>`_
+        `See HDBSCAN <https://scikit-learn.org/stable/modules/generated/sklearn.cluster.HDBSCAN.html>`_
 
     Returns
     -------
@@ -46,7 +45,6 @@ def temporal_point_reducer_hdbscan(data_by_tool, **kwargs):
         * `tool*_points_displayTime` : A list of `time` values for **all** points drawn with `tool*`
         * `tool*_cluster_labels` : A list of cluster labels for **all** points drawn with `tool*`
         * `tool*_cluster_probabilities`: A list of cluster probabilities for **all** points drawn with `tool*`
-        * `tool*_clusters_persistance`: A measure for how persistent each **cluster** is (1.0 = stable, 0.0 = unstable)
         * `tool*_clusters_count` : The number of points in each **cluster** found
         * `tool*_clusters_x` : The weighted `x` position for each **cluster** found
         * `tool*_clusters_y` : The weighted `y` position for each **cluster** found
@@ -76,7 +74,6 @@ def temporal_point_reducer_hdbscan(data_by_tool, **kwargs):
                 # what cluster each point belongs to
                 clusters[frame]['{0}_cluster_labels'.format(tool)] = list(db.labels_)
                 clusters[frame]['{0}_cluster_probabilities'.format(tool)] = list(db.probabilities_)
-                clusters[frame]['{0}_clusters_persistance'.format(tool)] = list(db.cluster_persistence_)
                 for k in set(db.labels_):
                     if k > -1:
                         idx = db.labels_ == k

@@ -227,7 +227,6 @@ reduced_data_hdbscan = {
         'T0_toolIndex0_clusters_count': [3, 4, 3],
         'T0_toolIndex0_clusters_displayTime': [0.7, 0.1, 0.9],
         'T0_toolIndex0_clusters_height': [98.5, 137.8, 54.5],
-        'T0_toolIndex0_clusters_persistance': [0.1, 0.4, 0.4],
         'T0_toolIndex0_clusters_sigma': [0.7, 0.7, 0.4],
         'T0_toolIndex0_clusters_width': [143.3, 62.7, 136.1],
         'T0_toolIndex0_clusters_x_center': [358.1, 502.9, 522.3],
