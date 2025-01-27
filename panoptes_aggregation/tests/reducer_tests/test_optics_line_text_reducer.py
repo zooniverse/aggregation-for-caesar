@@ -514,6 +514,7 @@ TestOpticsLTReducer = ReducerTest(
         'gutter_eps': 150.0,
         'low_consensus_threshold': 3.0,
         'minimum_views': 5,
+        'xi': 0.15
     },
     okwargs={
         'min_samples': 'auto'
@@ -538,6 +539,7 @@ TestOpticsLTReducerWithMinSamples = ReducerTest(
         'gutter_eps': 150.0,
         'low_consensus_threshold': 3.0,
         'minimum_views': 5,
+        'xi': 0.15
     },
     network_kwargs=kwargs_extra_data,
     output_kwargs=True,
@@ -709,7 +711,8 @@ TestOpticsLTReducerWithDollarSign = ReducerTest(
         'angle_eps': 30.0,
         'gutter_eps': 150.0,
         'low_consensus_threshold': 3.0,
-        'minimum_views': 5
+        'minimum_views': 5,
+        'xi': 0.15
     },
     okwargs={'min_samples': 'auto'},
     network_kwargs=kwargs_extra_data_with_dollar_sign,
@@ -780,7 +783,8 @@ TestOpticsLTReducerNoLengthLine = ReducerTest(
         'angle_eps': 30.0,
         'gutter_eps': 150.0,
         'low_consensus_threshold': 3.0,
-        'minimum_views': 5
+        'minimum_views': 5,
+        'xi': 0.15
     },
     network_kwargs=kwargs_extra_data_no_length,
     output_kwargs=True,
