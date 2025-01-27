@@ -60,8 +60,10 @@ def process_data(data_list, min_line_length=0.0):
     data_by_frame = {}
     row_ct = {}
     user_ct = 0
+    print("Number of users is "+str(len(data_list)))
     for user_ct, data in enumerate(data_list):
         for frame, value in data.items():
+            print(value)
             data_by_frame.setdefault(frame, {'X': [], 'data': []})
             row_ct.setdefault(frame, 0)
             gs = value.get('gold_standard', False)

@@ -1,5 +1,6 @@
 from .point_extractor import point_extractor
 from .freehand_line_extractor import freehand_line_extractor
+from .freehand_line_extractor2 import freehand_line_extractor2
 from .point_extractor_by_frame import point_extractor_by_frame
 from .rectangle_extractor import rectangle_extractor
 from .question_extractor import question_extractor
@@ -40,4 +41,5 @@ extractors = {
     'text_extractor': text_extractor,
     'all_tasks_empty_extractor': all_tasks_empty_extractor,
     'freehand_line_extractor': freehand_line_extractor,
+    'freehand_line_extractor2': freehand_line_extractor2,
 }
