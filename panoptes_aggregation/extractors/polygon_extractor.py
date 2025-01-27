@@ -13,7 +13,7 @@ from .tool_wrapper import tool_wrapper
 @extractor_wrapper(gold_standard=True)
 @tool_wrapper
 @subtask_wrapper
-def freehand_line_extractor(classification, gold_standard=False, **kwargs):
+def polygon_extractor(classification, gold_standard=False, **kwargs):
     '''Extact rectangle data from annotation
 
     Parameters
@@ -34,7 +34,8 @@ def freehand_line_extractor(classification, gold_standard=False, **kwargs):
         ('points', OrderedDict([('x', []), ('y', [])]))
     ])
     extract = OrderedDict()
-    for annotation in classification['annotations']:
+    for idx, annotation in enumerate(classification['annotations']):
+        time = classification['metadata']['finished_at']
         for vdx, value in enumerate(annotation['value']):
             frame = 'frame{0}'.format(value['frame'])
             extract.setdefault(frame, copy.deepcopy(blank_frame))
@@ -46,5 +47,6 @@ def freehand_line_extractor(classification, gold_standard=False, **kwargs):
                 y.append(point["y"])
             extract[frame]['points']['x'].append(x)
             extract[frame]['points']['y'].append(y)
+            extract[frame]['time'] = time
             extract[frame]['gold_standard'] = gold_standard
     return extract
