@@ -14,6 +14,7 @@ from .sw_variant_reducer import sw_variant_reducer
 from .shape_reducer_dbscan import shape_reducer_dbscan
 from .shape_reducer_hdbscan import shape_reducer_hdbscan
 from .shape_reducer_optics import shape_reducer_optics
+from .polygon_reducer import polygon_reducer
 from .slider_reducer import slider_reducer
 from .tess_reducer_column import tess_reducer_column
 from .tess_gold_standard_reducer import tess_gold_standard_reducer
@@ -45,6 +46,7 @@ reducers = {
     "shape_reducer_dbscan": shape_reducer_dbscan,
     "shape_reducer_hdbscan": shape_reducer_hdbscan,
     "shape_reducer_optics": shape_reducer_optics,
+    "polygon_reducer": polygon_reducer,
     "slider_reducer": slider_reducer,
     "tess_reducer_column": tess_reducer_column,
     "tess_gold_standard_reducer": tess_gold_standard_reducer,
