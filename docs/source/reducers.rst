@@ -92,6 +92,11 @@ Reducers
 
 ----
 
+.. automodule:: panoptes_aggregation.reducers.polygon_reducer_utils
+  :members:
+
+----
+
 .. automodule:: panoptes_aggregation.reducers.optics_text_utils
   :members:
 
