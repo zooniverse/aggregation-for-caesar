@@ -1,6 +1,6 @@
 '''
-Polygon/freehand Tool Reducer using dbscan
-------------------------------------------------
+Polygon/Freehand Tool Reducer Using DBSCAN
+------------------------------------------
 This module provides functions to reduce the polygon extractions from
 :mod:`panoptes_aggregation.extractors.polygon_extractor` using the
 algorithm DBSCAN.
@@ -47,8 +47,8 @@ def process_data(data_list):
         is a dictionary with two keys `X` and `data`. `X` is a 2D array with each row
         mapping to the data held in `data`.  The first column contains row indices
         and the second column is an index assigned to each user. `data` is a list of
-        dictionaries of the form `{'polygon': shapely_polygon,
-        'time': timestamp_of_extraction, 'gold_standard': bool}`.
+        dictionaries of the form `{'polygon': shapely.geometry.polygon.Polygon,
+        'time': float, 'gold_standard': bool}`. The time uses Unix timestamps. 
     '''
     data_by_frame = {}
     row_ct = {}
@@ -84,6 +84,35 @@ def polygon_gap_ratio(polygon_xy):
 
 # This needs a list of shapely objects to work!
 def IoU_metric_polygon(a, b, data_in=[]):
+    '''Find the Intersection of Union distance between two polygons. This is
+    based on the `Jaccard metric <https://en.wikipedia.org/wiki/Jaccard_index>`_
+
+    To use this metric within the clustering code without having to
+    precompute the full distance matrix `a` and `b` are index mappings to
+    the data contained in `data_in`.  `a` and `b` also contain the user
+    information that is used to help prevent self-clustering. The polygons are
+    contained in `data_in`, along with the timestamp of creation.
+
+    Parameters
+    ----------
+    a : list
+        A two element list containing [index mapping to data, index mapping to user]
+    b : list
+        A two element list containing [index mapping to data, index mapping to user]
+        A list of the parameters for shape 2 (as defined by PFE)
+    data_in : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'time': float, 'gold_standard', bool}
+        There is one element in this list for each classification made. The
+        time should be a Unix timestamp float.
+
+    Returns
+    -------
+    distance : float
+        The IoU distance between the two polygons. 0 means the polygons are the
+        same, 1 means the polygons don't overlap, values in the middle mean
+        partial overlap.
+    '''
     if a[0] == b[0]:
         # The same data point, the distance is zero
         return 0
@@ -109,6 +138,21 @@ def IoU_metric_polygon(a, b, data_in=[]):
 
 
 def cluster_average_last(data):
+    '''Find the last created polygon of provided cluster data
+
+    Parameters
+    ----------
+    data : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'time': float, 'gold_standard', bool}
+        There is one element in this list for each classification made. The
+        time should be a Unix timestamp float.
+
+    Returns
+    -------
+    ilast : shapely.geometry.polygon.Polygon
+        The last created shaeply polygon in the cluster.
+    '''
     times = [data[i]['time'] for i in range(len(data))]
     time_order = np.argsort(times)
     # Select the last polygon to be created
@@ -117,39 +161,69 @@ def cluster_average_last(data):
 
 
 def cluster_average_intersection(data):
+    '''Find the intersection of provided cluster data
+
+    Parameters
+    ----------
+    data : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'time': float, 'gold_standard', bool}
+        There is one element in this list for each classification made. The
+        time should be a Unix timestamp float.
+
+    Returns
+    -------
+    intersection_all : shapely.geometry.polygon.Polygon
+        The shapely intersection of the shaeply polygons in the cluster.
+    '''
     polygon_list = [data[i]['polygon'] for i in range(len(data))]
     # Just one object, so return it as it is its own average
     if isinstance(polygon_list, shapely.geometry.polygon.Polygon) or len(polygon_list)==1:
         return polygon_list
     # There must now be tw polygons to average
-    intersection_average = polygon_list[0].intersection(polygon_list[1])
+    intersection_all = polygon_list[0].intersection(polygon_list[1])
     # If there are any other
     if len(polygon_list) > 2:
         for i in range(2, len(polygon_list)):
-            intersection_average = intersection_average.intersection(polygon_list[i])
-    if isinstance(intersection_average, shapely.geometry.collection.GeometryCollection):
-        for geo in intersection_average.geoms:
+            intersection_all = intersection_all.intersection(polygon_list[i])
+    if isinstance(intersection_all, shapely.geometry.collection.GeometryCollection):
+        for geo in intersection_all.geoms:
             if isinstance(geo, shapely.geometry.polygon.Polygon):
                 intersection_average = geo
-    return intersection_average
+    return intersection_all
 
 
 def cluster_average_union(data):
+    '''Find the union of provided cluster data
+
+    Parameters
+    ----------
+    data : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'time': float, 'gold_standard', bool}
+        There is one element in this list for each classification made. The
+        time should be a Unix timestamp float.
+
+    Returns
+    -------
+    union_all : shapely.geometry.polygon.Polygon
+        The shapely union of the shaeply polygons in the cluster.
+    '''
     polygon_list = [data[i]['polygon'] for i in range(len(data))]
     # Just one object, so return it as it is its own average
     if isinstance(polygon_list, shapely.geometry.polygon.Polygon) or len(polygon_list)==1:
         return polygon_list
     # There must now be tw polygons to average
-    union_full = polygon_list[0].union(polygon_list[1])
+    union_all = polygon_list[0].union(polygon_list[1])
     # If there are any other
     if len(polygon_list) > 2:
         for i in range(2, len(polygon_list)):
-            union_full = union_full.union(polygon_list[i])
-    if isinstance(union_full, shapely.geometry.collection.GeometryCollection):
-        for geo in union_full.geoms:
+            union_all = union_all.union(polygon_list[i])
+    if isinstance(union_all, shapely.geometry.collection.GeometryCollection):
+        for geo in union_all.geoms:
             if isinstance(geo, shapely.geometry.polygon.Polygon):
-                union_full = geo
-    return union_full
+                union_all = geo
+    return union_all
 
 
 @reducer_wrapper(

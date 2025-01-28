@@ -1,7 +1,8 @@
 '''
-Free-hand Draw Extractor
--------------------
-This module provides a function to extract free-hand drawn lines from panoptes annotations.
+Polygon/Freehand Tool Extractor
+-------------------------------
+This module provides a function to extract polygon andfreehand drawn lines
+from panoptes annotations.
 '''
 from collections import OrderedDict
 import copy
@@ -14,7 +15,7 @@ from .tool_wrapper import tool_wrapper
 @tool_wrapper
 @subtask_wrapper
 def polygon_extractor(classification, gold_standard=False, **kwargs):
-    '''Extact rectangle data from annotation
+    '''Extact polygon/freehand data from annotation
 
     Parameters
     ----------
@@ -28,7 +29,8 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
         A dictionary containing one key per frame. Each frame contains
         the `x`, `y`, values for the tool used in
         the polygon.  These are lists that each contain list of the x and
-        y values for each drawn polygon.
+        y values for each drawn polygon. The UTC time when the annotation was
+        made and the if the data is gold standard is also extracted.
     '''
     blank_frame = OrderedDict([
         ('points', OrderedDict([('x', []), ('y', [])]))

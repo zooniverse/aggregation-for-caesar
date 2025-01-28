@@ -52,6 +52,11 @@ Reducers
 
 ----
 
+.. automodule:: panoptes_aggregation.reducers.polygon_reducer
+  :members:
+
+----
+
 .. automodule:: panoptes_aggregation.reducers.survey_reducer
   :members:
 
