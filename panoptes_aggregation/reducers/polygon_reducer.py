@@ -25,7 +25,7 @@ with warnings.catch_warnings():
 DEFAULTS = {
     'min_samples': {'default': 2, 'type': int},
     'eps': {'default': 0.5, 'type': float},
-    'average_type': {'default': 'union', 'type': str}
+    'average_type': {'default': 'last', 'type': str}
 }
 
 # override the built-in tokenize
@@ -108,7 +108,7 @@ def polygon_reducer(data_by_frame, **kwargs_dbscan):
 
         A custom "IoU" metric type is used.
     '''
-    average_type = kwargs_dbscan.pop('average_type', 'union')
+    average_type = kwargs_dbscan.pop('average_type', 'last')
     if average_type == "intersection":
         avg = cluster_average_intersection
     elif average_type == "last":
