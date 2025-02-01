@@ -49,8 +49,7 @@ classification = {
                 }
             ]
         }
-    ],
-    'metadata': {'finished_at': '2025-01-21T10:46:20.831Z'}
+    ]
 }
 
 expected = {
@@ -105,7 +104,7 @@ expected = {
                          2.2716019279274726]
                 ]
             },
-            'time': '2025-01-21T10:46:20.831Z', 'gold_standard': False
+            'gold_standard': False
         }
 }
 

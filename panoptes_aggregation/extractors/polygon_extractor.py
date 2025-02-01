@@ -29,15 +29,13 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
         A dictionary containing one key per frame. Each frame contains
         the `x`, `y`, values for the tool used in
         the polygon.  These are lists that each contain list of the x and
-        y values for each drawn polygon. The UTC time when the annotation was
-        made and the if the data is gold standard is also extracted.
+        y values for each drawn polygon, and the if the data is gold standard.
     '''
     blank_frame = OrderedDict([
         ('points', OrderedDict([('x', []), ('y', [])]))
     ])
     extract = OrderedDict()
     for idx, annotation in enumerate(classification['annotations']):
-        time = classification['metadata']['finished_at']
         for vdx, value in enumerate(annotation['value']):
             frame = 'frame{0}'.format(value['frame'])
             extract.setdefault(frame, copy.deepcopy(blank_frame))
@@ -49,6 +47,5 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
                 y.append(point["y"])
             extract[frame]['points']['x'].append(x)
             extract[frame]['points']['y'].append(y)
-            extract[frame]['time'] = time
             extract[frame]['gold_standard'] = gold_standard
     return extract

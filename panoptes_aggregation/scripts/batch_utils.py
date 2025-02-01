@@ -355,7 +355,8 @@ def reduce_subject(
         classifications = classifications.groupby(['user_name'], group_keys=False).apply(FILTER_TYPES[filter])
     data = [unflatten_data(c) for cdx, c in classifications.iterrows()]
     user_ids = [c.user_id for cdx, c in classifications.iterrows()]
-    reduction = reducers.reducers[reducer_name](data, user_id=user_ids, **keywords)
+    created_at = [c.created_at for cdx, c in classifications.iterrows()]
+    reduction = reducers.reducers[reducer_name](data, user_id=user_ids, created_at=created_at, **keywords)
     if isinstance(reduction, list):
         for r in reduction:
             reduced_data_list.append(OrderedDict([

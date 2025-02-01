@@ -13,8 +13,6 @@ from .polygon_reducer_utils import IoU_metric_polygon, cluster_average_last, clu
 from .text_utils import tokenize
 import warnings
 import shapely
-import datetime
-import time as time_module
 
 with warnings.catch_warnings():
     # collatex is a bit old, we can safely ignore this message as the display
@@ -49,7 +47,7 @@ def process_data(data_list):
         mapping to the data held in `data`.  The first column contains row indices
         and the second column is an index assigned to each user. `data` is a list of
         dictionaries of the form `{'polygon': shapely.geometry.polygon.Polygon,
-        'time': float, 'gold_standard': bool}`. The time uses Unix timestamps.
+        'gold_standard': bool}`.
     '''
     data_by_frame = {}
     row_ct = {}
@@ -59,14 +57,11 @@ def process_data(data_list):
             data_by_frame.setdefault(frame, {'X': [], 'data': []})
             row_ct.setdefault(frame, 0)
             gs = value.get('gold_standard', False)
-            # Convert the UTC fomrta time string into a unix time stamp
-            time = time_module.mktime(datetime.datetime.strptime(value.get('time'), "%Y-%m-%dT%X.%fZ").timetuple())
             for x, y in zip(value['points']['x'], value['points']['y']):
                 xy = np.array([x, y]).T
                 # Find the timestamp
                 data_by_frame[frame]['data'].append({
                     'polygon': shapely.Polygon(xy),
-                    'time': time,
                     'gold_standard': gs
                 })
                 data_by_frame[frame]['X'].append([row_ct[frame], user_ct])
@@ -78,6 +73,7 @@ def process_data(data_list):
     process_data=process_data,
     defaults_data=DEFAULTS,
     user_id=False,
+    created_at=True,
     output_kwargs=True
 )
 def polygon_reducer(data_by_frame, **kwargs_dbscan):
@@ -94,7 +90,8 @@ def polygon_reducer(data_by_frame, **kwargs_dbscan):
         the last polygon to be annotated in the cluster.
 
     kwargs :
-        `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
+        * `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
+        * `created_at` : A list of when the classifcations were made.
 
     Returns
     -------
@@ -108,6 +105,7 @@ def polygon_reducer(data_by_frame, **kwargs_dbscan):
 
         A custom "IoU" metric type is used.
     '''
+    created_at = np.array(kwargs_dbscan.pop('created_at'))
     average_type = kwargs_dbscan.pop('average_type', 'last')
     if average_type == "intersection":
         avg = cluster_average_intersection
@@ -140,6 +138,9 @@ def polygon_reducer(data_by_frame, **kwargs_dbscan):
             labels_array = db.labels_
             # Update the cluster labels of polygons
             clusters[frame]['cluster_labels'] = labels_array.tolist()
+            # Create a list of when the different polygons were created, assuming the order X matches the order of created_at_array.
+            # The cteaed_at list originally provided is when all of the classifications per user were added
+            created_at_full_array = np.array([created_at[int(user_id)] for user_id in X[:, 1]])
             # Looping through each cluster
             for label in set(labels_array):
                 if label > -1:
@@ -147,7 +148,7 @@ def polygon_reducer(data_by_frame, **kwargs_dbscan):
                     # number of points in the cluster
                     clusters[frame].setdefault('clusters_count', []).append(int(cdx.sum()))
                     # Now find the "average" of this cluster, using the provided average choice
-                    cluster_average = avg(data[cdx])
+                    cluster_average = avg(data[cdx], created_at=created_at_full_array[cdx])
                     # Find the x and y values of this polygon
                     average_polygon = np.array(list(cluster_average.boundary.coords))
                     # Add to the dictionary

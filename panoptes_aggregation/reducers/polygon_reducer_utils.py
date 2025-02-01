@@ -6,6 +6,8 @@ for :mod:`panoptes_aggregation.reducers.polygon_reducer`.
 '''
 import numpy as np
 import shapely
+import datetime
+from pandas._libs.tslibs.timestamps import Timestamp as pdtimestamp
 
 
 def polygon_gap_ratio(polygon_xy):
@@ -72,39 +74,60 @@ def IoU_metric_polygon(a, b, data_in=[]):
     return 1 - intersection / union
 
 
-def cluster_average_last(data):
+def cluster_average_last(data, **kwargs):
     '''Find the last created polygon of provided cluster data
 
     Parameters
     ----------
     data : list
         A list of dicts that take the form
-        {`polygon`: shapely.geometry.polygon.Polygon, 'time': float, 'gold_standard', bool}
+        {`polygon`: shapely.geometry.polygon.Polygon, 'gold_standard', bool}
         There is one element in this list for each classification made. The
         time should be a Unix timestamp float.
+    kwargs :
+        * `created_at` : A list of when the classifcations was made.
 
     Returns
     -------
-    ilast : shapely.geometry.polygon.Polygon
+    last : shapely.geometry.polygon.Polygon
         The last created shaeply polygon in the cluster.
     '''
-    times = [data[i]['time'] for i in range(len(data))]
-    time_order = np.argsort(times)
+    created_at = np.array(kwargs.pop('created_at'))
+    # Make sure `cteared_at` is a list or array
+    if not (isinstance(created_at, list) or isinstance(created_at, np.ndarray)):
+        raise ValueError('`created_at` must be a list or array')
+
+    # Change to datatime format
+    created_at_list = []
+    if isinstance(created_at[0], str):  # If in original format
+        for time in created_at:
+            created_at_list.append(datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S UTC"))
+    elif isinstance(created_at[0], pdtimestamp):
+        for time in created_at:
+            created_at_list.append(time.to_pydatetime())
+    elif isinstance(created_at[0], datetime.datetime):  # If already correct
+        created_at_list = created_at
+    else:
+        raise ValueError('`created_at` nees to contain either UTC strings, pandas timestamps or datetime objects')
+    # sort in time order
+    order_logic = np.argsort(created_at_list)
     # Select the last polygon to be created
-    last = data[time_order[-1]]['polygon']
+    last = data[order_logic[-1]]['polygon']
     return last
 
 
-def cluster_average_intersection(data):
+def cluster_average_intersection(data, **kwargs):
     '''Find the intersection of provided cluster data
 
     Parameters
     ----------
     data : list
         A list of dicts that take the form
-        {`polygon`: shapely.geometry.polygon.Polygon, 'time': float, 'gold_standard', bool}
-        There is one element in this list for each classification made. The
-        time should be a Unix timestamp float.
+        {`polygon`: shapely.geometry.polygon.Polygon, 'gold_standard', bool}
+        There is one element in this list for each classification made.
+    kwargs :
+        * `created_at` : A list of when the classifcations was made.
+        Not used in this average.
 
     Returns
     -------
@@ -128,16 +151,18 @@ def cluster_average_intersection(data):
     return intersection_all
 
 
-def cluster_average_union(data):
+def cluster_average_union(data, **kwargs):
     '''Find the union of provided cluster data
 
     Parameters
     ----------
     data : list
         A list of dicts that take the form
-        {`polygon`: shapely.geometry.polygon.Polygon, 'time': float, 'gold_standard', bool}
-        There is one element in this list for each classification made. The
-        time should be a Unix timestamp float.
+        {`polygon`: shapely.geometry.polygon.Polygon, 'gold_standard', bool}
+        There is one element in this list for each classification made.
+    kwargs :
+        * `created_at` : A list when the classifcation was made.
+        Not used in this average.
 
     Returns
     -------
