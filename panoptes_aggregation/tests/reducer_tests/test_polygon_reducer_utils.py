@@ -40,6 +40,16 @@ class TestIoUMetric(unittest.TestCase):
 
     def test_IoU_metric_polygon_same_user(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+        square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0], [-0.5, 0.2]]))
+        a = [0, 0]
+        b = [1, 1]
+        data_in = [{'polygon': square1}, {'polygon': square2}]
+        expected = 1.
+        result = utils.IoU_metric_polygon(a, b, data_in=data_in)
+        self.assertEqual(result, expected)
+
+    def test_IoU_metric_polygon_self_intersection(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
         square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
         a = [0, 0]
         b = [1, 0]

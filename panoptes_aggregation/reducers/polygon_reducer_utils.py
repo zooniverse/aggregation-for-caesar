@@ -61,9 +61,12 @@ def IoU_metric_polygon(a, b, data_in=[]):
     geo1 = data_in[int(a[0])]['polygon']
     geo2 = data_in[int(b[0])]['polygon']
 
-    intersection = 0
-    if geo1.intersects(geo2):
+    # The two shapes need to intersect and be simple for the intersection area
+    # to be found
+    if geo1.intersects(geo2) and (shapely.is_simple(geo1) and shapely.is_simple(geo2)):
         intersection = geo1.intersection(geo2).area
+    else:  # No intersection, so distance is 1
+        return 1
 
     union = geo1.union(geo2).area
 

@@ -54,6 +54,9 @@ def process_data(data_list):
     user_ct = 0
     for user_ct, data in enumerate(data_list):
         for frame, value in data.items():
+            # If the data also contains the classifer version
+            if frame == 'classifier_version':
+                continue
             data_by_frame.setdefault(frame, {'X': [], 'data': []})
             row_ct.setdefault(frame, 0)
             gs = value.get('gold_standard', False)

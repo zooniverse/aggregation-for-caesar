@@ -39,12 +39,20 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
         for vdx, value in enumerate(annotation['value']):
             frame = 'frame{0}'.format(value['frame'])
             extract.setdefault(frame, copy.deepcopy(blank_frame))
-            points = value["points"]
-            x = []
-            y = []
-            for point in points:
-                x.append(point["x"])
-                y.append(point["y"])
+            # If in the old polygon tool format
+            if 'points' in value.keys():
+                x = []
+                y = []
+                points = value["points"]
+                for point in points:
+                    x.append(point["x"])
+                    y.append(point["y"])
+            elif 'pathX' in value.keys():  # If data in new format
+                x = value["pathX"]
+                y = value["pathY"]
+            else:
+                raise ValueError('Unknwon data format for polygon')
+
             extract[frame]['points']['x'].append(x)
             extract[frame]['points']['y'].append(y)
             extract[frame]['gold_standard'] = gold_standard
