@@ -7,9 +7,10 @@ for :mod:`panoptes_aggregation.reducers.polygon_reducer`.
 import numpy as np
 import shapely
 import datetime
+from scipy.linalg import issymmetric
 from pandas._libs.tslibs.timestamps import Timestamp as pdtimestamp
 
-
+# Might use later
 def polygon_gap_ratio(polygon_xy):
     polygon_length = np.sum([((polygon_xy[i+1, 0] - polygon_xy[i, 0])**2 +
                               (polygon_xy[i+1, 1] - polygon_xy[i, 1])**2)**0.5
@@ -77,6 +78,78 @@ def IoU_metric_polygon(a, b, data_in=[]):
     return 1 - intersection / union
 
 
+def IoU_distance_matrix_of_cluster(cdx, X, data):
+    '''Find distance matrix using `IoU_metric_polygon` for a cluster.
+
+    The `cdx` argument is used to define the cluster.
+
+    Parameters
+    ----------
+    cdx : numpy.ndarray
+        A 1D array of booleans, corresponding to the polygons in `X` and `data`
+        which are in the cluster. `True` if in the cluster, `False` otherwise.
+    X : numpy.ndarray
+        A 2D array with each row mapping to the data held in `data`. The first
+        column contains row indices and the second column is an index assigned
+        to each user.
+    data_cluster : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'time': float, 'gold_standard', bool}
+        There is one element in this list for each member of the cluster.
+
+    Returns
+    -------
+    distances_matrix : numpy.ndarray
+        A symmetric-square array, with the off-diagonal elements containing the
+        IoU distance between the cluster members. The diagonal elements are all
+        zero.
+    '''
+    cluster_X = X[cdx]
+    num_in_cluster = np.shape(cluster_X)[0]
+    distances_matrix = np.zeros((num_in_cluster, num_in_cluster))
+    for i in range(num_in_cluster):
+        a = cluster_X[i]
+        for j in range(i+1, num_in_cluster):
+            b = cluster_X[j]
+            distance = IoU_metric_polygon(a, b, data_in=data)
+            distances_matrix[i, j] = distance
+            distances_matrix[j, i] = distance
+    return distances_matrix
+
+
+def IoU_cluster_mean_distance(distances_matrix):
+    '''The mean `IoU_metric_polygon` distance between the polygons of the
+    cluster 
+
+    Parameters
+    ----------
+    distances_matrix : numpy.ndarray
+        A symmetric-square array, with the off-diagonal elements containing the
+        `IoU_metric_polygon` distance between the cluster members. The diagonal
+        elements are all zero. This is found using `IoU_distance_matrix_of_cluster`.
+
+    Returns
+    -------
+    distances_mean : float
+        The mean of the `IoU_metric_polygon` defined distance between the
+        polygons of the cluster.
+    '''
+    # first check if it is symmetric
+    if not issymmetric(distances_matrix):
+        raise ValueError('`distances_matrix` must be a symmetric-square array')
+    # Check the diagonals are all 0, as the distance between an object and its self is always zero
+    if np.sum(np.diagonal(distances_matrix)) != 0:
+        raise ValueError('`distances_matrix` must zero diagonal elements, as distance between the an object and itself is zero')
+
+    # Find the unigue distances from the off diagonal components
+    unique_distances = np.array([distances_matrix[i,j] for i in range(len(distances_matrix)) for j in range(i+1, len(distances_matrix))])
+    # Set any infities to 1, otherwise the mean cannot be calculated
+    unique_distances[unique_distances==np.inf] = 1
+    # As IoU distances are akways positive, this mean will always be positive
+    distances_mean = np.mean(unique_distances)
+    return distances_mean
+
+
 def cluster_average_last(data, **kwargs):
     '''Find the last created polygon of provided cluster data
 
@@ -89,6 +162,7 @@ def cluster_average_last(data, **kwargs):
         time should be a Unix timestamp float.
     kwargs :
         * `created_at` : A list of when the classifcations was made.
+
 
     Returns
     -------
@@ -129,8 +203,8 @@ def cluster_average_intersection(data, **kwargs):
         {`polygon`: shapely.geometry.polygon.Polygon, 'gold_standard', bool}
         There is one element in this list for each classification made.
     kwargs :
-        * `created_at` : A list of when the classifcations was made.
-        Not used in this average.
+        * `created_at` : A list of when the classifcations was made. Not used in this average.
+
 
     Returns
     -------
@@ -164,8 +238,7 @@ def cluster_average_union(data, **kwargs):
         {`polygon`: shapely.geometry.polygon.Polygon, 'gold_standard', bool}
         There is one element in this list for each classification made.
     kwargs :
-        * `created_at` : A list when the classifcation was made.
-        Not used in this average.
+        * `created_at` : A list when the classifcation was made. Not used in this average.
 
     Returns
     -------

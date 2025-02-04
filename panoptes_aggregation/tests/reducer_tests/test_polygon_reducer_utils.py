@@ -48,6 +48,44 @@ class TestIoUMetric(unittest.TestCase):
         result = utils.IoU_metric_polygon(a, b, data_in=data_in)
         self.assertEqual(result, expected)
 
+    def test_IoU_distance_matrix_of_cluster(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+        square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
+        square3 = shapely.Polygon(np.array([[0, 2], [0, 3], [1, 3], [1, 2]]))
+        square4 = shapely.Polygon(np.array([[-2.0, 0.5], [-1., 0.5], [-1., 1.5], [-2.0, 1.5]]))
+        square5 = shapely.Polygon(np.array([[0.0, 0.5], [1., 0.5], [1., 1.5], [0.0, 1.5]]))
+        
+        data = [{'polygon': square1},
+                {'polygon': square2},
+                {'polygon': square3},
+                {'polygon': square4},
+                {'polygon': square5}]
+        X = np.array([[0, 0], [1,1], [2,2], [3,3], [4,4]])
+        cdx = np.array([True, True, False, False, True])
+        result = utils.IoU_distance_matrix_of_cluster(cdx, X, data)
+        expected = np.array([[0., 0.66666667, 0.66666667],
+                            [0.66666667, 0., 0.85714286],
+                            [0.66666667, 0.85714286, 0.]])
+        differance = np.abs(result - expected).flatten()
+        # Want it to be within this error
+        self.assertTrue(all(differance<0.001))
+
+    def test_IoU_cluster_mean_distance(self):
+        distances_matrix = np.array([[0., 0.66666667, 0.66666667],
+                            [0.66666667, 0., 0.85714286],
+                            [0.66666667, 0.85714286, 0.]])
+        result = utils.IoU_cluster_mean_distance(distances_matrix)
+        expected = 0.7301587333333334
+        self.assertEqual(result, expected)
+
+    def test_IoU_cluster_mean_distance_same_user(self):
+        distances_matrix = np.array([[0., 0.66666667, 0.66666667],
+                            [0.66666667, 0., np.inf],
+                            [0.66666667, np.inf, 0.]])
+        result = utils.IoU_cluster_mean_distance(distances_matrix)
+        expected = 0.7777777800000001
+        self.assertEqual(result, expected)
+
     def test_IoU_metric_polygon_self_intersection(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
         square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))

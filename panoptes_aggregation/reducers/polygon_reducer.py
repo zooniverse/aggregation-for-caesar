@@ -9,7 +9,9 @@ from sklearn.cluster import DBSCAN
 import numpy as np
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
-from .polygon_reducer_utils import IoU_metric_polygon, cluster_average_last, cluster_average_intersection, cluster_average_union
+from .polygon_reducer_utils import IoU_metric_polygon, cluster_average_last,\
+    cluster_average_intersection, cluster_average_union,\
+    IoU_distance_matrix_of_cluster, IoU_cluster_mean_distance
 from .text_utils import tokenize
 import warnings
 import shapely
@@ -157,4 +159,8 @@ def polygon_reducer(data_by_frame, **kwargs_dbscan):
                     # Add to the dictionary
                     clusters[frame].setdefault('clusters_x', []).append(average_polygon[:, 0].tolist())
                     clusters[frame].setdefault('clusters_y', []).append(average_polygon[:, 1].tolist())
+                    # Find the consensus of this cluster and add its data
+                    distances_matrix = IoU_distance_matrix_of_cluster(cdx, X, data)
+                    consensus = 1 - IoU_cluster_mean_distance(distances_matrix)
+                    clusters[frame].setdefault('consensus', []).append(consensus)
     return clusters
