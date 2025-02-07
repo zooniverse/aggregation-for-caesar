@@ -11,7 +11,8 @@ from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .polygon_reducer_utils import IoU_metric_polygon, cluster_average_last,\
     cluster_average_intersection, cluster_average_union,\
-    IoU_distance_matrix_of_cluster, IoU_cluster_mean_distance
+    cluster_average_median, IoU_distance_matrix_of_cluster,\
+    IoU_cluster_mean_distance
 from .text_utils import tokenize
 import warnings
 import shapely
@@ -118,6 +119,8 @@ def polygon_reducer(data_by_frame, **kwargs_dbscan):
         avg = cluster_average_last
     elif average_type == "union":
         avg = cluster_average_union
+    elif average_type == "median":
+        avg = cluster_average_median
     else:
         raise ValueError("`average_type` not valid. Should be either `intersection`, `union` or `last`.")
 
@@ -150,17 +153,21 @@ def polygon_reducer(data_by_frame, **kwargs_dbscan):
             for label in set(labels_array):
                 if label > -1:
                     cdx = labels_array == label
+                    kwargs_cluster = {}
+                    kwargs_cluster['created_at'] = created_at_full_array[cdx]
                     # number of points in the cluster
                     clusters[frame].setdefault('clusters_count', []).append(int(cdx.sum()))
+                    # The distance matrix is used to find the consensus and is sometimes used in the average
+                    distance_matrix = IoU_distance_matrix_of_cluster(cdx, X, data)
+                    kwargs_cluster['distance_matrix'] = distance_matrix
+                    # Find the consensus of this cluster and add its data
+                    consensus = 1 - IoU_cluster_mean_distance(distance_matrix)
                     # Now find the "average" of this cluster, using the provided average choice
-                    cluster_average = avg(data[cdx], created_at=created_at_full_array[cdx])
+                    cluster_average = avg(data[cdx], **kwargs_cluster)
                     # Find the x and y values of this polygon
                     average_polygon = np.array(list(cluster_average.boundary.coords))
                     # Add to the dictionary
                     clusters[frame].setdefault('clusters_x', []).append(average_polygon[:, 0].tolist())
                     clusters[frame].setdefault('clusters_y', []).append(average_polygon[:, 1].tolist())
-                    # Find the consensus of this cluster and add its data
-                    distances_matrix = IoU_distance_matrix_of_cluster(cdx, X, data)
-                    consensus = 1 - IoU_cluster_mean_distance(distances_matrix)
                     clusters[frame].setdefault('consensus', []).append(consensus)
     return clusters

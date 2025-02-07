@@ -96,6 +96,7 @@ class TestIoUMetric(unittest.TestCase):
         result = utils.IoU_metric_polygon(a, b, data_in=data_in)
         self.assertEqual(result, expected)
 
+
     def test_cluster_average_last_str_format(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
         square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
@@ -137,8 +138,42 @@ class TestIoUMetric(unittest.TestCase):
         created_at_list = [datetime.datetime.strptime('2025-01-21 10:46:23', "%Y-%m-%d %H:%M:%S"),
                            datetime.datetime.strptime('2025-01-21 10:46:21', "%Y-%m-%d %H:%M:%S"),
                            datetime.datetime.strptime('2025-01-21 10:46:22', "%Y-%m-%d %H:%M:%S")]
+        kwargs = {'created_at': created_at_list}
         expected = square1
-        result = utils.cluster_average_last(data, created_at=created_at_list)
+        result = utils.cluster_average_last(data, **kwargs)
+        self.assertEqual(result, expected)
+
+    def test_cluster_average_median(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+        square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
+        square3 = shapely.Polygon(np.array([[0.0, 0.5], [1., 0.5], [1., 1.5], [0.0, 1.5]]))
+
+        data = [{'polygon': square1},
+                {'polygon': square2},
+                {'polygon': square3}]
+        distance_matrix =  np.array([[0., 0.66666667, 0.66666667],
+                            [0.66666667, 0., 0.85714286],
+                            [0.66666667, 0.85714286, 0.]])
+        kwargs = {'distance_matrix': distance_matrix}
+        expected = square1
+        result = utils.cluster_average_median(data, **kwargs)
+        self.assertEqual(result, expected)
+
+
+    def test_cluster_average_median_same_user(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+        square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
+        square3 = shapely.Polygon(np.array([[0.0, 0.5], [1., 0.5], [1., 1.5], [0.0, 1.5]]))
+
+        data = [{'polygon': square1},
+                {'polygon': square2},
+                {'polygon': square3}]
+        distance_matrix =  np.array([[0., np.inf, 0.66666667],
+                            [ np.inf, 0., 0.85714286],
+                            [0.66666667, 0.85714286, 0.]])
+        kwargs = {'distance_matrix': distance_matrix}
+        expected = square3
+        result = utils.cluster_average_median(data, **kwargs)
         self.assertEqual(result, expected)
 
     def test_cluster_average_intersection(self):
@@ -152,8 +187,9 @@ class TestIoUMetric(unittest.TestCase):
         created_at_list = ['2025-01-21 10:46:23 UTC',
                            '2025-01-21 10:46:21 UTC',
                            '2025-01-21 10:46:22 UTC']
+        kwargs = {'created_at': created_at_list}
         expected = shapely.Polygon(np.array([[0.5, 0.5], [1.0, 0.5], [1.0, 1.0], [0.5, 1.0], [0.5, 0.5]]))
-        result = utils.cluster_average_intersection(data, created_at=created_at_list)
+        result = utils.cluster_average_intersection(data, **kwargs)
         self.assertTrue(shapely.equals(result, expected))
 
     def test_cluster_average_intersection_one_object(self):
@@ -161,8 +197,9 @@ class TestIoUMetric(unittest.TestCase):
 
         data = [{'polygon': square1, 'time': 100.3}]
         created_at_list = ['2025-01-21 10:46:23 UTC']
+        kwargs = {'created_at': created_at_list}
         expected = square1
-        result = utils.cluster_average_intersection(data, created_at=created_at_list)
+        result = utils.cluster_average_intersection(data, **kwargs)
         self.assertTrue(shapely.equals(result, expected))
 
     def test_cluster_average_union(self):
@@ -176,8 +213,9 @@ class TestIoUMetric(unittest.TestCase):
         created_at_list = ['2025-01-21 10:46:23 UTC',
                            '2025-01-21 10:46:21 UTC',
                            '2025-01-21 10:46:22 UTC']
+        kwargs = {'created_at': created_at_list}
         expected = shapely.Polygon(np.array([[0.0, 0.0], [1.5, 0.0], [1.5, 1.0], [1.0, 1.0], [1.0, 1.5], [0.0, 1.5]]))
-        result = utils.cluster_average_union(data, created_at=created_at_list)
+        result = utils.cluster_average_union(data, **kwargs)
         self.assertTrue(shapely.equals(result, expected))
 
     def test_cluster_average_union_one_object(self):
@@ -185,6 +223,7 @@ class TestIoUMetric(unittest.TestCase):
 
         data = [{'polygon': square1}]
         created_at_list = ['2025-01-21 10:46:23 UTC']
+        kwargs = {'created_at': created_at_list}
         expected = square1
-        result = utils.cluster_average_union(data, created_at=created_at_list)
+        result = utils.cluster_average_union(data, **kwargs)
         self.assertTrue(shapely.equals(result, expected))

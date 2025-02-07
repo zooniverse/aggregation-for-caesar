@@ -51,7 +51,7 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
                 x = value["pathX"]
                 y = value["pathY"]
             else:
-                raise ValueError('Unknwon data format for polygon')
+                raise ValueError('Unknown data format for polygon')
 
             extract[frame]['points']['x'].append(x)
             extract[frame]['points']['y'].append(y)

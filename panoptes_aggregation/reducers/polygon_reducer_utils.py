@@ -139,11 +139,11 @@ def IoU_cluster_mean_distance(distances_matrix):
         raise ValueError('`distances_matrix` must be a symmetric-square array')
     # Check the diagonals are all 0, as the distance between an object and its self is always zero
     if np.sum(np.diagonal(distances_matrix)) != 0:
-        raise ValueError('`distances_matrix` must zero diagonal elements, as distance between the an object and itself is zero')
+        raise ValueError('`distances_matrix` must have zero diagonal elements, as distance between the object and itself is zero')
 
     # Find the unigue distances from the off diagonal components
     unique_distances = np.array([distances_matrix[i,j] for i in range(len(distances_matrix)) for j in range(i+1, len(distances_matrix))])
-    # Set any infities to 1, otherwise the mean cannot be calculated
+    # Set any infinities to 1, otherwise the mean cannot be calculated
     unique_distances[unique_distances==np.inf] = 1
     # As IoU distances are akways positive, this mean will always be positive
     distances_mean = np.mean(unique_distances)
@@ -162,12 +162,15 @@ def cluster_average_last(data, **kwargs):
         time should be a Unix timestamp float.
     kwargs :
         * `created_at` : A list of when the classifcations was made.
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the
+        `IoU_metric_polygon` distance between the cluster members. The diagonal
+        elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
 
 
     Returns
     -------
     last : shapely.geometry.polygon.Polygon
-        The last created shaeply polygon in the cluster.
+        The last created shapely polygon in the cluster.
     '''
     created_at = np.array(kwargs.pop('created_at'))
     # Make sure `cteared_at` is a list or array
@@ -185,12 +188,50 @@ def cluster_average_last(data, **kwargs):
     elif isinstance(created_at[0], datetime.datetime):  # If already correct
         created_at_list = created_at
     else:
-        raise ValueError('`created_at` nees to contain either UTC strings, pandas timestamps or datetime objects')
+        raise ValueError('`created_at` needs to contain either UTC strings, pandas timestamps or datetime objects')
     # sort in time order
     order_logic = np.argsort(created_at_list)
     # Select the last polygon to be created
     last = data[order_logic[-1]]['polygon']
     return last
+
+
+def cluster_average_median(data, **kwargs):
+    '''Find the 'median' of provided cluster data,
+    i.e. the polygon of the cluster with the minimum total
+    distance to the other polygons.
+
+    Parameters
+    ----------
+    data : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'gold_standard', bool}
+        There is one element in this list for each classification made.
+    kwargs :
+        * `created_at` : A list when the classifcation was made. Not used in this average.
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the
+        `IoU_metric_polygon` distance between the cluster members. The diagonal
+        elements are all zero. This is found using `IoU_distance_matrix_of_cluster`.
+
+    Returns
+    -------
+    median : shapely.geometry.polygon.Polygon
+        The 'median' polygon in the cluster.
+    '''
+    distance_matrix = kwargs.pop('distance_matrix')
+    # first check if it is symmetric
+    if not issymmetric(distance_matrix):
+        raise ValueError('`distances_matrix` must be a symmetric-square array')
+    # Check the diagonals are all 0, as the distance between an object and its self is always zero
+    if np.sum(np.diagonal(distance_matrix)) != 0:
+        raise ValueError('`distances_matrix` must have zero diagonal elements, as distance between the object and itself is zero')
+    # Set infinities to 1 to avoid user self clustering
+    distance_matrix[distance_matrix==np.inf] = 1
+    # Find the total mutual distance to each polygon
+    sums_of_distances = np.sum(distance_matrix, axis=0)
+    median_polygon_index = np.argmin(sums_of_distances)
+    median_polygon = data[median_polygon_index]['polygon']
+    return median_polygon
 
 
 def cluster_average_intersection(data, **kwargs):
@@ -204,12 +245,14 @@ def cluster_average_intersection(data, **kwargs):
         There is one element in this list for each classification made.
     kwargs :
         * `created_at` : A list of when the classifcations was made. Not used in this average.
-
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the
+        `IoU_metric_polygon` distance between the cluster members. The diagonal
+        elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
 
     Returns
     -------
     intersection_all : shapely.geometry.polygon.Polygon
-        The shapely intersection of the shaeply polygons in the cluster.
+        The shapely intersection of the shapely polygons in the cluster.
     '''
     polygon_list = [data[i]['polygon'] for i in range(len(data))]
     # Just one object, so return it as it is its own average
@@ -239,11 +282,14 @@ def cluster_average_union(data, **kwargs):
         There is one element in this list for each classification made.
     kwargs :
         * `created_at` : A list when the classifcation was made. Not used in this average.
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the
+        `IoU_metric_polygon` distance between the cluster members. The diagonal
+        elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
 
     Returns
     -------
     union_all : shapely.geometry.polygon.Polygon
-        The shapely union of the shaeply polygons in the cluster.
+        The shapely union of the shapely polygons in the cluster.
     '''
     polygon_list = [data[i]['polygon'] for i in range(len(data))]
     # Just one object, so return it as it is its own average
