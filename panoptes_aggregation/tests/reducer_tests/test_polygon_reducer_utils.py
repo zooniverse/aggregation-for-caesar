@@ -38,13 +38,23 @@ class TestIoUMetric(unittest.TestCase):
         result = utils.IoU_metric_polygon(a, b, data_in=data_in)
         self.assertEqual(result, expected)
 
-    def test_IoU_metric_polygon_same_user(self):
+    def test_IoU_metric_polygon_self_intersection(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
         square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0], [-0.5, 0.2]]))
         a = [0, 0]
         b = [1, 1]
         data_in = [{'polygon': square1}, {'polygon': square2}]
         expected = 1.
+        result = utils.IoU_metric_polygon(a, b, data_in=data_in)
+        self.assertEqual(result, expected)
+
+    def test_IoU_metric_polygon_same_user(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+        square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
+        a = [0, 0]
+        b = [1, 0]
+        data_in = [{'polygon': square1}, {'polygon': square2}]
+        expected = np.inf
         result = utils.IoU_metric_polygon(a, b, data_in=data_in)
         self.assertEqual(result, expected)
 
@@ -76,7 +86,8 @@ class TestIoUMetric(unittest.TestCase):
                             [0.66666667, 0.85714286, 0.]])
         result = utils.IoU_cluster_mean_distance(distances_matrix)
         expected = 0.7301587333333334
-        self.assertEqual(result, expected)
+        differance = np.abs(result - expected)
+        self.assertTrue(differance<0.00001)
 
     def test_IoU_cluster_mean_distance_same_user(self):
         distances_matrix = np.array([[0., 0.66666667, 0.66666667],
@@ -84,18 +95,8 @@ class TestIoUMetric(unittest.TestCase):
                             [0.66666667, np.inf, 0.]])
         result = utils.IoU_cluster_mean_distance(distances_matrix)
         expected = 0.7777777800000001
-        self.assertEqual(result, expected)
-
-    def test_IoU_metric_polygon_self_intersection(self):
-        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
-        square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
-        a = [0, 0]
-        b = [1, 0]
-        data_in = [{'polygon': square1}, {'polygon': square2}]
-        expected = np.inf
-        result = utils.IoU_metric_polygon(a, b, data_in=data_in)
-        self.assertEqual(result, expected)
-
+        differance = np.abs(result - expected)
+        self.assertTrue(differance<0.00001)
 
     def test_cluster_average_last_str_format(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
