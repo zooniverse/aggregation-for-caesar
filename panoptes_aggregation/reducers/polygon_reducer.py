@@ -65,13 +65,32 @@ def process_data(data_list):
             gs = value.get('gold_standard', False)
             for x, y in zip(value['points']['x'], value['points']['y']):
                 xy = np.array([x, y]).T
-                # Find the timestamp
-                data_by_frame[frame]['data'].append({
-                    'polygon': shapely.Polygon(xy),
-                    'gold_standard': gs
-                })
-                data_by_frame[frame]['X'].append([row_ct[frame], user_ct])
-                row_ct[frame] += 1
+                # Make into shapely object
+                polygon = shapely.Polygon(xy)
+                # If not simple polygon, use buffer to try to make simple
+                if not shapely.is_simple(polygon):
+                    polygon = polygon.buffer(0)
+                # If simply polygon, add it
+                if isinstance(polygon, shapely.geometry.polygon.Polygon):
+                    data_by_frame[frame]['data'].append({
+                        'polygon': polygon,
+                        'gold_standard': gs
+                    })
+                    data_by_frame[frame]['X'].append([row_ct[frame], user_ct])
+                    row_ct[frame] += 1
+                # If part of multipolygon collection, add each component
+                elif isinstance(polygon, shapely.geometry.collection.GeometryCollection)\
+                    or isinstance(polygon, shapely.geometry.multipolygon.MultiPolygon):
+                    for p in polygon.geoms:
+                        data_by_frame[frame]['data'].append({
+                            'polygon': p,
+                            'gold_standard': gs
+                        })
+                        data_by_frame[frame]['X'].append([row_ct[frame], user_ct])
+                        row_ct[frame] += 1
+                # Else error
+                else:
+                    raise ValueError('Provided data could not be made into shapely polygon data type')
     return data_by_frame
 
 
@@ -83,8 +102,9 @@ def process_data(data_list):
     output_kwargs=True
 )
 def polygon_reducer(data_by_frame, **kwargs_dbscan):
-    '''Cluster a polygon or freehand tool using DBSCAN
+    '''Cluster a polygon or freehand tool using DBSCAN.
 
+    A custom "IoU" metric type is used.
 
     Parameters
     ----------
@@ -104,12 +124,13 @@ def polygon_reducer(data_by_frame, **kwargs_dbscan):
     reduction : dict
         A dictionary with the following keys for each frame
 
-        * `cluster_labels` : A list of cluster labels for **all** shapes
+        * `cluster_labels` : A list of cluster labels for **all** shapes. As
+        self-intersecting shapes are often split into smaller shapes, this
+        list may not match the provided extractions.
         * `clusters_count` : The number of points in each **cluster** found
         * `clusters_x` : A list of the x values of each cluster
         * `clusters_y` : A list of the y values of each cluster
 
-        A custom "IoU" metric type is used.
     '''
     created_at = np.array(kwargs_dbscan.pop('created_at'))
     average_type = kwargs_dbscan.pop('average_type', 'last')
