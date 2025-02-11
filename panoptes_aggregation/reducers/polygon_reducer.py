@@ -42,7 +42,7 @@ def process_data(data):
         A list of extractions created by
         :meth:`panoptes_aggregation.extractors.polygon_extractor`
 
-    Returnss
+    Returns
     -------
     data_by_tool : dict
         A dictionary with one key for each frame of the subject and each tool used for the classification.
@@ -126,19 +126,21 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
 
     kwargs :
         * `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
+        * `average_type` : Must be either "union", which returns the union of the cluster, "intersection" which retruns the intersection of the cluster, "last", which returns the last polygon to be annotated in the cluster, or "median", which returns the polygon with the minimum total distance to the other polygons.
         * `created_at` : A list of when the classifcations were made.
 
     Returns
     -------
     reduction : dict
-        A dictionary with the following keys for each frame
-
-        * `cluster_labels` : A list of cluster labels for **all** shapes. As
-        self-intersecting shapes are often split into smaller shapes, this
-        list may not match the provided extractions.
-        * `clusters_count` : The number of points in each **cluster** found
-        * `clusters_x` : A list of the x values of each cluster
-        * `clusters_y` : A list of the y values of each cluster
+        A dictionary with the following keys for each frame and tool
+        
+        * `tool*_cluster_labels` : A list of cluster labels for **all** shapes. As
+            self-intersecting shapes are often split into smaller shapes, this
+            list may not match the provided extractions.
+        * `tool*_clusters_count` : The number of points in each **cluster** found
+        * `tool*_clusters_x` : A list of the x values of each cluster
+        * `tool*_clusters_y` : A list of the y values of each cluster
+        * `tool*_consensus` : a measure of the overall consensus of each cluster. A value of 1 is perfect agreement, a value of 0 is complete disagreement. This is using found by subtracting`IoU_cluster_mean_distance` from 1
 
     '''
     min_samples = max(2, kwargs_dbscan.pop('min_samples', 2))

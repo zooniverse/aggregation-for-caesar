@@ -162,9 +162,7 @@ def cluster_average_last(data, **kwargs):
         time should be a Unix timestamp float.
     kwargs :
         * `created_at` : A list of when the classifcations was made.
-        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the
-        `IoU_metric_polygon` distance between the cluster members. The diagonal
-        elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
 
 
     Returns
@@ -209,9 +207,7 @@ def cluster_average_median(data, **kwargs):
         There is one element in this list for each classification made.
     kwargs :
         * `created_at` : A list when the classifcation was made. Not used in this average.
-        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the
-        `IoU_metric_polygon` distance between the cluster members. The diagonal
-        elements are all zero. This is found using `IoU_distance_matrix_of_cluster`.
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`.
 
     Returns
     -------
@@ -245,9 +241,7 @@ def cluster_average_intersection(data, **kwargs):
         There is one element in this list for each classification made.
     kwargs :
         * `created_at` : A list of when the classifcations was made. Not used in this average.
-        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the
-        `IoU_metric_polygon` distance between the cluster members. The diagonal
-        elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
 
     Returns
     -------
@@ -282,9 +276,7 @@ def cluster_average_union(data, **kwargs):
         There is one element in this list for each classification made.
     kwargs :
         * `created_at` : A list when the classifcation was made. Not used in this average.
-        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the
-        `IoU_metric_polygon` distance between the cluster members. The diagonal
-        elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
 
     Returns
     -------
