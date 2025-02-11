@@ -31,14 +31,23 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
         the polygon.  These are lists that each contain list of the x and
         y values for each drawn polygon, and the if the data is gold standard.
     '''
-    blank_frame = OrderedDict([
-        ('points', OrderedDict([('x', []), ('y', [])]))
-    ])
     extract = OrderedDict()
     for idx, annotation in enumerate(classification['annotations']):
+        task_key = annotation['task']
         for vdx, value in enumerate(annotation['value']):
-            frame = 'frame{0}'.format(value['frame'])
-            extract.setdefault(frame, copy.deepcopy(blank_frame))
+            if 'tool' in value:
+                # classifier v1.0
+                tool_index = value['tool']
+                key = '{0}_tool{1}'.format(task_key, tool_index)
+            elif 'toolIndex' in value:
+                # classifier v2.0
+                tool_index = value['toolIndex']
+                key = '{0}_toolIndex{1}'.format(task_key, tool_index)
+            else:
+                raise KeyError('Neither `tool` or `toolIndex` are in the annotation')
+
+            frame = 'frame{0}'.format(value.get('frame', 0))
+            extract.setdefault(frame, {})
             # If in the old polygon tool format
             if 'points' in value.keys():
                 x = []
@@ -52,8 +61,9 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
                 y = value["pathY"]
             else:
                 raise ValueError('Unknown data format for polygon')
-
-            extract[frame]['points']['x'].append(x)
-            extract[frame]['points']['y'].append(y)
-            extract[frame]['gold_standard'] = gold_standard
+            # Only include extracts with data
+            if len(x)>0:
+                extract[frame].setdefault('{0}_{1}'.format(key, 'pathX'), []).append(x)
+                extract[frame].setdefault('{0}_{1}'.format(key, 'pathY'), []).append(y)
+                extract[frame]['gold_standard'] = gold_standard
     return extract
