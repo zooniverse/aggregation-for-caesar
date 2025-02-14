@@ -203,6 +203,110 @@ class TestIoUMetric(unittest.TestCase):
         result = utils.cluster_average_intersection(data, **kwargs)
         self.assertTrue(shapely.equals(result, expected))
 
+    def test_cluster_average_intersection_n_polygons_one_intersections(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+        square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
+        square3 = shapely.Polygon(np.array([[0.0, 0.5], [1., 0.5], [1., 1.5], [0.0, 1.5]]))
+        square4 = shapely.Polygon(np.array([[0.5, 0.5], [1.5, 0.5], [1.5, 1.5], [0.5, 1.5]]))
+
+        data = [{'polygon': square1},
+                {'polygon': square2},
+                {'polygon': square3},
+                {'polygon': square4}]
+        created_at_list = ['2025-01-21 10:46:23 UTC',
+                           '2025-01-21 10:46:21 UTC',
+                           '2025-01-21 10:46:22 UTC',
+                           '2025-01-21 10:46:26 UTC']
+        kwargs = {'n_polygons': 1}
+        expected = shapely.Polygon(np.array([[1.5, 0.5],
+                                             [1.5, 0. ],
+                                             [1., 0. ],
+                                             [0.5, 0. ],
+                                             [0., 0. ],
+                                             [0., 0.5],
+                                             [0., 1. ],
+                                             [0., 1.5],
+                                             [0.5, 1.5],
+                                             [1., 1.5],
+                                             [1.5, 1.5],
+                                             [1.5, 1. ],
+                                             [1.5, 0.5]]))
+        result = utils.cluster_average_intersection_n_polygons(data, **kwargs)
+        self.assertTrue(shapely.equals(result, expected))
+
+    def test_cluster_average_intersection_n_polygons_two_intersections(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+        square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
+        square3 = shapely.Polygon(np.array([[0.0, 0.5], [1., 0.5], [1., 1.5], [0.0, 1.5]]))
+        square4 = shapely.Polygon(np.array([[0.5, 0.5], [1.5, 0.5], [1.5, 1.5], [0.5, 1.5]]))
+
+        data = [{'polygon': square1},
+                {'polygon': square2},
+                {'polygon': square3},
+                {'polygon': square4}]
+        created_at_list = ['2025-01-21 10:46:23 UTC',
+                           '2025-01-21 10:46:21 UTC',
+                           '2025-01-21 10:46:22 UTC',
+                           '2025-01-21 10:46:26 UTC']
+        kwargs = {'n_polygons': 2}
+        expected = shapely.Polygon(np.array([[0., 0.5],
+                                             [0., 1. ],
+                                             [0.5, 1. ],
+                                             [0.5, 1.5],
+                                             [1., 1.5],
+                                             [1., 1. ],
+                                             [1.5, 1. ],
+                                             [1.5, 0.5],
+                                             [1., 0.5],
+                                             [1., 0. ],
+                                             [0.5, 0. ],
+                                             [0.5, 0.5],
+                                             [0., 0.5]]))
+        result = utils.cluster_average_intersection_n_polygons(data, **kwargs)
+        self.assertTrue(shapely.equals(result, expected))
+
+    def test_cluster_average_intersection_n_polygons_four_intersections(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+        square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
+        square3 = shapely.Polygon(np.array([[0.0, 0.5], [1., 0.5], [1., 1.5], [0.0, 1.5]]))
+        square4 = shapely.Polygon(np.array([[0.5, 0.5], [1.5, 0.5], [1.5, 1.5], [0.5, 1.5]]))
+
+        data = [{'polygon': square1},
+                {'polygon': square2},
+                {'polygon': square3},
+                {'polygon': square4}]
+        created_at_list = ['2025-01-21 10:46:23 UTC',
+                           '2025-01-21 10:46:21 UTC',
+                           '2025-01-21 10:46:22 UTC',
+                           '2025-01-21 10:46:26 UTC']
+        kwargs = {'n_polygons': 4}
+        expected = shapely.Polygon(np.array([[0.5, 0.5],
+                                             [0.5, 1. ],
+                                             [1., 1. ],
+                                             [1., 0.5],
+                                             [0.5, 0.5]]))
+        result = utils.cluster_average_intersection_n_polygons(data, **kwargs)
+        self.assertTrue(shapely.equals(result, expected))
+
+    def test_cluster_average_intersection_n_polygons_five_intersections(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+        square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
+        square3 = shapely.Polygon(np.array([[0.0, 0.5], [1., 0.5], [1., 1.5], [0.0, 1.5]]))
+        square4 = shapely.Polygon(np.array([[0.5, 0.5], [1.5, 0.5], [1.5, 1.5], [0.5, 1.5]]))
+
+        data = [{'polygon': square1},
+                {'polygon': square2},
+                {'polygon': square3},
+                {'polygon': square4}]
+        created_at_list = ['2025-01-21 10:46:23 UTC',
+                           '2025-01-21 10:46:21 UTC',
+                           '2025-01-21 10:46:22 UTC',
+                           '2025-01-21 10:46:26 UTC']
+        kwargs = {'n_polygons': 5}
+        expected = []
+        result = utils.cluster_average_intersection_n_polygons(data, **kwargs)
+        self.assertTrue(expected==result)
+
     def test_cluster_average_union(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
         square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))

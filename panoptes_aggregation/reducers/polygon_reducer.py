@@ -10,9 +10,9 @@ import numpy as np
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .polygon_reducer_utils import IoU_metric_polygon, cluster_average_last,\
-    cluster_average_intersection, cluster_average_union,\
-    cluster_average_median, IoU_distance_matrix_of_cluster,\
-    IoU_cluster_mean_distance
+    cluster_average_intersection, cluster_average_intersection_n_polygons,\
+    cluster_average_union, cluster_average_median,\
+    IoU_distance_matrix_of_cluster, IoU_cluster_mean_distance
 from .text_utils import tokenize
 import warnings
 import shapely
@@ -144,10 +144,13 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
 
     '''
     min_samples = max(2, kwargs_dbscan.pop('min_samples', 2))
+    n_polygons = int(kwargs_dbscan.pop('n_polygons', 2))
     created_at = np.array(kwargs_dbscan.pop('created_at'))
     average_type = kwargs_dbscan.pop('average_type', 'last')
     if average_type == "intersection":
         avg = cluster_average_intersection
+    elif average_type == "intersection_n_polygons":
+        avg = cluster_average_intersection_n_polygons
     elif average_type == "last":
         avg = cluster_average_last
     elif average_type == "union":
@@ -155,7 +158,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
     elif average_type == "median":
         avg = cluster_average_median
     else:
-        raise ValueError("`average_type` not valid. Should be either `intersection`, `union`, `median` or `last`.")
+        raise ValueError("`average_type` not valid. Should be either `intersection`, `intersection_n_polygons`, `union`, `median` or `last`.")
 
     clusters = OrderedDict()
     for frame, frame_data in data_by_tool.items():
@@ -186,6 +189,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                     if label > -1:
                         cdx = labels_array == label
                         kwargs_cluster = {}
+                        kwargs_cluster['n_polygons'] = n_polygons
                         kwargs_cluster['created_at'] = created_at_full_array[cdx]
                         # number of points in the cluster
                         clusters[frame].setdefault('{0}_clusters_count'.format(tool), []).append(int(cdx.sum()))
