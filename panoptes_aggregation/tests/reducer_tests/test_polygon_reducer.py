@@ -327,8 +327,7 @@ processed_data = {
                 [8, 2],
                 [9, 3],
                 [10, 3],
-                [11, 3],
-                [12, 3]
+                [11, 3]
             ],
             'data': [
                 {'polygon': shapely.Polygon(np.array([[-0.011871167727739784, -0.28870602933343953, -0.38037475471301413, -0.2331790477845634, 0.06665584265632145, 0.3434907042620213, 0.4351594296415958, 0.2879637227131452, -0.0118711677277397],
@@ -364,9 +363,6 @@ processed_data = {
                 {'polygon': shapely.Polygon(np.array([[2.5, 2.5, 3.5, 3.5, 2.5],
                                             [2.1, 3.0, 3.0, 2.0, 2.1]]).T),
                  'gold_standard': False},
-                {'polygon': shapely.Polygon(np.array([[0.3577878103837472, -0.5, 0.5, 0.3577878103837472],
-                                            [3.6142212189616254, 3.7, 5.7, 3.6142212189616254]]).T),
-                 'gold_standard': False},
                 {'polygon': shapely.Polygon(np.array([[0.5, 0.5, 1.5, 1.5, 0.5],
                                             [3.6, 4.5, 4.5, 3.5, 3.6]]).T),
                  'gold_standard': False}
@@ -396,7 +392,7 @@ processed_data = {
 reduced_data_last = {
     'frame0':
         {
-            'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1, -1],
+            'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
             'T0_tool0_clusters_x': [[-0.15554523195117093,
@@ -506,7 +502,7 @@ TestPolygonTReducerLast = ReducerTest(
 reduced_data_median = {
     'frame0':
         {
-            'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1, -1],
+            'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
             'T0_tool0_clusters_x': [[-0.011871167727739784,
@@ -611,7 +607,7 @@ TestPolygonTReducerMedian = ReducerTest(
 reduced_data_intersection = {
     'frame0':
         {
-            'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1, -1],
+            'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
             'T0_tool0_clusters_x': [[-0.20060780558908906,
@@ -730,7 +726,7 @@ TestPolygonTReducerIntersection = ReducerTest(
 reduced_data_intersection_n_polygons = {
     'frame0':
         {
-            'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1, -1],
+            'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
             'T0_tool0_clusters_x': [[-0.28870602933343953,
@@ -913,7 +909,7 @@ TestPolygonTReducerIntersectionNPolygons = ReducerTest(
 reduced_data_union = {
     'frame0':
         {
-            'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1, -1],
+            'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
             'T0_tool0_clusters_x': [[0.3434907042620213,

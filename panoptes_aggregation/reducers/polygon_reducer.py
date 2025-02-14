@@ -79,27 +79,18 @@ def process_data(data):
                             # If not simple polygon, use buffer to try to make simple
                             if not shapely.is_simple(polygon):
                                 polygon = polygon.buffer(0)
-                            # If simply polygon, add it
-                            if isinstance(polygon, shapely.geometry.polygon.Polygon):
-                                data_by_tool[frame][tool]['data'].append({
-                                    'polygon': polygon,
-                                    'gold_standard': gs
-                                })
-                                data_by_tool[frame][tool]['X'].append([row_ct[frame][tool], user_ct])
-                                row_ct[frame][tool] += 1
-                            # If part of multipolygon collection, add each component
-                            elif isinstance(polygon, shapely.geometry.collection.GeometryCollection)\
-                                or isinstance(polygon, shapely.geometry.multipolygon.MultiPolygon):
-                                for p in polygon.geoms:
-                                    data_by_tool[frame][tool]['data'].append({
-                                        'polygon': p,
-                                        'gold_standard': gs
-                                    })
-                                    data_by_tool[frame][tool]['X'].append([row_ct[frame][tool], user_ct])
-                                    row_ct[frame][tool] += 1
-                            # Else error
-                            else:
-                                raise ValueError('Provided data could not be made into shapely polygon data type')
+                                # If part of multipolygon collection, choose largest polygon
+                                if isinstance(polygon, shapely.geometry.collection.GeometryCollection)\
+                                    or isinstance(polygon, shapely.geometry.multipolygon.MultiPolygon):
+                                    areas = [p.area for p in polygon.geoms]
+                                    polygon = polygon.geoms[np.argmax(areas)]
+                            # Add this polygon to the dictionary
+                            data_by_tool[frame][tool]['data'].append({
+                                'polygon': polygon,
+                                'gold_standard': gs
+                            })
+                            data_by_tool[frame][tool]['X'].append([row_ct[frame][tool], user_ct])
+                            row_ct[frame][tool] += 1
     return data_by_tool
 
 
