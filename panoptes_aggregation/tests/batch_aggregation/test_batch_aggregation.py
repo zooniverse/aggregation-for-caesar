@@ -1,17 +1,23 @@
+try:
+    from panoptes_aggregation.scripts import batch_utils
+    from panoptes_aggregation.batch_aggregation import run_aggregation
+    from panoptes_aggregation import batch_aggregation as batch_agg
+
+    batch_agg.celery.conf.update(CELERY_BROKER_URL='memory://')
+    batch_agg.celery.conf.update(CELERY_RESULT_BACKEND='cache+memory://')
+    OFFLINE = False
+except ImportError:
+    OFFLINE = True
 import unittest
 import os
 from unittest.mock import patch, MagicMock, call
-from panoptes_aggregation.scripts import batch_utils
-from panoptes_aggregation.batch_aggregation import run_aggregation
-from panoptes_aggregation import batch_aggregation as batch_agg
 
-batch_agg.celery.conf.update(CELERY_BROKER_URL='memory://')
-batch_agg.celery.conf.update(CELERY_RESULT_BACKEND='cache+memory://')
 
 wf_export = 'panoptes_aggregation/tests/batch_aggregation/wf_export.csv'
 cls_export = 'panoptes_aggregation/tests/batch_aggregation/cls_export.csv'
 
 
+@unittest.skipIf(OFFLINE, 'Installed in offline mode')
 @patch("panoptes_aggregation.batch_aggregation.BatchAggregator._connect_api_client", new=MagicMock())
 class TestBatchAggregation(unittest.TestCase):
     @patch("panoptes_aggregation.batch_aggregation.BatchAggregator")
