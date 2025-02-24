@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.13-slim
 ENV LANG=C.UTF-8
 
 WORKDIR /usr/src/aggregation
@@ -10,7 +10,7 @@ RUN apt-get update && apt-get -y upgrade && \
 
 # install dependencies
 RUN mkdir -p panoptes_aggregation/version
-COPY pyproject.toml README.md ./
+COPY pyproject.toml README.md LICENSE ./
 COPY panoptes_aggregation/__init__.py ./panoptes_aggregation/
 COPY panoptes_aggregation/version/__init__.py ./panoptes_aggregation/version/
 RUN pip install --upgrade pip

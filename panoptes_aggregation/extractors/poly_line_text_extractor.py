@@ -12,6 +12,13 @@ from .extractor_wrapper import extractor_wrapper
 from .tool_wrapper import tool_wrapper
 import warnings
 
+try:
+    # above numpy 2.0
+    from numpy.exceptions import RankWarning
+except ImportError:
+    # below numpy 2.0
+    from numpy import RankWarning
+
 
 @extractor_wrapper(gold_standard=True)
 @tool_wrapper
@@ -95,7 +102,7 @@ def poly_line_text_extractor(classification, dot_freq='line', gold_standard=Fals
                         dx = x[-1] - x[0]
                         dy = y_fit[-1] - y_fit[0]
                         slope = np.rad2deg(np.arctan2(dy, dx))
-                    except np.exceptions.RankWarning:
+                    except RankWarning:
                         try:
                             # rotate by 90 before fitting
                             x_tmp = -np.array(y)
@@ -109,7 +116,7 @@ def poly_line_text_extractor(classification, dot_freq='line', gold_standard=Fals
                                 dy = 0.0
                             # rotate by -90 to bring back into correct coordinates
                             slope = np.rad2deg(np.arctan2(dy, dx)) - 90
-                        except np.exceptions.RankWarning:
+                        except RankWarning:
                             # this is the case where dx = dy = 0 (a line of zero length)
                             slope = 0
                 if dot_freq == 'word':
