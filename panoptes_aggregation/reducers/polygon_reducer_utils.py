@@ -6,18 +6,10 @@ for :mod:`panoptes_aggregation.reducers.polygon_reducer`.
 '''
 import numpy as np
 import shapely
+import copy
 import datetime
 from scipy.linalg import issymmetric
 from pandas._libs.tslibs.timestamps import Timestamp as pdtimestamp
-
-# Might use later
-def polygon_gap_ratio(polygon_xy):
-    polygon_length = np.sum([((polygon_xy[i+1, 0] - polygon_xy[i, 0])**2 +
-                              (polygon_xy[i+1, 1] - polygon_xy[i, 1])**2)**0.5
-                             for i in range(len(polygon_xy)-1)])
-    gap_length = ((polygon_xy[-1, 0] - polygon_xy[0, 0])**2 +
-                  (polygon_xy[-1, 1] - polygon_xy[0, 1])**2)**0.5
-    return gap_length/polygon_length
 
 
 def _polygons_unify(polygons):
@@ -25,11 +17,12 @@ def _polygons_unify(polygons):
     # disconnected clusters or if individual polygons are not connected by are
     # connected by another polygon.
 
+    polygons = copy.deepcopy(polygons)
     all_unified = False
     i = 0
     safety = 0
     while all_unified is False:
-        if i > len(polygons)-2:  # Once first interation is done
+        if i>len(polygons)-2:  # Once first interation is done
             # Find all of the possible intersections
             intersections = []
             for j in range(len(polygons)):
@@ -40,27 +33,34 @@ def _polygons_unify(polygons):
                 break
             else:  # Restart the unification
                 i = 0
-
+    
         indices_included = []
         for j in range(i+1, len(polygons)):
             if polygons[i].intersects(polygons[j]):
                 polygons[i] = polygons[i].union(polygons[j])
+                if isinstance(polygons[i], shapely.geometry.collection.GeometryCollection):
+                    for p in polygons[i].geoms:
+                        if isinstance(p, shapely.geometry.polygon.Polygon):
+                            polygons[i] = p
+                            break
                 # If there are any holes, close them
-                if len(polygons[i].interiors) > 0:
+                if len(polygons[i].interiors)>0:
                     for hole in polygons[i].interiors:
                         hole = shapely.Polygon(hole)
                         polygons[i] = polygons[i].union(hole)
+                        if isinstance(polygons[i], shapely.geometry.linestring.LineString):
+                            print(polygons[i])
                 indices_included.append(j)
         # Remove polygons that have been unified into the others
         for j in sorted(indices_included, reverse=True):
             del polygons[j]
         # If only one polygon, we are finished
-        if len(polygons) == 1:
+        if len(polygons)==1:
             all_unified = True
             break
         i += 1
         safety += 1
-        if safety > 10:
+        if safety>10:
             all_unified = True
             break
     areas = [polygons[i].area for i in range(len(polygons))]
@@ -211,7 +211,6 @@ def cluster_average_last(data, **kwargs):
     kwargs :
         * `created_at` : A list of when the classifcations was made.
         * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
-        * `n_polygons` : the minimum number of intersections. Not used in this average.
 
 
     Returns
@@ -257,7 +256,6 @@ def cluster_average_median(data, **kwargs):
     kwargs :
         * `created_at` : A list when the classifcation was made. Not used in this average.
         * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`.
-        * `n_polygons` : the minimum number of intersections. Not used in this average.
 
     Returns
     -------
@@ -292,7 +290,6 @@ def cluster_average_intersection(data, **kwargs):
     kwargs :
         * `created_at` : A list of when the classifcations was made. Not used in this average.
         * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
-        * `n_polygons` : the minimum number of intersections. Not used in this average.
 
     Returns
     -------
@@ -316,109 +313,6 @@ def cluster_average_intersection(data, **kwargs):
     return intersection_all
 
 
-def cluster_average_intersection_n_polygons(data, **kwargs):
-    '''Find the largest area, i.e. a polygon of intersections,
-    where at least n polygons intersect.
-
-    The algorithm used is as follows. First every intersection of two polygons
-    is found, and made into new `shapely` polygons. These polygons may overlap.
-    If 'n_polygons' = 2, then these regions are unified into a single polygon,
-    `intersection_n_polygons`, and returned. This is the polygon of at least 2
-    intersections (i.e. area where at least 2 volunteers agree).
-
-    If 'n_polygons' > 2, then the intersections polygons have their
-    intersection found, producing a new list of polygons. Each of these
-    polygons will be, by construction, the intersection of at least 3 of the
-    original polygons.
-
-    If 'n_polygons' = 3, these polygons are then unified as for
-    'n_polygons' = 2 and returned. If however 'n_polygons' > 3, the process is
-    simply repeated until each of the intersection polygons is constructed
-    from at least 'n_polygons' of the original polygons.
-
-    If a polygon of at least 'n_polygons' intersections cannot be found, then
-    an empty list is returned. Such a case can occur when the cluster is
-    spread out or if the number of samples in the cluster is less than.
-
-    Parameters
-    ----------
-    data : list
-        A list of dicts that take the form
-        {`polygon`: shapely.geometry.polygon.Polygon, 'gold_standard', bool}
-        There is one element in this list for each classification made.
-    kwargs :
-        * `created_at` : A list when the classifcation was made. Not used in this average.
-        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
-        * `n_polygons` : the minimum number of intersections. Should be an integer.
-
-    Returns
-    -------
-    intersection_n_polygons : shapely.geometry.polygon.Polygon or []
-        The largest `shapely` intersection of at least n polygons. Is an empty
-        list if no such area can be found
-    '''
-    n_polygons = int(kwargs.pop('n_polygons', 2))
-    polygons = [data[i]['polygon'] for i in range(len(data))]
-
-    def polygon_list_simplify(polygons):
-        individual_polygons = []
-        for polygon in polygons:
-            if isinstance(polygon, shapely.geometry.polygon.Polygon):
-                individual_polygons.append(polygon)
-            elif isinstance(polygon, shapely.geometry.collection.GeometryCollection)\
-                                or isinstance(polygon, shapely.geometry.multipolygon.MultiPolygon):
-                for p in polygon.geoms:
-                    individual_polygons.append(p)
-            else:
-                raise ValueError('Provided data could not be made into shapely polygon data type')
-        return individual_polygons
-
-    # Need each item in the polygon list to be a polygon, not a list of polygons
-    # This list of polygons will be updated to just be the intersections of polygons
-    polygons = polygon_list_simplify(polygons)
-    # Need to keep track of the polygons which are in each intersection
-    polygon_indices = [[i] for i in range(len(polygons))]
-
-    # This is a function which takes a list of polygons, and returns a list
-    # of the unique intersections of these polygons, along with the indices
-    # of the cluster polygons in each intersection
-    def polygon_intersection_list(polygons, polygon_indices):
-        num_polygons = len(polygons)
-        polygon_connections = []
-        polygon_connections_indices = []
-        for i in range(num_polygons):
-            for j in range(i+1, num_polygons):
-                if (polygons[i].intersects(polygons[j])==True):
-                    # The indices of the polygons in this intersection
-                    polygon_connection_index = list(set(polygon_indices[i] + polygon_indices[j]))
-                    # Want it in order so comparison can be made
-                    polygon_connection_index.sort()
-                    if polygon_connection_index not in polygon_connections_indices:
-                        polygon_connections.append(polygons[i].intersection(polygons[j]))
-                        polygon_connections_indices.append(polygon_connection_index)
-        return polygon_connections, polygon_connections_indices
-    num_agreement = 1
-    while num_agreement<n_polygons:
-        # If there is only one polygon left, but more intersections are required, check if this already has enough
-        # intersections. If not, return nothing
-        if len(polygons)==1:
-            if len(polygon_indices[0]) >= n_polygons:
-                break
-            else:
-                return []
-        else:
-            # Find the intersection of the provided polygons, and the contributing indices
-            polygons, polygon_indices = polygon_intersection_list(polygons, polygon_indices)
-            # Each time the intersection polygons are found, the number of agreement increases by 1
-            num_agreement += 1
-
-    # Now we have the individual polygons of at least n_polygons overlap/agreement/intersection
-    # we can try to unify (if they each intersect) these regions into (hopefully one) larger polygon. If there are several polygons,
-    # the largest is chosen.
-    intersection_n_polygons = _polygons_unify(polygons)
-    return intersection_n_polygons
-
-
 def cluster_average_union(data, **kwargs):
     '''Find the union of provided cluster data
 
@@ -431,8 +325,6 @@ def cluster_average_union(data, **kwargs):
     kwargs :
         * `created_at` : A list when the classifcation was made. Not used in this average.
         * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
-        * `n_polygons` : the minimum number of intersections. Not used in this average.
-
     Returns
     -------
     union_all : shapely.geometry.polygon.Polygon
@@ -445,3 +337,123 @@ def cluster_average_union(data, **kwargs):
     # There must now be two polygons to average
     union_all =  _polygons_unify(polygon_list)
     return union_all
+
+
+def cluster_average_intersection_contours(data, **kwargs):
+    '''Find contours of intersection as a list. Each item of the list will
+    be the largest contour of `i` intersections, with the next item being the
+    contour `i+1` intersection etc. The intersection is where the polygons
+    overlap. This is useful for plotting the uncertainty in the cluster.
+
+    The algorithm used is as follows. First find the largest simply-connected
+    polygon for the cluster and add it to the list `intersection_contours`.
+    Next, every intersection of two polygons is found, and made into new
+    `shapely` polygons. This makes a list of 'level-2' polygons. These polygons may
+    overlap. Then, find the largest
+    simply-connected polygon of the level-2 polygons. This is the
+    polygon of at least 2 intersections
+    (i.e. area where at least 2 volunteers agree). Add it to list
+    `intersection_contours`.
+
+    If there are more than one level-2 polygons, which intersect, then the
+    intersection of the level-2 polygons is found as a list. These are the
+    level-3 polygons, as each polygon is made from at least three
+    intersections. Then find the largest
+    simply-connected polygon of the level-3 polygons. This is the
+    polygon of at least 3 intersections
+    (i.e. area where at least 3 volunteers agree). Add it to list
+    `intersection_contours`.
+
+    Continue this process until either 10 iterations have been done, or only
+    one unique intersection polygon remains.
+
+    Parameters
+    ----------
+    data : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'gold_standard', bool}
+        There is one element in this list for each classification made.
+    kwargs :
+        * `created_at` : A list when the classifcation was made. Not used in this average.
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
+
+    Returns
+    -------
+    intersection_contours : list
+        List of shapely objects. Each shape at position `i` in the list is the
+        largest simply-connected contour of at least `i` intersections.
+    '''
+    polygons = [data[i]['polygon'] for i in range(len(data))]
+    # Want the list to just be simple polygons
+    def polygon_list_simplify(polygons):
+        individual_polygons = []
+        for polygon in polygons:
+            if isinstance(polygon, shapely.geometry.polygon.Polygon):
+                # Make sure shape is simply connected
+                if not polygon.is_simple:
+                    polygon = polygon.buffer(0)
+                individual_polygons.append(polygon)
+            elif isinstance(polygon, shapely.geometry.collection.GeometryCollection)\
+                                or isinstance(polygon, shapely.geometry.multipolygon.MultiPolygon):
+                for p in polygon.geoms:
+                    if isinstance(p, shapely.geometry.polygon.Polygon):
+                        if not p.is_simple:
+                            polygon = polygon.buffer(0)
+                        individual_polygons.append(p)
+            # Any other shapely object is not included in the lost
+        return individual_polygons
+
+    # Need each item in the polygon list to be a polygon, not a list of polygons
+    # This list of polygons will be updated to just be the intersections of polygons
+    polygons = polygon_list_simplify(polygons)
+    # Need to keep track of the polygons which are in each intersection
+    polygon_indices = [[i] for i in range(len(polygons))]
+    def polygon_intersection_list(polygons, polygon_indices):
+        num_polygons = len(polygons)
+        polygon_connections = []
+        polygon_connections_indices = []
+        for i in range(num_polygons):
+            for j in range(i+1, num_polygons):
+                # Catch the error wehere one polygon is inside another
+                try:
+                    does_intersect = shapely.intersects(polygons[i], polygons[j])
+                except:
+                    intersection_polygon = polygons[i].intersection(polygons[j])
+                    # If empty is true, then the polygons do NOT intersect 
+                    does_intersect = not intersection_polygon.is_empty
+                if does_intersect==True:
+                    # The indices of the polygons in this intersection
+                    polygon_connection_index = list(set(polygon_indices[i] + polygon_indices[j]))
+                    # Want it in order so comparison can be made
+                    polygon_connection_index.sort()
+                    # If this connection has not already been made
+                    if polygon_connection_index not in polygon_connections_indices:
+                        polygon_connections.append(polygons[i].intersection(polygons[j]))
+                        polygon_connections_indices.append(polygon_connection_index)
+        return polygon_connections, polygon_connections_indices
+
+    num_agreement = 1
+    max_iters = 10
+    intersection_contours = []
+    # Start with the level 1 contours
+    polygons_union = _polygons_unify(polygons)
+    intersection_contours.append(polygons_union)
+    while num_agreement<max_iters:
+        # If there is only one polygon left, but it contains more intersections than the current level, cotinue.
+        # Otherwise all the contours have been found
+        if len(polygons)==1:
+            if len(polygon_indices[0]) > num_agreement:
+                continue
+            else:
+                break
+        else:
+            # Find the intersection of the provided polygons, and the contributing indices
+            polygons, polygon_indices = polygon_intersection_list(polygons, polygon_indices)
+            polygons = polygon_list_simplify(polygons)
+        # Now find the union of these contours and add it to the list of contours
+        polygons_union = _polygons_unify(polygons)
+        intersection_contours.append(polygons_union)
+        # Each time the intersection polygons are found, the number of agreement increases by 1
+        num_agreement += 1
+
+    return intersection_contours

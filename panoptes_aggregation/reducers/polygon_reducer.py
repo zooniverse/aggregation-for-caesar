@@ -10,8 +10,7 @@ import numpy as np
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .polygon_reducer_utils import IoU_metric_polygon, cluster_average_last,\
-    cluster_average_intersection, cluster_average_intersection_n_polygons,\
-    cluster_average_union, cluster_average_median,\
+    cluster_average_intersection, cluster_average_union, cluster_average_median,\
     IoU_distance_matrix_of_cluster, IoU_cluster_mean_distance
 from .text_utils import tokenize
 import warnings
@@ -103,6 +102,9 @@ def process_data(data):
 )
 def polygon_reducer(data_by_tool, **kwargs_dbscan):
     '''Cluster a polygon or freehand tool using DBSCAN.
+    
+    There is a choice in how the cluster is averaged into a single cluster,
+    with the varies choices listed below.
 
     A custom "IoU" metric type is used.
 
@@ -110,10 +112,6 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
     ----------
     data_by_tool : dict
         A dictionary returned by :meth:`process_data`
-    average_type : str
-        Either "union", which returns the union of the cluster, "intersection"
-        which retruns the intersection of the cluster or "last", which returns
-        the last polygon to be annotated in the cluster.
 
     kwargs :
         * `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
@@ -123,25 +121,18 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
     Returns
     -------
     reduction : dict
-        A dictionary with the following keys for each frame and tool
+        A dictionary with the following keys for each frame, task and tool:
         
-        * `tool*_cluster_labels` : A list of cluster labels for **all** shapes. As
-            self-intersecting shapes are often split into smaller shapes, this
-            list may not match the provided extractions.
-        * `tool*_clusters_count` : The number of points in each **cluster** found
+        * `tool*_cluster_labels` : A list of cluster labels for polygons provided for this frame and tool
+        * `tool*_clusters_count` : The number of points in each **cluster** found for this frame and tool
         * `tool*_clusters_x` : A list of the x values of each cluster
         * `tool*_clusters_y` : A list of the y values of each cluster
-        * `tool*_consensus` : a measure of the overall consensus of each cluster. A value of 1 is perfect agreement, a value of 0 is complete disagreement. This is using found by subtracting`IoU_cluster_mean_distance` from 1
+        * `tool*_consensus` : A list of the the overall consensus of each cluster. A value of 1 is perfect agreement, a value of 0 is complete disagreement. This is found by subtracting`IoU_cluster_mean_distance` from 1
 
     '''
-    min_samples = max(2, kwargs_dbscan.pop('min_samples', 2))
-    n_polygons = int(kwargs_dbscan.pop('n_polygons', 2))
-    created_at = np.array(kwargs_dbscan.pop('created_at'))
     average_type = kwargs_dbscan.pop('average_type', 'last')
     if average_type == "intersection":
         avg = cluster_average_intersection
-    elif average_type == "intersection_n_polygons":
-        avg = cluster_average_intersection_n_polygons
     elif average_type == "last":
         avg = cluster_average_last
     elif average_type == "union":
@@ -149,7 +140,10 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
     elif average_type == "median":
         avg = cluster_average_median
     else:
-        raise ValueError("`average_type` not valid. Should be either `intersection`, `intersection_n_polygons`, `union`, `median` or `last`.")
+        raise ValueError("`average_type` not valid. Should be either `intersection`, `union`, `median` or `last`.")
+
+    min_samples = max(2, kwargs_dbscan.pop('min_samples', 2))
+    created_at = np.array(kwargs_dbscan.pop('created_at'))
 
     clusters = OrderedDict()
     for frame, frame_data in data_by_tool.items():
@@ -180,7 +174,6 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                     if label > -1:
                         cdx = labels_array == label
                         kwargs_cluster = {}
-                        kwargs_cluster['n_polygons'] = n_polygons
                         kwargs_cluster['created_at'] = created_at_full_array[cdx]
                         # number of points in the cluster
                         clusters[frame].setdefault('{0}_clusters_count'.format(tool), []).append(int(cdx.sum()))
@@ -197,4 +190,5 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
                         clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
                         clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
+ 
     return clusters

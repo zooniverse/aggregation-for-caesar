@@ -81,7 +81,11 @@ def reducer_wrapper(
             if not no_version:
                 append_version(reduction)
             if output_kwargs:
-                reduction['parameters'] = {**kwargs_data, **kwargs_process}
+                if isinstance(reduction, list):
+                    for r in reduction:
+                        r['parameters'] = {**kwargs_data, **kwargs_process}
+                else:
+                    reduction['parameters'] = {**kwargs_data, **kwargs_process}
             return reduction
         #: keep the original function around for testing
         #: and access by other reducers
