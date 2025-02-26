@@ -101,7 +101,7 @@ To run a local version use:
 docker compose build
 docker compose up
 ```
-and listen on `localhost:5000`.
+and listen on `localhost:4000`.
 
 ### Running tests in the docker container
 To run the tests use:
