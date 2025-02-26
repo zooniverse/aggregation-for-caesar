@@ -185,10 +185,15 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                         # Now find the "average" of this cluster, using the provided average choice
                         cluster_average = avg(data[cdx], **kwargs_cluster)
                         # Find the x and y values of this polygon
-                        average_polygon = np.array(list(cluster_average.boundary.coords))
+                        if cluster_average.is_empty is True:
+                            # If there is no overall intersection, return empty
+                            average_polygon = np.array([[], []]).T
+                        else:
+                            # Find the x and y values of the shapely polygon
+                            average_polygon = np.array(list(cluster_average.boundary.coords))
                         # Add to the dictionary
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
                         clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
                         clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
- 
+
     return clusters

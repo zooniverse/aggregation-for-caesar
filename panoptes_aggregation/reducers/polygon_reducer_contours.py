@@ -33,9 +33,9 @@ DEFAULTS = {
 col.core_classes.WordPunctuationTokenizer.tokenize = tokenize
 
 
-# Non public function to make sure the list is returned in the correct order
+# Non public function to make sure the list is returned in the correct order.
 # While this order may have issues if there is more than 9 of either frame,
-# task or tool, or if '_cluster_label_for_contours' does not exist, hopefully
+# task or tool, or if '*_cluster_label_for_contours' does not exist, hopefully
 # it should at least return the same order each time
 def _order_clusters_list(clusters):
     list_of_numbered_clusters = []
@@ -47,7 +47,10 @@ def _order_clusters_list(clusters):
         tool = column_labels[0].split('_')[1]
         # Find the label for the cluster, default to 0 if unavailable
         cluster_label = cluster[frame].get(task+'_'+tool+'_cluster_label_for_contours', 0)
-        number = int('1' + frame[-1] + task[-1] + tool[-1] + str(cluster_label))
+        # Find the `serial number' of this cluster, with the first digit being
+        # the frame, the third the task, the fourth the tool and the fifth the
+        # cluster. This way ordering the seriod numbers gives the correct.
+        number = int(frame[-1] + task[-1] + tool[-1] + str(cluster_label))
         list_of_numbered_clusters.append(number)
 
     order = np.argsort(list_of_numbered_clusters)
@@ -74,7 +77,7 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
 
     A custom "IoU" metric type is used.
 
-    Thus takes approximately four times longer than
+    This reduction will take much longer than
     :mod:`panoptes_aggregation.reducers.polygon_reducer`
 
     Parameters
