@@ -256,7 +256,7 @@ class TestIoUMetric(unittest.TestCase):
         result = utils.cluster_average_intersection_contours(data, **kwargs)
         self.assertTrue(all([shapely.equals(result[i], expected[i]) for i in range(len(expected))]))
 
-
+    # If not standard shapely objects somehow are being used
     def test_cluster_average_intersection_contours_non_polygon_shapes(self):
         square1 = shapely.Polygon(np.array([[0.2, 0], [0.2, 1], [1.2, 1], [1.2, 0]]))
         square2 = shapely.Polygon(np.array([[1., 0], [1., 1], [2., 1], [2., 0]]))
@@ -307,6 +307,42 @@ class TestIoUMetric(unittest.TestCase):
         result = utils.cluster_average_intersection_contours(data, **kwargs)
         self.assertTrue(all([shapely.equals(result[i], expected[i]) for i in range(len(expected))]))
 
+    # If there is not one single overall area of intersection, test that the
+    # larger one is returned and that it can gracefully exit the algorithm
+    def test_cluster_average_intersection_contours_two_final_intersections(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+        square2 = shapely.Polygon(np.array([[1.5, 0], [1.5, 1], [2.5, 1], [2.5, 0]]))
+        square3 = shapely.Polygon(np.array([[0.8, 0], [0.8, 1], [1.8, 1], [1.8, 0]]))
+
+        data = [{'polygon': square1},
+                {'polygon': square2},
+                {'polygon': square3}]
+        created_at_list = ['2025-01-21 10:46:23 UTC',
+                           '2025-01-21 10:46:21 UTC',
+                           '2025-01-21 10:46:22 UTC']
+        kwargs = {'created_at': created_at_list}
+        expected_contour_1 = shapely.Polygon(np.array([[0.8, 1.],
+                                                        [1., 1.],
+                                                        [1.5, 1.],
+                                                        [1.8, 1.],
+                                                        [2.5, 1.],
+                                                        [2.5, 0.],
+                                                        [1.8, 0.],
+                                                        [1.5, 0.],
+                                                        [1., 0.],
+                                                        [0.8, 0.],
+                                                        [0., 0.],
+                                                        [0., 1.],
+                                                        [0.8, 1.]]))
+        expected_contour_2 = shapely.Polygon(np.array([[1.5, 1.],
+                                                        [1.8, 1.],
+                                                        [1.8, 0.],
+                                                        [1.5, 0.],
+                                                        [1.5, 1.]]))
+        expected = [expected_contour_1,
+                    expected_contour_2]
+        result = utils.cluster_average_intersection_contours(data, **kwargs)
+        self.assertTrue(all([shapely.equals(result[i], expected[i]) for i in range(len(expected))]))
 
     def test_cluster_average_union(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))

@@ -450,10 +450,14 @@ def cluster_average_intersection_contours(data, **kwargs):
             # Find the intersection of the provided polygons, and the contributing indices
             polygons, polygon_indices = polygon_intersection_list(polygons, polygon_indices)
             polygons = polygon_list_simplify(polygons)
+        # If there are intersection polygons, find their union. If not break as maximum level of intersection found
         # Now find the union of these contours and add it to the list of contours
-        polygons_union = _polygons_unify(polygons)
-        intersection_contours.append(polygons_union)
-        # Each time the intersection polygons are found, the number of agreement increases by 1
-        num_agreement += 1
+        if len(polygons) > 0:
+            polygons_union = _polygons_unify(polygons)
+            intersection_contours.append(polygons_union)
+            # Each time the intersection polygons are found, the number of agreement increases by 1
+            num_agreement += 1
+        else:
+            break
 
     return intersection_contours

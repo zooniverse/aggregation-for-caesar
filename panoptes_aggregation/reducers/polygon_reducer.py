@@ -115,7 +115,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
 
     kwargs :
         * `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
-        * `average_type` : Must be either "union", which returns the union of the cluster, "intersection" which retruns the intersection of the cluster, "last", which returns the last polygon to be annotated in the cluster, or "median", which returns the polygon with the minimum total distance to the other polygons.
+        * `average_type` : Must be either "union", which returns the union of the cluster, "intersection" which retruns the intersection of the cluster, "last", which returns the last polygon to be annotated in the cluster, or "median", which returns the polygon with the minimum total distance to the other polygons. Defaults to "median"".
         * `created_at` : A list of when the classifcations were made.
 
     Returns
@@ -130,7 +130,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
         * `tool*_consensus` : A list of the the overall consensus of each cluster. A value of 1 is perfect agreement, a value of 0 is complete disagreement. This is found by subtracting`IoU_cluster_mean_distance` from 1
 
     '''
-    average_type = kwargs_dbscan.pop('average_type', 'last')
+    average_type = kwargs_dbscan.pop('average_type', 'median')
     if average_type == "intersection":
         avg = cluster_average_intersection
     elif average_type == "last":
