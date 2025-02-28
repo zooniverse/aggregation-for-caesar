@@ -6,6 +6,16 @@ This module provides functions to reduce survey task extracts from
 '''
 from collections import Counter, OrderedDict
 from .reducer_wrapper import reducer_wrapper
+from numpy import argsort
+
+# Non public function to make sure the list is returned in the correct order.
+# This will return the list in alphbetical order of 'choice'
+def _order_list(reduction_list):
+    choice_list = [reduction['choice'] for reduction in reduction_list]
+    order = argsort(choice_list)
+    reduction_list = [reduction_list[i] for i in order]
+    return reduction_list
+
 
 
 def process_data(data):
@@ -32,7 +42,8 @@ def process_data(data):
         for key, value in d.items():
             outer[key] = Counter(value)
         data_out.setdefault(choice, []).append(outer)
-    return data_out, vote_count
+    data_out['vote_count'] = vote_count
+    return data_out
 
 
 @reducer_wrapper(process_data=process_data)
@@ -54,7 +65,8 @@ def survey_reducer(data_in):
         * `choice_count` : The number of users that made this `choice`
         * `answers_*` : Counters for each answer to sub-question `*`
     '''
-    data, vote_count = data_in
+    data = data_in
+    vote_count = data.pop('vote_count')
     reduction_list = []
     for choice, answers in data.items():
         reduction = OrderedDict()
@@ -72,4 +84,5 @@ def survey_reducer(data_in):
             if isinstance(value, Counter):
                 reduction[key] = dict(value)
         reduction_list.append(reduction)
+    reduction_list = _order_list(reduction_list)
     return reduction_list

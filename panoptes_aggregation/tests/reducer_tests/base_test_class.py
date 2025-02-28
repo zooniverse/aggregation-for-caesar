@@ -127,7 +127,6 @@ def ReducerTest(
             '''Test the offline reducer'''
             result = reducer(self.extracted_with_version, **kwargs, **pkwargs, **network_kwargs)
             if self.reduction_is_list is True:
-                result = reducer(self.extracted_with_version, **kwargs, **pkwargs, **network_kwargs)
                 for i, result_item in enumerate(result):
                     result_item = cast_to_dict(result_item)
                     if round is not None:
@@ -230,64 +229,6 @@ def ReducerTestNoProcessing(
     ReducerTestNoProcessing.__name__ = test_name
     ReducerTestNoProcessing.__qualname__ = test_name
     return ReducerTestNoProcessing
-
-
-def ReducerTestSurvey(
-    reducer,
-    processer,
-    extracted,
-    processed,
-    reduced,
-    name,
-    test_name=None
-):
-    class ReducerTest(unittest.TestCase):
-        def setUp(self):
-            self.maxDiff = None
-            self.extracted = copy.deepcopy(extracted)
-            self.extracted_with_version = copy.deepcopy(extracted)
-            append_version(self.extracted_with_version)
-            self.processed = copy.deepcopy(processed)
-            self.reduced = copy.deepcopy(reduced)
-            self.reduced_with_version = copy.deepcopy(reduced)
-            append_version(self.reduced_with_version)
-
-        def shortDescription(self):
-            return '{0}: {1}'.format(name, self._testMethodDoc)
-
-        def test_process_data(self):
-            '''Test data processing function'''
-            result, count = processer(self.extracted)
-            self.assertEqual(count, len(self.extracted))
-            self.assertDictEqual(result, self.processed)
-
-        def test_original_reducer(self):
-            '''Test the reducer function starting with the processed data'''
-            result = reducer._original((self.processed, len(self.extracted)))
-            self.assertCountEqual(result, self.reduced)
-
-        def test_reducer(self):
-            '''Test the offline reducer'''
-            result = reducer(self.extracted_with_version)
-            self.assertCountEqual(result, self.reduced_with_version)
-
-        @unittest.skipIf(OFFLINE, 'Installed in offline mode')
-        def test_reducer_request(self):
-            '''Test the online reducer'''
-            app = flask.Flask(__name__)
-            request_kwargs = {
-                'data': json.dumps(extract_in_data(self.extracted_with_version)),
-                'content_type': 'application/json'
-            }
-            with app.test_request_context(**request_kwargs):
-                result = reducer(flask.request)
-                self.assertCountEqual(result, self.reduced_with_version)
-
-    if test_name is None:
-        test_name = '_'.join(name.split())
-    ReducerTest.__name__ = test_name
-    ReducerTest.__qualname__ = test_name
-    return ReducerTest
 
 
 def ReducerTestPoints(
