@@ -180,8 +180,8 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                         # The distance matrix is used to find the consensus and is sometimes used in the average
                         distance_matrix = IoU_distance_matrix_of_cluster(cdx, X, data)
                         kwargs_cluster['distance_matrix'] = distance_matrix
-                        # Find the consensus of this cluster and add its data
-                        consensus = 1 - IoU_cluster_mean_distance(distance_matrix)
+                        # Find the consensus of this cluster and add it as float
+                        consensus = float(1 - IoU_cluster_mean_distance(distance_matrix))
                         # Now find the "average" of this cluster, using the provided average choice
                         cluster_average = avg(data[cdx], **kwargs_cluster)
                         # Find the x and y values of this polygon

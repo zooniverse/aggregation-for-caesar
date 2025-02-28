@@ -142,8 +142,8 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
                             cluster[frame] = OrderedDict()
                             # The distance matrix is used to find the consensus and is sometimes used in the average
                             distance_matrix = IoU_distance_matrix_of_cluster(cdx, X, data)
-                            # Find the consensus of this cluster and add its data
-                            consensus = 1 - IoU_cluster_mean_distance(distance_matrix)
+                            # Find the consensus of this cluster and add it as float
+                            consensus = float(1 - IoU_cluster_mean_distance(distance_matrix))
                             # Now find the "average" of this cluster, using the provided average choice
                             contours = cluster_average_intersection_contours(data[cdx], **kwargs_cluster)
                             # Extract the x and y values of these contours
@@ -154,8 +154,8 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
                                 contours_x_values.append(xy[:, 0].tolist())
                                 contours_y_values.append(xy[:, 1].tolist())
                             # Store the contours etc
-                            cluster[frame]['{0}_cluster_label_for_contours'.format(tool)] = label
-                            cluster[frame]['{0}_number_of_contours'.format(tool)] = len(contours)
+                            cluster[frame]['{0}_cluster_label_for_contours'.format(tool)] = int(label)
+                            cluster[frame]['{0}_number_of_contours'.format(tool)] = int(len(contours))
                             cluster[frame]['{0}_contours_x'.format(tool)] = contours_x_values
                             cluster[frame]['{0}_contours_y'.format(tool)] = contours_y_values
                             cluster[frame]['{0}_consensus'.format(tool)] = consensus
