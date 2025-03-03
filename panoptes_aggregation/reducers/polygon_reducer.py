@@ -47,9 +47,10 @@ def process_data(data):
         A dictionary with one key for each frame of the subject and each tool used for the classification.
         The value for each key is a dictionary with two keys `X` and `data`. `X` is a 2D array with each row
         mapping to the data held in `data`.  The first column contains row indices
-        and the second column is an index assigned to each user.
-        `data` is a list of dictionaries of the form `{'polygon': shapely.geometry.polygon.Polygon,
-        'gold_standard': bool}`.
+        and the second column is an index assigned to each user. `data` is a
+        list of dictionaries, which contains the polygon data to be reduced. It
+        is of the form
+        `{'polygon': shapely.geometry.polygon.Polygon, 'gold_standard': bool}`.
     '''
     unique_frames = set(sum([[k for k in d.keys() if k.startswith('frame')] for d in data], []))
     data_by_tool = {}
@@ -101,12 +102,12 @@ def process_data(data):
     output_kwargs=True
 )
 def polygon_reducer(data_by_tool, **kwargs_dbscan):
-    '''Cluster a polygon or freehand tool using DBSCAN.
+    '''Cluster a polygon/freehand tools using DBSCAN.
     
     There is a choice in how the cluster is averaged into a single cluster,
     with the varies choices listed below.
 
-    A custom "IoU" metric type is used.
+    A custom "IoU" metric type is used to measure the distance etween the polygons.
 
     Parameters
     ----------

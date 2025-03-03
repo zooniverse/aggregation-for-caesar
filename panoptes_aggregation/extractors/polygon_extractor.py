@@ -26,10 +26,11 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
     Returns
     -------
     extraction : dict
-        A dictionary containing one key per frame. Each frame contains
-        the `x`, `y`, values for the tool used in
-        the polygon.  These are lists that each contain list of the x and
-        y values for each drawn polygon, and the if the data is gold standard.
+        A dictionary containing one key per frame. Each frame contains lists
+        `pathX` and `pathT`. These are lists of lists, where each inner list of
+        `pathX` is the x values, and each inner list of `pathY` is the y values,
+        for a particular polygon/freehand drawing. The dictionary also
+        contains information if the data is gold standard or not.
     '''
     extract = OrderedDict()
     for idx, annotation in enumerate(classification['annotations']):

@@ -34,7 +34,8 @@ def batch_extract(
     classifications,
     extractor_config,
     cpu_count=1,
-    verbose=False
+    verbose=False,
+    display_progressbar=True
 ):
     '''
         Extracts the values given a list of classifications and a corresponding
@@ -62,32 +63,44 @@ def batch_extract(
                     A JSON formatted string for the subject metadata
         extractor_config: dict
             A dictionary defining the configuration for the extractor
+        cpu_count: int
+            The number of CPU cores to be used.
+        verbose: bool:
+            If True, increase output verbosity.
+        display_progressbar: bool:
+            If True, the progress bar is displayed.
     '''
     extracts_data = defaultdict(list)
-    widgets = [
-        'Extracting: ',
-        progressbar.Percentage(),
-        ' ', progressbar.Bar(),
-        ' ', progressbar.ETA()
-    ]
-    number_of_extractors = sum([len(value) for _, value in extractor_config.items()])
-    max_pbar = len(classifications) * number_of_extractors
-    pbar = progressbar.ProgressBar(widgets=widgets, max_value=max_pbar)
-    counter = 0
+    if display_progressbar:
+        widgets = [
+            'Extracting: ',
+            progressbar.Percentage(),
+            ' ', progressbar.Bar(),
+            ' ', progressbar.ETA()
+        ]
+        number_of_extractors = sum([len(value) for _, value in extractor_config.items()])
+        max_pbar = len(classifications) * number_of_extractors
+        pbar = progressbar.ProgressBar(widgets=widgets, max_value=max_pbar)
+        counter = 0
+    
+        def callback(name_with_row):
+            nonlocal extracts_data
+            nonlocal counter
+            nonlocal pbar
+            extractor_name, new_extract_row = name_with_row
+            if new_extract_row is not None:
+                extracts_data[extractor_name] += new_extract_row
+            counter += 1
+            pbar.update(counter)
+    
+        pbar.start()
+    else:
+        def callback(name_with_row):
+            nonlocal extracts_data
+            extractor_name, new_extract_row = name_with_row
+            if new_extract_row is not None:
+                extracts_data[extractor_name] += new_extract_row
 
-    extracts_data = defaultdict(list)
-
-    def callback(name_with_row):
-        nonlocal extracts_data
-        nonlocal counter
-        nonlocal pbar
-        extractor_name, new_extract_row = name_with_row
-        if new_extract_row is not None:
-            extracts_data[extractor_name] += new_extract_row
-        counter += 1
-        pbar.update(counter)
-
-    pbar.start()
     if cpu_count > 1:
         pool = Pool(cpu_count)
     for _, classification in classifications.iterrows():
@@ -137,7 +150,9 @@ def batch_extract(
     if cpu_count > 1:
         pool.close()
         pool.join()
-    pbar.finish()
+
+    if display_progressbar:
+        pbar.finish()
 
     flat_extracts = defaultdict(list)
     for extractor_name, data in extracts_data.items():
@@ -212,7 +227,8 @@ def batch_reduce(
     config,
     cpu_count=1,
     stream=False,
-    output_path=None
+    output_path=None,
+    display_progressbar=True
 ):
     '''
         Reduces a list of extracts on a per-subject basis and returns an aggregated
@@ -242,6 +258,8 @@ def batch_reduce(
             Whether to stream to an output CSV (and resume from the CSV in case of a stopped reduction)
         output_path: str
             Path to output CSV (used only if stream=True)
+        display_progressbar: bool:
+            If True, the progress bar is displayed.
     '''
     extracts.sort_values(['subject_id', 'created_at'], inplace=True)
     subjects = extracts.subject_id.unique()
@@ -256,16 +274,68 @@ def batch_reduce(
         'filter': filter,
         'keywords': keywords
     }
+    if display_progressbar:
+        widgets = [
+            'Reducing: ',
+            progressbar.Percentage(),
+            ' ', progressbar.Bar(),
+            ' ', progressbar.ETA()
+        ]
+        number_of_rows = len(subjects) * len(tasks)
+        pbar = progressbar.ProgressBar(widgets=widgets, max_value=number_of_rows)
 
-    widgets = [
-        'Reducing: ',
-        progressbar.Percentage(),
-        ' ', progressbar.Bar(),
-        ' ', progressbar.ETA()
-    ]
-    number_of_rows = len(subjects) * len(tasks)
-    pbar = progressbar.ProgressBar(widgets=widgets, max_value=number_of_rows)
+        def callback(reduced_data_list):
+            nonlocal reduced_data
+            nonlocal sdx
+            nonlocal pbar
+            nonlocal stream
+            reduced_data += reduced_data_list
+            if (stream) and (output_path is not None):
+                if (sdx == 0) and (not resume):
+                    pandas.DataFrame(reduced_data).to_csv(
+                        output_path,
+                        mode='w',
+                        index=False,
+                        encoding='utf-8'
+                    )
+                else:
+                    pandas.DataFrame(reduced_data).to_csv(
+                        output_path,
+                        mode='a',
+                        index=False,
+                        header=False,
+                        encoding='utf-8'
+                    )
+                reduced_data.clear()
+            sdx += 1
+            pbar.update(sdx)
+        pbar.start()
+    else:
+        def callback(reduced_data_list):
+            nonlocal reduced_data
+            nonlocal sdx
+            nonlocal stream
+            reduced_data += reduced_data_list
+            if (stream) and (output_path is not None):
+                if (sdx == 0) and (not resume):
+                    pandas.DataFrame(reduced_data).to_csv(
+                        output_path,
+                        mode='w',
+                        index=False,
+                        encoding='utf-8'
+                    )
+                else:
+                    pandas.DataFrame(reduced_data).to_csv(
+                        output_path,
+                        mode='a',
+                        index=False,
+                        header=False,
+                        encoding='utf-8'
+                    )
+                reduced_data.clear()
+            sdx += 1
 
+    sdx = 0
     resume = False
     if stream:
         if os.path.isfile(output_path):
@@ -276,35 +346,7 @@ def batch_reduce(
                 subjects = np.setdiff1d(subjects, reduced_csv.subject_id)
 
     reduced_data = []
-    sdx = 0
 
-    def callback(reduced_data_list):
-        nonlocal reduced_data
-        nonlocal sdx
-        nonlocal pbar
-        nonlocal stream
-        reduced_data += reduced_data_list
-        if (stream) and (output_path is not None):
-            if (sdx == 0) and (not resume):
-                pandas.DataFrame(reduced_data).to_csv(
-                    output_path,
-                    mode='w',
-                    index=False,
-                    encoding='utf-8'
-                )
-            else:
-                pandas.DataFrame(reduced_data).to_csv(
-                    output_path,
-                    mode='a',
-                    index=False,
-                    header=False,
-                    encoding='utf-8'
-                )
-            reduced_data.clear()
-        sdx += 1
-        pbar.update(sdx)
-
-    pbar.start()
     if cpu_count > 1:
         pool = Pool(cpu_count)
     for subject in subjects:
@@ -334,8 +376,8 @@ def batch_reduce(
     if cpu_count > 1:
         pool.close()
         pool.join()
-    pbar.finish()
-
+    if display_progressbar:
+        pbar.finish()
     return pandas.DataFrame(reduced_data)
 
 
