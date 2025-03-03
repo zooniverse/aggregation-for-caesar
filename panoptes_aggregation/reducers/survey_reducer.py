@@ -6,16 +6,6 @@ This module provides functions to reduce survey task extracts from
 '''
 from collections import Counter, OrderedDict
 from .reducer_wrapper import reducer_wrapper
-from numpy import argsort
-
-# Non public function to make sure the list is returned in the correct order.
-# This will return the list in alphbetical order of 'choice'
-def _order_list(reduction_list):
-    choice_list = [reduction['choice'] for reduction in reduction_list]
-    order = argsort(choice_list)
-    reduction_list = [reduction_list[i] for i in order]
-    return reduction_list
-
 
 
 def process_data(data):
@@ -84,5 +74,4 @@ def survey_reducer(data_in):
             if isinstance(value, Counter):
                 reduction[key] = dict(value)
         reduction_list.append(reduction)
-    reduction_list = _order_list(reduction_list)
     return reduction_list

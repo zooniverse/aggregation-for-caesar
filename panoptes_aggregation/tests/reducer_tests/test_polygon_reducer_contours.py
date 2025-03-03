@@ -4,7 +4,7 @@ from panoptes_aggregation.reducers.polygon_reducer_contours import\
 from .base_test_class import ReducerTest
 import copy
 import numpy as np
-import shapelyW
+import shapely
 
 '''This tests the reducer by providing 3 clusters of 3 regular polygons of different
 rotations, sizes and number of sides. There are three outliers. The first is

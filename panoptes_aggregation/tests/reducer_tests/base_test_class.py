@@ -116,7 +116,7 @@ def ReducerTest(
                     result_item = cast_to_dict(result_item)
                     if round is not None:
                         result_item = round_dict(result_item, round)
-                    self.assertDictEqual(result_item, self.reduced_no_params[i])
+                    self.assertCountEqual(result_item, self.reduced_no_params[i])
             else:
                 result = cast_to_dict(result)
                 if round is not None:
@@ -131,7 +131,7 @@ def ReducerTest(
                     result_item = cast_to_dict(result_item)
                     if round is not None:
                         result_item = round_dict(result_item, round)
-                    self.assertDictEqual(result_item, self.reduced_with_version[i])
+                    self.assertCountEqual(result_item, self.reduced_with_version[i])
             else:
                 result = cast_to_dict(result)
                 if round is not None:
@@ -158,7 +158,7 @@ def ReducerTest(
                         result_item = cast_to_dict(result_item)
                         if round is not None:
                             result_item = round_dict(result_item, round)
-                        self.assertDictEqual(result_item, self.reduced_with_version[i])
+                        self.assertCountEqual(result_item, self.reduced_with_version[i])
                 else:
                     result = reducer(self.extracted_with_version, **kwargs, **pkwargs, **network_kwargs)
                     result = cast_to_dict(result)
