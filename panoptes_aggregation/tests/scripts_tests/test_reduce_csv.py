@@ -152,7 +152,11 @@ class TestReduceCSV(unittest.TestCase):
             filter='all',
             cpu_count=1
         )
-        mock_question_reducer.assert_any_call([{'yes': 1.0}, {'no': 1.0}], user_id=[1, 2])
+        created_at = [ 
+            pandas.Timestamp('2017-05-31 12:33:46', tz='UTC'),
+            pandas.Timestamp('2017-05-31 12:33:51', tz='UTC')
+        ]
+        mock_question_reducer.assert_any_call([{'yes': 1.0}, {'no': 1.0}], user_id=[1, 2], created_at=created_at)
         output_path = os.path.join(os.getcwd(), 'question_reducer_reductions.csv')
         self.assertEqual(output_file_name, output_path)
         result_dataframe = reduce_panoptes_csv.flatten_data.return_values[0]
