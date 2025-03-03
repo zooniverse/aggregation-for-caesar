@@ -19,6 +19,7 @@ Welcome to panoptes_aggregation's documentation
    running_reducers
    panoptes
    How_Clustering_Works
+   Polygon data - extraction and reduction
    Gravity_Spy
    Contributing
    CODE_OF_CONDUCT
