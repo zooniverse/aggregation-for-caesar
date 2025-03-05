@@ -2,6 +2,8 @@ def pbar_override(progressbar):
     def update1(self, *args, **kwargs):
         progressbar.bar.ProgressBarMixinBase.update(self, *args, **kwargs)
         line = progressbar.bar.converters.to_unicode(self._format_line())
+        # Gooey does not support colors
+        line = progressbar.utils.no_color(line)
         print('R| ' + line, flush=True, end='')
 
     def finish(self, *args, **kwargs):
