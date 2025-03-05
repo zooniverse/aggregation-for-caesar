@@ -116,3 +116,5 @@ endpoints.yml
 tmp/*
 .DS_Store
 scrap.ipynb
+
+panoptes_aggregation/scripts/icons/zooniverse*

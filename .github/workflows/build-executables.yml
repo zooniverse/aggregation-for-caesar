@@ -1,0 +1,68 @@
+name: Build Executables
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['windows-latest', 'macos-latest']
+
+    env:
+      MAIN_PY_FILE: 'main.py'  # Define the path to your main.py file here
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+        cache: 'pip'
+
+    - name: Install panoptes aggregation
+      run: |
+        pip install -U pip
+        pip install .[gui,installer]
+      working-directory: ./
+
+    - name: Build executable (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        pyinstaller build_win.spec
+      working-directory: ./
+
+    - name: Build executable (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        pyinstaller build_mac_universal2.spec
+      working-directory: ./
+
+    - name: Collect licenses
+      run: |
+          pip-licenses --format=plain-vertical --with-authors --with-urls --with-license-file --no-license-path --output-file=dist/dependency_licenses_full.txt
+          pip-licenses --format=markdown --with-authors --with-urls --output-file=dist/dependency_licenses_summary.txt
+
+    - name: Create Artifact (Windows)
+      if: matrix.os == 'windows-latest'
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-executables
+        path: | 
+          dist/*.exe
+          dist/*.txt
+
+    - name: Create Artifact (macOS)
+      if: matrix.os == 'macos-latest'
+      uses: actions/upload-artifact@v4
+      with:
+        name: macos-executables
+        path: |
+          dist/*.app
+          dist/*.txt
+
+    - name: List files in dist folder
+      run: ls -R ./dist/
