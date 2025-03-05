@@ -73,6 +73,10 @@ test = [
     "pytest>=7.1.2,<8.4",
     "pytest-subtests>=0.10.0,<0.14"
 ]
+installer = [
+    "pip-licenses>=5.0",
+    "pyinstaller>=6.12"
+]
 
 [project.scripts]
 panoptes_aggregation = "panoptes_aggregation.scripts.aggregation_parser:main"
