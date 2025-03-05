@@ -11,7 +11,7 @@ Automatic documentation will be created using [sphinx](http://www.sphinx-doc.org
 ---
 
 ## Writing Extractors
-Extractors are used to take classifications coming out of Panoptes and extract the relevant data needed to calculate a aggregated answer for one task on a subject.  Ideally this extraction should be as flat as possible (i.e. no deeply nested dictionaries), but sometimes this can not be avoided.
+Extractors are used to take classifications coming out of Panoptes and extract the relevant data needed to calculate an aggregated answer for one task on a subject.  Ideally this extraction should be as flat as possible (i.e. no deeply nested dictionaries), but sometimes this can not be avoided.
 
 ### 1. Make a new function for the extractor
 
@@ -67,7 +67,7 @@ Reducers are functions that take a list of extracts and combines them into aggre
 Typically two function need to be defined for a reducer.
 
 1. `process_data` is a helper function that takes a list of raw extracted data objects and pre-processes them into a form the main reducer function can use (e.g. arranging the data into arrays, creating `Counter` objects, etc...)
-2. The `*_reducer` function that takes in the output of the `process_data` function and returns the reduced data as a `dict`-like object.
+2. The `*_reducer` function that takes in the output of the `process_data` function and returns the reduced data as a `dict`-like object or a list of `dict`-like object (sometimes needed to avoid deeply nested dictionaires).
 3. The `*_reducer` function should use the `@reducer_wrapper` decorator with the `process_data` function passed as the `process_data` keyword.
 4. If the reducer exposes keywords the user can specify a `DEFAULTS` dictionary must be specified of the form: `DEFAULTS = {'<keyword name>': {'default': <default value>, 'type': <data type>}}`
 5. If these keywords are passed into the `process_data` function they `DEFAULTS` dictionary should be passed into the `@reducer_wrapper` as the `defaults_process` keyword.  If these keywords are passed into the main `*_reducer` function the `DEFAULTS` dictionary should be passed into the `@reducer_wrapper` as the `defaults_data` keyword.  Note: any combination of these two can be used.

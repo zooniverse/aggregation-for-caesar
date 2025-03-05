@@ -25,7 +25,7 @@ with warnings.catch_warnings():
 DEFAULTS = {
     'min_samples': {'default': 2, 'type': int},
     'eps': {'default': 0.5, 'type': float},
-    'average_type': {'default': 'last', 'type': str}
+    'average_type': {'default': 'median', 'type': str}
 }
 
 # override the built-in tokenize
