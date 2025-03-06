@@ -8,7 +8,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['windows-latest', 'macos-latest']
+        os: ['windows-latest', 'macos-13', 'macos-latest']  # macos-13 is intel, macos-latest is arm
 
     env:
       MAIN_PY_FILE: 'main.py'  # Define the path to your main.py file here
@@ -36,9 +36,9 @@ jobs:
       working-directory: ./
 
     - name: Build executable (macOS)
-      if: matrix.os == 'macos-latest'
+      if: matrix.os != 'windows-latest'
       run: |
-        pyinstaller build_mac_universal2.spec
+        pyinstaller build_mac.spec
       working-directory: ./
 
     - name: Collect licenses
@@ -46,20 +46,29 @@ jobs:
           pip-licenses --format=plain-vertical --with-authors --with-urls --with-license-file --no-license-path --output-file=dist/dependency_licenses_full.txt
           pip-licenses --format=markdown --with-authors --with-urls --output-file=dist/dependency_licenses_summary.txt
 
-    - name: Create Artifact (Windows)
+    - name: Create Artifact (Windows x64)
       if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@v4
       with:
-        name: windows-executables
+        name: windows-x64-executables
         path: | 
           dist/*.exe
           dist/*.txt
 
-    - name: Create Artifact (macOS)
+    - name: Create Artifact (macOS arm)
       if: matrix.os == 'macos-latest'
       uses: actions/upload-artifact@v4
       with:
-        name: macos-executables
+        name: macos-arm64-executables
+        path: |
+          dist/*.app
+          dist/*.txt
+
+    - name: Create Artifact (macOS intel)
+      if: matrix.os == 'macos-13'
+      uses: actions/upload-artifact@v4
+      with:
+        name: macos-intel-executables
         path: |
           dist/*.app
           dist/*.txt
