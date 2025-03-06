@@ -28,7 +28,7 @@ def reduce_csv(
     order=False,
     stream=False,
     cpu_count=1,
-    display_progressbar=True
+    hide_progressbar=False
 ):
     extracted_csv = get_file_instance(extracted_csv)
     with extracted_csv as extracted_csv_in:
@@ -49,7 +49,7 @@ def reduce_csv(
 
     non_flat_data = batch_reduce(extracted, config_yaml, cpu_count=cpu_count,
                                  stream=stream, output_path=output_path,
-                                 display_progressbar=display_progressbar)
+                                 hide_progressbar=hide_progressbar)
     if stream:
         reduced_csv = pandas.read_csv(output_path, encoding='utf-8')
         if 'data' in reduced_csv:

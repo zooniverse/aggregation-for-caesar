@@ -76,6 +76,10 @@ mock_question_reducer.side_effect = [
     {'yes': 1, 'no': 1},
     {'blue': 1, 'green': 1},
     {'yes': 1, 'no': 1},
+    {'blue': 1, 'green': 1},
+    {'yes': 1, 'no': 1},
+    {'blue': 1, 'green': 1},
+    {'yes': 1, 'no': 1},
     {'blue': 1, 'green': 1}
 ]
 
@@ -139,6 +143,21 @@ class TestReduceCSV(unittest.TestCase):
         expected = task_T0_csv[[False, True]]
         result = batch_utils.last_filter(task_T0_csv)
         assert_frame_equal(result, expected)
+
+    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.DataFrame.to_csv')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.reducers.reducers', mock_reducers_dict)
+    @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.flatten_data', CaptureValues(batch_utils.flatten_data))
+    def test_reduce_csv_object_no_progress_bar(self, mock_progress_bar, *_):
+        '''Test to make sure progress is not displayed'''
+        _ = reduce_panoptes_csv.reduce_csv(
+            self.extracted_csv_question,
+            self.config_yaml_question,
+            filter='all',
+            cpu_count=1,
+            hide_progressbar=True
+        )
+        mock_progress_bar.assert_not_called()
 
     @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch('panoptes_aggregation.scripts.reduce_panoptes_csv.pandas.DataFrame.to_csv')

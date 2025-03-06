@@ -31,7 +31,7 @@ def extract_csv(
     order=False,
     verbose=False,
     cpu_count=1,
-    display_progressbar=True
+    hide_progressbar=False
 ):
     config = get_file_instance(config)
     with config as config_in:
@@ -81,7 +81,7 @@ def extract_csv(
     assert (vdx.sum() > 0), 'There are no classifications matching the configured version number(s)'
     assert ((vdx & wdx).sum() > 0), 'There are no classifications matching the combined workflow ID and version number(s)'
 
-    extracted_data = batch_extract(classifications[vdx & wdx], extractor_config, cpu_count, verbose, display_progressbar)
+    extracted_data = batch_extract(classifications[vdx & wdx], extractor_config, cpu_count, verbose, hide_progressbar=hide_progressbar)
 
     # create one flat csv file for each extractor used
     output_base_name, _ = os.path.splitext(output_name)

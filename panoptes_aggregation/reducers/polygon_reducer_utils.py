@@ -290,8 +290,10 @@ def cluster_average_intersection(data, **kwargs):
     '''
     polygon_list = [data[i]['polygon'] for i in range(len(data))]
     # Just one object, so return it as it is its own average
-    if isinstance(polygon_list, shapely.geometry.polygon.Polygon) or len(polygon_list) == 1:
+    if isinstance(polygon_list, shapely.geometry.polygon.Polygon):
         return polygon_list
+    elif len(polygon_list) == 1:
+        return polygon_list[0]
     # There must now be two polygons to average
     intersection_all = polygon_list[0].intersection(polygon_list[1])
     # If there are any other
@@ -321,8 +323,10 @@ def cluster_average_union(data, **kwargs):
     '''
     polygon_list = [data[i]['polygon'] for i in range(len(data))]
     # Just one object, so return it as it is its own average
-    if isinstance(polygon_list, shapely.geometry.polygon.Polygon) or len(polygon_list) == 1:
+    if isinstance(polygon_list, shapely.geometry.polygon.Polygon):
         return polygon_list
+    elif len(polygon_list) == 1:
+        return polygon_list[0]
     # There must now be two polygons to average
     union_all =  _polygons_unify(polygon_list)
     return union_all

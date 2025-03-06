@@ -35,7 +35,7 @@ def batch_extract(
     extractor_config,
     cpu_count=1,
     verbose=False,
-    display_progressbar=True
+    hide_progressbar=False
 ):
     '''
         Extracts the values given a list of classifications and a corresponding
@@ -67,11 +67,17 @@ def batch_extract(
             The number of CPU cores to be used.
         verbose: bool:
             If True, increase output verbosity.
-        display_progressbar: bool:
-            If True, the progress bar is displayed.
+        hide_progressbar: bool:
+            If True, the progress bar is hidden.
     '''
     extracts_data = defaultdict(list)
-    if display_progressbar:
+    if hide_progressbar:
+        def callback(name_with_row):
+            nonlocal extracts_data
+            extractor_name, new_extract_row = name_with_row
+            if new_extract_row is not None:
+                extracts_data[extractor_name] += new_extract_row
+    else:
         widgets = [
             'Extracting: ',
             progressbar.Percentage(),
@@ -94,12 +100,6 @@ def batch_extract(
             pbar.update(counter)
     
         pbar.start()
-    else:
-        def callback(name_with_row):
-            nonlocal extracts_data
-            extractor_name, new_extract_row = name_with_row
-            if new_extract_row is not None:
-                extracts_data[extractor_name] += new_extract_row
 
     if cpu_count > 1:
         pool = Pool(cpu_count)
@@ -151,7 +151,7 @@ def batch_extract(
         pool.close()
         pool.join()
 
-    if display_progressbar:
+    if hide_progressbar is False:
         pbar.finish()
 
     flat_extracts = defaultdict(list)
@@ -228,7 +228,7 @@ def batch_reduce(
     cpu_count=1,
     stream=False,
     output_path=None,
-    display_progressbar=True
+    hide_progressbar=False
 ):
     '''
         Reduces a list of extracts on a per-subject basis and returns an aggregated
@@ -258,8 +258,8 @@ def batch_reduce(
             Whether to stream to an output CSV (and resume from the CSV in case of a stopped reduction)
         output_path: str
             Path to output CSV (used only if stream=True)
-        display_progressbar: bool:
-            If True, the progress bar is displayed.
+        hide_progressbar: bool:
+            If True, the progress bar is hidden.
     '''
     extracts.sort_values(['subject_id', 'created_at'], inplace=True)
     subjects = extracts.subject_id.unique()
@@ -274,7 +274,31 @@ def batch_reduce(
         'filter': filter,
         'keywords': keywords
     }
-    if display_progressbar:
+    if hide_progressbar:
+        def callback(reduced_data_list):
+            nonlocal reduced_data
+            nonlocal sdx
+            nonlocal stream
+            reduced_data += reduced_data_list
+            if (stream) and (output_path is not None):
+                if (sdx == 0) and (not resume):
+                    pandas.DataFrame(reduced_data).to_csv(
+                        output_path,
+                        mode='w',
+                        index=False,
+                        encoding='utf-8'
+                    )
+                else:
+                    pandas.DataFrame(reduced_data).to_csv(
+                        output_path,
+                        mode='a',
+                        index=False,
+                        header=False,
+                        encoding='utf-8'
+                    )
+                reduced_data.clear()
+            sdx += 1
+    else:
         widgets = [
             'Reducing: ',
             progressbar.Percentage(),
@@ -310,30 +334,6 @@ def batch_reduce(
             sdx += 1
             pbar.update(sdx)
         pbar.start()
-    else:
-        def callback(reduced_data_list):
-            nonlocal reduced_data
-            nonlocal sdx
-            nonlocal stream
-            reduced_data += reduced_data_list
-            if (stream) and (output_path is not None):
-                if (sdx == 0) and (not resume):
-                    pandas.DataFrame(reduced_data).to_csv(
-                        output_path,
-                        mode='w',
-                        index=False,
-                        encoding='utf-8'
-                    )
-                else:
-                    pandas.DataFrame(reduced_data).to_csv(
-                        output_path,
-                        mode='a',
-                        index=False,
-                        header=False,
-                        encoding='utf-8'
-                    )
-                reduced_data.clear()
-            sdx += 1
 
     sdx = 0
     resume = False
@@ -376,7 +376,7 @@ def batch_reduce(
     if cpu_count > 1:
         pool.close()
         pool.join()
-    if display_progressbar:
+    if hide_progressbar is False:
         pbar.finish()
     return pandas.DataFrame(reduced_data)
 
