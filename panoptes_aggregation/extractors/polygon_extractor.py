@@ -27,7 +27,7 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
     -------
     extraction : dict
         A dictionary containing one key per frame. Each frame contains lists
-        `pathX` and `pathT`. These are lists of lists, where each inner list of
+        `pathX` and `pathY`. These are lists of lists, where each inner list of
         `pathX` is the x values, and each inner list of `pathY` is the y values,
         for a particular polygon/freehand drawing. The dictionary also
         contains information if the data is gold standard or not.
