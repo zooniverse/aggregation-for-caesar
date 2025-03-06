@@ -38,7 +38,8 @@ def _polygons_unify(polygons):
         for j in range(i+1, len(polygons)):
             if polygons[i].intersects(polygons[j]):
                 polygons[i] = polygons[i].union(polygons[j])
-                if isinstance(polygons[i], shapely.geometry.collection.GeometryCollection):
+                if isinstance(polygons[i], shapely.geometry.collection.GeometryCollection)\
+                    or isinstance(polygons[i], shapely.geometry.multipolygon.MultiPolygon):
                     for p in polygons[i].geoms:
                         if isinstance(p, shapely.geometry.polygon.Polygon):
                             polygons[i] = p
@@ -48,8 +49,6 @@ def _polygons_unify(polygons):
                     for hole in polygons[i].interiors:
                         hole = shapely.Polygon(hole)
                         polygons[i] = polygons[i].union(hole)
-                        if isinstance(polygons[i], shapely.geometry.linestring.LineString):
-                            print(polygons[i])
                 indices_included.append(j)
         # Remove polygons that have been unified into the others
         for j in sorted(indices_included, reverse=True):
@@ -119,10 +118,6 @@ def IoU_metric_polygon(a, b, data_in=[]):
 
     union = geo1.union(geo2).area
 
-    if union == 0:
-        # catch divide by zero (i.e. cases when neither shape has an area)
-        return np.inf
-
     return 1 - intersection / union
 
 
@@ -184,7 +179,7 @@ def IoU_cluster_mean_distance(distances_matrix):
     '''
     # first check if it is symmetric
     if not issymmetric(distances_matrix):
-        raise ValueError('`distances_matrix` must be a symmetric-square array')
+        raise Exception('`distances_matrix` must be a symmetric-square array')
     # Check the diagonals are all 0, as the distance between an object and its self is always zero
     if np.sum(np.diagonal(distances_matrix)) != 0:
         raise ValueError('`distances_matrix` must have zero diagonal elements, as distance between the object and itself is zero')
@@ -219,9 +214,6 @@ def cluster_average_last(data, **kwargs):
         The last created shapely polygon in the cluster.
     '''
     created_at = np.array(kwargs.pop('created_at'))
-    # Make sure `cteared_at` is a list or array
-    if not (isinstance(created_at, list) or isinstance(created_at, np.ndarray)):
-        raise ValueError('`created_at` must be a list or array')
 
     # Change to datatime format
     created_at_list = []
@@ -234,7 +226,7 @@ def cluster_average_last(data, **kwargs):
     elif isinstance(created_at[0], datetime.datetime):  # If already correct
         created_at_list = created_at
     else:
-        raise ValueError('`created_at` needs to contain either UTC strings, pandas timestamps or datetime objects')
+        raise Exception('`created_at` needs to contain either UTC strings, pandas timestamps or datetime objects')
     # sort in time order
     order_logic = np.argsort(created_at_list)
     # Select the last polygon to be created
@@ -306,10 +298,7 @@ def cluster_average_intersection(data, **kwargs):
     if len(polygon_list) > 2:
         for i in range(2, len(polygon_list)):
             intersection_all = intersection_all.intersection(polygon_list[i])
-    if isinstance(intersection_all, shapely.geometry.collection.GeometryCollection):
-        for geo in intersection_all.geoms:
-            if isinstance(geo, shapely.geometry.polygon.Polygon):
-                intersection_all = geo
+
     return intersection_all
 
 
@@ -398,7 +387,7 @@ def cluster_average_intersection_contours(data, **kwargs):
                 for p in polygon.geoms:
                     if isinstance(p, shapely.geometry.polygon.Polygon):
                         if not p.is_simple:
-                            polygon = polygon.buffer(0)
+                            p = p.buffer(0)
                         individual_polygons.append(p)
             # Any other shapely object is not included in the lost
         return individual_polygons
@@ -414,14 +403,7 @@ def cluster_average_intersection_contours(data, **kwargs):
         polygon_connections_indices = []
         for i in range(num_polygons):
             for j in range(i+1, num_polygons):
-                # Catch the error wehere one polygon is inside another
-                try:
-                    does_intersect = shapely.intersects(polygons[i], polygons[j])
-                except:
-                    intersection_polygon = polygons[i].intersection(polygons[j])
-                    # If empty is true, then the polygons do NOT intersect 
-                    does_intersect = not intersection_polygon.is_empty
-                if does_intersect==True:
+                if shapely.intersects(polygons[i], polygons[j]):
                     # The indices of the polygons in this intersection
                     polygon_connection_index = list(set(polygon_indices[i] + polygon_indices[j]))
                     # Want it in order so comparison can be made
@@ -439,13 +421,9 @@ def cluster_average_intersection_contours(data, **kwargs):
     polygons_union = _polygons_unify(polygons)
     intersection_contours.append(polygons_union)
     while num_agreement<max_iters:
-        # If there is only one polygon left, but it contains more intersections than the current level, cotinue.
-        # Otherwise all the contours have been found
+        # If there is only one polygon left, break
         if len(polygons)==1:
-            if len(polygon_indices[0]) > num_agreement:
-                continue
-            else:
-                break
+            break
         else:
             # Find the intersection of the provided polygons, and the contributing indices
             polygons, polygon_indices = polygon_intersection_list(polygons, polygon_indices)

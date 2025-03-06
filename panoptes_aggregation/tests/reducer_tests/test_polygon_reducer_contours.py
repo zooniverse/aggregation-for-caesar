@@ -992,3 +992,194 @@ TestPolygonTReducerIntersectionContours = ReducerTest(
     network_kwargs=kwargs_extra_data,
     test_name='TestPolygonTReducerIntersectionContours'
 )
+
+# Now to test cases with not enough intersection to cluster
+extracted_data_no_overall_intersection = [
+    {
+        'frame0': {
+            'T0_tool0_pathX': [
+                [
+                    0.21554927386591496,
+                    0.8346610570311462,
+                    0.36812686536062333,
+                    -0.25098491780460797,
+                    0.2155492738659148
+                ]
+            ],
+            'T0_tool0_pathY': [
+                [
+                    -0.25858097547222986,
+                    0.20795321619829304,
+                    0.8270649993635244,
+                    0.3605308076930015,
+                    -0.25858097547222986
+                ]
+            ],
+            'gold_standard': False
+        }
+    },
+    {
+        'frame0': {
+            'T0_tool0_pathX': [
+                [
+                    0.3693081708169513,
+                    0.553908720812514,
+                    0.5957542682751744,
+                    0.47526481648569685,
+                    0.2488187190274737,
+                    0.022372621569250545,
+                    -0.09811683022022713,
+                    -0.05627128275756679,
+                    0.12832926723799587,
+                    0.36930817081695105
+                ]
+            ],
+            'T0_tool0_pathY': [
+                [
+                    -0.5218849589408747,
+                    -0.3669867055244751,
+                    -0.1296688129675387,
+                    0.07902503930795732,
+                    0.16144467844849417,
+                    0.07902503930795748,
+                    -0.1296688129675385,
+                    -0.366986705524475,
+                    -0.5218849589408747,
+                    -0.5218849589408747
+                ]
+            ],
+            'gold_standard': False
+        }
+    },
+    {
+        'frame0': {
+            'T0_tool0_pathX': [
+                [
+                    0.09127357717866474,
+                    0.024685520754786305,
+                    -0.21171962328979593,
+                    -0.5073252607061052,
+                    -0.7238142284563371,
+                    -0.7598889325232856,
+                    -0.5986696179483486,
+                    -0.3155925937742383,
+                    -0.04311274566270751,
+                    0.0912735771786648
+                ]
+            ],
+            'T0_tool0_pathY': [
+                [
+                    0.3044349351140881,
+                    0.5928594950295896,
+                    0.7710035487895189,
+                    0.7555115137889823,
+                    0.5536322853795214,
+                    0.2598273981716289,
+                    0.011571424167481636,
+                    -0.07497390733855891,
+                    0.040686926109404054,
+                    0.3044349351140878
+                ]
+            ],
+            'gold_standard': False
+        }
+    }
+]
+
+kwargs_extra_data_no_overall_intersection = {
+    'created_at': [
+        '2025-01-21 10:46:20 UTC',
+        '2025-01-25 11:46:20 UTC',
+        '2025-01-26 16:46:20 UTC'
+    ]
+}
+
+processed_data_no_overall_intersection = {
+    'frame0': {
+        'T0_tool0': {
+            'X': [
+                [0, 0],
+                [1, 1],
+                [2, 2]
+            ],
+            'data': [
+                {
+                    'polygon': shapely.Polygon(np.array([
+                        [0.21554927386591496, 0.8346610570311462, 0.36812686536062333, -0.25098491780460797, 0.2155492738659148],
+                        [-0.25858097547222986, 0.20795321619829304, 0.8270649993635244, 0.3605308076930015, -0.25858097547222986]
+                        ]).T),
+                    'gold_standard': False
+                }, {
+                    'polygon': shapely.Polygon(np.array([
+                        [0.3693081708169513, 0.553908720812514, 0.5957542682751744, 0.47526481648569685, 0.2488187190274737, 0.022372621569250545, -0.09811683022022713, -0.05627128275756679, 0.12832926723799587, 0.36930817081695105],
+                        [-0.5218849589408747, -0.3669867055244751, -0.1296688129675387, 0.07902503930795732, 0.16144467844849417, 0.07902503930795748, -0.1296688129675385, -0.366986705524475, -0.5218849589408747, -0.5218849589408747]
+                        ]).T),
+                    'gold_standard': False
+                }, {
+                    'polygon': shapely.Polygon(np.array([
+                        [0.09127357717866474, 0.024685520754786305, -0.21171962328979593, -0.5073252607061052, -0.7238142284563371, -0.7598889325232856, -0.5986696179483486, -0.3155925937742383, -0.04311274566270751, 0.0912735771786648],
+                        [0.3044349351140881, 0.5928594950295896, 0.7710035487895189, 0.7555115137889823, 0.5536322853795214, 0.2598273981716289, 0.011571424167481636,-0.07497390733855891, 0.040686926109404054, 0.3044349351140878]
+                        ]).T),
+                    'gold_standard': False
+                }
+            ]
+        }
+    }
+}
+
+reduced_data_no_overall_intersection = [
+    {
+        'frame0': {
+                'T0_tool0_cluster_labels': [-1, -1, -1]
+            },
+        'parameters': {
+                'eps': 0.5,
+                'min_samples': 2
+            }
+    }
+]
+
+TestPolygonTReducerIntersectionContoursNoIntersection = ReducerTest(
+    polygon_reducer_contours,
+    process_data,
+    extracted_data_no_overall_intersection,
+    processed_data_no_overall_intersection,
+    reduced_data_no_overall_intersection,
+    'Test the polygon contour reducer can handle the case where the intersecting polygons are not close enough to form a cluster with this eps',
+    kwargs={
+        'eps': 0.5,
+        'min_samples': 2
+    },
+    output_kwargs=True,
+    network_kwargs=kwargs_extra_data,
+    test_name='TestPolygonTReducerIntersectionContoursNoIntersection'
+)
+
+# Now test if it can handle not enough data to cluster, by increasing min_samples
+reduced_data_not_enough_data = [
+    {
+        'frame0': {
+                'T0_tool0_cluster_labels': [-1, -1, -1]
+            },
+        'parameters': {
+                'eps': 0.5,
+                'min_samples': 4
+            }
+    }
+]
+
+TestPolygonTReducerIntersectionContoursNotEnoughData = ReducerTest(
+    polygon_reducer_contours,
+    process_data,
+    extracted_data_no_overall_intersection,
+    processed_data_no_overall_intersection,
+    reduced_data_not_enough_data,
+    'Test the polygon contour reducer can handle the case where there is not enough data to cluster',
+    kwargs={
+        'eps': 0.5,
+        'min_samples': 4
+    },
+    output_kwargs=True,
+    network_kwargs=kwargs_extra_data,
+    test_name='TestPolygonTReducerIntersectionContoursNotEnoughData'
+)

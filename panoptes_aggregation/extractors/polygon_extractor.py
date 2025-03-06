@@ -61,7 +61,7 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
                 x = value["pathX"]
                 y = value["pathY"]
             else:
-                raise ValueError('Unknown data format for polygon')
+                raise Exception('Unknown data format for polygon data')
             # Only include extracts with data
             if len(x)>0:
                 extract[frame].setdefault('{0}_{1}'.format(key, 'pathX'), []).append(x)

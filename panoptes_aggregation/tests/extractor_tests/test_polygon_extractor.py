@@ -1,5 +1,6 @@
 from panoptes_aggregation import extractors
 from .base_test_class import ExtractorTest
+import unittest
 
 classification = {
     'annotations': [
@@ -48,7 +49,7 @@ classification = {
                     'tool_label': 'Tool name'
                 },
                 {
-                    'tool': 1,
+                    'toolIndex': 1,
                     'frame': 0,
                     'pathX': [0., 1, 1., 0., 0.],
                     'pathY': [0., 0., 1., 1., 0.],
@@ -128,14 +129,14 @@ expected = {
                          1.9139981287461882,
                          2.2716019279274726]
                 ],
-            'T0_tool1_pathX': [
+            'T0_toolIndex1_pathX': [
                         [0.0,
                          1,
                          1.0,
                          0.0,
                          0.0]
                 ],
-            'T0_tool1_pathY': [
+            'T0_toolIndex1_pathY': [
                         [0.0,
                          0.0,
                          1.0,
@@ -165,3 +166,61 @@ TestPolygonTask = ExtractorTest(
     },
     test_name='TestPolygonTask'
 )
+
+# Now let's test if an error is thrown for incorrect data inputs
+classification_incorrect_tool = {
+    'annotations': [
+        {
+            'task': 'T0',
+            'task_label': 'Draw some lines',
+            'value': [
+                {
+                    'index': 0,
+                    'frame': 0,
+                    'pathX': [0., 1, 1., 0., 0.],
+                    'pathY': [0., 0., 1., 1., 0.],
+                    'details': [],
+                    'tool_label': 'Tool name'
+                }
+            ]
+        }
+    ]
+}
+
+
+# Test error is correctly thrown
+class TestExceptionTool(unittest.TestCase):
+    def testexception(self):
+        with self.assertRaises(Exception) as context:
+            extractors.polygon_extractor._original(classification_incorrect_tool)
+
+        self.assertTrue('Neither `tool` or `toolIndex` are in the annotation' in str(context.exception))
+
+
+classification_incorrect_x_y_format = {
+    'annotations': [
+        {
+            'task': 'T0',
+            'task_label': 'Draw some lines',
+            'value': [
+                {
+                    'tool': 0,
+                    'frame': 0,
+                    'X': [0., 1, 1., 0., 0.],
+                    'Y': [0., 0., 1., 1., 0.],
+                    'details': [],
+                    'tool_label': 'Tool name'
+                }
+            ]
+        }
+    ]
+}
+
+
+# Test error is correctly thrown
+class TestExceptionData(unittest.TestCase):
+    def testexception(self):
+        with self.assertRaises(Exception) as context:
+            extractors.polygon_extractor._original(classification_incorrect_x_y_format)
+
+        self.assertTrue('Unknown data format for polygon data' in str(context.exception))

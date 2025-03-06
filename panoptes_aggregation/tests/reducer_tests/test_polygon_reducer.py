@@ -3,6 +3,7 @@ from panoptes_aggregation.reducers.polygon_reducer import process_data,\
 from .base_test_class import ReducerTest
 import copy
 import numpy as np
+import unittest
 import shapely
 
 '''This tests the reducer by providing 3 clusters of 3 regular polygons of different
@@ -481,6 +482,14 @@ processed_data = {
     }
 }
 
+# Test error is correctly thrown
+class TestException(unittest.TestCase):
+    def testexception(self):
+        with self.assertRaises(Exception) as context:
+            polygon_reducer._original(processed_data, **{'average_type': 'incorrect'})
+
+        self.assertTrue("`average_type` not valid. Should be either `intersection`, `union`, `median` or `last`." in str(context.exception))
+
 reduced_data_last = {
     'frame0':
         {
@@ -734,6 +743,7 @@ TestPolygonTReducerMedian = ReducerTest(
     network_kwargs=kwargs_extra_data,
     test_name='TestPolygonTReducerMedian'
 )
+
 
 # Now let's the intersection version
 reduced_data_intersection = {

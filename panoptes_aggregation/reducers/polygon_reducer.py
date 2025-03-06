@@ -141,7 +141,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
     elif average_type == "median":
         avg = cluster_average_median
     else:
-        raise ValueError("`average_type` not valid. Should be either `intersection`, `union`, `median` or `last`.")
+        raise Exception("`average_type` not valid. Should be either `intersection`, `union`, `median` or `last`.")
 
     min_samples = max(2, kwargs_dbscan.pop('min_samples', 2))
     created_at = np.array(kwargs_dbscan.pop('created_at'))
@@ -186,11 +186,10 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                         # Now find the "average" of this cluster, using the provided average choice
                         cluster_average = avg(data[cdx], **kwargs_cluster)
                         # Find the x and y values of this polygon
-                        if cluster_average.is_empty is True:
+                        if cluster_average.is_empty is True or cluster_average.area == 0.:
                             # If there is no overall intersection, return empty
                             average_polygon = np.array([[], []]).T
                         else:
-                            # Find the x and y values of the shapely polygon
                             average_polygon = np.array(list(cluster_average.boundary.coords))
                         # Add to the dictionary
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
