@@ -10,7 +10,7 @@ building a stand alone version of your Gooey application.
 import os
 import gooey
 
-from PyInstaller.building.api import EXE, PYZ  #, COLLECT
+from PyInstaller.building.api import EXE, PYZ, COLLECT
 from PyInstaller.building.build_main import Analysis
 from PyInstaller.building.datastruct import Tree
 
@@ -42,12 +42,13 @@ options = [('u', None, 'OPTION'), ('X utf8', None, 'OPTION')]
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.datas,
+    # a.binaries,
+    # a.datas,
     options,
     gooey_languages,
     gooey_images,
-    exclude_binaries=False,
+    exclude_binaries=True,
+    # exclude_binaries=False,
     name='panoptes_aggregation_gui',
     debug=False,
     bootloader_ignore_signals=False,
@@ -59,5 +60,15 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=os.path.join(gooey_root, 'images', 'program_icon.ico')
+    icon=os.path.join('panoptes_aggregation', 'scripts', 'icons', 'program_icon.ico')
+)
+
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.datas,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    name='panoptes_aggregation_gui',
 )

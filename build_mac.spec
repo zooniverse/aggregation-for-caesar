@@ -58,10 +58,9 @@ exe = EXE(
     console=False,
     disable_windowed_traceback=True,
     argv_emulation=False,
-    # target_arch='universal2',
     codesign_identity=None,
     entitlements_file=None,
-    icon=os.path.join(gooey_root, 'images', 'program_icon.ico')
+    icon=os.path.join('panoptes_aggregation', 'scripts', 'icons', 'program_icon.ico')
 )
 
 coll = COLLECT(

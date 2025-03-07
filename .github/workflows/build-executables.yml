@@ -10,9 +10,6 @@ jobs:
       matrix:
         os: ['windows-latest', 'macos-13', 'macos-latest']  # macos-13 is intel, macos-latest is arm
 
-    env:
-      MAIN_PY_FILE: 'main.py'  # Define the path to your main.py file here
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -32,28 +29,26 @@ jobs:
     - name: Build executable (Windows)
       if: matrix.os == 'windows-latest'
       run: |
-        pyinstaller build_win.spec
+        pyinstaller --clean build_win.spec
       working-directory: ./
 
     - name: Build executable (macOS)
       if: matrix.os != 'windows-latest'
       run: |
-        pyinstaller build_mac.spec
+        pyinstaller --clean build_mac.spec
       working-directory: ./
 
     - name: Collect licenses
       run: |
-          pip-licenses --format=plain-vertical --with-authors --with-urls --with-license-file --no-license-path --output-file=dist/dependency_licenses_full.txt
-          pip-licenses --format=markdown --with-authors --with-urls --output-file=dist/dependency_licenses_summary.txt
+        pip-licenses --format=plain-vertical --with-authors --with-urls --with-license-file --no-license-path --output-file=dist/dependency_licenses_full.txt
+        pip-licenses --format=markdown --with-authors --with-urls --output-file=dist/dependency_licenses_summary.txt
 
     - name: Create Artifact (Windows x64)
       if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@v4
       with:
         name: windows-x64-executables
-        path: | 
-          dist/*.exe
-          dist/*.txt
+        path: dist/
 
     - name: Create Artifact (macOS arm)
       if: matrix.os == 'macos-latest'
@@ -72,6 +67,3 @@ jobs:
         path: |
           dist/*.app
           dist/*.txt
-
-    - name: List files in dist folder
-      run: ls -R ./dist/
