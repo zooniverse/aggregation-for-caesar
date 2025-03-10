@@ -112,6 +112,26 @@ class TestIoUMetric(unittest.TestCase):
         # Want it to be within this error
         self.assertTrue(all(differance<0.001))
 
+    def test_IoU_distance_matrix_cluster_of_one(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+        square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
+        square3 = shapely.Polygon(np.array([[0, 2], [0, 3], [1, 3], [1, 2]]))
+        square4 = shapely.Polygon(np.array([[-2.0, 0.5], [-1., 0.5], [-1., 1.5], [-2.0, 1.5]]))
+        square5 = shapely.Polygon(np.array([[0.0, 0.5], [1., 0.5], [1., 1.5], [0.0, 1.5]]))
+
+        data = [{'polygon': square1},
+                {'polygon': square2},
+                {'polygon': square3},
+                {'polygon': square4},
+                {'polygon': square5}]
+        X = np.array([[0, 0], [1,1], [2,2], [3,3], [4,4]])
+        cdx = np.array([True, False, False, False, False])
+        result = utils.IoU_distance_matrix_of_cluster(cdx, X, data)
+        expected = np.array([[0.]])
+        differance = np.abs(result - expected).flatten()
+        # Want it to be within this error
+        self.assertTrue(all(differance<0.001))
+
     def test_IoU_cluster_mean_distance(self):
         distances_matrix = np.array([[0., 0.66666667, 0.66666667],
                             [0.66666667, 0., 0.85714286],
@@ -127,6 +147,13 @@ class TestIoUMetric(unittest.TestCase):
                             [0.66666667, np.inf, 0.]])
         result = utils.IoU_cluster_mean_distance(distances_matrix)
         expected = 0.7777777800000001
+        differance = np.abs(result - expected)
+        self.assertTrue(differance<0.00001)
+
+    def test_IoU_cluster_mean_distance_cluster_of_one(self):
+        distances_matrix = np.array([[0.]])
+        result = utils.IoU_cluster_mean_distance(distances_matrix)
+        expected = 0.
         differance = np.abs(result - expected)
         self.assertTrue(differance<0.00001)
 
@@ -306,6 +333,7 @@ class TestIoUMetric(unittest.TestCase):
         expected = square1
         result = utils.cluster_average_intersection(data, **kwargs)
         self.assertTrue(shapely.equals(result, expected))
+
 
     def test_cluster_average_intersection_contours(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))

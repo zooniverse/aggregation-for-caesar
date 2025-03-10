@@ -79,18 +79,23 @@ def process_data(data):
                             # If not simple polygon, use buffer to try to make simple
                             if not shapely.is_simple(polygon):
                                 polygon = polygon.buffer(0)
-                                # If part of multipolygon collection, choose largest polygon
-                                if isinstance(polygon, shapely.geometry.collection.GeometryCollection)\
-                                    or isinstance(polygon, shapely.geometry.multipolygon.MultiPolygon):
-                                    areas = [p.area for p in polygon.geoms]
-                                    polygon = polygon.geoms[np.argmax(areas)]
-                            # Add this polygon to the dictionary
-                            data_by_tool[frame][tool]['data'].append({
-                                'polygon': polygon,
-                                'gold_standard': gs
-                            })
-                            data_by_tool[frame][tool]['X'].append([row_ct[frame][tool], user_ct])
-                            row_ct[frame][tool] += 1
+
+                            # If part of multipolygon collection, choose largest polygon
+                            if isinstance(polygon, shapely.geometry.collection.GeometryCollection)\
+                                or isinstance(polygon, shapely.geometry.multipolygon.MultiPolygon):
+                                areas = [p.area for p in polygon.geoms]
+                                polygon = polygon.geoms[np.argmax(areas)]
+
+                            # Add this polygon to the dictionary only if it is a polygon
+                            # It also must have a linear string as the boundary. This because the coords might need to be found later 
+                            if (isinstance(polygon, shapely.geometry.polygon.Polygon) is True)\
+                                    and (isinstance(polygon.boundary, shapely.geometry.linestring.LineString)):
+                                data_by_tool[frame][tool]['data'].append({
+                                    'polygon': polygon,
+                                    'gold_standard': gs
+                                })
+                                data_by_tool[frame][tool]['X'].append([row_ct[frame][tool], user_ct])
+                                row_ct[frame][tool] += 1
     return data_by_tool
 
 
@@ -143,7 +148,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
     else:
         raise Exception("`average_type` not valid. Should be either `intersection`, `union`, `median` or `last`.")
 
-    min_samples = max(2, kwargs_dbscan.pop('min_samples', 2))
+    min_samples = max(1, kwargs_dbscan.pop('min_samples', 2))
     created_at = np.array(kwargs_dbscan.pop('created_at'))
 
     clusters = OrderedDict()

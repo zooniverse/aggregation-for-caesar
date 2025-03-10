@@ -149,6 +149,7 @@ def IoU_distance_matrix_of_cluster(cdx, X, data):
     '''
     cluster_X = X[cdx]
     num_in_cluster = np.shape(cluster_X)[0]
+    # If a cluster of 1 is provided, this will correctly default to a distance of 0
     distances_matrix = np.zeros((num_in_cluster, num_in_cluster))
     for i in range(num_in_cluster):
         a = cluster_X[i]
@@ -184,8 +185,11 @@ def IoU_cluster_mean_distance(distances_matrix):
     if np.sum(np.diagonal(distances_matrix)) != 0:
         raise ValueError('`distances_matrix` must have zero diagonal elements, as distance between the object and itself is zero')
 
-    # Find the unigue distances from the off diagonal components
-    unique_distances = np.array([distances_matrix[i,j] for i in range(len(distances_matrix)) for j in range(i+1, len(distances_matrix))])
+    if np.shape(distances_matrix)==(1, 1):  # If cluster of one, include 0 distance to itself
+        unique_distances = np.array([distances_matrix[0, 0]])
+    else:
+        # Find the unigue distances from the off diagonal components
+        unique_distances = np.array([distances_matrix[i,j] for i in range(len(distances_matrix)) for j in range(i+1, len(distances_matrix))])
     # Set any infinities to 1, otherwise the mean cannot be calculated
     unique_distances[unique_distances==np.inf] = 1
     # As IoU distances are akways positive, this mean will always be positive
@@ -290,9 +294,7 @@ def cluster_average_intersection(data, **kwargs):
     '''
     polygon_list = [data[i]['polygon'] for i in range(len(data))]
     # Just one object, so return it as it is its own average
-    if isinstance(polygon_list, shapely.geometry.polygon.Polygon):
-        return polygon_list
-    elif len(polygon_list) == 1:
+    if len(polygon_list) == 1:
         return polygon_list[0]
     # There must now be two polygons to average
     intersection_all = polygon_list[0].intersection(polygon_list[1])
@@ -323,9 +325,7 @@ def cluster_average_union(data, **kwargs):
     '''
     polygon_list = [data[i]['polygon'] for i in range(len(data))]
     # Just one object, so return it as it is its own average
-    if isinstance(polygon_list, shapely.geometry.polygon.Polygon):
-        return polygon_list
-    elif len(polygon_list) == 1:
+    if len(polygon_list) == 1:
         return polygon_list[0]
     # There must now be two polygons to average
     union_all =  _polygons_unify(polygon_list)

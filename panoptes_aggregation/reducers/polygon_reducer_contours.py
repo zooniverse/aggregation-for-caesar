@@ -81,7 +81,7 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
         * `tool*_contours_y` : A list of the y values of each contour
         * `tool*_consensus` : A list of the the overall consensus of each cluster. A value of 1 is perfect agreement, a value of 0 is complete disagreement. This is found by subtracting`IoU_cluster_mean_distance` from 1
     '''
-    min_samples = max(2, kwargs_dbscan.pop('min_samples', 2))
+    min_samples = max(1, kwargs_dbscan.pop('min_samples', 2))
     # Remove created_at from kwargs, if it is provided
     _ = kwargs_dbscan.pop('created_at', [])
     clusters = []
