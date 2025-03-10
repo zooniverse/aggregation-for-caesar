@@ -125,7 +125,8 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
                             contours_x_values = []
                             contours_y_values = []
                             for contour in contours:
-                                xy = np.array(list(contour.boundary.coords))
+                                # exterior makes sure you ignore any interior holes
+                                xy = np.array(list(contour.exterior.coords))
                                 contours_x_values.append(xy[:, 0].tolist())
                                 contours_y_values.append(xy[:, 1].tolist())
                             # Store the contours etc

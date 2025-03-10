@@ -88,8 +88,7 @@ def process_data(data):
 
                             # Add this polygon to the dictionary only if it is a polygon
                             # It also must have a linear string as the boundary. This because the coords might need to be found later 
-                            if (isinstance(polygon, shapely.geometry.polygon.Polygon) is True)\
-                                    and (isinstance(polygon.boundary, shapely.geometry.linestring.LineString)):
+                            if isinstance(polygon, shapely.geometry.polygon.Polygon) is True:
                                 data_by_tool[frame][tool]['data'].append({
                                     'polygon': polygon,
                                     'gold_standard': gs
@@ -195,7 +194,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                             # If there is no overall intersection, return empty
                             average_polygon = np.array([[], []]).T
                         else:
-                            average_polygon = np.array(list(cluster_average.boundary.coords))
+                            average_polygon = np.array(list(cluster_average.exterior.coords))
                         # Add to the dictionary
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
                         clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
