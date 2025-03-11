@@ -234,9 +234,9 @@ def cluster_average_last(data, **kwargs):
     else:
         raise Exception('`created_at` needs to contain either UTC strings, pandas timestamps or datetime objects')
     # sort in time order
-    order_logic = np.argsort(created_at_list)
+    order_logic = np.argmax(created_at_list)
     # Select the last polygon to be created
-    last = data[order_logic[-1]]['polygon']
+    last = data[order_logic]['polygon']
     return last
 
 

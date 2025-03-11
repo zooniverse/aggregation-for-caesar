@@ -207,37 +207,32 @@ classification_incorrect_tool = {
 
 
 # Test error is correctly thrown
-class TestExceptionTool(unittest.TestCase):
-    def testexception(self):
+class TestException(unittest.TestCase):
+    def testexception_tool(self):
         with self.assertRaises(Exception) as context:
             extractors.polygon_extractor._original(classification_incorrect_tool)
 
         self.assertTrue('Neither `tool` or `toolIndex` are in the annotation' in str(context.exception))
 
-
-classification_incorrect_x_y_format = {
-    'annotations': [
-        {
-            'task': 'T0',
-            'task_label': 'Draw some lines',
-            'value': [
+    def testexception_format(self):
+        classification_incorrect_x_y_format = {
+            'annotations': [
                 {
-                    'tool': 0,
-                    'frame': 0,
-                    'X': [0., 1, 1., 0., 0.],
-                    'Y': [0., 0., 1., 1., 0.],
-                    'details': [],
-                    'tool_label': 'Tool name'
+                    'task': 'T0',
+                    'task_label': 'Draw some lines',
+                    'value': [
+                        {
+                            'tool': 0,
+                            'frame': 0,
+                            'X': [0., 1, 1., 0., 0.],
+                            'Y': [0., 0., 1., 1., 0.],
+                            'details': [],
+                            'tool_label': 'Tool name'
+                        }
+                    ]
                 }
             ]
         }
-    ]
-}
-
-
-# Test error is correctly thrown
-class TestExceptionData(unittest.TestCase):
-    def testexception(self):
         with self.assertRaises(Exception) as context:
             extractors.polygon_extractor._original(classification_incorrect_x_y_format)
 

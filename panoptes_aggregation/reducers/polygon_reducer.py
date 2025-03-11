@@ -13,24 +13,13 @@ from .polygon_reducer_utils import IoU_metric_polygon, cluster_average_last, \
     cluster_average_intersection, cluster_average_union, \
     cluster_average_median, IoU_distance_matrix_of_cluster, \
     IoU_cluster_mean_distance
-from .text_utils import tokenize
-import warnings
 import shapely
-
-with warnings.catch_warnings():
-    # collatex is a bit old, we can safely ignore this message as the display
-    # functions are optional and never used in this code
-    warnings.filterwarnings('ignore', category=DeprecationWarning, message='Importing display')
-    import collatex as col
 
 DEFAULTS = {
     'min_samples': {'default': 2, 'type': int},
     'eps': {'default': 0.5, 'type': float},
     'average_type': {'default': 'median', 'type': str}
 }
-
-# override the built-in tokenize
-col.core_classes.WordPunctuationTokenizer.tokenize = tokenize
 
 
 def process_data(data):

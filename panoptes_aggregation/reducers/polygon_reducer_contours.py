@@ -15,22 +15,11 @@ from .polygon_reducer_utils import IoU_metric_polygon, \
     IoU_distance_matrix_of_cluster, IoU_cluster_mean_distance, \
     cluster_average_intersection_contours
 from .polygon_reducer import process_data
-from .text_utils import tokenize
-import warnings
-
-with warnings.catch_warnings():
-    # collatex is a bit old, we can safely ignore this message as the display
-    # functions are optional and never used in this code
-    warnings.filterwarnings('ignore', category=DeprecationWarning, message='Importing display')
-    import collatex as col
 
 DEFAULTS = {
     'min_samples': {'default': 2, 'type': int},
     'eps': {'default': 0.5, 'type': float}
 }
-
-# override the built-in tokenize
-col.core_classes.WordPunctuationTokenizer.tokenize = tokenize
 
 
 @reducer_wrapper(
