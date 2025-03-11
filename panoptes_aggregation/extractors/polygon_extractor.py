@@ -1,11 +1,10 @@
 '''
 Polygon/Freehand Tool Extractor
 -------------------------------
-This module provides a function to extract polygon andfreehand drawn lines
-from panoptes annotations.
+This module provides a function to extract polygon and freehand drawn
+classifications from panoptes annotations.
 '''
 from collections import OrderedDict
-import copy
 from .extractor_wrapper import extractor_wrapper
 from .subtask_extractor_wrapper import subtask_wrapper
 from .tool_wrapper import tool_wrapper
@@ -21,15 +20,17 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
     ----------
     classification : dict
         A dictionary containing an `annotations` key that is a list of
-        panoptes annotations
+        panoptes annotations. The x and y data of the classifications needs to
+        be in one of the following formats: 'pathX': x and 'pathY': y, or
+        'points': {'x': x, 'y': y}.
 
     Returns
     -------
     extraction : dict
         A dictionary containing one key per frame. Each frame contains lists
         `pathX` and `pathY`. These are lists of lists, where each inner list of
-        `pathX` is the x values, and each inner list of `pathY` is the y values,
-        for a particular polygon/freehand drawing. The dictionary also
+        `pathX` is the x values, and each inner list of `pathY` is the y
+        values, for a particular polygon/freehand drawing. The dictionary also
         contains information if the data is gold standard or not.
     '''
     extract = OrderedDict()
@@ -63,7 +64,7 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
             else:
                 raise Exception('Unknown data format for polygon data')
             # Only include extracts with data
-            if len(x)>0:
+            if len(x) > 0:
                 extract[frame].setdefault('{0}_{1}'.format(key, 'pathX'), []).append(x)
                 extract[frame].setdefault('{0}_{1}'.format(key, 'pathY'), []).append(y)
                 extract[frame]['gold_standard'] = gold_standard

@@ -34,7 +34,8 @@ class TestAggregationParser(unittest.TestCase):
             output_dir=os.getcwd(),
             verbose=False,
             output_name='extractions',
-            cpu_count=1
+            cpu_count=1,
+            hide_progressbar=False
         )
 
     @patch('panoptes_aggregation.scripts.aggregation_parser.argparse.FileType')
@@ -50,5 +51,6 @@ class TestAggregationParser(unittest.TestCase):
             output_dir=os.getcwd(),
             stream=False,
             output_name='reductions',
-            cpu_count=1
+            cpu_count=1,
+            hide_progressbar=False
         )

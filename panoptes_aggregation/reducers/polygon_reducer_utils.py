@@ -1,6 +1,6 @@
 '''
 Utilities for `polygon_reducer`
-----------------------------------------
+-------------------------------
 This module provides utilities used to reduce the polygon extractions
 for :mod:`panoptes_aggregation.reducers.polygon_reducer`.
 '''
@@ -75,8 +75,9 @@ def IoU_metric_polygon(a, b, data_in=[]):
     To use this metric within the clustering code without having to
     precompute the full distance matrix `a` and `b` are index mappings to
     the data contained in `data_in`.  `a` and `b` also contain the user
-    information that is used to help prevent self-clustering. The polygons are
-    contained in `data_in`, along with the timestamp of creation.
+    information that is used to help prevent self-clustering. The polygons
+    used to calculate the IoU distance are contained in `data_in`, along with
+    the timestamp of creation.
 
     Parameters
     ----------
@@ -124,7 +125,8 @@ def IoU_metric_polygon(a, b, data_in=[]):
 def IoU_distance_matrix_of_cluster(cdx, X, data):
     '''Find distance matrix using `IoU_metric_polygon` for a cluster.
 
-    The `cdx` argument is used to define the cluster.
+    The `cdx` argument is used to define the cluster out of the full `X` and
+    `data` data sets, which may also contain other polygons not in the cluster.
 
     Parameters
     ----------
@@ -339,20 +341,20 @@ def cluster_average_intersection_contours(data, **kwargs):
     overlap. This is useful for plotting the uncertainty in the cluster.
 
     The algorithm used is as follows. First find the largest simply-connected
-    polygon for the cluster and add it to the list `intersection_contours`.
-    Next, every intersection of two polygons is found, and made into new
-    `shapely` polygons. This makes a list of 'level-2' polygons. These polygons may
-    overlap. Then, find the largest
-    simply-connected polygon of the level-2 polygons. This is the
+    union polygon for the cluster and add it to the list
+    `intersection_contours`. Next, every intersection of two polygons is found,
+    and made into new `shapely` polygons. This makes a list of 'level-2'
+    polygons. These polygons may overlap. Then, find the largest
+    simply-connected union polygon of the level-2 polygons. This is the
     polygon of at least 2 intersections
     (i.e. area where at least 2 volunteers agree). Add it to list
     `intersection_contours`.
 
-    If there are more than one level-2 polygons, which intersect, then the
+    If there is more than one level-2 polygons, which intersect, then the
     intersection of the level-2 polygons is found as a list. These are the
     level-3 polygons, as each polygon is made from at least three
     intersections. Then find the largest
-    simply-connected polygon of the level-3 polygons. This is the
+    simply-connected union polygon of the level-3 polygons. This is the
     polygon of at least 3 intersections
     (i.e. area where at least 3 volunteers agree). Add it to list
     `intersection_contours`.
@@ -419,12 +421,12 @@ def cluster_average_intersection_contours(data, **kwargs):
         return polygon_connections, polygon_connections_indices
 
     num_agreement = 1
-    max_iters = 10
+    safety = 10
     intersection_contours = []
     # Start with the level 1 contours
     polygons_union = _polygons_unify(polygons)
     intersection_contours.append(polygons_union)
-    while num_agreement<max_iters:
+    while num_agreement<safety:
         # If there is only one polygon left, break
         if len(polygons)==1:
             break

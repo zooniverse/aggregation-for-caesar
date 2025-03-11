@@ -111,7 +111,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
     There is a choice in how the cluster is averaged into a single cluster,
     with the varies choices listed below.
 
-    A custom "IoU" metric type is used to measure the distance etween the polygons.
+    A custom "IoU" metric type is used to measure the distance between the polygons.
 
     Parameters
     ----------
@@ -120,7 +120,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
 
     kwargs :
         * `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
-        * `average_type` : Must be either "union", which returns the union of the cluster, "intersection" which retruns the intersection of the cluster, "last", which returns the last polygon to be annotated in the cluster, or "median", which returns the polygon with the minimum total distance to the other polygons. Defaults to "median"".
+        * `average_type` : Must be either "union", which returns the union of the cluster, "intersection" which retruns the intersection of the cluster, "last", which returns the last polygon to be created in the cluster, or "median", which returns the polygon with the minimum total distance to the other polygons. Defaults to "median".
         * `created_at` : A list of when the classifcations were made.
 
     Returns
@@ -194,6 +194,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                             # If there is no overall intersection, return empty
                             average_polygon = np.array([[], []]).T
                         else:
+                            # exterior makes sure you ignore any interior holes
                             average_polygon = np.array(list(cluster_average.exterior.coords))
                         # Add to the dictionary
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())

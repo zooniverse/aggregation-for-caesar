@@ -183,6 +183,12 @@ def main(args=None):
         help="increase output verbosity",
         action="store_true"
     )
+    extract_options.add_argument(
+        "-hb",
+        "--hide_bar",
+        help="hide the progress bar",
+        action="store_true"
+    )
 
     reduce_parser = subparsers.add_parser(
         'reduce',
@@ -243,6 +249,12 @@ def main(args=None):
         type=int,
         default=1
     )
+    reduce_options.add_argument(
+        "-hb",
+        "--hide_bar",
+        help="hide the progress bar",
+        action="store_true"
+    )
     reduce_save_files.add_argument(
         "-d",
         "--dir",
@@ -286,7 +298,8 @@ def main(args=None):
             output_dir=args.dir,
             order=args.order,
             verbose=args.verbose,
-            cpu_count=args.cpu_count
+            cpu_count=args.cpu_count,
+            hide_progressbar=args.hide_bar
         )
     elif args.subparser == 'reduce':
         panoptes_aggregation.scripts.reduce_csv(
@@ -297,7 +310,8 @@ def main(args=None):
             output_dir=args.dir,
             order=args.order,
             stream=args.stream,
-            cpu_count=args.cpu_count
+            cpu_count=args.cpu_count,
+            hide_progressbar=args.hide_bar
         )
     return 0
 

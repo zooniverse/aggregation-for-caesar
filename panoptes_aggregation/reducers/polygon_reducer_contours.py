@@ -2,8 +2,8 @@
 Polygon/Freehand Tool Reducer Using DBSCAN - Contours
 -----------------------------------------------------
 This module is an extension of :mod:`panoptes_aggregation.reducers.polygon_reducer`
-to provide the contours of intersection. These can be used to estimate the
-cluster average. 
+to provide the contours of intersection/overlap. These can be used to estimate the
+cluster average and its uncertainty. 
 
 Note, this reduction is one cluster per row.
 '''
@@ -44,16 +44,18 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
     '''Cluster a polygon or freehand tool using DBSCAN, then find the contours
     of this cluster.
 
-    The contours are defined by the overlap/intersection of the polygons. Each
-    contour is the union of the at least the number of intersections of its
-    position in the list. E.g. the second contour is the largest polygon/area
-    of at least two volunteers agreeing, the third is at least three vilunteers
-    etc.
+    The contours are defined by the overlap/intersection of the polygons in the
+    cluster. Each contour is the union of at least the number of
+    intersections of its position in the list. E.g. the second contour is the
+    largest polygon/area of at least two volunteers agreeing, the third is at
+    least three volunteers etc.
 
     A custom "IoU" metric type is used.
 
     This reduction will take much longer than
-    :mod:`panoptes_aggregation.reducers.polygon_reducer`
+    :mod:`panoptes_aggregation.reducers.polygon_reducer`. As it retruns a list
+    rather than a dictionary this may cause issues with any subsequent data
+    processing with Caesar.
 
     Parameters
     ----------
