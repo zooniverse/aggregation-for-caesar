@@ -34,9 +34,9 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
         contains information if the data is gold standard or not.
     '''
     extract = OrderedDict()
-    for idx, annotation in enumerate(classification['annotations']):
+    for annotation in classification['annotations']:
         task_key = annotation['task']
-        for vdx, value in enumerate(annotation['value']):
+        for value in annotation['value']:
             if 'tool' in value:
                 # classifier v1.0
                 tool_index = value['tool']
