@@ -22,7 +22,7 @@ def _polygons_unify(polygons):
     i = 0
     safety = 0
     while all_unified is False:
-        if i > len(polygons)-2:  # Once first interation is done
+        if i > len(polygons) - 2:  # Once first interation is done
             # Find all of the possible intersections
             intersections = []
             for j in range(len(polygons)):

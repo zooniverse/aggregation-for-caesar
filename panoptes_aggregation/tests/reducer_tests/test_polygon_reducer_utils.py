@@ -26,10 +26,10 @@ class TestIoUMetric(unittest.TestCase):
         # the code can exit gracefully
         polygons_broken = []
         for i in range(12):
-            shape1 = shapely.Polygon(np.array([[0+1.1 * i, 1.1 * i],
-                                               [0+1.1 * i, 1+1.1 * i],
-                                               [1+1.1 * i, 1+1.1 * i],
-                                               [1+1.1 * i, 1.1 * i]]))
+            shape1 = shapely.Polygon(np.array([[0 + 1.1 * i, 1.1 * i],
+                                               [0 + 1.1 * i, 1 + 1.1 * i],
+                                               [1 + 1.1 * i, 1 + 1.1 * i],
+                                               [1 + 1.1 * i, 1.1 * i]]))
             polygons_broken.append(shape1)
 
         expected = shapely.Polygon(np.array([[3.3, 3.3],
@@ -295,9 +295,9 @@ class TestIoUMetric(unittest.TestCase):
         data = [{'polygon': square1},
                 {'polygon': square2},
                 {'polygon': square3}]
-        distance_matrix =  np.array([[0., np.inf, 0.66666667],
-                            [ np.inf, 0., 0.85714286],
-                            [0.66666667, 0.85714286, -10**-5.]])
+        distance_matrix = np.array([[0., np.inf, 0.66666667],
+                                    [np.inf, 0., 0.85714286],
+                                    [0.66666667, 0.85714286, -10**-5.]])
         kwargs = {'distance_matrix': distance_matrix}
         with self.assertRaises(Exception) as context:
             utils.cluster_average_median(data, **kwargs)
@@ -392,7 +392,6 @@ class TestIoUMetric(unittest.TestCase):
         geometrycollection = shapely.GeometryCollection([square3, line])
         non_simple = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [-1, 0]]))
         non_simplecollection = shapely.MultiPolygon([square1, non_simple])
-        
 
         data = [{'polygon': multipolygon},
                 {'polygon': geometrycollection},
