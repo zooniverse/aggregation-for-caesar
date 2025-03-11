@@ -22,7 +22,7 @@ def cast_to_dict(result):
                 result_out = dict(r)
             else:
                 result_out = r
-                
+
             for key in result_out.keys():
                 if isinstance(result_out[key], OrderedDict):
                     result_out[key] = cast_to_dict(result_out[key])
@@ -33,7 +33,7 @@ def cast_to_dict(result):
             result_out = dict(result)
         else:
             result_out = result
-            
+
         for key in result_out.keys():
             if isinstance(result_out[key], OrderedDict):
                 result_out[key] = cast_to_dict(result_out[key])
@@ -165,7 +165,6 @@ def ReducerTest(
                     if round is not None:
                         result = round_dict(result, round)
                     self.assertDictEqual(result, self.reduced_with_version)
-
 
     if test_name is None:
         test_name = '_'.join(name.split())

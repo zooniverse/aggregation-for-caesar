@@ -22,30 +22,30 @@ def _polygons_unify(polygons):
     i = 0
     safety = 0
     while all_unified is False:
-        if i>len(polygons)-2:  # Once first interation is done
+        if i > len(polygons)-2:  # Once first interation is done
             # Find all of the possible intersections
             intersections = []
             for j in range(len(polygons)):
-                for k in range(j+1, len(polygons)):
+                for k in range(j + 1, len(polygons)):
                     intersections.append(polygons[j].intersects(polygons[k]))
             if any(intersections) is False:
                 all_unified = True
                 break
             else:  # Restart the unification
                 i = 0
-    
+
         indices_included = []
-        for j in range(i+1, len(polygons)):
+        for j in range(i + 1, len(polygons)):
             if polygons[i].intersects(polygons[j]):
                 polygons[i] = polygons[i].union(polygons[j])
                 if isinstance(polygons[i], shapely.geometry.collection.GeometryCollection)\
-                    or isinstance(polygons[i], shapely.geometry.multipolygon.MultiPolygon):
+                        or isinstance(polygons[i], shapely.geometry.multipolygon.MultiPolygon):
                     for p in polygons[i].geoms:
                         if isinstance(p, shapely.geometry.polygon.Polygon):
                             polygons[i] = p
                             break
                 # If there are any holes, close them
-                if len(polygons[i].interiors)>0:
+                if len(polygons[i].interiors) > 0:
                     for hole in polygons[i].interiors:
                         hole = shapely.Polygon(hole)
                         polygons[i] = polygons[i].union(hole)
@@ -54,12 +54,12 @@ def _polygons_unify(polygons):
         for j in sorted(indices_included, reverse=True):
             del polygons[j]
         # If only one polygon, we are finished
-        if len(polygons)==1:
+        if len(polygons) == 1:
             all_unified = True
             break
         i += 1
         safety += 1
-        if safety>10:
+        if safety > 10:
             all_unified = True
             break
     areas = [polygons[i].area for i in range(len(polygons))]
@@ -155,7 +155,7 @@ def IoU_distance_matrix_of_cluster(cdx, X, data):
     distances_matrix = np.zeros((num_in_cluster, num_in_cluster))
     for i in range(num_in_cluster):
         a = cluster_X[i]
-        for j in range(i+1, num_in_cluster):
+        for j in range(i + 1, num_in_cluster):
             b = cluster_X[j]
             distance = IoU_metric_polygon(a, b, data_in=data)
             distances_matrix[i, j] = distance
@@ -165,7 +165,7 @@ def IoU_distance_matrix_of_cluster(cdx, X, data):
 
 def IoU_cluster_mean_distance(distances_matrix):
     '''The mean `IoU_metric_polygon` distance between the polygons of the
-    cluster 
+    cluster.
 
     Parameters
     ----------
@@ -187,13 +187,13 @@ def IoU_cluster_mean_distance(distances_matrix):
     if np.sum(np.diagonal(distances_matrix)) != 0:
         raise ValueError('`distances_matrix` must have zero diagonal elements, as distance between the object and itself is zero')
 
-    if np.shape(distances_matrix)==(1, 1):  # If cluster of one, include 0 distance to itself
+    if np.shape(distances_matrix) == (1, 1):  # If cluster of one, include 0 distance to itself
         unique_distances = np.array([distances_matrix[0, 0]])
     else:
         # Find the unigue distances from the off diagonal components
-        unique_distances = np.array([distances_matrix[i,j] for i in range(len(distances_matrix)) for j in range(i+1, len(distances_matrix))])
+        unique_distances = np.array([distances_matrix[i, j] for i in range(len(distances_matrix)) for j in range(i + 1, len(distances_matrix))])
     # Set any infinities to 1, otherwise the mean cannot be calculated
-    unique_distances[unique_distances==np.inf] = 1
+    unique_distances[unique_distances == np.inf] = 1
     # As IoU distances are akways positive, this mean will always be positive
     distances_mean = np.mean(unique_distances)
     return distances_mean
@@ -268,7 +268,7 @@ def cluster_average_median(data, **kwargs):
     if np.sum(np.diagonal(distance_matrix)) != 0:
         raise ValueError('`distances_matrix` must have zero diagonal elements, as distance between the object and itself is zero')
     # Set infinities to 1 to avoid user self clustering
-    distance_matrix[distance_matrix==np.inf] = 1
+    distance_matrix[distance_matrix == np.inf] = 1
     # Find the total mutual distance to each polygon
     sums_of_distances = np.sum(distance_matrix, axis=0)
     median_polygon_index = np.argmin(sums_of_distances)
@@ -330,7 +330,7 @@ def cluster_average_union(data, **kwargs):
     if len(polygon_list) == 1:
         return polygon_list[0]
     # There must now be two polygons to average
-    union_all =  _polygons_unify(polygon_list)
+    union_all = _polygons_unify(polygon_list)
     return union_all
 
 
@@ -378,8 +378,9 @@ def cluster_average_intersection_contours(data, **kwargs):
         List of shapely objects. Each shape at position `i` in the list is the
         largest simply-connected contour of at least `i` intersections.
     '''
-    polygons = [data[i]['polygon'] for i in range(len(data))]
     # Want the list to just be simple polygons
+    polygons = [data[i]['polygon'] for i in range(len(data))]
+
     def polygon_list_simplify(polygons):
         individual_polygons = []
         for polygon in polygons:
@@ -389,7 +390,7 @@ def cluster_average_intersection_contours(data, **kwargs):
                     polygon = polygon.buffer(0)
                 individual_polygons.append(polygon)
             elif isinstance(polygon, shapely.geometry.collection.GeometryCollection)\
-                                or isinstance(polygon, shapely.geometry.multipolygon.MultiPolygon):
+                    or isinstance(polygon, shapely.geometry.multipolygon.MultiPolygon):
                 for p in polygon.geoms:
                     if isinstance(p, shapely.geometry.polygon.Polygon):
                         if not p.is_simple:
@@ -403,12 +404,13 @@ def cluster_average_intersection_contours(data, **kwargs):
     polygons = polygon_list_simplify(polygons)
     # Need to keep track of the polygons which are in each intersection
     polygon_indices = [[i] for i in range(len(polygons))]
+
     def polygon_intersection_list(polygons, polygon_indices):
         num_polygons = len(polygons)
         polygon_connections = []
         polygon_connections_indices = []
         for i in range(num_polygons):
-            for j in range(i+1, num_polygons):
+            for j in range(i + 1, num_polygons):
                 if shapely.intersects(polygons[i], polygons[j]):
                     # The indices of the polygons in this intersection
                     polygon_connection_index = list(set(polygon_indices[i] + polygon_indices[j]))
@@ -426,9 +428,9 @@ def cluster_average_intersection_contours(data, **kwargs):
     # Start with the level 1 contours
     polygons_union = _polygons_unify(polygons)
     intersection_contours.append(polygons_union)
-    while num_agreement<safety:
+    while num_agreement < safety:
         # If there is only one polygon left, break
-        if len(polygons)==1:
+        if len(polygons) == 1:
             break
         else:
             # Find the intersection of the provided polygons, and the contributing indices

@@ -3,7 +3,7 @@ Polygon/Freehand Tool Reducer Using DBSCAN - Contours
 -----------------------------------------------------
 This module is an extension of :mod:`panoptes_aggregation.reducers.polygon_reducer`
 to provide the contours of intersection/overlap. These can be used to estimate the
-cluster average and its uncertainty. 
+cluster average and its uncertainty.
 
 Note, this reduction is one cluster per row.
 '''
@@ -11,8 +11,8 @@ from sklearn.cluster import DBSCAN
 import numpy as np
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
-from .polygon_reducer_utils import IoU_metric_polygon,\
-    IoU_distance_matrix_of_cluster, IoU_cluster_mean_distance,\
+from .polygon_reducer_utils import IoU_metric_polygon, \
+    IoU_distance_matrix_of_cluster, IoU_cluster_mean_distance, \
     cluster_average_intersection_contours
 from .polygon_reducer import process_data
 from .text_utils import tokenize

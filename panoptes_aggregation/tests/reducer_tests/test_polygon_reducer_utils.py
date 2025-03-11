@@ -26,10 +26,10 @@ class TestIoUMetric(unittest.TestCase):
         # the code can exit gracefully
         polygons_broken = []
         for i in range(12):
-            shape1 = shapely.Polygon(np.array([[0+1.1*i, 1.1*i],
-                                               [0+1.1*i, 1+1.1*i],
-                                               [1+1.1*i, 1+1.1*i],
-                                               [1+1.1*i, 1.1*i]]))
+            shape1 = shapely.Polygon(np.array([[0+1.1 * i, 1.1 * i],
+                                               [0+1.1 * i, 1+1.1 * i],
+                                               [1+1.1 * i, 1+1.1 * i],
+                                               [1+1.1 * i, 1.1 * i]]))
             polygons_broken.append(shape1)
 
         expected = shapely.Polygon(np.array([[3.3, 3.3],
@@ -96,13 +96,13 @@ class TestIoUMetric(unittest.TestCase):
         square3 = shapely.Polygon(np.array([[0, 2], [0, 3], [1, 3], [1, 2]]))
         square4 = shapely.Polygon(np.array([[-2.0, 0.5], [-1., 0.5], [-1., 1.5], [-2.0, 1.5]]))
         square5 = shapely.Polygon(np.array([[0.0, 0.5], [1., 0.5], [1., 1.5], [0.0, 1.5]]))
-        
+
         data = [{'polygon': square1},
                 {'polygon': square2},
                 {'polygon': square3},
                 {'polygon': square4},
                 {'polygon': square5}]
-        X = np.array([[0, 0], [1,1], [2,2], [3,3], [4,4]])
+        X = np.array([[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]])
         cdx = np.array([True, True, False, False, True])
         result = utils.IoU_distance_matrix_of_cluster(cdx, X, data)
         expected = np.array([[0., 0.66666667, 0.66666667],
@@ -110,7 +110,7 @@ class TestIoUMetric(unittest.TestCase):
                             [0.66666667, 0.85714286, 0.]])
         differance = np.abs(result - expected).flatten()
         # Want it to be within this error
-        self.assertTrue(all(differance<0.001))
+        self.assertTrue(all(differance < 0.001))
 
     def test_IoU_distance_matrix_cluster_of_one(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
@@ -124,13 +124,13 @@ class TestIoUMetric(unittest.TestCase):
                 {'polygon': square3},
                 {'polygon': square4},
                 {'polygon': square5}]
-        X = np.array([[0, 0], [1,1], [2,2], [3,3], [4,4]])
+        X = np.array([[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]])
         cdx = np.array([True, False, False, False, False])
         result = utils.IoU_distance_matrix_of_cluster(cdx, X, data)
         expected = np.array([[0.]])
         differance = np.abs(result - expected).flatten()
         # Want it to be within this error
-        self.assertTrue(all(differance<0.001))
+        self.assertTrue(all(differance < 0.001))
 
     def test_IoU_cluster_mean_distance(self):
         distances_matrix = np.array([[0., 0.66666667, 0.66666667],
@@ -139,7 +139,7 @@ class TestIoUMetric(unittest.TestCase):
         result = utils.IoU_cluster_mean_distance(distances_matrix)
         expected = 0.7301587333333334
         differance = np.abs(result - expected)
-        self.assertTrue(differance<0.00001)
+        self.assertTrue(differance < 0.00001)
 
     def test_IoU_cluster_mean_distance_same_user(self):
         distances_matrix = np.array([[0., 0.66666667, 0.66666667],
@@ -148,24 +148,23 @@ class TestIoUMetric(unittest.TestCase):
         result = utils.IoU_cluster_mean_distance(distances_matrix)
         expected = 0.7777777800000001
         differance = np.abs(result - expected)
-        self.assertTrue(differance<0.00001)
+        self.assertTrue(differance < 0.00001)
 
     def test_IoU_cluster_mean_distance_cluster_of_one(self):
         distances_matrix = np.array([[0.]])
         result = utils.IoU_cluster_mean_distance(distances_matrix)
         expected = 0.
         differance = np.abs(result - expected)
-        self.assertTrue(differance<0.00001)
+        self.assertTrue(differance < 0.00001)
 
     def test_IoU_cluster_mean_distance_non_symmetric(self):
         distances_matrix = np.array([[0., 0.66666667, 0.6666669],
-                            [0.66666667, 0., np.inf],
-                            [0.66666667, np.inf, 0.]])
+                                    [0.66666667, 0., np.inf],
+                                    [0.66666667, np.inf, 0.]])
         with self.assertRaises(Exception) as context:
             utils.IoU_cluster_mean_distance(distances_matrix)
 
         self.assertTrue('`distances_matrix` must be a symmetric-square array' in str(context.exception))
-
 
     def test_IoU_cluster_mean_distance_non_diagonal(self):
         distances_matrix = np.array([[0., 0.66666667, 0.66666667],
@@ -175,7 +174,6 @@ class TestIoUMetric(unittest.TestCase):
             utils.IoU_cluster_mean_distance(distances_matrix)
 
         self.assertTrue('`distances_matrix` must have zero diagonal elements, as distance between the object and itself is zero' in str(context.exception))
-    
 
     def test_cluster_average_last_str_format(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
@@ -248,14 +246,13 @@ class TestIoUMetric(unittest.TestCase):
         data = [{'polygon': square1},
                 {'polygon': square2},
                 {'polygon': square3}]
-        distance_matrix =  np.array([[0., 0.66666667, 0.66666667],
-                            [0.66666667, 0., 0.85714286],
-                            [0.66666667, 0.85714286, 0.]])
+        distance_matrix = np.array([[0., 0.66666667, 0.66666667],
+                                    [0.66666667, 0., 0.85714286],
+                                    [0.66666667, 0.85714286, 0.]])
         kwargs = {'distance_matrix': distance_matrix}
         expected = square1
         result = utils.cluster_average_median(data, **kwargs)
         self.assertEqual(result, expected)
-
 
     def test_cluster_average_median_same_user(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
@@ -265,9 +262,9 @@ class TestIoUMetric(unittest.TestCase):
         data = [{'polygon': square1},
                 {'polygon': square2},
                 {'polygon': square3}]
-        distance_matrix =  np.array([[0., np.inf, 0.66666667],
-                            [ np.inf, 0., 0.85714286],
-                            [0.66666667, 0.85714286, 0.]])
+        distance_matrix = np.array([[0., np.inf, 0.66666667],
+                                    [np.inf, 0., 0.85714286],
+                                    [0.66666667, 0.85714286, 0.]])
         kwargs = {'distance_matrix': distance_matrix}
         expected = square3
         result = utils.cluster_average_median(data, **kwargs)
@@ -281,9 +278,9 @@ class TestIoUMetric(unittest.TestCase):
         data = [{'polygon': square1},
                 {'polygon': square2},
                 {'polygon': square3}]
-        distance_matrix =  np.array([[0., np.inf, 0.66666669],
-                            [ np.inf, 0., 0.85714286],
-                            [0.66666667, 0.85714286, 0.]])
+        distance_matrix = np.array([[0., np.inf, 0.66666669],
+                                    [np.inf, 0., 0.85714286],
+                                    [0.66666667, 0.85714286, 0.]])
         kwargs = {'distance_matrix': distance_matrix}
         with self.assertRaises(Exception) as context:
             utils.cluster_average_median(data, **kwargs)
@@ -306,7 +303,6 @@ class TestIoUMetric(unittest.TestCase):
             utils.cluster_average_median(data, **kwargs)
 
         self.assertTrue('`distances_matrix` must have zero diagonal elements, as distance between the object and itself is zero' in str(context.exception))
-
 
     def test_cluster_average_intersection(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
@@ -334,7 +330,6 @@ class TestIoUMetric(unittest.TestCase):
         result = utils.cluster_average_intersection(data, **kwargs)
         self.assertTrue(shapely.equals(result, expected))
 
-
     def test_cluster_average_intersection_contours(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
         square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
@@ -351,36 +346,36 @@ class TestIoUMetric(unittest.TestCase):
                            '2025-01-21 10:46:26 UTC']
         kwargs = {'created_at': created_at_list}
         expected_contour_1 = shapely.Polygon(np.array([[1.5, 0.5],
-                                             [1.5, 0. ],
-                                             [1., 0. ],
-                                             [0.5, 0. ],
-                                             [0., 0. ],
-                                             [0., 0.5],
-                                             [0., 1. ],
-                                             [0., 1.5],
-                                             [0.5, 1.5],
-                                             [1., 1.5],
-                                             [1.5, 1.5],
-                                             [1.5, 1. ],
-                                             [1.5, 0.5]]))
+                                                       [1.5, 0.],
+                                                       [1., 0.],
+                                                       [0.5, 0.],
+                                                       [0., 0.],
+                                                       [0., 0.5],
+                                                       [0., 1.],
+                                                       [0., 1.5],
+                                                       [0.5, 1.5],
+                                                       [1., 1.5],
+                                                       [1.5, 1.5],
+                                                       [1.5, 1.],
+                                                       [1.5, 0.5]]))
         expected_contour_2 = shapely.Polygon(np.array([[0., 0.5],
-                                             [0., 1. ],
-                                             [0.5, 1. ],
-                                             [0.5, 1.5],
-                                             [1., 1.5],
-                                             [1., 1. ],
-                                             [1.5, 1. ],
-                                             [1.5, 0.5],
-                                             [1., 0.5],
-                                             [1., 0. ],
-                                             [0.5, 0. ],
-                                             [0.5, 0.5],
-                                             [0., 0.5]]))
+                                                       [0., 1.],
+                                                       [0.5, 1.],
+                                                       [0.5, 1.5],
+                                                       [1., 1.5],
+                                                       [1., 1.],
+                                                       [1.5, 1.],
+                                                       [1.5, 0.5],
+                                                       [1., 0.5],
+                                                       [1., 0.],
+                                                       [0.5, 0.],
+                                                       [0.5, 0.5],
+                                                       [0., 0.5]]))
         expected_contour_3 = shapely.Polygon(np.array([[0.5, 0.5],
-                                             [0.5, 1. ],
-                                             [1., 1. ],
-                                             [1., 0.5],
-                                             [0.5, 0.5]]))
+                                                       [0.5, 1.],
+                                                       [1., 1.],
+                                                       [1., 0.5],
+                                                       [0.5, 0.5]]))
         expected = [expected_contour_1,
                     expected_contour_2,
                     expected_contour_3,
@@ -388,8 +383,6 @@ class TestIoUMetric(unittest.TestCase):
         result = utils.cluster_average_intersection_contours(data, **kwargs)
         self.assertTrue(all([shapely.equals(result[i], expected[i]) for i in range(len(expected))]))
 
-
-    # If not standard shapely objects somehow are being used
     def test_cluster_average_intersection_contours_non_polygon_shapes(self):
         square1 = shapely.Polygon(np.array([[0.2, 0], [0.2, 1], [1.2, 1], [1.2, 0]]))
         square2 = shapely.Polygon(np.array([[1., 0], [1., 1], [2., 1], [2., 0]]))
@@ -459,23 +452,23 @@ class TestIoUMetric(unittest.TestCase):
                            '2025-01-21 10:46:22 UTC']
         kwargs = {'created_at': created_at_list}
         expected_contour_1 = shapely.Polygon(np.array([[0.8, 1.],
-                                                        [1., 1.],
-                                                        [1.5, 1.],
-                                                        [1.8, 1.],
-                                                        [2.5, 1.],
-                                                        [2.5, 0.],
-                                                        [1.8, 0.],
-                                                        [1.5, 0.],
-                                                        [1., 0.],
-                                                        [0.8, 0.],
-                                                        [0., 0.],
-                                                        [0., 1.],
-                                                        [0.8, 1.]]))
+                                                       [1., 1.],
+                                                       [1.5, 1.],
+                                                       [1.8, 1.],
+                                                       [2.5, 1.],
+                                                       [2.5, 0.],
+                                                       [1.8, 0.],
+                                                       [1.5, 0.],
+                                                       [1., 0.],
+                                                       [0.8, 0.],
+                                                       [0., 0.],
+                                                       [0., 1.],
+                                                       [0.8, 1.]]))
         expected_contour_2 = shapely.Polygon(np.array([[1.5, 1.],
-                                                        [1.8, 1.],
-                                                        [1.8, 0.],
-                                                        [1.5, 0.],
-                                                        [1.5, 1.]]))
+                                                       [1.8, 1.],
+                                                       [1.8, 0.],
+                                                       [1.5, 0.],
+                                                       [1.5, 1.]]))
         expected = [expected_contour_1,
                     expected_contour_2]
         result = utils.cluster_average_intersection_contours(data, **kwargs)

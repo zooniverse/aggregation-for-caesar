@@ -9,9 +9,10 @@ from sklearn.cluster import DBSCAN
 import numpy as np
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
-from .polygon_reducer_utils import IoU_metric_polygon, cluster_average_last,\
-    cluster_average_intersection, cluster_average_union, cluster_average_median,\
-    IoU_distance_matrix_of_cluster, IoU_cluster_mean_distance
+from .polygon_reducer_utils import IoU_metric_polygon, cluster_average_last, \
+    cluster_average_intersection, cluster_average_union, \
+    cluster_average_median, IoU_distance_matrix_of_cluster, \
+    IoU_cluster_mean_distance
 from .text_utils import tokenize
 import warnings
 import shapely
@@ -82,12 +83,12 @@ def process_data(data):
 
                             # If part of multipolygon collection, choose largest polygon
                             if isinstance(polygon, shapely.geometry.collection.GeometryCollection)\
-                                or isinstance(polygon, shapely.geometry.multipolygon.MultiPolygon):
+                                    or isinstance(polygon, shapely.geometry.multipolygon.MultiPolygon):
                                 areas = [p.area for p in polygon.geoms]
                                 polygon = polygon.geoms[np.argmax(areas)]
 
                             # Add this polygon to the dictionary only if it is a polygon
-                            # It also must have a linear string as the boundary. This because the coords might need to be found later 
+                            # It also must have a linear string as the boundary. This because the coords might need to be found later
                             if isinstance(polygon, shapely.geometry.polygon.Polygon) is True:
                                 data_by_tool[frame][tool]['data'].append({
                                     'polygon': polygon,
@@ -107,7 +108,7 @@ def process_data(data):
 )
 def polygon_reducer(data_by_tool, **kwargs_dbscan):
     '''Cluster a polygon/freehand tools using DBSCAN.
-    
+
     There is a choice in how the cluster is averaged into a single cluster,
     with the varies choices listed below.
 
@@ -120,14 +121,14 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
 
     kwargs :
         * `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
-        * `average_type` : Must be either "union", which returns the union of the cluster, "intersection" which retruns the intersection of the cluster, "last", which returns the last polygon to be created in the cluster, or "median", which returns the polygon with the minimum total distance to the other polygons. Defaults to "median".
+        * `average_type` : Must be either "union", which returns the union of the cluster, "intersection" which returns the intersection of the cluster, "last", which returns the last polygon to be created in the cluster, or "median", which returns the polygon with the minimum total distance to the other polygons. Defaults to "median".
         * `created_at` : A list of when the classifcations were made.
 
     Returns
     -------
     reduction : dict
         A dictionary with the following keys for each frame, task and tool:
-        
+
         * `tool*_cluster_labels` : A list of cluster labels for polygons provided for this frame and tool
         * `tool*_clusters_count` : The number of points in each **cluster** found for this frame and tool
         * `tool*_clusters_x` : A list of the x values of each cluster

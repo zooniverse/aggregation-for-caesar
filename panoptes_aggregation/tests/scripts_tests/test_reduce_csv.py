@@ -171,7 +171,7 @@ class TestReduceCSV(unittest.TestCase):
             filter='all',
             cpu_count=1
         )
-        created_at = [ 
+        created_at = [
             pandas.Timestamp('2017-05-31 12:33:46', tz='UTC'),
             pandas.Timestamp('2017-05-31 12:33:51', tz='UTC')
         ]

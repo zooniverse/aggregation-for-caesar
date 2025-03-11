@@ -88,7 +88,7 @@ def batch_extract(
         max_pbar = len(classifications) * number_of_extractors
         pbar = progressbar.ProgressBar(widgets=widgets, max_value=max_pbar)
         counter = 0
-    
+
         def callback(name_with_row):
             nonlocal extracts_data
             nonlocal counter
@@ -98,7 +98,7 @@ def batch_extract(
                 extracts_data[extractor_name] += new_extract_row
             counter += 1
             pbar.update(counter)
-    
+
         pbar.start()
 
     if cpu_count > 1:

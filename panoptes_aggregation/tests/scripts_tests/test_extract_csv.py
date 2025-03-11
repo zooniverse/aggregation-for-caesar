@@ -366,7 +366,6 @@ class TestExtractCSV(unittest.TestCase):
         mock_print.assert_not_called()
         self.assertEqual(output_file_names, [])
 
-
     @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
     @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
     @patch.dict('panoptes_aggregation.scripts.batch_utils.extractors.extractors', mock_extractors_dict)
