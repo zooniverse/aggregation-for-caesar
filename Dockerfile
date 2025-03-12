@@ -23,7 +23,7 @@ RUN pip install -U .[online,test,doc]
 # make documentation
 RUN /bin/bash -lc ./scripts/make_docs.sh
 
-ADD ./ /usr/src/aggregation
+# ADD ./ /usr/src/aggregation
 
 ARG REVISION=''
 ENV REVISION=$REVISION

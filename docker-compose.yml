@@ -28,8 +28,8 @@ services:
   worker:
     image: aggregation-for-caesar:local
     command: celery --app panoptes_aggregation.batch_aggregation.celery worker --loglevel=info
-    volumes:
-      - ./:/usr/src/aggregation
+    # volumes:
+      # - ./:/usr/src/aggregation
     environment:
       - FLASK_DEBUG=1
       - APP_SETTINGS=project.server.config.DevelopmentConfig
