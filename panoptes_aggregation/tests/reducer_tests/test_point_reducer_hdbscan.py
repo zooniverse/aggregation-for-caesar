@@ -13,19 +13,21 @@ xy = np.vstack([
     np.random.multivariate_normal(c0_loc, c0_cov, size=c0_count),
     np.random.multivariate_normal(c1_loc, c1_cov, size=c1_count)
 ])
+# Reformat to list
+xy = xy.T.tolist()
 extracted_data = [
     {
         'frame0': {
-            'tool1_x': list(xy[:12, 0]),
-            'tool1_y': list(xy[:12, 1]),
+            'tool1_x': list(xy[0][:12]),
+            'tool1_y': list(xy[1][:12]),
             'tool2_x': [3, None, None],
             'tool2_y': [4, None, None]
         }
     },
     {
         'frame0': {
-            'tool1_x': list(xy[12:, 0]),
-            'tool1_y': list(xy[12:, 1])
+            'tool1_x': list(xy[0][12:]),
+            'tool1_y': list(xy[1][12:]),
         }
     }
 ]
@@ -39,14 +41,14 @@ kwargs_extra_data = {
 
 processed_data = {
     'frame0': {
-        'tool1': [tuple(z) for z in list(xy)],
+        'tool1': [tuple((xy[0][i], xy[1][i])) for i in range(len(xy[0]))],
         'tool2': [(3, 4), (None, None), (None, None)]
     }
 }
 reduced_data = {
     'frame0': {
-        'tool1_points_x': list(xy[:, 0]),
-        'tool1_points_y': list(xy[:, 1]),
+        'tool1_points_x': list(xy[0]),
+        'tool1_points_y': list(xy[1]),
         'tool1_cluster_labels': [1] * c0_count + [0] * c1_count,
         'tool1_cluster_probabilities': [
             1.0,
@@ -76,9 +78,9 @@ reduced_data = {
         'tool1_clusters_count': [c0_count, c1_count],
         'tool1_clusters_x': [c0_loc[0], c1_loc[0]],
         'tool1_clusters_y': [c0_loc[1], c1_loc[1]],
-        'tool1_clusters_var_x': [c0_cov[0, 0], c1_cov[0, 0]],
-        'tool1_clusters_var_y': [c0_cov[1, 1], c1_cov[1, 1]],
-        'tool1_clusters_var_x_y': [c0_cov[0, 1], c1_cov[0, 1]],
+        'tool1_clusters_var_x': [c0_cov[0][0], c1_cov[0][0]],
+        'tool1_clusters_var_y': [c0_cov[1][1], c1_cov[1][1]],
+        'tool1_clusters_var_x_y': [c0_cov[0][1], c1_cov[0][1]],
         'tool2_points_x': [3],
         'tool2_points_y': [4],
         'tool2_cluster_labels': [-1],

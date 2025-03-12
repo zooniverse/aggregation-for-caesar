@@ -1,6 +1,6 @@
 import numpy as np
 from panoptes_aggregation.reducers.point_reducer_dbscan import process_data_by_frame, point_reducer_dbscan
-from .base_test_class import ReducerTestPoints, ReducerTest
+from .base_test_class import ReducerTestPoints
 
 c0_cov = np.array([[3, 0.5], [0.5, 4]]).tolist()
 c1_cov = np.array([[7, -0.5], [-0.5, 5]]).tolist()

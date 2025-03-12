@@ -53,7 +53,7 @@ def find_non_built_in_data_types(dictionary):
             for idx, value in enumerate(d):
                 search_data(value, found, directory)
         elif (d.__class__.__module__ != 'builtins') and (d != nan):
-            found[directory] = 'Contains none built-in data types'
+            found[directory] = 'Contains none built-in data type ' + d.__class__.__module__
             directory = ''
     search_data(dictionary, found, directory)
     return found
