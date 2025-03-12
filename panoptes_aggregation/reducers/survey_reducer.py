@@ -32,7 +32,8 @@ def process_data(data):
         for key, value in d.items():
             outer[key] = Counter(value)
         data_out.setdefault(choice, []).append(outer)
-    return data_out, vote_count
+    data_out['vote_count'] = vote_count
+    return data_out
 
 
 @reducer_wrapper(process_data=process_data)
@@ -54,7 +55,8 @@ def survey_reducer(data_in):
         * `choice_count` : The number of users that made this `choice`
         * `answers_*` : Counters for each answer to sub-question `*`
     '''
-    data, vote_count = data_in
+    data = data_in
+    vote_count = data.pop('vote_count')
     reduction_list = []
     for choice, answers in data.items():
         reduction = OrderedDict()

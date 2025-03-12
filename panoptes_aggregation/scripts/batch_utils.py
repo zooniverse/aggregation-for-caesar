@@ -34,7 +34,8 @@ def batch_extract(
     classifications,
     extractor_config,
     cpu_count=1,
-    verbose=False
+    verbose=False,
+    hide_progressbar=False
 ):
     '''
         Extracts the values given a list of classifications and a corresponding
@@ -62,32 +63,44 @@ def batch_extract(
                     A JSON formatted string for the subject metadata
         extractor_config: dict
             A dictionary defining the configuration for the extractor
+        cpu_count: int
+            The number of CPU cores to be used.
+        verbose: bool:
+            If True, increase output verbosity.
+        hide_progressbar: bool:
+            If True, the progress bar is hidden.
     '''
     extracts_data = defaultdict(list)
-    widgets = [
-        'Extracting: ',
-        progressbar.Percentage(),
-        ' ', progressbar.Bar(),
-        ' ', progressbar.ETA()
-    ]
-    number_of_extractors = sum([len(value) for _, value in extractor_config.items()])
-    max_pbar = len(classifications) * number_of_extractors
-    pbar = progressbar.ProgressBar(widgets=widgets, max_value=max_pbar)
-    counter = 0
+    if hide_progressbar:
+        def callback(name_with_row):
+            nonlocal extracts_data
+            extractor_name, new_extract_row = name_with_row
+            if new_extract_row is not None:
+                extracts_data[extractor_name] += new_extract_row
+    else:
+        widgets = [
+            'Extracting: ',
+            progressbar.Percentage(),
+            ' ', progressbar.Bar(),
+            ' ', progressbar.ETA()
+        ]
+        number_of_extractors = sum([len(value) for _, value in extractor_config.items()])
+        max_pbar = len(classifications) * number_of_extractors
+        pbar = progressbar.ProgressBar(widgets=widgets, max_value=max_pbar)
+        counter = 0
 
-    extracts_data = defaultdict(list)
+        def callback(name_with_row):
+            nonlocal extracts_data
+            nonlocal counter
+            nonlocal pbar
+            extractor_name, new_extract_row = name_with_row
+            if new_extract_row is not None:
+                extracts_data[extractor_name] += new_extract_row
+            counter += 1
+            pbar.update(counter)
 
-    def callback(name_with_row):
-        nonlocal extracts_data
-        nonlocal counter
-        nonlocal pbar
-        extractor_name, new_extract_row = name_with_row
-        if new_extract_row is not None:
-            extracts_data[extractor_name] += new_extract_row
-        counter += 1
-        pbar.update(counter)
+        pbar.start()
 
-    pbar.start()
     if cpu_count > 1:
         pool = Pool(cpu_count)
     for _, classification in classifications.iterrows():
@@ -137,7 +150,9 @@ def batch_extract(
     if cpu_count > 1:
         pool.close()
         pool.join()
-    pbar.finish()
+
+    if hide_progressbar is False:
+        pbar.finish()
 
     flat_extracts = defaultdict(list)
     for extractor_name, data in extracts_data.items():
@@ -212,7 +227,8 @@ def batch_reduce(
     config,
     cpu_count=1,
     stream=False,
-    output_path=None
+    output_path=None,
+    hide_progressbar=False
 ):
     '''
         Reduces a list of extracts on a per-subject basis and returns an aggregated
@@ -242,6 +258,8 @@ def batch_reduce(
             Whether to stream to an output CSV (and resume from the CSV in case of a stopped reduction)
         output_path: str
             Path to output CSV (used only if stream=True)
+        hide_progressbar: bool:
+            If True, the progress bar is hidden.
     '''
     extracts.sort_values(['subject_id', 'created_at'], inplace=True)
     subjects = extracts.subject_id.unique()
@@ -256,16 +274,68 @@ def batch_reduce(
         'filter': filter,
         'keywords': keywords
     }
+    if hide_progressbar:
+        def callback(reduced_data_list):
+            nonlocal reduced_data
+            nonlocal sdx
+            nonlocal stream
+            reduced_data += reduced_data_list
+            if (stream) and (output_path is not None):
+                if (sdx == 0) and (not resume):
+                    pandas.DataFrame(reduced_data).to_csv(
+                        output_path,
+                        mode='w',
+                        index=False,
+                        encoding='utf-8'
+                    )
+                else:
+                    pandas.DataFrame(reduced_data).to_csv(
+                        output_path,
+                        mode='a',
+                        index=False,
+                        header=False,
+                        encoding='utf-8'
+                    )
+                reduced_data.clear()
+            sdx += 1
+    else:
+        widgets = [
+            'Reducing: ',
+            progressbar.Percentage(),
+            ' ', progressbar.Bar(),
+            ' ', progressbar.ETA()
+        ]
+        number_of_rows = len(subjects) * len(tasks)
+        pbar = progressbar.ProgressBar(widgets=widgets, max_value=number_of_rows)
 
-    widgets = [
-        'Reducing: ',
-        progressbar.Percentage(),
-        ' ', progressbar.Bar(),
-        ' ', progressbar.ETA()
-    ]
-    number_of_rows = len(subjects) * len(tasks)
-    pbar = progressbar.ProgressBar(widgets=widgets, max_value=number_of_rows)
+        def callback(reduced_data_list):
+            nonlocal reduced_data
+            nonlocal sdx
+            nonlocal pbar
+            nonlocal stream
+            reduced_data += reduced_data_list
+            if (stream) and (output_path is not None):
+                if (sdx == 0) and (not resume):
+                    pandas.DataFrame(reduced_data).to_csv(
+                        output_path,
+                        mode='w',
+                        index=False,
+                        encoding='utf-8'
+                    )
+                else:
+                    pandas.DataFrame(reduced_data).to_csv(
+                        output_path,
+                        mode='a',
+                        index=False,
+                        header=False,
+                        encoding='utf-8'
+                    )
+                reduced_data.clear()
+            sdx += 1
+            pbar.update(sdx)
+        pbar.start()
 
+    sdx = 0
     resume = False
     if stream:
         if os.path.isfile(output_path):
@@ -276,35 +346,7 @@ def batch_reduce(
                 subjects = np.setdiff1d(subjects, reduced_csv.subject_id)
 
     reduced_data = []
-    sdx = 0
 
-    def callback(reduced_data_list):
-        nonlocal reduced_data
-        nonlocal sdx
-        nonlocal pbar
-        nonlocal stream
-        reduced_data += reduced_data_list
-        if (stream) and (output_path is not None):
-            if (sdx == 0) and (not resume):
-                pandas.DataFrame(reduced_data).to_csv(
-                    output_path,
-                    mode='w',
-                    index=False,
-                    encoding='utf-8'
-                )
-            else:
-                pandas.DataFrame(reduced_data).to_csv(
-                    output_path,
-                    mode='a',
-                    index=False,
-                    header=False,
-                    encoding='utf-8'
-                )
-            reduced_data.clear()
-        sdx += 1
-        pbar.update(sdx)
-
-    pbar.start()
     if cpu_count > 1:
         pool = Pool(cpu_count)
     for subject in subjects:
@@ -334,8 +376,8 @@ def batch_reduce(
     if cpu_count > 1:
         pool.close()
         pool.join()
-    pbar.finish()
-
+    if hide_progressbar is False:
+        pbar.finish()
     return pandas.DataFrame(reduced_data)
 
 
@@ -355,7 +397,8 @@ def reduce_subject(
         classifications = classifications.groupby(['user_name'], group_keys=False).apply(FILTER_TYPES[filter])
     data = [unflatten_data(c) for cdx, c in classifications.iterrows()]
     user_ids = [c.user_id for cdx, c in classifications.iterrows()]
-    reduction = reducers.reducers[reducer_name](data, user_id=user_ids, **keywords)
+    created_at = [c.created_at for cdx, c in classifications.iterrows()]
+    reduction = reducers.reducers[reducer_name](data, user_id=user_ids, created_at=created_at, **keywords)
     if isinstance(reduction, list):
         for r in reduction:
             reduced_data_list.append(OrderedDict([

@@ -181,7 +181,7 @@ Other options:
   -c CPU_COUNT, --cpu_count CPU_COUNT
                         How many cpu cores to use during extraction
   -vv, --verbose        increase output verbosity
-
+  -hb, --hide_bar       hide the progress bar
 ```
 
 ### Example: Penguin Watch
@@ -251,6 +251,7 @@ Reducer options:
                         saving
   -c CPU_COUNT, --cpu_count CPU_COUNT
                         How many cpu cores to use during reduction
+  -hb, --hide_bar       hide the progress bar
 ```
 
 ### Example: Penguin Watch

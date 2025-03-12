@@ -1,6 +1,6 @@
 from collections import Counter
 from panoptes_aggregation.reducers.survey_reducer import process_data, survey_reducer
-from .base_test_class import ReducerTestSurvey
+from .base_test_class import ReducerTest
 
 extracted_data = [
     {'answers_howmanyanimalsdoyousee': {'1': 1.0}, 'answers_whatistheanimalsdoing': {'grooming': 1.0}, 'choice': 'raccoon'},
@@ -52,25 +52,11 @@ processed_data = {
             'answers_howmanyanimalsdoyousee': Counter({'1': 1}),
             'answers_whatistheanimalsdoing': Counter({'standing': 1})
         }
-    ]
+    ],
+    'vote_count': 8
 }
 
 reduced_data = [
-    {
-        'choice': 'raccoon',
-        'total_vote_count': 8,
-        'choice_count': 4,
-        'answers_howmanyanimalsdoyousee': {
-            '1': 4
-        },
-        'answers_whatistheanimalsdoing': {
-            'standing': 3,
-            'grooming': 1
-        },
-        'answers_clickwowifthisasanespeciallyawesomephoto': {
-            'wow': 1
-        }
-    },
     {
         'choice': 'blackbear',
         'total_vote_count': 8,
@@ -86,10 +72,25 @@ reduced_data = [
         'answers_clickwowifthisasanespeciallyawesomephoto': {
             'wow': 2
         }
+    },
+    {
+        'choice': 'raccoon',
+        'total_vote_count': 8,
+        'choice_count': 4,
+        'answers_howmanyanimalsdoyousee': {
+            '1': 4
+        },
+        'answers_whatistheanimalsdoing': {
+            'standing': 3,
+            'grooming': 1
+        },
+        'answers_clickwowifthisasanespeciallyawesomephoto': {
+            'wow': 1
+        }
     }
 ]
 
-TestSurvey = ReducerTestSurvey(
+TestSurvey = ReducerTest(
     survey_reducer,
     process_data,
     extracted_data,

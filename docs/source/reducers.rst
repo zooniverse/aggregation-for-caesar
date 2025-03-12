@@ -52,6 +52,16 @@ Reducers
 
 ----
 
+.. automodule:: panoptes_aggregation.reducers.polygon_reducer
+  :members:
+
+----
+
+.. automodule:: panoptes_aggregation.reducers.polygon_reducer_contours
+  :members:
+
+----
+
 .. automodule:: panoptes_aggregation.reducers.survey_reducer
   :members:
 
@@ -83,6 +93,11 @@ Reducers
 ----
 
 .. automodule:: panoptes_aggregation.reducers.tess_gold_standard_reducer
+  :members:
+
+----
+
+.. automodule:: panoptes_aggregation.reducers.polygon_reducer_utils
   :members:
 
 ----

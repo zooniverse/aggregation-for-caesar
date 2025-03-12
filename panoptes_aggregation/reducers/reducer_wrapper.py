@@ -9,6 +9,7 @@ def reducer_wrapper(
     defaults_process=None,
     defaults_data=None,
     user_id=False,
+    created_at=False,
     relevant_reduction=False,
     output_kwargs=False
 ):
@@ -30,6 +31,8 @@ def reducer_wrapper(
                     kwargs_details['data_in'] = data_in
                 if user_id:
                     kwargs_extra_data['user_id'] = [d['user_id'] for d in argument_json]
+                if created_at:
+                    kwargs_extra_data['created_at'] = [d['created_at'] for d in argument_json]
                 if relevant_reduction:
                     kwargs_extra_data['relevant_reduction'] = [d['relevant_reduction'] for d in argument_json]
             else:
@@ -40,6 +43,8 @@ def reducer_wrapper(
                     kwargs_details['data_in'] = data_in
                 if user_id:
                     kwargs_extra_data['user_id'] = kwargs['user_id']
+                if created_at:
+                    kwargs_extra_data['created_at'] = kwargs['created_at']
                 if relevant_reduction:
                     kwargs_extra_data['relevant_reduction'] = kwargs['relevant_reduction']
 
@@ -76,7 +81,11 @@ def reducer_wrapper(
             if not no_version:
                 append_version(reduction)
             if output_kwargs:
-                reduction['parameters'] = {**kwargs_data, **kwargs_process}
+                if isinstance(reduction, list):
+                    for r in reduction:
+                        r['parameters'] = {**kwargs_data, **kwargs_process}
+                else:
+                    reduction['parameters'] = {**kwargs_data, **kwargs_process}
             return reduction
         #: keep the original function around for testing
         #: and access by other reducers

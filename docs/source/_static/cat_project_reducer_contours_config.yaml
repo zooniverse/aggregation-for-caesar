@@ -1,0 +1,4 @@
+reducer_config: 
+    polygon_reducer_contours:
+        eps: 0.5
+        min_samples: 2

@@ -365,3 +365,23 @@ class TestExtractCSV(unittest.TestCase):
         )
         mock_print.assert_not_called()
         self.assertEqual(output_file_names, [])
+
+    @patch('panoptes_aggregation.scripts.extract_panoptes_csv.pandas.DataFrame.to_csv')
+    @patch('panoptes_aggregation.scripts.batch_utils.progressbar.ProgressBar')
+    @patch.dict('panoptes_aggregation.scripts.batch_utils.extractors.extractors', mock_extractors_dict)
+    @patch('panoptes_aggregation.scripts.batch_utils.flatten_data', CaptureValues(batch_utils.flatten_data))
+    def test_extract_csv_object_no_progress_bar(self, mock_progress_bar, *_):
+        '''Test to make sure progress is not displayed'''
+        mock_question_extractor.side_effect = [
+            {'yes': 1},
+            {'blue': 1, 'green': 1},
+            {'no': 1},
+            {}
+        ]
+        extract_panoptes_csv.extract_csv(
+            self.classification_data_dump_two_tasks,
+            self.config_yaml_question,
+            cpu_count=1,
+            hide_progressbar=True
+        )
+        mock_progress_bar.assert_not_called()

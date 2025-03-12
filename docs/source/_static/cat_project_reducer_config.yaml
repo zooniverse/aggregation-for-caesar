@@ -1,0 +1,5 @@
+reducer_config: 
+    polygon_reducer:
+        average_type: 'median'
+        eps: 0.5
+        min_samples: 2

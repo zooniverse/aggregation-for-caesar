@@ -1,0 +1,5 @@
+workflow_id: 28090
+workflow_version: '13.19'
+extractor_config: 
+    polygon_extractor:
+    -   task: T0

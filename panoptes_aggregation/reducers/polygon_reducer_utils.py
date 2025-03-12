@@ -1,0 +1,449 @@
+'''
+Utilities for `polygon_reducer`
+-------------------------------
+This module provides utilities used to reduce the polygon extractions
+for :mod:`panoptes_aggregation.reducers.polygon_reducer`.
+'''
+import numpy as np
+import shapely
+import copy
+import datetime
+from scipy.linalg import issymmetric
+from pandas._libs.tslibs.timestamps import Timestamp as pdtimestamp
+
+
+def _polygons_unify(polygons):
+    # Internal function to unify the polygons in a cluster, even for cases with
+    # disconnected clusters or if individual polygons are not connected by are
+    # connected by another polygon.
+
+    polygons = copy.deepcopy(polygons)
+    all_unified = False
+    i = 0
+    safety = 0
+    while all_unified is False:
+        if i > len(polygons) - 2:  # Once first interation is done
+            # Find all of the possible intersections
+            intersections = []
+            for j in range(len(polygons)):
+                for k in range(j + 1, len(polygons)):
+                    intersections.append(polygons[j].intersects(polygons[k]))
+            if any(intersections) is False:
+                all_unified = True
+                break
+            else:  # Restart the unification
+                i = 0
+
+        indices_included = []
+        for j in range(i + 1, len(polygons)):
+            if polygons[i].intersects(polygons[j]):
+                polygons[i] = polygons[i].union(polygons[j])
+                if isinstance(polygons[i], shapely.geometry.collection.GeometryCollection)\
+                        or isinstance(polygons[i], shapely.geometry.multipolygon.MultiPolygon):
+                    for p in polygons[i].geoms:
+                        if isinstance(p, shapely.geometry.polygon.Polygon):
+                            polygons[i] = p
+                            break
+                # If there are any holes, close them
+                if len(polygons[i].interiors) > 0:
+                    for hole in polygons[i].interiors:
+                        hole = shapely.Polygon(hole)
+                        polygons[i] = polygons[i].union(hole)
+                indices_included.append(j)
+        # Remove polygons that have been unified into the others
+        for j in sorted(indices_included, reverse=True):
+            del polygons[j]
+        # If only one polygon, we are finished
+        if len(polygons) == 1:
+            all_unified = True
+            break
+        i += 1
+        safety += 1
+        if safety > 10:
+            all_unified = True
+            break
+    areas = [polygons[i].area for i in range(len(polygons))]
+    largest_polygon_index = np.argmax(areas)
+    return polygons[largest_polygon_index]
+
+
+# This needs a list of shapely objects to work!
+def IoU_metric_polygon(a, b, data_in=[]):
+    '''Find the Intersection of Union distance between two polygons. This is
+    based on the `Jaccard metric <https://en.wikipedia.org/wiki/Jaccard_index>`_
+
+    To use this metric within the clustering code without having to
+    precompute the full distance matrix `a` and `b` are index mappings to
+    the data contained in `data_in`.  `a` and `b` also contain the user
+    information that is used to help prevent self-clustering. The polygons
+    used to calculate the IoU distance are contained in `data_in`, along with
+    the timestamp of creation.
+
+    Parameters
+    ----------
+    a : list
+        A two element list containing [index mapping to data, index mapping to user]
+    b : list
+        A two element list containing [index mapping to data, index mapping to user]
+        A list of the parameters for shape 2 (as defined by PFE)
+    data_in : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'time': float, 'gold_standard', bool}
+        There is one element in this list for each classification made. The
+        time should be a Unix timestamp float.
+
+    Returns
+    -------
+    distance : float
+        The IoU distance between the two polygons. 0 means the polygons are the
+        same, 1 means the polygons don't overlap, values in the middle mean
+        partial overlap.
+    '''
+    if a[0] == b[0]:
+        # The same data point, the distance is zero
+        return 0
+    if a[1] == b[1]:
+        # The same users, distance is inf
+        return np.inf
+
+    # Now need to find the actual data
+    geo1 = data_in[int(a[0])]['polygon']
+    geo2 = data_in[int(b[0])]['polygon']
+
+    # The two shapes need to intersect and be simple for the intersection area
+    # to be found
+    if geo1.intersects(geo2) and (shapely.is_simple(geo1) and shapely.is_simple(geo2)):
+        intersection = geo1.intersection(geo2).area
+    else:  # No intersection, so distance is 1
+        return 1
+
+    union = geo1.union(geo2).area
+
+    return 1 - intersection / union
+
+
+def IoU_distance_matrix_of_cluster(cdx, X, data):
+    '''Find distance matrix using `IoU_metric_polygon` for a cluster.
+
+    The `cdx` argument is used to define the cluster out of the full `X` and
+    `data` data sets, which may also contain other polygons not in the cluster.
+
+    Parameters
+    ----------
+    cdx : numpy.ndarray
+        A 1D array of booleans, corresponding to the polygons in `X` and `data`
+        which are in the cluster. `True` if in the cluster, `False` otherwise.
+    X : numpy.ndarray
+        A 2D array with each row mapping to the data held in `data`. The first
+        column contains row indices and the second column is an index assigned
+        to each user.
+    data_cluster : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'time': float, 'gold_standard', bool}
+        There is one element in this list for each member of the cluster.
+
+    Returns
+    -------
+    distances_matrix : numpy.ndarray
+        A symmetric-square array, with the off-diagonal elements containing the
+        IoU distance between the cluster members. The diagonal elements are all
+        zero.
+    '''
+    cluster_X = X[cdx]
+    num_in_cluster = np.shape(cluster_X)[0]
+    # If a cluster of 1 is provided, this will correctly default to a distance of 0
+    distances_matrix = np.zeros((num_in_cluster, num_in_cluster))
+    for i in range(num_in_cluster):
+        a = cluster_X[i]
+        for j in range(i + 1, num_in_cluster):
+            b = cluster_X[j]
+            distance = IoU_metric_polygon(a, b, data_in=data)
+            distances_matrix[i, j] = distance
+            distances_matrix[j, i] = distance
+    return distances_matrix
+
+
+def IoU_cluster_mean_distance(distances_matrix):
+    '''The mean `IoU_metric_polygon` distance between the polygons of the
+    cluster.
+
+    Parameters
+    ----------
+    distances_matrix : numpy.ndarray
+        A symmetric-square array, with the off-diagonal elements containing the
+        `IoU_metric_polygon` distance between the cluster members. The diagonal
+        elements are all zero. This is found using `IoU_distance_matrix_of_cluster`.
+
+    Returns
+    -------
+    distances_mean : float
+        The mean of the `IoU_metric_polygon` defined distance between the
+        polygons of the cluster.
+    '''
+    # first check if it is symmetric
+    if not issymmetric(distances_matrix):
+        raise Exception('`distances_matrix` must be a symmetric-square array')
+    # Check the diagonals are all 0, as the distance between an object and its self is always zero
+    if np.sum(np.diagonal(distances_matrix)) != 0:
+        raise ValueError('`distances_matrix` must have zero diagonal elements, as distance between the object and itself is zero')
+
+    if np.shape(distances_matrix) == (1, 1):  # If cluster of one, include 0 distance to itself
+        unique_distances = np.array([distances_matrix[0, 0]])
+    else:
+        # Find the unigue distances from the off diagonal components
+        unique_distances = np.array([distances_matrix[i, j] for i in range(len(distances_matrix)) for j in range(i + 1, len(distances_matrix))])
+    # Set any infinities to 1, otherwise the mean cannot be calculated
+    unique_distances[unique_distances == np.inf] = 1
+    # As IoU distances are akways positive, this mean will always be positive
+    distances_mean = np.mean(unique_distances)
+    return distances_mean
+
+
+def cluster_average_last(data, **kwargs):
+    '''Find the last created polygon of provided cluster data
+
+    Parameters
+    ----------
+    data : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'gold_standard', bool}
+        There is one element in this list for each classification made. The
+        time should be a Unix timestamp float.
+    kwargs :
+        * `created_at` : A list of when the classifcations was made.
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
+
+
+    Returns
+    -------
+    last : shapely.geometry.polygon.Polygon
+        The last created shapely polygon in the cluster.
+    '''
+    created_at = np.array(kwargs.pop('created_at'))
+
+    # Change to datatime format
+    created_at_list = []
+    if isinstance(created_at[0], str):  # If in original format
+        for time in created_at:
+            created_at_list.append(datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S UTC"))
+    elif isinstance(created_at[0], pdtimestamp):
+        for time in created_at:
+            created_at_list.append(time.to_pydatetime())
+    elif isinstance(created_at[0], datetime.datetime):  # If already correct
+        created_at_list = created_at
+    else:
+        raise Exception('`created_at` needs to contain either UTC strings, pandas timestamps or datetime objects')
+    # sort in time order
+    order_logic = np.argmax(created_at_list)
+    # Select the last polygon to be created
+    last = data[order_logic]['polygon']
+    return last
+
+
+def cluster_average_median(data, **kwargs):
+    '''Find the 'median' of provided cluster data,
+    i.e. the polygon of the cluster with the minimum total
+    distance to the other polygons.
+
+    Parameters
+    ----------
+    data : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'gold_standard', bool}
+        There is one element in this list for each classification made.
+    kwargs :
+        * `created_at` : A list when the classifcation was made. Not used in this average.
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`.
+
+    Returns
+    -------
+    median : shapely.geometry.polygon.Polygon
+        The 'median' polygon in the cluster.
+    '''
+    distance_matrix = kwargs.pop('distance_matrix')
+    # first check if it is symmetric
+    if not issymmetric(distance_matrix):
+        raise ValueError('`distances_matrix` must be a symmetric-square array')
+    # Check the diagonals are all 0, as the distance between an object and its self is always zero
+    if np.sum(np.diagonal(distance_matrix)) != 0:
+        raise ValueError('`distances_matrix` must have zero diagonal elements, as distance between the object and itself is zero')
+    # Set infinities to 1 to avoid user self clustering
+    distance_matrix[distance_matrix == np.inf] = 1
+    # Find the total mutual distance to each polygon
+    sums_of_distances = np.sum(distance_matrix, axis=0)
+    median_polygon_index = np.argmin(sums_of_distances)
+    median_polygon = data[median_polygon_index]['polygon']
+    return median_polygon
+
+
+def cluster_average_intersection(data, **kwargs):
+    '''Find the intersection of provided cluster data
+
+    Parameters
+    ----------
+    data : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'gold_standard', bool}
+        There is one element in this list for each classification made.
+    kwargs :
+        * `created_at` : A list of when the classifcations was made. Not used in this average.
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
+
+    Returns
+    -------
+    intersection_all : shapely.geometry.polygon.Polygon
+        The `shapely` intersection of the shapely polygons in the cluster.
+    '''
+    polygon_list = [data[i]['polygon'] for i in range(len(data))]
+    # Just one object, so return it as it is its own average
+    if len(polygon_list) == 1:
+        return polygon_list[0]
+    # There must now be two polygons to average
+    intersection_all = polygon_list[0].intersection(polygon_list[1])
+    # If there are any other
+    if len(polygon_list) > 2:
+        for i in range(2, len(polygon_list)):
+            intersection_all = intersection_all.intersection(polygon_list[i])
+
+    return intersection_all
+
+
+def cluster_average_union(data, **kwargs):
+    '''Find the union of provided cluster data
+
+    Parameters
+    ----------
+    data : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'gold_standard', bool}
+        There is one element in this list for each classification made.
+    kwargs :
+        * `created_at` : A list when the classifcation was made. Not used in this average.
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
+    Returns
+    -------
+    union_all : shapely.geometry.polygon.Polygon
+        The shapely union of the shapely polygons in the cluster.
+    '''
+    polygon_list = [data[i]['polygon'] for i in range(len(data))]
+    # Just one object, so return it as it is its own average
+    if len(polygon_list) == 1:
+        return polygon_list[0]
+    # There must now be two polygons to average
+    union_all = _polygons_unify(polygon_list)
+    return union_all
+
+
+def cluster_average_intersection_contours(data, **kwargs):
+    '''Find contours of intersection as a list. Each item of the list will
+    be the largest contour of `i` intersections, with the next item being the
+    contour `i+1` intersection etc. The intersection is where the polygons
+    overlap. This is useful for plotting the uncertainty in the cluster.
+
+    The algorithm used is as follows. First find the largest simply-connected
+    union polygon for the cluster and add it to the list
+    `intersection_contours`. Next, every intersection of two polygons is found,
+    and made into new `shapely` polygons. This makes a list of 'level-2'
+    polygons. These polygons may overlap. Then, find the largest
+    simply-connected union polygon of the level-2 polygons. This is the
+    polygon of at least 2 intersections
+    (i.e. area where at least 2 volunteers agree). Add it to list
+    `intersection_contours`.
+
+    If there is more than one level-2 polygons, which intersect, then the
+    intersection of the level-2 polygons is found as a list. These are the
+    level-3 polygons, as each polygon is made from at least three
+    intersections. Then find the largest
+    simply-connected union polygon of the level-3 polygons. This is the
+    polygon of at least 3 intersections
+    (i.e. area where at least 3 volunteers agree). Add it to list
+    `intersection_contours`.
+
+    Continue this process until either 10 iterations have been done, or only
+    one unique intersection polygon remains.
+
+    Parameters
+    ----------
+    data : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'gold_standard', bool}
+        There is one element in this list for each classification made.
+    kwargs :
+        * `created_at` : A list when the classifcation was made. Not used in this average.
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
+
+    Returns
+    -------
+    intersection_contours : list
+        List of shapely objects. Each shape at position `i` in the list is the
+        largest simply-connected contour of at least `i` intersections.
+    '''
+    # Want the list to just be simple polygons
+    polygons = [data[i]['polygon'] for i in range(len(data))]
+
+    def polygon_list_simplify(polygons):
+        individual_polygons = []
+        for polygon in polygons:
+            if isinstance(polygon, shapely.geometry.polygon.Polygon):
+                # Make sure shape is simply connected
+                if not polygon.is_simple:
+                    polygon = polygon.buffer(0)
+                individual_polygons.append(polygon)
+            elif isinstance(polygon, shapely.geometry.collection.GeometryCollection)\
+                    or isinstance(polygon, shapely.geometry.multipolygon.MultiPolygon):
+                for p in polygon.geoms:
+                    if isinstance(p, shapely.geometry.polygon.Polygon):
+                        if not p.is_simple:
+                            p = p.buffer(0)
+                        individual_polygons.append(p)
+            # Any other shapely object is not included in the lost
+        return individual_polygons
+
+    # Need each item in the polygon list to be a polygon, not a list of polygons
+    # This list of polygons will be updated to just be the intersections of polygons
+    polygons = polygon_list_simplify(polygons)
+    # Need to keep track of the polygons which are in each intersection
+    polygon_indices = [[i] for i in range(len(polygons))]
+
+    def polygon_intersection_list(polygons, polygon_indices):
+        num_polygons = len(polygons)
+        polygon_connections = []
+        polygon_connections_indices = []
+        for i in range(num_polygons):
+            for j in range(i + 1, num_polygons):
+                if shapely.intersects(polygons[i], polygons[j]):
+                    # The indices of the polygons in this intersection
+                    polygon_connection_index = list(set(polygon_indices[i] + polygon_indices[j]))
+                    # Want it in order so comparison can be made
+                    polygon_connection_index.sort()
+                    # If this connection has not already been made
+                    if polygon_connection_index not in polygon_connections_indices:
+                        polygon_connections.append(polygons[i].intersection(polygons[j]))
+                        polygon_connections_indices.append(polygon_connection_index)
+        return polygon_connections, polygon_connections_indices
+
+    num_agreement = 1
+    safety = 10
+    intersection_contours = []
+    # Start with the level 1 contours
+    polygons_union = _polygons_unify(polygons)
+    intersection_contours.append(polygons_union)
+    while num_agreement < safety:
+        # If there is only one polygon left, break
+        if len(polygons) == 1:
+            break
+        else:
+            # Find the intersection of the provided polygons, and the contributing indices
+            polygons, polygon_indices = polygon_intersection_list(polygons, polygon_indices)
+            polygons = polygon_list_simplify(polygons)
+        # If there are intersection polygons, find their union. If not break as maximum level of intersection found
+        # Now find the union of these contours and add it to the list of contours
+        if len(polygons) > 0:
+            polygons_union = _polygons_unify(polygons)
+            intersection_contours.append(polygons_union)
+            # Each time the intersection polygons are found, the number of agreement increases by 1
+            num_agreement += 1
+        else:
+            break
+
+    return intersection_contours

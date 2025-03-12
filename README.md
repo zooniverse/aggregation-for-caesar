@@ -13,7 +13,7 @@ You can find the [latest documentation](https://aggregation-caesar.zooniverse.or
 ---
 
 ## Installing for offline use
-### With your own python install (python 3.8 or higher only)
+### With your own python install (python 3.9 or higher only)
 Instal the latest stable release:
 ```bash
 pip install panoptes_aggregation
