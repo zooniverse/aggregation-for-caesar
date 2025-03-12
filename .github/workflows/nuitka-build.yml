@@ -1,0 +1,64 @@
+name: Build Executables
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['windows-latest', 'macos-13', 'macos-latest']  # macos-13 is intel, macos-latest is arm
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+        cache: 'pip'
+
+    - name: Install panoptes aggregation
+      run: |
+        pip install -U pip
+        pip install .[gui,installer]
+      working-directory: ./
+
+    - name: Collect licenses
+      run: |
+        pip-licenses --format=plain-vertical --with-authors --with-urls --with-license-file --no-license-path --output-file=dependency_licenses_full.txt
+        pip-licenses --format=markdown --with-authors --with-urls --output-file=dependency_licenses_summary.txt
+
+    - name: Build Executable (MacOS)
+      if: matrix.os != 'windows-latest'
+      uses: Nuitka/Nuitka-Action@main
+      with:
+        nuitka-version: main
+        script-name: panoptes_aggregation/scripts/gui.py
+        mode: app
+        include-data-dir: |
+            panoptes_aggregation/scripts/icons=icons
+        include-data-files: |
+            ./dependency_licenses_full.txt=dependency_licenses_full.txt
+            ./dependency_licenses_summary.txt=dependency_licenses_summary.txt
+        macos-app-icon: panoptes_aggregation/scripts/icons/zooniverse.icns
+        no-deployment-flag: 'self-execution'
+        python-flag: '-u'
+
+    - name: Build Executable (Windows)
+      if: matrix.os == 'windows-latest'
+      uses: Nuitka/Nuitka-Action@main
+      with:
+        nuitka-version: main
+        script-name: panoptes_aggregation/scripts/gui.py
+        mode: standalone
+        include-data-dir: |
+            panoptes_aggregation/scripts/icons=icons
+        include-data-files: |
+            ./dependency_licenses_full.txt=dependency_licenses_full.txt
+            ./dependency_licenses_summary.txt=dependency_licenses_summary.txt
+        windows-icon-from-ico: panoptes_aggregation/scripts/icons/zooniverse.ico
+        no-deployment-flag: 'self-execution'
+        python-flag: '-u'
