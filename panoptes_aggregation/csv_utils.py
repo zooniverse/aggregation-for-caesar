@@ -1,6 +1,5 @@
 import ast
 import pandas
-from numpy import nan
 from pandas import json_normalize
 
 
