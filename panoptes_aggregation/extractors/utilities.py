@@ -149,6 +149,6 @@ def get_feedback_info(feedback_dict):
 
     # calculate an agreement score for this classification
     # (ratio of successful classifications to number of gold standards)
-    feedback_data['agreement_score'] = np.mean(feedback_data['success'])
+    feedback_data['agreement_score'] = float(np.mean(feedback_data['success']))
 
     return feedback_data

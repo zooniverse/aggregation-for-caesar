@@ -50,9 +50,13 @@ def round_dict(dictionary, ndigits):
         return round(dictionary, ndigits)
     return dictionary
 
+
 def find_non_built_in_data_types(dictionary):
+    '''This seraches the dictionary for non-builtin or np.nan data types,
+    then stores the dictionary key location when it occurs'''
     found = {}
-    directory =''
+    directory = ''
+
     def search_data(d, found, directory):
         if isinstance(d, dict):
             for key, value in d.items():
@@ -159,7 +163,7 @@ def ReducerTest(
                     result = round_dict(result, round)
                 self.assertDictEqual(result, self.reduced_with_version)
 
-        def test_data_types(self):
+        def test_reducer_data_types(self):
             '''Test the dictionary only contains built-in or nan data types'''
             result = reducer(self.extracted_with_version, **kwargs, **pkwargs, **network_kwargs)
             non_built_in_locations = find_non_built_in_data_types(result)
@@ -232,7 +236,7 @@ def ReducerTestNoProcessing(
                 result = round_dict(result, round)
             self.assertDictEqual(result, self.reduced_with_version)
 
-        def test_data_types(self):
+        def test_reducer_data_types(self):
             '''Test the dictionary only contains built-in or nan data types'''
             result = reducer(self.extracted_with_version, **kwargs, **network_kwargs)
             non_built_in_locations = find_non_built_in_data_types(result)
@@ -333,7 +337,7 @@ def ReducerTestPoints(
                             with self.subTest(j=j):
                                 self.assertIn(j, result[i])
 
-        def test_data_types(self):
+        def test_reducer_data_types(self):
             '''Test the dictionary only contains built-in or nan data types'''
             result = reducer(self.extracted_with_version, **kwargs, **network_kwargs)
             non_built_in_locations = find_non_built_in_data_types(result)

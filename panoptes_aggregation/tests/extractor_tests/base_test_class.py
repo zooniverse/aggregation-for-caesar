@@ -5,6 +5,7 @@ import numpy as np
 import urllib
 from panoptes_aggregation.extractors.utilities import annotation_by_task
 from panoptes_aggregation.append_version import append_version
+from ..reducer_tests.base_test_class import find_non_built_in_data_types
 
 try:
     import flask
@@ -41,6 +42,13 @@ def ExtractorTest(
             result = function(annotation_by_task(classification), **kwargs)
             append_version(expected)
             self.assertTestType(result, expected)
+
+        def test_extract_data_types(self):
+            '''Test the dictionary only contains built-in or nan data types'''
+            result = function(annotation_by_task(classification), **kwargs)
+            non_built_in_locations = find_non_built_in_data_types(result)
+            expected = {}
+            self.assertDictEqual(non_built_in_locations, expected)
 
         def test_blank(self):
             '''Test a blank annotation'''
@@ -109,6 +117,13 @@ def TextExtractorTest(
             result = function(annotation_by_task(classification), **kwargs)
             append_version(expected)
             self.assertTextExtractor(result, expected)
+
+        def test_extract_data_types(self):
+            '''Test the dictionary only contains built-in or nan data types'''
+            result = function(annotation_by_task(classification), **kwargs)
+            non_built_in_locations = find_non_built_in_data_types(result)
+            expected = {}
+            self.assertDictEqual(non_built_in_locations, expected)
 
         def test_blank(self):
             '''Test a blank annotation'''
