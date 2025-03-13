@@ -40,8 +40,8 @@ def slider_reducer(votes_list):
         A dictionary giving the mean, median, and variance of the slider values
     '''
     stats = {
-        'slider_mean': np.mean(votes_list),
-        'slider_median': np.median(votes_list),
-        'slider_var': np.var(votes_list)
+        'slider_mean': float(np.mean(votes_list)),
+        'slider_median': float(np.median(votes_list)),
+        'slider_var': float(np.var(votes_list))
     }
     return stats

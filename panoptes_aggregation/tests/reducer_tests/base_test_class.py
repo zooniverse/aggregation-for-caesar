@@ -16,13 +16,28 @@ except ImportError:
 
 
 def cast_to_dict(result):
-    if isinstance(result, OrderedDict):
-        result_out = dict(result)
+    if isinstance(result, list):
+        result_out_list = []
+        for r in result:
+            if isinstance(r, OrderedDict):
+                result_out = dict(r)
+            else:
+                result_out = r
+
+            for key in result_out.keys():
+                if isinstance(result_out[key], OrderedDict):
+                    result_out[key] = cast_to_dict(result_out[key])
+            result_out_list.append(result_out)
+        return result_out_list
     else:
-        result_out = result
-    for key in result_out.keys():
-        if isinstance(result_out[key], OrderedDict):
-            result_out[key] = cast_to_dict(result_out[key])
+        if isinstance(result, OrderedDict):
+            result_out = dict(result)
+        else:
+            result_out = result
+
+        for key in result_out.keys():
+            if isinstance(result_out[key], OrderedDict):
+                result_out[key] = cast_to_dict(result_out[key])
     return result_out
 
 
@@ -35,12 +50,9 @@ def round_dict(dictionary, ndigits):
         return round(dictionary, ndigits)
     return dictionary
 
-
-# This is a function to find instances where the data type is not bulit-in
 def find_non_built_in_data_types(dictionary):
     found = {}
-    directory = ''
-
+    directory =''
     def search_data(d, found, directory):
         if isinstance(d, dict):
             for key, value in d.items():
@@ -53,7 +65,7 @@ def find_non_built_in_data_types(dictionary):
             for idx, value in enumerate(d):
                 search_data(value, found, directory)
         elif (d.__class__.__module__ != 'builtins') and (d != nan):
-            found[directory] = 'Contains none built-in data type ' + d.__class__.__module__
+            found[directory] = 'Contains non built-in data type: ' + d.__class__.__module__
             directory = ''
     search_data(dictionary, found, directory)
     return found
@@ -88,10 +100,18 @@ def ReducerTest(
             if add_version:
                 append_version(self.extracted_with_version)
             self.processed = copy.deepcopy(processed)
+            if isinstance(reduced, list):
+                self.reduction_is_list = True
+            else:
+                self.reduction_is_list = False
             self.reduced = copy.deepcopy(reduced)
             self.reduced_no_params = copy.deepcopy(reduced)
             if output_kwargs:
-                del self.reduced_no_params['parameters']
+                if isinstance(self.reduced_no_params, list):
+                    for r in self.reduced_no_params:
+                        del r['parameters']
+                else:
+                    del self.reduced_no_params['parameters']
             self.reduced_with_version = copy.deepcopy(reduced)
             append_version(self.reduced_with_version)
 
@@ -112,18 +132,39 @@ def ReducerTest(
         def test_original_reducer(self):
             '''Test the reducer function starting with the processed data'''
             result = reducer._original(self.processed, **okwargs, **kwargs, **network_kwargs)
-            result = cast_to_dict(result)
-            if round is not None:
-                result = round_dict(result, round)
-            self.assertDictEqual(result, self.reduced_no_params)
+            if self.reduction_is_list is True:
+                for i, result_item in enumerate(result):
+                    result_item = cast_to_dict(result_item)
+                    if round is not None:
+                        result_item = round_dict(result_item, round)
+                    self.assertCountEqual(result_item, self.reduced_no_params[i])
+            else:
+                result = cast_to_dict(result)
+                if round is not None:
+                    result = round_dict(result, round)
+                self.assertDictEqual(result, self.reduced_no_params)
 
         def test_reducer(self):
             '''Test the offline reducer'''
             result = reducer(self.extracted_with_version, **kwargs, **pkwargs, **network_kwargs)
-            result = cast_to_dict(result)
-            if round is not None:
-                result = round_dict(result, round)
-            self.assertDictEqual(result, self.reduced_with_version)
+            if self.reduction_is_list is True:
+                for i, result_item in enumerate(result):
+                    result_item = cast_to_dict(result_item)
+                    if round is not None:
+                        result_item = round_dict(result_item, round)
+                    self.assertCountEqual(result_item, self.reduced_with_version[i])
+            else:
+                result = cast_to_dict(result)
+                if round is not None:
+                    result = round_dict(result, round)
+                self.assertDictEqual(result, self.reduced_with_version)
+
+        def test_data_types(self):
+            '''Test the dictionary only contains built-in or nan data types'''
+            result = reducer(self.extracted_with_version, **kwargs, **pkwargs, **network_kwargs)
+            non_built_in_locations = find_non_built_in_data_types(result)
+            expected = {}
+            self.assertDictEqual(non_built_in_locations, expected)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_reducer_request(self):
@@ -140,10 +181,18 @@ def ReducerTest(
                 url_params = ''
             with app.test_request_context(url_params, **request_kwargs):
                 result = reducer(flask.request)
-                result = cast_to_dict(result)
-                if round is not None:
-                    result = round_dict(result, round)
-                self.assertDictEqual(result, self.reduced_with_version)
+                if self.reduction_is_list is True:
+                    for i, result_item in enumerate(result):
+                        result_item = cast_to_dict(result_item)
+                        if round is not None:
+                            result_item = round_dict(result_item, round)
+                        self.assertCountEqual(result_item, self.reduced_with_version[i])
+                else:
+                    result = reducer(self.extracted_with_version, **kwargs, **pkwargs, **network_kwargs)
+                    result = cast_to_dict(result)
+                    if round is not None:
+                        result = round_dict(result, round)
+                    self.assertDictEqual(result, self.reduced_with_version)
 
     if test_name is None:
         test_name = '_'.join(name.split())
@@ -183,6 +232,13 @@ def ReducerTestNoProcessing(
                 result = round_dict(result, round)
             self.assertDictEqual(result, self.reduced_with_version)
 
+        def test_data_types(self):
+            '''Test the dictionary only contains built-in or nan data types'''
+            result = reducer(self.extracted_with_version, **kwargs, **network_kwargs)
+            non_built_in_locations = find_non_built_in_data_types(result)
+            expected = {}
+            self.assertDictEqual(non_built_in_locations, expected)
+
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_request(self):
             '''Test the online reducer'''
@@ -207,64 +263,6 @@ def ReducerTestNoProcessing(
     ReducerTestNoProcessing.__name__ = test_name
     ReducerTestNoProcessing.__qualname__ = test_name
     return ReducerTestNoProcessing
-
-
-def ReducerTestSurvey(
-    reducer,
-    processer,
-    extracted,
-    processed,
-    reduced,
-    name,
-    test_name=None
-):
-    class ReducerTest(unittest.TestCase):
-        def setUp(self):
-            self.maxDiff = None
-            self.extracted = copy.deepcopy(extracted)
-            self.extracted_with_version = copy.deepcopy(extracted)
-            append_version(self.extracted_with_version)
-            self.processed = copy.deepcopy(processed)
-            self.reduced = copy.deepcopy(reduced)
-            self.reduced_with_version = copy.deepcopy(reduced)
-            append_version(self.reduced_with_version)
-
-        def shortDescription(self):
-            return '{0}: {1}'.format(name, self._testMethodDoc)
-
-        def test_process_data(self):
-            '''Test data processing function'''
-            result, count = processer(self.extracted)
-            self.assertEqual(count, len(self.extracted))
-            self.assertDictEqual(result, self.processed)
-
-        def test_original_reducer(self):
-            '''Test the reducer function starting with the processed data'''
-            result = reducer._original((self.processed, len(self.extracted)))
-            self.assertCountEqual(result, self.reduced)
-
-        def test_reducer(self):
-            '''Test the offline reducer'''
-            result = reducer(self.extracted_with_version)
-            self.assertCountEqual(result, self.reduced_with_version)
-
-        @unittest.skipIf(OFFLINE, 'Installed in offline mode')
-        def test_reducer_request(self):
-            '''Test the online reducer'''
-            app = flask.Flask(__name__)
-            request_kwargs = {
-                'data': json.dumps(extract_in_data(self.extracted_with_version)),
-                'content_type': 'application/json'
-            }
-            with app.test_request_context(**request_kwargs):
-                result = reducer(flask.request)
-                self.assertCountEqual(result, self.reduced_with_version)
-
-    if test_name is None:
-        test_name = '_'.join(name.split())
-    ReducerTest.__name__ = test_name
-    ReducerTest.__qualname__ = test_name
-    return ReducerTest
 
 
 def ReducerTestPoints(
@@ -300,9 +298,9 @@ def ReducerTestPoints(
                         for j in result[i].keys():
                             with self.subTest(j=j):
                                 try:
-                                    np.testing.assert_allclose(result[i][j], reduced[i][j], atol=atol)            
+                                    np.testing.assert_allclose(result[i][j], reduced[i][j], atol=atol)
                                 except TypeError:
-                                    self.assertEqual(result[i], reduced[i])
+                                    self.assertEqual(result[i][j], reduced[i][j])
                     else:
                         try:
                             np.testing.assert_allclose(result[i], reduced[i], atol=atol)

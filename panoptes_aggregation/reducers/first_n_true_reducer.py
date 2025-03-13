@@ -37,5 +37,5 @@ def first_n_true_reducer(data_list, n=0, **kwargs):
     return {
         "result": n > 0
         and len(data_list) >= n
-        and np.all(list(map(extractResultKey, data_list[:n])))
+        and bool(np.all(list(map(extractResultKey, data_list[:n]))))
     }

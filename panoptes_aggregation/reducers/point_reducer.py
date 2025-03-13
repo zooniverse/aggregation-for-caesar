@@ -84,14 +84,14 @@ def point_reducer(data_by_tool, **kwargs):
         loc_list_clean = [xy for xy in loc_list if None not in xy]
         loc = np.array(loc_list_clean)
         # orignal data points in order used by cluster code
-        clusters['{0}_points_x'.format(tool)] = list(loc[:, 0])
-        clusters['{0}_points_y'.format(tool)] = list(loc[:, 1])
+        clusters['{0}_points_x'.format(tool)] = loc[:, 0].tolist()
+        clusters['{0}_points_y'.format(tool)] = loc[:, 1].tolist()
         # default each point in no cluster
         clusters['{0}_cluster_labels'.format(tool)] = [-1] * loc.shape[0]
         if loc.shape[0] >= kwargs['min_samples']:
             db = DBSCAN(**kwargs).fit(loc)
             # what cluster each point belongs to
-            clusters['{0}_cluster_labels'.format(tool)] = list(db.labels_)
+            clusters['{0}_cluster_labels'.format(tool)] = db.labels_.tolist()
             for k in set(db.labels_):
                 if k > -1:
                     idx = db.labels_ == k

@@ -137,7 +137,7 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
 
         Note: the image coordinate system has y increasing downward.
     '''
-    user_ids_input = np.array(kwargs_optics.pop('user_id'))
+    user_ids_input = kwargs_optics.pop('user_id')
     low_consensus_threshold = kwargs_optics.pop('low_consensus_threshold')
     _ = kwargs_optics.pop('minimum_views')
     output = defaultdict(list)

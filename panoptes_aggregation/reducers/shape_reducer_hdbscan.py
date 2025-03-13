@@ -101,7 +101,7 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
                 db = HDBSCAN(**kwargs).fit(loc)
                 # what cluster each point belongs to
                 clusters[frame]['{0}_cluster_labels'.format(tool)] = db.labels_.tolist()
-                clusters[frame]['{0}_cluster_probabilities'.format(tool)] = list(db.probabilities_)
+                clusters[frame]['{0}_cluster_probabilities'.format(tool)] = db.probabilities_.tolist()
                 for k in set(db.labels_):
                     if k > -1:
                         idx = db.labels_ == k
