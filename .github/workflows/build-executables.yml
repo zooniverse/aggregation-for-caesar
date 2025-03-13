@@ -79,7 +79,7 @@ jobs:
         (cd build; zip -r ../macos-intel-app.zip ./*)
     
     - name:  Zip Executable (Windows)
-      if: matrix.os == 'macos-13'
+      if: matrix.os == 'windows-latest'
       run: Compress-Archive -Path build\gui.dist\* -Destination windows-x64-executable.zip
 
     - name: Create Artifact (Windows x64)
