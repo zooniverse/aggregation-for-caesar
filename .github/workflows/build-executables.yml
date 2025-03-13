@@ -43,7 +43,7 @@ jobs:
         include-data-files: |
             ./dependency_licenses_full.txt=dependency_licenses_full.txt
             ./dependency_licenses_summary.txt=dependency_licenses_summary.txt
-        macos-app-icon: panoptes_aggregation/scripts/icons/zooniverse.icns
+        macos-app-icon: panoptes_aggregation/scripts/icons/program_icon.icns
         no-deployment-flag: 'self-execution'
         python-flag: '-u'
 
@@ -59,7 +59,7 @@ jobs:
         include-data-files: |
             ./dependency_licenses_full.txt=dependency_licenses_full.txt
             ./dependency_licenses_summary.txt=dependency_licenses_summary.txt
-        windows-icon-from-ico: panoptes_aggregation/scripts/icons/zooniverse.ico
+        windows-icon-from-ico: panoptes_aggregation/scripts/icons/program_icon.ico
         windows-console-mode: 'disable'
         no-deployment-flag: 'self-execution'
         python-flag: '-u'
