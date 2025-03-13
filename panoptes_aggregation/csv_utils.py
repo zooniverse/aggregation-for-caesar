@@ -98,7 +98,7 @@ def find_non_built_in_data_types(dictionary):
                     directory_temp = directory + '/' + key
                 search_data(value, found, directory_temp)
         elif isinstance(d, list):
-            for idx, value in enumerate(d):
+            for value in d:
                 search_data(value, found, directory)
         elif d.__class__.__module__ != 'builtins':
             # Note that nan counts as a builtin data type
