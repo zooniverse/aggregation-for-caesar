@@ -104,5 +104,5 @@ def sw_extractor(classification, gold_standard=False, **kwargs):
                         extract[frame]['text'].append(text)
                         extract[frame]['points']['x'].append(x)
                         extract[frame]['points']['y'].append(y)
-                        extract[frame]['slope'].append(slope)
+                        extract[frame]['slope'].append(float(slope))
     return extract

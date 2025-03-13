@@ -28,4 +28,4 @@ def all_tasks_empty_extractor(classification, **kwargs):
         for task in classification["annotations"]
     ]
 
-    return {"result": len(empty_or_absent_value) == 0 or np.all(empty_or_absent_value)}
+    return {"result": len(empty_or_absent_value) == 0 or bool(np.all(empty_or_absent_value))}

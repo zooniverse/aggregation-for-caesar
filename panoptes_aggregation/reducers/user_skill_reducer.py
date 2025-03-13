@@ -75,11 +75,13 @@ def user_skill_reducer(extracts, relevant_reduction=[], mode='binary', null_clas
 
     # get both the weighted and non-weighted skill
     weight_per_class_skill = (confusion_subject.diagonal()) / (np.sum(confusion_subject, axis=1) + 1.e-16)
+    weight_per_class_skill = weight_per_class_skill.tolist()
     per_class_skill = (confusion_simple.diagonal()) / (np.sum(confusion_simple, axis=1) + 1.e-16)
+    per_class_skill = per_class_skill.tolist()
 
     weighted_per_class_skill_dict = {key: value for key, value in zip(classes, weight_per_class_skill)}
     per_class_skill_dict = {key: value for key, value in zip(classes, per_class_skill)}
-    per_class_count = {key: value for key, value in zip(classes, np.sum(confusion_simple, axis=1))}
+    per_class_count = {key: value for key, value in zip(classes, np.sum(confusion_simple, axis=1).tolist())}
 
     # remove the null class from the skill array to calculate the mean skill
     if mode == 'binary':
@@ -108,8 +110,8 @@ def user_skill_reducer(extracts, relevant_reduction=[], mode='binary', null_clas
             'weighted_skill': weighted_per_class_skill_dict,
             'skill': per_class_skill_dict,
             'count': per_class_count,
-            'mean_skill': mean_skill,
-            'level_up': level_up
+            'mean_skill': float(mean_skill),
+            'level_up': bool(level_up)
             }
 
 

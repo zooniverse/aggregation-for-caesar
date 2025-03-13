@@ -127,12 +127,12 @@ def poly_line_text_extractor(classification, dot_freq='line', gold_standard=Fals
                         extract[frame]['text'].append(words)
                         extract[frame]['points']['x'].append(x)
                         extract[frame]['points']['y'].append(y)
-                        extract[frame]['slope'].append(slope)
+                        extract[frame]['slope'].append(float(slope))
                 elif (dot_freq == 'line'):
                     # NOTE: if there are not two `points` the extract is not used
                     if len(x) == 2:
                         extract[frame]['text'].append([text])
                         extract[frame]['points']['x'].append(x)
                         extract[frame]['points']['y'].append(y)
-                        extract[frame]['slope'].append(slope)
+                        extract[frame]['slope'].append(float(slope))
     return extract

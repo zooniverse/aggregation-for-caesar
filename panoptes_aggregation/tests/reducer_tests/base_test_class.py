@@ -6,6 +6,7 @@ import numpy as np
 from collections import OrderedDict
 from panoptes_aggregation.reducers.utilities import extract_in_data
 from panoptes_aggregation.append_version import append_version
+from panoptes_aggregation.csv_utils import find_non_built_in_data_types
 
 try:
     import flask
@@ -138,6 +139,13 @@ def ReducerTest(
                     result = round_dict(result, round)
                 self.assertDictEqual(result, self.reduced_with_version)
 
+        def test_reducer_data_types(self):
+            '''Test the dictionary only contains built-in or nan data types'''
+            result = reducer(self.extracted_with_version, **kwargs, **pkwargs, **network_kwargs)
+            non_built_in_locations = find_non_built_in_data_types(result)
+            expected = {}
+            self.assertDictEqual(non_built_in_locations, expected)
+
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_reducer_request(self):
             '''Test the online reducer'''
@@ -203,6 +211,13 @@ def ReducerTestNoProcessing(
             if round is not None:
                 result = round_dict(result, round)
             self.assertDictEqual(result, self.reduced_with_version)
+
+        def test_reducer_data_types(self):
+            '''Test the dictionary only contains built-in or nan data types'''
+            result = reducer(self.extracted_with_version, **kwargs, **network_kwargs)
+            non_built_in_locations = find_non_built_in_data_types(result)
+            expected = {}
+            self.assertDictEqual(non_built_in_locations, expected)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_request(self):
@@ -297,6 +312,13 @@ def ReducerTestPoints(
                         for j in result[i].keys():
                             with self.subTest(j=j):
                                 self.assertIn(j, result[i])
+
+        def test_reducer_data_types(self):
+            '''Test the dictionary only contains built-in or nan data types'''
+            result = reducer(self.extracted_with_version, **kwargs, **network_kwargs)
+            non_built_in_locations = find_non_built_in_data_types(result)
+            expected = {}
+            self.assertDictEqual(non_built_in_locations, expected)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_reducer_request(self):

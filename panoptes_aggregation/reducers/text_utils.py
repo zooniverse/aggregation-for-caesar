@@ -241,7 +241,7 @@ def cluster_by_word(
         stripped before returning the words.
     '''
     db_words = DBSCAN(eps=kwargs_cluster['eps_word'], **kwargs_dbscan).fit(word_line)
-    word_labels = sort_labels(db_words.labels_, word_line)
+    word_labels = sort_labels(db_words.labels_, word_line).tolist()
     clusters_x = []
     clusters_y = []
     unique_annotations = np.unique(annotation_labels)
@@ -254,7 +254,7 @@ def cluster_by_word(
         wdx = db_words.labels_ == word_label
         word_x, word_y = xy_line[wdx].mean(axis=0)
         for word, a_label in zip(text_line[wdx], lower_annotaiton_labels[wdx]):
-            clusters_text[cdx][a_label] = word
+            clusters_text[cdx][a_label] = str(word)
         clusters_x.append(float(word_x))
         clusters_y.append(float(word_y))
     return clusters_x, clusters_y, clusters_text
@@ -304,7 +304,7 @@ def align_words(
     db_words = DBSCAN(eps=kwargs_cluster['eps_word'], min_samples=1, **kwargs_dbscan).fit(word_line)
     # put min_samples back in
     kwargs_dbscan['min_samples'] = min_samples
-    word_labels = sort_labels(db_words.labels_, word_line)
+    word_labels = sort_labels(db_words.labels_, word_line).tolist()
     if len(word_labels) > 1:
         word_labels = [word_labels[0], word_labels[-1]]
         for word_label in word_labels:
@@ -388,7 +388,7 @@ def cluster_by_line(
     a_lables = np.unique(annotation_labels)
     avg_lines = np.array([lines[annotation_labels == a].mean() for a in a_lables]).reshape(-1, 1)
     db_lines = DBSCAN(eps=kwargs_cluster['eps_line'], **kwargs_dbscan).fit(avg_lines)
-    line_labels = sort_labels(db_lines.labels_, avg_lines)
+    line_labels = sort_labels(db_lines.labels_, avg_lines).tolist()
     frame_lines = []
     for line_label in line_labels:
         ldx = db_lines.labels_ == line_label
@@ -418,7 +418,7 @@ def cluster_by_line(
             'clusters_x': clusters_x,
             'clusters_y': clusters_y,
             'clusters_text': clusters_text,
-            'number_views': ldx.sum(),
+            'number_views': int(ldx.sum()),
             'consensus_score': consensus_score_value,
             'consensus_text': consensus_text,
             'line_slope': float(kwargs_cluster['avg_slope']),

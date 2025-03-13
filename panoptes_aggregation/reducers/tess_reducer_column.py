@@ -96,7 +96,7 @@ def tess_reducer_column(data_by_tool, **kwargs):
         * `user_ids`: A list of lists with the `user_id` for each volunteer who marked each column
         * `max_weighted_counts`: The largest likelihood of a transit for this subject
     '''
-    user_id = np.array(kwargs.pop('user_id'))
+    user_id = kwargs.pop('user_id')
     relevant_reduction = kwargs.pop('relevant_reduction')
     skill = np.array([rr['data']['skill'] if rr else 1.0 for rr in relevant_reduction])
     clusters = OrderedDict()

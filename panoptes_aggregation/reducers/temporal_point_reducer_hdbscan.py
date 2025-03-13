@@ -62,9 +62,9 @@ def temporal_point_reducer_hdbscan(data_by_tool, **kwargs):
             loc_list_clean = [xy for xy in loc_list if None not in xy]
             loc = np.array(loc_list_clean)
             # original data points in order used by cluster code
-            clusters[frame]['{0}_points_x'.format(tool)] = list(loc[:, 0])
-            clusters[frame]['{0}_points_y'.format(tool)] = list(loc[:, 1])
-            clusters[frame]['{0}_points_displayTime'.format(tool)] = list(loc[:, 2])
+            clusters[frame]['{0}_points_x'.format(tool)] = loc[:, 0].tolist()
+            clusters[frame]['{0}_points_y'.format(tool)] = loc[:, 1].tolist()
+            clusters[frame]['{0}_points_displayTime'.format(tool)] = loc[:, 2].tolist()
             # default each point in no cluster
             clusters[frame]['{0}_cluster_labels'.format(tool)] = [-1] * loc.shape[0]
             clusters[frame]['{0}_cluster_probabilities'.format(tool)] = [0] * loc.shape[0]
@@ -72,8 +72,8 @@ def temporal_point_reducer_hdbscan(data_by_tool, **kwargs):
                 kwargs['metric'] = temporal_metric
                 db = HDBSCAN(**kwargs).fit(loc)
                 # what cluster each point belongs to
-                clusters[frame]['{0}_cluster_labels'.format(tool)] = list(db.labels_)
-                clusters[frame]['{0}_cluster_probabilities'.format(tool)] = list(db.probabilities_)
+                clusters[frame]['{0}_cluster_labels'.format(tool)] = db.labels_.tolist()
+                clusters[frame]['{0}_cluster_probabilities'.format(tool)] = db.probabilities_.tolist()
                 for k in set(db.labels_):
                     if k > -1:
                         idx = db.labels_ == k
