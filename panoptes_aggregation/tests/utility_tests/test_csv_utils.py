@@ -1,6 +1,7 @@
 import unittest
 from collections import OrderedDict
 import numpy as np
+from numpy import nan
 import pandas
 from pandas.testing import assert_frame_equal
 import panoptes_aggregation.csv_utils as csv_utils
@@ -86,6 +87,23 @@ ordered_data = pandas.DataFrame(OrderedDict((
     ('data.c', [1, 2, 3])
 )))
 
+dictionary_with_numpy_data = {
+    'frame0': {
+        'T0_Tool0': [0, 1, 3, 4, nan],
+        'T0_Tool3': ['cat', 'dog', 'owl'],
+        'T1_tool1': pandas.DataFrame({'output': [1, 2, 3]})
+    },
+    'frame1': {
+        'T1_Tool2': [2.2, 3.3, 4.4, 5.5],
+        'T0_Tool5': ['1', 2, np.sin(2)],
+    }
+}
+
+dictionary_non_built_in_location = {
+    'frame0/T1_tool1': 'Contains non built-in data type: pandas.core.frame',
+    'frame1/T0_Tool5': 'Contains non built-in data type: numpy'
+}
+
 
 class TestCSVUtils(unittest.TestCase):
     def test_flatten_data(self):
@@ -127,3 +145,9 @@ class TestCSVUtils(unittest.TestCase):
         '''Test order columns'''
         result = csv_utils.order_columns(unordered_data, front=['choice'])
         assert_frame_equal(result, ordered_data)
+
+    def test_find_non_built_in_data_types(self):
+        '''Test if it can find location of non-builtin data types, but ignore
+        nan'''
+        result = csv_utils.find_non_built_in_data_types(dictionary_with_numpy_data)
+        self.assertDictEqual(result, dictionary_non_built_in_location)

@@ -3,10 +3,10 @@ import json
 import urllib
 import copy
 import numpy as np
-from numpy import nan
 from collections import OrderedDict
 from panoptes_aggregation.reducers.utilities import extract_in_data
 from panoptes_aggregation.append_version import append_version
+from panoptes_aggregation.csv_utils import find_non_built_in_data_types
 
 try:
     import flask
@@ -49,30 +49,6 @@ def round_dict(dictionary, ndigits):
     elif isinstance(dictionary, float):
         return round(dictionary, ndigits)
     return dictionary
-
-
-def find_non_built_in_data_types(dictionary):
-    '''This seraches the dictionary for non-builtin or np.nan data types,
-    then stores the dictionary key location when it occurs'''
-    found = {}
-    directory = ''
-
-    def search_data(d, found, directory):
-        if isinstance(d, dict):
-            for key, value in d.items():
-                if directory == '':
-                    directory_temp = key
-                else:
-                    directory_temp = directory + '/' + key
-                search_data(value, found, directory_temp)
-        elif isinstance(d, list):
-            for idx, value in enumerate(d):
-                search_data(value, found, directory)
-        elif (d.__class__.__module__ != 'builtins') and (d != nan):
-            found[directory] = 'Contains non built-in data type: ' + d.__class__.__module__
-            directory = ''
-    search_data(dictionary, found, directory)
-    return found
 
 
 def ReducerTest(

@@ -5,7 +5,7 @@ import numpy as np
 import urllib
 from panoptes_aggregation.extractors.utilities import annotation_by_task
 from panoptes_aggregation.append_version import append_version
-from ..reducer_tests.base_test_class import find_non_built_in_data_types
+from panoptes_aggregation.csv_utils import find_non_built_in_data_types
 
 try:
     import flask

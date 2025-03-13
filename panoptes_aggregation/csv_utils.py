@@ -1,5 +1,6 @@
 import ast
 import pandas
+from numpy import nan
 from pandas import json_normalize
 
 
@@ -81,3 +82,28 @@ def order_columns(data_frame, json_column='data', front=['choice']):
         d_cols = move_to_front(d_cols, '{0}.{1}'.format(json_column, f))
     order_columns = cols[:-len(d_cols)] + d_cols
     return data_frame[order_columns]
+
+
+def find_non_built_in_data_types(dictionary):
+    '''This seraches the dictionary for non-builtin or np.nan data types,
+    then stores the dictionary key location when it occurs'''
+    found = {}
+    directory = ''
+
+    def search_data(d, found, directory):
+        if isinstance(d, dict):
+            for key, value in d.items():
+                if directory == '':
+                    directory_temp = key
+                else:
+                    directory_temp = directory + '/' + key
+                search_data(value, found, directory_temp)
+        elif isinstance(d, list):
+            for idx, value in enumerate(d):
+                search_data(value, found, directory)
+        elif d.__class__.__module__ != 'builtins':
+            # Note that nan counts as a builtin data type
+            found[directory] = 'Contains non built-in data type: ' + d.__class__.__module__
+            directory = ''
+    search_data(dictionary, found, directory)
+    return found
