@@ -53,7 +53,7 @@ jobs:
       with:
         nuitka-version: main
         script-name: panoptes_aggregation/scripts/gui.py
-        mode: standalone
+        mode: onefile
         include-data-dir: |
             panoptes_aggregation/scripts/icons=icons
         include-data-files: |
@@ -87,7 +87,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: windows-x64-executable
-        path: build/
+        path: build/gui.exe
 
     - name: Create Artifact (macOS arm)
       if: matrix.os == 'macos-latest'
