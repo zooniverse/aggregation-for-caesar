@@ -3,10 +3,9 @@
 import sys
 import multiprocessing
 
-if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-    # this is a frozen pyinstaller instance
-    # make sure multiprocessing has freeze support turned on
-    # see https://pyinstaller.org/en/stable/common-issues-and-pitfalls.html#multi-processing
+target = None
+if "__compiled__" in globals():
+    target = sys.argv[0]
     multiprocessing.freeze_support()
 
 import os
@@ -41,7 +40,8 @@ gui = gooey.Gooey(
     progress_regex=r"^[a-zA-Z:\s|]+ (\d+)% .+$",
     terminal_font_family="Consolas",
     navigation='TABBED',
-    image_dir=gooey.local_resource_path(os.path.join(current_folder, 'icons'))
+    image_dir=gooey.local_resource_path(os.path.join(current_folder, 'icons')),
+    target=target
 )(panoptes_aggregation.scripts.parser_main)
 
 if __name__ == '__main__':
