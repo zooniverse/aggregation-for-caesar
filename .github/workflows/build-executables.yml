@@ -64,12 +64,11 @@ jobs:
         no-deployment-flag: 'self-execution'
         python-flag: '-u'
 
-    # - name: Zip Executable (MacOS arm)
-    #   if: matrix.os == 'macos-latest'
-    #   run: |
-    #     rm -rf build/gui.build
-    #     rm -rf build/gui.dist
-    #     (cd build; zip -r ../macos-arm64-app.zip ./*)
+    - name: Cleanup Executable (MacOS)
+      if: matrix.os != 'windows-latest'
+      run: |
+        rm -rf build/gui.build
+        rm -rf build/gui.dist
     
     # - name: Zip Executable (MacOS intel)
     #   if: matrix.os == 'macos-13'
@@ -78,9 +77,10 @@ jobs:
     #     rm -rf build/gui.dist
     #     (cd build; zip -r ../macos-intel-app.zip ./*)
     
-    # - name:  Zip Executable (Windows)
-    #   if: matrix.os == 'windows-latest'
-    #   run: Compress-Archive -Path build\gui.dist\* -Destination windows-x64-executable.zip
+    - name:  Cleanup Executable (Windows)
+      if: matrix.os == 'windows-latest'
+      run: Remove-Item build\gui.build -Recurse -Force
+      # run: Compress-Archive -Path build\gui.dist\* -Destination windows-x64-executable.zip
 
     - name: Create Artifact (Windows x64)
       if: matrix.os == 'windows-latest'
