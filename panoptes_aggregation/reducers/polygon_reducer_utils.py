@@ -377,6 +377,7 @@ def cluster_average_intersection_contours(data, **kwargs):
     polygon_indices = [[i] for i in range(len(polygons))]
 
     def polygon_intersection_list(polygons, polygon_indices):
+        # List of all of the intersections for these polygons
         tree = shapely.STRtree(polygons)
         intersection_array = tree.query(polygons, predicate='intersects').T
         num_polygons = len(polygons)
@@ -391,7 +392,7 @@ def cluster_average_intersection_contours(data, **kwargs):
                 polygon_connection_index = list(set(polygon_indices[i] + polygon_indices[j]))
                 # Want it in order so comparison can be made
                 polygon_connection_index.sort()
-                # If this connection has not already been made, add it to the list to be made and
+                # If this connection has not already been made, add it to the list of 'to be added' and
                 # make sure it won't be made again
                 if polygon_connection_index not in polygon_connections_indices:
                     to_add_intersections.append(j)
@@ -399,6 +400,7 @@ def cluster_average_intersection_contours(data, **kwargs):
             # Now make the connects and add them
             if len(to_add_intersections) > 0:
                 polygons_to_intersect = [polygons[k] for k in to_add_intersections]
+                # Find the intersections effcienctly
                 polygon_intersection_list = list(shapely.intersection(polygons[i], polygons_to_intersect))
                 polygon_connections += polygon_intersection_list
 
