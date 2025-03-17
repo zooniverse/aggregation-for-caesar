@@ -6,65 +6,39 @@ for :mod:`panoptes_aggregation.reducers.polygon_reducer`.
 '''
 import numpy as np
 import shapely
-import copy
 import datetime
 from scipy.linalg import issymmetric
 from pandas._libs.tslibs.timestamps import Timestamp as pdtimestamp
 
 
 def _polygons_unify(polygons):
-    # Internal function to unify the polygons in a cluster, even for cases with
-    # disconnected clusters or if individual polygons are not connected by are
-    # connected by another polygon.
-
-    polygons = copy.deepcopy(polygons)
-    all_unified = False
-    i = 0
-    safety = 0
-    while all_unified is False:
-        if i > len(polygons) - 2:  # Once first interation is done
-            # Find all of the possible intersections
-            intersections = []
-            for j in range(len(polygons)):
-                for k in range(j + 1, len(polygons)):
-                    intersections.append(polygons[j].intersects(polygons[k]))
-            if any(intersections) is False:
-                all_unified = True
-                break
-            else:  # Restart the unification
-                i = 0
-
-        indices_included = []
-        for j in range(i + 1, len(polygons)):
-            if polygons[i].intersects(polygons[j]):
-                polygons[i] = polygons[i].union(polygons[j])
-                if isinstance(polygons[i], shapely.geometry.collection.GeometryCollection)\
-                        or isinstance(polygons[i], shapely.geometry.multipolygon.MultiPolygon):
-                    for p in polygons[i].geoms:
-                        if isinstance(p, shapely.geometry.polygon.Polygon):
-                            polygons[i] = p
-                            break
-                # If there are any holes, close them
-                if len(polygons[i].interiors) > 0:
-                    for hole in polygons[i].interiors:
-                        hole = shapely.Polygon(hole)
-                        polygons[i] = polygons[i].union(hole)
-                indices_included.append(j)
-        # Remove polygons that have been unified into the others
-        for j in sorted(indices_included, reverse=True):
-            del polygons[j]
-        # If only one polygon, we are finished
-        if len(polygons) == 1:
-            all_unified = True
-            break
-        i += 1
-        safety += 1
-        if safety > 10:
-            all_unified = True
-            break
-    areas = [polygons[i].area for i in range(len(polygons))]
-    largest_polygon_index = np.argmax(areas)
-    return polygons[largest_polygon_index]
+    '''Internal function to unify the polygons in a cluster, even for cases
+    with disconnected clusters or if individual polygons are not connected by
+    are connected by another polygon.'''
+    polygons = np.array(polygons)
+    union_all = shapely.unary_union(polygons)
+    # If multipolygon data type, find the largest polygon
+    if isinstance(union_all, shapely.geometry.collection.GeometryCollection)\
+            or isinstance(union_all, shapely.geometry.multipolygon.MultiPolygon):
+        areas = []
+        for geometry in union_all.geoms:
+            if isinstance(geometry, shapely.geometry.polygon.Polygon):
+                areas.append(geometry.area)
+            else:
+                areas.append(0.)
+        # Find the polygon with the largest area
+        union = union_all.geoms[np.argmax(areas)]
+    else:  # Else if only one polygon, this is the union by itself
+        union = union_all
+    # Now close any holes
+    if len(union.interiors) > 0:
+        for hole in union.interiors:
+            hole = shapely.Polygon(hole)
+            union = union.union(hole)
+    # Simplfy if needed
+    if not union.is_simple:
+        union = union.buffer(0)
+    return union
 
 
 # This needs a list of shapely objects to work!
@@ -382,21 +356,18 @@ def cluster_average_intersection_contours(data, **kwargs):
     polygons = [data[i]['polygon'] for i in range(len(data))]
 
     def polygon_list_simplify(polygons):
+        # First find all of the indivual polygons
         individual_polygons = []
         for polygon in polygons:
             if isinstance(polygon, shapely.geometry.polygon.Polygon):
-                # Make sure shape is simply connected
-                if not polygon.is_simple:
-                    polygon = polygon.buffer(0)
                 individual_polygons.append(polygon)
             elif isinstance(polygon, shapely.geometry.collection.GeometryCollection)\
                     or isinstance(polygon, shapely.geometry.multipolygon.MultiPolygon):
                 for p in polygon.geoms:
                     if isinstance(p, shapely.geometry.polygon.Polygon):
-                        if not p.is_simple:
-                            p = p.buffer(0)
                         individual_polygons.append(p)
-            # Any other shapely object is not included in the lost
+        # Make sure all polygons are simple
+        individual_polygons = shapely.buffer(individual_polygons, 0)
         return individual_polygons
 
     # Need each item in the polygon list to be a polygon, not a list of polygons
@@ -406,20 +377,31 @@ def cluster_average_intersection_contours(data, **kwargs):
     polygon_indices = [[i] for i in range(len(polygons))]
 
     def polygon_intersection_list(polygons, polygon_indices):
+        tree = shapely.STRtree(polygons)
+        intersection_array = tree.query(polygons, predicate='intersects').T
         num_polygons = len(polygons)
         polygon_connections = []
         polygon_connections_indices = []
         for i in range(num_polygons):
-            for j in range(i + 1, num_polygons):
-                if shapely.intersects(polygons[i], polygons[j]):
-                    # The indices of the polygons in this intersection
-                    polygon_connection_index = list(set(polygon_indices[i] + polygon_indices[j]))
-                    # Want it in order so comparison can be made
-                    polygon_connection_index.sort()
-                    # If this connection has not already been made
-                    if polygon_connection_index not in polygon_connections_indices:
-                        polygon_connections.append(polygons[i].intersection(polygons[j]))
-                        polygon_connections_indices.append(polygon_connection_index)
+            intersects = intersection_array[intersection_array[:, 0] == i][:, 1]
+            intersects = intersects[intersects != i]
+            to_add_intersections = []
+            for j in intersects:
+                # The indices of the polygons in this intersection
+                polygon_connection_index = list(set(polygon_indices[i] + polygon_indices[j]))
+                # Want it in order so comparison can be made
+                polygon_connection_index.sort()
+                # If this connection has not already been made, add it to the list to be made and
+                # make sure it won't be made again
+                if polygon_connection_index not in polygon_connections_indices:
+                    to_add_intersections.append(j)
+                    polygon_connections_indices.append(polygon_connection_index)
+            # Now make the connects and add them
+            if len(to_add_intersections) > 0:
+                polygons_to_intersect = [polygons[k] for k in to_add_intersections]
+                polygon_intersection_list = list(shapely.intersection(polygons[i], polygons_to_intersect))
+                polygon_connections += polygon_intersection_list
+
         return polygon_connections, polygon_connections_indices
 
     num_agreement = 1
