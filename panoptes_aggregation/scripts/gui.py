@@ -45,16 +45,27 @@ help_items = [
 if "__compiled__" in globals():
     # when packaged we need to make the licenses for each dependency available
     # to view in the GUI as these .txt files will be packaged inside the executable
-    help_items.append({
-        'type': 'Link',
-        'menuTitle': 'Dependencies Licenses Summary',
-        'url': f'file://{current_folder}/dependency_licenses_summary.txt'
-    })
-    help_items.append({
-        'type': 'Link',
-        'menuTitle': 'Dependencies Licenses Full Text',
-        'url': f'file://{current_folder}/dependency_licenses_full.txt'
-    })
+    if sys.platform == 'darwin':
+        # due to file permission errors these can't be opened directly
+        # instead provide instructions for navigating to the files
+        help_items.append({
+            'type': 'MessageDialog',
+            'menuTitle': 'Dependencies Licenses Information',
+            'message': 'The licenses for all packaged dependencies can be found inside this application.  To view these files control click the application, select "Show Package Contents", and navigate to the "Contents/Resources" folder.  A summary of each license is contained in "dependency_licenses_summary.txt" and the full license text is in "dependency_licenses_full.txt".',
+            'caption': 'Dependencies Licenses'
+        })
+    elif sys.platform == 'win32':
+        # Windows has no issue just opening the files :D
+        help_items.append({
+            'type': 'Link',
+            'menuTitle': 'Dependencies Licenses Summary',
+            'url': f'file://{current_folder}/dependency_licenses_summary.txt'
+        })
+        help_items.append({
+            'type': 'Link',
+            'menuTitle': 'Dependencies Licenses Full Text',
+            'url': f'file://{current_folder}/dependency_licenses_full.txt'
+        })
 
 menu = [{
     'name': 'Help',
