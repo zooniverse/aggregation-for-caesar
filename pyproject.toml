@@ -75,7 +75,7 @@ test = [
 ]
 installer = [
     "pip-licenses>=5.0",
-    "pyinstaller>=6.12"
+    "nuitka>=2.6.8"
 ]
 
 [project.scripts]

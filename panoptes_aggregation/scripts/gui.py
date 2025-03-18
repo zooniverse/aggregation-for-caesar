@@ -34,6 +34,33 @@ panoptes_aggregation.scripts.gui_override(gooey)
 
 current_folder = os.path.dirname(os.path.abspath(__file__))
 
+help_items = [
+    {
+        'type': 'Link',
+        'menuTitle': 'Documentation',
+        'url': 'https://aggregation-caesar.zooniverse.org/docs'
+    }
+]
+
+if "__compiled__" in globals():
+    # when packaged we need to make the licenses for each dependency available
+    # to view in the GUI as these .txt files will be packaged inside the executable
+    help_items.append({
+        'type': 'Link',
+        'menuTitle': 'Dependencies Licenses Summary',
+        'url': f'file://{current_folder}/dependency_licenses_summary.txt'
+    })
+    help_items.append({
+        'type': 'Link',
+        'menuTitle': 'Dependencies Licenses Full Text',
+        'url': f'file://{current_folder}/dependency_licenses_full.txt'
+    })
+
+menu = [{
+    'name': 'Help',
+    'items': help_items
+}]
+
 gui = gooey.Gooey(
     program_name="Aggregate",
     default_size=(1000, 900),
@@ -41,7 +68,8 @@ gui = gooey.Gooey(
     terminal_font_family="Consolas",
     navigation='TABBED',
     image_dir=gooey.local_resource_path(os.path.join(current_folder, 'icons')),
-    target=target
+    target=target,
+    menu=menu
 )(panoptes_aggregation.scripts.parser_main)
 
 if __name__ == '__main__':
