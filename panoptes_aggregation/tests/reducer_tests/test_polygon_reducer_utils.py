@@ -26,19 +26,22 @@ class TestIoUMetric(unittest.TestCase):
         # the code can exit gracefully
         polygons_broken = []
         for i in range(12):
-            shape1 = shapely.Polygon(np.array([[0 + 1.1 * i, 1.1 * i],
-                                               [0 + 1.1 * i, 1 + 1.1 * i],
-                                               [1 + 1.1 * i, 1 + 1.1 * i],
-                                               [1 + 1.1 * i, 1.1 * i]]))
-            polygons_broken.append(shape1)
+            dist = 1.1 * i
+            shape = shapely.Polygon(np.array([[0 + dist, dist],
+                                              [0 + dist, 1 + dist],
+                                              [1 + dist, 1 + dist],
+                                              [1 + dist, dist]]))
+            polygons_broken.append(shape)
 
-        expected = shapely.Polygon(np.array([[3.3, 3.3],
-                                            [3.3, 4.3],
-                                            [4.3, 4.3],
-                                            [4.3, 3.3],
-                                            [3.3, 3.3]]))
+        dist = 1.1 * 12
+        shape_largest = shapely.Polygon(np.array([[0 + dist, dist],
+                                                  [0 + dist, 2 + dist],
+                                                  [2 + dist, 2 + dist],
+                                                  [2 + dist, dist]]))
+        polygons_broken.append(shape_largest)
+        expected = shape_largest
         result = utils._polygons_unify(polygons_broken)
-        self.assertTrue(expected.equals_exact(result, 10**-4))
+        self.assertTrue(shapely.equals(result, expected))
 
     def test_IoU_metric_polygon_no_overlap(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
@@ -385,7 +388,7 @@ class TestIoUMetric(unittest.TestCase):
 
     def test_cluster_average_intersection_contours_non_polygon_shapes(self):
         square1 = shapely.Polygon(np.array([[0.2, 0], [0.2, 1], [1.2, 1], [1.2, 0]]))
-        square2 = shapely.Polygon(np.array([[1., 0], [1., 1], [2., 1], [2., 0]]))
+        square2 = shapely.Polygon(np.array([[1.1, 0], [1.1, 1], [2.1, 1], [2.1, 0]]))
         multipolygon = shapely.MultiPolygon([square1, square2])
         square3 = shapely.Polygon(np.array([[0., 0], [0., 1], [1., 1], [1., 0]]))
         line = shapely.LineString([(0, -1), (0, 1)])
@@ -402,34 +405,44 @@ class TestIoUMetric(unittest.TestCase):
                            '2025-01-21 10:46:22 UTC',
                            '2025-01-21 10:36:21 UTC']
         kwargs = {'created_at': created_at_list}
-        expected_contour_1 = shapely.Polygon(np.array([[1.2, 1.],
-                                                [2., 1.],
-                                                [2., 0.],
-                                                [1.2, 0.],
-                                                [1., 0.],
-                                                [0.2, 0.],
-                                                [0., 0.],
-                                                [0., 0.5],
-                                                [0., 1.],
-                                                [0.2, 1.],
-                                                [1., 1.],
-                                                [1.2, 1.]]))
-        expected_contour_2 = shapely.Polygon(np.array([[0.2, 0.],
-                                                [0.2, 0.6],
-                                                [0., 0.5],
-                                                [0., 1.],
-                                                [0.2, 1.],
-                                                [1, 1.],
-                                                [1.2, 1.],
-                                                [1.2, 0.],
-                                                [1., 0.],
-                                                [0.2, 0.]]))
+        expected_contour_0 = shapely.Polygon(np.array([[0.2, 1.0],
+                                                       [1.0, 1.0],
+                                                       [1.1, 1.0],
+                                                       [1.2, 1.0],
+                                                       [2.1, 1.0],
+                                                       [2.1, 0.0],
+                                                       [1.2, 0.0],
+                                                       [1.1, 0.0],
+                                                       [1.0, 0.0],
+                                                       [0.2, 0.0],
+                                                       [0.0, 0.0],
+                                                       [0.0, 0.5],
+                                                       [0.0, 1.0],
+                                                       [0.2, 1.0]]))
+        expected_contour_1 = shapely.Polygon(np.array([[0.2, 0.0],
+                                                       [0.2, 0.6],
+                                                       [0.0, 0.5],
+                                                       [0.0, 1.0],
+                                                       [0.2, 1.0],
+                                                       [1.0, 1.0],
+                                                       [1.2, 1.0],
+                                                       [1.2, 0.0],
+                                                       [1.0, 0.0],
+                                                       [0.2, 0.0]]))
+        expected_contour_2 = shapely.Polygon(np.array([[0.2, 1.0],
+                                                       [1.0, 1.0],
+                                                       [1.0, 0.0],
+                                                       [0.2, 0.0],
+                                                       [0.2, 0.6],
+                                                       [0.0, 0.5],
+                                                       [0.0, 1.0],
+                                                       [0.2, 1.0]]))
         expected_contour_3 = shapely.Polygon(np.array([[0.2, 0.6],
-                                                 [0.2, 1.],
-                                                 [1., 1.],
-                                                 [0.2, 0.6]]))
-        expected = [expected_contour_1,
-                    expected_contour_2,
+                                                       [0.2, 1.],
+                                                       [1., 1.],
+                                                       [0.2, 0.6]]))
+        expected = [expected_contour_0,
+                    expected_contour_1,
                     expected_contour_2,
                     expected_contour_3,
                     expected_contour_3]
