@@ -69,7 +69,7 @@ jobs:
       run: |
         rm -rf build/gui.build
         rm -rf build/gui.dist
-        ./mac_app_link_files.sh
+        ./scripts/mac_app_link_files.sh
     
     # - name: Zip Executable (MacOS intel)
     #   if: matrix.os == 'macos-13'
