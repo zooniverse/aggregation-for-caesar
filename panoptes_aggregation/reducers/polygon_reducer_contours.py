@@ -13,7 +13,8 @@ from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .polygon_reducer_utils import IoU_metric_polygon, \
     IoU_distance_matrix_of_cluster, IoU_cluster_mean_distance, \
-    cluster_average_intersection_contours
+    cluster_average_intersection_contours, \
+    cluster_average_intersection_contours_rasterisation
 from .polygon_reducer import process_data
 
 DEFAULTS = {
@@ -45,6 +46,13 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
     :mod:`panoptes_aggregation.reducers.polygon_reducer`. As it retruns a list
     rather than a dictionary this may cause issues with any subsequent data
     processing with Caesar.
+    
+    The default method for finding the contours is slow but accurate. However,
+    the algorithm time per cluster increases approximately exponentially with
+    number of polygons in the cluster. Therefore, for cases with clusters of
+    many polygons, a more effcient but less accurate rasterisation based
+    approach is used. This can be used instead of the default setting the kwarg
+    `rasterisation` to `True`.
 
     Parameters
     ----------
@@ -58,6 +66,8 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
         of the cluster.
 
     kwargs :
+        * `rasterisation`: Boolean, if `True` the contours are found using rasterisation. Defaults to `False`, as rasterisation is less accurate than the default using shapely.
+        * `num_grid_points`: integer which defines the number of grid points per axis when rasterisation is used. A higher number results in more accuracy but also increases computational time. Defaults to 100.
         * `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
 
     Returns
@@ -73,6 +83,8 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
         * `tool*_consensus` : A list of the the overall consensus of each cluster. A value of 1 is perfect agreement, a value of 0 is complete disagreement. This is found by subtracting`IoU_cluster_mean_distance` from 1
     '''
     min_samples = max(1, kwargs_dbscan.pop('min_samples', 2))
+    rasterisation = kwargs_dbscan.pop('rasterisation', False)
+    num_grid_points = kwargs_dbscan.pop('num_grid_points', None)
     # Remove created_at from kwargs, if it is provided
     _ = kwargs_dbscan.pop('created_at', [])
     clusters = []
@@ -103,7 +115,6 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
                     for label in unique_labels:
                         if label > -1:
                             cdx = labels_array == label
-                            kwargs_cluster = {}
                             cluster = OrderedDict()
                             cluster[frame] = OrderedDict()
                             # The distance matrix is used to find the consensus and is sometimes used in the average
@@ -111,7 +122,11 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
                             # Find the consensus of this cluster and add it as float
                             consensus = float(1 - IoU_cluster_mean_distance(distance_matrix))
                             # Now find the "average" of this cluster, using the provided average choice
-                            contours = cluster_average_intersection_contours(data[cdx], **kwargs_cluster)
+                            # Either using rasterisation or the default approach
+                            if rasterisation is True:
+                                contours = cluster_average_intersection_contours_rasterisation(data[cdx], num_grid_points=num_grid_points)
+                            else:
+                                contours = cluster_average_intersection_contours(data[cdx])
                             # Extract the x and y values of these contours
                             contours_x_values = []
                             contours_y_values = []

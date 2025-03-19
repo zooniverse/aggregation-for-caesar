@@ -486,6 +486,107 @@ class TestIoUMetric(unittest.TestCase):
         result = utils.cluster_average_intersection_contours(data, **kwargs)
         self.assertTrue(all([shapely.equals(result[i], expected[i]) for i in range(len(expected))]))
 
+    def test_cluster_average_intersection_contours_rasterisation(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+        square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
+        square3 = shapely.Polygon(np.array([[0.0, 0.5], [1., 0.5], [1., 1.5], [0.0, 1.5]]))
+        square4 = shapely.Polygon(np.array([[0.5, 0.5], [1.5, 0.5], [1.5, 1.5], [0.5, 1.5]]))
+
+        data = [{'polygon': square1},
+                {'polygon': square2},
+                {'polygon': square3},
+                {'polygon': square4}]
+        created_at_list = ['2025-01-21 10:46:23 UTC',
+                           '2025-01-21 10:46:21 UTC',
+                           '2025-01-21 10:46:22 UTC',
+                           '2025-01-21 10:46:26 UTC']
+        kwargs = {'created_at': created_at_list, 'num_grid_points': 50}
+        expected_contour_1 = shapely.Polygon(np.array([[0.0, 0.030612244897959183],
+                                                       [0.030612244897959183, 0.0],
+                                                       [1.4693877551020407, 0.0],
+                                                       [1.5, 0.030612244897959183],
+                                                       [1.5, 1.4693877551020407],
+                                                       [1.4693877551020407, 1.5],
+                                                       [0.030612244897959183, 1.5],
+                                                       [0.0, 1.4693877551020407],
+                                                       [0.0, 0.030612244897959183]]))
+        expected_contour_2 = shapely.Polygon(np.array([[0.4897959183673469, 0.030612244897959183],
+                                                       [0.5204081632653061, 0.015306122448979591],
+                                                       [0.9795918367346939, 0.015306122448979591],
+                                                       [1.010204081632653, 0.030612244897959183],
+                                                       [1.010204081632653, 0.4897959183673469],
+                                                       [1.4693877551020407, 0.4897959183673469],
+                                                       [1.4846938775510203, 0.5204081632653061],
+                                                       [1.4846938775510203, 0.9795918367346939],
+                                                       [1.4693877551020407, 1.010204081632653],
+                                                       [1.010204081632653, 1.010204081632653],
+                                                       [1.010204081632653, 1.4693877551020407],
+                                                       [0.9795918367346939, 1.4846938775510203],
+                                                       [0.5204081632653061, 1.4846938775510203],
+                                                       [0.4897959183673469, 1.4693877551020407],
+                                                       [0.4897959183673469, 1.010204081632653],
+                                                       [0.030612244897959183, 1.010204081632653],
+                                                       [0.015306122448979591, 0.9795918367346939],
+                                                       [0.015306122448979591, 0.5204081632653061],
+                                                       [0.030612244897959183, 0.4897959183673469],
+                                                       [0.4897959183673469, 0.4897959183673469],
+                                                       [0.4897959183673469, 0.030612244897959183]]))
+        expected_contour_3 = shapely.Polygon(np.array([[0.4897959183673469, 0.5204081632653061],
+                                                       [0.5204081632653061, 0.4897959183673469],
+                                                       [0.9795918367346939, 0.4897959183673469],
+                                                       [1.010204081632653, 0.5204081632653061],
+                                                       [1.010204081632653, 0.9795918367346939],
+                                                       [0.9795918367346939, 1.010204081632653],
+                                                       [0.5204081632653061, 1.010204081632653],
+                                                       [0.4897959183673469, 0.9795918367346939],
+                                                       [0.4897959183673469, 0.5204081632653061]]))
+        expected_contour_4 = shapely.Polygon(np.array([[0.5051020408163265, 0.5204081632653061],
+                                                       [0.5204081632653061, 0.5051020408163265],
+                                                       [0.9795918367346939, 0.5051020408163265],
+                                                       [0.9948979591836734, 0.5204081632653061],
+                                                       [0.9948979591836734, 0.9795918367346939],
+                                                       [0.9795918367346939, 0.9948979591836734],
+                                                       [0.5204081632653061, 0.9948979591836734],
+                                                       [0.5051020408163265, 0.9795918367346939],
+                                                       [0.5051020408163265, 0.5204081632653061]]))
+        expected = [expected_contour_1,
+                    expected_contour_2,
+                    expected_contour_3,
+                    expected_contour_4]
+        result = utils.cluster_average_intersection_contours_rasterisation(data, **kwargs)
+        self.assertTrue(all([shapely.equals(result[i], expected[i]) for i in range(len(expected))]))
+
+    # If there is not one single overall area of intersection, test that the
+    # larger one is returned and that it can gracefully exit the algorithm
+    def test_cluster_average_intersection_contours_two_final_intersections_rasterisation(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+        square2 = shapely.Polygon(np.array([[1.5, 0], [1.5, 1], [2.5, 1], [2.5, 0]]))
+        square3 = shapely.Polygon(np.array([[0.8, 0], [0.8, 1], [1.8, 1], [1.8, 0]]))
+
+        data = [{'polygon': square1},
+                {'polygon': square2},
+                {'polygon': square3}]
+        created_at_list = ['2025-01-21 10:46:23 UTC',
+                           '2025-01-21 10:46:21 UTC',
+                           '2025-01-21 10:46:22 UTC']
+        kwargs = {'created_at': created_at_list, 'num_grid_points': 200}
+        expected_contour_1 = shapely.Polygon(np.array([[0.0, 0.005025125628140704],
+                                                       [2.4874371859296485, 0.0],
+                                                       [2.5, 0.005025125628140704],
+                                                       [2.5, 0.9949748743718593],
+                                                       [0.01256281407035176, 1.0],
+                                                       [0.0, 0.9949748743718593],
+                                                       [0.0, 0.005025125628140704]]))
+        expected_contour_2 = shapely.Polygon(np.array([[1.4949748743718594, 0.005025125628140704],
+                                                       [1.8090452261306533, 0.005025125628140704],
+                                                       [1.8090452261306533, 0.9949748743718593],
+                                                       [1.4949748743718594, 0.9949748743718593],
+                                                       [1.4949748743718594, 0.005025125628140704]]))
+        expected = [expected_contour_1,
+                    expected_contour_2]
+        result = utils.cluster_average_intersection_contours_rasterisation(data, **kwargs)
+        self.assertTrue(all([shapely.equals(result[i], expected[i]) for i in range(len(expected))]))
+
     def test_cluster_average_union(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
         square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))

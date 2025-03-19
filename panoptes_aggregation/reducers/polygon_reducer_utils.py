@@ -9,6 +9,7 @@ import shapely
 import datetime
 from scipy.linalg import issymmetric
 from pandas._libs.tslibs.timestamps import Timestamp as pdtimestamp
+from contourpy import contour_generator
 
 
 def _polygons_unify(polygons):
@@ -430,4 +431,78 @@ def cluster_average_intersection_contours(data, **kwargs):
         else:
             break
 
+    return intersection_contours
+
+def cluster_average_intersection_contours_rasterisation(data, **kwargs):
+    '''Find contours of intersection as a list. Each item of the list will
+    be the largest contour of `i` intersections, with the next item being the
+    contour `i+1` intersection etc. The intersection is where the polygons
+    overlap. This is useful for plotting the uncertainty in the cluster.
+
+    This approach uses rasterisation to find the contours. A square grid, with
+    the number of grid points given by `num_grid_points`, is placed over the
+    cluster. Then the number of polygon intersections in each grid sqaure is
+    counted. Contours are then made from this grid.
+
+    This function has the advantage of being more effcient than
+    :mod:`cluster_average_intersection_contours` when the number of polygons in
+    the cluster is large (approximately when greater than 8). Equally if
+    `num_grid_points` is small, say 10, then rasterisation is faster in most
+    cases but gives poorer quality contours with increased risk of grid-spacing
+    based artifacts.
+
+    Parameters
+    ----------
+    data : list
+        A list of dicts that take the form
+        {`polygon`: shapely.geometry.polygon.Polygon, 'gold_standard', bool}
+        There is one element in this list for each classification made.
+    kwargs :
+        * `num_grid_points`: The number of grid points per axis. A larger number means greater resolution, but takes longer. Default is 100.
+        * `created_at` : A list when the classifcation was made. Not used in this average.
+        * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
+    Returns
+    -------
+    intersection_contours : list
+        List of shapely objects. Each shape at position `i` in the list is the
+        largest simply-connected contour of at least `i` intersections.
+    '''
+    # Want the list to just be simple polygons
+    polygons = [data[i]['polygon'] for i in range(len(data))]
+    num_grid_points = kwargs.pop('num_grid_points', 100)
+
+    polygons_bounds = shapely.bounds(polygons)
+    x_min = np.min(polygons_bounds[:, 0])
+    x_max = np.max(polygons_bounds[:, 2])
+    y_min = np.min(polygons_bounds[:, 1])
+    y_max = np.max(polygons_bounds[:, 3])
+
+    x_values = np.linspace(x_min, x_max, num_grid_points)
+    y_values = np.linspace(y_min, y_max, num_grid_points)
+    x_grid, y_grid = np.meshgrid(x_values, y_values)
+    z_grid = np.zeros(np.shape(x_grid))
+
+    # Find the number of agreement for each 'pixel'
+    for i, x in enumerate(x_grid[0, :]):
+        for j, y in enumerate(y_grid[:, 0]):
+            # Note i and j are swapped compared what one would naively expect
+            z_grid[j, i] = int(np.sum(shapely.contains_xy(polygons, x=x, y=y)))
+
+    # Find the contour lines
+    cont_gen = contour_generator(x=x_grid, y=y_grid, z=z_grid)
+    multi_lines = cont_gen.multi_lines(np.arange(0, np.max(z_grid), 1, dtype='int'))
+    # Find only the largest contours for each level of agreement by area
+    intersection_contours = []
+    for lines in multi_lines:
+        possible_contour = []
+        for xy in lines:
+            contour = shapely.Polygon(xy)
+            possible_contour.append(contour)
+        areas = shapely.area(possible_contour)
+        # Find contour with largest area
+        contour = possible_contour[np.argmax(areas)]
+        intersection_contours.append(contour)
+    # Remove any artifacts from grid size
+    tolerance = max(0.5/num_grid_points, 0.01)
+    intersection_contours = shapely.simplify(intersection_contours, tolerance)
     return intersection_contours
