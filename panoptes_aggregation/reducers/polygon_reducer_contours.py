@@ -66,8 +66,8 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
         of the cluster.
 
     kwargs :
-        * `rasterisation`: Boolean, if `True` the contours are found using rasterisation. Defaults to `False`, as rasterisation is less accurate than the default using shapely.
-        * `num_grid_points`: integer which defines the number of grid points per axis when rasterisation is used. A higher number results in more accuracy but also increases computational time. Defaults to 100.
+        * `rasterisation`: Boolean, if `True` the contours are found using rasterisation. Defaults to `False`, as rasterisation is less accurate than the default using shapely intersections.
+        * `num_grid_points`: integer which defines the number of grid points per axis when rasterisation is `True`. A higher number results in more accuracy but also increases computational time. Defaults to 100.
         * `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
 
     Returns

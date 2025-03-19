@@ -36,9 +36,8 @@ def _polygons_unify(polygons):
         for hole in union.interiors:
             hole = shapely.Polygon(hole)
             union = union.union(hole)
-    # Simplfy if needed
-    if not union.is_simple:
-        union = union.buffer(0)
+    # Simplfy
+    union = union.buffer(0)
     return union
 
 
@@ -433,6 +432,7 @@ def cluster_average_intersection_contours(data, **kwargs):
 
     return intersection_contours
 
+
 def cluster_average_intersection_contours_rasterisation(data, **kwargs):
     '''Find contours of intersection as a list. Each item of the list will
     be the largest contour of `i` intersections, with the next item being the
@@ -440,11 +440,12 @@ def cluster_average_intersection_contours_rasterisation(data, **kwargs):
     overlap. This is useful for plotting the uncertainty in the cluster.
 
     This approach uses rasterisation to find the contours. A square grid, with
-    the number of grid points given by `num_grid_points`, is placed over the
-    cluster. Then the number of polygon intersections in each grid sqaure is
-    counted. Contours are then made from this grid.
+    the number of grid points along each of the two axis given by
+    `num_grid_points`, is placed over the cluster. Then the number of polygon
+    intersections in each grid square are counted. Contours are then made from
+    this 2D surface of intersection counts.
 
-    This function has the advantage of being more effcient than
+    This function has the advantage of being more efficient than
     :mod:`cluster_average_intersection_contours` when the number of polygons in
     the cluster is large (approximately when greater than 8). Equally if
     `num_grid_points` is small, say 10, then rasterisation is faster in most
@@ -461,6 +462,7 @@ def cluster_average_intersection_contours_rasterisation(data, **kwargs):
         * `num_grid_points`: The number of grid points per axis. A larger number means greater resolution, but takes longer. Default is 100.
         * `created_at` : A list when the classifcation was made. Not used in this average.
         * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
+
     Returns
     -------
     intersection_contours : list

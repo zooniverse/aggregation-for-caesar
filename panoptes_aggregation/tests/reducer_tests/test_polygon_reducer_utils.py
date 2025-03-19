@@ -21,6 +21,20 @@ class TestIoUMetric(unittest.TestCase):
         result = utils._polygons_unify(polygons)
         self.assertTrue(shapely.equals(result, expected))
 
+    def test__polygons_unify_non_polygons(self):
+        shape1 = shapely.Polygon(np.array([[0, 0], [0, 3], [1, 3], [1, 0]]))
+        shape2 = shapely.Polygon(np.array([[2, 0], [2, 3], [3, 3], [3, 0]]))
+        shape3 = shapely.Polygon(np.array([[0, 2], [0, 3], [3, 3], [3, 2]]))
+        shape4 = shapely.Polygon(np.array([[0, 0], [0, 1], [3, 1], [3, 0]]))
+        shape5 = shapely.LineString([(0, -1), (0, 1)])
+
+        # make a large square with a whole in the centre
+        polygons = [shape1, shape2, shape3, shape4, shape5]
+        # Should return a square with no hole
+        expected = shapely.Polygon(np.array([[0, 0], [0, 3], [3, 3], [3, 0]]))
+        result = utils._polygons_unify(polygons)
+        self.assertTrue(shapely.equals(result, expected))
+
     def test__polygons_unify_impossible_to_unify(self):
         # This is a series of polygons which don't intersect, to see if
         # the code can exit gracefully
