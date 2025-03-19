@@ -118,3 +118,6 @@ tmp/*
 scrap.ipynb
 
 panoptes_aggregation/scripts/icons/zooniverse*
+gui.app
+gui.build
+gui.dist

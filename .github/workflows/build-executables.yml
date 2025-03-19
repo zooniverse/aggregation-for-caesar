@@ -26,44 +26,80 @@ jobs:
         pip install .[gui,installer]
       working-directory: ./
 
-    - name: Build executable (Windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        pyinstaller --clean build_win.spec
-      working-directory: ./
-
-    - name: Build executable (macOS)
-      if: matrix.os != 'windows-latest'
-      run: |
-        pyinstaller --clean build_mac.spec
-      working-directory: ./
-
     - name: Collect licenses
       run: |
-        pip-licenses --format=plain-vertical --with-authors --with-urls --with-license-file --no-license-path --output-file=dist/dependency_licenses_full.txt
-        pip-licenses --format=markdown --with-authors --with-urls --output-file=dist/dependency_licenses_summary.txt
+        pip-licenses --format=plain-vertical --with-authors --with-urls --with-license-file --no-license-path --output-file=dependency_licenses_full.txt
+        pip-licenses --format=markdown --with-authors --with-urls --output-file=dependency_licenses_summary.txt
+
+    - name: Build Executable (MacOS)
+      if: matrix.os != 'windows-latest'
+      uses: Nuitka/Nuitka-Action@main
+      with:
+        nuitka-version: main
+        script-name: panoptes_aggregation/scripts/gui.py
+        mode: app
+        include-data-dir: |
+            panoptes_aggregation/scripts/icons=icons
+        include-data-files: |
+            ./dependency_licenses_full.txt=dependency_licenses_full.txt
+            ./dependency_licenses_summary.txt=dependency_licenses_summary.txt
+        macos-app-icon: panoptes_aggregation/scripts/icons/program_icon.icns
+        no-deployment-flag: 'self-execution'
+        python-flag: '-u'
+
+    - name: Build Executable (Windows)
+      if: matrix.os == 'windows-latest'
+      uses: Nuitka/Nuitka-Action@main
+      with:
+        nuitka-version: main
+        script-name: panoptes_aggregation/scripts/gui.py
+        mode: onefile
+        include-data-dir: |
+            panoptes_aggregation/scripts/icons=icons
+        include-data-files: |
+            ./dependency_licenses_full.txt=dependency_licenses_full.txt
+            ./dependency_licenses_summary.txt=dependency_licenses_summary.txt
+        windows-icon-from-ico: panoptes_aggregation/scripts/icons/program_icon.ico
+        windows-console-mode: 'disable'
+        no-deployment-flag: 'self-execution'
+        python-flag: '-u'
+
+    - name: Cleanup Executable (MacOS)
+      if: matrix.os != 'windows-latest'
+      run: |
+        rm -rf build/gui.build
+        rm -rf build/gui.dist
+        ./scripts/mac_app_link_files.sh
+    
+    # - name: Zip Executable (MacOS intel)
+    #   if: matrix.os == 'macos-13'
+    #   run: |
+    #     rm -rf build/gui.build
+    #     rm -rf build/gui.dist
+    #     (cd build; zip -r ../macos-intel-app.zip ./*)
+    
+    - name:  Cleanup Executable (Windows)
+      if: matrix.os == 'windows-latest'
+      run: Remove-Item build\gui.build -Recurse -Force
+      # run: Compress-Archive -Path build\gui.dist\* -Destination windows-x64-executable.zip
 
     - name: Create Artifact (Windows x64)
       if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@v4
       with:
-        name: windows-x64-executables
-        path: dist/
+        name: windows-x64-executable
+        path: build/gui.exe
 
     - name: Create Artifact (macOS arm)
       if: matrix.os == 'macos-latest'
       uses: actions/upload-artifact@v4
       with:
-        name: macos-arm64-executables
-        path: |
-          dist/*.app
-          dist/*.txt
+        name: macos-arm64-app
+        path: build/
 
     - name: Create Artifact (macOS intel)
       if: matrix.os == 'macos-13'
       uses: actions/upload-artifact@v4
       with:
-        name: macos-intel-executables
-        path: |
-          dist/*.app
-          dist/*.txt
+        name: macos-intel-app
+        path: build/
