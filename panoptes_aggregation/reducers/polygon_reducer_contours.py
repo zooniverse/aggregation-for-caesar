@@ -46,7 +46,7 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
     :mod:`panoptes_aggregation.reducers.polygon_reducer`. As it retruns a list
     rather than a dictionary this may cause issues with any subsequent data
     processing with Caesar.
-    
+
     The default method for finding the contours is slow but accurate. However,
     the algorithm time per cluster increases approximately exponentially with
     number of polygons in the cluster. Therefore, for cases with clusters of

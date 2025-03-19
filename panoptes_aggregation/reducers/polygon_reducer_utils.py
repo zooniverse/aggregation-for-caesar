@@ -505,6 +505,6 @@ def cluster_average_intersection_contours_rasterisation(data, **kwargs):
         contour = possible_contour[np.argmax(areas)]
         intersection_contours.append(contour)
     # Remove any artifacts from grid size
-    tolerance = max(0.5/num_grid_points, 0.01)
+    tolerance = max(0.5 / num_grid_points, 0.01)
     intersection_contours = shapely.simplify(intersection_contours, tolerance)
     return intersection_contours
