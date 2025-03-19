@@ -4,7 +4,7 @@ import functools
 
 def copy_function(f, new_name):
     try:
-      g = f.clone()
+        g = f.clone()
     except AttributeError:
         '''Based on http://stackoverflow.com/a/6528148/190597 (Glenn Maynard) and
         https://stackoverflow.com/a/13503277/1052418 (unutbu)'''
