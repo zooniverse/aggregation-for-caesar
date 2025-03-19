@@ -202,6 +202,10 @@ def optics_line_text_reducer(data_by_frame, **kwargs_optics):
                         if text.strip() != '':
                             key = str(index)
                             witness_keys.append(key)
+                            if isinstance(user_ids_input[user_index], np.float64):
+                                user_ids_input[user_index] = float(user_ids_input[user_index])
+                            elif isinstance(user_ids_input[user_index], np.int64):
+                                user_ids_input[user_index] = int(user_ids_input[user_index])
                             user_ids.append(user_ids_input[user_index])
                             gold_standard.append(gs)
                             collation.add_plain_witness(key, text)
