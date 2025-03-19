@@ -1,9 +1,6 @@
 # Move data files out of the MacOS subfolder and re-sign
 # see https://github.com/Nuitka/Nuitka/issues/2906
 
-chmod 666 build/gui.app/Contents/MacOS/dependency_licenses_full.txt
-chmod 666 build/gui.app/Contents/MacOS/dependency_licenses_summary.txt
-
 for dir in "dependency_licenses_full.txt" "dependency_licenses_summary.txt" "gooey" "icons" "jaraco"; do 
   mv "build/gui.app/Contents/MacOS/$dir" "build/gui.app/Contents/Resources/"
   cd "build/gui.app/Contents/MacOS/" # needs to be a relative symlink
