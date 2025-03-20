@@ -1493,6 +1493,7 @@ reduced_data_intersection_contours_rasterisation = [
     }
 ]
 
+# Test with American English
 TestPolygonTReducerIntersectionContoursRasterisation = ReducerTest(
     polygon_reducer_contours,
     process_data,
@@ -1503,13 +1504,14 @@ TestPolygonTReducerIntersectionContoursRasterisation = ReducerTest(
     kwargs={
         'eps': 0.5,
         'min_samples': 2,
-        'rasterisation': True,
+        'rasterization': True,
         'num_grid_points': 100
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
     test_name='TestPolygonTReducerIntersectionContoursRasterisation'
 )
+
 
 # Now to test cases with not enough intersection to cluster
 extracted_data_no_overall_intersection = [
