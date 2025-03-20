@@ -67,9 +67,8 @@ jobs:
     - name: Cleanup Executable (MacOS)
       if: matrix.os != 'windows-latest'
       run: |
-        rm -rf build/gui.build
-        rm -rf build/gui.dist
         ./scripts/mac_app_link_files.sh
+        ditto -c -k --sequesterRsrc --keepParent build/gui.app build/gui.zip
     
     # - name: Zip Executable (MacOS intel)
     #   if: matrix.os == 'macos-13'
@@ -95,11 +94,11 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: macos-arm64-app
-        path: build/
+        path: build/gui.zip
 
     - name: Create Artifact (macOS intel)
       if: matrix.os == 'macos-13'
       uses: actions/upload-artifact@v4
       with:
         name: macos-intel-app
-        path: build/
+        path: build/gui.zip
