@@ -6,10 +6,18 @@ import json
 import os
 import sys
 
+from pathlib import Path
+
 try:
     from gooey import GooeyParser
 except ImportError:  # pragma: no cover
     from .no_gooey import GooeyParser  # pragma: no cover
+
+
+save_path = os.path.abspath('.')
+if "__compiled__" in globals():
+    # When packaged use a reasonable path rather than the temp folder the app unpacks into
+    save_path = str(Path.home() / 'Desktop')
 
 
 def main(args=None):
@@ -73,7 +81,7 @@ def main(args=None):
         "--dir",
         help="The directory to save the configuration files to",
         type=panoptes_aggregation.scripts.PathType(type='dir'),
-        default=os.path.abspath('.'),
+        default=save_path,
         widget='DirChooser'
     )
     config_numbers.add_argument(
@@ -154,7 +162,7 @@ def main(args=None):
         "--dir",
         help="The directory to save the extraction file(s) to",
         type=panoptes_aggregation.scripts.PathType(type='dir'),
-        default=os.path.abspath('.'),
+        default=save_path,
         widget='DirChooser'
     )
     extract_save_files.add_argument(
@@ -260,7 +268,7 @@ def main(args=None):
         "--dir",
         help="The directory to save the reduction file to",
         type=panoptes_aggregation.scripts.PathType(type='dir'),
-        default=os.path.abspath('.'),
+        default=save_path,
         widget='DirChooser'
     )
     reduce_save_files.add_argument(
@@ -269,7 +277,6 @@ def main(args=None):
         help="The base name for output csv file to store the reductions",
         type=str,
         default="reductions",
-        widget='DirChooser'
     )
     reduce_save_files.add_argument(
         "-s",
