@@ -307,7 +307,7 @@ def average_shape_IoU(params_list, shape, eps_t=None):
         else:
             unions = shapely.union(geo, geo_list)
             unions = numpy.array([uni.area for uni in unions])
-        iou_distances = [1 - intersections[i]/unions[i] if unions[i] > 0 else numpy.inf for i in range(len(unions))]
+        iou_distances = [1 - intersections[i] / unions[i] if unions[i] > 0 else numpy.inf for i in range(len(unions))]
         iou_distances = numpy.array(iou_distances)
         return numpy.sum(iou_distances**2)
     # find shape that minimizes the variance in the IoU metric using bounds
