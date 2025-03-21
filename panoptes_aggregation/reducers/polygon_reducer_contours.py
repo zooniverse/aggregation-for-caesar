@@ -66,7 +66,7 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
         of the cluster.
 
     kwargs :
-        * `rasterisation`/`rasterization`: Boolean, if `True` the contours are found using rasterisation. Defaults to `False`, as rasterisation is less accurate than the default using shapely intersections.
+        * `rasterisation`/`rasterization`: String/boolean. If `True` the contours are found using rasterisation, if `False` intersections are used. Defaults to 'auto', which uses rasterisation if more than 9 in the cluster.
         * `num_grid_points`: integer which defines the number of grid points per axis when rasterisation is `True`. A higher number results in more accuracy but also increases computational time. Defaults to 100.
         * `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
 
@@ -83,13 +83,13 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
         * `tool*_consensus` : A list of the the overall consensus of each cluster. A value of 1 is perfect agreement, a value of 0 is complete disagreement. This is found by subtracting`IoU_cluster_mean_distance` from 1
     '''
     min_samples = max(1, kwargs_dbscan.pop('min_samples', 2))
-    rasterisation = kwargs_dbscan.pop('rasterisation', False)
+    rasterisation = kwargs_dbscan.pop('rasterisation', 'auto')
     # In case American English is used
     try:
         rasterisation = kwargs_dbscan.pop('rasterization')
     except KeyError:
         pass
-    num_grid_points = kwargs_dbscan.pop('num_grid_points', None)
+    num_grid_points = kwargs_dbscan.pop('num_grid_points', 100)
     # Remove created_at from kwargs, if it is provided
     _ = kwargs_dbscan.pop('created_at', [])
     clusters = []
@@ -127,11 +127,19 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
                             # Find the consensus of this cluster and add it as float
                             consensus = float(1 - IoU_cluster_mean_distance(distance_matrix))
                             # Now find the "average" of this cluster, using the provided average choice
-                            # Either using rasterisation or the default approach
-                            if rasterisation is True:
+                            # Below is logic to choose rasterisation or the default approach
+                            cluster_size = np.sum(cdx)
+                            use_rastorisation = rasterisation
+                            if use_rastorisation == 'auto':
+                                if cluster_size > 9:
+                                    use_rastorisation = True
+                                else:
+                                    use_rastorisation = False
+                            if use_rastorisation is True:
                                 contours = cluster_average_intersection_contours_rasterisation(data[cdx], num_grid_points=num_grid_points)
                             else:
                                 contours = cluster_average_intersection_contours(data[cdx])
+
                             # Extract the x and y values of these contours
                             contours_x_values = []
                             contours_y_values = []
