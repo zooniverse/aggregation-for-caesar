@@ -1891,7 +1891,7 @@ kwargs_extra_data_10_identical_squares = {
 }
 
 processed_data_10_identical_squares_dictionary = {
-    'polygon':  shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]])),
+    'polygon': shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]])),
     'gold_standard': False
 }
 
