@@ -33,10 +33,10 @@ def config_workflow(
     with workflow_csv as workflow_csv_in:
         workflows = pandas.read_csv(workflow_csv_in, encoding='utf-8')
 
-    workflows['version_parse'] = np.array([
+    workflows = workflows.assign(version_parse=np.array([
         packaging.version.parse('{0}.{1}'.format(v, m))
         for v, m in zip(workflows.version, workflows.minor_version)
-    ])
+    ]))
 
     wdx = (workflows.workflow_id == workflow_id)
     if (version is None) and (min_version is None) and (max_version is None):
