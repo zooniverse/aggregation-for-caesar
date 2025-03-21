@@ -484,11 +484,15 @@ def cluster_average_intersection_contours_rasterisation(data, **kwargs):
     x_grid, y_grid = np.meshgrid(x_values, y_values)
     z_grid = np.zeros(np.shape(x_grid))
 
-    # Find the number of agreement for each 'pixel'
-    for i, x in enumerate(x_grid[0, :]):
-        for j, y in enumerate(y_grid[:, 0]):
-            # Note i and j are swapped compared what one would naively expect
-            z_grid[j, i] = int(np.sum(shapely.contains_xy(polygons, x=x, y=y)))
+    x_grid_flat, y_grid_flat = x_grid.flatten(), y_grid.flatten()
+    for polygon in polygons:
+        # Find flattened grid of bools for if point inside polygon
+        count_grid = shapely.contains_xy(polygon, x=x_grid_flat, y=y_grid_flat)
+        # Convert to 0 or 1
+        count_grid = count_grid.astype('int')
+        # make grid again
+        count_grid = np.reshape(count_grid, np.shape(z_grid))
+        z_grid += count_grid
 
     # Find the contour lines
     cont_gen = contour_generator(x=x_grid, y=y_grid, z=z_grid)
