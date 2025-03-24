@@ -1846,3 +1846,231 @@ TestPolygonTReducerIntersectionContoursClusterOfOne = ReducerTest(
     network_kwargs=kwargs_extra_data,
     test_name='TestPolygonTReducerIntersectionContoursClusterOfOne'
 )
+
+# Test if can use rasterisation if cluster has 10 or more polygons.
+# This is not realistic data, just the simplest possible cluster of 10
+classification_square = {
+    'frame0': {
+        'T0_tool0_pathX': [
+            [
+                0,
+                0,
+                1,
+                1,
+                0
+            ]
+        ],
+        'T0_tool0_pathY': [
+            [
+                0,
+                1,
+                1,
+                0,
+                0
+            ]
+        ],
+        'gold_standard': False
+    }
+}
+
+extracted_data_10_identical_squares = [classification_square for i in range(10)]
+
+kwargs_extra_data_10_identical_squares = {
+    'created_at': [
+        '2025-01-21 10:46:20 UTC',
+        '2025-01-21 10:46:21 UTC',
+        '2025-01-21 10:46:22 UTC',
+        '2025-01-21 10:46:23 UTC',
+        '2025-01-21 10:46:24 UTC',
+        '2025-01-21 10:46:25 UTC',
+        '2025-01-21 10:46:26 UTC',
+        '2025-01-21 10:46:27 UTC',
+        '2025-01-21 10:46:28 UTC',
+        '2025-01-21 10:46:29 UTC'
+    ]
+}
+
+processed_data_10_identical_squares_dictionary = {
+    'polygon': shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]])),
+    'gold_standard': False
+}
+
+processed_data_10_identical_squares = {
+    'frame0': {
+        'T0_tool0': {
+            'X': [
+                [0, 0],
+                [1, 1],
+                [2, 2],
+                [3, 3],
+                [4, 4],
+                [5, 5],
+                [6, 6],
+                [7, 7],
+                [8, 8],
+                [9, 9]
+            ],
+            'data': [processed_data_10_identical_squares_dictionary for i in range(10)],
+        }
+    }
+}
+
+# Now test if it can handle not enough data to cluster, by increasing min_samples
+reduced_data_10_identical_squares = [
+    {
+        'frame0': {
+            'T0_tool0_cluster_label_for_contours': 0,
+            'T0_tool0_number_of_contours': 10,
+            'T0_tool0_contours_x': [
+                [
+                    0.0,
+                    0.9932885906040269,
+                    1.0,
+                    0.006711409395973154,
+                    0.0
+                ], [
+                    0.0006711409395973155,
+                    0.9932885906040269,
+                    0.9993288590604027,
+                    0.006711409395973154,
+                    0.0006711409395973155
+                ], [
+                    0.001342281879194631,
+                    0.9932885906040269,
+                    0.9986577181208054,
+                    0.006711409395973155,
+                    0.001342281879194631
+                ], [
+                    0.002013422818791946,
+                    0.9932885906040267,
+                    0.997986577181208,
+                    0.006711409395973153,
+                    0.002013422818791946
+                ], [
+                    0.002684563758389262,
+                    0.9932885906040267,
+                    0.9973154362416108,
+                    0.006711409395973154,
+                    0.002684563758389262
+                ], [
+                    0.003355704697986577,
+                    0.9932885906040269,
+                    0.9966442953020134,
+                    0.006711409395973154,
+                    0.003355704697986577
+                ], [
+                    0.004026845637583892,
+                    0.9932885906040267,
+                    0.9959731543624161,
+                    0.006711409395973154,
+                    0.004026845637583892
+                ], [
+                    0.004697986577181208,
+                    0.9932885906040267,
+                    0.9953020134228188,
+                    0.006711409395973154,
+                    0.004697986577181208
+                ], [
+                    0.005369127516778524,
+                    0.9932885906040269,
+                    0.9946308724832215,
+                    0.006711409395973155,
+                    0.005369127516778524
+                ], [
+                    0.006040268456375839,
+                    0.9932885906040269,
+                    0.9939597315436242,
+                    0.006711409395973154,
+                    0.006040268456375839
+                ]
+            ],
+            'T0_tool0_contours_y': [
+                [
+                    0.006711409395973154,
+                    0.0,
+                    0.9932885906040269,
+                    1.0,
+                    0.006711409395973154
+                ], [
+                    0.006711409395973154,
+                    0.0006711409395973155,
+                    0.9932885906040269,
+                    0.9993288590604027,
+                    0.006711409395973154
+                ], [
+                    0.006711409395973155,
+                    0.001342281879194631,
+                    0.9932885906040269,
+                    0.9986577181208054,
+                    0.006711409395973155
+                ], [
+                    0.006711409395973153,
+                    0.002013422818791946,
+                    0.9932885906040267,
+                    0.997986577181208,
+                    0.006711409395973153
+                ], [
+                    0.006711409395973154,
+                    0.002684563758389262,
+                    0.9932885906040267,
+                    0.9973154362416108,
+                    0.006711409395973154
+                ], [
+                    0.006711409395973154,
+                    0.003355704697986577,
+                    0.9932885906040269,
+                    0.9966442953020134,
+                    0.006711409395973154
+                ], [
+                    0.006711409395973154,
+                    0.004026845637583892,
+                    0.9932885906040267,
+                    0.9959731543624161,
+                    0.006711409395973154
+                ], [
+                    0.006711409395973154,
+                    0.004697986577181208,
+                    0.9932885906040267,
+                    0.9953020134228188,
+                    0.006711409395973154
+                ], [
+                    0.006711409395973155,
+                    0.005369127516778524,
+                    0.9932885906040269,
+                    0.9946308724832215,
+                    0.006711409395973155
+                ], [
+                    0.006711409395973154,
+                    0.006040268456375839,
+                    0.9932885906040269,
+                    0.9939597315436242,
+                    0.006711409395973154
+                ]
+            ],
+            'T0_tool0_consensus': 1.0,
+            'T0_tool0_cluster_labels': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        'parameters': {
+            'eps': 0.5,
+            'min_samples': 2,
+            'num_grid_points': 150
+        }
+    }
+]
+
+TestPolygonTReducerIntersectionContours10IdenticalSquares = ReducerTest(
+    polygon_reducer_contours,
+    process_data,
+    extracted_data_10_identical_squares,
+    processed_data_10_identical_squares,
+    reduced_data_10_identical_squares,
+    'Test polygon reducer contours can switch to rasterisation if cluster has 10 polygons',
+    kwargs={
+        'eps': 0.5,
+        'min_samples': 2,
+        'num_grid_points': 150
+    },
+    output_kwargs=True,
+    network_kwargs=kwargs_extra_data_10_identical_squares,
+    test_name='TestPolygonTReducerIntersectionContours10IdenticalSquares'
+)
