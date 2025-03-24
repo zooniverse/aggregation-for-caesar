@@ -67,7 +67,8 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
 
     kwargs :
         * `rasterisation`/`rasterization`: String/boolean. If `True` the contours are found using rasterisation, if `False` intersections are used. Defaults to 'auto', which uses rasterisation if more than 9 in the cluster.
-        * `num_grid_points`: integer which defines the number of grid points per axis when rasterisation is `True`. A higher number results in more accuracy but also increases computational time. Defaults to 100.
+        * `num_grid_points`: An integer which defines the number of grid points per axis when rasterisation is `True`. A higher number results in more accuracy but also increases computational time. Defaults to 100.
+        * `smoothing`: A string to choose the type of smoothing used for rasterisation (if used). If 'minimal_sides', the number of sides of the contour is minimised. If 'rounded', corners are rounded. If 'no_smoothing', no smoothing is done. Defaults to 'minimal_sides'.
         * `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
 
     Returns
@@ -84,6 +85,7 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
     '''
     min_samples = max(1, kwargs_dbscan.pop('min_samples', 2))
     rasterisation = kwargs_dbscan.pop('rasterisation', 'auto')
+    smoothing = kwargs_dbscan.pop('rasterisation', 'minimal_sides')
     # In case American English is used
     try:
         rasterisation = kwargs_dbscan.pop('rasterization')
@@ -136,7 +138,9 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
                                 else:
                                     use_rastorisation = False
                             if use_rastorisation is True:
-                                contours = cluster_average_intersection_contours_rasterisation(data[cdx], num_grid_points=num_grid_points)
+                                contours = cluster_average_intersection_contours_rasterisation(data[cdx],
+                                                                                               num_grid_points=num_grid_points,
+                                                                                               smoothing=smoothing)
                             else:
                                 contours = cluster_average_intersection_contours(data[cdx])
 
