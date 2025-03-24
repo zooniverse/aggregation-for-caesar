@@ -38,7 +38,7 @@ def run_aggregation(project_id, workflow_id, user_id):
 
     print(f'[Batch Aggregation] Extacting workflow {workflow_id})')
     extractor_config = workflow_extractor_config(ba.tasks)
-    extracted_data = batch_utils.batch_extract(cls_df, extractor_config)
+    extracted_data = batch_utils.batch_extract(cls_df, extractor_config, hide_progressbar=True)
 
     batch_standard_reducers = {
         'question_extractor': ['question_reducer', 'question_consensus_reducer'],
@@ -56,7 +56,7 @@ def run_aggregation(project_id, workflow_id, user_id):
             # This is an override. The workflow_reducer_config method returns a config object
             # that is incompatible with the batch_utils batch_reduce method
             reducer_config = {'reducer_config': {reducer: {}}}
-            reduced_data[reducer] = batch_utils.batch_reduce(extract_df, reducer_config)
+            reduced_data[reducer] = batch_utils.batch_reduce(extract_df, reducer_config, hide_progressbar=True)
             # filename = f'{ba.output_path}/{ba.workflow_id}_reductions.csv'
             filename = os.path.join(ba.output_path, f'{ba.workflow_id}_reductions.csv')
             reduced_data[reducer].to_csv(filename, mode='a')
