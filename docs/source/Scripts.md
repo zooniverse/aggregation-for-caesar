@@ -1,5 +1,5 @@
 # Using the command line scripts
-This package comes with several command line scripts for use with the `csv` data dumps produced by Panoptes.
+This package comes with several command line scripts for use with the `csv` data dumps produced by Panoptes. To reproduce the results, you will need to have [panoptes_aggregation](https://aggregation-staging.zooniverse.org/README.html) installed and the command line open in the folder containing the following penguin data.
 
 ## Download your data from the project builder
 You will need two to three files from your project for offline use:
@@ -11,13 +11,16 @@ Penguin Watch has several workflows, for this example we will look at workflow n
  - `penguin-watch-workflows.csv`: the workflow file (contains the major version number as a column)
  - `penguin-watch-classifications-trim.csv`: the classification file for workflow 6465
 
-This [zip folder](https://drive.google.com/file/d/177uXdt3IRIOc2b42UvG4EdNJv973RCtS/view?usp=sharing) contains these files.
+This [zip folder](_static/Penguin-Watch-Example-data-dumps.zip) contains these files.
 
 ---
 
 ## Scripts
-All scripts are packaged under a single name `panoptes_aggregation`.  Under this command there are three sub-commands `config`, `extract`, and `reduce`.
-
+All scripts are packaged under a single name `panoptes_aggregation`.  Under this command there are three sub-commands `config`, `extract`, and `reduce`. A description of these commands can be found using:
+```bash
+panoptes_aggregation -h config
+```
+giving:
 ```bash
 usage: panoptes_aggregation [-h] {config,extract,reduce} ...
 
@@ -32,13 +35,18 @@ positional arguments:
     reduce              reduce data from panoptes classifications based on the
                         extracted data
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
 ```
 
 ## Configure the extractors and reducers
 Use the command line tool to make configuration `yaml` files that are used to set up the extractors and reducers.  These base files will use the default settings for various task types. They can be adjusted if the defaults are not needed (e.g. you don't need to extract all the tasks, or you need more control over the reducer's settings).
 
+Details about the config files can be found using:
+```bash
+panoptes_aggregation config -h
+```
+giving:
 ```bash
 usage: panoptes_aggregation config [-h] [-d DIR] [-v VERSION]
                                    [--min_version MIN_VERSION]
@@ -49,7 +57,7 @@ usage: panoptes_aggregation config [-h] [-d DIR] [-v VERSION]
 Make configuration files for panoptes data extraction and reduction based on a
 workflow export
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
 
 Load Workflow Files:
@@ -99,15 +107,17 @@ Other options:
 ```
 
 ### Example: Penguin Watch
+To create the default config files for the example project, use the following command:
 ```bash
 panoptes_aggregation config penguin-watch-workflows.csv 6465 -v 52.76
 ```
 
-This creates four files:
+This creates five files:
  - `Extractor_config_workflow_6465_V52.76.yaml`: The configuration for the extractor code
  - `Reducer_config_workflow_6465_V52.76_point_extractor_by_frame.yaml`: The configuration for the reducer used for the point task
  - `Reducer_config_workflow_6465_V52.76_question_extractor.yaml`: The configuration for the reducer used for the question task
- - `Task_labels_workflow_6465_V52.76.yaml`: A lookup table to translate the column names used in the extractor/reducer output files into the text originally used on the workflow.
+ - `Reducer_config_workflow_6465_V52.76_shortcut_extractor`: A simple question task that leads to a shortcut of any of the following tasks
+ - `Task_labels_workflow_6465_V52.76.yaml`: A lookup table to translate the column names used in the extractor/reducer output files into the text originally used on the workflow
 
 
 ````{note}
@@ -151,8 +161,13 @@ These can values be set with the `panoptes_aggregation config` command using the
 ## Extracting data
 Note: this only works for some task types, see the [documentation](https://aggregation-caesar.zooniverse.org/docs) for a full list of supported task types.
 
-Use the command line tool to extract your data into one flat `csv` file for each task type:
+Use the command line tool to extract your data into one flat `csv` file for each task type.
 
+Details about how to run extractions can be found using:
+```bash
+panoptes_aggregation extract -h
+```
+giving:
 ```bash
 usage: panoptes_aggregation extract [-h] [-d DIR] [-o OUTPUT] [-O]
                                     [-c CPU_COUNT] [-vv]
@@ -160,7 +175,7 @@ usage: panoptes_aggregation extract [-h] [-d DIR] [-o OUTPUT] [-O]
 
 Extract data from panoptes classifications based on the workflow
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
 
 Load classification and configuration files:
@@ -199,27 +214,37 @@ extractor_config:
         - 2
         - 3
     question_extractor:
-    -   task: T6
     -   task: T1
+    shortcut_extractor:
+    -   task: T6
 workflow_id: 6465
 workflow_version: '52.76'
 ```
-This shows the basic setup for what extractor will be used for each task.  From this configuration we can see that the point extractor will be used for each of the tools in task `T0`, `tool3` of that task will have the question extractor run on its sub-task, and a question extractor will be used for tasks `T1` and `T6`.  If any of these extractions are not desired they can be deleted from this file before running the extractor.  In this case task `T4` was on the original workflow but was never used on the final project, I have already removed it from the configuration above.
+This shows the basic setup for what extractor will be used for each task.  From this configuration we can see that the point extractor will be used for each of the tools in task `T0`, `tool3` of that task will have the question extractor run on its sub-task, and a question extractor will be used for tasks `T1` and `T4`. Task `T6` is the shortcut task.  If any of these extractions are not desired they can be deleted from this file before running the extractor.  In this case task `T4` was on the original workflow but was never used on the final project, I have already removed it from the configuration above.
 
 Note: If a workflow contains any task types that don't have extractors or reducers they will not show up in this config file.
+
+To make the extractions, run the following command:
 
 ```bash
 panoptes_aggregation extract penguin-watch-classifications-trim.csv Extractor_config_workflow_6465_V52.76.yaml -o example
 ```
 
-This creates two `csv` files (one for each extractor listed in the config file):
+This creates three `csv` files (one for each extractor listed in the config file):
  - `question_extractor_example.csv`
  - `point_extractor_by_frame_example.csv`
+ - `shortcut_extractor_example.csv`
 
 ---
 
 ## Reducing data
 Note: this only works for some task types, see the [documentation](https://aggregation-caesar.zooniverse.org/docs) for a full list of supported task types.
+
+Details about how to run reductions can be found using:
+```bash
+panoptes_aggregation reduce -h
+```
+giving:
 
 ```bash
 usage: panoptes_aggregation reduce [-h] [-F {first,last,all}] [-O]
@@ -228,7 +253,7 @@ usage: panoptes_aggregation reduce [-h] [-F {first,last,all}] [-O]
 
 reduce data from panoptes classifications based on the extracted data
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
 
 Load extraction and configuration files:
@@ -264,7 +289,7 @@ reducer_config:
             - question_reducer
 ```
 
-As we can see, the default reducer is `point_reducer_dbscan` and the only keyword specified is the only associated with the sub-task of `tool3`.  To get better results we will add some clustering keywords to the configuration of `DBSCAN`:
+As we can see, the default reducer is `point_reducer_dbscan` and the only keyword specified is the only one associated with the sub-task of `tool3`.  To get better results we will add some clustering keywords to the configuration of `DBSCAN`:
 ```yaml
 reducer_config:
     point_reducer_dbscan:
@@ -291,7 +316,7 @@ Now that it is set up we can run:
 panoptes_aggregation reduce point_extractor_by_frame_example.csv Reducer_config_workflow_6465_V52.76_point_extractor_by_frame.yaml -o example
 ```
 
-This will create one file:
+to run the reduction. This will create one file:
  - `point_reducer_hdbscan_example.csv`: The clustered data points for task `T0`
 
 ---
