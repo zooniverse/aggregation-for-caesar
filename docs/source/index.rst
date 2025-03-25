@@ -8,21 +8,36 @@ Welcome to panoptes_aggregation's documentation
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Running Aggregation:
 
    README
    Scripts
    GUI
    Task_lookup_table
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Guides:
+
+   How_Clustering_Works
+   Polygon data - extraction and reduction
+   Gravity_Spy
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API Documentation:
+
    extractors
    reducers
    running_reducers
    panoptes
-   How_Clustering_Works
-   Polygon data - extraction and reduction
-   Gravity_Spy
-   Contributing
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Administration:
+
    CODE_OF_CONDUCT
+   Contributing
 
 Indices and tables
 ==================

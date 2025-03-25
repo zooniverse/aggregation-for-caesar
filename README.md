@@ -12,9 +12,20 @@ You can find the [latest documentation](https://aggregation-caesar.zooniverse.or
 
 ---
 
-## Installing for offline use
+## Download and run
+You can find the latest standalone application version to download on the [Github releases page](https://github.com/zooniverse/aggregation-for-caesar/releases), it is a `.zip` file. Simply download, unzip and double click to run.
+
+```{warning}
+As this program is unsigned, there will be a warning on both Windows and on MacOS. On Windows click 'run anyway' and on MacOS allow the program in your security settings.
+```
+
+This is a standalone version that does not need a local installation of [Python](https://www.python.org/downloads/) or [any dependancies](https://github.com/zooniverse/aggregation-for-caesar/blob/master/pyproject.toml). It runs on Windows, and both Intel and ARM (M1, M2 etc) based versions of MacOS.
+
+---
+
+## Manual installing for offline use
 ### With your own python install (python 3.9 or higher only)
-Instal the latest stable release:
+Install the latest stable release:
 ```bash
 pip install panoptes_aggregation
 ```
