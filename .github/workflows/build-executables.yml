@@ -46,6 +46,7 @@ jobs:
         macos-app-icon: panoptes_aggregation/scripts/icons/program_icon.icns
         no-deployment-flag: 'self-execution'
         python-flag: '-u'
+        output-file: 'panoptes_aggregation'
 
     - name: Build Executable (Windows)
       if: matrix.os == 'windows-latest'
@@ -63,12 +64,13 @@ jobs:
         windows-console-mode: 'disable'
         no-deployment-flag: 'self-execution'
         python-flag: '-u'
+        output-file: 'panoptes_aggregation'
 
     - name: Cleanup Executable (MacOS)
       if: matrix.os != 'windows-latest'
       run: |
         ./scripts/mac_app_link_files.sh
-        ditto -c -k --sequesterRsrc --keepParent build/gui.app build/gui.zip
+        ditto -c -k --sequesterRsrc --keepParent build/panoptes_aggregation.app build/panoptes_aggregation.zip
     
     # - name: Zip Executable (MacOS intel)
     #   if: matrix.os == 'macos-13'
@@ -87,18 +89,18 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: windows-x64-executable
-        path: build/gui.exe
+        path: build/panoptes_aggregation.exe
 
     - name: Create Artifact (macOS arm)
       if: matrix.os == 'macos-latest'
       uses: actions/upload-artifact@v4
       with:
         name: macos-arm64-app
-        path: build/gui.zip
+        path: build/panoptes_aggregation.zip
 
     - name: Create Artifact (macOS intel)
       if: matrix.os == 'macos-13'
       uses: actions/upload-artifact@v4
       with:
         name: macos-intel-app
-        path: build/gui.zip
+        path: build/panoptes_aggregation.zip

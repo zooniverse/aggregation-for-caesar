@@ -8,4 +8,5 @@ for dir in "dependency_licenses_full.txt" "dependency_licenses_summary.txt" "goo
   cd -
 done
 
-/usr/bin/codesign -s - --force --deep --preserve-metadata=entitlements build/gui.app
+mv build/gui.app build/panoptes_aggregation.app
+/usr/bin/codesign -s - --force --deep --preserve-metadata=entitlements build/panoptes_aggregation.app
