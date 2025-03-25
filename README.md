@@ -13,13 +13,15 @@ You can find the [latest documentation](https://aggregation-caesar.zooniverse.or
 ---
 
 ## Download and run
-You can find the latest standalone application version to download on the [Github releases page](https://github.com/zooniverse/aggregation-for-caesar/releases), it is a `.zip` file. Simply download, unzip and double click to run.
+You can find the latest standalone application version to download under 'Assets' on the [Github releases page](https://github.com/zooniverse/aggregation-for-caesar/releases). There are different `.zip` files for Windows/MacOS(Intel)/MacOS(ARM), choose the correct file for you operating system.
+
+Once downloaded, unzip and double click to run.
 
 ```{warning}
 As this program is unsigned, there will be a warning on both Windows and on MacOS. On Windows click 'run anyway' and on MacOS allow the program in your security settings.
 ```
 
-This is a standalone version that does not need a local installation of [Python](https://www.python.org/downloads/) or [any dependancies](https://github.com/zooniverse/aggregation-for-caesar/blob/master/pyproject.toml). It runs on Windows, and both Intel and ARM (M1, M2 etc) based versions of MacOS.
+This is a standalone version that does not need a local installation of [Python](https://www.python.org/downloads/) or [any dependancies](https://github.com/zooniverse/aggregation-for-caesar/blob/master/pyproject.toml).
 
 ---
 
