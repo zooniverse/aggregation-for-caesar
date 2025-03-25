@@ -1,5 +1,5 @@
-# Using the Graphical User Interface (GUI)
-If the GUI component is installed on your computer you can use the GUI instead of the command line to aggregate your Panoptes data.
+# Using the Application/Graphical User Interface (GUI)
+This is a guide on how to use the Graphical User Interface (GUI). The GUI is a user-friendly version to run aggregation instead of the command line.
 
 ## Download your data from the project builder
 You will need two to three files from your project for offline use:
@@ -12,10 +12,12 @@ Penguin Watch has several workflows, for this example we will look at workflow n
  - `penguin-watch-workflows.csv`: the workflow file (contains the major version number as a column)
  - `penguin-watch-classifications-trim.csv`: the classification file for workflow 6465
 
-This [zip folder](https://drive.google.com/file/d/177uXdt3IRIOc2b42UvG4EdNJv973RCtS/view?usp=sharing) contains these files.
+This [zip folder](_static/Penguin-Watch-Example-data-dumps.zip) contains these files.
 
 ## Launching the GUI
-Open a terminal and type:
+If you have the standalone application downloaded, simply double click the `.exe` file (Windows) or `.app` file (MacOS) to launch the GUI.
+
+If you have `panoptes_aggregation` installed, open a terminal and type:
 ```bash
 panoptes_aggregation_gui
 ```
@@ -28,17 +30,20 @@ There are three tabs at the top of the GUI for switching between `config`, `extr
 The `config` tab is used to make configuration `yaml` files that are used to set up the extractors and reducers. These base files will use the default settings for various task types. They can be adjusted if the defaults are not needed (e.g. you don't need to extract all the tasks, or you need more control over the reducer's settings).
 
 ### Example: Penguin Watch
-We want to configure files for workflow 6465 v52.76.  Enter this information into the GUI and click the `start` button:
+We want to configure files for workflow 6465 v52.76.  Enter this information into the GUI, along with the directory to save the files, and click the `start` button:
 
 ![GUI config](_static/gui_config.png)
 
+![GUI config](_static/gui_config_directory.png)
+
 ![GUI config](_static/gui_config_output.png)
 
-We can see this created four `yaml` files in our chosen output directory:
+We can see this created five `yaml` files in our chosen output directory:
  - `Extractor_config_workflow_6465_V52.76.yaml`: The configuration for the extractor code
  - `Reducer_config_workflow_6465_V52.76_point_extractor_by_frame.yaml`: The configuration for the reducer used for the point task
  - `Reducer_config_workflow_6465_V52.76_question_extractor.yaml`: The configuration for the reducer used for the question task
- - `Task_labels_workflow_6465_V52.76.yaml`: A lookup table to translate the column names used in the extractor/reducer output files into the text originally used on the workflow.
+ - `Reducer_config_workflow_6465_V52.76_shortcut_extractor`: A simple question task that leads to a shortcut of any of the following tasks
+ - `Task_labels_workflow_6465_V52.76.yaml`: A lookup table to translate the column names used in the extractor/reducer output files into the text originally used on the workflow
 
 Click the `Edit` button to go back to the previous screen.
 
@@ -64,12 +69,13 @@ extractor_config:
         - 2
         - 3
     question_extractor:
-    -   task: T6
     -   task: T1
+    shortcut_extractor:
+    -   task: T6
 workflow_id: 6465
 workflow_version: '52.76'
 ```
-This shows the basic setup for what extractor will be used for each task.  From this configuration we can see that the point extractor will be used for each of the tools in task `T0`, `tool3` of that task will have the question extractor run on its sub-task, and a question extractor will be used for tasks `T1` and `T6`.  If any of these extractions are not desired they can be deleted from this file before running the extractor.  In this case task `T4` was on the original workflow but was never used on the final project, I have already removed it from the configuration above.
+This shows the basic setup for what extractor will be used for each task.  From this configuration we can see that the point extractor will be used for each of the tools in task `T0`, `tool3` of that task will have the question extractor run on its sub-task, and a question extractor will be used for tasks `T1` and `T4`. Task `T6` is the shortcut task.  If any of these extractions are not desired they can be deleted from this file before running the extractor.  In this case task `T4` was on the original workflow but was never used on the final project, I have already removed it from the configuration above.
 
 Note: If a workflow contains any task types that don't have extractors or reducers they will not show up in this config file.
 
@@ -79,9 +85,10 @@ This extractor configuration file can be used along with the classification data
 
 ![GUI config](_static/gui_extract_output.png)
 
-This creates two `csv` files (one for each extractor listed in the config file):
+This creates three `csv` files (one for each extractor listed in the config file):
  - `question_extractor_example.csv`
  - `point_extractor_by_frame_example.csv`
+ - `shortcut_extractor_example.csv`
 
 Click the `Edit` button to go back to the previous screen.
 
