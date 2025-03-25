@@ -82,7 +82,8 @@ def main(args=None):
         help="The directory to save the configuration files to",
         type=panoptes_aggregation.scripts.PathType(type='dir'),
         default=save_path,
-        widget='DirChooser'
+        widget='DirChooser',
+        gooey_options={'default_path': save_path}
     )
     config_numbers.add_argument(
         "workflow_id",
@@ -163,7 +164,8 @@ def main(args=None):
         help="The directory to save the extraction file(s) to",
         type=panoptes_aggregation.scripts.PathType(type='dir'),
         default=save_path,
-        widget='DirChooser'
+        widget='DirChooser',
+        gooey_options={'default_path': save_path}
     )
     extract_save_files.add_argument(
         "-o",
@@ -269,7 +271,8 @@ def main(args=None):
         help="The directory to save the reduction file to",
         type=panoptes_aggregation.scripts.PathType(type='dir'),
         default=save_path,
-        widget='DirChooser'
+        widget='DirChooser',
+        gooey_options={'default_path': save_path}
     )
     reduce_save_files.add_argument(
         "-o",
