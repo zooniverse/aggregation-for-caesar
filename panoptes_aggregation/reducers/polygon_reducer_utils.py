@@ -10,6 +10,7 @@ import datetime
 from scipy.linalg import issymmetric
 from pandas._libs.tslibs.timestamps import Timestamp as pdtimestamp
 from contourpy import contour_generator
+from shapelysmooth import taubin_smooth
 
 
 def _polygons_unify(polygons):
@@ -452,6 +453,8 @@ def cluster_average_intersection_contours_rasterisation(data, **kwargs):
     cases but gives poorer quality contours with increased risk of grid-spacing
     based artifacts.
 
+    The resulting contours are smoothed by default.
+
     Parameters
     ----------
     data : list
@@ -460,6 +463,7 @@ def cluster_average_intersection_contours_rasterisation(data, **kwargs):
         There is one element in this list for each classification made.
     kwargs :
         * `num_grid_points`: The number of grid points per axis. A larger number means greater resolution, but takes longer. Default is 100.
+        * `smoothing`: A string to choose the type of smoothing used. If 'minimal_sides', the number of sides of the contour is minimised. If 'rounded', corners are rounded. If 'no_smoothing', no smoothing is done. Defaults to 'minimal_sides'.
         * `created_at` : A list when the classifcation was made. Not used in this average.
         * `distance_matrix` : A symmetric-square array, with the off-diagonal elements containing the `IoU_metric_polygon` distance between the cluster members. The diagonal elements are all zero. This is found using `IoU_distance_matrix_of_cluster`. Not used in this average.
 
@@ -472,6 +476,7 @@ def cluster_average_intersection_contours_rasterisation(data, **kwargs):
     # Want the list to just be simple polygons
     polygons = [data[i]['polygon'] for i in range(len(data))]
     num_grid_points = kwargs.pop('num_grid_points', 100)
+    smoothing = kwargs.pop('smoothing', 'minimal_sides')
 
     polygons_bounds = shapely.bounds(polygons)
     x_min = np.min(polygons_bounds[:, 0])
@@ -508,7 +513,13 @@ def cluster_average_intersection_contours_rasterisation(data, **kwargs):
         # Find contour with largest area
         contour = possible_contour[np.argmax(areas)]
         intersection_contours.append(contour)
-    # Remove any artifacts from grid size
-    tolerance = max(0.5 / num_grid_points, 0.01)
-    intersection_contours = shapely.simplify(intersection_contours, tolerance)
+    # Remove any artifacts from grid size, if specified
+    if smoothing == 'no_smoothing':
+        pass
+    elif smoothing == 'rounded':
+        for i in range(len(intersection_contours)):
+            intersection_contours[i] = taubin_smooth(intersection_contours[i])
+    else:
+        tolerance = max(0.5 / num_grid_points, 0.01)
+        intersection_contours = shapely.simplify(intersection_contours, tolerance)
     return intersection_contours

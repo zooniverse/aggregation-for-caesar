@@ -347,6 +347,32 @@ class TestIoUMetric(unittest.TestCase):
         result = utils.cluster_average_intersection(data, **kwargs)
         self.assertTrue(shapely.equals(result, expected))
 
+    def test_cluster_average_union(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+        square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
+        square3 = shapely.Polygon(np.array([[0.0, 0.5], [1., 0.5], [1., 1.5], [0.0, 1.5]]))
+
+        data = [{'polygon': square1},
+                {'polygon': square2},
+                {'polygon': square3}]
+        created_at_list = ['2025-01-21 10:46:23 UTC',
+                           '2025-01-21 10:46:21 UTC',
+                           '2025-01-21 10:46:22 UTC']
+        kwargs = {'created_at': created_at_list}
+        expected = shapely.Polygon(np.array([[0.0, 0.0], [1.5, 0.0], [1.5, 1.0], [1.0, 1.0], [1.0, 1.5], [0.0, 1.5]]))
+        result = utils.cluster_average_union(data, **kwargs)
+        self.assertTrue(shapely.equals(result, expected))
+
+    def test_cluster_average_union_one_object(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+
+        data = [{'polygon': square1}]
+        created_at_list = ['2025-01-21 10:46:23 UTC']
+        kwargs = {'created_at': created_at_list}
+        expected = square1
+        result = utils.cluster_average_union(data, **kwargs)
+        self.assertTrue(shapely.equals(result, expected))
+
     def test_cluster_average_intersection_contours(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
         square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
@@ -572,7 +598,7 @@ class TestIoUMetric(unittest.TestCase):
 
     # If there is not one single overall area of intersection, test that the
     # larger one is returned and that it can gracefully exit the algorithm
-    def test_cluster_average_intersection_contours_two_final_intersections_rasterisation(self):
+    def test_cluster_average_intersection_contours_rasterisation_two_final_intersections(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
         square2 = shapely.Polygon(np.array([[1.5, 0], [1.5, 1], [2.5, 1], [2.5, 0]]))
         square3 = shapely.Polygon(np.array([[0.8, 0], [0.8, 1], [1.8, 1], [1.8, 0]]))
@@ -601,28 +627,54 @@ class TestIoUMetric(unittest.TestCase):
         result = utils.cluster_average_intersection_contours_rasterisation(data, **kwargs)
         self.assertTrue(all([shapely.equals(result[i], expected[i]) for i in range(len(expected))]))
 
-    def test_cluster_average_union(self):
-        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
-        square2 = shapely.Polygon(np.array([[0.5, 0.0], [0.5, 1.0], [1.5, 1.0], [1.5, 0.0]]))
-        square3 = shapely.Polygon(np.array([[0.0, 0.5], [1., 0.5], [1., 1.5], [0.0, 1.5]]))
-
-        data = [{'polygon': square1},
-                {'polygon': square2},
-                {'polygon': square3}]
-        created_at_list = ['2025-01-21 10:46:23 UTC',
-                           '2025-01-21 10:46:21 UTC',
-                           '2025-01-21 10:46:22 UTC']
-        kwargs = {'created_at': created_at_list}
-        expected = shapely.Polygon(np.array([[0.0, 0.0], [1.5, 0.0], [1.5, 1.0], [1.0, 1.0], [1.0, 1.5], [0.0, 1.5]]))
-        result = utils.cluster_average_union(data, **kwargs)
-        self.assertTrue(shapely.equals(result, expected))
-
-    def test_cluster_average_union_one_object(self):
+    # Just use a single polygon, to see if no smoothing works as expected
+    def test_cluster_average_intersection_contours_rasterisation_no_smoothing(self):
         square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
 
         data = [{'polygon': square1}]
         created_at_list = ['2025-01-21 10:46:23 UTC']
-        kwargs = {'created_at': created_at_list}
-        expected = square1
-        result = utils.cluster_average_union(data, **kwargs)
-        self.assertTrue(shapely.equals(result, expected))
+        kwargs = {'created_at': created_at_list,
+                  'num_grid_points': 5,
+                  'smoothing': 'no_smoothing'}
+        expected_contour_1 = shapely.Polygon(np.array([[0.0, 0.25],
+                                                       [0.25, 0.0],
+                                                       [0.5, 0.0],
+                                                       [0.75, 0.0],
+                                                       [1.0, 0.25],
+                                                       [1.0, 0.5],
+                                                       [1.0, 0.75],
+                                                       [0.75, 1.0],
+                                                       [0.5, 1.0],
+                                                       [0.25, 1.0],
+                                                       [0.0, 0.75],
+                                                       [0.0, 0.5],
+                                                       [0.0, 0.25]]))
+        expected = [expected_contour_1]
+        result = utils.cluster_average_intersection_contours_rasterisation(data, **kwargs)
+        self.assertTrue(all([shapely.equals(result[i], expected[i]) for i in range(len(expected))]))
+
+    # Just use a single polygon, to see if rounded works as expected
+    def test_cluster_average_intersection_contours_rasterisation_rounded(self):
+        square1 = shapely.Polygon(np.array([[0, 0], [0, 1], [1, 1], [1, 0]]))
+
+        data = [{'polygon': square1}]
+        created_at_list = ['2025-01-21 10:46:23 UTC']
+        kwargs = {'created_at': created_at_list,
+                  'num_grid_points': 5,
+                  'smoothing': 'rounded'}
+        expected_contour_1 = shapely.Polygon(np.array([[0.04386568069458008, 0.23665213584899902],
+                                                       [0.23665213584899902, 0.04386568069458008],
+                                                       [0.5, -0.026695728302001953],
+                                                       [0.763347864151001, 0.04386568069458008],
+                                                       [0.9561343193054199, 0.23665213584899902],
+                                                       [1.026695728302002, 0.5],
+                                                       [0.9561343193054199, 0.763347864151001],
+                                                       [0.763347864151001, 0.9561343193054199],
+                                                       [0.5, 1.026695728302002],
+                                                       [0.23665213584899902, 0.9561343193054199],
+                                                       [0.04386568069458008, 0.763347864151001],
+                                                       [-0.026695728302001953, 0.5],
+                                                       [0.04386568069458008, 0.23665213584899902]]))
+        expected = [expected_contour_1]
+        result = utils.cluster_average_intersection_contours_rasterisation(data, **kwargs)
+        self.assertTrue(all([shapely.equals(result[i], expected[i]) for i in range(len(expected))]))
