@@ -17,7 +17,7 @@ def _bezier_curve_func(points, num_iters=10):
 
     t = np.linspace(0.0, 1.0, num_iters)
     polynomial_array =\
-        np.array([comb(num_points - 1, i) * (t**(num_points-1-i)) * (1 - t)**i
+        np.array([comb(num_points - 1, i) * (t ** (num_points-1-i)) * (1 - t) ** i
                   for i in range(num_points)])
 
     xs = np.dot(points[:, 0], polynomial_array)
@@ -76,10 +76,10 @@ def bezier_extractor(classification, **kwargs):
                 # becomes the last point
                 if len(xy_values) % 2 == 0:
                     xy_values = np.append(xy_values, [xy_values[0]], axis=0)
-                bezier_curve = np.array([_bezier_curve_func(xy_values[i-1:i+2]) for i in range(1, len(xy_values), 2)])
+                bezier_curve = np.array([_bezier_curve_func(xy_values[i - 1:i + 2]) for i in range(1, len(xy_values), 2)])
                 # Stack the curves back to back
                 shape = np.shape(bezier_curve)
-                bezier_curve = bezier_curve.reshape(shape[0]*shape[1], shape[2])
+                bezier_curve = bezier_curve.reshape(shape[0] * shape[1], shape[2])
                 # Store the x/y data
                 x = bezier_curve[:, 0].tolist()
                 y = bezier_curve[:, 1].tolist()
