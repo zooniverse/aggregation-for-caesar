@@ -17,7 +17,7 @@ def _bezier_curve_func(points, num_iters=10):
 
     t = np.linspace(0.0, 1.0, num_iters)
     polynomial_array =\
-        np.array([comb(num_points - 1, i) * (t ** (num_points-1-i)) * (1 - t) ** i
+        np.array([comb(num_points - 1, i) * (t ** (num_points - 1 - i)) * (1 - t) ** i
                   for i in range(num_points)])
 
     xs = np.dot(points[:, 0], polynomial_array)
