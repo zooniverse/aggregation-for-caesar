@@ -12,7 +12,7 @@ from .tool_wrapper import tool_wrapper
 from scipy.special import comb
 
 
-def _bezier_curve_func(points, num_iters=100):
+def _bezier_curve_func(points, num_iters=10):
     num_points = len(points)
 
     t = np.linspace(0.0, 1.0, num_iters)
@@ -28,7 +28,7 @@ def _bezier_curve_func(points, num_iters=100):
     return xy
 
 
-@extractor_wrapper
+@extractor_wrapper(gold_standard=False)
 @tool_wrapper
 @subtask_wrapper
 def bezier_extractor(classification, **kwargs):
