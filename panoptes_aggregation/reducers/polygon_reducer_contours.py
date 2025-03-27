@@ -31,8 +31,8 @@ DEFAULTS = {
     output_kwargs=True
 )
 def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
-    '''Cluster a polygon or freehand tool using DBSCAN, then find the contours
-    of this cluster.
+    '''Cluster a polygon/freehand/Bezier tools using DBSCAN, then find the
+    contours of this cluster.
 
     The contours are defined by the overlap/intersection of the polygons in the
     cluster. Each contour is the union of at least the number of

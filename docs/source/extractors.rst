@@ -31,6 +31,11 @@ Extractors
 
 ----
 
+.. automodule:: panoptes_aggregation.extractors.bezier_extractor
+  :members:
+
+----
+
 .. automodule:: panoptes_aggregation.extractors.polygon_extractor
   :members:
 

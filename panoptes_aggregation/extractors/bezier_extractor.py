@@ -34,17 +34,21 @@ def _bezier_curve_func(points, num_iters=10):
 def bezier_extractor(classification, **kwargs):
     '''Extact Bezier data from annotation.
 
-    See Bezier <https://en.wikipedia.org/wiki/B%C3%A9zier_curve> for more info
-    about Bezier curves.
+    See the `Bezier wiki <https://en.wikipedia.org/wiki/B%C3%A9zier_curve>`_
+    for more info about Bezier curves.
 
-    The output extraction is full xy curves, based on the input control points.
+    The output extraction is full xy curves, based on the individual Bezier
+    curves from input control points stitched together into a single continuous
+    curve. The individual Bezier curves have 10 points constructed from the
+    3 control points of the quadratic Bezier curve.
+
     Parameters
     ----------
     classification : dict
         A dictionary containing an `annotations` key that is a list of
         panoptes annotations. The x and y data of the classifications needs to
         be of the format 'points': {'x': x, 'y': y}. It is
-        assumed the input xy data corresponds to a continuous set of triplets,
+        assumed the input xy data is a continuous set of triplets (the last value of a triplet is the starting value of the next triplet)
         corresponding to the quadratic Bezier control points.
 
     Returns

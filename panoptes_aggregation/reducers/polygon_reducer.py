@@ -1,8 +1,9 @@
 '''
 Polygon/Freehand Tool Reducer Using DBSCAN
 ------------------------------------------
-This module provides functions to reduce the polygon extractions from
-:mod:`panoptes_aggregation.extractors.polygon_extractor` using the
+This module provides functions to reduce the polygon extractions from both
+:mod:`panoptes_aggregation.extractors.polygon_extractor` and
+:mod:`panoptes_aggregation.extractors.bezier_extractor` using the
 algorithm DBSCAN.
 '''
 from sklearn.cluster import DBSCAN
@@ -29,7 +30,8 @@ def process_data(data):
     ----------
     data : list
         A list of extractions created by
-        :meth:`panoptes_aggregation.extractors.polygon_extractor`
+        :meth:`panoptes_aggregation.extractors.polygon_extractor` or
+        :meth:`panoptes_aggregation.extractors.bezier_extractor`
 
     Returns
     -------
@@ -96,7 +98,7 @@ def process_data(data):
     output_kwargs=True
 )
 def polygon_reducer(data_by_tool, **kwargs_dbscan):
-    '''Cluster a polygon/freehand tools using DBSCAN.
+    '''Cluster a polygon/freehand/Bezier tools using DBSCAN.
 
     There is a choice in how the cluster is averaged into a single cluster,
     with the varies choices listed below.
