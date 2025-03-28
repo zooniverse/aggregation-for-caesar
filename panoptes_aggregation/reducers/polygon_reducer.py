@@ -5,6 +5,8 @@ This module provides functions to reduce the polygon extractions from both
 :mod:`panoptes_aggregation.extractors.polygon_extractor` and
 :mod:`panoptes_aggregation.extractors.bezier_extractor` using the
 algorithm DBSCAN.
+
+All polygons are assumed to be closed. Any unclosed polygons will be closed.
 '''
 from sklearn.cluster import DBSCAN
 import numpy as np
@@ -25,6 +27,8 @@ DEFAULTS = {
 
 def process_data(data):
     '''Process a list of extractions into a dictionary organized by `frame`, `Task` and `tool`.
+    
+    This also closes and simplifies the polygons.
 
     Parameters
     ----------
