@@ -61,6 +61,18 @@ tasks = {
                 'label': 'T0.tools.4.label',
                 'type': 'rectangle'
             },
+            {
+                'color': '#f00fff',
+                'details': [],
+                'label': 'T0.tools.5.label',
+                'type': 'freehandLine'
+            },
+            {
+                'color': '#f00f00',
+                'details': [],
+                'label': 'T0.tools.6.label',
+                'type': 'bezier'
+            }
         ],
         'type': 'drawing'
     },
@@ -174,12 +186,26 @@ extractor_config = {
             'shape': 'line'
         }
     ],
+    'polygon_extractor': [
+        {
+            'task': 'T0',
+            'tools': [3, 5],
+            'details': {}
+        }
+    ],
     'shape_extractor_rectangle': [
         {
             'task': 'T0',
             'tools': [4],
             'details': {},
             'shape': 'rectangle'
+        }
+    ],
+    'bezier_extractor': [
+        {
+            'task': 'T0',
+            'tools': [6],
+            'details': {}
         }
     ],
     'question_extractor': [
@@ -212,6 +238,7 @@ extractor_config = {
     ]
 }
 reducer_config = [
+    {'polygon_reducer': {}},
     {'poly_line_text_reducer': {
         'dot_freq': 'word'
     }},
@@ -227,6 +254,7 @@ reducer_config = [
     {'poly_line_text_reducer': {
         'dot_freq': 'line'
     }},
+    {'polygon_reducer': {}},
     {'question_reducer': {}},
     {'shape_reducer_dbscan': {
         'shape': 'line'
