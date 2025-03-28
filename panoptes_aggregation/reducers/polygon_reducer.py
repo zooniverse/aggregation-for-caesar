@@ -27,7 +27,7 @@ DEFAULTS = {
 
 def process_data(data):
     '''Process a list of extractions into a dictionary organized by `frame`, `Task` and `tool`.
-    
+
     This also closes and simplifies the polygons.
 
     Parameters
