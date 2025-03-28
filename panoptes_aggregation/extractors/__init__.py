@@ -1,3 +1,4 @@
+from .bezier_extractor import bezier_extractor
 from .point_extractor import point_extractor
 from .polygon_extractor import polygon_extractor
 from .point_extractor_by_frame import point_extractor_by_frame
@@ -40,4 +41,5 @@ extractors = {
     'text_extractor': text_extractor,
     'all_tasks_empty_extractor': all_tasks_empty_extractor,
     'polygon_extractor': polygon_extractor,
+    'bezier_extractor': bezier_extractor
 }

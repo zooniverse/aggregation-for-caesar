@@ -5,6 +5,8 @@ This module is an extension of :mod:`panoptes_aggregation.reducers.polygon_reduc
 to provide the contours of intersection/overlap. These can be used to estimate the
 cluster average and its uncertainty.
 
+All polygons are assumed to be closed. Any unclosed polygons will be closed.
+
 Note, this reduction is one cluster per row.
 '''
 from sklearn.cluster import DBSCAN
@@ -31,8 +33,8 @@ DEFAULTS = {
     output_kwargs=True
 )
 def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
-    '''Cluster a polygon or freehand tool using DBSCAN, then find the contours
-    of this cluster.
+    '''Cluster a polygon/freehand/Bezier tools using DBSCAN, then find the
+    contours of this cluster.
 
     The contours are defined by the overlap/intersection of the polygons in the
     cluster. Each contour is the union of at least the number of

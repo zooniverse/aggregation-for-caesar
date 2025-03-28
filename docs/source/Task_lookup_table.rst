@@ -57,9 +57,11 @@ Basic task types
 +--------------------+                                                                      |                                                                                       |
 | Fan                |                                                                      |                                                                                       |
 +--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| Polygon            | :mod:`panoptes_aggregation.extractors.polygon_extractor`             | :mod:`panoptes_aggregation.reducers.polygon_reducer`                                  |
+| Polygon            | :mod:`panoptes_aggregation.extractors.polygon_extractor`             | :mod:`panoptes_aggregation.reducers.polygon_reducer` (shapes will be closed)          |
 +--------------------+                                                                      |                                                                                       |
 | Freehand           |                                                                      |                                                                                       |
++--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Bezier             | :mod:`panoptes_aggregation.extractors.bezier_extractor`              | :mod:`panoptes_aggregation.reducers.polygon_reducer` (shapes will be closed)          |
 +--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 | Text               | :mod:`panoptes_aggregation.extractors.text_extractor`                | :mod:`panoptes_aggregation.reducers.text_reducer`                                     |
 +--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
