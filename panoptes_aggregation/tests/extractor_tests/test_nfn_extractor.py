@@ -125,7 +125,7 @@ TestNfNThree = ExtractorTest(
     test_name='TestNfNThree'
 )
 
-classification_we_dig_bio_april_2024 = {
+classification_we_dig_bio_april_2025 = {
     "annotations": [{
         "task": "T99",
         "value": [
@@ -148,24 +148,24 @@ classification_we_dig_bio_april_2024 = {
             "country": "United States",
         }
     },
-    "created_at": "2024-04-20T05:30:00.000Z",
+    "created_at": "2025-04-11T05:30:00.000Z",
 }
 
-expected_we_dig_bio_april_2024 = {
+expected_we_dig_bio_april_2025 = {
     "workflow": "herbarium",
     "decade": "00s",
     "time": "lunchbreak",
-    "we_dig_bio": 2024,
+    "we_dig_bio": 2025,
     "country": "United States"
 }
 
-TestNfNWeDigBioApril2024 = ExtractorTest(
+TestNfNWeDigBioApril2025 = ExtractorTest(
     extractors.nfn_extractor,
-    classification_we_dig_bio_april_2024,
-    expected_we_dig_bio_april_2024,
-    'Test NfN during April, 2024, WeDigBio event with year as nested task and country from metadata at lunchtime local time',
+    classification_we_dig_bio_april_2025,
+    expected_we_dig_bio_april_2025,
+    'Test NfN during April, 2025, WeDigBio event with year as nested task and country from metadata at lunchtime local time',
     kwargs={'year': 'T11', 'workflow': 'herbarium', 'country': 'metadata'},
-    test_name='TestNfNWeDigBioApril2024'
+    test_name='TestNfNWeDigBioApril2025'
 )
 
 classification_we_dig_bio_october_2024 = {
@@ -211,7 +211,7 @@ TestNfNWeDigBioOctober2024 = ExtractorTest(
     test_name='TestNfNWeDigBioOctober2024'
 )
 
-classification_not_we_dig_bio_2024 = {
+classification_not_we_dig_bio_2025 = {
     "annotations": [{
         "task": "T99",
         "value": [
@@ -234,10 +234,10 @@ classification_not_we_dig_bio_2024 = {
             "country": "United States",
         }
     },
-    "created_at": "2024-05-31T05:30:00.000Z",
+    "created_at": "2025-05-31T05:30:00.000Z",
 }
 
-expected_not_we_dig_bio_2024 = {
+expected_not_we_dig_bio_2025 = {
     "workflow": "herbarium",
     "decade": "00s",
     "time": "lunchbreak",
@@ -246,11 +246,11 @@ expected_not_we_dig_bio_2024 = {
 
 TestNfNNotWeDigBio2024 = ExtractorTest(
     extractors.nfn_extractor,
-    classification_not_we_dig_bio_2024,
-    expected_not_we_dig_bio_2024,
-    'Test NfN during 2024, not during a WeDigBio event, with year as nested task and country from metadata at lunchtime local time',
+    classification_not_we_dig_bio_2025,
+    expected_not_we_dig_bio_2025,
+    'Test NfN during 2025, not during a WeDigBio event, with year as nested task and country from metadata at lunchtime local time',
     kwargs={'year': 'T11', 'workflow': 'herbarium', 'country': 'metadata'},
-    test_name='TestNfNNotWeDigBio2024'
+    test_name='TestNfNNotWeDigBio2025'
 )
 
 classification_bad_year = {
