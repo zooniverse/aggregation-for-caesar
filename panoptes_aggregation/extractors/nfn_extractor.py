@@ -107,6 +107,8 @@ def we_dig_bio(parser):
         return 2024
     elif (date.year == 2024) and (date.month == 10) and (10 <= date.day <= 13):
         return 2024
+    elif (date.year == 2025) and (date.month == 4) and (10 <= date.day <= 13):
+        return 2025
     else:
         return None
 
