@@ -73,7 +73,7 @@ def batch_extract(
     extracts_data = defaultdict(list)
     if hide_progressbar:
         def callback(name_with_row):
-            nonlocal extracts_data
+            nonlocal extracts_data  # noqa: F824
             extractor_name, new_extract_row = name_with_row
             if new_extract_row is not None:
                 extracts_data[extractor_name] += new_extract_row
@@ -90,9 +90,9 @@ def batch_extract(
         counter = 0
 
         def callback(name_with_row):
-            nonlocal extracts_data
-            nonlocal counter
-            nonlocal pbar
+            nonlocal extracts_data  # noqa: F824
+            nonlocal counter  # noqa: F824
+            nonlocal pbar  # noqa: F824
             extractor_name, new_extract_row = name_with_row
             if new_extract_row is not None:
                 extracts_data[extractor_name] += new_extract_row
@@ -276,9 +276,9 @@ def batch_reduce(
     }
     if hide_progressbar:
         def callback(reduced_data_list):
-            nonlocal reduced_data
-            nonlocal sdx
-            nonlocal stream
+            nonlocal reduced_data  # noqa: F824
+            nonlocal sdx  # noqa: F824
+            nonlocal stream  # noqa: F824
             reduced_data += reduced_data_list
             if (stream) and (output_path is not None):
                 if (sdx == 0) and (not resume):
@@ -309,10 +309,10 @@ def batch_reduce(
         pbar = progressbar.ProgressBar(widgets=widgets, max_value=number_of_rows)
 
         def callback(reduced_data_list):
-            nonlocal reduced_data
-            nonlocal sdx
-            nonlocal pbar
-            nonlocal stream
+            nonlocal reduced_data  # noqa: F824
+            nonlocal sdx  # noqa: F824
+            nonlocal pbar  # noqa: F824
+            nonlocal stream  # noqa: F824
             reduced_data += reduced_data_list
             if (stream) and (output_path is not None):
                 if (sdx == 0) and (not resume):
