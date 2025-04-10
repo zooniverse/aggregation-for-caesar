@@ -8,6 +8,8 @@ from .text_utils import consensus_score, tokenize
 from .reducer_wrapper import reducer_wrapper
 import warnings
 
+import numpy as np
+
 with warnings.catch_warnings():
     # collatex is a bit old, we can safely ignore this message as the display
     # functions are optional and never used in this code
@@ -53,7 +55,7 @@ def text_reducer(data_in, **kwargs):
     if len(data_in) > 0:
         user_ids_input = kwargs.pop('user_id')
         idx, data, gold_standard = zip(*data_in)
-        user_ids = [int(user_ids_input[i]) if user_ids_input[i] is not None else user_ids_input[i] for i in idx]
+        user_ids = [int(user_ids_input[i]) if user_ids_input[i] not in [None, np.nan] else user_ids_input[i] for i in idx]
         witness_keys = []
         aligned_text = []
         collation = col.Collation()
