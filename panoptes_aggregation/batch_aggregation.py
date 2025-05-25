@@ -134,7 +134,7 @@ class BatchAggregator:
         self.connect_blob_storage()
         reductions_file = os.path.join(self.output_path, f'{self.workflow_id}_reductions.csv')
         self.upload_file_to_storage(self.id, reductions_file)
-        zippath = os.path.join('tmp', self.id)
+        zippath = os.path.join('tmp', f'{self.workflow_id}_aggregation')
         zipfile = make_archive(zippath, 'zip', self.output_path)
         self.upload_file_to_storage(self.id, zipfile)
 
