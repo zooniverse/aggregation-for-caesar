@@ -12,6 +12,7 @@ from azure.storage.blob import BlobServiceClient
 from panoptes_client import Panoptes, Project, Workflow
 from panoptes_aggregation.workflow_config import workflow_extractor_config
 from panoptes_aggregation.scripts import batch_utils
+from panoptes_aggregation.csv_utils import flatten_data
 
 celery = Celery(__name__)
 celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
@@ -36,7 +37,7 @@ def run_aggregation(project_id, workflow_id, user_id):
     ba.process_wf_export(ba.wf_csv)
     cls_df = ba.process_cls_export(ba.cls_csv)
 
-    print(f'[Batch Aggregation] Extacting workflow {workflow_id})')
+    print(f'[Batch Aggregation] Extracting workflow {workflow_id})')
     extractor_config = workflow_extractor_config(ba.tasks)
     extracted_data = batch_utils.batch_extract(cls_df, extractor_config, hide_progressbar=True)
 
@@ -46,20 +47,29 @@ def run_aggregation(project_id, workflow_id, user_id):
     }
 
     print(f'[Batch Aggregation] Reducing workflow {workflow_id})')
-    for task_type, extract_df in extracted_data.items():
-        csv_filepath = os.path.join(ba.output_path, f'{ba.workflow_id}_{task_type}.csv')
-        extract_df.to_csv(csv_filepath)
-        reducer_list = batch_standard_reducers[task_type]
-        reduced_data = {}
+    reduced_data = {}
+    for extractor_type, extract_df in extracted_data.items():
+        extract_filepath = os.path.join(ba.output_path, f'{ba.workflow_id}_{extractor_type}.csv')
+        extract_df.to_csv(extract_filepath, index=False)
+        reducer_list = batch_standard_reducers[extractor_type]
 
         for reducer in reducer_list:
             # This is an override. The workflow_reducer_config method returns a config object
             # that is incompatible with the batch_utils batch_reduce method
             reducer_config = {'reducer_config': {reducer: {}}}
             reduced_data[reducer] = batch_utils.batch_reduce(extract_df, reducer_config, hide_progressbar=True)
-            # filename = f'{ba.output_path}/{ba.workflow_id}_reductions.csv'
-            filename = os.path.join(ba.output_path, f'{ba.workflow_id}_reductions.csv')
-            reduced_data[reducer].to_csv(filename, mode='a')
+            # Output full pre-reducer output files
+            reduction_filepath = os.path.join(ba.output_path, f'{ba.workflow_id}_{reducer}_reductions.csv')
+            reduced_data[reducer].to_csv(reduction_filepath, index=False)
+
+    # Merge and save combined reductions file
+    reduction_dfs = [
+        flatten_data(reduced_data[reducer]) if reducer != 'survey_reducer'
+        else reduced_data[reducer]
+        for reducer in reduced_data.keys()
+    ]
+    combined_reduction_filepath = os.path.join(ba.output_path, f'{ba.workflow_id}_reductions.csv')
+    pd.concat(reduction_dfs).to_csv(combined_reduction_filepath, index=False)
 
     # Upload zip & reduction files to blob storage
     print(f'[Batch Aggregation] Uploading results for {workflow_id})')
