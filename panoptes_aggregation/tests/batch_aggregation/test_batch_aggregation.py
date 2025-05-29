@@ -2,7 +2,6 @@ try:
     from panoptes_aggregation.scripts import batch_utils
     from panoptes_aggregation.batch_aggregation import run_aggregation
     from panoptes_aggregation import batch_aggregation as batch_agg
-    import pandas as pd
 
     batch_agg.celery.conf.update(CELERY_BROKER_URL='memory://')
     batch_agg.celery.conf.update(CELERY_RESULT_BACKEND='cache+memory://')
@@ -30,9 +29,10 @@ class TestBatchAggregation(unittest.TestCase):
             run_aggregation(1, 10, 100)
         mock_aggregator_instance.update_panoptes.assert_not_called()
 
+    @patch("panoptes_aggregation.batch_aggregation.pd.concat")
     @patch("panoptes_aggregation.batch_aggregation.workflow_extractor_config")
     @patch("panoptes_aggregation.batch_aggregation.BatchAggregator")
-    def test_run_aggregation_success(self, mock_aggregator, mock_wf_ext_conf):
+    def test_run_aggregation_success(self, mock_aggregator, mock_wf_ext_conf, mock_concat):
         mock_aggregator_instance = mock_aggregator.return_value
         mock_aggregator_instance.check_permission.return_value = True
 
@@ -42,7 +42,7 @@ class TestBatchAggregation(unittest.TestCase):
         mock_reducer = MagicMock()
         batch_utils.batch_reduce = mock_reducer
         mock_combo_df = MagicMock()
-        pd.concat = mock_combo_df
+        mock_concat.return_value = mock_combo_df
 
         run_aggregation(1, 10, 100)
         mock_aggregator_instance.check_permission.assert_called_once()
@@ -52,6 +52,7 @@ class TestBatchAggregation(unittest.TestCase):
         mock_df.to_csv.assert_called()
         batch_utils.batch_reduce.assert_called()
         self.assertEqual(mock_reducer.call_count, 2)
+        mock_combo_df.to_csv.assert_called_once()
         mock_aggregator_instance.upload_files.assert_called_once()
         mock_aggregator_instance.update_panoptes.assert_called_once()
 
