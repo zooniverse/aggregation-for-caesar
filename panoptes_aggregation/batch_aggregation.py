@@ -69,7 +69,11 @@ def run_aggregation(project_id, workflow_id, user_id):
         for reducer in reduced_data.keys()
     ]
     combined_reduction_filepath = os.path.join(ba.output_path, f'{ba.workflow_id}_reductions.csv')
-    pd.concat(reduction_dfs).to_csv(combined_reduction_filepath, index=False)
+    if len(reduction_dfs) == 0:
+        with open(combined_reduction_filepath, 'w') as combined_reduction_file:
+            combined_reduction_file.write('No supported reducers were found.')
+    else:
+        pd.concat(reduction_dfs).to_csv(combined_reduction_filepath, index=False)
 
     # Upload zip & reduction files to blob storage
     print(f'[Batch Aggregation] Uploading results for {workflow_id})')
