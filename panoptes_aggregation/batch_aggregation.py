@@ -30,14 +30,14 @@ def run_aggregation(project_id, workflow_id, user_id):
 
     print(f'[Batch Aggregation] Run beginning for workflow {workflow_id} by user {user_id}')
 
-    print(f'[Batch Aggregation] Saving exports for workflow {workflow_id})')
+    print(f'[Batch Aggregation] Saving exports for workflow {workflow_id}')
     ba.save_exports()
 
-    print(f'[Batch Aggregation] Processing exports for workflow {workflow_id})')
+    print(f'[Batch Aggregation] Processing exports for workflow {workflow_id}')
     ba.process_wf_export(ba.wf_csv)
     cls_df = ba.process_cls_export(ba.cls_csv)
 
-    print(f'[Batch Aggregation] Extracting workflow {workflow_id})')
+    print(f'[Batch Aggregation] Extracting workflow {workflow_id}')
     extractor_config = workflow_extractor_config(ba.tasks)
     extracted_data = batch_utils.batch_extract(cls_df, extractor_config, hide_progressbar=True)
 
@@ -46,7 +46,7 @@ def run_aggregation(project_id, workflow_id, user_id):
         'survey_extractor': ['survey_reducer']
     }
 
-    print(f'[Batch Aggregation] Reducing workflow {workflow_id})')
+    print(f'[Batch Aggregation] Reducing workflow {workflow_id}')
     reduced_data = {}
     for extractor_type, extract_df in extracted_data.items():
         extract_filepath = os.path.join(ba.output_path, f'{ba.workflow_id}_{extractor_type}.csv')
