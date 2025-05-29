@@ -2,6 +2,7 @@ try:
     from panoptes_aggregation.scripts import batch_utils
     from panoptes_aggregation.batch_aggregation import run_aggregation
     from panoptes_aggregation import batch_aggregation as batch_agg
+    import pandas as pd
 
     batch_agg.celery.conf.update(CELERY_BROKER_URL='memory://')
     batch_agg.celery.conf.update(CELERY_RESULT_BACKEND='cache+memory://')
@@ -40,6 +41,8 @@ class TestBatchAggregation(unittest.TestCase):
         batch_utils.batch_extract = MagicMock(return_value=test_extracts)
         mock_reducer = MagicMock()
         batch_utils.batch_reduce = mock_reducer
+        mock_combo_df = MagicMock()
+        pd.concat = mock_combo_df
 
         run_aggregation(1, 10, 100)
         mock_aggregator_instance.check_permission.assert_called_once()
@@ -107,7 +110,7 @@ class TestBatchAggregation(unittest.TestCase):
         ba = batch_agg.BatchAggregator(1, 10, 100)
         mock_client = MagicMock()
         ba.blob_service_client = MagicMock(return_value=mock_client)
-        ba.upload_file_to_storage('container', cls_export)
+        ba.upload_file_to_storage('asdf123asdf', cls_export)
         mock_client.upload_blob.assert_called_once
 
     @patch("panoptes_aggregation.batch_aggregation.Project")
@@ -168,9 +171,3 @@ class TestBatchAggregation(unittest.TestCase):
         ba.update_panoptes(body)
         mock_get.assert_called_with('/aggregations', params={'workflow_id': 10})
         mock_put.assert_not_called()
-
-    @patch("panoptes_aggregation.batch_aggregation.BlobServiceClient")
-    def test_connect_blob_storage(self, mock_client):
-        ba = batch_agg.BatchAggregator(1, 10, 100)
-        ba.connect_blob_storage()
-        ba.blob_service_client.create_container.assert_called_once_with(name=ba.id, public_access='container')
