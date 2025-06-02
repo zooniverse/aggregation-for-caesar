@@ -47,6 +47,8 @@ spec:
             # allow a longer response time than 1s
             timeoutSeconds: 10
           env:
+            - name: AGGREGATION_APP_ENV
+              value: staging
             - name: FLASK_ENV
               value: production
             - name: CELERY_BROKER_URL
@@ -159,6 +161,8 @@ spec:
             failureThreshold: 3
           args: ["/usr/src/aggregation/scripts/start-celery.sh"]
           env:
+            - name: AGGREGATION_APP_ENV
+              value: staging
             - name: FLASK_ENV
               value: production
             - name: CELERY_BROKER_URL
