@@ -58,6 +58,11 @@ def run_aggregation(project_id, workflow_id, user_id):
             # that is incompatible with the batch_utils batch_reduce method
             reducer_config = {'reducer_config': {reducer: {}}}
             reduced_data[reducer] = batch_utils.batch_reduce(extract_df, reducer_config, hide_progressbar=True)
+
+            # Cast the data column to a dict to prevent an incorrectly serialized OrderedDict
+            # This is necessary for the survey_reducer, but is fine for the others
+            reduced_data[reducer]['data'] = reduced_data[reducer]['data'].apply(dict)
+
             # Output full pre-reducer output files
             reduction_filepath = os.path.join(ba.output_path, f'{ba.workflow_id}_{reducer}_reductions.csv')
             reduced_data[reducer].to_csv(reduction_filepath, index=False)
