@@ -79,6 +79,27 @@ class TestBatchAggregation(unittest.TestCase):
         mock_project.return_value.describe_export.assert_called_once_with('workflows')
         mock_workflow.return_value.describe_export.assert_called_once_with('classifications')
 
+    @patch("panoptes_aggregation.batch_aggregation.Workflow")
+    @patch("panoptes_aggregation.batch_aggregation.os.makedirs")
+    def test_save_exports_panoptes_exception(self, mock_makedirs, mock_workflow):
+        from panoptes_aggregation.batch_aggregation import PanoptesAPIException
+
+        error_string = 'No classifications_export exists for workflow #10'
+        mock_workflow.return_value.describe_export.side_effect = PanoptesAPIException(error_string)
+        ba = batch_agg.BatchAggregator(1, 10, 100)
+        ba.id = 'asdf123asdf'
+        ba.update_panoptes = MagicMock()
+
+        # Patch sys.exit to prevent the test from exiting
+        with patch("sys.exit", side_effect=SystemExit):
+            with self.assertRaises(SystemExit):
+                ba.save_exports()
+
+        ba.update_panoptes.assert_called_once_with({'uuid': ba.id, 'status': 'failed', 'error': error_string})
+        mock_makedirs.assert_not_called()
+        mock_workflow.assert_called_once_with(10)
+        mock_workflow.return_value.describe_export.assert_called_once_with('classifications')
+
     def test_process_wf_export(self):
         ba = batch_agg.BatchAggregator(1, 10, 100)
         result = ba.process_wf_export(wf_export)
