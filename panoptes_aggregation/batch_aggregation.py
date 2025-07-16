@@ -10,6 +10,7 @@ import uuid
 from azure.storage.blob import BlobServiceClient
 
 from panoptes_client import Panoptes, Project, Workflow
+from panoptes_client.panoptes import PanoptesAPIException
 from panoptes_aggregation.workflow_config import workflow_extractor_config
 from panoptes_aggregation.scripts import batch_utils
 from panoptes_aggregation.csv_utils import flatten_data
@@ -107,15 +108,21 @@ class BatchAggregator:
 
     def save_exports(self):
         self.output_path = os.path.join('tmp', str(self.id))
+
+        try:
+            cls_export = Workflow(self.workflow_id).describe_export('classifications')
+            wf_export = Project(self.project_id).describe_export('workflows')
+        except PanoptesAPIException as e:
+            print(f'[Batch Aggregation] Error fetching exports for workflow {self.workflow_id}: {e}')
+            self.update_panoptes({'uuid': self.id, 'status': 'failed', 'error': str(e)})
+            sys.exit()
+
         os.makedirs(self.output_path)
 
-        cls_export = Workflow(self.workflow_id).describe_export('classifications')
         full_cls_url = cls_export['media'][0]['src']
         cls_file = os.path.join(self.output_path, f'{self.workflow_id}_cls_export.csv')
-
         self._download_export(full_cls_url, cls_file)
 
-        wf_export = Project(self.project_id).describe_export('workflows')
         full_wf_url = wf_export['media'][0]['src']
         wf_file = os.path.join(self.output_path, f'{self.workflow_id}_workflow_export.csv')
         self._download_export(full_wf_url, wf_file)
