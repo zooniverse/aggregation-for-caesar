@@ -408,7 +408,8 @@ TestPolygon = ExtractorTest(
     classification,
     expected,
     'Test Bezier',
-    test_name='TestBezier'
+    test_name='TestBezier',
+    round=7
 )
 
 TestPolygonTask = ExtractorTest(
@@ -419,5 +420,6 @@ TestPolygonTask = ExtractorTest(
     kwargs={
         'task': 'T0'
     },
-    test_name='TestBezierTask'
+    test_name='TestBezierTask',
+    round=7
 )
