@@ -268,7 +268,7 @@ def scale_shape(params, shape, gamma):
         raise ValueError('The IoU metric only works with the following shapes: rectangle, rotateing rectangle, circle, ellipse, or triangle')
 
 
-def average_shape_IoU(params_list, shape, eps_t=None):
+def average_shape_IoU(params_list, shape, eps_t=None, estimate=False):
     '''Find the average shape and standard deviation from a list of parameters with respect
     to the IoU metric.
 
@@ -279,6 +279,9 @@ def average_shape_IoU(params_list, shape, eps_t=None):
     shape : string
         The shape these parameters belong to (see :meth:`panoptes_to_geometry` for
         supported shapes)
+    estimate : bool (optional)
+        Estimate the average and sigma by the most representative shape from the cluster,
+        this is significantly faster to compute than the true average, False by default.
 
     Returns
     -------
@@ -288,37 +291,50 @@ def average_shape_IoU(params_list, shape, eps_t=None):
     sigma : float
         The standard deviation of the input shapes with respect to the IoU metric
     '''
-    geo_list = [panoptes_to_geometry(p, shape) for p in params_list]
-    if 'temporal' in shape:
-        time_geo_list = [panoptes_to_geometry((params[-1] - eps_t, 0, eps_t, 1), 'rectangle')
-                         for params in params_list]
-        geo_areas = numpy.array([geo_item.area for geo_item in geo_list])
-
-    def sum_distance(x):
-        geo = panoptes_to_geometry(x, shape)
-        intersections = shapely.intersection(geo, geo_list)
-        intersections = numpy.array([inter.area for inter in intersections])
+    if estimate:
+        N = len(params_list)
+        distance_matrix = numpy.zeros((N, N))
+        for i in range(N):
+            for j in range(i + 1, N):
+                distance = IoU_metric(params_list[i], params_list[j], shape=shape, eps_t=eps_t)
+                distance_matrix[i, j] = distance
+                distance_matrix[j, i] = distance
+        sum_square_distance = numpy.sum(distance_matrix**2, axis=1)
+        mdx = numpy.argmin(sum_square_distance)
+        sigma = numpy.sqrt(sum_square_distance[mdx] / max((N - 1), 1))
+        return params_list[mdx], sigma
+    else:
+        geo_list = [panoptes_to_geometry(p, shape) for p in params_list]
         if 'temporal' in shape:
-            time_geo = panoptes_to_geometry((x[-1] - eps_t, 0, eps_t, 1), 'rectangle')
-            time_intersections = shapely.intersection(time_geo, time_geo_list)
-            time_intersections = numpy.array([inter.area for inter in time_intersections])
-            intersections = intersections * time_intersections
-            unions = ((geo.area + geo_areas) * eps_t - intersections)
-        else:
-            unions = shapely.union(geo, geo_list)
-            unions = numpy.array([uni.area for uni in unions])
-        iou_distances = [1 - intersections[i] / unions[i] if unions[i] > 0 else numpy.inf for i in range(len(unions))]
-        iou_distances = numpy.array(iou_distances)
-        return numpy.sum(iou_distances**2)
-    # find shape that minimizes the variance in the IoU metric using bounds
-    m = scipy.optimize.direct(
-        sum_distance,
-        locally_biased=False,
-        bounds=average_bounds(params_list, shape)
-    )
-    # find the 1-sigma value
-    sigma = numpy.sqrt(m.fun / (len(params_list) - 1))
-    return list(m.x), sigma
+            time_geo_list = [panoptes_to_geometry((params[-1] - eps_t, 0, eps_t, 1), 'rectangle')
+                            for params in params_list]
+            geo_areas = numpy.array([geo_item.area for geo_item in geo_list])
+
+        def sum_distance(x):
+            geo = panoptes_to_geometry(x, shape)
+            intersections = shapely.intersection(geo, geo_list)
+            intersections = numpy.array([inter.area for inter in intersections])
+            if 'temporal' in shape:
+                time_geo = panoptes_to_geometry((x[-1] - eps_t, 0, eps_t, 1), 'rectangle')
+                time_intersections = shapely.intersection(time_geo, time_geo_list)
+                time_intersections = numpy.array([inter.area for inter in time_intersections])
+                intersections = intersections * time_intersections
+                unions = ((geo.area + geo_areas) * eps_t - intersections)
+            else:
+                unions = shapely.union(geo, geo_list)
+                unions = numpy.array([uni.area for uni in unions])
+            iou_distances = [1 - intersections[i] / unions[i] if unions[i] > 0 else numpy.inf for i in range(len(unions))]
+            iou_distances = numpy.array(iou_distances)
+            return numpy.sum(iou_distances**2)
+        # find shape that minimizes the variance in the IoU metric using bounds
+        m = scipy.optimize.direct(
+            sum_distance,
+            locally_biased=False,
+            bounds=average_bounds(params_list, shape)
+        )
+        # find the 1-sigma value
+        sigma = numpy.sqrt(m.fun / max((len(params_list) - 1), 1))
+        return list(m.x), sigma
 
 
 def sigma_shape(params, shape, sigma):

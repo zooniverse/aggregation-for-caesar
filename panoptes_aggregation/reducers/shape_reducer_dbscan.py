@@ -21,7 +21,8 @@ DEFAULTS = {
     'algorithm': {'default': 'auto', 'type': str},
     'leaf_size': {'default': 30, 'type': int},
     'p': {'default': None, 'type': float},
-    'metric_type': {'default': 'euclidean', 'type': str}
+    'metric_type': {'default': 'euclidean', 'type': str},
+    'estimate_average': {'default': False, 'type': bool}
 }
 
 
@@ -49,6 +50,10 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
         * circle
         * ellipse
 
+    estimate_average : bool
+        For the IoU metric estimate the average by the most representative shape from the cluster,
+        this is significantly faster to compute than the true average, True by default.
+
     kwargs :
         `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
 
@@ -68,6 +73,7 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
     '''
     shape = data_by_tool.pop('shape')
     eps_t = kwargs.pop('eps_t', None)
+    estimate_average = kwargs.pop('estimate_average', DEFAULTS['estimate_average']['default'])
     shape_params = SHAPE_LUT[shape]
     metric_type = kwargs.pop('metric_type', 'euclidean').lower()
     symmetric = data_by_tool.pop('symmetric')
@@ -105,7 +111,7 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
                         if metric_type == 'euclidean':
                             k_loc = avg(loc[idx])
                         elif metric_type == 'iou':
-                            k_loc, sigma = avg(loc[idx], shape, eps_t)
+                            k_loc, sigma = avg(loc[idx], shape, eps_t, estimate=estimate_average)
                             clusters[frame].setdefault('{0}_clusters_sigma'.format(tool), []).append(float(sigma))
                         for pdx, param in enumerate(shape_params):
                             clusters[frame].setdefault('{0}_clusters_{1}'.format(tool, param), []).append(float(k_loc[pdx]))
