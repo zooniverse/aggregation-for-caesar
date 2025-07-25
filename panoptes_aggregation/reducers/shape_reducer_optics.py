@@ -55,7 +55,7 @@ def shape_reducer_optics(data_by_tool, **kwargs):
         * rotateRectangle
         * circle
         * ellipse
- 
+
     estimate_average : bool
         For the IoU metric estimate the average by the most representative shape from the cluster,
         this is significantly faster to compute than the true average, True by default.

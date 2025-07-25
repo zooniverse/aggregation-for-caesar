@@ -24,7 +24,6 @@ def round_dict(dictionary, ndigits):
     return dictionary
 
 
-
 def ExtractorTest(
     function,
     classification,

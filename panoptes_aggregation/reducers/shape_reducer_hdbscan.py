@@ -53,7 +53,6 @@ def shape_reducer_hdbscan(data_by_tool, **kwargs):
         * circle
         * ellipse
 
-    
     estimate_average : bool
         For the IoU metric estimate the average by the most representative shape from the cluster,
         this is significantly faster to compute than the true average, True by default.
