@@ -14,6 +14,17 @@ except ImportError:
     OFFLINE = True
 
 
+def round_dict(dictionary, ndigits):
+    if isinstance(dictionary, dict):
+        return {key: round_dict(value, ndigits) for key, value in dictionary.items()}
+    elif isinstance(dictionary, list):
+        return [round_dict(value, ndigits) for value in dictionary]
+    elif isinstance(dictionary, float):
+        return round(dictionary, ndigits)
+    return dictionary
+
+
+
 def ExtractorTest(
     function,
     classification,
@@ -22,7 +33,8 @@ def ExtractorTest(
     blank_extract={},
     kwargs={},
     test_type='assertDictEqual',
-    test_name=None
+    test_name=None,
+    round=None
 ):
     class ExtractorTest(unittest.TestCase):
         def setUp(self):
@@ -32,6 +44,9 @@ def ExtractorTest(
             return '{0}: {1}'.format(name, self._testMethodDoc)
 
         def assertTestType(self, result, expected):
+            if round is not None:
+                result = round_dict(result, round)
+                expected = round_dict(expected, round)
             if test_type == 'assertDictEqual':
                 self.assertDictEqual(dict(result), expected)
             else:
