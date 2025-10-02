@@ -2,6 +2,7 @@ try:
     from panoptes_aggregation.scripts import batch_utils
     from panoptes_aggregation.batch_aggregation import run_aggregation
     from panoptes_aggregation import batch_aggregation as batch_agg
+    import jwt
 
     batch_agg.celery.conf.update(CELERY_BROKER_URL='memory://')
     batch_agg.celery.conf.update(CELERY_RESULT_BACKEND='cache+memory://')
@@ -26,7 +27,7 @@ class TestBatchAggregation(unittest.TestCase):
         mock_aggregator_instance.check_permission.return_value = False
 
         with self.assertRaises(SystemExit):
-            run_aggregation(1, 10, 100)
+            run_aggregation(1, 10, 'fake-token')
         mock_aggregator_instance.update_panoptes.assert_not_called()
 
     @patch("panoptes_aggregation.batch_aggregation.pd.concat")
@@ -44,9 +45,9 @@ class TestBatchAggregation(unittest.TestCase):
         mock_combo_df = MagicMock()
         mock_concat.return_value = mock_combo_df
 
-        run_aggregation(1, 10, 100)
+        run_aggregation(1, 10, 'fake-token')
         mock_aggregator_instance.check_permission.assert_called_once()
-        mock_aggregator.assert_called_once_with(1, 10, 100)
+        mock_aggregator.assert_called_once_with(1, 10, 'fake-token')
         mock_wf_ext_conf.assert_called_once()
         batch_utils.batch_extract.assert_called_once()
         mock_df.to_csv.assert_called()
@@ -101,7 +102,7 @@ class TestBatchAggregation(unittest.TestCase):
         mock_workflow.return_value.describe_export.assert_called_once_with('classifications')
 
     def test_process_wf_export(self):
-        ba = batch_agg.BatchAggregator(1, 10, 100)
+        ba = batch_agg.BatchAggregator(1, 10, 'fake-token')
         result = ba.process_wf_export(wf_export)
         self.assertEqual(ba.wf_maj_version, 16)
         self.assertEqual(ba.wf_min_version, 55)
@@ -109,7 +110,7 @@ class TestBatchAggregation(unittest.TestCase):
         self.assertEqual(result.__class__.__name__, 'DataFrame')
 
     def test_process_cls_export(self):
-        ba = batch_agg.BatchAggregator(1, 10, 100)
+        ba = batch_agg.BatchAggregator(1, 10, 'fake-token')
         ba.workflow_version = '16.55'
         result = ba.process_cls_export(cls_export)
         self.assertEqual(result.__class__.__name__, 'DataFrame')
@@ -119,7 +120,7 @@ class TestBatchAggregation(unittest.TestCase):
     def test_upload_files(self, archive_mock, client_mock):
         zipped_mock = MagicMock()
         archive_mock.return_value = zipped_mock
-        ba = batch_agg.BatchAggregator(1, 10, 100)
+        ba = batch_agg.BatchAggregator(1, 10, 'fake-token')
         ba.upload_file_to_storage = MagicMock()
         ba.output_path = os.path.join('tmp', '10')
         reductions_file = os.path.join('tmp', '10', '10_reductions.csv')
@@ -129,45 +130,81 @@ class TestBatchAggregation(unittest.TestCase):
         ba.upload_file_to_storage.assert_has_calls([call(ba.id, reductions_file), call(ba.id, zipped_mock)])
 
     def test_upload_file_to_storage(self):
-        ba = batch_agg.BatchAggregator(1, 10, 100)
+        ba = batch_agg.BatchAggregator(1, 10, 'fake-token')
         mock_client = MagicMock()
         ba.blob_service_client = MagicMock(return_value=mock_client)
         ba.upload_file_to_storage('asdf123asdf', cls_export)
         mock_client.upload_blob.assert_called_once
 
     @patch("panoptes_aggregation.batch_aggregation.Project")
-    def test_check_permission_success(self, mock_project):
+    @patch("builtins.open")
+    @patch("panoptes_aggregation.batch_aggregation.os.path.exists")
+    def test_check_permission_success_admin(self, mock_exists, mock_open, mock_project):
+        mock_exists.return_value = True
+        mock_file = MagicMock()
+        mock_file.read.return_value = "test-public-key"
+        mock_open.return_value.__enter__.return_value = mock_file
+
+        ba = batch_agg.BatchAggregator(1, 10, "fake-token")
+        ba.decoded_token = {'data': {'id': 100, 'admin': True}}
+        ba.is_admin = True
+        ba.user_id = 100
+
+        # Admin should have permission regardless of collaborator status
+        self.assertTrue(ba.check_permission())
+        # Project lookup not needed for admin
+        mock_project.find.assert_not_called()
+
+    @patch("panoptes_aggregation.batch_aggregation.Project")
+    @patch("builtins.open")
+    @patch("panoptes_aggregation.batch_aggregation.os.path.exists")
+    def test_check_permission_success_collaborator(self, mock_exists, mock_open, mock_project):
+        mock_exists.return_value = True
+        mock_file = MagicMock()
+        mock_file.read.return_value = "test-public-key"
+        mock_open.return_value.__enter__.return_value = mock_file
+
+        ba = batch_agg.BatchAggregator(1, 10, "fake-token")
+        ba.decoded_token = {'data': {'id': 100, 'admin': False}}
+        ba.is_admin = False
+        ba.user_id = 100
+
         mock_user = MagicMock()
-        # Panoptes responses return strings
         mock_user.id = '100'
         mock_project.find().collaborators.return_value = [mock_user]
 
-        ba = batch_agg.BatchAggregator(1, 10, 100)
-        ba.check_permission()
+        self.assertTrue(ba.check_permission())
         mock_project.find.assert_called_with(1)
         mock_project.find().collaborators.assert_called()
-        self.assertEqual(ba.check_permission(), True)
 
     @patch("panoptes_aggregation.batch_aggregation.Project")
-    def test_check_permission_failure(self, mock_project):
-        mock_user = MagicMock()
+    @patch("builtins.open")
+    @patch("panoptes_aggregation.batch_aggregation.os.path.exists")
+    def test_check_permission_failure(self, mock_exists, mock_open, mock_project):
+        mock_exists.return_value = True
+        mock_file = MagicMock()
+        mock_file.read.return_value = "test-public-key"
+        mock_open.return_value.__enter__.return_value = mock_file
 
-        # List of collaborators does not include initiating user
-        mock_user.id = '999'
-        mock_project.find().collaborators.return_value = [mock_user]
-
-        ba = batch_agg.BatchAggregator(1, 10, 100)
+        ba = batch_agg.BatchAggregator(1, 10, "fake-token")
+        ba.decoded_token = {'data': {'id': 100, 'admin': False}}
+        ba.is_admin = False
+        ba.user_id = 100
         ba.update_panoptes = MagicMock()
-        ba.check_permission()
+
+        diff_user = MagicMock()
+        diff_user.id = '999'
+        mock_project.find().collaborators.return_value = [diff_user]
+
+        self.assertFalse(ba.check_permission())
         mock_project.find.assert_called_with(1)
         mock_project.find().collaborators.assert_called()
-        self.assertEqual(ba.check_permission(), False)
         ba.update_panoptes.assert_not_called()
 
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.put")
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.get")
     def test_update_panoptes_run_success(self, mock_get, mock_put):
-        ba = batch_agg.BatchAggregator(1, 10, 100)
+        ba = batch_agg.BatchAggregator(1, 10, 'fake-token')
         mock_get.return_value = ({'aggregations': [{'id': 5555}]}, 'thisisanetag')
         body = {'uuid': ba.id, 'status': 'completed'}
         ba.update_panoptes(body)
@@ -177,7 +214,7 @@ class TestBatchAggregation(unittest.TestCase):
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.put")
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.get")
     def test_update_panoptes_run_failure(self, mock_get, mock_put):
-        ba = batch_agg.BatchAggregator(1, 10, 100)
+        ba = batch_agg.BatchAggregator(1, 10, 'fake-token')
         mock_get.return_value = ({'aggregations': [{'id': 5555}]}, 'thisisanetag')
         body = {'status': 'failure'}
         ba.update_panoptes(body)
@@ -187,9 +224,98 @@ class TestBatchAggregation(unittest.TestCase):
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.put")
     @patch("panoptes_aggregation.batch_aggregation.Panoptes.get")
     def test_update_panoptes_get_failure(self, mock_get, mock_put):
-        ba = batch_agg.BatchAggregator(1, 10, 100)
+        ba = batch_agg.BatchAggregator(1, 10, 'fake-token')
         mock_get.return_value = ({'aggregations': []}, 'etag')
         body = {'status': 'failure'}
         ba.update_panoptes(body)
         mock_get.assert_called_with('/aggregations', params={'workflow_id': 10})
         mock_put.assert_not_called()
+
+    @patch('panoptes_aggregation.batch_aggregation.os.path.exists')
+    @patch('builtins.open')
+    @patch('jwt.decode')
+    def test_jwt_token_verification_success(self, mock_decode, mock_open, mock_exists):
+        mock_exists.return_value = True
+        mock_file = MagicMock()
+        mock_file.read.return_value = "test-public-key"
+        mock_open.return_value.__enter__.return_value = mock_file
+
+        token_payload = {
+            'data': {
+                'id': 123,
+                'admin': True
+            }
+        }
+        mock_decode.return_value = token_payload
+        jwt_token = "fake-token"
+
+        ba = batch_agg.BatchAggregator(1, 10, jwt_token)
+
+        self.assertEqual(ba.user_id, 123)
+        self.assertTrue(ba.is_admin)
+        self.assertEqual(ba.decoded_token, token_payload)
+        mock_decode.assert_called_once_with(jwt_token, "test-public-key", algorithms=['RS256'])
+
+    @patch('panoptes_aggregation.batch_aggregation.os.path.exists')
+    def test_jwt_token_verification_missing_key_file(self, mock_exists):
+        mock_exists.return_value = False
+        ba = batch_agg.BatchAggregator(1, 10, "invalid-token")
+
+        self.assertIsNone(ba.decoded_token)
+        self.assertIsNone(ba.user_id)
+        self.assertFalse(ba.is_admin)
+
+    @patch('panoptes_aggregation.batch_aggregation.os.path.exists')
+    @patch('builtins.open')
+    @patch('jwt.decode')
+    def test_jwt_token_verification_invalid_token(self, mock_jwt_decode, mock_open, mock_exists):
+        mock_exists.return_value = True
+        mock_file = MagicMock(read=MagicMock(return_value="test-public-key"))
+        mock_open.return_value = mock_file
+        mock_jwt_decode.side_effect = jwt.InvalidTokenError("Invalid token")
+
+        ba = batch_agg.BatchAggregator(1, 10, "invalid-token")
+
+        self.assertIsNone(ba.decoded_token)
+        self.assertIsNone(ba.user_id)
+        self.assertFalse(ba.is_admin)
+
+    @patch('panoptes_aggregation.batch_aggregation.os.path.exists')
+    @patch('builtins.open')
+    @patch('jwt.decode')
+    def test_jwt_token_admin_permission(self, mock_jwt_decode, mock_open, mock_exists):
+        mock_exists.return_value = True
+        mock_file = MagicMock(read=MagicMock(return_value="test-public-key"))
+        mock_open.return_value = mock_file
+
+        admin_payload = {
+            'data': {
+                'id': 123,
+                'admin': True
+            }
+        }
+        mock_jwt_decode.return_value = admin_payload
+
+        ba = batch_agg.BatchAggregator(1, 10, "admin-token")
+        self.assertTrue(ba.check_permission())
+
+    @patch('panoptes_aggregation.batch_aggregation.os.path.exists')
+    @patch('builtins.open')
+    @patch('jwt.decode')
+    @patch('panoptes_aggregation.batch_aggregation.Project')
+    def test_jwt_token_non_admin_permission(self, mock_project, mock_jwt_decode, mock_open, mock_exists):
+        mock_exists.return_value = True
+        mock_file = MagicMock(read=MagicMock(return_value="test-public-key"))
+        mock_open.return_value = mock_file
+
+        non_admin_payload = {
+            'data': {
+                'id': 123,
+                'admin': False
+            }
+        }
+        mock_jwt_decode.return_value = non_admin_payload
+        mock_project.find().collaborators.return_value = []
+
+        ba = batch_agg.BatchAggregator(1, 10, "non-admin-token")
+        self.assertFalse(ba.check_permission())

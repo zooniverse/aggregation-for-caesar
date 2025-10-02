@@ -6,6 +6,7 @@ import sys
 import urllib3
 from shutil import make_archive
 import uuid
+import jwt
 
 from azure.storage.blob import BlobServiceClient
 
@@ -21,15 +22,15 @@ celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://lo
 
 
 @celery.task(name="run_aggregation")
-def run_aggregation(project_id, workflow_id, user_id):
-    ba = BatchAggregator(project_id, workflow_id, user_id)
+def run_aggregation(project_id, workflow_id, jwt_token):
+    ba = BatchAggregator(project_id, workflow_id, jwt_token)
 
     if not ba.check_permission():
-        print(f'[Batch Aggregation] Unauthorized attempt by user {user_id} to aggregate workflow {workflow_id}')
+        print(f'[Batch Aggregation] Unauthorized attempt by user {ba.user_id} to aggregate workflow {workflow_id}')
         # Exit the task gracefully without retrying or erroring
         sys.exit()
 
-    print(f'[Batch Aggregation] Run beginning for workflow {workflow_id} by user {user_id}')
+    print(f'[Batch Aggregation] Run beginning for workflow {workflow_id} by user {ba.user_id}')
 
     print(f'[Batch Aggregation] Saving exports for workflow {workflow_id}')
     ba.save_exports()
@@ -91,7 +92,7 @@ def run_aggregation(project_id, workflow_id, user_id):
     ba.update_panoptes(success_attrs)
 
     # STDOUT messages get printed to kubernetes logs
-    print(f'[Batch Aggregation] Run successful for workflow {workflow_id} by user {user_id}')
+    print(f'[Batch Aggregation] Run successful for workflow {workflow_id} by user {ba.user_id}')
 
 
 class BatchAggregator:
@@ -99,10 +100,12 @@ class BatchAggregator:
     Bunch of stuff to manage a batch aggregation run
     """
 
-    def __init__(self, project_id, workflow_id, user_id):
+    def __init__(self, project_id, workflow_id, jwt_token):
         self.project_id = int(project_id)
         self.workflow_id = int(workflow_id)
-        self.user_id = int(user_id)
+        self.jwt_token = str(jwt_token)
+        self.decoded_token = None
+        self._verify_jwt_token()
         self._generate_uuid()
         self._connect_api_client()
 
@@ -181,12 +184,14 @@ class BatchAggregator:
         )
 
     def check_permission(self):
+        if not self.decoded_token:
+            return False
+
+        if self.is_admin:
+            return True
+
         project = Project.find(self.project_id)
-        permission = False
-        for user in project.collaborators():
-            if user.id == str(self.user_id):
-                permission = True
-        return permission
+        return any(user.id == str(self.user_id) for user in project.collaborators())
 
     def _generate_uuid(self):
         self.id = uuid.uuid4().hex
@@ -210,3 +215,26 @@ class BatchAggregator:
             client_secret=os.getenv('PANOPTES_CLIENT_SECRET'),
             admin='true'
         )
+
+    def _verify_jwt_token(self):
+        try:
+            env = os.getenv('AGGREGATION_APP_ENV')
+            public_key_path = os.path.join('data', f"doorkeeper-jwt-{env}.pub")
+            if not os.path.exists(public_key_path):
+                raise ValueError(f"JWT public key file not found at {public_key_path}")
+
+            with open(public_key_path, 'r') as key_file:
+                public_key = key_file.read()
+
+            self.decoded_token = jwt.decode(
+                self.jwt_token,
+                public_key,
+                algorithms=['RS512']
+            )
+            self.user_id = self.decoded_token.get('data', {}).get('id')
+            self.is_admin = self.decoded_token.get('data', {}).get('admin', False)
+        except (jwt.exceptions.InvalidTokenError, jwt.exceptions.ExpiredSignatureError, ValueError, IOError) as e:
+            print(f'[Batch Aggregation] JWT verification failed: {str(e)}')
+            self.decoded_token = None
+            self.user_id = None
+            self.is_admin = False
