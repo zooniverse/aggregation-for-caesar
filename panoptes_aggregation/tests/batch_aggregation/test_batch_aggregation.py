@@ -254,7 +254,7 @@ class TestBatchAggregation(unittest.TestCase):
         self.assertEqual(ba.user_id, 123)
         self.assertTrue(ba.is_admin)
         self.assertEqual(ba.decoded_token, token_payload)
-        mock_decode.assert_called_once_with(jwt_token, "test-public-key", algorithms=['RS256'])
+        mock_decode.assert_called_once_with(jwt_token, "test-public-key", algorithms=['RS512'])
 
     @patch('panoptes_aggregation.batch_aggregation.os.path.exists')
     def test_jwt_token_verification_missing_key_file(self, mock_exists):
