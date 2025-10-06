@@ -93,6 +93,29 @@ def process_data(data):
                                 row_ct[frame][tool] += 1
     return data_by_tool
 
+def get_annotations(tool, average_polygon):
+    # classifier v2.0
+    if 'toolIndex' in tool:
+        tool_split = tool.split("_toolIndex")
+        task = tool_split[0]
+        tool_index = tool_split[1]
+    # classifier v1.0
+    elif 'tool' in tool:
+        tool_split = tool.split("_tool")
+        task = tool_split[0]
+        tool_index = tool_split[1]
+
+    x = average_polygon[:, 0].tolist()
+    y = average_polygon[:, 1].tolist()
+
+    annotations = {'task': task,
+                  'values': {'pathX': x,
+                             'pathY': y,
+                             'toolType': 'freehandLine',
+                             'toolIndex': tool_index
+                             }
+    }
+    return annotations
 
 @reducer_wrapper(
     process_data=process_data,
@@ -192,9 +215,13 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                         else:
                             # exterior makes sure you ignore any interior holes
                             average_polygon = np.array(list(cluster_average.exterior.coords))
+
+                        annotations = get_annotations(tool, average_polygon)
+
                         # Add to the dictionary
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
                         clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
                         clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
+                        clusters.setdefault('annotations', []).append(annotations)
 
     return clusters
