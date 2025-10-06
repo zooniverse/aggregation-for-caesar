@@ -168,7 +168,7 @@ TestNfNWeDigBioApril2025 = ExtractorTest(
     test_name='TestNfNWeDigBioApril2025'
 )
 
-classification_we_dig_bio_october_2024 = {
+classification_we_dig_bio_october_2025 = {
     "annotations": [{
         "task": "T99",
         "value": [
@@ -191,24 +191,24 @@ classification_we_dig_bio_october_2024 = {
             "country": "United States",
         }
     },
-    "created_at": "2024-10-12T05:30:00.000Z",
+    "created_at": "2025-10-10T05:30:00.000Z",
 }
 
-expected_we_dig_bio_october_2024 = {
+expected_we_dig_bio_october_2025 = {
     "workflow": "herbarium",
     "decade": "00s",
     "time": "lunchbreak",
-    "we_dig_bio": 2024,
+    "we_dig_bio": 2025,
     "country": "United States"
 }
 
-TestNfNWeDigBioOctober2024 = ExtractorTest(
+TestNfNWeDigBioOctober2025 = ExtractorTest(
     extractors.nfn_extractor,
-    classification_we_dig_bio_october_2024,
-    expected_we_dig_bio_october_2024,
-    'Test NfN during October, 2024, WeDigBio event with year as nested task and country from metadata at lunchtime local time',
+    classification_we_dig_bio_october_2025,
+    expected_we_dig_bio_october_2025,
+    'Test NfN during October, 2025, WeDigBio event with year as nested task and country from metadata at lunchtime local time',
     kwargs={'year': 'T11', 'workflow': 'herbarium', 'country': 'metadata'},
-    test_name='TestNfNWeDigBioOctober2024'
+    test_name='TestNfNWeDigBioOctober2025'
 )
 
 classification_not_we_dig_bio_2025 = {
