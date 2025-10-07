@@ -170,9 +170,9 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
     created_at = np.array(kwargs_dbscan.pop('created_at'))
 
     clusters = OrderedDict()
-    for frame, frame_data in data_by_tool.items():
+    for frame, frame_data in sorted(data_by_tool.items()):
         clusters[frame] = OrderedDict()
-        for tool, value in frame_data.items():
+        for tool, value in sorted(frame_data.items()):
             X = np.array(value['X'])
             data = np.array(value['data'])
             num_polygons = len(data)
