@@ -93,6 +93,7 @@ def process_data(data):
                                 row_ct[frame][tool] += 1
     return data_by_tool
 
+
 def get_annotations(tool, average_polygon):
     # classifier v2.0
     if 'toolIndex' in tool:
@@ -109,13 +110,15 @@ def get_annotations(tool, average_polygon):
     y = average_polygon[:, 1].tolist()
 
     annotations = {'task': task,
-                  'values': {'pathX': x,
-                             'pathY': y,
-                             'toolType': 'freehandLine',
-                             'toolIndex': tool_index
-                             }
-    }
+                   'values': {
+                       'pathX': x,
+                       'pathY': y,
+                       'toolType': 'freehandLine',
+                       'toolIndex': tool_index
+                   }
+                   }
     return annotations
+
 
 @reducer_wrapper(
     process_data=process_data,
