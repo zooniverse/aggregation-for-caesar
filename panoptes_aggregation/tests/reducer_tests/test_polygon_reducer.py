@@ -718,7 +718,9 @@ reduced_data_last = {
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
-            'average_type': 'last'
+            'average_type': 'last',
+            'collab': 'True'
+
     }
 }
 
@@ -732,7 +734,140 @@ TestPolygonTReducerLast = ReducerTest(
     kwargs={
         'eps': 0.5,
         'min_samples': 2,
-        'average_type': 'last'
+        'average_type': 'last',
+        'collab': 'True'
+    },
+    output_kwargs=True,
+    network_kwargs=kwargs_extra_data,
+    test_name='TestPolygonTReducerLast'
+)
+
+# Testing annotations are not in output when 'collab': 'False'
+reduced_data_last_collab_false = {
+    'frame0':
+        {
+            'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
+            'T0_tool0_clusters_count': [3, 3, 3],
+            'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
+            'T0_tool0_clusters_x': [
+                [
+                    -0.15554523195117093,
+                    0.19219246615042257,
+                    0.44238509316213026,
+                    0.40663249794462797,
+                    0.11185711391672837,
+                    -0.21996918242654376,
+                    -0.3389744219158122,
+                    -0.15554523195117032,
+                    -0.15554523195117093
+                ], [
+                    5.144708505321773,
+                    4.860757556171935,
+                    4.695377487814731,
+                    4.7454457013476254,
+                    4.98163291632684,
+                    5.265583865476678,
+                    5.4309639338338815,
+                    5.3808957203009875,
+                    5.144708505321773
+                ], [
+                    -1.8100930795620302,
+                    -2.0695264316885313,
+                    -2.262440502917424,
+                    -2.298568655319627,
+                    -2.1610061248664607,
+                    -1.9141199483941913,
+                    -1.6734309117084105,
+                    -1.5515600900350757,
+                    -1.6055321952784525,
+                    -1.81009307956203,
+                    -1.8100930795620302
+                ]
+            ],
+            'T0_tool0_clusters_y': [
+                [
+                    -0.25714285951044563,
+                    -0.29983968008123657,
+                    -0.05458843226212788,
+                    0.2939316921253496,
+                    0.4832779309024998,
+                    0.3708687043107462,
+                    0.04135045270402384,
+                    -0.2571428595104454,
+                    -0.25714285951044563
+                ], [
+                    4.2683409230436045,
+                    4.21827270951071,
+                    3.9820854945314967,
+                    3.698134545381657,
+                    3.5327544770244548,
+                    3.582822690557349,
+                    3.819009905536562,
+                    4.102960854686401,
+                    4.2683409230436045
+                ], [
+                    2.3692156886043496,
+                    2.360156076316269,
+                    2.186455466379812,
+                    1.9293903046514933,
+                    1.7092442372650303,
+                    1.6290260558015568,
+                    1.7262707388936125,
+                    1.9554764185681563,
+                    2.2093952099680867,
+                    2.3692156886043496,
+                    2.3692156886043496
+                ]
+            ],
+            'T0_tool1_cluster_labels': [0, 0, 0],
+            'T0_tool1_clusters_count': [3],
+            'T0_tool1_consensus': [0.5723807679762805],
+            'T0_tool1_clusters_x': [
+                [
+                    -0.15554523195117093,
+                    0.19219246615042257,
+                    0.44238509316213026,
+                    0.40663249794462797,
+                    0.11185711391672837,
+                    -0.21996918242654376,
+                    -0.3389744219158122,
+                    -0.15554523195117032,
+                    -0.15554523195117093
+                ]
+            ],
+            'T0_tool1_clusters_y': [
+                [
+                    -0.25714285951044563,
+                    -0.29983968008123657,
+                    -0.05458843226212788,
+                    0.2939316921253496,
+                    0.4832779309024998,
+                    0.3708687043107462,
+                    0.04135045270402384,
+                    -0.2571428595104454,
+                    -0.25714285951044563
+                ]
+            ]
+        },
+        'parameters': {
+            'eps': 0.5,
+            'min_samples': 2,
+            'average_type': 'last',
+            'collab': 'False'
+        }
+}
+
+TestPolygonTReducerLastCollabFalse = ReducerTest(
+    polygon_reducer,
+    process_data,
+    extracted_data,
+    processed_data,
+    reduced_data_last_collab_false,
+    'Test polygon reducer with a series of polygons in 3 clusters using last average with collab turned off',
+    kwargs={
+        'eps': 0.5,
+        'min_samples': 2,
+        'average_type': 'last',
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
@@ -954,7 +1089,8 @@ reduced_data_median = {
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
-            'average_type': 'median'
+            'average_type': 'median',
+            'collab': 'True'
     }
 }
 
@@ -968,7 +1104,8 @@ TestPolygonTReducerMedian = ReducerTest(
     kwargs={
         'eps': 0.5,
         'min_samples': 2,
-        'average_type': 'median'
+        'average_type': 'median',
+        'collab': 'True'
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
@@ -1218,7 +1355,8 @@ reduced_data_intersection = {
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
-            'average_type': 'intersection'
+            'average_type': 'intersection',
+            'collab': 'True'
     }
 }
 
@@ -1232,7 +1370,8 @@ TestPolygonTReducerIntersection = ReducerTest(
     kwargs={
         'eps': 0.5,
         'min_samples': 2,
-        'average_type': 'intersection'
+        'average_type': 'intersection',
+        'collab': 'True'
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
@@ -1612,7 +1751,8 @@ reduced_data_union = {
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
-            'average_type': 'union'
+            'average_type': 'union',
+            'collab': 'True'
     }
 }
 
@@ -1626,7 +1766,8 @@ TestPolygonTReducerUnion = ReducerTest(
     kwargs={
         'eps': 0.5,
         'min_samples': 2,
-        'average_type': 'union'
+        'average_type': 'union',
+        'collab': 'True'
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
@@ -1981,7 +2122,8 @@ TestPolygonTReducerUnionDifferentExtractionFormat = ReducerTest(
     kwargs={
         'eps': 0.5,
         'min_samples': 2,
-        'average_type': 'union'
+        'average_type': 'union',
+        'collab': 'True'
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
@@ -2147,7 +2289,8 @@ reduced_data_no_overall_intersection = {
         'parameters': {
             'eps': 0.95,
             'min_samples': 2,
-            'average_type': 'intersection'
+            'average_type': 'intersection',
+            'collab': 'True'
     }
 }
 
@@ -2162,7 +2305,8 @@ TestPolygonTReducerNoOverallIntersection = ReducerTest(
     kwargs={
         'eps': 0.95,
         'min_samples': 2,
-        'average_type': 'intersection'
+        'average_type': 'intersection',
+        'collab': 'True'
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data_no_overall_intersection,
@@ -2336,7 +2480,8 @@ reduced_data_no_overall_intersection_cluster_of_one = {
         'parameters': {
             'eps': 0.5,
             'min_samples': 1,
-            'average_type': 'last'
+            'average_type': 'last',
+            'collab': 'True'
     }
 }
 
@@ -2350,7 +2495,8 @@ TestPolygonTReducerClusterOfOne = ReducerTest(
     kwargs={
         'eps': 0.5,
         'min_samples': 1,
-        'average_type': 'last'
+        'average_type': 'last',
+        'collab': 'True'
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data_no_overall_intersection,
