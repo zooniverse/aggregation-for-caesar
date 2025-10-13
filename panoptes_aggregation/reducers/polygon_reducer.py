@@ -21,7 +21,8 @@ import shapely
 DEFAULTS = {
     'min_samples': {'default': 2, 'type': int},
     'eps': {'default': 0.5, 'type': float},
-    'average_type': {'default': 'median', 'type': str}
+    'average_type': {'default': 'median', 'type': str},
+    'collab': {'default': 'False', 'type': str}
 }
 
 
@@ -144,7 +145,8 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
     kwargs :
         * `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
         * `average_type` : Must be either "union", which returns the union of the cluster, "intersection" which returns the intersection of the cluster, "last", which returns the last polygon to be created in the cluster, or "median", which returns the polygon with the minimum total distance to the other polygons. Defaults to "median".
-        * `created_at` : A list of when the classifcations were made.
+        * `created_at` : A list of when the classifications were made.
+        * `collab` : Must be either "True", which includes the annotations in the output or "False", which does not include the annotations in the output. Defaults to "False".
 
     Returns
     -------
@@ -155,9 +157,12 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
         * `tool*_clusters_count` : The number of points in each **cluster** found for this frame and tool
         * `tool*_clusters_x` : A list of the x values of each cluster
         * `tool*_clusters_y` : A list of the y values of each cluster
-        * `tool*_consensus` : A list of the the overall consensus of each cluster. A value of 1 is perfect agreement, a value of 0 is complete disagreement. This is found by subtracting`IoU_cluster_mean_distance` from 1
+        * `tool*_consensus` : A list of the overall consensus of each cluster. A value of 1 is perfect agreement, a value of 0 is complete disagreement. This is found by subtracting`IoU_cluster_mean_distance` from 1
+        * `annotations` : Contains the consensus polygons in the original classification format. For use with the Zooniverse front-end
 
     '''
+    collab = kwargs_dbscan.pop('collab', 'off')
+
     average_type = kwargs_dbscan.pop('average_type', 'median')
     if average_type == "intersection":
         avg = cluster_average_intersection
@@ -220,12 +225,14 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                             # exterior makes sure you ignore any interior holes
                             average_polygon = np.array(list(cluster_average.exterior.coords))
 
-                        annotations = get_annotations(tool, average_polygon)
-
                         # Add to the dictionary
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
                         clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
                         clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
-                        clusters.setdefault('annotations', []).append(annotations)
+
+                        if collab == "True":
+                            annotations = get_annotations(tool, average_polygon)
+                            # Add to dictionary
+                            clusters.setdefault('annotations', []).append(annotations)
 
     return clusters
