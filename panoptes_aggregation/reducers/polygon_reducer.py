@@ -109,14 +109,15 @@ def get_annotations(tool, average_polygon):
     x = average_polygon[:, 0].tolist()
     y = average_polygon[:, 1].tolist()
 
-    annotations = {'task': task,
-                   'values': {
-                       'pathX': x,
-                       'pathY': y,
-                       'toolType': 'freehandLine',
-                       'toolIndex': tool_index
-                   }
-                   }
+    annotations = {
+        'task': task,
+        'values': {
+            'pathX': x,
+            'pathY': y,
+            'toolType': 'freehandLine',
+            'toolIndex': tool_index
+        }
+    }
     return annotations
 
 
