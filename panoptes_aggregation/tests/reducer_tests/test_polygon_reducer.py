@@ -719,7 +719,7 @@ reduced_data_last = {
             'eps': 0.5,
             'min_samples': 2,
             'average_type': 'last',
-            'collab': 'True'
+            'collab': True
 
     }
 }
@@ -735,14 +735,14 @@ TestPolygonTReducerLast = ReducerTest(
         'eps': 0.5,
         'min_samples': 2,
         'average_type': 'last',
-        'collab': 'True'
+        'collab': True
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
     test_name='TestPolygonTReducerLast'
 )
 
-# Testing annotations are not in output when 'collab': 'False'
+# Testing annotations are not in output when 'collab': False
 reduced_data_last_collab_false = {
     'frame0':
         {
@@ -853,7 +853,7 @@ reduced_data_last_collab_false = {
             'eps': 0.5,
             'min_samples': 2,
             'average_type': 'last',
-            'collab': 'False'
+            'collab': False
         }
 }
 
@@ -1090,7 +1090,7 @@ reduced_data_median = {
             'eps': 0.5,
             'min_samples': 2,
             'average_type': 'median',
-            'collab': 'True'
+            'collab': True
     }
 }
 
@@ -1105,7 +1105,7 @@ TestPolygonTReducerMedian = ReducerTest(
         'eps': 0.5,
         'min_samples': 2,
         'average_type': 'median',
-        'collab': 'True'
+        'collab': True
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
@@ -1356,7 +1356,7 @@ reduced_data_intersection = {
             'eps': 0.5,
             'min_samples': 2,
             'average_type': 'intersection',
-            'collab': 'True'
+            'collab': True
     }
 }
 
@@ -1371,7 +1371,7 @@ TestPolygonTReducerIntersection = ReducerTest(
         'eps': 0.5,
         'min_samples': 2,
         'average_type': 'intersection',
-        'collab': 'True'
+        'collab': True
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
@@ -1752,7 +1752,7 @@ reduced_data_union = {
             'eps': 0.5,
             'min_samples': 2,
             'average_type': 'union',
-            'collab': 'True'
+            'collab': True
     }
 }
 
@@ -1767,7 +1767,7 @@ TestPolygonTReducerUnion = ReducerTest(
         'eps': 0.5,
         'min_samples': 2,
         'average_type': 'union',
-        'collab': 'True'
+        'collab': True
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
@@ -2123,7 +2123,7 @@ TestPolygonTReducerUnionDifferentExtractionFormat = ReducerTest(
         'eps': 0.5,
         'min_samples': 2,
         'average_type': 'union',
-        'collab': 'True'
+        'collab': True
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
@@ -2290,7 +2290,7 @@ reduced_data_no_overall_intersection = {
             'eps': 0.95,
             'min_samples': 2,
             'average_type': 'intersection',
-            'collab': 'True'
+            'collab': True
     }
 }
 
@@ -2306,7 +2306,7 @@ TestPolygonTReducerNoOverallIntersection = ReducerTest(
         'eps': 0.95,
         'min_samples': 2,
         'average_type': 'intersection',
-        'collab': 'True'
+        'collab': True
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data_no_overall_intersection,
@@ -2481,7 +2481,7 @@ reduced_data_no_overall_intersection_cluster_of_one = {
             'eps': 0.5,
             'min_samples': 1,
             'average_type': 'last',
-            'collab': 'True'
+            'collab': True
     }
 }
 
@@ -2496,7 +2496,7 @@ TestPolygonTReducerClusterOfOne = ReducerTest(
         'eps': 0.5,
         'min_samples': 1,
         'average_type': 'last',
-        'collab': 'True'
+        'collab': True
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data_no_overall_intersection,
