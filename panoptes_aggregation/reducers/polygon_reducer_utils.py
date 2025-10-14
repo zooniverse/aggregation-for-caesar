@@ -200,7 +200,10 @@ def cluster_average_last(data, **kwargs):
     created_at_list = []
     if isinstance(created_at[0], str):  # If in original format
         for time in created_at:
-            created_at_list.append(datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S UTC"))
+            if 'UTC' in time:
+                created_at_list.append(datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S UTC"))
+            elif 'Z' in time:
+                created_at_list.append(datetime.datetime.strptime(time, "%Y-%m-%dT%H:%M:%S.%fZ"))
     elif isinstance(created_at[0], pdtimestamp):
         for time in created_at:
             created_at_list.append(time.to_pydatetime())
