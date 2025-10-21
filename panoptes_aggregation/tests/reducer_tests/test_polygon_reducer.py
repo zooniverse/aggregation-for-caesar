@@ -492,7 +492,7 @@ class TestException(unittest.TestCase):
 
 
 reduced_data_last = {
-    'annotations': [{
+    'data': [{
         'task': 'T0',
         'values': {
             'pathX': [
@@ -902,7 +902,7 @@ TestPolygonTReducerLastCollabFalse = ReducerTest(
 )
 
 reduced_data_median = {
-    'annotations': [{
+    'data': [{
         'task': 'T0',
         'values': {
             'pathX': [
@@ -1142,7 +1142,7 @@ TestPolygonTReducerMedian = ReducerTest(
 
 # Now let's the intersection version
 reduced_data_intersection = {
-    'annotations': [{
+    'data': [{
         'task': 'T0',
         'values': {
             'pathX': [
@@ -1406,7 +1406,7 @@ TestPolygonTReducerIntersection = ReducerTest(
 )
 
 reduced_data_union = {
-    'annotations': [{
+    'data': [{
         'task': 'T0',
         'values': {
             'pathX': [
@@ -2295,7 +2295,7 @@ processed_data_no_overall_intersection = {
 }
 
 reduced_data_no_overall_intersection = {
-    'annotations': [{
+    'data': [{
         'task': 'T0',
         'values': {
             'pathX': [],
@@ -2342,7 +2342,7 @@ TestPolygonTReducerNoOverallIntersection = ReducerTest(
 
 # Testing cluster of 1. This is just the original extraction
 reduced_data_no_overall_intersection_cluster_of_one = {
-    'annotations': [{
+    'data': [{
         'task': 'T0',
         'values': {
             'pathX': [
