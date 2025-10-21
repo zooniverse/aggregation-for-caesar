@@ -71,19 +71,29 @@ class RouterTest(unittest.TestCase):
                     running_reducer_name
                 )
 
-    # Override json.dumps() for this test so it doesn't try to jsonify the mock
-    import json
-
-    @patch("panoptes_aggregation.batch_aggregation.json.dumps", return_value=json.dumps({'project_id': 1, 'workflow_id': 10, 'user_id': 100, 'task_id': 'asdf'}))
     @patch("panoptes_aggregation.batch_aggregation.run_aggregation.delay")
-    def test_run_aggregation_route(self, mocked_task, mocked_json):
-        '''Test that the bg task gets called on batch aggregation route'''
+    def test_run_aggregation_route_success(self, mocked_task):
+        '''Test that the bg task gets called on batch aggregation route with valid token'''
         with routes.make_application().test_client() as client:
-            mocked_task.id = 'asdf'
-            response = client.post('/run_aggregation', json={'project_id': 1, 'workflow_id': 10, 'user_id': 100})
-            mocked_task.assert_called_once_with(1, 10, 100)
+            mock_async_result = MagicMock()
+            mock_async_result.id = 'asdf'
+            mocked_task.return_value = mock_async_result
+            response = client.post('/run_aggregation',
+                json={'project_id': 1, 'workflow_id': 10},
+                headers={'Authorization': 'Bearer test-token'})
+            mocked_task.assert_called_once_with(1, 10, 'test-token')
             self.assertEqual(response.status_code, 202)
             self.assertIn('"task_id": "asdf"', response.text)
+
+    @patch("panoptes_aggregation.batch_aggregation.run_aggregation.delay")
+    def test_run_aggregation_route_no_token(self, mocked_task):
+        '''Test that the route returns 401 when no token is provided'''
+        with routes.make_application().test_client() as client:
+            response = client.post('/run_aggregation',
+                json={'project_id': 1, 'workflow_id': 10})
+            mocked_task.assert_not_called()
+            self.assertEqual(response.status_code, 401)
+            self.assertIn('"error": "Authorization token required"', response.text)
 
     @patch("celery.result.AsyncResult")
     def test_get_status(self, asyncresult):
