@@ -233,6 +233,6 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                         if collab:
                             annotations = get_annotations(tool, average_polygon)
                             # Add to dictionary
-                            clusters.setdefault('annotations', []).append(annotations)
+                            clusters.setdefault('data', []).append(annotations)
 
     return clusters
