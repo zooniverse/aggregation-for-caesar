@@ -22,9 +22,11 @@ DEFAULTS = {
     'min_samples': {'default': 2, 'type': int},
     'eps': {'default': 0.5, 'type': float},
     'average_type': {'default': 'median', 'type': str},
-    'collab': {'default': False, 'type': bool}
+    'collab': {'default': False, 'type': bool},
+    'step_key': {'default': 'S0', 'type': str},
+    'task_index': {'default': 0, 'type': int},
+    'tool_type': {'default': 'freehandLine', 'type': str}
 }
-
 
 def process_data(data):
     '''Process a list of extractions into a dictionary organized by `frame`, `Task` and `tool`.
@@ -95,7 +97,7 @@ def process_data(data):
     return data_by_tool
 
 
-def get_annotations(tool, frame, average_polygon):
+def get_annotations(tool, frame, average_polygon, step_key, task_index, tool_type):
     # classifier v2.0
     if 'toolIndex' in tool:
         tool_split = tool.split("_toolIndex")
@@ -114,14 +116,14 @@ def get_annotations(tool, frame, average_polygon):
     y = average_polygon[:, 1].tolist()
 
     annotations = {
-        'stepKey': 'S0',
-        'taskIndex': 'task_index',
+        'stepKey': step_key,
+        'taskIndex': task_index,
         'taskKey': task_key,
         'taskType': 'drawing',
         'toolIndex': int(tool_index),
         'frame': int(frame_num),
         'markID': 'mark_id',
-        'toolType': 'freehandLine',
+        'toolType': tool_type,
         'pathX': x,
         'pathY': y
     }
@@ -168,6 +170,9 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
 
     '''
     collab = kwargs_dbscan.pop('collab', False)
+    step_key = kwargs_dbscan.pop('step_key', 'S0')
+    task_index = kwargs_dbscan.pop('task_index', 0)
+    tool_type = kwargs_dbscan.pop('tool_type', 'freehandLine')
 
     average_type = kwargs_dbscan.pop('average_type', 'median')
     if average_type == "intersection":
@@ -237,7 +242,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                         clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
 
                         if collab:
-                            annotations = get_annotations(tool, frame, average_polygon)
+                            annotations = get_annotations(tool, frame, average_polygon, step_key, task_index, tool_type)
                             # Add to dictionary
                             clusters.setdefault('data', []).append(annotations)
 
