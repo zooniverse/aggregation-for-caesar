@@ -256,4 +256,4 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                             clusters.setdefault('data', []).append(annotations)
                             counter += 1
 
-    return clusters
+    return OrderedDict(sorted(clusters.items()))
