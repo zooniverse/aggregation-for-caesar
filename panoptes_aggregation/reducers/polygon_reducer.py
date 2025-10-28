@@ -28,7 +28,6 @@ DEFAULTS = {
     'tool_type': {'default': 'freehandLine', 'type': str}
 }
 
-counter = 0
 
 def process_data(data):
     '''Process a list of extractions into a dictionary organized by `frame`, `Task` and `tool`.
@@ -99,7 +98,7 @@ def process_data(data):
     return data_by_tool
 
 
-def get_annotations(tool, frame, average_polygon, mark_id, step_key, task_index, tool_type):
+def get_annotations(tool, frame, average_polygon, step_key, task_index, tool_type):
     # classifier v2.0
     if 'toolIndex' in tool:
         tool_split = tool.split("_toolIndex")
@@ -124,7 +123,7 @@ def get_annotations(tool, frame, average_polygon, mark_id, step_key, task_index,
         'taskType': 'drawing',
         'toolIndex': int(tool_index),
         'frame': int(frame_num),
-        'markID': mark_id,
+        'markID': 'consensus',
         'toolType': tool_type,
         'pathX': x,
         'pathY': y
@@ -175,7 +174,6 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
         * `annotations` : Contains the consensus polygons in the original classification format, which is included in the output if `collab` is set to True. For use with the Zooniverse front-end.
 
     '''
-    global counter
 
     collab = kwargs_dbscan.pop('collab', False)
     step_key = kwargs_dbscan.pop('step_key', 'S0')
@@ -250,10 +248,8 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                         clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
 
                         if collab:
-                            mark_id = f'consensus_{counter}'
-                            annotations = get_annotations(tool, frame, average_polygon, mark_id, step_key, task_index, tool_type)
+                            annotations = get_annotations(tool, frame, average_polygon, step_key, task_index, tool_type)
                             # Add to dictionary
                             clusters.setdefault('data', []).append(annotations)
-                            counter += 1
 
     return OrderedDict(sorted(clusters.items()))
