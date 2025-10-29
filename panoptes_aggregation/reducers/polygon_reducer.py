@@ -98,7 +98,7 @@ def process_data(data):
     return data_by_tool
 
 
-def get_annotations(tool, frame, average_polygon, step_key, task_index, tool_type):
+def get_annotations(tool, frame, average_polygon, step_key, task_index, tool_type, counter):
     # classifier v2.0
     if 'toolIndex' in tool:
         tool_split = tool.split("_toolIndex")
@@ -123,7 +123,7 @@ def get_annotations(tool, frame, average_polygon, step_key, task_index, tool_typ
         'taskType': 'drawing',
         'toolIndex': int(tool_index),
         'frame': int(frame_num),
-        'markID': 'consensus',
+        'markID': f'consensus_{counter}',
         'toolType': tool_type,
         'pathX': x,
         'pathY': y
@@ -196,6 +196,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
     created_at = np.array(kwargs_dbscan.pop('created_at'))
 
     clusters = OrderedDict()
+    counter = 0
     for frame, frame_data in sorted(data_by_tool.items()):
         clusters[frame] = OrderedDict()
         for tool, value in sorted(frame_data.items()):
@@ -248,7 +249,8 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                         clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
 
                         if collab:
-                            annotations = get_annotations(tool, frame, average_polygon, step_key, task_index, tool_type)
+                            annotations = get_annotations(tool, frame, average_polygon, step_key, task_index, tool_type, counter)
+                            counter += 1
                             # Add to dictionary
                             clusters.setdefault('data', []).append(annotations)
 
