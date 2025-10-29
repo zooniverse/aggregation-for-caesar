@@ -122,8 +122,15 @@ def make_application():
         content = request.json
         project_id = content['project_id']
         workflow_id = content['workflow_id']
-        user_id = content['user_id']
-        task = batch_aggregation.run_aggregation.delay(project_id, workflow_id, user_id)
+        token = request.headers.get('Authorization')
+
+        if not token:
+            return jsonify({"error": "Authorization token required"}), 401
+
+        if token.startswith('Bearer '):
+            token = token[7:]
+
+        task = batch_aggregation.run_aggregation.delay(project_id, workflow_id, token)
         return jsonify({"task_id": task.id}), 202
 
     @application.route('/tasks/<task_id>', methods=['GET'])
