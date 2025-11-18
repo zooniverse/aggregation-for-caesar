@@ -12,6 +12,7 @@ from sklearn.cluster import DBSCAN
 import numpy as np
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
+from .collab_wrapper import collab_wrapper
 from .polygon_reducer_utils import IoU_metric_polygon, cluster_average_last, \
     cluster_average_intersection, cluster_average_union, \
     cluster_average_median, IoU_distance_matrix_of_cluster, \
@@ -97,41 +98,7 @@ def process_data(data):
                                 row_ct[frame][tool] += 1
     return data_by_tool
 
-
-def get_annotations(tool, frame, average_polygon, step_key, task_index, tool_type, counter):
-    # classifier v2.0
-    if 'toolIndex' in tool:
-        tool_split = tool.split("_toolIndex")
-        task_key = tool_split[0]
-        tool_index = tool_split[1]
-    # classifier v1.0
-    elif 'tool' in tool:
-        tool_split = tool.split("_tool")
-        task_key = tool_split[0]
-        tool_index = tool_split[1]
-
-    frame_split = frame.split("frame")
-    frame_num = frame_split[1]
-
-    x = average_polygon[:, 0].tolist()
-    y = average_polygon[:, 1].tolist()
-
-    annotations = {
-        'stepKey': step_key,
-        'taskIndex': task_index,
-        'taskKey': task_key,
-        'taskType': 'drawing',
-        'toolIndex': int(tool_index),
-        'frame': int(frame_num),
-        'markID': f'consensus_{counter}',
-        'toolType': tool_type,
-        'pathX': x,
-        'pathY': y
-    }
-
-    return annotations
-
-
+@collab_wrapper
 @reducer_wrapper(
     process_data=process_data,
     defaults_data=DEFAULTS,
@@ -175,10 +142,10 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
 
     '''
 
-    collab = kwargs_dbscan.pop('collab', False)
-    step_key = kwargs_dbscan.pop('step_key', 'S0')
-    task_index = kwargs_dbscan.pop('task_index', 0)
-    tool_type = kwargs_dbscan.pop('tool_type', 'freehandLine')
+    kwargs_dbscan.pop('collab', None)
+    kwargs_dbscan.pop('step_key', None)
+    kwargs_dbscan.pop('task_index', None)
+    kwargs_dbscan.pop('tool_type', None)
 
     average_type = kwargs_dbscan.pop('average_type', 'median')
     if average_type == "intersection":
@@ -196,7 +163,6 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
     created_at = np.array(kwargs_dbscan.pop('created_at'))
 
     clusters = OrderedDict()
-    counter = 0
     for frame, frame_data in sorted(data_by_tool.items()):
         clusters[frame] = OrderedDict()
         for tool, value in sorted(frame_data.items()):
@@ -247,11 +213,5 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
                         clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
                         clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
-
-                        if collab:
-                            annotations = get_annotations(tool, frame, average_polygon, step_key, task_index, tool_type, counter)
-                            counter += 1
-                            # Add to dictionary
-                            clusters.setdefault('data', []).append(annotations)
 
     return OrderedDict(sorted(clusters.items()))
