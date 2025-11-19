@@ -10,8 +10,32 @@ def collab_wrapper(func):
 
         # run the original reducer
         clusters = func(argument, **kwargs)
+        counter = 0
+        tool = None
 
         if collab:
+            for key in clusters:
+                if key.startswith('frame'):
+                    frame_split = key.split("frame")
+                    frame_num = frame_split[1]
+                    break
+
+            frame_dict = clusters[key]
+
+            for k in frame_dict:
+                if k.endswith('_consensus'):
+                    tool = k.split('_consensus')[0]
+                    break
+
+            if tool is None:
+                return clusters
+
+            consensus_x = frame_dict[f"{tool}_clusters_x"]
+            consensus_y = frame_dict[f"{tool}_clusters_y"]
+
+            x = consensus_x[0]  # list of all x coordinates
+            y = consensus_y[0]  # list of all y coordinates
+
             # classifier v2.0
             if 'toolIndex' in tool:
                 tool_split = tool.split("_toolIndex")
@@ -22,12 +46,8 @@ def collab_wrapper(func):
                 tool_split = tool.split("_tool")
                 task_key = tool_split[0]
                 tool_index = tool_split[1]
-
-            frame_split = frame.split("frame")
-            frame_num = frame_split[1]
-
-            x = average_polygon[:, 0].tolist()
-            y = average_polygon[:, 1].tolist()
+            else:
+                return clusters
 
             annotations = {
                 'stepKey': step_key,
@@ -45,5 +65,5 @@ def collab_wrapper(func):
             clusters.setdefault('data', []).append(annotations)
             counter += 1
 
-        return OrderedDict(sorted(clusters.items()))
+        return clusters
     return wrapper
