@@ -159,10 +159,11 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
         * `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
         * `average_type` : Must be either "union", which returns the union of the cluster, "intersection" which returns the intersection of the cluster, "last", which returns the last polygon to be created in the cluster, or "median", which returns the polygon with the minimum total distance to the other polygons. Defaults to "median".
         * `created_at` : A list of when the classifications were made.
-        * `collab` : A boolean indicating whether the annotations column is included in the output. Defaults to False.
+        * `collab` : A boolean indicating whether the data column is included in the output. Defaults to False.
         * 'step_key' : Identifies the step key. Defaults to 'S0'.
         * 'task_index' : The task index. Defaults to 0.
         * 'tool_type' : The tool used to create the polygons. Defaults to 'freehandLine'.
+        * 'min_threshold' : If the threshold value for a cluster is less than min_threshold, it is not added to the dictionary. Defaults to 0.
 
     Returns
     -------
@@ -174,7 +175,8 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
         * `tool*_clusters_x` : A list of the x values of each cluster
         * `tool*_clusters_y` : A list of the y values of each cluster
         * `tool*_consensus` : A list of the overall consensus of each cluster. A value of 1 is perfect agreement, a value of 0 is complete disagreement. This is found by subtracting`IoU_cluster_mean_distance` from 1
-        * `annotations` : Contains the consensus polygons in the original classification format, which is included in the output if `collab` is set to True. For use with the Zooniverse front-end.
+        * `data` : Contains the consensus polygons in the original classification format, which is included in the output if `collab` is set to True. For use with the Zooniverse front-end.
+        * `threshold` : For each cluster, the threshold is the number of items in the cluster divided by the total number of classifications.
 
     '''
 
