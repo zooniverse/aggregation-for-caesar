@@ -22,7 +22,6 @@ Welcome to panoptes_aggregation's documentation
    How_Clustering_Works
    Polygon data - extraction and reduction
    Gravity_Spy
-   Collaborative workflow
 
 .. toctree::
    :maxdepth: 2
