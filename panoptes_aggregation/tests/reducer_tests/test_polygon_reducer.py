@@ -448,7 +448,8 @@ processed_data = {
                     ]).T),
                     'gold_standard': False
                 }
-            ]
+            ],
+            'n_classifications': 4
         },
         'T0_tool1': {
             'X': [
@@ -476,7 +477,8 @@ processed_data = {
                     ]).T),
                     'gold_standard': False
                 }
-            ]
+            ],
+            'n_classifications': 4
         }
     }
 }
@@ -729,6 +731,7 @@ reduced_data_last = {
                 ]
             ]
     },
+        'threshold': [0.75, 0.75, 0.75, 0.75],
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
@@ -736,7 +739,8 @@ reduced_data_last = {
             'collab': True,
             'step_key': 'S0',
             'task_index': 0,
-            'tool_type': 'freehandLine'
+            'tool_type': 'freehandLine',
+            'min_threshold': 0
     }
 }
 
@@ -783,6 +787,44 @@ TestPolygonTReducerLast = ReducerTest(
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
     test_name='TestPolygonTReducerLast'
+)
+
+reduced_data_last_min_threshold = {
+    'frame0': {
+        'T0_tool0_cluster_labels': [
+            0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1
+        ],
+        'T0_tool1_cluster_labels': [0, 0, 0]
+    },
+    'parameters': {
+        'eps': 0.5,
+        'min_samples': 2,
+        'average_type': 'last',
+        'collab': True,
+        'step_key': 'S0',
+        'task_index': 0,
+        'tool_type': 'freehandLine',
+        'min_threshold': 0.8
+    }
+}
+
+TestPolygonTReducerLast = ReducerTest(
+    polygon_reducer,
+    process_data,
+    extracted_data,
+    processed_data,
+    reduced_data_last_min_threshold,
+    'Test polygon reducer with threshold < min_threshold',
+    kwargs={
+        'eps': 0.5,
+        'min_samples': 2,
+        'average_type': 'last',
+        'collab': True,
+        'min_threshold': 0.8
+    },
+    output_kwargs=True,
+    network_kwargs=kwargs_extra_data,
+    test_name='TestPolygonTReducerLastMinThreshold'
 )
 
 # Testing annotations are not in output when 'collab': False
@@ -892,6 +934,7 @@ reduced_data_last_collab_false = {
                 ]
             ]
         },
+        'threshold': [0.75, 0.75, 0.75, 0.75],
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
@@ -899,7 +942,8 @@ reduced_data_last_collab_false = {
             'collab': False,
             'step_key': 'S0',
             'task_index': 0,
-            'tool_type': 'freehandLine'
+            'tool_type': 'freehandLine',
+            'min_threshold': 0
         }
 }
 
@@ -1158,6 +1202,7 @@ reduced_data_last_non_default = {
                 ]
             ]
     },
+'threshold': [0.75, 0.75, 0.75, 0.75],
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
@@ -1165,7 +1210,8 @@ reduced_data_last_non_default = {
             'collab': True,
             'step_key': 'S1',
             'task_index': 1,
-            'tool_type': 'freehandDrawing'
+            'tool_type': 'freehandDrawing',
+            'min_threshold': 0
     }
 }
 
@@ -1416,6 +1462,7 @@ reduced_data_median = {
                 ]
             ]
     },
+        'threshold': [0.75, 0.75, 0.75, 0.75],
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
@@ -1423,7 +1470,8 @@ reduced_data_median = {
             'collab': True,
             'step_key': 'S0',
             'task_index': 0,
-            'tool_type': 'freehandLine'
+            'tool_type': 'freehandLine',
+            'min_threshold': 0
     }
 }
 
@@ -1699,6 +1747,7 @@ reduced_data_intersection = {
                 ]
             ]
     },
+        'threshold': [0.75, 0.75, 0.75, 0.75],
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
@@ -1706,7 +1755,8 @@ reduced_data_intersection = {
             'collab': True,
             'step_key': 'S0',
             'task_index': 0,
-            'tool_type': 'freehandLine'
+            'tool_type': 'freehandLine',
+            'min_threshold': 0
     }
 }
 
@@ -2110,6 +2160,7 @@ reduced_data_union = {
                 ]
             ]
     },
+        'threshold': [0.75, 0.75, 0.75, 0.75],
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
@@ -2117,7 +2168,8 @@ reduced_data_union = {
             'collab': True,
             'step_key': 'S0',
             'task_index': 0,
-            'tool_type': 'freehandLine'
+            'tool_type': 'freehandLine',
+            'min_threshold': 0
     }
 }
 
@@ -2627,7 +2679,8 @@ processed_data_no_overall_intersection = {
                     ]).T),
                     'gold_standard': False
                 }
-            ]
+            ],
+            'n_classifications': 3,
         }
     }
 }
@@ -2654,6 +2707,7 @@ reduced_data_no_overall_intersection = {
             'T0_tool0_clusters_x': [[]],
             'T0_tool0_clusters_y': [[]]
     },
+    'threshold': [1.0],
         'parameters': {
             'eps': 0.95,
             'min_samples': 2,
@@ -2661,7 +2715,8 @@ reduced_data_no_overall_intersection = {
             'collab': True,
             'step_key': 'S0',
             'task_index': 0,
-            'tool_type': 'freehandLine'
+            'tool_type': 'freehandLine',
+            'min_threshold': 0
     }
 }
 
@@ -2857,6 +2912,8 @@ reduced_data_no_overall_intersection_cluster_of_one = {
                 ]
             ]
     },
+
+        'threshold': [0.3333333333333333, 0.3333333333333333, 0.3333333333333333],
         'parameters': {
             'eps': 0.5,
             'min_samples': 1,
@@ -2864,7 +2921,8 @@ reduced_data_no_overall_intersection_cluster_of_one = {
             'collab': True,
             'step_key': 'S0',
             'task_index': 0,
-            'tool_type': 'freehandLine'
+            'tool_type': 'freehandLine',
+            'min_threshold': 0
     }
 }
 
