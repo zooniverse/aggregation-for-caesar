@@ -1202,7 +1202,7 @@ reduced_data_last_non_default = {
                 ]
             ]
     },
-'threshold': [0.75, 0.75, 0.75, 0.75],
+        'threshold': [0.75, 0.75, 0.75, 0.75],
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
