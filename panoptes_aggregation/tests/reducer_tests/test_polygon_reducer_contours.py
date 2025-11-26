@@ -1914,7 +1914,7 @@ processed_data_10_identical_squares = {
                 [9, 9]
             ],
             'data': [processed_data_10_identical_squares_dictionary for i in range(10)],
-        'n_classifications': 10
+            'n_classifications': 10
         }
     }
 }
