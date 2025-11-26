@@ -10,7 +10,7 @@ All polygons are assumed to be closed. Any unclosed polygons will be closed.
 '''
 from sklearn.cluster import DBSCAN
 import numpy as np
-from collections import OrderedDict, Counter
+from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .polygon_reducer_utils import IoU_metric_polygon, cluster_average_last, \
     cluster_average_intersection, cluster_average_union, \
