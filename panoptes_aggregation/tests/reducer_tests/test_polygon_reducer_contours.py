@@ -448,7 +448,8 @@ processed_data = {
                     ]).T),
                     'gold_standard': False
                 }
-            ]
+            ],
+            'n_classifications': 4
         },
         'T0_tool1': {
             'X': [
@@ -476,7 +477,8 @@ processed_data = {
                     ]).T),
                     'gold_standard': False
                 }
-            ]
+            ],
+            'n_classifications': 4
         }
     }
 }
@@ -1642,7 +1644,8 @@ processed_data_no_overall_intersection = {
                     ]).T),
                     'gold_standard': False
                 }
-            ]
+            ],
+            'n_classifications': 3
         }
     }
 }
@@ -1911,6 +1914,7 @@ processed_data_10_identical_squares = {
                 [9, 9]
             ],
             'data': [processed_data_10_identical_squares_dictionary for i in range(10)],
+        'n_classifications': 10
         }
     }
 }
