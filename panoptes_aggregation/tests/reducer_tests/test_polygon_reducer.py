@@ -808,7 +808,7 @@ reduced_data_last_min_threshold = {
     }
 }
 
-TestPolygonTReducerLast = ReducerTest(
+TestPolygonTReducerLastMinThreshold = ReducerTest(
     polygon_reducer,
     process_data,
     extracted_data,
