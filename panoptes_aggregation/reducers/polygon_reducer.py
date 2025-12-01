@@ -256,7 +256,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
 
                             # number of points in the cluster
                             clusters[frame].setdefault('{0}_clusters_count'.format(tool), []).append(int(cdx.sum()))
-                            clusters.setdefault('thresholdgit add ', []).append(threshold)
+                            clusters.setdefault('threshold', []).append(threshold)
                             clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
                             clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
                             clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
