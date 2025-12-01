@@ -61,7 +61,7 @@ def process_data(data):
         row_ct.setdefault(frame, {})
         data_by_tool[frame] = {}
         unique_tools = set(sum([['_'.join(k.split('_')[:-1]) for k in d.get(frame, {}).keys()] for d in data], []))
-        n_classifications_frame = sum(1 for d in data if frame in d)
+        n_classifications_frame = len(data)
         for tool in unique_tools:
             # gold standard is not a tool
             if tool == 'gold':
@@ -232,7 +232,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                     if label > -1:
                         cdx = labels_array == label
                         cluster_items = int(cdx.sum())
-                        n_classifications = value.get('n_classifications', 0)
+                        n_classifications = value.get('n_classifications')
                         threshold = cluster_items / n_classifications
                         kwargs_cluster = {}
                         kwargs_cluster['created_at'] = created_at_full_array[cdx]
@@ -256,7 +256,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
 
                             # number of points in the cluster
                             clusters[frame].setdefault('{0}_clusters_count'.format(tool), []).append(int(cdx.sum()))
-                            clusters.setdefault('threshold', []).append(threshold)
+                            clusters.setdefault('thresholdgit add ', []).append(threshold)
                             clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
                             clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
                             clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
