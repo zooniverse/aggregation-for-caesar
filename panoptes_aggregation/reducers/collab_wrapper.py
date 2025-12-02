@@ -3,59 +3,50 @@ from functools import wraps
 def collab_wrapper(func):
     @wraps(func)
     def wrapper(argument, **kwargs):
-        collab = kwargs.pop('collab', False)
-        step_key = kwargs.pop('step_key', 'S0')
-        task_index = kwargs.pop('task_index', 0)
-        tool_type = kwargs.pop('tool_type', 'freehandLine')
+        collab = kwargs.get('collab', False)
+        step_key = kwargs.get('step_key', 'S0')
+        task_index = kwargs.get('task_index', 0)
+        tool_type = kwargs.get('tool_type', 'freehandLine')
 
-        # run the original reducer
-        clusters = func(argument, **kwargs)
         counter = 0
-        tool = None
+
+        clusters = func(argument, **kwargs)
+        clusters_list = list(clusters.items())
+        frame_key, frame_data = clusters_list[0]
 
         if collab:
-            for key in clusters:
-                if key.startswith('frame'):
-                    frame_split = key.split("frame")
-                    frame_num = frame_split[1]
-                    break
 
-            frame_dict = clusters[key]
+            frame_split = frame_key.split("frame")
+            frame_num = frame_split[1]
 
-            for k in frame_dict:
-                if k.endswith('_consensus'):
-                    tool = k.split('_consensus')[0]
-                    break
+            for key, value in frame_data.items():
+                if key.endswith("_cluster_labels"):
+                    # classifier v2.0
+                    if 'toolIndex' in key:
+                        tool_split = key.split("_toolIndex")
+                        task_key = tool_split[0]
+                        tool_index_split = tool_split[1]
+                        tool_index = tool_index_split.split("_cluster_labels")[0]
+                    # classifier v1.0
+                    elif 'tool' in key:
+                        tool_split = key.split("_tool")
+                        task_key = tool_split[0]
+                        tool_index_split = tool_split[1]
+                        tool_index = tool_index_split.split("_cluster_labels")[0]
 
-            if tool is None:
-                return clusters
+                if key.endswith("_clusters_x"):
+                    x = value
 
-            consensus_x = frame_dict[f"{tool}_clusters_x"]
-            consensus_y = frame_dict[f"{tool}_clusters_y"]
-
-            x = consensus_x[0]  # list of all x coordinates
-            y = consensus_y[0]  # list of all y coordinates
-
-            # classifier v2.0
-            if 'toolIndex' in tool:
-                tool_split = tool.split("_toolIndex")
-                task_key = tool_split[0]
-                tool_index = tool_split[1]
-            # classifier v1.0
-            elif 'tool' in tool:
-                tool_split = tool.split("_tool")
-                task_key = tool_split[0]
-                tool_index = tool_split[1]
-            else:
-                return clusters
+                if key.endswith("_clusters_y"):
+                    y = value
 
             annotations = {
-                'stepKey': step_key,
-                'taskIndex': task_index,
-                'taskKey': task_key,
+                'step_key': step_key,
+                'task_index': task_index,
+                'task_key': task_key,
                 'taskType': 'drawing',
-                'toolIndex': int(tool_index),
-                'frame': int(frame_num),
+                'tool_index': tool_index,
+                'frame': frame_num,
                 'markID': f'consensus_{counter}',
                 'toolType': tool_type,
                 'pathX': x,
@@ -66,4 +57,5 @@ def collab_wrapper(func):
             counter += 1
 
         return clusters
+
     return wrapper
