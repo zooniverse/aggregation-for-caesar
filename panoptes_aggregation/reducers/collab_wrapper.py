@@ -3,7 +3,6 @@ from functools import wraps
 def collab_wrapper(func):
     @wraps(func)
     def wrapper(argument, **kwargs):
-        collab = kwargs.get('collab', False)
         step_key = kwargs.get('step_key', 'S0')
         task_index = kwargs.get('task_index', 0)
         tool_type = kwargs.get('tool_type', 'freehandLine')
@@ -11,6 +10,10 @@ def collab_wrapper(func):
         counter = 0
 
         clusters = func(argument, **kwargs)
+
+        for frame_key, frame_data in list(clusters.items()):
+            if frame_key.startswith('collab'):
+                collab = frame_data[0]
 
         if not collab:
             return clusters

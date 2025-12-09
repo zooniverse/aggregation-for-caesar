@@ -141,6 +141,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
         * `annotations` : Contains the consensus polygons in the original classification format, which is included in the output if `collab` is set to True. For use with the Zooniverse front-end.
 
     '''
+    collab = kwargs_dbscan.get('collab', False)
 
     kwargs_dbscan.pop('collab', None)
     kwargs_dbscan.pop('step_key', None)
@@ -213,5 +214,6 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
                         clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
                         clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
+                        clusters.setdefault('collab', []).append(collab)
 
     return OrderedDict(sorted(clusters.items()))
