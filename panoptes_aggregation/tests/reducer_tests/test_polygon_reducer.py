@@ -492,6 +492,7 @@ class TestException(unittest.TestCase):
 
 
 reduced_data_last = {
+    'collab': [True],
     'data': [{
         'stepKey': 'S0',
         'taskIndex': 0,

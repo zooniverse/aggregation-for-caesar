@@ -164,6 +164,9 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
     created_at = np.array(kwargs_dbscan.pop('created_at'))
 
     clusters = OrderedDict()
+
+    clusters.setdefault('collab', []).append(collab)
+
     for frame, frame_data in sorted(data_by_tool.items()):
         clusters[frame] = OrderedDict()
         for tool, value in sorted(frame_data.items()):
@@ -214,6 +217,5 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
                         clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
                         clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
-                        clusters.setdefault('collab', []).append(collab)
 
     return OrderedDict(sorted(clusters.items()))
