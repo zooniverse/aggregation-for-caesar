@@ -86,6 +86,8 @@ def ReducerTest(
                 self.reduction_is_list = False
             self.reduced = copy.deepcopy(reduced)
             self.reduced_no_params = copy.deepcopy(reduced)
+            if isinstance(self.reduced_no_params, dict):
+                self.reduced_no_params.pop('data', None)
             if output_kwargs:
                 if isinstance(self.reduced_no_params, list):
                     for r in self.reduced_no_params:
@@ -145,6 +147,71 @@ def ReducerTest(
             non_built_in_locations = find_non_built_in_data_types(result)
             expected = {}
             self.assertDictEqual(non_built_in_locations, expected)
+
+        def test_collab_behavior(self):
+            '''
+            If collab=True, reducer should include extra information.
+            If collab=False (or absent), it should not.
+            '''
+
+            # Is collab expected according to the fixture?
+            expect_collab_data = (
+                    isinstance(self.reduced, dict)
+                    and 'data' in self.reduced
+                    and isinstance(self.reduced.get('data'), list)
+                    and len(self.reduced.get('data', [])) > 0
+            )
+
+            result = reducer(
+                self.extracted_with_version,
+                **kwargs,
+                **pkwargs,
+                **network_kwargs
+            )
+            result = cast_to_dict(result)
+
+            if expect_collab_data:
+                self.assertIn('data', result)
+                self.assertIsInstance(result['data'], list)
+                self.assertGreater(len(result['data']), 0)
+
+                item = result['data'][0]
+
+                required_keys = {
+                    'stepKey',
+                    'taskIndex',
+                    'taskKey',
+                    'taskType',
+                    'toolIndex',
+                    'frame',
+                    'markID',
+                    'toolType',
+                    'pathX',
+                    'pathY',
+                }
+
+                # Enforce exact annotation schema (no missing or extra keys)
+                self.assertSetEqual(set(item.keys()), required_keys)
+
+                # ---- Semantic + type checks ----
+                self.assertIsInstance(item['stepKey'], str)
+                self.assertIsInstance(item['taskIndex'], int)
+                self.assertIsInstance(item['taskKey'], str)
+                self.assertEqual(item['taskType'], 'drawing')
+                self.assertIsInstance(item['toolIndex'], int)
+                self.assertIsInstance(item['frame'], int)
+                self.assertTrue(item['markID'].startswith('consensus_'))
+                self.assertIsInstance(item['toolType'], str)
+
+                self.assertIsInstance(item['pathX'], list)
+                self.assertIsInstance(item['pathY'], list)
+                self.assertEqual(len(item['pathX']), len(item['pathY']))
+                self.assertGreater(len(item['pathX']), 0)
+
+            else:
+                self.assertTrue(
+                    'data' not in result or len(result.get('data', [])) == 0
+                )
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_reducer_request(self):
