@@ -154,7 +154,6 @@ def ReducerTest(
             If collab=False (or absent), it should not.
             '''
 
-            # Is collab expected according to the fixture?
             expect_collab_data = (
                     isinstance(self.reduced, dict)
                     and 'data' in self.reduced
@@ -190,10 +189,8 @@ def ReducerTest(
                     'pathY',
                 }
 
-                # Enforce exact annotation schema (no missing or extra keys)
                 self.assertSetEqual(set(item.keys()), required_keys)
 
-                # ---- Semantic + type checks ----
                 self.assertIsInstance(item['stepKey'], str)
                 self.assertIsInstance(item['taskIndex'], int)
                 self.assertIsInstance(item['taskKey'], str)
