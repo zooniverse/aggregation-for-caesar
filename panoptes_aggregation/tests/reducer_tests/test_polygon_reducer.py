@@ -596,7 +596,7 @@ reduced_data_last = {
                     -0.25714285951044563
                 ]
             ]
-    },
+        },
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
@@ -605,7 +605,7 @@ reduced_data_last = {
             'step_key': 'S0',
             'task_index': 0,
             'tool_type': 'freehandLine'
-    }
+        }
 }
 
 kwargs_extra_data_time_format = {
@@ -921,7 +921,7 @@ reduced_data_last_non_default = {
                     -0.25714285951044563
                 ]
             ]
-    },
+        },
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
@@ -930,7 +930,7 @@ reduced_data_last_non_default = {
             'step_key': 'S1',
             'task_index': 1,
             'tool_type': 'freehandDrawing'
-    }
+        }
 }
 
 TestPolygonTReducerLastNonDefaultParams = ReducerTest(
@@ -1053,7 +1053,7 @@ reduced_data_median = {
                     0.361724434930079
                 ]
             ]
-    },
+        },
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
@@ -1062,7 +1062,7 @@ reduced_data_median = {
             'step_key': 'S0',
             'task_index': 0,
             'tool_type': 'freehandLine'
-    }
+        }
 }
 
 TestPolygonTReducerMedian = ReducerTest(
@@ -1198,7 +1198,7 @@ reduced_data_intersection = {
                     0.2613713844791226
                 ]
             ]
-    },
+        },
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
@@ -1207,7 +1207,7 @@ reduced_data_intersection = {
             'step_key': 'S0',
             'task_index': 0,
             'tool_type': 'freehandLine'
-    }
+        }
 }
 
 TestPolygonTReducerIntersection = ReducerTest(
@@ -1405,7 +1405,7 @@ reduced_data_union = {
                     -0.5007448417839794
                 ]
             ]
-    },
+        },
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
@@ -1414,7 +1414,7 @@ reduced_data_union = {
             'step_key': 'S0',
             'task_index': 0,
             'tool_type': 'freehandLine'
-    }
+        }
 }
 
 TestPolygonTReducerUnion = ReducerTest(
@@ -1936,7 +1936,7 @@ reduced_data_no_overall_intersection = {
             'T0_tool0_consensus': [0.07844246929976251],
             'T0_tool0_clusters_x': [[]],
             'T0_tool0_clusters_y': [[]]
-    },
+        },
         'parameters': {
             'eps': 0.95,
             'min_samples': 2,
@@ -1945,7 +1945,7 @@ reduced_data_no_overall_intersection = {
             'step_key': 'S0',
             'task_index': 0,
             'tool_type': 'freehandLine'
-    }
+        }
 }
 
 
@@ -2042,7 +2042,7 @@ reduced_data_no_overall_intersection_cluster_of_one = {
                     0.3044349351140881
                 ]
             ]
-    },
+        },
         'parameters': {
             'eps': 0.5,
             'min_samples': 1,
@@ -2051,7 +2051,7 @@ reduced_data_no_overall_intersection_cluster_of_one = {
             'step_key': 'S0',
             'task_index': 0,
             'tool_type': 'freehandLine'
-    }
+        }
 }
 
 TestPolygonTReducerClusterOfOne = ReducerTest(

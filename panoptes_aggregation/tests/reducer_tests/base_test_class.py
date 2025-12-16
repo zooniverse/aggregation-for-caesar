@@ -155,10 +155,10 @@ def ReducerTest(
             '''
 
             expect_collab_data = (
-                    isinstance(self.reduced, dict)
-                    and 'data' in self.reduced
-                    and isinstance(self.reduced.get('data'), list)
-                    and len(self.reduced.get('data', [])) > 0
+                isinstance(self.reduced, dict)
+                and 'data' in self.reduced
+                and isinstance(self.reduced.get('data'), list)
+                and len(self.reduced.get('data', [])) > 0
             )
 
             result = reducer(
