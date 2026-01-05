@@ -149,17 +149,10 @@ def ReducerTest(
             self.assertDictEqual(non_built_in_locations, expected)
 
         def test_collab_behavior(self):
-            '''
-            If collab=True, reducer should include extra information.
-            If collab=False (or absent), it should not.
-            '''
-
-            expect_collab_data = (
-                isinstance(self.reduced, dict)
-                and 'data' in self.reduced
-                and isinstance(self.reduced.get('data'), list)
-                and len(self.reduced.get('data', [])) > 0
-            )
+            """
+            If collab=True, reducer should include collab annotations for each consensus polygon.
+            If collab=False, no collab data should be present.
+            """
 
             result = reducer(
                 self.extracted_with_version,
@@ -169,46 +162,98 @@ def ReducerTest(
             )
             result = cast_to_dict(result)
 
-            if expect_collab_data:
-                self.assertIn('data', result)
-                self.assertIsInstance(result['data'], list)
-                self.assertGreater(len(result['data']), 0)
+            collab = bool(kwargs.get('collab', False))
 
-                item = result['data'][0]
+            data = result.get('data', [])
+            self.assertIsInstance(data, list)
 
-                required_keys = {
-                    'stepKey',
-                    'taskIndex',
-                    'taskKey',
-                    'taskType',
-                    'toolIndex',
-                    'frame',
-                    'markID',
-                    'toolType',
-                    'pathX',
-                    'pathY',
-                }
+            if not collab:
+                self.assertEqual(len(data), 0)
+                return
 
-                self.assertSetEqual(set(item.keys()), required_keys)
+            frame_key = next(k for k in self.reduced if isinstance(k, str) and k.startswith('frame'))
+            frame = self.reduced[frame_key]
 
-                self.assertIsInstance(item['stepKey'], str)
-                self.assertIsInstance(item['taskIndex'], int)
-                self.assertIsInstance(item['taskKey'], str)
-                self.assertEqual(item['taskType'], 'drawing')
-                self.assertIsInstance(item['toolIndex'], int)
-                self.assertIsInstance(item['frame'], int)
-                self.assertTrue(item['markID'].startswith('consensus_'))
-                self.assertIsInstance(item['toolType'], str)
+            frame_num = int(frame_key.replace('frame', ''))
 
-                self.assertIsInstance(item['pathX'], list)
-                self.assertIsInstance(item['pathY'], list)
-                self.assertEqual(len(item['pathX']), len(item['pathY']))
-                self.assertGreater(len(item['pathX']), 0)
+            params = self.reduced.get('parameters', {}) if isinstance(self.reduced, dict) else {}
+            expected_step_key = params.get('step_key')
+            expected_tool_type = params.get('tool_type')
+            expected_task_index = kwargs.get('task_index', 0)
 
-            else:
-                self.assertTrue(
-                    'data' not in result or len(result.get('data', [])) == 0
+            required_keys = {
+                'stepKey',
+                'taskIndex',
+                'taskKey',
+                'taskType',
+                'toolIndex',
+                'frame',
+                'markID',
+                'toolType',
+                'pathX',
+                'pathY',
+            }
+
+            expected_counts = {}
+            for k, v in frame.items():
+                if isinstance(k, str) and k.endswith('_clusters_x'):
+                    task_key, tool_part, _ = k.split('_', 2)
+                    tool_index = int(tool_part.replace('tool', ''))
+                    expected_counts[(task_key, tool_index)] = len(v)
+
+            self.assertGreater(len(expected_counts), 0)
+
+            returned = {}
+            for item in data:
+                key = (item['taskKey'], item['toolIndex'])
+                returned.setdefault(key, []).append(item)
+
+            for (task_key, tool_index), expected_n in expected_counts.items():
+                group = returned.get((task_key, tool_index), [])
+                actual_n = len(group)
+
+                self.assertEqual(
+                    expected_n,
+                    actual_n,
+                    f"{task_key} toolIndex={tool_index}: expected {expected_n} consensus polygons, got {actual_n}"
                 )
+
+                expected_markids = {f'consensus_{i}' for i in range(expected_n)}
+                actual_markids = {g.get('markID') for g in group}
+                self.assertSetEqual(expected_markids, actual_markids)
+
+                for annotation in group:
+                    self.assertSetEqual(set(annotation.keys()), required_keys)
+
+                    self.assertIsInstance(annotation['stepKey'], str)
+                    if expected_step_key is not None:
+                        self.assertEqual(annotation['stepKey'], expected_step_key)
+
+                    self.assertIsInstance(annotation['taskIndex'], int)
+                    self.assertEqual(annotation['taskIndex'], expected_task_index)
+
+                    self.assertIsInstance(annotation['taskKey'], str)
+                    self.assertEqual(annotation['taskKey'], task_key)
+
+                    self.assertEqual(annotation['taskType'], 'drawing')
+
+                    self.assertIsInstance(annotation['toolIndex'], int)
+                    self.assertEqual(annotation['toolIndex'], tool_index)
+
+                    self.assertIsInstance(annotation['toolType'], str)
+                    if expected_tool_type is not None:
+                        self.assertEqual(annotation['toolType'], expected_tool_type)
+
+                    self.assertIsInstance(annotation['frame'], int)
+                    self.assertEqual(annotation['frame'], frame_num)
+
+                    self.assertIsInstance(annotation['markID'], str)
+                    self.assertTrue(annotation['markID'].startswith('consensus_'))
+
+                    self.assertIsInstance(annotation['pathX'], list)
+                    self.assertIsInstance(annotation['pathY'], list)
+                    self.assertEqual(len(annotation['pathX']), len(annotation['pathY']))
+                    self.assertGreater(len(annotation['pathX']), 0)
 
         @unittest.skipIf(OFFLINE, 'Installed in offline mode')
         def test_reducer_request(self):
