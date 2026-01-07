@@ -155,12 +155,7 @@ def ReducerTest(
             If collab=True, reducer should include extra annotations for each consensus polygon.
             If collab=False, no extra annotations should be present.
             """
-            result = cast_to_dict(reducer(
-                self.extracted_with_version,
-                **kwargs,
-                **pkwargs,
-                **network_kwargs
-            ))
+            result = reducer(self.extracted_with_version, **kwargs, **pkwargs, **network_kwargs)
 
             collab = bool(kwargs.get("collab", False))
             data = result.get("data", [])
@@ -180,8 +175,16 @@ def ReducerTest(
             expected_task_index = kwargs.get("task_index", 0)
 
             required_keys = {
-                "stepKey", "taskIndex", "taskKey", "taskType", "toolIndex",
-                "frame", "markID", "toolType", "pathX", "pathY",
+                "stepKey",
+                "taskIndex",
+                "taskKey",
+                "taskType",
+                "toolIndex",
+                "frame",
+                "markID",
+                "toolType",
+                "pathX",
+                "pathY"
             }
 
             expected_counts = {}

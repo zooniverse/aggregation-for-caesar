@@ -1,5 +1,6 @@
 from functools import wraps
 
+
 def collab_wrapper(func):
     @wraps(func)
     def wrapper(argument, **kwargs):
