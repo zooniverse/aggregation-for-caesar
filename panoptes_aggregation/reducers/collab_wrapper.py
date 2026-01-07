@@ -8,6 +8,7 @@ def collab_wrapper(func):
         step_key = kwargs.get('step_key', 'S0')
         task_index = kwargs.get('task_index', 0)
         tool_type = kwargs.get('tool_type', 'freehandLine')
+        min_threshold = kwargs.get('min_threshold', 0)
 
         clusters = func(argument, **kwargs)
 
@@ -24,7 +25,6 @@ def collab_wrapper(func):
 
                         # shape dependent code goes
                         # new_dict = shape_dep_fn(...)
-
                         if key.endswith("_clusters_x"):
                             # classifier v2.0
                             if 'toolIndex' in key:

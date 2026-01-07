@@ -61,6 +61,7 @@ def process_data(data):
         row_ct.setdefault(frame, {})
         data_by_tool[frame] = {}
         unique_tools = set(sum([['_'.join(k.split('_')[:-1]) for k in d.get(frame, {}).keys()] for d in data], []))
+        n_classifications_frame = len(data)
         for tool in unique_tools:
             # gold standard is not a tool
             if tool == 'gold':
@@ -69,6 +70,7 @@ def process_data(data):
             for user_ct, d in enumerate(data):
                 if frame in d:
                     data_by_tool[frame].setdefault(tool, {'X': [], 'data': []})
+                    data_by_tool[frame][tool]['n_classifications'] = n_classifications_frame
                     if ('{0}_pathX'.format(tool) in d[frame]) and ('{0}_pathY'.format(tool) in d[frame]):
                         value = d[frame]
                         row_ct[frame].setdefault(tool, 0)
@@ -128,6 +130,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
         * 'step_key' : Identifies the step key. Defaults to 'S0'.
         * 'task_index' : The task index. Defaults to 0.
         * 'tool_type' : The tool used to create the polygons. Defaults to 'freehandLine'.
+        * 'min_threshold' : If the threshold value for a cluster is less than min_threshold, it is not added to the dictionary. Defaults to 0.
 
     Returns
     -------
@@ -140,6 +143,8 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
         * `tool*_clusters_y` : A list of the y values of each cluster
         * `tool*_consensus` : A list of the overall consensus of each cluster. A value of 1 is perfect agreement, a value of 0 is complete disagreement. This is found by subtracting`IoU_cluster_mean_distance` from 1
         * `annotations` : Contains the consensus polygons in the original classification format, which is included in the output if `collab` is set to True. For use with the Zooniverse front-end.
+        * `data` : Contains the consensus polygons in the original classification format, which is included in the output if `collab` is set to True. For use with the Zooniverse front-end.
+        * `threshold` : For each cluster, the threshold is the number of items in the cluster divided by the total number of classifications.
 
     '''
 
@@ -147,6 +152,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
     kwargs_dbscan.pop('step_key', None)
     kwargs_dbscan.pop('task_index', None)
     kwargs_dbscan.pop('tool_type', None)
+    min_threshold = kwargs_dbscan.pop('min_threshold', 0)
 
     average_type = kwargs_dbscan.pop('average_type', 'median')
     if average_type == "intersection":
@@ -192,6 +198,9 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                 for label in set(labels_array):
                     if label > -1:
                         cdx = labels_array == label
+                        cluster_items = int(cdx.sum())
+                        n_classifications = value.get('n_classifications')
+                        threshold = cluster_items / n_classifications
                         kwargs_cluster = {}
                         kwargs_cluster['created_at'] = created_at_full_array[cdx]
                         # number of points in the cluster
@@ -211,9 +220,11 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                             # exterior makes sure you ignore any interior holes
                             average_polygon = np.array(list(cluster_average.exterior.coords))
 
-                        # Add to the dictionary
-                        clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
-                        clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
-                        clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
+                        if threshold > min_threshold:
+                            # Add to the dictionary
+                            clusters[frame].setdefault('threshold', []).append(threshold)
+                            clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
+                            clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
+                            clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
 
     return OrderedDict(sorted(clusters.items()))
