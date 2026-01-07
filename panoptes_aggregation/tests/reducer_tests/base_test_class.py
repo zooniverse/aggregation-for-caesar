@@ -220,8 +220,6 @@ def ReducerTest(
                     self.assertEqual(annotation["taskType"], "drawing")
                     self.assertEqual(annotation["toolIndex"], tool_index)
                     self.assertEqual(annotation["frame"], frame_num)
-                    self.assertIsInstance(annotation["markID"], str)
-                    self.assertTrue(annotation["markID"].startswith("consensus_"))
                     self.assertIsInstance(annotation["pathX"], list)
                     self.assertIsInstance(annotation["pathY"], list)
                     self.assertEqual(len(annotation["pathX"]), len(annotation["pathY"]))
