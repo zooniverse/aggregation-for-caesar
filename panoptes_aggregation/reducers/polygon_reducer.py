@@ -98,6 +98,7 @@ def process_data(data):
                                 row_ct[frame][tool] += 1
     return data_by_tool
 
+
 @collab_wrapper
 @reducer_wrapper(
     process_data=process_data,
@@ -141,7 +142,6 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
         * `annotations` : Contains the consensus polygons in the original classification format, which is included in the output if `collab` is set to True. For use with the Zooniverse front-end.
 
     '''
-
 
     kwargs_dbscan.pop('collab', None)
     kwargs_dbscan.pop('step_key', None)
