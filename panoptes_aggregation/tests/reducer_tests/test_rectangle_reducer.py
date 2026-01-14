@@ -232,3 +232,195 @@ TestSWRectReducer = ReducerTest(
     },
     test_name='TestSWRectReducer'
 )
+
+extracted_data_with_mixed_subtasks = [
+    {
+        'frame0': {
+            'T0_tool0_x': [0.0, 100.0],
+            'T0_tool0_y': [0.0, 100.0],
+            'T0_tool0_width': [50.0, 10.0],
+            'T0_tool0_height': [20.0, 8.0],
+            'T0_tool0_details': [[],
+                                 [
+                                     {'text': '', 'gold_standard': False},
+                                     {'text': '', 'gold_standard': False},
+                                     {'text': '', 'gold_standard': False},
+                                     {'text': '', 'gold_standard': False}
+                                 ]
+            ],
+        },
+        'frame1': {
+            'T0_tool1_x': [50.0],
+            'T0_tool1_y': [50.0],
+            'T0_tool1_width': [50.0],
+            'T0_tool1_height': [50.0]
+        }
+    },
+    {
+        'frame0': {
+            'T0_tool0_x': [0.0, 100.0],
+            'T0_tool0_y': [0.0, 100.0],
+            'T0_tool0_width': [50.0, 10.0],
+            'T0_tool0_height': [20.0, 8.0],
+            'T0_tool0_details': [
+                [
+                    {'text': '', 'gold_standard': False},
+                    {'text': '', 'gold_standard': False},
+                    {'text': '', 'gold_standard': False},
+                    {'text': '', 'gold_standard': False}
+                ],
+                [
+                     {'text': '', 'gold_standard': False},
+                     {'text': '', 'gold_standard': False},
+                     {'text': '', 'gold_standard': False},
+                     {'text': '', 'gold_standard': False}
+                ]
+            ],
+            'T0_tool1_x': [0.0, 100.0],
+            'T0_tool1_y': [100.0, 0.0],
+            'T0_tool1_width': [10.0, 50.0],
+            'T0_tool1_height': [8.0, 20.0]
+        }
+    },
+    {
+        'frame1': {
+            'T0_tool1_x': [50.0],
+            'T0_tool1_y': [50.0],
+            'T0_tool1_width': [50.0],
+            'T0_tool1_height': [50.0]
+        }
+    },
+    {
+        'frame0': {
+            'T0_tool1_x': [0.0, 100.0],
+            'T0_tool1_y': [100.0, 0.0],
+            'T0_tool1_width': [10.0, 50.0],
+            'T0_tool1_height': [8.0, 20.0]
+        },
+        'frame1': {
+            'T0_tool0_x': [20.0],
+            'T0_tool0_y': [20.0],
+            'T0_tool0_width': [20.0],
+            'T0_tool0_height': [20.0]
+        }
+    },
+    {}
+]
+
+processed_data_with_mixed_subtasks = {
+    'frame0': {
+        'T0_tool0': [
+            (0.0, 0.0, 50.0, 20.0),
+            (100.0, 100.0, 10.0, 8.0),
+            (0.0, 0.0, 50.0, 20.0),
+            (100.0, 100.0, 10.0, 8.0),
+        ],
+
+        'T0_tool0_details': [
+            [],
+            [
+                {'text': '', 'gold_standard': False},
+                {'text': '', 'gold_standard': False},
+                {'text': '', 'gold_standard': False},
+                {'text': '', 'gold_standard': False},
+            ],
+            [
+                {'text': '', 'gold_standard': False},
+                {'text': '', 'gold_standard': False},
+                {'text': '', "gold_standard": False},
+                {'text': '', 'gold_standard': False},
+            ],
+            [
+                {'text': '', "gold_standard": False},
+                {'text': '', "gold_standard": False},
+                {'text': '', "gold_standard": False},
+                {'text': '', "gold_standard": False},
+            ],
+        ],
+
+        "T0_tool1": [
+            (0.0, 100.0, 10.0, 8.0),
+            (100.0, 0.0, 50.0, 20.0),
+            (0.0, 100.0, 10.0, 8.0),
+            (100.0, 0.0, 50.0, 20.0),
+        ],
+    }
+}
+
+reduced_data_with_mixed_subtasks = {
+    'frame0': {
+        'T0_tool0_rec_x': [0.0, 100.0, 0.0, 100.0],
+        'T0_tool0_rec_y': [0.0, 100.0, 0.0, 100.0],
+        'T0_tool0_rec_width': [50.0, 10.0, 50.0, 10.0],
+        'T0_tool0_rec_height': [20.0, 8.0, 20.0, 8.0],
+        'T0_tool0_cluster_labels': [0, 1, 0, 1],
+        'T0_tool0_clusters_count': [2, 2],
+        'T0_tool0_clusters_x': [0.0, 100.0],
+        'T0_tool0_clusters_y': [0.0, 100.0],
+        'T0_tool0_clusters_width': [50.0, 10.0],
+        'T0_tool0_clusters_height': [20.0, 8.0],
+        'T0_tool0_details': [
+            [],
+            [
+                {'text': '', 'gold_standard': False},
+                {'text': '', 'gold_standard': False},
+                {'text': '', 'gold_standard': False},
+                {'text': '', 'gold_standard': False}
+            ],
+[
+                {'text': '', 'gold_standard': False},
+                {'text': '', 'gold_standard': False},
+                {'text': '', 'gold_standard': False},
+                {'text': '', 'gold_standard': False}
+            ],
+[
+                {'text': '', 'gold_standard': False},
+                {'text': '', 'gold_standard': False},
+                {'text': '', 'gold_standard': False},
+                {'text': '', 'gold_standard': False}
+            ]
+        ],
+        'T0_tool1_rec_x': [0.0, 100.0, 0.0, 100.0],
+        'T0_tool1_rec_y': [100.0, 0.0, 100.0, 0.0],
+        'T0_tool1_rec_width': [10.0, 50.0, 10.0, 50.0],
+        'T0_tool1_rec_height': [8.0, 20.0, 8.0, 20.0],
+        'T0_tool1_cluster_labels': [0, 1, 0, 1],
+        'T0_tool1_clusters_count': [2, 2],
+        'T0_tool1_clusters_x': [0.0, 100.0],
+        'T0_tool1_clusters_y': [100.0, 0.0],
+        'T0_tool1_clusters_width': [10.0, 50.0],
+        'T0_tool1_clusters_height': [8.0, 20.0],
+    },
+    'frame1': {
+        'T0_tool0_rec_x': [20.0],
+        'T0_tool0_rec_y': [20.0],
+        'T0_tool0_rec_width': [20.0],
+        'T0_tool0_rec_height': [20.0],
+        'T0_tool0_cluster_labels': [-1],
+        'T0_tool1_rec_x': [50.0, 50.0],
+        'T0_tool1_rec_y': [50.0, 50.0],
+        'T0_tool1_rec_width': [50.0, 50.0],
+        'T0_tool1_rec_height': [50.0, 50.0],
+        'T0_tool1_cluster_labels': [0, 0],
+        'T0_tool1_clusters_count': [2],
+        'T0_tool1_clusters_x': [50.0],
+        'T0_tool1_clusters_y': [50.0],
+        'T0_tool1_clusters_width': [50.0],
+        'T0_tool1_clusters_height': [50.0],
+    }
+}
+
+TestRectReducerMixedSubtasks = ReducerTest(
+    rectangle_reducer,
+    process_data,
+    extracted_data_with_mixed_subtasks,
+    processed_data_with_mixed_subtasks,
+    reduced_data_with_mixed_subtasks,
+    'Test rectangle reducer with extracted data with both empty and non-empty subtasks',
+    network_kwargs=kwargs_extra_data,
+    kwargs={
+        'eps': 5,
+        'min_samples': 2
+    },
+    test_name='TestRectReducerMixedSubtasks'
+)
