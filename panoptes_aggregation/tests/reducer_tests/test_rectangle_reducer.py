@@ -1,5 +1,5 @@
 from panoptes_aggregation.reducers.rectangle_reducer import process_data, rectangle_reducer
-from .base_test_class import ReducerTest
+from .base_test_class import ReducerTest, ReducerTestNoProcessing
 
 extracted_data = [
     {
@@ -563,285 +563,6 @@ extracted_data_with_mixed_subtasks = [
     },
 ]
 
-processed_data_with_mixed_subtasks = {
-    "frame0": {
-        "T0_tool0": [
-            (901.3092651367188, 729.5806884765625, 770.7821655273438, 102.1082763671875),
-            (904.9237060546875, 840.72509765625, 750.902587890625, 93.975830078125),
-            (896.7911987304688, 940.12255859375, 728.3123168945312, 110.2408447265625),
-            (880.5261840820312, 1035.905517578125, 774.3965454101562, 114.7589111328125),
-            (887.7550659179688, 1137.1102294921875, 782.5291137695312, 127.409423828125),
-            (867.8756103515625, 1250.965576171875, 835.84228515625, 84.9395751953125),
-            (890.4659423828125, 1357.5919189453125, 793.3724365234375, 120.1805419921875),
-            (893.1767578125, 1462.4110107421875, 768.0712890625, 110.2408447265625),
-            (903.1165161132812, 1561.808349609375, 766.2640991210938, 130.120361328125),
-            (894.080322265625, 1680.1817626953125, 752.7099609375, 72.2891845703125),
-            (913.9598388671875, 1766.0250244140625, 760.8424072265625, 95.782958984375),
-            (915.76708984375, 1873.554931640625, 752.7098388671875, 129.216552734375),
-            (938.0682373046875, 1989.89404296875, 631.625732421875, 75.903564453125),
-            (976.9236450195312, 2072.122802734375, 637.0473022460938, 136.44580078125),
-            (985.9597778320312, 2215.79736328125, 652.4087524414062, 65.060302734375),
-            (-9.742353439331055, -3.116422653198242, 336.03468132019043, 524.3477458953857),
-            (423.4798278808594, 256.030029296875, 349.5593566894531, 113.49136352539062),
-            (1160.939208984375, 243.6797332763672, 102.291015625, 94.02519226074219),
-            (883.1085205078125, 383.2991943359375, 48.19427490234375, 96.18414306640625),
-            (1363.4852294921875, 110.43333435058594, 50.0760498046875, 82.36686706542969),
-            (1115.87890625, 712.0652465820312, 0, 0),
-            (873.0498046875, 699.6864013671875, 472.5726318359375, 26.27093505859375),
-            (1031.3603515625, 719.7999877929688, 355.8408203125, 31.686279296875),
-            (1181.77392578125, 713.116455078125, 488.4212646484375, 9.3726806640625),
-            (903.3765869140625, 737.5718994140625, 276.3695068359375, 24.7528076171875),
-            (1185.6890869140625, 753.4766235351562, 191.9783935546875, 30.563232421875),
-            (891.61962890625, 715.47021484375, 309.0950927734375, 120.85577392578125),
-            (880.8611450195312, 695.65087890625, 807.5890502929688, 122.03204345703125),
-            (876.495849609375, 819.0789794921875, 809.861083984375, 88.61627197265625),
-            (872.1119384765625, 909.5127563476562, 813.3726806640625, 103.9720458984375),
-            (874.17138671875, 1017.8277587890625, 827.4056396484375, 91.78271484375),
-            (872.6128540039062, 1117.206298828125, 815.9467163085938, 101.5477294921875),
-            (878.608642578125, 1335.4556884765625, 809.661376953125, 91.816650390625),
-            (884.288818359375, 1436.809326171875, 801.8133544921875, 94.9967041015625),
-            (886.793212890625, 1547.3175048828125, 791.160888671875, 90.3236083984375),
-            (887.1810913085938, 1649.8463134765625, 802.7300415039062, 100.845947265625),
-            (887.0620727539062, 1759.5242919921875, 798.5192260742188, 101.8271484375),
-            (893.8353881835938, 1874.884521484375, 800.9204711914062, 75.5814208984375),
-            (884.1692504882812, 1985.36669921875, 805.5040893554688, 96.654052734375),
-            (904.79541015625, 2085.9462890625, 762.917724609375, 81.45263671875),
-            (887.8665161132812, 2206.82373046875, 794.4669799804688, 78.5068359375),
-            (870.9708251953125, 1343.0013427734375, 816.923095703125, 99.2750244140625),
-            (875.6729125976562, 2184.53515625, 811.0797729492188, 104.9940185546875),
-        ],
-        "T0_tool0_details": [
-            [
-                {"text": "Lilley", "gold_standard": False},
-                {"text": "1915-05-05", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Malta", "gold_standard": False},
-                {"text": "1917-05-18", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "J. Lilley &Son", "gold_standard": False},
-                {"text": "1917-12-07", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Cape of Good Hope", "gold_standard": False},
-                {"text": "1918-07-02", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "J Lilley &Son", "gold_standard": False},
-                {"text": "1918-09-20", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": 'HMS ""Kildare""', "gold_standard": False},
-                {"text": "1919-05-05", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "J Lilly&Son", "gold_standard": False},
-                {"text": "1922-10-13", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "JLilley &Son", "gold_standard": False},
-                {"text": "1923-02-16", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "J Lilley &Son", "gold_standard": False},
-                {"text": "1923-04-27", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Portsmouth", "gold_standard": False},
-                {"text": "1924-03-31", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Sheerness", "gold_standard": False},
-                {"text": "1926-01-27", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Lilley", "gold_standard": False},
-                {"text": "1927-03-31", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Portsmouth", "gold_standard": False},
-                {"text": "1929-12-03", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Lilley", "gold_standard": False},
-                {"text": "1931-03-25", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "V. Kullberg", "gold_standard": False},
-                {"text": "1935-08-30", "gold_standard": False},
-                {"text": "2-16-0", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Lilly", "gold_standard": False},
-                {"text": "1915-05-05", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Malta", "gold_standard": False},
-                {"text": "1914-05-18", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "J. Lilley & Son", "gold_standard": False},
-                {"text": "1914-12-07", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Cape of Good Hope", "gold_standard": False},
-                {"text": "1918-07-02", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "J Lilley & Son", "gold_standard": False},
-                {"text": "1918-09-20", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "J Lilley & Son", "gold_standard": False},
-                {"text": "1922-12-13", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "J Lilley & Son", "gold_standard": False},
-                {"text": "1923-02-07", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "J Lilly & Son", "gold_standard": False},
-                {"text": "1923-04-27", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Portsmouth", "gold_standard": False},
-                {"text": "1924-03-31", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Sheemess", "gold_standard": False},
-                {"text": "1926-01-27", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Lilly", "gold_standard": False},
-                {"text": "1924-05-31", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Portsmouth", "gold_standard": False},
-                {"text": "1919-12-03", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "Lilly", "gold_standard": False},
-                {"text": "1931-03-28", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "V. Kullberg (unclear)", "gold_standard": False},
-                {"text": "1935-08-30", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "(unclear)Steve Vildare(unclear)", "gold_standard": False},
-                {"text": "1919-05-05", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-            [
-                {"text": "V Kullberg ", "gold_standard": False},
-                {"text": "1935-08-30", "gold_standard": False},
-                {"text": "2-16-0", "gold_standard": False},
-                {"text": "", "gold_standard": False},
-            ],
-        ],
-    }
-}
 
 reduced_data_with_mixed_subtasks = {
     "frame0": {
@@ -1002,12 +723,6 @@ reduced_data_with_mixed_subtasks = {
                 {"text": "2-16-0", "gold_standard": False},
                 {"text": "", "gold_standard": False},
             ],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
             [
                 {"text": "", "gold_standard": False},
                 {"text": "", "gold_standard": False},
@@ -1145,17 +860,23 @@ reduced_data_with_mixed_subtasks = {
 }
 
 
-TestRectReducerMixedSubtasks = ReducerTest(
+TestRectReducerMixedSubtasks = ReducerTestNoProcessing(
     rectangle_reducer,
-    process_data,
     extracted_data_with_mixed_subtasks,
-    processed_data_with_mixed_subtasks,
     reduced_data_with_mixed_subtasks,
     'Test rectangle reducer with extracted data with both empty and non-empty subtasks',
     network_kwargs=kwargs_extra_data,
     kwargs={
         'eps': 5,
-        'min_samples': 2
+        'min_samples': 2,
+        'details': {
+            'T0_tool0': [
+                'text_reducer',
+                'text_reducer',
+                'text_reducer',
+                'text_reducer'
+                    ]
+                }
     },
     test_name='TestRectReducerMixedSubtasks'
 )
