@@ -577,7 +577,8 @@ reduced_data_with_mixed_subtasks = {
             872.6128540039062, 878.608642578125, 884.288818359375,
             886.793212890625, 887.1810913085938, 887.0620727539062,
             893.8353881835938, 884.1692504882812, 904.79541015625,
-            887.8665161132812, 870.9708251953125,
+            887.8665161132812,
+            870.9708251953125,
             875.6729125976562
         ],
         "T0_tool0_rec_y": [
@@ -592,6 +593,7 @@ reduced_data_with_mixed_subtasks = {
             1436.809326171875, 1547.3175048828125, 1649.8463134765625,
             1759.5242919921875, 1874.884521484375, 1985.36669921875,
             2085.9462890625, 2206.82373046875,
+            1343.0013427734375,
             2184.53515625
         ],
         "T0_tool0_rec_width": [
@@ -606,6 +608,7 @@ reduced_data_with_mixed_subtasks = {
             801.8133544921875, 791.160888671875, 802.7300415039062,
             798.5192260742188, 800.9204711914062, 805.5040893554688,
             762.917724609375, 794.4669799804688,
+            816.923095703125,
             811.0797729492188
         ],
         "T0_tool0_rec_height": [
@@ -620,18 +623,16 @@ reduced_data_with_mixed_subtasks = {
             94.9967041015625, 90.3236083984375, 100.845947265625,
             101.8271484375, 75.5814208984375, 96.654052734375,
             81.45263671875, 78.5068359375,
+            99.2750244140625,
             104.9940185546875
         ],
         "T0_tool0_cluster_labels": [
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            2
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1,
+            -1
         ],
-        "T0_tool0_clusters_count": [],
-        "T0_tool0_clusters_x": [],
-        "T0_tool0_clusters_y": [],
-        "T0_tool0_clusters_width": [],
-        "T0_tool0_clusters_height": [],
         "T0_tool0_details": [
             [
                 {"text": "Lilley", "gold_standard": False},
@@ -721,6 +722,42 @@ reduced_data_with_mixed_subtasks = {
                 {"text": "V. Kullberg", "gold_standard": False},
                 {"text": "1935-08-30", "gold_standard": False},
                 {"text": "2-16-0", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+            ],
+            [
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+            ],
+            [
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+            ],
+            [
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+            ],
+            [
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+            ],
+            [
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+            ],
+            [
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
+                {"text": "", "gold_standard": False},
                 {"text": "", "gold_standard": False},
             ],
             [
