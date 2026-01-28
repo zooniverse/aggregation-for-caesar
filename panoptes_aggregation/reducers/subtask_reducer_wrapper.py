@@ -89,21 +89,17 @@ def subtask_wrapper(func):
                     # reducer from running in the first place
                     pass
         except (ValueError):
-            for d_index, d in enumerate(data_in):
-                #print(d_index, d)
-                for frame, tools in d.items():
-                    for key, value in tools.items():
-                        remove_indices = []
-                        for v_index, v in enumerate(value):
-                            if v == []:
-                                #print(f"Found empty [] at data_in[{d_index}]['{frame}']['{key}'][{v_index}]")
-                                #print(data_in[d_index][frame][key][v_index])
-                                remove_indices.append(v_index)
-                        if remove_indices:
-                            for i in range(len(remove_indices)):
-                                print(key, value)
-                                for k, val in tools.items():
-                                    print(remove_indices[i])
+            for frame_key, frame in output.items():
+                for key, values in frame.items():
+                    remove_indices = []
+                    for v_index, v in enumerate(values):
+                        if v == []:
+                            remove_indices.append(v_index)
+                    if remove_indices:
+                        for i in range(len(remove_indices)):
+                            for key, values in frame.items():
+                                values.pop(remove_indices[-1 - i])
+
             pass
         return output
     return wrapper
