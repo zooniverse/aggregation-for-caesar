@@ -89,16 +89,15 @@ def subtask_wrapper(func):
                     # reducer from running in the first place
                     pass
         except (ValueError):
+            remove_indices = []
             for frame_key, frame in output.items():
                 for key, values in frame.items():
-                    remove_indices = []
                     for v_index, v in enumerate(values):
                         if v == []:
                             remove_indices.append(v_index)
                     if remove_indices:
                         for i in range(len(remove_indices)):
-                            for key, values in frame.items():
-                                values.pop(remove_indices[-1 - i])
+                            values.pop(remove_indices[-1 - i])
 
             pass
         return output
