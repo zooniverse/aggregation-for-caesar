@@ -8,13 +8,13 @@ from packaging import version
 def subtask_wrapper(func):
     @wraps(func)
     def wrapper(data, **kwargs):
+        details_functions = kwargs.pop('details', None)
+        user_id = np.array(kwargs.pop('user_id', []))
+        # data_in is the list of original extracts
+        # data is the `processed` data_in
+        data_in = kwargs.pop('data_in', None)
+        output = func(data, **kwargs)
         try:
-            details_functions = kwargs.pop('details', None)
-            user_id = np.array(kwargs.pop('user_id', []))
-            # data_in is the list of original extracts
-            # data is the `processed` data_in
-            data_in = kwargs.pop('data_in', None)
-            output = func(data, **kwargs)
             if details_functions is not None:
                 classifier_versions = np.array([version.parse(d.pop('classifier_version', '1.0')) for d in data_in])
                 if all(classifier_versions == version.parse('1.0')):
