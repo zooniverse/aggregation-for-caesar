@@ -1326,7 +1326,7 @@ TestRectReducerOneEmptySubtasks = ReducerTestNoProcessing(
     shape_reducer_dbscan,
     extracted_data_cluster_with_empty_subtask,
     reduced_data_cluster_with_empty_subtask,
-    'Test rectangle reducer with extracted data with both empty and non-empty subtasks',
+    'Test rectangle reducer with a cluster with both empty and non-empty subtasks',
     network_kwargs=kwargs_extra_data,
     kwargs={
         'eps': 0.5,
