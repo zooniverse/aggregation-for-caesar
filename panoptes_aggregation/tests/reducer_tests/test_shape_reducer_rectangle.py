@@ -885,7 +885,7 @@ TestRectReducerEmptySubtasksClustersOfOne = ReducerTestNoProcessing(
 )
 
 
-extracted_data_with_one_empty_subtask = [
+extracted_data_cluster_with_empty_subtask = [
     {
         "frame0": {
             "T0_tool0_x": [
@@ -1105,7 +1105,7 @@ extracted_data_with_one_empty_subtask = [
     },
 ]
 
-reduced_data_with_one_empty_subtask = {
+reduced_data_cluster_with_empty_subtask = {
     "frame0": {
         "T0_tool0_rectangle_x": [
             395.15679931640625, 394.6253662109375, 391.43670654296875,
@@ -1325,8 +1325,8 @@ reduced_data_with_one_empty_subtask = {
 
 TestRectReducerOneEmptySubtasks = ReducerTestNoProcessing(
     shape_reducer_dbscan,
-    extracted_data_with_one_empty_subtask,
-    reduced_data_with_one_empty_subtask,
+    extracted_data_cluster_with_empty_subtask,
+    reduced_data_cluster_with_empty_subtask,
     'Test rectangle reducer with extracted data with both empty and non-empty subtasks',
     network_kwargs=kwargs_extra_data,
     kwargs={
