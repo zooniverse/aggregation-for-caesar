@@ -1,5 +1,5 @@
 from panoptes_aggregation.reducers.rectangle_reducer import process_data, rectangle_reducer
-from .base_test_class import ReducerTest, ReducerTestNoProcessing
+from .base_test_class import ReducerTest
 
 extracted_data = [
     {
