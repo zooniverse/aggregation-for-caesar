@@ -880,7 +880,7 @@ TestRectReducerEmptySubtasksClustersOfOne = ReducerTestNoProcessing(
             ]
         }
     },
-    test_name='TestRectReducerEmptySubtasksClustersOfOne'
+    test_name='TestShapeReducerRectangleClustersOfOneWithEmptySubtasks'
 )
 
 
@@ -1343,5 +1343,5 @@ TestRectReducerOneEmptySubtasks = ReducerTestNoProcessing(
             ]
         }
     },
-    test_name='TestRectReducerOneEmptySubtask'
+    test_name='TestShapeReducerRectangleClusterWithEmptySubtask'
 )
