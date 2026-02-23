@@ -218,8 +218,8 @@ extracted_data_empty_subtasks_clusters_of_one = [
                 75.903564453125, 136.44580078125, 65.060302734375
             ],
             "T0_tool0_details": [
-                [{
-                    'text': 'Lilley', 'gold_standard': False},
+                [
+                    {'text': 'Lilley', 'gold_standard': False},
                     {'text': '1915-05-05', 'gold_standard': False},
                     {'text': '', 'gold_standard': False},
                     {'text': '', 'gold_standard': False}
@@ -859,7 +859,6 @@ reduced_data_empty_subtasks_clusters_of_one = {
 }
 
 
-
 TestRectReducerEmptySubtasksClustersOfOne = ReducerTestNoProcessing(
     shape_reducer_dbscan,
     extracted_data_empty_subtasks_clusters_of_one,
@@ -878,8 +877,8 @@ TestRectReducerEmptySubtasksClustersOfOne = ReducerTestNoProcessing(
                 'text_reducer',
                 'text_reducer',
                 'text_reducer'
-                    ]
-                }
+            ]
+        }
     },
     test_name='TestRectReducerEmptySubtasksClustersOfOne'
 )
