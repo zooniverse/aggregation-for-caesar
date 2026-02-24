@@ -605,6 +605,7 @@ reduced_data_last = {
             'min_samples': 2,
             'average_type': 'last',
             'collab': False,
+            'min_threshold': 0,
             'step_key': 'S0',
             'task_index': 0,
             'tool_type': 'freehandLine'
@@ -896,6 +897,7 @@ reduced_data_last_collab_true = {
             'min_samples': 2,
             'average_type': 'last',
             'collab': True,
+            'min_threshold': 0,
             'step_key': 'S0',
             'task_index': 0,
             'tool_type': 'freehandLine'
@@ -1072,6 +1074,7 @@ reduced_data_last_non_default = {
             'min_samples': 2,
             'average_type': 'last',
             'collab': False,
+            'min_threshold': 0,
             'step_key': 'S1',
             'task_index': 1,
             'tool_type': 'freehandDrawing'
@@ -1205,6 +1208,7 @@ reduced_data_median = {
             'min_samples': 2,
             'average_type': 'median',
             'collab': False,
+            'min_threshold': 0,
             'step_key': 'S0',
             'task_index': 0,
             'tool_type': 'freehandLine'
@@ -1351,6 +1355,7 @@ reduced_data_intersection = {
             'min_samples': 2,
             'average_type': 'intersection',
             'collab': False,
+            'min_threshold': 0,
             'step_key': 'S0',
             'task_index': 0,
             'tool_type': 'freehandLine'
@@ -1559,6 +1564,7 @@ reduced_data_union = {
             'min_samples': 2,
             'average_type': 'union',
             'collab': False,
+            'min_threshold': 0,
             'step_key': 'S0',
             'task_index': 0,
             'tool_type': 'freehandLine'
@@ -2092,6 +2098,7 @@ reduced_data_no_overall_intersection = {
             'min_samples': 2,
             'average_type': 'intersection',
             'collab': False,
+            'min_threshold': 0,
             'step_key': 'S0',
             'task_index': 0,
             'tool_type': 'freehandLine'
@@ -2199,6 +2206,7 @@ reduced_data_no_overall_intersection_cluster_of_one = {
             'min_samples': 1,
             'average_type': 'last',
             'collab': False,
+            'min_threshold': 0,
             'step_key': 'S0',
             'task_index': 0,
             'tool_type': 'freehandLine'
