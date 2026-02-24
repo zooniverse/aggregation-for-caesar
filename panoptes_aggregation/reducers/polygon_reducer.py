@@ -26,7 +26,8 @@ DEFAULTS = {
     'collab': {'default': False, 'type': bool},
     'step_key': {'default': 'S0', 'type': str},
     'task_index': {'default': 0, 'type': int},
-    'tool_type': {'default': 'freehandLine', 'type': str}
+    'tool_type': {'default': 'freehandLine', 'type': str},
+    'min_threshold': {'default': 0, 'type': float}
 }
 
 
