@@ -26,8 +26,8 @@ DEFAULTS = {
     'collab': {'default': False, 'type': bool},
     'step_key': {'default': 'S0', 'type': str},
     'task_index': {'default': 0, 'type': int},
-    'tool_type': {'default': 'freehandLine', 'type': str},
-    'min_threshold': {'default': 0, 'type': float}
+    'tool_type': {'default': 'freehandLine', 'type': str}
+    #'min_threshold': {'default': 0, 'type': float}
 }
 
 
@@ -149,11 +149,10 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
 
     '''
 
-    kwargs_dbscan.pop('collab', None)
+    collab = kwargs_dbscan.pop('collab', None)
     kwargs_dbscan.pop('step_key', None)
     kwargs_dbscan.pop('task_index', None)
     kwargs_dbscan.pop('tool_type', None)
-    min_threshold = kwargs_dbscan.pop('min_threshold', 0)
 
     average_type = kwargs_dbscan.pop('average_type', 'median')
     if average_type == "intersection":
@@ -193,7 +192,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                 # Update the cluster labels of polygons
                 clusters[frame]['{0}_cluster_labels'.format(tool)] = labels_array.tolist()
                 # Create a list of when the different polygons were created, assuming the order X matches the order of created_at_array.
-                # The cteaed_at list originally provided is when all of the classifications per user were added
+                # The created_at list originally provided is when all of the classifications per user were added
                 created_at_full_array = np.array([created_at[int(user_id)] for user_id in X[:, 1]])
                 # Looping through each cluster
                 for label in set(labels_array):
@@ -201,7 +200,6 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                         cdx = labels_array == label
                         cluster_items = int(cdx.sum())
                         n_classifications = value.get('n_classifications')
-                        threshold = cluster_items / n_classifications
                         kwargs_cluster = {}
                         kwargs_cluster['created_at'] = created_at_full_array[cdx]
                         # number of points in the cluster
@@ -221,11 +219,11 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                             # exterior makes sure you ignore any interior holes
                             average_polygon = np.array(list(cluster_average.exterior.coords))
 
-                        if threshold > min_threshold:
-                            # Add to the dictionary
-                            clusters[frame].setdefault('threshold', []).append(threshold)
-                            clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
-                            clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
-                            clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
+                        # Add to the dictionary
+                        clusters.setdefault('n_classifications', []).append(n_classifications)
+                        clusters.setdefault('cluster_items', []).append(cluster_items)
+                        clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
+                        clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
+                        clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
 
     return OrderedDict(sorted(clusters.items()))
