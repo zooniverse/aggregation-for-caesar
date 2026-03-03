@@ -1,5 +1,5 @@
 from functools import wraps
-
+import numpy as np
 
 def collab_wrapper(func):
     @wraps(func)
@@ -16,13 +16,15 @@ def collab_wrapper(func):
             return clusters
 
         if collab:
+            cluster_items = np.array(clusters.get('cluster_items'))
+            n_classifications = np.array(clusters.get('n_classifications', 0))
+            threshold = cluster_items / n_classifications
             for frame_key, frame_data in list(clusters.items()):
                 if frame_key.startswith('frame'):
                     frame_split = frame_key.split("frame")
                     frame_num = frame_split[1]
 
                     for key, value in frame_data.items():
-
                         # shape dependent code goes
                         # new_dict = shape_dep_fn(...)
                         if key.endswith("_clusters_x"):
@@ -47,6 +49,9 @@ def collab_wrapper(func):
 
                             for i in range(len(clusters_x)):
                                 annotations = {
+                                    'cluster_items': cluster_items,
+                                    'n_classifications': n_classifications,
+                                    'threshold': threshold,
                                     'stepKey': step_key,
                                     'taskIndex': task_index,
                                     'taskKey': task_key,
