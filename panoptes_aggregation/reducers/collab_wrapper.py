@@ -12,62 +12,64 @@ def collab_wrapper(func):
 
         clusters = func(argument, **kwargs)
 
+
         if not collab:
             return clusters
 
         if collab:
             cluster_items = np.array(clusters.get('cluster_items'))
             n_classifications = np.array(clusters.get('n_classifications', 0))
-            threshold = cluster_items / n_classifications
-            for frame_key, frame_data in list(clusters.items()):
-                if frame_key.startswith('frame'):
-                    frame_split = frame_key.split("frame")
-                    frame_num = frame_split[1]
+            if n_classifications and cluster_items is not None:
+                threshold = cluster_items / n_classifications
+                if threshold > min_threshold:
+                    for frame_key, frame_data in list(clusters.items()):
+                        if frame_key.startswith('frame'):
+                            frame_split = frame_key.split("frame")
+                            frame_num = frame_split[1]
+                            for key, value in frame_data.items():
+                                # shape dependent code goes
+                                # new_dict = shape_dep_fn(...)
+                                if key.endswith("_clusters_x"):
+                                    # classifier v2.0
+                                    if 'toolIndex' in key:
+                                        tool_split = key.split("_toolIndex")
+                                        task_key = tool_split[0]
+                                        tool_index_split = tool_split[1]
+                                        tool_index = tool_index_split.split("_clusters_x")[0]
+                                    # classifier v1.0
+                                    elif 'tool' in key:
+                                        tool_split = key.split("_tool")
+                                        task_key = tool_split[0]
+                                        tool_index_split = tool_split[1]
+                                        tool_index = tool_index_split.split("_clusters_x")[0]
 
-                    for key, value in frame_data.items():
-                        # shape dependent code goes
-                        # new_dict = shape_dep_fn(...)
-                        if key.endswith("_clusters_x"):
-                            # classifier v2.0
-                            if 'toolIndex' in key:
-                                tool_split = key.split("_toolIndex")
-                                task_key = tool_split[0]
-                                tool_index_split = tool_split[1]
-                                tool_index = tool_index_split.split("_clusters_x")[0]
-                            # classifier v1.0
-                            elif 'tool' in key:
-                                tool_split = key.split("_tool")
-                                task_key = tool_split[0]
-                                tool_index_split = tool_split[1]
-                                tool_index = tool_index_split.split("_clusters_x")[0]
+                                    base = key[:-len("_clusters_x")]
+                                    clusters_x = value
+                                    clusters_y = frame_data[f"{base}_clusters_y"]
 
-                            base = key[:-len("_clusters_x")]
-                            clusters_x = value
-                            clusters_y = frame_data[f"{base}_clusters_y"]
+                                    counter = 0
 
-                            counter = 0
+                                    for i in range(len(clusters_x)):
+                                        annotations = {
+                                            'cluster_items': cluster_items,
+                                            'n_classifications': n_classifications,
+                                            'threshold': threshold,
+                                            'stepKey': step_key,
+                                            'taskIndex': task_index,
+                                            'taskKey': task_key,
+                                            'taskType': 'drawing',
+                                            'toolIndex': int(tool_index),
+                                            'frame': int(frame_num),
+                                            'markID': f'consensus_{counter}',
+                                            'toolType': tool_type,
+                                            'pathX': clusters_x[i],
+                                            'pathY': clusters_y[i]
+                                        }
 
-                            for i in range(len(clusters_x)):
-                                annotations = {
-                                    'cluster_items': cluster_items,
-                                    'n_classifications': n_classifications,
-                                    'threshold': threshold,
-                                    'stepKey': step_key,
-                                    'taskIndex': task_index,
-                                    'taskKey': task_key,
-                                    'taskType': 'drawing',
-                                    'toolIndex': int(tool_index),
-                                    'frame': int(frame_num),
-                                    'markID': f'consensus_{counter}',
-                                    'toolType': tool_type,
-                                    'pathX': clusters_x[i],
-                                    'pathY': clusters_y[i]
-                                }
+                                        # annotations.update(new_dict)
 
-                                # annotations.update(new_dict)
-
-                                clusters.setdefault('data', []).append(annotations)
-                                counter += 1
+                                        clusters.setdefault('data', []).append(annotations)
+                                        counter += 1
 
         return clusters
 
