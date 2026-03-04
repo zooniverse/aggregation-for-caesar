@@ -26,8 +26,8 @@ DEFAULTS = {
     'collab': {'default': False, 'type': bool},
     'step_key': {'default': 'S0', 'type': str},
     'task_index': {'default': 0, 'type': int},
-    'tool_type': {'default': 'freehandLine', 'type': str}
-    #'min_threshold': {'default': 0, 'type': float}
+    'tool_type': {'default': 'freehandLine', 'type': str},
+    'min_threshold': {'default': 0, 'type': float}
 }
 
 
@@ -149,10 +149,11 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
 
     '''
 
-    collab = kwargs_dbscan.pop('collab', None)
+    kwargs_dbscan.pop('collab', None)
     kwargs_dbscan.pop('step_key', None)
     kwargs_dbscan.pop('task_index', None)
     kwargs_dbscan.pop('tool_type', None)
+    kwargs_dbscan.pop('min_threshold', None)
 
     average_type = kwargs_dbscan.pop('average_type', 'median')
     if average_type == "intersection":
