@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['windows-latest', 'macos-latest-large', 'macos-latest']  # macos-latest-large is intel, macos-latest is arm
+        os: ['windows-latest', 'macos-15-intel', 'macos-latest']  # macos-xx-large is intel, macos-latest is arm
 
     steps:
     - name: Checkout code
@@ -103,7 +103,7 @@ jobs:
         path: build/panoptes_aggregation.zip
 
     - name: Create Artifact (macOS intel)
-      if: matrix.os == 'macos-latest-large'
+      if: matrix.os == 'macos-15-intel'
       uses: actions/upload-artifact@v6
       with:
         name: macos-intel-app
