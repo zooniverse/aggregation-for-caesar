@@ -70,10 +70,10 @@ def collab_wrapper(func):
                             counter = 0
 
                             for i in range(len(clusters_x)):
-                                if int(threshold[i]) >= min_threshold:
+                                if threshold[i] >= min_threshold:
                                     annotations = {
                                         'min_threshold': min_threshold,
-                                        'threshold': int(threshold[i]),
+                                        'threshold': threshold[i],
                                         'stepKey': step_key,
                                         'taskIndex': task_index,
                                         'taskKey': task_key,
