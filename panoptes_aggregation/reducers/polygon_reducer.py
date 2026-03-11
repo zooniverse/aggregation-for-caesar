@@ -221,8 +221,8 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                             average_polygon = np.array(list(cluster_average.exterior.coords))
 
                         # Add to the dictionary
-                        clusters.setdefault('n_classifications', []).append(n_classifications)
-                        clusters.setdefault('cluster_items', []).append(cluster_items)
+                        clusters[frame].setdefault('{0}_n_classifications'.format(tool), []).append(n_classifications)
+                        clusters[frame].setdefault('{0}_cluster_items'.format(tool), []).append(cluster_items)
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
                         clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
                         clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
