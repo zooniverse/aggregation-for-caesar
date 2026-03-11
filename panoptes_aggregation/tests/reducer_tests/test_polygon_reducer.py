@@ -1,6 +1,6 @@
 from panoptes_aggregation.reducers.polygon_reducer import process_data, \
     polygon_reducer
-from .base_test_class import ReducerTest
+from .base_test_class import ReducerTest, ReducerTestNoProcessing
 import numpy as np
 import unittest
 import shapely
@@ -496,9 +496,11 @@ class TestException(unittest.TestCase):
 reduced_data_last = {
     'frame0':
         {
+            'T0_tool0_cluster_items': [3, 3, 3],
             'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
+            'T0_tool0_n_classifications': [4, 4, 4],
             'T0_tool0_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -569,10 +571,11 @@ reduced_data_last = {
                     2.3692156886043496
                 ]
             ],
+            'T0_tool1_cluster_items': [3],
             'T0_tool1_cluster_labels': [0, 0, 0],
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
-            'threshold': [0.75, 0.75, 0.75, 0.75],
+            'T0_tool1_n_classifications': [4],
             'T0_tool1_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -662,10 +665,12 @@ reduced_data_last_collab_true = {
         {
             "frame": 0,
             "markID": "consensus_0",
+            "min_threshold": 0,
             "stepKey": "S0",
             "taskIndex": 0,
             "taskKey": "T0",
             "taskType": "drawing",
+            "threshold": "0.75",
             "toolIndex": 0,
             "toolType": "freehandLine",
             "pathX": [
@@ -694,10 +699,12 @@ reduced_data_last_collab_true = {
         {
             "frame": 0,
             "markID": "consensus_1",
+            "min_threshold": 0,
             "stepKey": "S0",
             "taskIndex": 0,
             "taskKey": "T0",
             "taskType": "drawing",
+            "threshold": "0.75",
             "toolIndex": 0,
             "toolType": "freehandLine",
             "pathX": [
@@ -726,10 +733,12 @@ reduced_data_last_collab_true = {
         {
             "frame": 0,
             "markID": "consensus_2",
+            "min_threshold": 0,
             "stepKey": "S0",
             "taskIndex": 0,
             "taskKey": "T0",
             "taskType": "drawing",
+            "threshold": "0.75",
             "toolIndex": 0,
             "toolType": "freehandLine",
             "pathX": [
@@ -762,6 +771,8 @@ reduced_data_last_collab_true = {
         {
             'frame': 0,
             'markID': 'consensus_0',
+            'min_threshold': 0,
+            'threshold': "0.75",
             'pathX': [-0.15554523195117093,
                       0.19219246615042257,
                       0.44238509316213026,
@@ -788,9 +799,11 @@ reduced_data_last_collab_true = {
             'toolType': 'freehandLine'}],
     'frame0':
         {
+            'T0_tool0_cluster_items': [3, 3, 3],
             'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
+            'T0_tool0_n_classifications': [4, 4, 4],
             'T0_tool0_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -861,10 +874,11 @@ reduced_data_last_collab_true = {
                     2.3692156886043496
                 ]
             ],
+            'T0_tool1_cluster_items': [3],
             'T0_tool1_cluster_labels': [0, 0, 0],
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
-            'threshold': [0.75, 0.75, 0.75, 0.75],
+            'T0_tool1_n_classifications': [4],
             'T0_tool1_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -924,12 +938,22 @@ TestPolygonTReducerLastCollabTrue = ReducerTest(
 
 reduced_data_last_min_threshold = {
     'frame0': {
+        'T0_tool0_cluster_items': [3, 3, 3],
         'T0_tool0_cluster_labels': [
-            0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1
+            -1, -1, -1
         ],
-        'T0_tool0_clusters_count': [3, 3, 3],
-        'T0_tool1_cluster_labels': [0, 0, 0],
-        'T0_tool1_clusters_count': [3]
+        'T0_tool0_clusters_count': [],
+        'T0_tool0_clusters_x': [],
+        'T0_tool0_clusters_y': [],
+        'T0_tool0_consensus': [],
+        'T0_tool0_n_classifications': [4, 4, 4],
+        'T0_tool1_cluster_items': [3],
+        'T0_tool1_cluster_labels': [0, 0],
+        'T0_tool1_clusters_count': [],
+        'T0_tool1_clusters_x': [],
+        'T0_tool1_clusters_y': [],
+        'T0_tool1_consensus': [],
+        'T0_tool1_n_classifications': [4]
     },
     'parameters': {
         'eps': 0.5,
@@ -943,11 +967,9 @@ reduced_data_last_min_threshold = {
     }
 }
 
-TestPolygonTReducerLastMinThreshold = ReducerTest(
+TestPolygonTReducerLastMinThreshold = ReducerTestNoProcessing(
     polygon_reducer,
-    process_data,
     extracted_data,
-    processed_data,
     reduced_data_last_min_threshold,
     'Test polygon reducer with threshold < min_threshold',
     kwargs={
@@ -957,7 +979,6 @@ TestPolygonTReducerLastMinThreshold = ReducerTest(
         'collab': True,
         'min_threshold': 0.8
     },
-    output_kwargs=True,
     network_kwargs=kwargs_extra_data,
     test_name='TestPolygonTReducerLastMinThreshold'
 )
@@ -965,9 +986,11 @@ TestPolygonTReducerLastMinThreshold = ReducerTest(
 reduced_data_last_non_default = {
     'frame0':
         {
+            'T0_tool0_cluster_items': [3, 3, 3],
             'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
+            'T0_tool0_n_classifications': [4, 4, 4],
             'T0_tool0_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -1038,10 +1061,11 @@ reduced_data_last_non_default = {
                     2.3692156886043496
                 ]
             ],
+            'T0_tool1_cluster_items': [3],
             'T0_tool1_cluster_labels': [0, 0, 0],
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
-            'threshold': [0.75, 0.75, 0.75, 0.75],
+            'T0_tool1_n_classifications': [4],
             'T0_tool1_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -1105,9 +1129,11 @@ TestPolygonTReducerLastNonDefaultParams = ReducerTest(
 reduced_data_median = {
     'frame0':
         {
+            'T0_tool0_cluster_items': [3, 3, 3],
             'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
+            'T0_tool0_n_classifications': [4, 4, 4],
             'T0_tool0_clusters_x': [
                 [
                     -0.011871167727739784,
@@ -1170,10 +1196,11 @@ reduced_data_median = {
                     2.3322557650241134
                 ]
             ],
+            'T0_tool1_cluster_items': [3],
             'T0_tool1_cluster_labels': [0, 0, 0],
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
-            'threshold': [0.75, 0.75, 0.75, 0.75],
+            'T0_tool1_n_classifications': [4],
             'T0_tool1_clusters_x': [
                 [
                     -0.011871167727739784,
@@ -1238,9 +1265,11 @@ TestPolygonTReducerMedian = ReducerTest(
 reduced_data_intersection = {
     'frame0':
         {
+            'T0_tool0_cluster_items': [3, 3, 3],
             'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
+            'T0_tool0_n_classifications': [4, 4, 4],
             'T0_tool0_clusters_x': [
                 [
                     -0.20060780558908908,
@@ -1317,10 +1346,11 @@ reduced_data_intersection = {
                     2.231658814592464
                 ]
             ],
+            'T0_tool1_cluster_items': [3],
             'T0_tool1_cluster_labels': [0, 0, 0],
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
-            'threshold': [0.75, 0.75, 0.75, 0.75],
+            'T0_tool1_n_classifications': [4],
             'T0_tool1_clusters_x': [
                 [
                     -0.20060780558908908,
@@ -1383,9 +1413,11 @@ TestPolygonTReducerIntersection = ReducerTest(
 reduced_data_union = {
     'frame0':
         {
+            'T0_tool0_cluster_items': [3, 3, 3],
             'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
+            'T0_tool0_n_classifications': [4, 4, 4],
             'T0_tool0_clusters_x': [
                 [
                     -0.06253880643091841,
@@ -1516,10 +1548,11 @@ reduced_data_union = {
                     1.8994361013759973
                 ]
             ],
+            'T0_tool1_cluster_items': [3],
             'T0_tool1_cluster_labels': [0, 0, 0],
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
-            'threshold': [0.75, 0.75, 0.75, 0.75],
+            'T0_tool1_n_classifications': [4],
             'T0_tool1_clusters_x': [
                 [
                     -0.06253880643091841,
@@ -2086,10 +2119,11 @@ processed_data_no_overall_intersection = {
 reduced_data_no_overall_intersection = {
     'frame0':
         {
+            'T0_tool0_cluster_items': [3],
             'T0_tool0_cluster_labels': [0, 0, 0],
             'T0_tool0_clusters_count': [3],
             'T0_tool0_consensus': [0.07844246929976251],
-            'threshold': [1.0],
+            'T0_tool0_n_classifications': [3],
             'T0_tool0_clusters_x': [[]],
             'T0_tool0_clusters_y': [[]]
         },
@@ -2128,10 +2162,11 @@ TestPolygonTReducerNoOverallIntersection = ReducerTest(
 reduced_data_no_overall_intersection_cluster_of_one = {
     'frame0':
         {
+            'T0_tool0_cluster_items': [1, 1, 1],
             'T0_tool0_cluster_labels': [0, 1, 2],
             'T0_tool0_clusters_count': [1, 1, 1],
             'T0_tool0_consensus': [1.0, 1.0, 1.0],
-            'threshold': [0.3333333333333333, 0.3333333333333333, 0.3333333333333333],
+            'T0_tool0_n_classifications': [3, 3, 3],
             'T0_tool0_clusters_x': [
                 [
                     0.21554927386591496,
