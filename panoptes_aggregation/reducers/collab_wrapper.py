@@ -39,9 +39,6 @@ def collab_wrapper(func):
             return clusters
 
         if collab:
-            cluster_items = np.array(clusters.get('cluster_items'))
-            n_classifications = np.array(clusters.get('n_classifications', 0))
-            threshold = cluster_items / n_classifications
             for frame_key, frame_data in list(clusters.items()):
                 if frame_key.startswith('frame'):
                     frame_split = frame_key.split("frame")
@@ -67,20 +64,36 @@ def collab_wrapper(func):
                             clusters_x = value
                             clusters_y = frame_data[f"{base}_clusters_y"]
 
-                            counter = 0
+                            cluster_labels = frame_data[f"{base}_cluster_labels"]
+                            clusters_count = frame_data[f"{base}_clusters_count"]
+                            consensus = frame_data[f"{base}_consensus"]
+
+                            cluster_items = frame_data[f"{base}_cluster_items"]
+                            n_classifications = frame_data[f"{base}_n_classifications"]
+                            if cluster_items and n_classifications is not None:
+                                threshold = list(np.array(cluster_items) / np.array(n_classifications))
+
+                            for i in reversed(range(len(clusters_x))):
+                                if threshold[i] < min_threshold:
+                                    clusters_x.pop(i)
+                                    clusters_y.pop(i)
+                                    cluster_labels.pop(i)
+                                    clusters_count.pop(i)
+                                    consensus.pop(i)
+                                    threshold.pop(i)
 
                             for i in range(len(clusters_x)):
                                 if threshold[i] >= min_threshold:
                                     annotations = {
                                         'min_threshold': min_threshold,
-                                        'threshold': threshold[i],
+                                        'threshold': f"{threshold[i]}",
                                         'stepKey': step_key,
                                         'taskIndex': task_index,
                                         'taskKey': task_key,
                                         'taskType': 'drawing',
                                         'toolIndex': int(tool_index),
                                         'frame': int(frame_num),
-                                        'markID': f'consensus_{counter}',
+                                        'markID': f'consensus_{i}',
                                         'toolType': tool_type,
                                         'pathX': clusters_x[i],
                                         'pathY': clusters_y[i]
@@ -89,7 +102,6 @@ def collab_wrapper(func):
                                     # annotations.update(new_dict)
 
                                     clusters.setdefault('data', []).append(annotations)
-                                    counter += 1
 
         return clusters
 
