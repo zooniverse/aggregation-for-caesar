@@ -77,10 +77,11 @@ def collab_wrapper(func):
                                 if threshold[i] < min_threshold:
                                     clusters_x.pop(i)
                                     clusters_y.pop(i)
-                                    cluster_labels.pop(i)
                                     clusters_count.pop(i)
                                     consensus.pop(i)
                                     threshold.pop(i)
+                                    while i in cluster_labels:
+                                        cluster_labels.pop(cluster_labels.index(i))
 
                             for i in range(len(clusters_x)):
                                 if threshold[i] >= min_threshold:
