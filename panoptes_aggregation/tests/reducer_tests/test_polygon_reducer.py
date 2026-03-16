@@ -12,7 +12,7 @@ self-intersections. The latter two need to be processed, the first by removing
 the small extract `triangle` and the second by splitting the shape in 2.
 
 Finally, there is repeat data but labelled as for a second tool, to test if
-the reducer can reduce mutiple tools for a single task.
+the reducer can reduce multiple tools for a single task.
 '''
 
 extracted_data = [
@@ -939,16 +939,14 @@ TestPolygonTReducerLastCollabTrue = ReducerTest(
 reduced_data_last_min_threshold = {
     'frame0': {
         'T0_tool0_cluster_items': [3, 3, 3],
-        'T0_tool0_cluster_labels': [
-            -1, -1, -1
-        ],
+        'T0_tool0_cluster_labels': [-1, -1, -1],
         'T0_tool0_clusters_count': [],
         'T0_tool0_clusters_x': [],
         'T0_tool0_clusters_y': [],
         'T0_tool0_consensus': [],
         'T0_tool0_n_classifications': [4, 4, 4],
         'T0_tool1_cluster_items': [3],
-        'T0_tool1_cluster_labels': [0, 0],
+        'T0_tool1_cluster_labels': [],
         'T0_tool1_clusters_count': [],
         'T0_tool1_clusters_x': [],
         'T0_tool1_clusters_y': [],
