@@ -1,6 +1,7 @@
 from functools import wraps
 import numpy as np
 
+
 def collab_wrapper(func):
     '''description
 
@@ -23,7 +24,6 @@ def collab_wrapper(func):
             * `threshold` : For each cluster, the threshold is the number of items in the cluster divided by the total number of classifications.
 
         '''
-
 
     @wraps(func)
     def wrapper(argument, **kwargs):
