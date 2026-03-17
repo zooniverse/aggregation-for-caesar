@@ -24,6 +24,7 @@ def collab_wrapper(func):
 
         '''
 
+
     @wraps(func)
     def wrapper(argument, **kwargs):
         collab = kwargs.get('collab')
@@ -33,7 +34,6 @@ def collab_wrapper(func):
         min_threshold = kwargs.get('min_threshold', 0)
 
         clusters = func(argument, **kwargs)
-
 
         if not collab:
             return clusters
@@ -64,7 +64,6 @@ def collab_wrapper(func):
                             clusters_x = value
                             clusters_y = frame_data[f"{base}_clusters_y"]
 
-                            cluster_labels = frame_data[f"{base}_cluster_labels"]
                             clusters_count = frame_data[f"{base}_clusters_count"]
                             consensus = frame_data[f"{base}_consensus"]
 
@@ -80,8 +79,6 @@ def collab_wrapper(func):
                                     clusters_count.pop(i)
                                     consensus.pop(i)
                                     threshold.pop(i)
-                                    while i in cluster_labels:
-                                        cluster_labels.pop(cluster_labels.index(i))
 
                             for i in range(len(clusters_x)):
                                 if threshold[i] >= min_threshold:
