@@ -939,14 +939,14 @@ TestPolygonTReducerLastCollabTrue = ReducerTest(
 reduced_data_last_min_threshold = {
     'frame0': {
         'T0_tool0_cluster_items': [3, 3, 3],
-        'T0_tool0_cluster_labels': [-1, -1, -1],
+        'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
         'T0_tool0_clusters_count': [],
         'T0_tool0_clusters_x': [],
         'T0_tool0_clusters_y': [],
         'T0_tool0_consensus': [],
         'T0_tool0_n_classifications': [4, 4, 4],
         'T0_tool1_cluster_items': [3],
-        'T0_tool1_cluster_labels': [],
+        'T0_tool1_cluster_labels': [0, 0, 0],
         'T0_tool1_clusters_count': [],
         'T0_tool1_clusters_x': [],
         'T0_tool1_clusters_y': [],
