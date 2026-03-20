@@ -6,6 +6,7 @@ from .point_extractor_by_frame import point_extractor_by_frame
 from .rectangle_extractor import rectangle_extractor
 from .question_extractor import question_extractor
 from .survey_extractor import survey_extractor
+from .survey_whitelist_extractor import survey_whitelist_extractor
 from .poly_line_text_extractor import poly_line_text_extractor
 from .line_text_extractor import line_text_extractor
 from .sw_extractor import sw_extractor
@@ -29,6 +30,7 @@ extractors = {
     'question_extractor': question_extractor,
     'shortcut_extractor': shortcut_extractor,
     'survey_extractor': survey_extractor,
+    'survey_whitelist_extractor': survey_whitelist_extractor,
     'poly_line_text_extractor': poly_line_text_extractor,
     'line_text_extractor': line_text_extractor,
     'sw_extractor': sw_extractor,
