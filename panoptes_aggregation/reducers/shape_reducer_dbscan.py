@@ -13,6 +13,7 @@ from ..shape_tools import SHAPE_LUT
 from .shape_process_data import process_data, DEFAULTS_PROCESS
 from .shape_metric import get_shape_metric_and_avg
 from .shape_metric_IoU import IoU_metric, average_shape_IoU
+from .collab_wrapper import collab_wrapper
 
 DEFAULTS = {
     'eps': {'default': 5.0, 'type': float},
@@ -22,10 +23,16 @@ DEFAULTS = {
     'leaf_size': {'default': 30, 'type': int},
     'p': {'default': None, 'type': float},
     'metric_type': {'default': 'euclidean', 'type': str},
-    'estimate_average': {'default': False, 'type': bool}
+    'estimate_average': {'default': False, 'type': bool},
+    'collab': {'default': False, 'type': bool},
+    'step_key': {'default': 'S0', 'type': str},
+    'task_index': {'default': 0, 'type': int},
+    'tool_type': {'default': 'freehandLine', 'type': str},
+    'min_threshold': {'default': 0, 'type': float}
 }
 
 
+@collab_wrapper
 @reducer_wrapper(
     process_data=process_data,
     defaults_data=DEFAULTS,
@@ -71,6 +78,13 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
 
         * `tool*_clusters_sigma` : The standard deviation of the average shape under the IoU metric
     '''
+
+    kwargs.pop('collab', None)
+    kwargs.pop('step_key', None)
+    kwargs.pop('task_index', None)
+    kwargs.pop('tool_type', None)
+    kwargs.pop('min_threshold', None)
+
     shape = data_by_tool.pop('shape')
     eps_t = kwargs.pop('eps_t', None)
     estimate_average = kwargs.pop('estimate_average', DEFAULTS['estimate_average']['default'])
@@ -89,6 +103,7 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
     clusters = OrderedDict()
     for frame, frame_data in data_by_tool.items():
         clusters[frame] = OrderedDict()
+        n_classifications = frame_data.get('n_classifications')
         for tool, loc_list in frame_data.items():
             loc = np.array(loc_list)
             if len(shape_params) == 1:
@@ -106,6 +121,9 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
                     if k > -1:
                         idx = db.labels_ == k
                         # number of points in the cluster
+                        cluster_items = int(idx.sum())
+                        clusters[frame].setdefault('{0}_cluster_items'.format(tool), []).append(cluster_items)
+                        clusters[frame].setdefault('{0}_n_classifications'.format(tool), []).append(n_classifications)
                         clusters[frame].setdefault('{0}_clusters_count'.format(tool), []).append(int(idx.sum()))
                         # mean of the cluster
                         if metric_type == 'euclidean':
