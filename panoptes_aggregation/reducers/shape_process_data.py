@@ -50,6 +50,7 @@ def process_data(data, shape=None, symmetric=False):
         unique_tools = set(sum([["_".join(re.findall(pattern, k)[0]) for k in d.get(frame, {}).keys()] for d in data], []))
         for tool in unique_tools:
             for d in data:
+                data_by_tool[frame]['n_classifications'] = len(data)
                 if frame in d:
                     data_by_tool[frame].setdefault(tool, [])
                     keys = ['{0}_{1}'.format(tool, param) for param in shape_params]
