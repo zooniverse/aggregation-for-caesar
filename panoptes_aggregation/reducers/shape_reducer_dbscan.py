@@ -86,6 +86,7 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
     kwargs.pop('min_threshold', None)
 
     shape = data_by_tool.pop('shape')
+    n_classifications = data_by_tool.pop('n_classifications')
     eps_t = kwargs.pop('eps_t', None)
     estimate_average = kwargs.pop('estimate_average', DEFAULTS['estimate_average']['default'])
     shape_params = SHAPE_LUT[shape]
@@ -103,7 +104,6 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
     clusters = OrderedDict()
     for frame, frame_data in data_by_tool.items():
         clusters[frame] = OrderedDict()
-        n_classifications = frame_data.get('n_classifications')
         for tool, loc_list in frame_data.items():
             loc = np.array(loc_list)
             if len(shape_params) == 1:
