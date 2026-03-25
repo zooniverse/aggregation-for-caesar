@@ -46,13 +46,7 @@ def collab_wrapper(func):
                     for key, value in frame_data.items():
                         # shape dependent code goes
                         # new_dict = shape_dep_fn(...)
-                        clusters_width = []
-                        clusters_height = []
-                        if key.endswith('clusters_width'):
-                            rec_base = key[:-len("_clusters_width")]
-                            clusters_width = value
-                            clusters_height = frame_data[f"{rec_base}_clusters_height"]
-                        if key.endswith("_clusters_x"):
+                        if key.endswith('clusters_x'):
                             # classifier v2.0
                             if 'toolIndex' in key:
                                 tool_split = key.split("_toolIndex")
@@ -65,70 +59,86 @@ def collab_wrapper(func):
                                 task_key = tool_split[0]
                                 tool_index_split = tool_split[1]
                                 tool_index = tool_index_split.split("_clusters_x")[0]
-
                             base = key[:-len("_clusters_x")]
-                            clusters_x = value
-                            clusters_y = frame_data[f"{base}_clusters_y"]
-                            clusters_count = frame_data[f"{base}_clusters_count"]
-                            n_classifications = frame_data[f"{base}_n_classifications"]
+                            shape = frame_data[f"{base}_shape"]
+                            if 'rectangle' in shape:
+                                clusters_width = frame_data[f"{base}_clusters_width"]
+                                clusters_height = frame_data[f"{base}_clusters_height"]
+                                clusters_x = value
+                                clusters_y = frame_data[f"{base}_clusters_y"]
+                                clusters_count = frame_data[f"{base}_clusters_count"]
+                                n_classifications = frame_data[f"{base}_n_classifications"]
 
-                            if not clusters_width:
+                                if clusters_count and n_classifications is not None:
+                                    threshold = list(np.array(clusters_count) / np.array(n_classifications))
+
+                                    for i in reversed(range(len(clusters_x))):
+                                        if threshold[i] < min_threshold:
+                                            clusters_x.pop(i)
+                                            clusters_y.pop(i)
+                                            clusters_count.pop(i)
+                                            threshold.pop(i)
+                                            clusters_width.pop(i)
+                                            clusters_height.pop(i)
+
+                                    for i in range(len(clusters_x)):
+                                        if threshold[i] >= min_threshold:
+                                            annotations = {
+                                                'min_threshold': min_threshold,
+                                                'threshold': f"{threshold[i]}",
+                                                'stepKey': step_key,
+                                                'taskIndex': task_index,
+                                                'taskKey': task_key,
+                                                'taskType': 'rectangle',
+                                                'toolIndex': int(tool_index),
+                                                'frame': int(frame_num),
+                                                'markID': f'consensus_{i}',
+                                                'toolType': tool_type,
+                                                'rec_x': clusters_x[i],
+                                                'rec_y': clusters_y[i],
+                                                'rec_width': clusters_width[i],
+                                                'rec_height': clusters_height[i]
+                                            }
+
+
+                            elif 'rectangle' not in shape:
+                                clusters_x = value
+                                clusters_y = frame_data[f"{base}_clusters_y"]
+                                clusters_count = frame_data[f"{base}_clusters_count"]
+                                n_classifications = frame_data[f"{base}_n_classifications"]
                                 consensus = frame_data[f"{base}_consensus"]
 
-                            if clusters_count and n_classifications is not None:
-                                threshold = list(np.array(clusters_count) / np.array(n_classifications))
+                                if clusters_count and n_classifications is not None:
+                                    threshold = list(np.array(clusters_count) / np.array(n_classifications))
 
-                            for i in reversed(range(len(clusters_x))):
-                                if threshold[i] < min_threshold:
-                                    clusters_x.pop(i)
-                                    clusters_y.pop(i)
-                                    clusters_count.pop(i)
-                                    consensus.pop(i)
-                                    threshold.pop(i)
+                                    for i in reversed(range(len(clusters_x))):
+                                        if threshold[i] < min_threshold:
+                                            clusters_x.pop(i)
+                                            clusters_y.pop(i)
+                                            clusters_count.pop(i)
+                                            consensus.pop(i)
+                                            threshold.pop(i)
 
-                                    if clusters_width:
-                                        clusters_width.pop(i)
-                                        clusters_height.pop(i)
+                                    for i in range(len(clusters_x)):
+                                        if threshold[i] >= min_threshold:
+                                            annotations = {
+                                                'min_threshold': min_threshold,
+                                                'threshold': f"{threshold[i]}",
+                                                'stepKey': step_key,
+                                                'taskIndex': task_index,
+                                                'taskKey': task_key,
+                                                'taskType': 'drawing',
+                                                'toolIndex': int(tool_index),
+                                                'frame': int(frame_num),
+                                                'markID': f'consensus_{i}',
+                                                'toolType': tool_type,
+                                                'pathX': clusters_x[i],
+                                                'pathY': clusters_y[i]
+                                            }
 
-                            for i in range(len(clusters_x)):
-                                if threshold[i] >= min_threshold:
-                                    if clusters_width:
-                                        annotations = {
-                                            'min_threshold': min_threshold,
-                                            'threshold': f"{threshold[i]}",
-                                            'stepKey': step_key,
-                                            'taskIndex': task_index,
-                                            'taskKey': task_key,
-                                            'taskType': 'rectangle',
-                                            'toolIndex': int(tool_index),
-                                            'frame': int(frame_num),
-                                            'markID': f'consensus_{i}',
-                                            'toolType': tool_type,
-                                            'rec_x': clusters_x[i],
-                                            'rec_y': clusters_y[i],
-                                            'rec_width': clusters_width[i],
-                                            'rec_height': clusters_height[i]
-                                        }
+                                            # annotations.update(new_dict)
 
-                                    else:
-                                        annotations = {
-                                            'min_threshold': min_threshold,
-                                            'threshold': f"{threshold[i]}",
-                                            'stepKey': step_key,
-                                            'taskIndex': task_index,
-                                            'taskKey': task_key,
-                                            'taskType': 'drawing',
-                                            'toolIndex': int(tool_index),
-                                            'frame': int(frame_num),
-                                            'markID': f'consensus_{i}',
-                                            'toolType': tool_type,
-                                            'pathX': clusters_x[i],
-                                            'pathY': clusters_y[i]
-                                        }
-
-                                    # annotations.update(new_dict)
-
-                                    clusters.setdefault('data', []).append(annotations)
+                            clusters.setdefault('data', []).append(annotations)
 
         return clusters
 
