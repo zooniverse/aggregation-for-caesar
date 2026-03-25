@@ -500,6 +500,7 @@ reduced_data_last = {
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
             'T0_tool0_n_classifications': [4, 4, 4],
+            'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
             'T0_tool0_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -574,6 +575,7 @@ reduced_data_last = {
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
             'T0_tool1_n_classifications': [4],
+            'T0_tool1_shape': ['polygon'],
             'T0_tool1_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -801,6 +803,7 @@ reduced_data_last_collab_true = {
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
             'T0_tool0_n_classifications': [4, 4, 4],
+            'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
             'T0_tool0_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -875,6 +878,7 @@ reduced_data_last_collab_true = {
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
             'T0_tool1_n_classifications': [4],
+            'T0_tool1_shape': ['polygon'],
             'T0_tool1_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -940,12 +944,14 @@ reduced_data_last_min_threshold = {
         'T0_tool0_clusters_y': [],
         'T0_tool0_consensus': [],
         'T0_tool0_n_classifications': [4, 4, 4],
+        'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
         'T0_tool1_cluster_labels': [0, 0, 0],
         'T0_tool1_clusters_count': [],
         'T0_tool1_clusters_x': [],
         'T0_tool1_clusters_y': [],
         'T0_tool1_consensus': [],
-        'T0_tool1_n_classifications': [4]
+        'T0_tool1_n_classifications': [4],
+        'T0_tool1_shape': ['polygon']
     },
     'parameters': {
         'eps': 0.5,
@@ -982,6 +988,7 @@ reduced_data_last_non_default = {
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
             'T0_tool0_n_classifications': [4, 4, 4],
+            'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
             'T0_tool0_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -1056,6 +1063,7 @@ reduced_data_last_non_default = {
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
             'T0_tool1_n_classifications': [4],
+            'T0_tool1_shape': ['polygon'],
             'T0_tool1_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -1123,6 +1131,7 @@ reduced_data_median = {
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
             'T0_tool0_n_classifications': [4, 4, 4],
+            'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
             'T0_tool0_clusters_x': [
                 [
                     -0.011871167727739784,
@@ -1189,6 +1198,7 @@ reduced_data_median = {
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
             'T0_tool1_n_classifications': [4],
+            'T0_tool1_shape': ['polygon'],
             'T0_tool1_clusters_x': [
                 [
                     -0.011871167727739784,
@@ -1257,6 +1267,7 @@ reduced_data_intersection = {
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
             'T0_tool0_n_classifications': [4, 4, 4],
+            'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
             'T0_tool0_clusters_x': [
                 [
                     -0.20060780558908908,
@@ -1337,6 +1348,7 @@ reduced_data_intersection = {
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
             'T0_tool1_n_classifications': [4],
+            'T0_tool1_shape': ['polygon'],
             'T0_tool1_clusters_x': [
                 [
                     -0.20060780558908908,
@@ -1403,6 +1415,7 @@ reduced_data_union = {
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
             'T0_tool0_n_classifications': [4, 4, 4],
+            'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
             'T0_tool0_clusters_x': [
                 [
                     -0.06253880643091841,
@@ -1537,6 +1550,7 @@ reduced_data_union = {
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
             'T0_tool1_n_classifications': [4],
+            'T0_tool1_shape': ['polygon'],
             'T0_tool1_clusters_x': [
                 [
                     -0.06253880643091841,
@@ -2107,6 +2121,7 @@ reduced_data_no_overall_intersection = {
             'T0_tool0_clusters_count': [3],
             'T0_tool0_consensus': [0.07844246929976251],
             'T0_tool0_n_classifications': [3],
+            'T0_tool0_shape': ['polygon'],
             'T0_tool0_clusters_x': [[]],
             'T0_tool0_clusters_y': [[]]
         },
@@ -2149,6 +2164,7 @@ reduced_data_no_overall_intersection_cluster_of_one = {
             'T0_tool0_clusters_count': [1, 1, 1],
             'T0_tool0_consensus': [1.0, 1.0, 1.0],
             'T0_tool0_n_classifications': [3, 3, 3],
+            'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
             'T0_tool0_clusters_x': [
                 [
                     0.21554927386591496,
