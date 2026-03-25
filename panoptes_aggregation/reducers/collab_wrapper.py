@@ -100,8 +100,10 @@ def collab_wrapper(func):
                                                 'rec_height': clusters_height[i]
                                             }
 
+                                            clusters.setdefault('data', []).append(annotations)
 
-                            elif 'rectangle' not in shape:
+
+                            elif 'polygon' in shape:
                                 clusters_x = value
                                 clusters_y = frame_data[f"{base}_clusters_y"]
                                 clusters_count = frame_data[f"{base}_clusters_count"]
@@ -138,7 +140,7 @@ def collab_wrapper(func):
 
                                             # annotations.update(new_dict)
 
-                            clusters.setdefault('data', []).append(annotations)
+                                            clusters.setdefault('data', []).append(annotations)
 
         return clusters
 
