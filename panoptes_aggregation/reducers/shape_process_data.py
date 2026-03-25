@@ -38,9 +38,11 @@ def process_data(data, shape=None, symmetric=False):
         raise KeyError('`shape` must be one of {0}'.format(list(SHAPE_LUT.keys())))
     shape_params = SHAPE_LUT[shape]
     unique_frames = set(sum([[k for k in d.keys() if k.startswith('frame')] for d in data], []))
+    n_classifications = len(data)
     data_by_tool = {
         'shape': shape,
-        'symmetric': symmetric
+        'symmetric': symmetric,
+        'n_classifications': n_classifications
     }
 
     pattern = r'(T[0-9]+)_(tool[Index]*[0-9]+)'
@@ -50,7 +52,6 @@ def process_data(data, shape=None, symmetric=False):
         unique_tools = set(sum([["_".join(re.findall(pattern, k)[0]) for k in d.get(frame, {}).keys()] for d in data], []))
         for tool in unique_tools:
             for d in data:
-                data_by_tool[frame]['n_classifications'] = len(data)
                 if frame in d:
                     data_by_tool[frame].setdefault(tool, [])
                     keys = ['{0}_{1}'.format(tool, param) for param in shape_params]
