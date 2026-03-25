@@ -199,7 +199,6 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                 for label in set(labels_array):
                     if label > -1:
                         cdx = labels_array == label
-                        cluster_items = int(cdx.sum())
                         n_classifications = value.get('n_classifications')
                         kwargs_cluster = {}
                         kwargs_cluster['created_at'] = created_at_full_array[cdx]
@@ -222,7 +221,6 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
 
                         # Add to the dictionary
                         clusters[frame].setdefault('{0}_n_classifications'.format(tool), []).append(n_classifications)
-                        clusters[frame].setdefault('{0}_cluster_items'.format(tool), []).append(cluster_items)
                         clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
                         clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
                         clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)

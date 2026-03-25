@@ -70,14 +70,13 @@ def collab_wrapper(func):
                             clusters_x = value
                             clusters_y = frame_data[f"{base}_clusters_y"]
                             clusters_count = frame_data[f"{base}_clusters_count"]
-                            cluster_items = frame_data[f"{base}_cluster_items"]
                             n_classifications = frame_data[f"{base}_n_classifications"]
 
-                            if clusters_width is None:
+                            if not clusters_width:
                                 consensus = frame_data[f"{base}_consensus"]
 
-                            if cluster_items and n_classifications is not None:
-                                threshold = list(np.array(cluster_items) / np.array(n_classifications))
+                            if clusters_count and n_classifications is not None:
+                                threshold = list(np.array(clusters_count) / np.array(n_classifications))
 
                             for i in reversed(range(len(clusters_x))):
                                 if threshold[i] < min_threshold:
