@@ -121,8 +121,6 @@ def shape_reducer_dbscan(data_by_tool, **kwargs):
                     if k > -1:
                         idx = db.labels_ == k
                         # number of points in the cluster
-                        cluster_items = int(idx.sum())
-                        clusters[frame].setdefault('{0}_cluster_items'.format(tool), []).append(cluster_items)
                         clusters[frame].setdefault('{0}_n_classifications'.format(tool), []).append(n_classifications)
                         clusters[frame].setdefault('{0}_clusters_count'.format(tool), []).append(int(idx.sum()))
                         # mean of the cluster
