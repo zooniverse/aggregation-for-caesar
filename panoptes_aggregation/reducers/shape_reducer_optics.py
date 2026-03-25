@@ -130,6 +130,7 @@ def shape_reducer_optics(data_by_tool, **kwargs):
                         # number of points in the cluster
                         clusters[frame].setdefault('{0}_n_classifications'.format(tool), []).append(n_classifications)
                         clusters[frame].setdefault('{0}_clusters_count'.format(tool), []).append(int(idx.sum()))
+                        clusters[frame].setdefault('{0}_shape'.format(tool), []).append(shape)
                         # mean of the cluster
                         if metric_type == 'euclidean':
                             k_loc = avg(loc[idx])
