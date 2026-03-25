@@ -67,6 +67,7 @@ kwargs_extra_data = {
 }
 
 processed_data = {
+    'n_classifications': 5,
     'shape': 'rectangle',
     'symmetric': False,
     'frame0': {
@@ -102,20 +103,24 @@ reduced_data = {
         'T0_tool0_rectangle_height': [60.0, 20.0, 60.0, 20.0],
         'T0_tool0_cluster_labels': [0, 1, 0, 1],
         'T0_tool0_clusters_count': [2, 2],
+        'T0_tool0_n_classifications': [5, 5],
         'T0_tool0_clusters_x': [0.0, 100.0],
         'T0_tool0_clusters_y': [0.0, 100.0],
         'T0_tool0_clusters_width': [50.0, 10.0],
         'T0_tool0_clusters_height': [60.0, 20.0],
+        'T0_tool0_shape': ['rectangle', 'rectangle'],
         'T0_tool1_rectangle_x': [0.0, 100.0, 0.0, 100.0],
         'T0_tool1_rectangle_y': [100.0, 0.0, 100.0, 0.0],
         'T0_tool1_rectangle_width': [10.0, 50.0, 10.0, 50.0],
         'T0_tool1_rectangle_height': [50.0, 10.0, 50.0, 10.0],
         'T0_tool1_cluster_labels': [0, 1, 0, 1],
         'T0_tool1_clusters_count': [2, 2],
+        'T0_tool1_n_classifications': [5, 5],
         'T0_tool1_clusters_x': [0.0, 100.0],
         'T0_tool1_clusters_y': [100.0, 0.0],
         'T0_tool1_clusters_width': [10.0, 50.0],
-        'T0_tool1_clusters_height': [50.0, 10.0]
+        'T0_tool1_clusters_height': [50.0, 10.0],
+        'T0_tool1_shape': ['rectangle', 'rectangle']
     },
     'frame1': {
         'T0_tool0_rectangle_x': [20.0],
@@ -129,10 +134,12 @@ reduced_data = {
         'T0_tool1_rectangle_height': [50.0, 50.0],
         'T0_tool1_cluster_labels': [0, 0],
         'T0_tool1_clusters_count': [2],
+        'T0_tool1_n_classifications': [5],
         'T0_tool1_clusters_x': [50.0],
         'T0_tool1_clusters_y': [50.0],
         'T0_tool1_clusters_width': [50.0],
-        'T0_tool1_clusters_height': [50.0]
+        'T0_tool1_clusters_height': [50.0],
+        'T0_tool1_shape': ['rectangle']
     }
 }
 
@@ -177,21 +184,29 @@ reduced_data_collab_true = {
             "taskIndex": 0,
             "taskKey": "T0",
             "taskType": "rectangle",
-            "threshold": "0.75",
+            "threshold": "0.4",
             "toolIndex": 0,
             "toolType": "freehandLine",
-            "rec_x": [
-                0.0, 100.0
-            ],
-            "rec_y": [
-                0.0, 100.0
-            ],
-            "rec_width": [
-                50.0, 10.0
-            ],
-            "rec_height": [
-                60.0, 20.0
-            ]
+            "rec_x": 0.0,
+            "rec_y": 0.0,
+            "rec_width": 50.0,
+            "rec_height": 60.0
+        },
+{
+            "frame": 0,
+            "markID": "consensus_1",
+            "min_threshold": 0,
+            "stepKey": "S0",
+            "taskIndex": 0,
+            "taskKey": "T0",
+            "taskType": "rectangle",
+            "threshold": "0.4",
+            "toolIndex": 0,
+            "toolType": "freehandLine",
+            "rec_x": 100.0,
+            "rec_y": 100.0,
+            "rec_width": 10.0,
+            "rec_height": 20.0
         },
         {
             "frame": 0,
@@ -201,21 +216,29 @@ reduced_data_collab_true = {
             "taskIndex": 0,
             "taskKey": "T0",
             "taskType": "rectangle",
-            "threshold": "0.75",
+            "threshold": "0.4",
             "toolIndex": 1,
             "toolType": "freehandLine",
-            "rec_x": [
-                0.0, 100.0
-            ],
-            "rec_y": [
-                100.0, 0.0
-            ],
-            "rec_width": [
-                10.0, 50.0
-            ],
-            "rec_height": [
-                50.0, 10.0
-            ]
+            "rec_x": 0.0,
+            "rec_y": 100.0,
+            "rec_width": 10.0,
+            "rec_height": 50.0,
+        },
+{
+            "frame": 0,
+            "markID": "consensus_1",
+            "min_threshold": 0,
+            "stepKey": "S0",
+            "taskIndex": 0,
+            "taskKey": "T0",
+            "taskType": "rectangle",
+            "threshold": "0.4",
+            "toolIndex": 1,
+            "toolType": "freehandLine",
+            "rec_x": 100.0,
+            "rec_y": 0.0,
+            "rec_width": 50.0,
+            "rec_height": 10.0
         },
 {
             "frame": 1,
@@ -225,21 +248,13 @@ reduced_data_collab_true = {
             "taskIndex": 0,
             "taskKey": "T0",
             "taskType": "rectangle",
-            "threshold": "0.75",
+            "threshold": "0.4",
             "toolIndex": 1,
             "toolType": "freehandLine",
-            "rec_x": [
-                50.0
-            ],
-            "rec_y": [
-                50.0
-            ],
-            "rec_width": [
-                50.0
-            ],
-            "rec_height": [
-                50.0
-            ]
+            "rec_x": 50.0,
+            "rec_y": 50.0,
+            "rec_width": 50.0,
+            "rec_height": 50.0
         }
         ],
     'frame0': {
@@ -249,20 +264,24 @@ reduced_data_collab_true = {
         'T0_tool0_rectangle_height': [60.0, 20.0, 60.0, 20.0],
         'T0_tool0_cluster_labels': [0, 1, 0, 1],
         'T0_tool0_clusters_count': [2, 2],
+        'T0_tool0_n_classifications': [5, 5],
         'T0_tool0_clusters_x': [0.0, 100.0],
         'T0_tool0_clusters_y': [0.0, 100.0],
         'T0_tool0_clusters_width': [50.0, 10.0],
         'T0_tool0_clusters_height': [60.0, 20.0],
+        'T0_tool0_shape': ['rectangle', 'rectangle'],
         'T0_tool1_rectangle_x': [0.0, 100.0, 0.0, 100.0],
         'T0_tool1_rectangle_y': [100.0, 0.0, 100.0, 0.0],
         'T0_tool1_rectangle_width': [10.0, 50.0, 10.0, 50.0],
         'T0_tool1_rectangle_height': [50.0, 10.0, 50.0, 10.0],
         'T0_tool1_cluster_labels': [0, 1, 0, 1],
         'T0_tool1_clusters_count': [2, 2],
+        'T0_tool1_n_classifications': [5, 5],
         'T0_tool1_clusters_x': [0.0, 100.0],
         'T0_tool1_clusters_y': [100.0, 0.0],
         'T0_tool1_clusters_width': [10.0, 50.0],
-        'T0_tool1_clusters_height': [50.0, 10.0]
+        'T0_tool1_clusters_height': [50.0, 10.0],
+        'T0_tool1_shape': ['rectangle', 'rectangle']
     },
     'frame1': {
         'T0_tool0_rectangle_x': [20.0],
@@ -276,10 +295,12 @@ reduced_data_collab_true = {
         'T0_tool1_rectangle_height': [50.0, 50.0],
         'T0_tool1_cluster_labels': [0, 0],
         'T0_tool1_clusters_count': [2],
+        'T0_tool1_n_classifications': [5],
         'T0_tool1_clusters_x': [50.0],
         'T0_tool1_clusters_y': [50.0],
         'T0_tool1_clusters_width': [50.0],
-        'T0_tool1_clusters_height': [50.0]
+        'T0_tool1_clusters_height': [50.0],
+        'T0_tool1_shape': ['rectangle']
     }
 }
 
