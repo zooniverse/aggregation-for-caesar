@@ -174,6 +174,31 @@ TestShapeReducerRectangleOptics = ReducerTest(
     test_name='TestShapeReducerRectangleOptics'
 )
 
+
+reduced_data_hdbscan = copy.deepcopy(reduced_data)
+reduced_data_hdbscan['frame0']['T0_tool0_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
+reduced_data_hdbscan['frame0']['T0_tool1_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
+reduced_data_hdbscan['frame1']['T0_tool0_cluster_probabilities'] = [0.0]
+reduced_data_hdbscan['frame1']['T0_tool1_cluster_probabilities'] = [1.0, 1.0]
+
+TestShapeReducerRectangleHdbscan = ReducerTest(
+    shape_reducer_hdbscan,
+    process_data_hdbscan,
+    extracted_data,
+    processed_data,
+    reduced_data_hdbscan,
+    'Test shape rectangle reducer with HDBSCAN',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'rectangle'},
+    kwargs={
+        'min_cluster_size': 2,
+        'min_samples': 1,
+        'allow_single_cluster': True
+    },
+    test_name='TestShapeReducerRectangleHdbscan'
+)
+
+
 reduced_data_collab_true = {
 'data': [
         {
@@ -304,6 +329,22 @@ reduced_data_collab_true = {
     }
 }
 
+TestShapeReducerRectangleDbscanCollabTrue = ReducerTest(
+    shape_reducer_dbscan,
+    process_data_dbscan,
+    extracted_data,
+    processed_data,
+    reduced_data_collab_true,
+    'Test shape rectangle reducer with DBSCAN when collab: True',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'rectangle'},
+    kwargs={
+        'eps': 5,
+        'min_samples': 2
+    },
+    test_name='TestShapeReducerRectangleDBScanCollabTrue'
+)
+
 TestShapeReducerRectangleOpticsCollabTrue = ReducerTest(
     shape_reducer_optics,
     process_data_optics,
@@ -320,19 +361,19 @@ TestShapeReducerRectangleOpticsCollabTrue = ReducerTest(
     test_name='TestShapeReducerRectangleOpticsCollabTrue'
 )
 
-reduced_data_hdbscan = copy.deepcopy(reduced_data)
-reduced_data_hdbscan['frame0']['T0_tool0_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
-reduced_data_hdbscan['frame0']['T0_tool1_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
-reduced_data_hdbscan['frame1']['T0_tool0_cluster_probabilities'] = [0.0]
-reduced_data_hdbscan['frame1']['T0_tool1_cluster_probabilities'] = [1.0, 1.0]
+reduced_data_hdbscan_collab_true = copy.deepcopy(reduced_data_collab_true)
+reduced_data_hdbscan_collab_true['frame0']['T0_tool0_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
+reduced_data_hdbscan_collab_true['frame0']['T0_tool1_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
+reduced_data_hdbscan_collab_true['frame1']['T0_tool0_cluster_probabilities'] = [0.0]
+reduced_data_hdbscan_collab_true['frame1']['T0_tool1_cluster_probabilities'] = [1.0, 1.0]
 
-TestShapeReducerRectangleHdbscan = ReducerTest(
+TestShapeReducerRectangleHdbscanCollabTrue = ReducerTest(
     shape_reducer_hdbscan,
     process_data_hdbscan,
     extracted_data,
     processed_data,
-    reduced_data_hdbscan,
-    'Test shape rectangle reducer with HDBSCAN',
+    reduced_data_hdbscan_collab_true,
+    'Test shape rectangle reducer with HDBSCAN when collab: True',
     network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'rectangle'},
     kwargs={
@@ -340,5 +381,5 @@ TestShapeReducerRectangleHdbscan = ReducerTest(
         'min_samples': 1,
         'allow_single_cluster': True
     },
-    test_name='TestShapeReducerRectangleHdbscan'
+    test_name='TestShapeReducerRectangleHdbscanCollabTrue'
 )
