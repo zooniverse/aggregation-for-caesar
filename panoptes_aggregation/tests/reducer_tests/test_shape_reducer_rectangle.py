@@ -340,7 +340,8 @@ TestShapeReducerRectangleDbscanCollabTrue = ReducerTest(
     pkwargs={'shape': 'rectangle'},
     kwargs={
         'eps': 5,
-        'min_samples': 2
+        'min_samples': 2,
+        'collab': True
     },
     test_name='TestShapeReducerRectangleDBScanCollabTrue'
 )
@@ -379,6 +380,7 @@ TestShapeReducerRectangleHdbscanCollabTrue = ReducerTest(
     kwargs={
         'min_cluster_size': 2,
         'min_samples': 1,
+        'collab': True,
         'allow_single_cluster': True
     },
     test_name='TestShapeReducerRectangleHdbscanCollabTrue'
