@@ -1,4 +1,5 @@
 from functools import wraps
+from collections import OrderedDict
 import numpy as np
 
 
@@ -142,6 +143,16 @@ def collab_wrapper(func):
 
                                             clusters.setdefault('data', []).append(annotations)
 
+                    if 'data' in clusters:
+                        clusters['data'].sort(
+                            key=lambda d: (
+                                d['frame'],
+                                d['toolIndex'],
+                                int(d['markID'].split('_')[1])
+                            )
+                        )
+
+        return clusters
         return clusters
 
     return wrapper
