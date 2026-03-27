@@ -670,7 +670,7 @@ reduced_data_last_collab_true = {
             "taskIndex": 0,
             "taskKey": "T0",
             "taskType": "drawing",
-            "threshold": "0.75",
+            "threshold": 0.75,
             "toolIndex": 0,
             "toolType": "freehandLine",
             "pathX": [
@@ -704,7 +704,7 @@ reduced_data_last_collab_true = {
             "taskIndex": 0,
             "taskKey": "T0",
             "taskType": "drawing",
-            "threshold": "0.75",
+            "threshold": 0.75,
             "toolIndex": 0,
             "toolType": "freehandLine",
             "pathX": [
@@ -738,7 +738,7 @@ reduced_data_last_collab_true = {
             "taskIndex": 0,
             "taskKey": "T0",
             "taskType": "drawing",
-            "threshold": "0.75",
+            "threshold": 0.75,
             "toolIndex": 0,
             "toolType": "freehandLine",
             "pathX": [
@@ -772,7 +772,7 @@ reduced_data_last_collab_true = {
             'frame': 0,
             'markID': 'consensus_0',
             'min_threshold': 0,
-            'threshold': "0.75",
+            'threshold': 0.75,
             'pathX': [-0.15554523195117093,
                       0.19219246615042257,
                       0.44238509316213026,
