@@ -1,5 +1,4 @@
 from functools import wraps
-from collections import OrderedDict
 import numpy as np
 
 
@@ -70,8 +69,11 @@ def collab_wrapper(func):
                                 clusters_count = frame_data[f"{base}_clusters_count"]
                                 n_classifications = frame_data[f"{base}_n_classifications"]
 
-                                if clusters_count and n_classifications is not None:
-                                    threshold = list(np.array(clusters_count) / np.array(n_classifications))
+                                if clusters_count and n_classifications:
+                                    threshold = []
+                                    for i in range(len(clusters_count)):
+                                        threshold_i = clusters_count[i]/n_classifications[i]
+                                        threshold.append(threshold_i)
 
                                     for i in reversed(range(len(clusters_x))):
                                         if threshold[i] < min_threshold:
@@ -86,7 +88,7 @@ def collab_wrapper(func):
                                         if threshold[i] >= min_threshold:
                                             annotations = {
                                                 'min_threshold': min_threshold,
-                                                'threshold': f"{threshold[i]}",
+                                                'threshold': threshold[i],
                                                 'stepKey': step_key,
                                                 'taskIndex': task_index,
                                                 'taskKey': task_key,
@@ -111,8 +113,11 @@ def collab_wrapper(func):
                                 n_classifications = frame_data[f"{base}_n_classifications"]
                                 consensus = frame_data[f"{base}_consensus"]
 
-                                if clusters_count and n_classifications is not None:
-                                    threshold = list(np.array(clusters_count) / np.array(n_classifications))
+                                if clusters_count and n_classifications:
+                                    threshold = []
+                                    for i in range(len(clusters_count)):
+                                        threshold_i = clusters_count[i] / n_classifications[i]
+                                        threshold.append(threshold_i)
 
                                     for i in reversed(range(len(clusters_x))):
                                         if threshold[i] < min_threshold:
@@ -126,7 +131,7 @@ def collab_wrapper(func):
                                         if threshold[i] >= min_threshold:
                                             annotations = {
                                                 'min_threshold': min_threshold,
-                                                'threshold': f"{threshold[i]}",
+                                                'threshold': threshold[i],
                                                 'stepKey': step_key,
                                                 'taskIndex': task_index,
                                                 'taskKey': task_key,
@@ -152,7 +157,6 @@ def collab_wrapper(func):
                             )
                         )
 
-        return clusters
         return clusters
 
     return wrapper
