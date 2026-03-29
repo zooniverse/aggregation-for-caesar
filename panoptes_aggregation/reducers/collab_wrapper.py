@@ -148,6 +148,49 @@ def collab_wrapper(func):
 
                                             clusters.setdefault('data', []).append(annotations)
 
+                            elif 'circle' in shape:
+                                clusters_x = value
+                                clusters_y = frame_data[f"{base}_clusters_y"]
+                                clusters_r = frame_data[f"{base}_clusters_r"]
+                                clusters_count = frame_data[f"{base}_clusters_count"]
+                                n_classifications = frame_data[f"{base}_n_classifications"]
+
+                                if clusters_count and n_classifications:
+                                    threshold = []
+                                    for i in range(len(clusters_count)):
+                                        threshold_i = clusters_count[i] / n_classifications[i]
+                                        threshold.append(threshold_i)
+
+                                    for i in reversed(range(len(clusters_x))):
+                                        if threshold[i] < min_threshold:
+                                            clusters_x.pop(i)
+                                            clusters_y.pop(i)
+                                            clusters_r.pop(i)
+                                            clusters_count.pop(i)
+                                            threshold.pop(i)
+
+                                    for i in range(len(clusters_x)):
+                                        if threshold[i] >= min_threshold:
+                                            annotations = {
+                                                'min_threshold': min_threshold,
+                                                'threshold': threshold[i],
+                                                'stepKey': step_key,
+                                                'taskIndex': task_index,
+                                                'taskKey': task_key,
+                                                'taskType': 'circle',
+                                                'toolIndex': int(tool_index),
+                                                'frame': int(frame_num),
+                                                'markID': f'consensus_{i}',
+                                                'toolType': tool_type,
+                                                'pathX': clusters_x[i],
+                                                'pathY': clusters_y[i],
+                                                'pathR': clusters_r[i]
+                                            }
+
+                                            # annotations.update(new_dict)
+
+                                            clusters.setdefault('data', []).append(annotations)
+
                     if 'data' in clusters:
                         clusters['data'].sort(
                             key=lambda d: (
