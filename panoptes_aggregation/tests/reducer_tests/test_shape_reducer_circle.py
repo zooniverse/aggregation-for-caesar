@@ -1,7 +1,7 @@
 from panoptes_aggregation.reducers.shape_reducer_dbscan import process_data as process_data_dbscan, shape_reducer_dbscan
 from panoptes_aggregation.reducers.shape_reducer_hdbscan import process_data as process_data_hdbscan, shape_reducer_hdbscan
 from panoptes_aggregation.reducers.shape_reducer_optics import process_data as process_data_optics, shape_reducer_optics
-from .base_test_class import ReducerTest
+from .base_test_class import ReducerTest, CollabTest
 import copy
 
 extracted_data = [
@@ -61,6 +61,7 @@ kwargs_extra_data = {
 
 processed_data = {
     'shape': 'circle',
+    'n_classifications': 5,
     'symmetric': False,
     'frame0': {
         'T0_tool0': [
@@ -97,6 +98,8 @@ reduced_data = {
         'T0_tool0_clusters_x': [0.0, 100.0],
         'T0_tool0_clusters_y': [0.0, 100.0],
         'T0_tool0_clusters_r': [50.0, 10.0],
+        'T0_tool0_n_classifications': [5, 5],
+        'T0_tool0_shape': ['circle', 'circle'],
         'T0_tool1_circle_x': [0.0, 100.0, 0.0, 100.0],
         'T0_tool1_circle_y': [100.0, 0.0, 100.0, 0.0],
         'T0_tool1_circle_r': [10.0, 50.0, 10.0, 50.0],
@@ -104,7 +107,9 @@ reduced_data = {
         'T0_tool1_clusters_count': [2, 2],
         'T0_tool1_clusters_x': [0.0, 100.0],
         'T0_tool1_clusters_y': [100.0, 0.0],
-        'T0_tool1_clusters_r': [10.0, 50.0]
+        'T0_tool1_clusters_r': [10.0, 50.0],
+        'T0_tool1_n_classifications': [5, 5],
+        'T0_tool1_shape': ['circle', 'circle']
     },
     'frame1': {
         'T0_tool0_circle_x': [20.0],
@@ -118,7 +123,9 @@ reduced_data = {
         'T0_tool1_clusters_count': [2],
         'T0_tool1_clusters_x': [50.0],
         'T0_tool1_clusters_y': [50.0],
-        'T0_tool1_clusters_r': [50.0]
+        'T0_tool1_clusters_r': [50.0],
+        'T0_tool1_n_classifications': [5],
+        'T0_tool1_shape': ['circle']
     }
 }
 
@@ -174,4 +181,96 @@ TestShapeReducerCircleHdbscan = ReducerTest(
         'allow_single_cluster': True
     },
     test_name='TestShapeReducerCircleHdbscan'
+)
+
+data_collab_true = [
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'circle',
+        'toolIndex': 0,
+        'frame': 0,
+        'markID': 'consensus_0',
+        'toolType': 'freehandLine',
+        'pathX': 0.0,
+        'pathY': 0.0,
+        'pathR': 50.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'circle',
+        'toolIndex': 0,
+        'frame': 0,
+        'markID': 'consensus_1',
+        'toolType': 'freehandLine',
+        'pathX': 100.0,
+        'pathY': 100.0,
+        'pathR': 10.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'circle',
+        'toolIndex': 1,
+        'frame': 0,
+        'markID': 'consensus_0',
+        'toolType': 'freehandLine',
+        'pathX': 0.0,
+        'pathY': 100.0,
+        'pathR': 10.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'circle',
+        'toolIndex': 1,
+        'frame': 0,
+        'markID': 'consensus_1',
+        'toolType': 'freehandLine',
+        'pathX': 100.0,
+        'pathY': 0.0,
+        'pathR': 50.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'circle',
+        'toolIndex': 1,
+        'frame': 1,
+        'markID': 'consensus_0',
+        'toolType': 'freehandLine',
+        'pathX': 50.0,
+        'pathY': 50.0,
+        'pathR': 50.0
+    }
+]
+
+TestShapeReducerCircleCollabTrue = CollabTest(
+    shape_reducer_optics,
+    extracted_data,
+    data_collab_true,
+    'Test data is correct when collab: True',
+    kwargs={
+        'min_samples': 2,
+        'shape': 'circle',
+        'collab': True
+    },
+    network_kwargs=kwargs_extra_data,
+    test_name='TestShapeReducerCircleCollabTrue'
 )
