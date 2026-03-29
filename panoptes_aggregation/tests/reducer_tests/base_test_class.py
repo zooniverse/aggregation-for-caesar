@@ -246,6 +246,29 @@ def ReducerTestNoProcessing(
     ReducerTestNoProcessing.__qualname__ = test_name
     return ReducerTestNoProcessing
 
+def CollabTest(
+        reducer,
+        extracted,
+        data,
+        name,
+        kwargs=None,
+        network_kwargs=None,
+        test_name=None
+):
+
+    class CollabTest(unittest.TestCase):
+        def setUp(self):
+            self.maxDiff = None
+            self.extracted_with_version = copy.deepcopy(extracted)
+            append_version(self.extracted_with_version)
+
+        def test_data(self):
+            '''Test if data is added correctly'''
+            result = reducer(self.extracted_with_version, **kwargs, **network_kwargs)
+            result = cast_to_dict(result)
+            self.assertEqual(result['data'], data)
+
+    return CollabTest
 
 def ReducerTestPoints(
     reducer,
