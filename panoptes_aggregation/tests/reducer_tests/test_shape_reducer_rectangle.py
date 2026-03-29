@@ -212,10 +212,10 @@ reduced_data_collab_true = {
             "threshold": 0.4,
             "toolIndex": 0,
             "toolType": "freehandLine",
-            "rec_x": 0.0,
-            "rec_y": 0.0,
-            "rec_width": 50.0,
-            "rec_height": 60.0
+            "pathX": 0.0,
+            "pathY": 0.0,
+            "pathWidth": 50.0,
+            "pathHeight": 60.0
         },
 {
             "frame": 0,
@@ -228,10 +228,10 @@ reduced_data_collab_true = {
             "threshold": 0.4,
             "toolIndex": 0,
             "toolType": "freehandLine",
-            "rec_x": 100.0,
-            "rec_y": 100.0,
-            "rec_width": 10.0,
-            "rec_height": 20.0
+            "pathX": 100.0,
+            "pathY": 100.0,
+            "pathWidth": 10.0,
+            "pathHeight": 20.0
         },
         {
             "frame": 0,
@@ -244,10 +244,10 @@ reduced_data_collab_true = {
             "threshold": 0.4,
             "toolIndex": 1,
             "toolType": "freehandLine",
-            "rec_x": 0.0,
-            "rec_y": 100.0,
-            "rec_width": 10.0,
-            "rec_height": 50.0,
+            "pathX": 0.0,
+            "pathY": 100.0,
+            "pathWidth": 10.0,
+            "pathHeight": 50.0,
         },
 {
             "frame": 0,
@@ -260,10 +260,10 @@ reduced_data_collab_true = {
             "threshold": 0.4,
             "toolIndex": 1,
             "toolType": "freehandLine",
-            "rec_x": 100.0,
-            "rec_y": 0.0,
-            "rec_width": 50.0,
-            "rec_height": 10.0
+            "pathX": 100.0,
+            "pathY": 0.0,
+            "pathWidth": 50.0,
+            "pathHeight": 10.0
         },
 {
             "frame": 1,
@@ -276,10 +276,10 @@ reduced_data_collab_true = {
             "threshold": 0.4,
             "toolIndex": 1,
             "toolType": "freehandLine",
-            "rec_x": 50.0,
-            "rec_y": 50.0,
-            "rec_width": 50.0,
-            "rec_height": 50.0
+            "pathX": 50.0,
+            "pathY": 50.0,
+            "pathWidth": 50.0,
+            "pathHeight": 50.0
         }
         ],
     'frame0': {
