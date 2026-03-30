@@ -150,7 +150,7 @@ def collab_wrapper(func):
                                         clusters_x.pop(i)
                                         clusters_y.pop(i)
 
-                                    if 'rotateRectangle' in shape:
+                                    elif 'rotateRectangle' in shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
@@ -161,6 +161,17 @@ def collab_wrapper(func):
                                         clusters_y.pop(i)
                                         clusters_width.pop(i)
                                         clusters_height.pop(i)
+                                        clusters_angle.pop(i)
+
+                                    elif 'triangle' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
+                                        clusters_y = frame_data[f"{base}_clusters_y"]
+                                        clusters_r = frame_data[f"{base}_clusters_r"]
+                                        clusters_angle = frame_data[f"{base}_clusters_angle"]
+
+                                        clusters_x.pop(i)
+                                        clusters_y.pop(i)
+                                        clusters_r.pop(i)
                                         clusters_angle.pop(i)
 
                             for i in range(len(clusters_count)):
@@ -297,7 +308,7 @@ def collab_wrapper(func):
                                             }
                                         )
 
-                                    if 'rotateRectangle' in shape:
+                                    elif 'rotateRectangle' in shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
@@ -311,6 +322,22 @@ def collab_wrapper(func):
                                                 'pathY': clusters_y[i],
                                                 'pathWidth': clusters_width[i],
                                                 'pathHeight': clusters_height[i],
+                                                'angle': clusters_angle[i]
+                                            }
+                                        )
+
+                                    elif 'triangle' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
+                                        clusters_y = frame_data[f"{base}_clusters_y"]
+                                        clusters_r = frame_data[f"{base}_clusters_r"]
+                                        clusters_angle = frame_data[f"{base}_clusters_angle"]
+
+                                        annotations.update(
+                                            {
+                                                'taskType': 'triangle',
+                                                'pathX': clusters_x[i],
+                                                'pathY': clusters_y[i],
+                                                'pathR': clusters_r[i],
                                                 'angle': clusters_angle[i]
                                             }
                                         )
