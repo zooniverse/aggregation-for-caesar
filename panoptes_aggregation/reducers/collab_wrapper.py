@@ -44,8 +44,6 @@ def collab_wrapper(func):
                     frame_split = frame_key.split("frame")
                     frame_num = frame_split[1]
                     for key, value in frame_data.items():
-                        # shape dependent code goes
-                        # new_dict = shape_dep_fn(...)
                         if key.endswith('clusters_x'):
                             # classifier v2.0
                             if 'toolIndex' in key:
@@ -99,6 +97,22 @@ def collab_wrapper(func):
 
                                         clusters_y.pop(i)
                                         clusters_r.pop(i)
+
+                                    elif 'column' in shape:
+                                        clusters_width = frame_data[f"{base}_clusters_width"]
+
+                                        clusters_width.pop(i)
+
+                                    elif 'ellipse' in shape:
+                                        clusters_y = frame_data[f"{base}_clusters_y"]
+                                        clusters_rx = frame_data[f"{base}_clusters_rx"]
+                                        clusters_ry = frame_data[f"{base}_clusters_ry"]
+                                        clusters_angle = frame_data[f"{base}_clusters_angle"]
+
+                                        clusters_y.pop(i)
+                                        clusters_rx.pop(i)
+                                        clusters_ry.pop(i)
+                                        clusters_angle.pop(i)
 
                             for i in range(len(clusters_x)):
                                 if threshold[i] >= min_threshold:
@@ -154,6 +168,21 @@ def collab_wrapper(func):
                                             {
                                                 'taskType': 'column',
                                                 'pathWidth': clusters_width[i]
+                                            }
+                                        )
+
+                                    elif 'ellipse' in shape:
+                                        clusters_y = frame_data[f"{base}_clusters_y"]
+                                        clusters_rx = frame_data[f"{base}_clusters_rx"]
+                                        clusters_ry = frame_data[f"{base}_clusters_ry"]
+                                        clusters_angle = frame_data[f"{base}_clusters_angle"]
+                                        annotations.update(
+                                            {
+                                                'taskType': 'ellipse',
+                                                'pathY': clusters_y[i],
+                                                'pathRX': clusters_rx[i],
+                                                'pathRY': clusters_ry[i],
+                                                'angle': clusters_angle[i]
                                             }
                                         )
 
