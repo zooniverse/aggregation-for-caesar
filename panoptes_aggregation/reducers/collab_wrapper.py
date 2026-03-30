@@ -44,22 +44,21 @@ def collab_wrapper(func):
                     frame_split = frame_key.split("frame")
                     frame_num = frame_split[1]
                     for key, value in frame_data.items():
-                        if key.endswith('clusters_x'):
+                        if key.endswith('clusters_count'):
                             # classifier v2.0
                             if 'toolIndex' in key:
                                 tool_split = key.split("_toolIndex")
                                 task_key = tool_split[0]
                                 tool_index_split = tool_split[1]
-                                tool_index = tool_index_split.split("_clusters_x")[0]
+                                tool_index = tool_index_split.split("_clusters_count")[0]
                             # classifier v1.0
                             elif 'tool' in key:
                                 tool_split = key.split("_tool")
                                 task_key = tool_split[0]
                                 tool_index_split = tool_split[1]
-                                tool_index = tool_index_split.split("_clusters_x")[0]
-                            base = key[:-len("_clusters_x")]
+                                tool_index = tool_index_split.split("_clusters_count")[0]
+                            base = key[:-len("_clusters_count")]
                             shape = frame_data[f"{base}_shape"]
-                            clusters_x = value
                             clusters_count = frame_data[f"{base}_clusters_count"]
                             n_classifications = frame_data[f"{base}_n_classifications"]
 
@@ -69,52 +68,66 @@ def collab_wrapper(func):
                                     threshold_i = clusters_count[i] / n_classifications[i]
                                     threshold.append(threshold_i)
 
-                            for i in reversed(range(len(clusters_x))):
+                            for i in reversed(range(len(clusters_count))):
                                 if threshold[i] < min_threshold:
-                                    clusters_x.pop(i)
                                     clusters_count.pop(i)
                                     threshold.pop(i)
 
                                     if 'rectangle' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
                                         clusters_height = frame_data[f"{base}_clusters_height"]
 
+                                        clusters_x.pop(i)
                                         clusters_y.pop(i)
                                         clusters_width.pop(i)
                                         clusters_height.pop(i)
 
                                     elif 'polygon' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         consensus = frame_data[f"{base}_consensus"]
 
+                                        clusters_x.pop(i)
                                         clusters_y.pop(i)
                                         consensus.pop(i)
 
                                     elif 'circle' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_r = frame_data[f"{base}_clusters_r"]
 
+                                        clusters_x.pop(i)
                                         clusters_y.pop(i)
                                         clusters_r.pop(i)
 
                                     elif 'column' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
 
+                                        clusters_x.pop(i)
                                         clusters_width.pop(i)
 
                                     elif 'ellipse' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_rx = frame_data[f"{base}_clusters_rx"]
                                         clusters_ry = frame_data[f"{base}_clusters_ry"]
                                         clusters_angle = frame_data[f"{base}_clusters_angle"]
 
+                                        clusters_x.pop(i)
                                         clusters_y.pop(i)
                                         clusters_rx.pop(i)
                                         clusters_ry.pop(i)
                                         clusters_angle.pop(i)
 
-                            for i in range(len(clusters_x)):
+                                    elif 'fullWidthLine' in shape:
+                                        clusters_y = frame_data[f"{base}_clusters_y"]
+
+                                        clusters_y.pop(i)
+
+                            for i in range(len(clusters_count)):
                                 if threshold[i] >= min_threshold:
                                     annotations = {
                                         'min_threshold': min_threshold,
@@ -125,17 +138,18 @@ def collab_wrapper(func):
                                         'toolIndex': int(tool_index),
                                         'frame': int(frame_num),
                                         'markID': f'consensus_{i}',
-                                        'toolType': tool_type,
-                                        'pathX': clusters_x[i]
+                                        'toolType': tool_type
                                     }
 
                                     if 'rectangle' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
                                         clusters_height = frame_data[f"{base}_clusters_height"]
                                         annotations.update(
                                             {
                                                 'taskType': 'rectangle',
+                                                'pathX': clusters_x[i],
                                                 'pathY': clusters_y[i],
                                                 'pathWidth': clusters_width[i],
                                                 'pathHeight': clusters_height[i]
@@ -143,35 +157,42 @@ def collab_wrapper(func):
                                         )
 
                                     elif 'polygon' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         annotations.update(
                                             {
                                                 'taskType': 'drawing',
+                                                'pathX': clusters_x[i],
                                                 'pathY': clusters_y[i]
                                             }
                                         )
 
                                     elif 'circle' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_r = frame_data[f"{base}_clusters_r"]
                                         annotations.update(
                                             {
                                                 'taskType': 'circle',
                                                 'pathR': clusters_r[i],
+                                                'pathX': clusters_x[i],
                                                 'pathY': clusters_y[i]
                                             }
                                         )
 
                                     elif 'column' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
                                         annotations.update(
                                             {
                                                 'taskType': 'column',
+                                                'pathX': clusters_x[i],
                                                 'pathWidth': clusters_width[i]
                                             }
                                         )
 
                                     elif 'ellipse' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_rx = frame_data[f"{base}_clusters_rx"]
                                         clusters_ry = frame_data[f"{base}_clusters_ry"]
@@ -179,10 +200,21 @@ def collab_wrapper(func):
                                         annotations.update(
                                             {
                                                 'taskType': 'ellipse',
+                                                'pathX': clusters_x[i],
                                                 'pathY': clusters_y[i],
                                                 'pathRX': clusters_rx[i],
                                                 'pathRY': clusters_ry[i],
                                                 'angle': clusters_angle[i]
+                                            }
+                                        )
+
+                                    elif 'fullWidthLine' in shape:
+                                        clusters_y = frame_data[f"{base}_clusters_y"]
+
+                                        annotations.update(
+                                            {
+                                                'taskType': 'fullWidthLine',
+                                                'pathY': clusters_y[i],
                                             }
                                         )
 
