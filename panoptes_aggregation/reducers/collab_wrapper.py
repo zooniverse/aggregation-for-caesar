@@ -127,6 +127,11 @@ def collab_wrapper(func):
 
                                         clusters_y.pop(i)
 
+                                    elif 'fullHeightLine' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
+
+                                        clusters_x.pop(i)
+
                             for i in range(len(clusters_count)):
                                 if threshold[i] >= min_threshold:
                                     annotations = {
@@ -215,6 +220,16 @@ def collab_wrapper(func):
                                             {
                                                 'taskType': 'fullWidthLine',
                                                 'pathY': clusters_y[i],
+                                            }
+                                        )
+
+                                    elif 'fullHeightLine' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
+
+                                        annotations.update(
+                                            {
+                                                'taskType': 'fullHeightLine',
+                                                'pathX': clusters_x[i],
                                             }
                                         )
 
