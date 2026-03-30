@@ -43,7 +43,10 @@ def collab_wrapper(func):
         step_key = kwargs.get('step_key', 'S0')
         task_index = kwargs.get('task_index', 0)
         tool_type = kwargs.get('tool_type', 'freehandLine')
-        min_threshold = kwargs.get('min_threshold', 0)
+        min_threshold = kwargs.get('min_threshold')
+
+        if min_threshold is None:
+            min_threshold = 0
 
         clusters = func(argument, **kwargs)
 
