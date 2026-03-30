@@ -132,6 +132,17 @@ def collab_wrapper(func):
 
                                         clusters_x.pop(i)
 
+                                    elif 'line' in shape:
+                                        clusters_x1 = frame_data[f"{base}_clusters_x1"]
+                                        clusters_y1 = frame_data[f"{base}_clusters_y1"]
+                                        clusters_x2 = frame_data[f"{base}_clusters_x2"]
+                                        clusters_y2 = frame_data[f"{base}_clusters_y2"]
+
+                                        clusters_x1.pop(i)
+                                        clusters_y1.pop(i)
+                                        clusters_x2.pop(i)
+                                        clusters_y2.pop(i)
+
                             for i in range(len(clusters_count)):
                                 if threshold[i] >= min_threshold:
                                     annotations = {
@@ -230,6 +241,22 @@ def collab_wrapper(func):
                                             {
                                                 'taskType': 'fullHeightLine',
                                                 'pathX': clusters_x[i],
+                                            }
+                                        )
+
+                                    elif 'line' in shape:
+                                        clusters_x1 = frame_data[f"{base}_clusters_x1"]
+                                        clusters_y1 = frame_data[f"{base}_clusters_y1"]
+                                        clusters_x2 = frame_data[f"{base}_clusters_x2"]
+                                        clusters_y2 = frame_data[f"{base}_clusters_y2"]
+
+                                        annotations.update(
+                                            {
+                                                'taskType': 'line',
+                                                'pathX1': clusters_x1[i],
+                                                'pathY1': clusters_y1[i],
+                                                'pathX2': clusters_x2[i],
+                                                'pathY2': clusters_y2[i]
                                             }
                                         )
 
