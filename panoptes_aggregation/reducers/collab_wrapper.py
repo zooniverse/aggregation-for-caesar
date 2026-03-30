@@ -1,5 +1,4 @@
 from functools import wraps
-import numpy as np
 
 
 def collab_wrapper(func):

@@ -37,6 +37,7 @@ DEFAULTS = {
     'min_threshold': {'default': 0, 'type': float}
 }
 
+
 @collab_wrapper
 @reducer_wrapper(
     process_data=process_data,
