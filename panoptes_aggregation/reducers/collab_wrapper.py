@@ -349,8 +349,8 @@ def collab_wrapper(func):
                                         )
 
                                     elif 'rotateRectangle' in shape:
-                                        clusters_x = frame_data[f"{base}_clusters_x_center"]
-                                        clusters_y = frame_data[f"{base}_clusters_y_center"]
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
+                                        clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
                                         clusters_height = frame_data[f"{base}_clusters_height"]
                                         clusters_angle = frame_data[f"{base}_clusters_angle"]
