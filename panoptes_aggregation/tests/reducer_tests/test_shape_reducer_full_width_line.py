@@ -1,7 +1,7 @@
 from panoptes_aggregation.reducers.shape_reducer_dbscan import shape_reducer_dbscan
 from panoptes_aggregation.reducers.shape_reducer_hdbscan import shape_reducer_hdbscan
 from panoptes_aggregation.reducers.shape_reducer_optics import shape_reducer_optics
-from .base_test_class import ReducerTestNoProcessing
+from .base_test_class import ReducerTestNoProcessing, CollabTest
 import copy
 
 extracted_data = [
@@ -47,6 +47,7 @@ kwargs_extra_data = {
 
 processed_data = {
     'shape': 'fullWidthLine',
+    'n_classifications': 5,
     'symmetric': False,
     'frame0': {
         'T0_tool0': [
@@ -78,11 +79,15 @@ reduced_data = {
         'T0_tool0_fullWidthLine_y': [0.0, 100.0, 0.0, 100.0],
         'T0_tool0_cluster_labels': [0, 1, 0, 1],
         'T0_tool0_clusters_count': [2, 2],
+        'T0_tool0_n_classifications': [5, 5],
+        'T0_tool0_shape': ['fullWidthLine', 'fullWidthLine'],
         'T0_tool0_clusters_y': [0.0, 100.0],
         'T0_tool1_fullWidthLine_y': [0.0, 100.0, 0.0, 100.0],
         'T0_tool1_cluster_labels': [0, 1, 0, 1],
         'T0_tool1_clusters_count': [2, 2],
-        'T0_tool1_clusters_y': [0.0, 100.0]
+        'T0_tool1_clusters_y': [0.0, 100.0],
+        'T0_tool1_n_classifications': [5, 5],
+        'T0_tool1_shape': ['fullWidthLine', 'fullWidthLine']
     },
     'frame1': {
         'T0_tool0_fullWidthLine_y': [20.0],
@@ -90,7 +95,9 @@ reduced_data = {
         'T0_tool1_fullWidthLine_y': [50.0, 50.0],
         'T0_tool1_cluster_labels': [0, 0],
         'T0_tool1_clusters_count': [2],
-        'T0_tool1_clusters_y': [50.0]
+        'T0_tool1_clusters_y': [50.0],
+        'T0_tool1_n_classifications': [5],
+        'T0_tool1_shape': ['fullWidthLine']
     }
 }
 
@@ -140,4 +147,86 @@ TestShapeReducerFullWidthLineHdbscan = ReducerTestNoProcessing(
         'shape': 'fullWidthLine'
     },
     test_name='TestShapeReducerFullWidthLineHdbscan'
+)
+
+data_collab_true = [
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'fullWidthLine',
+        'toolIndex': 0,
+        'frame': 0,
+        'markID': 'consensus_0',
+        'toolType': 'freehandLine',
+        'pathY': 0.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'fullWidthLine',
+        'toolIndex': 0,
+        'frame': 0,
+        'markID': 'consensus_1',
+        'toolType': 'freehandLine',
+        'pathY': 100.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'fullWidthLine',
+        'toolIndex': 1,
+        'frame': 0,
+        'markID': 'consensus_0',
+        'toolType': 'freehandLine',
+        'pathY': 0.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'fullWidthLine',
+        'toolIndex': 1,
+        'frame': 0,
+        'markID': 'consensus_1',
+        'toolType': 'freehandLine',
+        'pathY': 100.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'fullWidthLine',
+        'toolIndex': 1,
+        'frame': 1,
+        'markID': 'consensus_0',
+        'toolType': 'freehandLine',
+        'pathY': 50.0
+    }
+]
+
+TestShapeReducerFullWidthLineCollabTrue = CollabTest(
+    shape_reducer_optics,
+    extracted_data,
+    data_collab_true,
+    'Test data is correct when collab: True',
+    kwargs={
+        'min_samples': 2,
+        'shape': 'fullWidthLine',
+        'collab': True
+    },
+    network_kwargs=kwargs_extra_data,
+    test_name='TestShapeReducerFullWidthLineCollabTrue'
 )
