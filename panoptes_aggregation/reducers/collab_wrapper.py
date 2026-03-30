@@ -187,6 +187,21 @@ def collab_wrapper(func):
                                         clusters_spread.pop(i)
                                         clusters_rotation.pop(i)
 
+                                    elif 'temporalRotateRectangle' in shape:
+                                        clusters_angle = frame_data[f"{base}_clusters_angle"]
+                                        clusters_displayTime = frame_data[f"{base}_clusters_displayTime"]
+                                        clusters_height = frame_data[f"{base}_clusters_height"]
+                                        clusters_width = frame_data[f"{base}_clusters_width"]
+                                        clusters_x_center = frame_data[f"{base}_clusters_x_center"]
+                                        clusters_y_center = frame_data[f"{base}_clusters_y_center"]
+
+                                        clusters_angle.pop(i)
+                                        clusters_displayTime.pop(i)
+                                        clusters_height.pop(i)
+                                        clusters_width.pop(i)
+                                        clusters_x_center.pop(i)
+                                        clusters_y_center.pop(i)
+
                             for i in range(len(clusters_count)):
                                 if threshold[i] >= min_threshold:
                                     annotations = {
@@ -322,8 +337,8 @@ def collab_wrapper(func):
                                         )
 
                                     elif 'rotateRectangle' in shape:
-                                        clusters_x = frame_data[f"{base}_clusters_x"]
-                                        clusters_y = frame_data[f"{base}_clusters_y"]
+                                        clusters_x = frame_data[f"{base}_clusters_x_center"]
+                                        clusters_y = frame_data[f"{base}_clusters_y_center"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
                                         clusters_height = frame_data[f"{base}_clusters_height"]
                                         clusters_angle = frame_data[f"{base}_clusters_angle"]
@@ -373,7 +388,27 @@ def collab_wrapper(func):
                                             }
                                         )
 
-                                    clusters.setdefault('data', []).append(annotations)
+                                    elif 'temporalRotateRectangle' in shape:
+                                        clusters_angle = frame_data[f"{base}_clusters_angle"]
+                                        clusters_displayTime = frame_data[f"{base}_clusters_displayTime"]
+                                        clusters_height = frame_data[f"{base}_clusters_height"]
+                                        clusters_width = frame_data[f"{base}_clusters_width"]
+                                        clusters_x_center = frame_data[f"{base}_clusters_x_center"]
+                                        clusters_y_center = frame_data[f"{base}_clusters_y_center"]
+
+                                        annotations.update(
+                                            {
+                                                'taskType': 'temporalRotateRectangle',
+                                                'angle': round(clusters_angle[i], 1),
+                                                'displayTime': round(clusters_displayTime[i], 1),
+                                                'height': round(clusters_height[i], 1),
+                                                'width': round(clusters_width[i], 1),
+                                                'x_center': round(clusters_x_center[i], 1),
+                                                'y_center': round(clusters_y_center[i], 1)
+                                            }
+                                        )
+
+                                clusters.setdefault('data', []).append(annotations)
 
                     if 'data' in clusters:
                         clusters['data'].sort(
