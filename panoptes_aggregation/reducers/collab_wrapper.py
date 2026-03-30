@@ -150,6 +150,19 @@ def collab_wrapper(func):
                                         clusters_x.pop(i)
                                         clusters_y.pop(i)
 
+                                    if 'rotateRectangle' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
+                                        clusters_y = frame_data[f"{base}_clusters_y"]
+                                        clusters_width = frame_data[f"{base}_clusters_width"]
+                                        clusters_height = frame_data[f"{base}_clusters_height"]
+                                        clusters_angle = frame_data[f"{base}_clusters_angle"]
+
+                                        clusters_x.pop(i)
+                                        clusters_y.pop(i)
+                                        clusters_width.pop(i)
+                                        clusters_height.pop(i)
+                                        clusters_angle.pop(i)
+
                             for i in range(len(clusters_count)):
                                 if threshold[i] >= min_threshold:
                                     annotations = {
@@ -169,6 +182,7 @@ def collab_wrapper(func):
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
                                         clusters_height = frame_data[f"{base}_clusters_height"]
+
                                         annotations.update(
                                             {
                                                 'taskType': 'rectangle',
@@ -182,6 +196,7 @@ def collab_wrapper(func):
                                     elif 'polygon' in shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
+
                                         annotations.update(
                                             {
                                                 'taskType': 'drawing',
@@ -194,6 +209,7 @@ def collab_wrapper(func):
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_r = frame_data[f"{base}_clusters_r"]
+
                                         annotations.update(
                                             {
                                                 'taskType': 'circle',
@@ -206,6 +222,7 @@ def collab_wrapper(func):
                                     elif 'column' in shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
+
                                         annotations.update(
                                             {
                                                 'taskType': 'column',
@@ -220,6 +237,7 @@ def collab_wrapper(func):
                                         clusters_rx = frame_data[f"{base}_clusters_rx"]
                                         clusters_ry = frame_data[f"{base}_clusters_ry"]
                                         clusters_angle = frame_data[f"{base}_clusters_angle"]
+
                                         annotations.update(
                                             {
                                                 'taskType': 'ellipse',
@@ -276,6 +294,24 @@ def collab_wrapper(func):
                                                 'taskType': 'point',
                                                 'pathX': clusters_x[i],
                                                 'pathY': clusters_y[i],
+                                            }
+                                        )
+
+                                    if 'rotateRectangle' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
+                                        clusters_y = frame_data[f"{base}_clusters_y"]
+                                        clusters_width = frame_data[f"{base}_clusters_width"]
+                                        clusters_height = frame_data[f"{base}_clusters_height"]
+                                        clusters_angle = frame_data[f"{base}_clusters_angle"]
+
+                                        annotations.update(
+                                            {
+                                                'taskType': 'rotateRectangle',
+                                                'pathX': clusters_x[i],
+                                                'pathY': clusters_y[i],
+                                                'pathWidth': clusters_width[i],
+                                                'pathHeight': clusters_height[i],
+                                                'angle': clusters_angle[i]
                                             }
                                         )
 
