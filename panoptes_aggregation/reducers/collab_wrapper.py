@@ -143,6 +143,13 @@ def collab_wrapper(func):
                                         clusters_x2.pop(i)
                                         clusters_y2.pop(i)
 
+                                    elif 'point' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
+                                        clusters_y = frame_data[f"{base}_clusters_y"]
+
+                                        clusters_x.pop(i)
+                                        clusters_y.pop(i)
+
                             for i in range(len(clusters_count)):
                                 if threshold[i] >= min_threshold:
                                     annotations = {
@@ -257,6 +264,18 @@ def collab_wrapper(func):
                                                 'pathY1': clusters_y1[i],
                                                 'pathX2': clusters_x2[i],
                                                 'pathY2': clusters_y2[i]
+                                            }
+                                        )
+
+                                    elif 'point' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
+                                        clusters_y = frame_data[f"{base}_clusters_y"]
+
+                                        annotations.update(
+                                            {
+                                                'taskType': 'point',
+                                                'pathX': clusters_x[i],
+                                                'pathY': clusters_y[i],
                                             }
                                         )
 
