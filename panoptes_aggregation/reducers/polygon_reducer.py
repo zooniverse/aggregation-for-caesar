@@ -127,7 +127,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
         * `See DBSCAN <http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html>`_
         * `average_type` : Must be either "union", which returns the union of the cluster, "intersection" which returns the intersection of the cluster, "last", which returns the last polygon to be created in the cluster, or "median", which returns the polygon with the minimum total distance to the other polygons. Defaults to "median".
         * `created_at` : A list of when the classifications were made.
-        * `collab` : A boolean indicating whether the annotations column is included in the output. Defaults to False.
+        * `collab` : A boolean indicating whether the data column is included in the output. Defaults to False.
         * 'step_key' : Identifies the step key. Defaults to 'S0'.
         * 'task_index' : The task index. Defaults to 0.
         * 'tool_type' : The tool used to create the polygons. Defaults to 'freehandLine'.
@@ -196,6 +196,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                 # Create a list of when the different polygons were created, assuming the order X matches the order of created_at_array.
                 # The created_at list originally provided is when all of the classifications per user were added
                 created_at_full_array = np.array([created_at[int(user_id)] for user_id in X[:, 1]])
+
                 # Looping through each cluster
                 for label in set(labels_array):
                     if label > -1:
@@ -203,8 +204,6 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                         n_classifications = value.get('n_classifications')
                         kwargs_cluster = {}
                         kwargs_cluster['created_at'] = created_at_full_array[cdx]
-                        # number of points in the cluster
-                        clusters[frame].setdefault('{0}_clusters_count'.format(tool), []).append(int(cdx.sum()))
                         # The distance matrix is used to find the consensus and is sometimes used in the average
                         distance_matrix = IoU_distance_matrix_of_cluster(cdx, X, data)
                         kwargs_cluster['distance_matrix'] = distance_matrix
