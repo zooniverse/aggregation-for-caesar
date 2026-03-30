@@ -150,7 +150,7 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
 
     '''
 
-    kwargs = kwargs_dbscan.copy()
+    _kwargs = kwargs_dbscan.copy()
 
     kwargs_dbscan.pop('collab', None)
     kwargs_dbscan.pop('step_key', None)
