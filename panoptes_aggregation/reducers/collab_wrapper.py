@@ -19,10 +19,8 @@ def collab_wrapper(func):
         -------
         Modifies reduction dict
 
-            * `annotations` : Contains the consensus polygons in the original classification format, which is included in the output if `collab` is set to True. For use with the Zooniverse front-end.
             * `data` : Contains the consensus polygons in the original classification format, which is included in the output if `collab` is set to True. For use with the Zooniverse front-end.
             * `threshold` : For each cluster, the threshold is the number of items in the cluster divided by the total number of classifications.
-
         '''
 
     @wraps(func)

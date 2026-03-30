@@ -143,9 +143,10 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
         * `tool*_clusters_x` : A list of the x values of each cluster
         * `tool*_clusters_y` : A list of the y values of each cluster
         * `tool*_consensus` : A list of the overall consensus of each cluster. A value of 1 is perfect agreement, a value of 0 is complete disagreement. This is found by subtracting`IoU_cluster_mean_distance` from 1
+        * `tool*_n_classifications` : The total number of classifications found for this frame and tool
+        * `tool*_shape` : The shape type of the clusters. For this case it is always 'polygon'.
         * `annotations` : Contains the consensus polygons in the original classification format, which is included in the output if `collab` is set to True. For use with the Zooniverse front-end.
         * `data` : Contains the consensus polygons in the original classification format, which is included in the output if `collab` is set to True. For use with the Zooniverse front-end.
-        * `threshold` : For each cluster, the threshold is the number of items in the cluster divided by the total number of classifications.
 
     '''
 
