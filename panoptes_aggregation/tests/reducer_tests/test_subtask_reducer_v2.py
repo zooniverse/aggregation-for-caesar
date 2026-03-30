@@ -106,6 +106,8 @@ reduced_data = {
         'T0_toolIndex0_point_y': [0.0, 100.0, 0.0, 100.0],
         'T0_toolIndex0_cluster_labels': [0, 1, 0, 1],
         'T0_toolIndex0_clusters_count': [2, 2],
+        'T0_toolIndex0_n_classifications': [3, 3],
+        'T0_toolIndex0_shape': ['point', 'point'],
         'T0_toolIndex0_clusters_x': [0.0, 100.0],
         'T0_toolIndex0_clusters_y': [0.0, 100.0],
         'T0_toolIndex0_subtask0': [
@@ -156,6 +158,8 @@ reduced_data = {
         'T0_toolIndex1_point_y': [500.0, 500.0, 500.0],
         'T0_toolIndex1_cluster_labels': [0, 0, 0],
         'T0_toolIndex1_clusters_count': [3],
+        'T0_toolIndex1_n_classifications': [3],
+        'T0_toolIndex1_shape': ['point'],
         'T0_toolIndex1_clusters_x': [500.0],
         'T0_toolIndex1_clusters_y': [500.0],
         'T0_toolIndex1_subtask0': [
@@ -221,10 +225,14 @@ reduced_data_no_details = {
         'T0_toolIndex0_clusters_count': [2, 2],
         'T0_toolIndex0_clusters_x': [0.0, 100.0],
         'T0_toolIndex0_clusters_y': [0.0, 100.0],
+        'T0_toolIndex0_n_classifications': [3, 3],
+        'T0_toolIndex0_shape': ['point', 'point'],
         'T0_toolIndex1_point_x': [500.0, 500.0, 500.0],
         'T0_toolIndex1_point_y': [500.0, 500.0, 500.0],
         'T0_toolIndex1_cluster_labels': [0, 0, 0],
         'T0_toolIndex1_clusters_count': [3],
+        'T0_toolIndex1_n_classifications': [3],
+        'T0_toolIndex1_shape': ['point'],
         'T0_toolIndex1_clusters_x': [500.0],
         'T0_toolIndex1_clusters_y': [500.0],
     }
