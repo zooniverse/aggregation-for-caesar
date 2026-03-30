@@ -246,6 +246,7 @@ def ReducerTestNoProcessing(
     ReducerTestNoProcessing.__qualname__ = test_name
     return ReducerTestNoProcessing
 
+
 def CollabTest(
         reducer,
         extracted,
@@ -269,6 +270,7 @@ def CollabTest(
             self.assertEqual(result['data'], data)
 
     return CollabTest
+
 
 def ReducerTestPoints(
     reducer,

@@ -200,7 +200,7 @@ TestShapeReducerRectangleHdbscan = ReducerTest(
 
 
 reduced_data_collab_true = {
-'data': [
+    'data': [
         {
             "frame": 0,
             "markID": "consensus_0",
@@ -217,7 +217,7 @@ reduced_data_collab_true = {
             "pathWidth": 50.0,
             "pathHeight": 60.0
         },
-{
+        {
             "frame": 0,
             "markID": "consensus_1",
             "min_threshold": 0,
@@ -249,7 +249,7 @@ reduced_data_collab_true = {
             "pathWidth": 10.0,
             "pathHeight": 50.0,
         },
-{
+        {
             "frame": 0,
             "markID": "consensus_1",
             "min_threshold": 0,
@@ -265,7 +265,7 @@ reduced_data_collab_true = {
             "pathWidth": 50.0,
             "pathHeight": 10.0
         },
-{
+        {
             "frame": 1,
             "markID": "consensus_0",
             "min_threshold": 0,
@@ -281,7 +281,7 @@ reduced_data_collab_true = {
             "pathWidth": 50.0,
             "pathHeight": 50.0
         }
-        ],
+    ],
     'frame0': {
         'T0_tool0_rectangle_x': [0.0, 100.0, 0.0, 100.0],
         'T0_tool0_rectangle_y': [0.0, 100.0, 0.0, 100.0],
