@@ -16,7 +16,6 @@ from .shape_process_data import process_data, DEFAULTS_PROCESS
 from .shape_metric import get_shape_metric_and_avg
 from .shape_metric_IoU import IoU_metric, average_shape_IoU
 from .collab_wrapper import collab_wrapper
-from ..tests.extractor_tests.test_question_extractor import null_classification
 
 warnings.filterwarnings("ignore", category=RuntimeWarning, module='sklearn.cluster')
 

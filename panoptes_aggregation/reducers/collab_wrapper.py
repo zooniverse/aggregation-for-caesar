@@ -40,7 +40,7 @@ def collab_wrapper(func):
                 if frame_key.startswith('frame'):
                     frame_split = frame_key.split("frame")
                     frame_num = frame_split[1]
-                    for key, value in frame_data.items():
+                    for key, _value in frame_data.items():
                         if key.endswith('clusters_count'):
                             # classifier v2.0
                             if 'toolIndex' in key:
