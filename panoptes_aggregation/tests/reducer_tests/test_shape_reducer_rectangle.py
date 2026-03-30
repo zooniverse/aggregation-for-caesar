@@ -486,6 +486,8 @@ TestShapeReducerRectangleHdbscanMinThreshold = ReducerTestNoProcessing(
         'shape': 'rectangle'
     },
     test_name='TestShapeReducerRectangleHdbscanMinThreshold'
+)
+
 extracted_data_empty_subtasks_clusters_of_one = [
     {
         "frame0": {
@@ -875,6 +877,18 @@ reduced_data_empty_subtasks_clusters_of_one = {
             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
             18, 19, -1, 20, 21, 22, 23, 24, 25, 0, 1, 26, 3, 4, 6, 27, 8,
             9, 10, 11, 12, 13, 14, 6, 14
+        ],
+        'T0_tool0_n_classifications': [
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4
+        ],
+        'T0_tool0_shape': [
+            'rectangle', 'rectangle', 'rectangle', 'rectangle', 'rectangle',
+            'rectangle', 'rectangle', 'rectangle', 'rectangle', 'rectangle',
+            'rectangle', 'rectangle', 'rectangle', 'rectangle', 'rectangle',
+            'rectangle', 'rectangle', 'rectangle', 'rectangle', 'rectangle',
+            'rectangle', 'rectangle', 'rectangle', 'rectangle', 'rectangle',
+            'rectangle', 'rectangle', 'rectangle'
         ],
         "T0_tool0_clusters_count": [
             2, 2, 1, 2, 2, 1, 3, 1, 2, 2,
@@ -1449,6 +1463,13 @@ reduced_data_cluster_with_empty_subtask = {
         ],
         "T0_tool0_clusters_count": [
             3, 3, 3, 3, 3, 3, 3, 3
+        ],
+        "T0_tool0_n_classifications": [
+            3, 3, 3, 3, 3, 3, 3, 3
+        ],
+        "T0_tool0_shape": [
+            'rectangle', 'rectangle', 'rectangle', 'rectangle', 'rectangle',
+            'rectangle', 'rectangle', 'rectangle'
         ],
         "T0_tool0_clusters_x": [
             395.15679931640625, 395.5323181152344, 391.43670654296875,
