@@ -1,7 +1,7 @@
 from panoptes_aggregation.reducers.shape_reducer_dbscan import process_data as process_data_dbscan, shape_reducer_dbscan
 from panoptes_aggregation.reducers.shape_reducer_hdbscan import process_data as process_data_hdbscan, shape_reducer_hdbscan
 from panoptes_aggregation.reducers.shape_reducer_optics import process_data as process_data_optics, shape_reducer_optics
-from .base_test_class import ReducerTest
+from .base_test_class import ReducerTest, CollabTest
 import copy
 
 extracted_data = [
@@ -54,6 +54,7 @@ kwargs_extra_data = {
 
 processed_data = {
     'shape': 'point',
+    'n_classifications': 5,
     'symmetric': False,
     'frame0': {
         'T0_tool0': [
@@ -86,12 +87,16 @@ reduced_data = {
         'T0_tool0_point_y': [0.0, 100.0, 0.0, 100.0],
         'T0_tool0_cluster_labels': [0, 1, 0, 1],
         'T0_tool0_clusters_count': [2, 2],
+        'T0_tool0_n_classifications': [5, 5],
+        'T0_tool0_shape': ['point', 'point'],
         'T0_tool0_clusters_x': [0.0, 100.0],
         'T0_tool0_clusters_y': [0.0, 100.0],
         'T0_tool1_point_x': [0.0, 100.0, 0.0, 100.0],
         'T0_tool1_point_y': [100.0, 0.0, 100.0, 0.0],
         'T0_tool1_cluster_labels': [0, 1, 0, 1],
         'T0_tool1_clusters_count': [2, 2],
+        'T0_tool1_n_classifications': [5, 5],
+        'T0_tool1_shape': ['point', 'point'],
         'T0_tool1_clusters_x': [0.0, 100.0],
         'T0_tool1_clusters_y': [100.0, 0.0]
     },
@@ -103,6 +108,8 @@ reduced_data = {
         'T0_tool1_point_y': [50.0, 50.0],
         'T0_tool1_cluster_labels': [0, 0],
         'T0_tool1_clusters_count': [2],
+        'T0_tool1_n_classifications': [5],
+        'T0_tool1_shape': ['point'],
         'T0_tool1_clusters_x': [50.0],
         'T0_tool1_clusters_y': [50.0]
     }
@@ -160,4 +167,91 @@ TestShapeReducerPointHdbscan = ReducerTest(
         'allow_single_cluster': True
     },
     test_name='TestShapeReducerPointHdbscan'
+)
+
+data_collab_true = [
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'point',
+        'toolIndex': 0,
+        'frame': 0,
+        'markID': 'consensus_0',
+        'toolType': 'freehandLine',
+        'pathX': 0.0,
+        'pathY': 0.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'point',
+        'toolIndex': 0,
+        'frame': 0,
+        'markID': 'consensus_1',
+        'toolType': 'freehandLine',
+        'pathX': 100.0,
+        'pathY': 100.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'point',
+        'toolIndex': 1,
+        'frame': 0,
+        'markID': 'consensus_0',
+        'toolType': 'freehandLine',
+        'pathX': 0.0,
+        'pathY': 100.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'point',
+        'toolIndex': 1,
+        'frame': 0,
+        'markID': 'consensus_1',
+        'toolType': 'freehandLine',
+        'pathX': 100.0,
+        'pathY': 0.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'point',
+        'toolIndex': 1,
+        'frame': 1,
+        'markID': 'consensus_0',
+        'toolType': 'freehandLine',
+        'pathX': 50.0,
+        'pathY': 50.0
+    }
+]
+
+TestShapeReducerPointCollabTrue = CollabTest(
+    shape_reducer_optics,
+    extracted_data,
+    data_collab_true,
+    'Test data is correct when collab: True',
+    kwargs={
+        'min_samples': 2,
+        'shape': 'point',
+        'collab': True
+    },
+    network_kwargs=kwargs_extra_data,
+    test_name='TestShapeReducerPointCollabTrue'
 )
