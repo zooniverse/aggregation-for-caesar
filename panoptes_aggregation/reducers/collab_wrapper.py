@@ -174,6 +174,19 @@ def collab_wrapper(func):
                                         clusters_r.pop(i)
                                         clusters_angle.pop(i)
 
+                                    elif 'fan' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
+                                        clusters_y = frame_data[f"{base}_clusters_y"]
+                                        clusters_radius = frame_data[f"{base}_clusters_radius"]
+                                        clusters_spread = frame_data[f"{base}_clusters_spread"]
+                                        clusters_rotation = frame_data[f"{base}_clusters_rotation"]
+
+                                        clusters_x.pop(i)
+                                        clusters_y.pop(i)
+                                        clusters_radius.pop(i)
+                                        clusters_spread.pop(i)
+                                        clusters_rotation.pop(i)
+
                             for i in range(len(clusters_count)):
                                 if threshold[i] >= min_threshold:
                                     annotations = {
@@ -339,6 +352,24 @@ def collab_wrapper(func):
                                                 'pathY': clusters_y[i],
                                                 'pathR': clusters_r[i],
                                                 'angle': clusters_angle[i]
+                                            }
+                                        )
+
+                                    elif 'fan' in shape:
+                                        clusters_x = frame_data[f"{base}_clusters_x"]
+                                        clusters_y = frame_data[f"{base}_clusters_y"]
+                                        clusters_radius = frame_data[f"{base}_clusters_radius"]
+                                        clusters_spread = frame_data[f"{base}_clusters_spread"]
+                                        clusters_rotation = frame_data[f"{base}_clusters_rotation"]
+
+                                        annotations.update(
+                                            {
+                                                'taskType': 'fan',
+                                                'pathX': clusters_x[i],
+                                                'pathY': clusters_y[i],
+                                                'radius': clusters_radius[i],
+                                                'spread': clusters_spread[i],
+                                                'rotation': clusters_rotation[i]
                                             }
                                         )
 
