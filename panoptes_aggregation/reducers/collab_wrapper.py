@@ -70,7 +70,8 @@ def collab_wrapper(func):
                                 tool_index_split = tool_split[1]
                                 tool_index = tool_index_split.split("_clusters_count")[0]
                             base = key[:-len("_clusters_count")]
-                            shape = frame_data[f"{base}_shape"]
+                            shape_array = frame_data[f"{base}_shape"]
+                            shape = shape_array[0]
                             clusters_count = frame_data[f"{base}_clusters_count"]
                             n_classifications = frame_data[f"{base}_n_classifications"]
 
@@ -85,7 +86,7 @@ def collab_wrapper(func):
                                     clusters_count.pop(i)
                                     threshold.pop(i)
 
-                                    if 'rectangle' in shape:
+                                    if 'rectangle' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
@@ -96,7 +97,7 @@ def collab_wrapper(func):
                                         clusters_width.pop(i)
                                         clusters_height.pop(i)
 
-                                    elif 'polygon' in shape:
+                                    elif 'polygon' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         consensus = frame_data[f"{base}_consensus"]
@@ -105,7 +106,7 @@ def collab_wrapper(func):
                                         clusters_y.pop(i)
                                         consensus.pop(i)
 
-                                    elif 'circle' in shape:
+                                    elif 'circle' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_r = frame_data[f"{base}_clusters_r"]
@@ -114,14 +115,14 @@ def collab_wrapper(func):
                                         clusters_y.pop(i)
                                         clusters_r.pop(i)
 
-                                    elif 'column' in shape:
+                                    elif 'column' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
 
                                         clusters_x.pop(i)
                                         clusters_width.pop(i)
 
-                                    elif 'ellipse' in shape:
+                                    elif 'ellipse' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_rx = frame_data[f"{base}_clusters_rx"]
@@ -134,17 +135,17 @@ def collab_wrapper(func):
                                         clusters_ry.pop(i)
                                         clusters_angle.pop(i)
 
-                                    elif 'fullWidthLine' in shape:
+                                    elif 'fullWidthLine' == shape:
                                         clusters_y = frame_data[f"{base}_clusters_y"]
 
                                         clusters_y.pop(i)
 
-                                    elif 'fullHeightLine' in shape:
+                                    elif 'fullHeightLine' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
 
                                         clusters_x.pop(i)
 
-                                    elif 'line' in shape:
+                                    elif 'line' == shape:
                                         clusters_x1 = frame_data[f"{base}_clusters_x1"]
                                         clusters_y1 = frame_data[f"{base}_clusters_y1"]
                                         clusters_x2 = frame_data[f"{base}_clusters_x2"]
@@ -155,14 +156,14 @@ def collab_wrapper(func):
                                         clusters_x2.pop(i)
                                         clusters_y2.pop(i)
 
-                                    elif 'point' in shape:
+                                    elif 'point' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
 
                                         clusters_x.pop(i)
                                         clusters_y.pop(i)
 
-                                    elif 'rotateRectangle' in shape:
+                                    elif 'rotateRectangle' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
@@ -175,7 +176,7 @@ def collab_wrapper(func):
                                         clusters_height.pop(i)
                                         clusters_angle.pop(i)
 
-                                    elif 'triangle' in shape:
+                                    elif 'triangle' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_r = frame_data[f"{base}_clusters_r"]
@@ -186,7 +187,7 @@ def collab_wrapper(func):
                                         clusters_r.pop(i)
                                         clusters_angle.pop(i)
 
-                                    elif 'fan' in shape:
+                                    elif 'fan' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_radius = frame_data[f"{base}_clusters_radius"]
@@ -199,7 +200,7 @@ def collab_wrapper(func):
                                         clusters_spread.pop(i)
                                         clusters_rotation.pop(i)
 
-                                    elif 'temporalRotateRectangle' in shape:
+                                    elif 'temporalRotateRectangle' == shape:
                                         clusters_angle = frame_data[f"{base}_clusters_angle"]
                                         clusters_displayTime = frame_data[f"{base}_clusters_displayTime"]
                                         clusters_height = frame_data[f"{base}_clusters_height"]
@@ -228,7 +229,7 @@ def collab_wrapper(func):
                                         'toolType': tool_type
                                     }
 
-                                    if 'rectangle' in shape:
+                                    if 'rectangle' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
@@ -244,7 +245,7 @@ def collab_wrapper(func):
                                             }
                                         )
 
-                                    elif 'polygon' in shape:
+                                    elif 'polygon' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
 
@@ -256,7 +257,7 @@ def collab_wrapper(func):
                                             }
                                         )
 
-                                    elif 'circle' in shape:
+                                    elif 'circle' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_r = frame_data[f"{base}_clusters_r"]
@@ -270,7 +271,7 @@ def collab_wrapper(func):
                                             }
                                         )
 
-                                    elif 'column' in shape:
+                                    elif 'column' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
 
@@ -282,7 +283,7 @@ def collab_wrapper(func):
                                             }
                                         )
 
-                                    elif 'ellipse' in shape:
+                                    elif 'ellipse' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_rx = frame_data[f"{base}_clusters_rx"]
@@ -300,7 +301,7 @@ def collab_wrapper(func):
                                             }
                                         )
 
-                                    elif 'fullWidthLine' in shape:
+                                    elif 'fullWidthLine' == shape:
                                         clusters_y = frame_data[f"{base}_clusters_y"]
 
                                         annotations.update(
@@ -310,7 +311,7 @@ def collab_wrapper(func):
                                             }
                                         )
 
-                                    elif 'fullHeightLine' in shape:
+                                    elif 'fullHeightLine' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
 
                                         annotations.update(
@@ -320,7 +321,7 @@ def collab_wrapper(func):
                                             }
                                         )
 
-                                    elif 'line' in shape:
+                                    elif 'line' == shape:
                                         clusters_x1 = frame_data[f"{base}_clusters_x1"]
                                         clusters_y1 = frame_data[f"{base}_clusters_y1"]
                                         clusters_x2 = frame_data[f"{base}_clusters_x2"]
@@ -336,7 +337,7 @@ def collab_wrapper(func):
                                             }
                                         )
 
-                                    elif 'point' in shape:
+                                    elif 'point' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
 
@@ -348,7 +349,7 @@ def collab_wrapper(func):
                                             }
                                         )
 
-                                    elif 'rotateRectangle' in shape:
+                                    elif 'rotateRectangle' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_width = frame_data[f"{base}_clusters_width"]
@@ -366,7 +367,7 @@ def collab_wrapper(func):
                                             }
                                         )
 
-                                    elif 'triangle' in shape:
+                                    elif 'triangle' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_r = frame_data[f"{base}_clusters_r"]
@@ -382,7 +383,7 @@ def collab_wrapper(func):
                                             }
                                         )
 
-                                    elif 'fan' in shape:
+                                    elif 'fan' == shape:
                                         clusters_x = frame_data[f"{base}_clusters_x"]
                                         clusters_y = frame_data[f"{base}_clusters_y"]
                                         clusters_radius = frame_data[f"{base}_clusters_radius"]
@@ -400,7 +401,7 @@ def collab_wrapper(func):
                                             }
                                         )
 
-                                    elif 'temporalRotateRectangle' in shape:
+                                    elif 'temporalRotateRectangle' == shape:
                                         clusters_angle = frame_data[f"{base}_clusters_angle"]
                                         clusters_displayTime = frame_data[f"{base}_clusters_displayTime"]
                                         clusters_height = frame_data[f"{base}_clusters_height"]
