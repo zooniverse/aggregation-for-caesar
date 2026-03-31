@@ -918,11 +918,9 @@ reduced_data_last_collab_true = {
     }
 }
 
-TestPolygonTReducerLastCollabTrue = ReducerTest(
+TestPolygonTReducerLastCollabTrue = ReducerTestNoProcessing(
     polygon_reducer,
-    process_data,
     extracted_data,
-    processed_data,
     reduced_data_last_collab_true,
     'Test polygon reducer with a series of polygons in 3 clusters using last average when collab is True',
     kwargs={
@@ -931,7 +929,6 @@ TestPolygonTReducerLastCollabTrue = ReducerTest(
         'average_type': 'last',
         'collab': True
     },
-    output_kwargs=True,
     network_kwargs=kwargs_extra_data,
     test_name='TestPolygonTReducerLastCollabTrue'
 )

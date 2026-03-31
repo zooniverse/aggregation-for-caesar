@@ -329,35 +329,31 @@ reduced_data_collab_true = {
     }
 }
 
-TestShapeReducerRectangleDbscanCollabTrue = ReducerTest(
+TestShapeReducerRectangleDbscanCollabTrue = ReducerTestNoProcessing(
     shape_reducer_dbscan,
-    process_data_dbscan,
     extracted_data,
-    processed_data,
     reduced_data_collab_true,
     'Test shape rectangle reducer with DBSCAN when collab: True',
     network_kwargs=kwargs_extra_data,
-    pkwargs={'shape': 'rectangle'},
     kwargs={
         'eps': 5,
         'min_samples': 2,
-        'collab': True
+        'collab': True,
+        'shape': 'rectangle'
     },
     test_name='TestShapeReducerRectangleDBScanCollabTrue'
 )
 
-TestShapeReducerRectangleOpticsCollabTrue = ReducerTest(
+TestShapeReducerRectangleOpticsCollabTrue = ReducerTestNoProcessing(
     shape_reducer_optics,
-    process_data_optics,
     extracted_data,
-    processed_data,
     reduced_data_collab_true,
     'Test shape rectangle reducer with OPTICS when collab: True',
     network_kwargs=kwargs_extra_data,
-    pkwargs={'shape': 'rectangle'},
     kwargs={
         'min_samples': 2,
-        'collab': True
+        'collab': True,
+        'shape': 'rectangle'
     },
     test_name='TestShapeReducerRectangleOpticsCollabTrue'
 )
@@ -368,20 +364,18 @@ reduced_data_hdbscan_collab_true['frame0']['T0_tool1_cluster_probabilities'] = [
 reduced_data_hdbscan_collab_true['frame1']['T0_tool0_cluster_probabilities'] = [0.0]
 reduced_data_hdbscan_collab_true['frame1']['T0_tool1_cluster_probabilities'] = [1.0, 1.0]
 
-TestShapeReducerRectangleHdbscanCollabTrue = ReducerTest(
+TestShapeReducerRectangleHdbscanCollabTrue = ReducerTestNoProcessing(
     shape_reducer_hdbscan,
-    process_data_hdbscan,
     extracted_data,
-    processed_data,
     reduced_data_hdbscan_collab_true,
     'Test shape rectangle reducer with HDBSCAN when collab: True',
     network_kwargs=kwargs_extra_data,
-    pkwargs={'shape': 'rectangle'},
     kwargs={
         'min_cluster_size': 2,
         'min_samples': 1,
         'collab': True,
-        'allow_single_cluster': True
+        'allow_single_cluster': True,
+        'shape': 'rectangle'
     },
     test_name='TestShapeReducerRectangleHdbscanCollabTrue'
 )
