@@ -481,6 +481,7 @@ TestShapeReducerRectangleHdbscanMinThreshold = ReducerTestNoProcessing(
     kwargs={
         'min_cluster_size': 2,
         'min_samples': 1,
+        'min_threshold': 0.5,
         'collab': True,
         'allow_single_cluster': True,
         'shape': 'rectangle'
