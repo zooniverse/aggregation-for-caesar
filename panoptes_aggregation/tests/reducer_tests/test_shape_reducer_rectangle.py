@@ -475,7 +475,7 @@ reduced_data_hdbscan_min_threshold['frame1']['T0_tool1_cluster_probabilities'] =
 TestShapeReducerRectangleHdbscanMinThreshold = ReducerTestNoProcessing(
     shape_reducer_hdbscan,
     extracted_data,
-    reduced_data_hdbscan_collab_true,
+    reduced_data_hdbscan_min_threshold,
     'Test shape rectangle reducer with HDBSCAN when collab: True and threshold < min_threshold',
     network_kwargs=kwargs_extra_data,
     kwargs={
