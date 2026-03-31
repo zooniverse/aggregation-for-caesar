@@ -32,13 +32,13 @@ DEFAULTS = {
 }
 
 
-@collab_wrapper
 @reducer_wrapper(
     process_data=process_data,
     defaults_data=DEFAULTS,
     defaults_process=DEFAULTS_PROCESS,
     user_id=True
 )
+@collab_wrapper
 @subtask_wrapper
 def shape_reducer_dbscan(data_by_tool, **kwargs):
     '''Cluster a shape by tool using DBSCAN

@@ -102,7 +102,6 @@ def process_data(data):
     return data_by_tool
 
 
-@collab_wrapper
 @reducer_wrapper(
     process_data=process_data,
     defaults_data=DEFAULTS,
@@ -110,6 +109,7 @@ def process_data(data):
     created_at=True,
     output_kwargs=True
 )
+@collab_wrapper
 def polygon_reducer(data_by_tool, **kwargs_dbscan):
     '''Cluster a polygon/freehand/Bezier tools using DBSCAN.
 
