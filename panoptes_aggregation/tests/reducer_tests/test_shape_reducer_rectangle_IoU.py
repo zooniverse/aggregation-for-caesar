@@ -53,6 +53,7 @@ kwargs_extra_data = {
 
 processed_data = {
     'shape': 'rectangle',
+    'n_classifications': 5,
     'symmetric': False,
     'frame0': {
         'T0_tool0': [
@@ -72,6 +73,8 @@ reduced_data = {
         'T0_tool0_rectangle_height': [2.0, 2.0, 2.0, 2.0],
         'T0_tool0_cluster_labels': [0, 0, 0, 0],
         'T0_tool0_clusters_count': [4],
+        'T0_tool0_n_classifications': [5],
+        'T0_tool0_shape': ['rectangle'],
         'T0_tool0_clusters_x': [1.0],
         'T0_tool0_clusters_y': [1.0],
         'T0_tool0_clusters_width': [2.0],

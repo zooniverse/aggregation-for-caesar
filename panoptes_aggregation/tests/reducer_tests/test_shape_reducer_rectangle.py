@@ -67,6 +67,7 @@ kwargs_extra_data = {
 }
 
 processed_data = {
+    'n_classifications': 5,
     'shape': 'rectangle',
     'symmetric': False,
     'frame0': {
@@ -102,20 +103,24 @@ reduced_data = {
         'T0_tool0_rectangle_height': [60.0, 20.0, 60.0, 20.0],
         'T0_tool0_cluster_labels': [0, 1, 0, 1],
         'T0_tool0_clusters_count': [2, 2],
+        'T0_tool0_n_classifications': [5, 5],
         'T0_tool0_clusters_x': [0.0, 100.0],
         'T0_tool0_clusters_y': [0.0, 100.0],
         'T0_tool0_clusters_width': [50.0, 10.0],
         'T0_tool0_clusters_height': [60.0, 20.0],
+        'T0_tool0_shape': ['rectangle', 'rectangle'],
         'T0_tool1_rectangle_x': [0.0, 100.0, 0.0, 100.0],
         'T0_tool1_rectangle_y': [100.0, 0.0, 100.0, 0.0],
         'T0_tool1_rectangle_width': [10.0, 50.0, 10.0, 50.0],
         'T0_tool1_rectangle_height': [50.0, 10.0, 50.0, 10.0],
         'T0_tool1_cluster_labels': [0, 1, 0, 1],
         'T0_tool1_clusters_count': [2, 2],
+        'T0_tool1_n_classifications': [5, 5],
         'T0_tool1_clusters_x': [0.0, 100.0],
         'T0_tool1_clusters_y': [100.0, 0.0],
         'T0_tool1_clusters_width': [10.0, 50.0],
-        'T0_tool1_clusters_height': [50.0, 10.0]
+        'T0_tool1_clusters_height': [50.0, 10.0],
+        'T0_tool1_shape': ['rectangle', 'rectangle']
     },
     'frame1': {
         'T0_tool0_rectangle_x': [20.0],
@@ -129,10 +134,12 @@ reduced_data = {
         'T0_tool1_rectangle_height': [50.0, 50.0],
         'T0_tool1_cluster_labels': [0, 0],
         'T0_tool1_clusters_count': [2],
+        'T0_tool1_n_classifications': [5],
         'T0_tool1_clusters_x': [50.0],
         'T0_tool1_clusters_y': [50.0],
         'T0_tool1_clusters_width': [50.0],
-        'T0_tool1_clusters_height': [50.0]
+        'T0_tool1_clusters_height': [50.0],
+        'T0_tool1_shape': ['rectangle']
     }
 }
 
@@ -167,6 +174,7 @@ TestShapeReducerRectangleOptics = ReducerTest(
     test_name='TestShapeReducerRectangleOptics'
 )
 
+
 reduced_data_hdbscan = copy.deepcopy(reduced_data)
 reduced_data_hdbscan['frame0']['T0_tool0_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
 reduced_data_hdbscan['frame0']['T0_tool1_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
@@ -188,6 +196,291 @@ TestShapeReducerRectangleHdbscan = ReducerTest(
         'allow_single_cluster': True
     },
     test_name='TestShapeReducerRectangleHdbscan'
+)
+
+
+reduced_data_collab_true = {
+    'data': [
+        {
+            "frame": 0,
+            "markID": "consensus_0",
+            "min_threshold": 0,
+            "stepKey": "S0",
+            "taskIndex": 0,
+            "taskKey": "T0",
+            "taskType": "rectangle",
+            "threshold": 0.4,
+            "toolIndex": 0,
+            "toolType": "freehandLine",
+            "pathX": 0.0,
+            "pathY": 0.0,
+            "pathWidth": 50.0,
+            "pathHeight": 60.0
+        },
+        {
+            "frame": 0,
+            "markID": "consensus_1",
+            "min_threshold": 0,
+            "stepKey": "S0",
+            "taskIndex": 0,
+            "taskKey": "T0",
+            "taskType": "rectangle",
+            "threshold": 0.4,
+            "toolIndex": 0,
+            "toolType": "freehandLine",
+            "pathX": 100.0,
+            "pathY": 100.0,
+            "pathWidth": 10.0,
+            "pathHeight": 20.0
+        },
+        {
+            "frame": 0,
+            "markID": "consensus_0",
+            "min_threshold": 0,
+            "stepKey": "S0",
+            "taskIndex": 0,
+            "taskKey": "T0",
+            "taskType": "rectangle",
+            "threshold": 0.4,
+            "toolIndex": 1,
+            "toolType": "freehandLine",
+            "pathX": 0.0,
+            "pathY": 100.0,
+            "pathWidth": 10.0,
+            "pathHeight": 50.0,
+        },
+        {
+            "frame": 0,
+            "markID": "consensus_1",
+            "min_threshold": 0,
+            "stepKey": "S0",
+            "taskIndex": 0,
+            "taskKey": "T0",
+            "taskType": "rectangle",
+            "threshold": 0.4,
+            "toolIndex": 1,
+            "toolType": "freehandLine",
+            "pathX": 100.0,
+            "pathY": 0.0,
+            "pathWidth": 50.0,
+            "pathHeight": 10.0
+        },
+        {
+            "frame": 1,
+            "markID": "consensus_0",
+            "min_threshold": 0,
+            "stepKey": "S0",
+            "taskIndex": 0,
+            "taskKey": "T0",
+            "taskType": "rectangle",
+            "threshold": 0.4,
+            "toolIndex": 1,
+            "toolType": "freehandLine",
+            "pathX": 50.0,
+            "pathY": 50.0,
+            "pathWidth": 50.0,
+            "pathHeight": 50.0
+        }
+    ],
+    'frame0': {
+        'T0_tool0_rectangle_x': [0.0, 100.0, 0.0, 100.0],
+        'T0_tool0_rectangle_y': [0.0, 100.0, 0.0, 100.0],
+        'T0_tool0_rectangle_width': [50.0, 10.0, 50.0, 10.0],
+        'T0_tool0_rectangle_height': [60.0, 20.0, 60.0, 20.0],
+        'T0_tool0_cluster_labels': [0, 1, 0, 1],
+        'T0_tool0_clusters_count': [2, 2],
+        'T0_tool0_n_classifications': [5, 5],
+        'T0_tool0_clusters_x': [0.0, 100.0],
+        'T0_tool0_clusters_y': [0.0, 100.0],
+        'T0_tool0_clusters_width': [50.0, 10.0],
+        'T0_tool0_clusters_height': [60.0, 20.0],
+        'T0_tool0_shape': ['rectangle', 'rectangle'],
+        'T0_tool1_rectangle_x': [0.0, 100.0, 0.0, 100.0],
+        'T0_tool1_rectangle_y': [100.0, 0.0, 100.0, 0.0],
+        'T0_tool1_rectangle_width': [10.0, 50.0, 10.0, 50.0],
+        'T0_tool1_rectangle_height': [50.0, 10.0, 50.0, 10.0],
+        'T0_tool1_cluster_labels': [0, 1, 0, 1],
+        'T0_tool1_clusters_count': [2, 2],
+        'T0_tool1_n_classifications': [5, 5],
+        'T0_tool1_clusters_x': [0.0, 100.0],
+        'T0_tool1_clusters_y': [100.0, 0.0],
+        'T0_tool1_clusters_width': [10.0, 50.0],
+        'T0_tool1_clusters_height': [50.0, 10.0],
+        'T0_tool1_shape': ['rectangle', 'rectangle']
+    },
+    'frame1': {
+        'T0_tool0_rectangle_x': [20.0],
+        'T0_tool0_rectangle_y': [20.0],
+        'T0_tool0_rectangle_width': [20.0],
+        'T0_tool0_rectangle_height': [20.0],
+        'T0_tool0_cluster_labels': [-1],
+        'T0_tool1_rectangle_x': [50.0, 50.0],
+        'T0_tool1_rectangle_y': [50.0, 50.0],
+        'T0_tool1_rectangle_width': [50.0, 50.0],
+        'T0_tool1_rectangle_height': [50.0, 50.0],
+        'T0_tool1_cluster_labels': [0, 0],
+        'T0_tool1_clusters_count': [2],
+        'T0_tool1_n_classifications': [5],
+        'T0_tool1_clusters_x': [50.0],
+        'T0_tool1_clusters_y': [50.0],
+        'T0_tool1_clusters_width': [50.0],
+        'T0_tool1_clusters_height': [50.0],
+        'T0_tool1_shape': ['rectangle']
+    }
+}
+
+TestShapeReducerRectangleDbscanCollabTrue = ReducerTestNoProcessing(
+    shape_reducer_dbscan,
+    extracted_data,
+    reduced_data_collab_true,
+    'Test shape rectangle reducer with DBSCAN when collab: True',
+    network_kwargs=kwargs_extra_data,
+    kwargs={
+        'eps': 5,
+        'min_samples': 2,
+        'collab': True,
+        'shape': 'rectangle'
+    },
+    test_name='TestShapeReducerRectangleDBScanCollabTrue'
+)
+
+TestShapeReducerRectangleOpticsCollabTrue = ReducerTestNoProcessing(
+    shape_reducer_optics,
+    extracted_data,
+    reduced_data_collab_true,
+    'Test shape rectangle reducer with OPTICS when collab: True',
+    network_kwargs=kwargs_extra_data,
+    kwargs={
+        'min_samples': 2,
+        'collab': True,
+        'shape': 'rectangle'
+    },
+    test_name='TestShapeReducerRectangleOpticsCollabTrue'
+)
+
+reduced_data_hdbscan_collab_true = copy.deepcopy(reduced_data_collab_true)
+reduced_data_hdbscan_collab_true['frame0']['T0_tool0_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
+reduced_data_hdbscan_collab_true['frame0']['T0_tool1_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
+reduced_data_hdbscan_collab_true['frame1']['T0_tool0_cluster_probabilities'] = [0.0]
+reduced_data_hdbscan_collab_true['frame1']['T0_tool1_cluster_probabilities'] = [1.0, 1.0]
+
+TestShapeReducerRectangleHdbscanCollabTrue = ReducerTestNoProcessing(
+    shape_reducer_hdbscan,
+    extracted_data,
+    reduced_data_hdbscan_collab_true,
+    'Test shape rectangle reducer with HDBSCAN when collab: True',
+    network_kwargs=kwargs_extra_data,
+    kwargs={
+        'min_cluster_size': 2,
+        'min_samples': 1,
+        'collab': True,
+        'allow_single_cluster': True,
+        'shape': 'rectangle'
+    },
+    test_name='TestShapeReducerRectangleHdbscanCollabTrue'
+)
+
+reduced_data_min_threshold = {
+    'frame0': {
+        'T0_tool0_rectangle_x': [0.0, 100.0, 0.0, 100.0],
+        'T0_tool0_rectangle_y': [0.0, 100.0, 0.0, 100.0],
+        'T0_tool0_rectangle_width': [50.0, 10.0, 50.0, 10.0],
+        'T0_tool0_rectangle_height': [60.0, 20.0, 60.0, 20.0],
+        'T0_tool0_cluster_labels': [0, 1, 0, 1],
+        'T0_tool0_clusters_count': [],
+        'T0_tool0_n_classifications': [5, 5],
+        'T0_tool0_clusters_x': [],
+        'T0_tool0_clusters_y': [],
+        'T0_tool0_clusters_width': [],
+        'T0_tool0_clusters_height': [],
+        'T0_tool0_shape': ['rectangle', 'rectangle'],
+        'T0_tool1_rectangle_x': [0.0, 100.0, 0.0, 100.0],
+        'T0_tool1_rectangle_y': [100.0, 0.0, 100.0, 0.0],
+        'T0_tool1_rectangle_width': [10.0, 50.0, 10.0, 50.0],
+        'T0_tool1_rectangle_height': [50.0, 10.0, 50.0, 10.0],
+        'T0_tool1_cluster_labels': [0, 1, 0, 1],
+        'T0_tool1_clusters_count': [],
+        'T0_tool1_n_classifications': [5, 5],
+        'T0_tool1_clusters_x': [],
+        'T0_tool1_clusters_y': [],
+        'T0_tool1_clusters_width': [],
+        'T0_tool1_clusters_height': [],
+        'T0_tool1_shape': ['rectangle', 'rectangle']
+    },
+    'frame1': {
+        'T0_tool0_rectangle_x': [20.0],
+        'T0_tool0_rectangle_y': [20.0],
+        'T0_tool0_rectangle_width': [20.0],
+        'T0_tool0_rectangle_height': [20.0],
+        'T0_tool0_cluster_labels': [-1],
+        'T0_tool1_rectangle_x': [50.0, 50.0],
+        'T0_tool1_rectangle_y': [50.0, 50.0],
+        'T0_tool1_rectangle_width': [50.0, 50.0],
+        'T0_tool1_rectangle_height': [50.0, 50.0],
+        'T0_tool1_cluster_labels': [0, 0],
+        'T0_tool1_clusters_count': [],
+        'T0_tool1_n_classifications': [5],
+        'T0_tool1_clusters_x': [],
+        'T0_tool1_clusters_y': [],
+        'T0_tool1_clusters_width': [],
+        'T0_tool1_clusters_height': [],
+        'T0_tool1_shape': ['rectangle']
+    }
+}
+
+TestShapeReducerRectangleDbscanMinThreshold = ReducerTestNoProcessing(
+    shape_reducer_dbscan,
+    extracted_data,
+    reduced_data_min_threshold,
+    'Test shape rectangle reducer with DBSCAN when collab: True and threshold < min_threshold',
+    network_kwargs=kwargs_extra_data,
+    kwargs={
+        'eps': 5,
+        'min_samples': 2,
+        'collab': True,
+        'min_threshold': 0.5,
+        'shape': 'rectangle'
+    },
+    test_name='TestShapeReducerRectangleDBScanMinThreshold'
+)
+
+
+TestShapeReducerRectangleOpticsMinThreshold = ReducerTestNoProcessing(
+    shape_reducer_optics,
+    extracted_data,
+    reduced_data_min_threshold,
+    'Test shape rectangle reducer with OPTICS when collab: True and threshold < min_threshold',
+    network_kwargs=kwargs_extra_data,
+    kwargs={
+        'min_samples': 2,
+        'collab': True,
+        'min_threshold': 0.5,
+        'shape': 'rectangle'
+    },
+    test_name='TestShapeReducerRectangleOpticsMinThreshold'
+)
+
+reduced_data_hdbscan_min_threshold = copy.deepcopy(reduced_data_min_threshold)
+reduced_data_hdbscan_min_threshold['frame0']['T0_tool0_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
+reduced_data_hdbscan_min_threshold['frame0']['T0_tool1_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
+reduced_data_hdbscan_min_threshold['frame1']['T0_tool0_cluster_probabilities'] = [0.0]
+reduced_data_hdbscan_min_threshold['frame1']['T0_tool1_cluster_probabilities'] = [1.0, 1.0]
+
+TestShapeReducerRectangleHdbscanMinThreshold = ReducerTestNoProcessing(
+    shape_reducer_hdbscan,
+    extracted_data,
+    reduced_data_hdbscan_min_threshold,
+    'Test shape rectangle reducer with HDBSCAN when collab: True and threshold < min_threshold',
+    network_kwargs=kwargs_extra_data,
+    kwargs={
+        'min_cluster_size': 2,
+        'min_samples': 1,
+        'min_threshold': 0.5,
+        'collab': True,
+        'allow_single_cluster': True,
+        'shape': 'rectangle'
+    },
+    test_name='TestShapeReducerRectangleHdbscanMinThreshold'
 )
 
 extracted_data_empty_subtasks_clusters_of_one = [
@@ -579,6 +872,18 @@ reduced_data_empty_subtasks_clusters_of_one = {
             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
             18, 19, -1, 20, 21, 22, 23, 24, 25, 0, 1, 26, 3, 4, 6, 27, 8,
             9, 10, 11, 12, 13, 14, 6, 14
+        ],
+        'T0_tool0_n_classifications': [
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4
+        ],
+        'T0_tool0_shape': [
+            'rectangle', 'rectangle', 'rectangle', 'rectangle', 'rectangle',
+            'rectangle', 'rectangle', 'rectangle', 'rectangle', 'rectangle',
+            'rectangle', 'rectangle', 'rectangle', 'rectangle', 'rectangle',
+            'rectangle', 'rectangle', 'rectangle', 'rectangle', 'rectangle',
+            'rectangle', 'rectangle', 'rectangle', 'rectangle', 'rectangle',
+            'rectangle', 'rectangle', 'rectangle'
         ],
         "T0_tool0_clusters_count": [
             2, 2, 1, 2, 2, 1, 3, 1, 2, 2,
@@ -1153,6 +1458,13 @@ reduced_data_cluster_with_empty_subtask = {
         ],
         "T0_tool0_clusters_count": [
             3, 3, 3, 3, 3, 3, 3, 3
+        ],
+        "T0_tool0_n_classifications": [
+            3, 3, 3, 3, 3, 3, 3, 3
+        ],
+        "T0_tool0_shape": [
+            'rectangle', 'rectangle', 'rectangle', 'rectangle', 'rectangle',
+            'rectangle', 'rectangle', 'rectangle'
         ],
         "T0_tool0_clusters_x": [
             395.15679931640625, 395.5323181152344, 391.43670654296875,

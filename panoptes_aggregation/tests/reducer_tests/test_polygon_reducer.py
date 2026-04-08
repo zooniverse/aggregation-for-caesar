@@ -1,6 +1,6 @@
 from panoptes_aggregation.reducers.polygon_reducer import process_data, \
     polygon_reducer
-from .base_test_class import ReducerTest
+from .base_test_class import ReducerTest, ReducerTestNoProcessing
 import numpy as np
 import unittest
 import shapely
@@ -12,7 +12,7 @@ self-intersections. The latter two need to be processed, the first by removing
 the small extract `triangle` and the second by splitting the shape in 2.
 
 Finally, there is repeat data but labelled as for a second tool, to test if
-the reducer can reduce mutiple tools for a single task.
+the reducer can reduce multiple tools for a single task.
 '''
 
 extracted_data = [
@@ -494,143 +494,13 @@ class TestException(unittest.TestCase):
 
 
 reduced_data_last = {
-    'data': [{
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{0}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            -0.15554523195117093,
-            0.19219246615042257,
-            0.44238509316213026,
-            0.40663249794462797,
-            0.11185711391672837,
-            -0.21996918242654376,
-            -0.3389744219158122,
-            -0.15554523195117032,
-            -0.15554523195117093
-        ],
-        'pathY': [
-            -0.25714285951044563,
-            -0.29983968008123657,
-            -0.05458843226212788,
-            0.2939316921253496,
-            0.4832779309024998,
-            0.3708687043107462,
-            0.04135045270402384,
-            -0.2571428595104454,
-            -0.25714285951044563
-        ]
-    },
-        {
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{1}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            5.144708505321773,
-            4.860757556171935,
-            4.695377487814731,
-            4.7454457013476254,
-            4.98163291632684,
-            5.265583865476678,
-            5.4309639338338815,
-            5.3808957203009875,
-            5.144708505321773
-        ],
-        'pathY': [
-            4.2683409230436045,
-            4.21827270951071,
-            3.9820854945314967,
-            3.698134545381657,
-            3.5327544770244548,
-            3.582822690557349,
-            3.819009905536562,
-            4.102960854686401,
-            4.2683409230436045
-        ]
-    },
-        {
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{2}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            -1.8100930795620302,
-            -2.0695264316885313,
-            -2.262440502917424,
-            -2.298568655319627,
-            -2.1610061248664607,
-            -1.9141199483941913,
-            -1.6734309117084105,
-            -1.5515600900350757,
-            -1.6055321952784525,
-            -1.81009307956203,
-            -1.8100930795620302
-        ],
-        'pathY': [
-            2.3692156886043496,
-            2.360156076316269,
-            2.186455466379812,
-            1.9293903046514933,
-            1.7092442372650303,
-            1.6290260558015568,
-            1.7262707388936125,
-            1.9554764185681563,
-            2.2093952099680867,
-            2.3692156886043496,
-            2.3692156886043496
-        ]
-    },
-        {
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 1,
-        'frame': 0,
-        'markID': f'consensus_{3}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            -0.15554523195117093,
-            0.19219246615042257,
-            0.44238509316213026,
-            0.40663249794462797,
-            0.11185711391672837,
-            -0.21996918242654376,
-            -0.3389744219158122,
-            -0.15554523195117032,
-            -0.15554523195117093
-        ],
-        'pathY': [
-            -0.25714285951044563,
-            -0.29983968008123657,
-            -0.05458843226212788,
-            0.2939316921253496,
-            0.4832779309024998,
-            0.3708687043107462,
-            0.04135045270402384,
-            -0.2571428595104454,
-            -0.25714285951044563
-        ],
-    }],
     'frame0':
         {
             'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
+            'T0_tool0_n_classifications': [4, 4, 4],
+            'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
             'T0_tool0_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -704,209 +574,8 @@ reduced_data_last = {
             'T0_tool1_cluster_labels': [0, 0, 0],
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
-            'T0_tool1_clusters_x': [
-                [
-                    -0.15554523195117093,
-                    0.19219246615042257,
-                    0.44238509316213026,
-                    0.40663249794462797,
-                    0.11185711391672837,
-                    -0.21996918242654376,
-                    -0.3389744219158122,
-                    -0.15554523195117032,
-                    -0.15554523195117093
-                ]
-            ],
-            'T0_tool1_clusters_y': [
-                [
-                    -0.25714285951044563,
-                    -0.29983968008123657,
-                    -0.05458843226212788,
-                    0.2939316921253496,
-                    0.4832779309024998,
-                    0.3708687043107462,
-                    0.04135045270402384,
-                    -0.2571428595104454,
-                    -0.25714285951044563
-                ]
-            ]
-    },
-        'threshold': [0.75, 0.75, 0.75, 0.75],
-        'parameters': {
-            'eps': 0.5,
-            'min_samples': 2,
-            'average_type': 'last',
-            'collab': True,
-            'step_key': 'S0',
-            'task_index': 0,
-            'tool_type': 'freehandLine',
-            'min_threshold': 0
-    }
-}
-
-kwargs_extra_data_time_format = {
-    'created_at': [
-        '2025-10-14T12:47:55.154Z',
-        '2025-10-14T12:47:57.154Z',
-        '2025-10-14T12:47:59.154Z',
-        '2025-10-14T12:47:59.254Z'
-    ]
-}
-
-TestPolygonTReducerLastTimeStamp = ReducerTest(
-    polygon_reducer,
-    process_data,
-    extracted_data,
-    processed_data,
-    reduced_data_last,
-    'Test polygon reducer using last average with a different time data format',
-    kwargs={
-        'eps': 0.5,
-        'min_samples': 2,
-        'average_type': 'last',
-        'collab': True
-    },
-    output_kwargs=True,
-    network_kwargs=kwargs_extra_data_time_format,
-    test_name='TestPolygonTReducerTimeDataFormat'
-)
-
-TestPolygonTReducerLast = ReducerTest(
-    polygon_reducer,
-    process_data,
-    extracted_data,
-    processed_data,
-    reduced_data_last,
-    'Test polygon reducer with a series of polygons in 3 clusters using last average',
-    kwargs={
-        'eps': 0.5,
-        'min_samples': 2,
-        'average_type': 'last',
-        'collab': True
-    },
-    output_kwargs=True,
-    network_kwargs=kwargs_extra_data,
-    test_name='TestPolygonTReducerLast'
-)
-
-reduced_data_last_min_threshold = {
-    'frame0': {
-        'T0_tool0_cluster_labels': [
-            0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1
-        ],
-        'T0_tool1_cluster_labels': [0, 0, 0]
-    },
-    'parameters': {
-        'eps': 0.5,
-        'min_samples': 2,
-        'average_type': 'last',
-        'collab': True,
-        'step_key': 'S0',
-        'task_index': 0,
-        'tool_type': 'freehandLine',
-        'min_threshold': 0.8
-    }
-}
-
-TestPolygonTReducerLastMinThreshold = ReducerTest(
-    polygon_reducer,
-    process_data,
-    extracted_data,
-    processed_data,
-    reduced_data_last_min_threshold,
-    'Test polygon reducer with threshold < min_threshold',
-    kwargs={
-        'eps': 0.5,
-        'min_samples': 2,
-        'average_type': 'last',
-        'collab': True,
-        'min_threshold': 0.8
-    },
-    output_kwargs=True,
-    network_kwargs=kwargs_extra_data,
-    test_name='TestPolygonTReducerLastMinThreshold'
-)
-
-# Testing annotations are not in output when 'collab': False
-reduced_data_last_collab_false = {
-    'frame0':
-        {
-            'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
-            'T0_tool0_clusters_count': [3, 3, 3],
-            'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
-            'T0_tool0_clusters_x': [
-                [
-                    -0.15554523195117093,
-                    0.19219246615042257,
-                    0.44238509316213026,
-                    0.40663249794462797,
-                    0.11185711391672837,
-                    -0.21996918242654376,
-                    -0.3389744219158122,
-                    -0.15554523195117032,
-                    -0.15554523195117093
-                ], [
-                    5.144708505321773,
-                    4.860757556171935,
-                    4.695377487814731,
-                    4.7454457013476254,
-                    4.98163291632684,
-                    5.265583865476678,
-                    5.4309639338338815,
-                    5.3808957203009875,
-                    5.144708505321773
-                ], [
-                    -1.8100930795620302,
-                    -2.0695264316885313,
-                    -2.262440502917424,
-                    -2.298568655319627,
-                    -2.1610061248664607,
-                    -1.9141199483941913,
-                    -1.6734309117084105,
-                    -1.5515600900350757,
-                    -1.6055321952784525,
-                    -1.81009307956203,
-                    -1.8100930795620302
-                ]
-            ],
-            'T0_tool0_clusters_y': [
-                [
-                    -0.25714285951044563,
-                    -0.29983968008123657,
-                    -0.05458843226212788,
-                    0.2939316921253496,
-                    0.4832779309024998,
-                    0.3708687043107462,
-                    0.04135045270402384,
-                    -0.2571428595104454,
-                    -0.25714285951044563
-                ], [
-                    4.2683409230436045,
-                    4.21827270951071,
-                    3.9820854945314967,
-                    3.698134545381657,
-                    3.5327544770244548,
-                    3.582822690557349,
-                    3.819009905536562,
-                    4.102960854686401,
-                    4.2683409230436045
-                ], [
-                    2.3692156886043496,
-                    2.360156076316269,
-                    2.186455466379812,
-                    1.9293903046514933,
-                    1.7092442372650303,
-                    1.6290260558015568,
-                    1.7262707388936125,
-                    1.9554764185681563,
-                    2.2093952099680867,
-                    2.3692156886043496,
-                    2.3692156886043496
-                ]
-            ],
-            'T0_tool1_cluster_labels': [0, 0, 0],
-            'T0_tool1_clusters_count': [3],
-            'T0_tool1_consensus': [0.5723807679762805],
+            'T0_tool1_n_classifications': [4],
+            'T0_tool1_shape': ['polygon'],
             'T0_tool1_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -934,174 +603,207 @@ reduced_data_last_collab_false = {
                 ]
             ]
         },
-        'threshold': [0.75, 0.75, 0.75, 0.75],
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
             'average_type': 'last',
             'collab': False,
+            'min_threshold': 0,
             'step_key': 'S0',
             'task_index': 0,
-            'tool_type': 'freehandLine',
-            'min_threshold': 0
+            'tool_type': 'freehandLine'
         }
 }
 
-TestPolygonTReducerLastCollabFalse = ReducerTest(
+kwargs_extra_data_time_format = {
+    'created_at': [
+        '2025-10-14T12:47:55.154Z',
+        '2025-10-14T12:47:57.154Z',
+        '2025-10-14T12:47:59.154Z',
+        '2025-10-14T12:47:59.254Z'
+    ]
+}
+
+TestPolygonTReducerLastTimeStamp = ReducerTest(
     polygon_reducer,
     process_data,
     extracted_data,
     processed_data,
-    reduced_data_last_collab_false,
-    'Test polygon reducer with a series of polygons in 3 clusters using last average with collab turned off',
+    reduced_data_last,
+    'Test polygon reducer using last average with a different time data format',
     kwargs={
         'eps': 0.5,
         'min_samples': 2,
         'average_type': 'last',
+        'collab': False
+    },
+    output_kwargs=True,
+    network_kwargs=kwargs_extra_data_time_format,
+    test_name='TestPolygonTReducerTimeDataFormat'
+)
+
+TestPolygonTReducerLast = ReducerTest(
+    polygon_reducer,
+    process_data,
+    extracted_data,
+    processed_data,
+    reduced_data_last,
+    'Test polygon reducer with a series of polygons in 3 clusters using last average',
+    kwargs={
+        'eps': 0.5,
+        'min_samples': 2,
+        'average_type': 'last',
+        'collab': False
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
-    test_name='TestPolygonTReducerCollabFalse'
+    test_name='TestPolygonTReducerLast'
 )
 
-reduced_data_last_non_default = {
-    'data': [{
-        'stepKey': 'S1',
-        'taskIndex': 1,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{0}',
-        'toolType': 'freehandDrawing',
-        'pathX': [
-            -0.15554523195117093,
-            0.19219246615042257,
-            0.44238509316213026,
-            0.40663249794462797,
-            0.11185711391672837,
-            -0.21996918242654376,
-            -0.3389744219158122,
-            -0.15554523195117032,
-            -0.15554523195117093
-        ],
-        'pathY': [
-            -0.25714285951044563,
-            -0.29983968008123657,
-            -0.05458843226212788,
-            0.2939316921253496,
-            0.4832779309024998,
-            0.3708687043107462,
-            0.04135045270402384,
-            -0.2571428595104454,
-            -0.25714285951044563
-        ]
-    },
+reduced_data_last_collab_true = {
+    'data': [
         {
-        'stepKey': 'S1',
-        'taskIndex': 1,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{1}',
-        'toolType': 'freehandDrawing',
-        'pathX': [
-            5.144708505321773,
-            4.860757556171935,
-            4.695377487814731,
-            4.7454457013476254,
-            4.98163291632684,
-            5.265583865476678,
-            5.4309639338338815,
-            5.3808957203009875,
-            5.144708505321773
-        ],
-        'pathY': [
-            4.2683409230436045,
-            4.21827270951071,
-            3.9820854945314967,
-            3.698134545381657,
-            3.5327544770244548,
-            3.582822690557349,
-            3.819009905536562,
-            4.102960854686401,
-            4.2683409230436045
-        ]
-    },
+            "frame": 0,
+            "markID": "consensus_0",
+            "min_threshold": 0,
+            "stepKey": "S0",
+            "taskIndex": 0,
+            "taskKey": "T0",
+            "taskType": "drawing",
+            "threshold": 0.75,
+            "toolIndex": 0,
+            "toolType": "freehandLine",
+            "pathX": [
+                -0.15554523195117093,
+                0.19219246615042257,
+                0.44238509316213026,
+                0.40663249794462797,
+                0.11185711391672837,
+                -0.21996918242654376,
+                -0.3389744219158122,
+                -0.15554523195117032,
+                -0.15554523195117093,
+            ],
+            "pathY": [
+                -0.25714285951044563,
+                -0.29983968008123657,
+                -0.05458843226212788,
+                0.2939316921253496,
+                0.4832779309024998,
+                0.3708687043107462,
+                0.04135045270402384,
+                -0.2571428595104454,
+                -0.25714285951044563,
+            ],
+        },
         {
-        'stepKey': 'S1',
-        'taskIndex': 1,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{2}',
-        'toolType': 'freehandDrawing',
-        'pathX': [
-            -1.8100930795620302,
-            -2.0695264316885313,
-            -2.262440502917424,
-            -2.298568655319627,
-            -2.1610061248664607,
-            -1.9141199483941913,
-            -1.6734309117084105,
-            -1.5515600900350757,
-            -1.6055321952784525,
-            -1.81009307956203,
-            -1.8100930795620302
-        ],
-        'pathY': [
-            2.3692156886043496,
-            2.360156076316269,
-            2.186455466379812,
-            1.9293903046514933,
-            1.7092442372650303,
-            1.6290260558015568,
-            1.7262707388936125,
-            1.9554764185681563,
-            2.2093952099680867,
-            2.3692156886043496,
-            2.3692156886043496
-        ]
-    },
+            "frame": 0,
+            "markID": "consensus_1",
+            "min_threshold": 0,
+            "stepKey": "S0",
+            "taskIndex": 0,
+            "taskKey": "T0",
+            "taskType": "drawing",
+            "threshold": 0.75,
+            "toolIndex": 0,
+            "toolType": "freehandLine",
+            "pathX": [
+                5.144708505321773,
+                4.860757556171935,
+                4.695377487814731,
+                4.7454457013476254,
+                4.98163291632684,
+                5.265583865476678,
+                5.4309639338338815,
+                5.3808957203009875,
+                5.144708505321773,
+            ],
+            "pathY": [
+                4.2683409230436045,
+                4.21827270951071,
+                3.9820854945314967,
+                3.698134545381657,
+                3.5327544770244548,
+                3.582822690557349,
+                3.819009905536562,
+                4.102960854686401,
+                4.2683409230436045,
+            ],
+        },
         {
-        'stepKey': 'S1',
-        'taskIndex': 1,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 1,
-        'frame': 0,
-        'markID': f'consensus_{3}',
-        'toolType': 'freehandDrawing',
-        'pathX': [
-            -0.15554523195117093,
-            0.19219246615042257,
-            0.44238509316213026,
-            0.40663249794462797,
-            0.11185711391672837,
-            -0.21996918242654376,
-            -0.3389744219158122,
-            -0.15554523195117032,
-            -0.15554523195117093
-        ],
-        'pathY': [
-            -0.25714285951044563,
-            -0.29983968008123657,
-            -0.05458843226212788,
-            0.2939316921253496,
-            0.4832779309024998,
-            0.3708687043107462,
-            0.04135045270402384,
-            -0.2571428595104454,
-            -0.25714285951044563
-        ],
-    }],
+            "frame": 0,
+            "markID": "consensus_2",
+            "min_threshold": 0,
+            "stepKey": "S0",
+            "taskIndex": 0,
+            "taskKey": "T0",
+            "taskType": "drawing",
+            "threshold": 0.75,
+            "toolIndex": 0,
+            "toolType": "freehandLine",
+            "pathX": [
+                -1.8100930795620302,
+                -2.0695264316885313,
+                -2.262440502917424,
+                -2.298568655319627,
+                -2.1610061248664607,
+                -1.9141199483941913,
+                -1.6734309117084105,
+                -1.5515600900350757,
+                -1.6055321952784525,
+                -1.81009307956203,
+                -1.8100930795620302,
+            ],
+            "pathY": [
+                2.3692156886043496,
+                2.360156076316269,
+                2.186455466379812,
+                1.9293903046514933,
+                1.7092442372650303,
+                1.6290260558015568,
+                1.7262707388936125,
+                1.9554764185681563,
+                2.2093952099680867,
+                2.3692156886043496,
+                2.3692156886043496,
+            ],
+        },
+        {
+            'frame': 0,
+            'markID': 'consensus_0',
+            'min_threshold': 0,
+            'threshold': 0.75,
+            'pathX': [-0.15554523195117093,
+                      0.19219246615042257,
+                      0.44238509316213026,
+                      0.40663249794462797,
+                      0.11185711391672837,
+                      -0.21996918242654376,
+                      -0.3389744219158122,
+                      -0.15554523195117032,
+                      -0.15554523195117093],
+            'pathY': [-0.25714285951044563,
+                      -0.29983968008123657,
+                      -0.05458843226212788,
+                      0.2939316921253496,
+                      0.4832779309024998,
+                      0.3708687043107462,
+                      0.04135045270402384,
+                      -0.2571428595104454,
+                      -0.25714285951044563],
+            'stepKey': 'S0',
+            'taskIndex': 0,
+            'taskKey': 'T0',
+            'taskType': 'drawing',
+            'toolIndex': 1,
+            'toolType': 'freehandLine'}],
     'frame0':
         {
             'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
+            'T0_tool0_n_classifications': [4, 4, 4],
+            'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
             'T0_tool0_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -1175,6 +877,8 @@ reduced_data_last_non_default = {
             'T0_tool1_cluster_labels': [0, 0, 0],
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
+            'T0_tool1_n_classifications': [4],
+            'T0_tool1_shape': ['polygon'],
             'T0_tool1_clusters_x': [
                 [
                     -0.15554523195117093,
@@ -1202,17 +906,198 @@ reduced_data_last_non_default = {
                 ]
             ]
     },
-        'threshold': [0.75, 0.75, 0.75, 0.75],
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
             'average_type': 'last',
             'collab': True,
+            'min_threshold': 0,
+            'step_key': 'S0',
+            'task_index': 0,
+            'tool_type': 'freehandLine'
+    }
+}
+
+TestPolygonTReducerLastCollabTrue = ReducerTestNoProcessing(
+    polygon_reducer,
+    extracted_data,
+    reduced_data_last_collab_true,
+    'Test polygon reducer with a series of polygons in 3 clusters using last average when collab is True',
+    kwargs={
+        'eps': 0.5,
+        'min_samples': 2,
+        'average_type': 'last',
+        'collab': True
+    },
+    network_kwargs=kwargs_extra_data,
+    test_name='TestPolygonTReducerLastCollabTrue'
+)
+
+reduced_data_last_min_threshold = {
+    'frame0': {
+        'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
+        'T0_tool0_clusters_count': [],
+        'T0_tool0_clusters_x': [],
+        'T0_tool0_clusters_y': [],
+        'T0_tool0_consensus': [],
+        'T0_tool0_n_classifications': [4, 4, 4],
+        'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
+        'T0_tool1_cluster_labels': [0, 0, 0],
+        'T0_tool1_clusters_count': [],
+        'T0_tool1_clusters_x': [],
+        'T0_tool1_clusters_y': [],
+        'T0_tool1_consensus': [],
+        'T0_tool1_n_classifications': [4],
+        'T0_tool1_shape': ['polygon']
+    },
+    'parameters': {
+        'eps': 0.5,
+        'min_samples': 2,
+        'average_type': 'last',
+        'collab': True,
+        'step_key': 'S0',
+        'task_index': 0,
+        'tool_type': 'freehandLine',
+        'min_threshold': 0.8
+    }
+}
+
+TestPolygonTReducerLastMinThreshold = ReducerTestNoProcessing(
+    polygon_reducer,
+    extracted_data,
+    reduced_data_last_min_threshold,
+    'Test polygon reducer with threshold < min_threshold',
+    kwargs={
+        'eps': 0.5,
+        'min_samples': 2,
+        'average_type': 'last',
+        'collab': True,
+        'min_threshold': 0.8
+    },
+    network_kwargs=kwargs_extra_data,
+    test_name='TestPolygonTReducerLastMinThreshold'
+)
+
+reduced_data_last_non_default = {
+    'frame0':
+        {
+            'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
+            'T0_tool0_clusters_count': [3, 3, 3],
+            'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
+            'T0_tool0_n_classifications': [4, 4, 4],
+            'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
+            'T0_tool0_clusters_x': [
+                [
+                    -0.15554523195117093,
+                    0.19219246615042257,
+                    0.44238509316213026,
+                    0.40663249794462797,
+                    0.11185711391672837,
+                    -0.21996918242654376,
+                    -0.3389744219158122,
+                    -0.15554523195117032,
+                    -0.15554523195117093
+                ], [
+                    5.144708505321773,
+                    4.860757556171935,
+                    4.695377487814731,
+                    4.7454457013476254,
+                    4.98163291632684,
+                    5.265583865476678,
+                    5.4309639338338815,
+                    5.3808957203009875,
+                    5.144708505321773
+                ], [
+                    -1.8100930795620302,
+                    -2.0695264316885313,
+                    -2.262440502917424,
+                    -2.298568655319627,
+                    -2.1610061248664607,
+                    -1.9141199483941913,
+                    -1.6734309117084105,
+                    -1.5515600900350757,
+                    -1.6055321952784525,
+                    -1.81009307956203,
+                    -1.8100930795620302
+                ]
+            ],
+            'T0_tool0_clusters_y': [
+                [
+                    -0.25714285951044563,
+                    -0.29983968008123657,
+                    -0.05458843226212788,
+                    0.2939316921253496,
+                    0.4832779309024998,
+                    0.3708687043107462,
+                    0.04135045270402384,
+                    -0.2571428595104454,
+                    -0.25714285951044563
+                ], [
+                    4.2683409230436045,
+                    4.21827270951071,
+                    3.9820854945314967,
+                    3.698134545381657,
+                    3.5327544770244548,
+                    3.582822690557349,
+                    3.819009905536562,
+                    4.102960854686401,
+                    4.2683409230436045
+                ], [
+                    2.3692156886043496,
+                    2.360156076316269,
+                    2.186455466379812,
+                    1.9293903046514933,
+                    1.7092442372650303,
+                    1.6290260558015568,
+                    1.7262707388936125,
+                    1.9554764185681563,
+                    2.2093952099680867,
+                    2.3692156886043496,
+                    2.3692156886043496
+                ]
+            ],
+            'T0_tool1_cluster_labels': [0, 0, 0],
+            'T0_tool1_clusters_count': [3],
+            'T0_tool1_consensus': [0.5723807679762805],
+            'T0_tool1_n_classifications': [4],
+            'T0_tool1_shape': ['polygon'],
+            'T0_tool1_clusters_x': [
+                [
+                    -0.15554523195117093,
+                    0.19219246615042257,
+                    0.44238509316213026,
+                    0.40663249794462797,
+                    0.11185711391672837,
+                    -0.21996918242654376,
+                    -0.3389744219158122,
+                    -0.15554523195117032,
+                    -0.15554523195117093
+                ]
+            ],
+            'T0_tool1_clusters_y': [
+                [
+                    -0.25714285951044563,
+                    -0.29983968008123657,
+                    -0.05458843226212788,
+                    0.2939316921253496,
+                    0.4832779309024998,
+                    0.3708687043107462,
+                    0.04135045270402384,
+                    -0.2571428595104454,
+                    -0.25714285951044563
+                ]
+            ]
+        },
+        'parameters': {
+            'eps': 0.5,
+            'min_samples': 2,
+            'average_type': 'last',
+            'collab': False,
+            'min_threshold': 0,
             'step_key': 'S1',
             'task_index': 1,
-            'tool_type': 'freehandDrawing',
-            'min_threshold': 0
-    }
+            'tool_type': 'freehandDrawing'
+        }
 }
 
 TestPolygonTReducerLastNonDefaultParams = ReducerTest(
@@ -1226,7 +1111,7 @@ TestPolygonTReducerLastNonDefaultParams = ReducerTest(
         'eps': 0.5,
         'min_samples': 2,
         'average_type': 'last',
-        'collab': True,
+        'collab': False,
         'step_key': 'S1',
         'task_index': 1,
         'tool_type': 'freehandDrawing'
@@ -1237,137 +1122,13 @@ TestPolygonTReducerLastNonDefaultParams = ReducerTest(
 )
 
 reduced_data_median = {
-    'data': [{
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{0}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            -0.011871167727739784,
-            -0.28870602933343953,
-            -0.38037475471301413,
-            -0.2331790477845634,
-            0.06665584265632145,
-            0.3434907042620213,
-            0.4351594296415958,
-            0.2879637227131452,
-            -0.0118711677277397,
-            -0.011871167727739784
-        ],
-        'pathY': [
-            0.361724434930079,
-            0.21452872800162825,
-            -0.08530616243925668,
-            -0.3621410240449564,
-            -0.453809749424531,
-            -0.30661404249608026,
-            -0.006779152055195435,
-            0.2700557095505044,
-            0.36172443493007894,
-            0.361724434930079
-        ],
-    },
-        {
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{1}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            4.630602319839481,
-            5.081828653996981,
-            5.449443973123015,
-            5.225416400970543,
-            4.719344427837162,
-            4.630602319839481,
-            4.630602319839481
-        ],
-        'pathY': [
-            3.855330076852154,
-            3.615408779166577,
-            3.9704107662937083,
-            4.429735358097605,
-            4.358611580573953,
-            3.8553300768521543,
-            3.855330076852154
-        ],
-    },
-        {
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{2}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            -2.0530832043103215,
-            -2.347496085003458,
-            -2.2484817914071478,
-            -1.855054617117701,
-            -1.5606417364245644,
-            -1.6596560300208743,
-            -2.053083204310321,
-            -2.0530832043103215
-        ],
-        'pathY': [
-            2.3322557650241134,
-            2.047944550980137,
-            1.6508199100765353,
-            1.53800648321691,
-            1.8223176972608863,
-            2.219442338164488,
-            2.3322557650241134,
-            2.3322557650241134
-        ],
-    },
-        {
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 1,
-        'frame': 0,
-        'markID': f'consensus_{3}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            -0.011871167727739784,
-            -0.28870602933343953,
-            -0.38037475471301413,
-            -0.2331790477845634,
-            0.06665584265632145,
-            0.3434907042620213,
-            0.4351594296415958,
-            0.2879637227131452,
-            -0.0118711677277397,
-            -0.011871167727739784
-        ],
-        'pathY': [
-            0.361724434930079,
-            0.21452872800162825,
-            -0.08530616243925668,
-            -0.3621410240449564,
-            -0.453809749424531,
-            -0.30661404249608026,
-            -0.006779152055195435,
-            0.2700557095505044,
-            0.36172443493007894,
-            0.361724434930079],
-    }
-    ],
     'frame0':
         {
             'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
+            'T0_tool0_n_classifications': [4, 4, 4],
+            'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
             'T0_tool0_clusters_x': [
                 [
                     -0.011871167727739784,
@@ -1433,6 +1194,8 @@ reduced_data_median = {
             'T0_tool1_cluster_labels': [0, 0, 0],
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
+            'T0_tool1_n_classifications': [4],
+            'T0_tool1_shape': ['polygon'],
             'T0_tool1_clusters_x': [
                 [
                     -0.011871167727739784,
@@ -1461,18 +1224,17 @@ reduced_data_median = {
                     0.361724434930079
                 ]
             ]
-    },
-        'threshold': [0.75, 0.75, 0.75, 0.75],
+        },
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
             'average_type': 'median',
-            'collab': True,
+            'collab': False,
+            'min_threshold': 0,
             'step_key': 'S0',
             'task_index': 0,
-            'tool_type': 'freehandLine',
-            'min_threshold': 0
-    }
+            'tool_type': 'freehandLine'
+        }
 }
 
 TestPolygonTReducerMedian = ReducerTest(
@@ -1486,7 +1248,7 @@ TestPolygonTReducerMedian = ReducerTest(
         'eps': 0.5,
         'min_samples': 2,
         'average_type': 'median',
-        'collab': True
+        'collab': False
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
@@ -1496,149 +1258,13 @@ TestPolygonTReducerMedian = ReducerTest(
 
 # Now let's the intersection version
 reduced_data_intersection = {
-    'data': [{
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{0}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            -0.20060780558908908,
-            0.05713739436766835,
-            0.2956022809277974,
-            0.25587931382701484,
-            0.19219246615042257,
-            -0.15554523195117093,
-            -0.15554523195117032,
-            -0.3389744219158122,
-            -0.27351395358024566,
-            -0.20060780558908908
-        ],
-        'pathY': [
-            0.2613713844791226,
-            0.2800405841233082,
-            0.021747909361406553,
-            -0.23741066668901195,
-            -0.29983968008123657,
-            -0.25714285951044563,
-            -0.2571428595104454,
-            0.04135045270402384,
-            0.2226064979661171,
-            0.2613713844791226
-        ],
-    },
-        {'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{1}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            4.9452546176219245,
-            4.7171640385013776,
-            4.695377487814731,
-            4.860757556171935,
-            5.144708505321773,
-            5.3808957203009875,
-            5.386015510591181,
-            5.275562930243272,
-            5.266194425673992,
-            4.9452546176219245
-        ],
-        'pathY': [
-            3.6988170828153155,
-            3.858527825710141,
-            3.9820854945314967,
-            4.21827270951071,
-            4.2683409230436045,
-            4.102960854686401,
-            4.073925081093372,
-            3.8024957950329927,
-            3.79344873533371,
-            3.6988170828153155
-        ],
-    },
-        {
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{2}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            -1.7022599463686408,
-            -1.6346450301820536,
-            -1.5803444407979248,
-            -1.6734309117084105,
-            -1.9141199483941913,
-            -2.1610061248664607,
-            -2.298568655319627,
-            -2.288217289968108,
-            -2.1663776913581434,
-            -2.1230644265945626,
-            -1.8349423242472744,
-            -1.7022599463686408
-        ],
-        'pathY': [
-            2.231658814592464,
-            2.1191286968822776,
-            1.9013409283006542,
-            1.7262707388936125,
-            1.6290260558015568,
-            1.7092442372650303,
-            1.9293903046514933,
-            2.0030440962590284,
-            2.222848550634506,
-            2.2646756842169427,
-            2.269704874220669,
-            2.231658814592464
-        ],
-    },
-        {'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 1,
-        'frame': 0,
-        'markID': f'consensus_{3}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            -0.20060780558908908,
-            0.05713739436766835,
-            0.2956022809277974,
-            0.25587931382701484,
-            0.19219246615042257,
-            -0.15554523195117093,
-            -0.15554523195117032,
-            -0.3389744219158122,
-            -0.27351395358024566,
-            -0.20060780558908908
-        ],
-        'pathY': [
-            0.2613713844791226,
-            0.2800405841233082,
-            0.021747909361406553,
-            -0.23741066668901195,
-            -0.29983968008123657,
-            -0.25714285951044563,
-            -0.2571428595104454,
-            0.04135045270402384,
-            0.2226064979661171,
-            0.2613713844791226
-        ],
-    }],
     'frame0':
         {
             'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
+            'T0_tool0_n_classifications': [4, 4, 4],
+            'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
             'T0_tool0_clusters_x': [
                 [
                     -0.20060780558908908,
@@ -1718,6 +1344,8 @@ reduced_data_intersection = {
             'T0_tool1_cluster_labels': [0, 0, 0],
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
+            'T0_tool1_n_classifications': [4],
+            'T0_tool1_shape': ['polygon'],
             'T0_tool1_clusters_x': [
                 [
                     -0.20060780558908908,
@@ -1746,18 +1374,17 @@ reduced_data_intersection = {
                     0.2613713844791226
                 ]
             ]
-    },
-        'threshold': [0.75, 0.75, 0.75, 0.75],
+        },
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
             'average_type': 'intersection',
-            'collab': True,
+            'collab': False,
+            'min_threshold': 0,
             'step_key': 'S0',
             'task_index': 0,
-            'tool_type': 'freehandLine',
-            'min_threshold': 0
-    }
+            'tool_type': 'freehandLine'
+        }
 }
 
 TestPolygonTReducerIntersection = ReducerTest(
@@ -1771,7 +1398,7 @@ TestPolygonTReducerIntersection = ReducerTest(
         'eps': 0.5,
         'min_samples': 2,
         'average_type': 'intersection',
-        'collab': True
+        'collab': False
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
@@ -1779,215 +1406,13 @@ TestPolygonTReducerIntersection = ReducerTest(
 )
 
 reduced_data_union = {
-    'data': [{
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{0}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            -0.06253880643091841,
-            -0.3894572368218461,
-            -0.49223768418803526,
-            -0.49223768418803493,
-            -0.2934843753237021,
-            -0.2610963698935616,
-            -0.21996918242654376,
-            0.11185711391672837,
-            0.40663249794462797,
-            0.44238509316213026,
-            0.4111953308040009,
-            0.3434907042620213,
-            0.06665584265632145,
-            0.035708140618821,
-            -0.06253880643091841
-        ],
-        'pathY': [
-            -0.5007448417839794,
-            -0.3714972196452143,
-            -0.03531752424854295,
-            -0.03531752424854333,
-            0.2546440769562919,
-            0.25699003001207604,
-            0.3708687043107462,
-            0.4832779309024998,
-            0.2939316921253496,
-            -0.05458843226212788,
-            -0.08516218748775546,
-            -0.30661404249608026,
-            -0.453809749424531,
-            -0.44434808739102644,
-            -0.5007448417839794
-        ],
-    },
-        {
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{1}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            5.4309639338338815,
-            5.265583865476678,
-            4.98163291632684,
-            4.7454457013476254,
-            4.726741378282931,
-            4.630602319839481,
-            4.630602319839481,
-            4.658295462956292,
-            4.644384004088639,
-            4.707699854782151,
-            4.719344427837162,
-            4.791954327443189,
-            4.897477295041295,
-            5.162772021619619,
-            5.225416400970543,
-            5.24259169742927,
-            5.401312969268549,
-            5.391901686905876,
-            5.449443973123015,
-            5.410841064166533,
-            5.4309639338338815
-        ],
-        'pathY': [
-            3.819009905536562,
-            3.582822690557349,
-            3.5327544770244548,
-            3.698134545381657,
-            3.8042120327267175,
-            3.855330076852154,
-            3.8553300768521543,
-            4.012385695938597,
-            4.235275578910275,
-            4.292571925109859,
-            4.358611580573953,
-            4.368816236472241,
-            4.4643070245969305,
-            4.420931264734213,
-            4.429735358097605,
-            4.394520781788013,
-            4.111517487484036,
-            4.088389936777963,
-            3.9704107662937083,
-            3.9331323704395342,
-            3.819009905536562
-        ],
-    },
-        {
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{2}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            -2.3456481393346444,
-            -2.3213831520236607,
-            -2.347496085003458,
-            -2.2716074328809563,
-            -2.262440502917424,
-            -2.0695264316885313,
-            -1.8100930795620302,
-            -1.81009307956203,
-            -1.6055321952784525,
-            -1.5599064027625509,
-            -1.5113901500303277,
-            -1.561128116636017,
-            -1.5606417364245644,
-            -1.5640152526307798,
-            -1.7136491045398121,
-            -1.8459444260649625,
-            -1.855054617117701,
-            -1.8834523076541,
-            -2.1307780991919705,
-            -2.1853949812266844,
-            -2.2484817914071478,
-            -2.2855174523162423,
-            -2.3456481393346444
-        ],
-        'pathY': [
-            1.8994361013759973,
-            1.943211297266067,
-            2.047944550980137,
-            2.1212293704700755,
-            2.186455466379812,
-            2.360156076316269,
-            2.3692156886043496,
-            2.3692156886043496,
-            2.2093952099680867,
-            1.9947427327289593,
-            1.9139981287461882,
-            1.8242684617394296,
-            1.8223176972608863,
-            1.8190599305289143,
-            1.5491133158798083,
-            1.5468040924528874,
-            1.53800648321691,
-            1.546149389944429,
-            1.5418323021947127,
-            1.6327300583550457,
-            1.6508199100765353,
-            1.7993618327116296,
-            1.8994361013759973
-        ],
-    },
-        {
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 1,
-        'frame': 0,
-        'markID': f'consensus_{3}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            -0.06253880643091841,
-            -0.3894572368218461,
-            -0.49223768418803526,
-            -0.49223768418803493,
-            -0.2934843753237021,
-            -0.2610963698935616,
-            -0.21996918242654376,
-            0.11185711391672837,
-            0.40663249794462797,
-            0.44238509316213026,
-            0.4111953308040009,
-            0.3434907042620213,
-            0.06665584265632145,
-            0.035708140618821,
-            -0.06253880643091841
-        ],
-        'pathY': [
-            -0.5007448417839794,
-            -0.3714972196452143,
-            -0.03531752424854295,
-            -0.03531752424854333,
-            0.2546440769562919,
-            0.25699003001207604,
-            0.3708687043107462,
-            0.4832779309024998,
-            0.2939316921253496,
-            -0.05458843226212788,
-            -0.08516218748775546,
-            -0.30661404249608026,
-            -0.453809749424531,
-            -0.44434808739102644,
-            -0.5007448417839794],
-    }
-    ],
     'frame0':
         {
             'T0_tool0_cluster_labels': [0, 1, 2, 0, 1, 2, 0, 1, 2, -1, -1, -1],
             'T0_tool0_clusters_count': [3, 3, 3],
             'T0_tool0_consensus': [0.5723807679762805, 0.6353380315630046, 0.7645350003018981],
+            'T0_tool0_n_classifications': [4, 4, 4],
+            'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
             'T0_tool0_clusters_x': [
                 [
                     -0.06253880643091841,
@@ -2121,6 +1546,8 @@ reduced_data_union = {
             'T0_tool1_cluster_labels': [0, 0, 0],
             'T0_tool1_clusters_count': [3],
             'T0_tool1_consensus': [0.5723807679762805],
+            'T0_tool1_n_classifications': [4],
+            'T0_tool1_shape': ['polygon'],
             'T0_tool1_clusters_x': [
                 [
                     -0.06253880643091841,
@@ -2159,18 +1586,17 @@ reduced_data_union = {
                     -0.5007448417839794
                 ]
             ]
-    },
-        'threshold': [0.75, 0.75, 0.75, 0.75],
+        },
         'parameters': {
             'eps': 0.5,
             'min_samples': 2,
             'average_type': 'union',
-            'collab': True,
+            'collab': False,
+            'min_threshold': 0,
             'step_key': 'S0',
             'task_index': 0,
-            'tool_type': 'freehandLine',
-            'min_threshold': 0
-    }
+            'tool_type': 'freehandLine'
+        }
 }
 
 TestPolygonTReducerUnion = ReducerTest(
@@ -2184,7 +1610,7 @@ TestPolygonTReducerUnion = ReducerTest(
         'eps': 0.5,
         'min_samples': 2,
         'average_type': 'union',
-        'collab': True
+        'collab': False
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
@@ -2540,7 +1966,7 @@ TestPolygonTReducerUnionDifferentExtractionFormat = ReducerTest(
         'eps': 0.5,
         'min_samples': 2,
         'average_type': 'union',
-        'collab': True
+        'collab': False
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data,
@@ -2548,7 +1974,7 @@ TestPolygonTReducerUnionDifferentExtractionFormat = ReducerTest(
 )
 
 
-# Testing it it can handle empty intersection
+# Testing it can handle empty intersection
 extracted_data_no_overall_intersection = [
     {
         'frame0': {
@@ -2680,44 +2106,32 @@ processed_data_no_overall_intersection = {
                     'gold_standard': False
                 }
             ],
-            'n_classifications': 3,
+            'n_classifications': 3
         }
     }
 }
 
 reduced_data_no_overall_intersection = {
-    'data': [{
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{0}',
-        'toolType': 'freehandLine',
-        'pathX': [],
-        'pathY': [],
-    }
-    ],
     'frame0':
         {
             'T0_tool0_cluster_labels': [0, 0, 0],
             'T0_tool0_clusters_count': [3],
             'T0_tool0_consensus': [0.07844246929976251],
+            'T0_tool0_n_classifications': [3],
+            'T0_tool0_shape': ['polygon'],
             'T0_tool0_clusters_x': [[]],
             'T0_tool0_clusters_y': [[]]
-    },
-    'threshold': [1.0],
+        },
         'parameters': {
             'eps': 0.95,
             'min_samples': 2,
             'average_type': 'intersection',
-            'collab': True,
+            'collab': False,
+            'min_threshold': 0,
             'step_key': 'S0',
             'task_index': 0,
-            'tool_type': 'freehandLine',
-            'min_threshold': 0
-    }
+            'tool_type': 'freehandLine'
+        }
 }
 
 
@@ -2732,7 +2146,7 @@ TestPolygonTReducerNoOverallIntersection = ReducerTest(
         'eps': 0.95,
         'min_samples': 2,
         'average_type': 'intersection',
-        'collab': True
+        'collab': False
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data_no_overall_intersection,
@@ -2741,108 +2155,13 @@ TestPolygonTReducerNoOverallIntersection = ReducerTest(
 
 # Testing cluster of 1. This is just the original extraction
 reduced_data_no_overall_intersection_cluster_of_one = {
-    'data': [{
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{0}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            0.21554927386591496,
-            0.8346610570311462,
-            0.36812686536062333,
-            -0.25098491780460797,
-            0.2155492738659148,
-            0.21554927386591496
-        ],
-        'pathY': [
-            -0.25858097547222986,
-            0.20795321619829304,
-            0.8270649993635244,
-            0.3605308076930015,
-            -0.25858097547222986,
-            -0.25858097547222986
-        ],
-    },
-        {'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{1}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            0.3693081708169513,
-            0.553908720812514,
-            0.5957542682751744,
-            0.47526481648569685,
-            0.2488187190274737,
-            0.022372621569250545,
-            -0.09811683022022713,
-            -0.05627128275756679,
-            0.12832926723799587,
-            0.36930817081695105,
-            0.3693081708169513
-        ],
-        'pathY': [
-            -0.5218849589408747,
-            -0.3669867055244751,
-            -0.1296688129675387,
-            0.07902503930795732,
-            0.16144467844849417,
-            0.07902503930795748,
-            -0.1296688129675385,
-            -0.366986705524475,
-            -0.5218849589408747,
-            -0.5218849589408747,
-            -0.5218849589408747
-        ],
-    },
-        {
-        'stepKey': 'S0',
-        'taskIndex': 0,
-        'taskKey': 'T0',
-        'taskType': 'drawing',
-        'toolIndex': 0,
-        'frame': 0,
-        'markID': f'consensus_{2}',
-        'toolType': 'freehandLine',
-        'pathX': [
-            0.09127357717866474,
-            0.024685520754786305,
-            -0.21171962328979593,
-            -0.5073252607061052,
-            -0.7238142284563371,
-            -0.7598889325232856,
-            -0.5986696179483486,
-            -0.3155925937742383,
-            -0.04311274566270751,
-            0.0912735771786648,
-            0.09127357717866474
-        ],
-        'pathY': [
-            0.3044349351140881,
-            0.5928594950295896,
-            0.7710035487895189,
-            0.7555115137889823,
-            0.5536322853795214,
-            0.2598273981716289,
-            0.011571424167481636,
-            -0.07497390733855891,
-            0.040686926109404054,
-            0.3044349351140878,
-            0.3044349351140881],
-    }
-    ],
     'frame0':
         {
             'T0_tool0_cluster_labels': [0, 1, 2],
             'T0_tool0_clusters_count': [1, 1, 1],
             'T0_tool0_consensus': [1.0, 1.0, 1.0],
+            'T0_tool0_n_classifications': [3, 3, 3],
+            'T0_tool0_shape': ['polygon', 'polygon', 'polygon'],
             'T0_tool0_clusters_x': [
                 [
                     0.21554927386591496,
@@ -2911,19 +2230,17 @@ reduced_data_no_overall_intersection_cluster_of_one = {
                     0.3044349351140881
                 ]
             ]
-    },
-
-        'threshold': [0.3333333333333333, 0.3333333333333333, 0.3333333333333333],
+        },
         'parameters': {
             'eps': 0.5,
             'min_samples': 1,
             'average_type': 'last',
-            'collab': True,
+            'collab': False,
+            'min_threshold': 0,
             'step_key': 'S0',
             'task_index': 0,
-            'tool_type': 'freehandLine',
-            'min_threshold': 0
-    }
+            'tool_type': 'freehandLine'
+        }
 }
 
 TestPolygonTReducerClusterOfOne = ReducerTest(
@@ -2937,7 +2254,7 @@ TestPolygonTReducerClusterOfOne = ReducerTest(
         'eps': 0.5,
         'min_samples': 1,
         'average_type': 'last',
-        'collab': True
+        'collab': False
     },
     output_kwargs=True,
     network_kwargs=kwargs_extra_data_no_overall_intersection,

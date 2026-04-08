@@ -86,6 +86,8 @@ def ReducerTest(
                 self.reduction_is_list = False
             self.reduced = copy.deepcopy(reduced)
             self.reduced_no_params = copy.deepcopy(reduced)
+            if isinstance(self.reduced_no_params, dict):
+                self.reduced_no_params.pop('data', None)
             if output_kwargs:
                 if isinstance(self.reduced_no_params, list):
                     for r in self.reduced_no_params:
@@ -243,6 +245,31 @@ def ReducerTestNoProcessing(
     ReducerTestNoProcessing.__name__ = test_name
     ReducerTestNoProcessing.__qualname__ = test_name
     return ReducerTestNoProcessing
+
+
+def CollabTest(
+        reducer,
+        extracted,
+        data,
+        name,
+        kwargs=None,
+        network_kwargs=None,
+        test_name=None
+):
+
+    class CollabTest(unittest.TestCase):
+        def setUp(self):
+            self.maxDiff = None
+            self.extracted_with_version = copy.deepcopy(extracted)
+            append_version(self.extracted_with_version)
+
+        def test_data(self):
+            '''Test if data is added correctly'''
+            result = reducer(self.extracted_with_version, **kwargs, **network_kwargs)
+            result = cast_to_dict(result)
+            self.assertEqual(result['data'], data)
+
+    return CollabTest
 
 
 def ReducerTestPoints(

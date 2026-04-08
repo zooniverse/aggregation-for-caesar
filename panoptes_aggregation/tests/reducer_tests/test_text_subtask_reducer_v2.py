@@ -54,6 +54,8 @@ reduced_data = {
         'T0_tool0_point_y': [0.0, 100.0, 0.0, 100.0],
         'T0_tool0_cluster_labels': [0, 1, 0, 1],
         'T0_tool0_clusters_count': [2, 2],
+        'T0_tool0_n_classifications': [3, 3],
+        'T0_tool0_shape': ['point', 'point'],
         'T0_tool0_clusters_x': [0.0, 100.0],
         'T0_tool0_clusters_y': [0.0, 100.0],
         'T0_tool0_subtask0': [
