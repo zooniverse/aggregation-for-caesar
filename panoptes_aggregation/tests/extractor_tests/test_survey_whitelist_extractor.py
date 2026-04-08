@@ -39,5 +39,7 @@ TestSurveyWhitelist = ExtractorTest(
     blank_extract=[],
     test_type="assertCountEqual",
     test_name="TestSurveyWhitelist",
-    path="$.metadata.species_whitelist",
+    kwargs={
+        "path": "$.metadata.species_whitelist",
+    },
 )
