@@ -13,7 +13,7 @@ from ..shape_tools import SHAPE_LUT
 @extractor_wrapper()
 @tool_wrapper
 @subtask_wrapper
-def shape_extractor(classification, **kwargs):
+def shape_extractor(classification, use_v1_keys=False, **kwargs):
     '''Extract shape data from annotations
 
     Parameters
@@ -24,6 +24,10 @@ def shape_extractor(classification, **kwargs):
     shape: str, keyword, required
         A string indicating what shape the annotation contains. This
         should be the name of one of the pre-defined shape tools.
+    use_v1_keys: boolean, keyword, optional
+        A boolean that, when true, adopts classifier v1 `toolN` keys
+        instead of the default classifier v2 `toolIndexN` keys for 
+        classifier v2 annotations.
 
     Returns
     -------
@@ -50,7 +54,10 @@ def shape_extractor(classification, **kwargs):
             elif 'toolIndex' in value:
                 # classifier v2.0
                 tool_index = value['toolIndex']
-                key = '{0}_toolIndex{1}'.format(task_key, tool_index)
+                if use_v1_keys:
+                    key = '{0}_tool{1}'.format(task_key, tool_index)
+                else:
+                    key = '{0}_toolIndex{1}'.format(task_key, tool_index)
             else:
                 raise KeyError('Neither `tool` or `toolIndex` are in the annotation')
 
