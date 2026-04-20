@@ -1,7 +1,7 @@
 from panoptes_aggregation.reducers.shape_reducer_dbscan import process_data as process_data_dbscan, shape_reducer_dbscan
 from panoptes_aggregation.reducers.shape_reducer_hdbscan import process_data as process_data_hdbscan, shape_reducer_hdbscan
 from panoptes_aggregation.reducers.shape_reducer_optics import process_data as process_data_optics, shape_reducer_optics
-from .base_test_class import ReducerTest
+from .base_test_class import ReducerTest, CollabTest
 import copy
 
 extracted_data = [
@@ -68,6 +68,7 @@ kwargs_extra_data = {
 
 processed_data = {
     'shape': 'line',
+    'n_classifications': 5,
     'symmetric': False,
     'frame0': {
         'T0_tool0': [
@@ -102,6 +103,8 @@ reduced_data = {
         'T0_tool0_line_y2': [60.0, 20.0, 60.0, 20.0],
         'T0_tool0_cluster_labels': [0, 1, 0, 1],
         'T0_tool0_clusters_count': [2, 2],
+        'T0_tool0_n_classifications': [5, 5],
+        'T0_tool0_shape': ['line', 'line'],
         'T0_tool0_clusters_x1': [0.0, 100.0],
         'T0_tool0_clusters_y1': [0.0, 100.0],
         'T0_tool0_clusters_x2': [50.0, 10.0],
@@ -112,6 +115,8 @@ reduced_data = {
         'T0_tool1_line_y2': [50.0, 10.0, 50.0, 10.0],
         'T0_tool1_cluster_labels': [0, 1, 0, 1],
         'T0_tool1_clusters_count': [2, 2],
+        'T0_tool1_n_classifications': [5, 5],
+        'T0_tool1_shape': ['line', 'line'],
         'T0_tool1_clusters_x1': [0.0, 100.0],
         'T0_tool1_clusters_y1': [100.0, 0.0],
         'T0_tool1_clusters_x2': [10.0, 50.0],
@@ -155,6 +160,8 @@ reduced_data_optics['frame1']['T0_tool1_clusters_x1'] = [60.0]
 reduced_data_optics['frame1']['T0_tool1_clusters_x2'] = [60.0]
 reduced_data_optics['frame1']['T0_tool1_clusters_y1'] = [60.0]
 reduced_data_optics['frame1']['T0_tool1_clusters_y2'] = [60.0]
+reduced_data_optics['frame1']['T0_tool1_n_classifications'] = [5]
+reduced_data_optics['frame1']['T0_tool1_shape'] = ['line']
 
 TestShapeReducerLineOptics = ReducerTest(
     shape_reducer_optics,
@@ -173,6 +180,7 @@ TestShapeReducerLineOptics = ReducerTest(
 
 processed_data_symmetric = {
     'shape': 'line',
+    'n_classifications': 5,
     'symmetric': True,
     'frame0': {
         'T0_tool0': [
@@ -207,6 +215,8 @@ reduced_data_symmetric = {
         'T0_tool0_line_y2': [60.0, 100.0, 60.0, 100.0],
         'T0_tool0_cluster_labels': [0, 1, 0, 1],
         'T0_tool0_clusters_count': [2, 2],
+        'T0_tool0_n_classifications': [5, 5],
+        'T0_tool0_shape': ['line', 'line'],
         'T0_tool0_clusters_x1': [0.0, 10.0],
         'T0_tool0_clusters_y1': [0.0, 20.0],
         'T0_tool0_clusters_x2': [50.0, 100.0],
@@ -217,6 +227,8 @@ reduced_data_symmetric = {
         'T0_tool1_line_y2': [50.0, 0.0, 50.0, 0.0],
         'T0_tool1_cluster_labels': [0, 1, 0, 1],
         'T0_tool1_clusters_count': [2, 2],
+        'T0_tool1_n_classifications': [5, 5],
+        'T0_tool1_shape': ['line', 'line'],
         'T0_tool1_clusters_x1': [0.0, 50.0],
         'T0_tool1_clusters_y1': [100.0, 10.0],
         'T0_tool1_clusters_x2': [10.0, 100.0],
@@ -234,6 +246,8 @@ reduced_data_symmetric = {
         'T0_tool1_line_y2': [70.0, 70.0],
         'T0_tool1_cluster_labels': [0, 0],
         'T0_tool1_clusters_count': [2],
+        'T0_tool1_n_classifications': [5],
+        'T0_tool1_shape': ['line'],
         'T0_tool1_clusters_x1': [50.0],
         'T0_tool1_clusters_y1': [50.0],
         'T0_tool1_clusters_x2': [70.0],
@@ -290,6 +304,8 @@ reduced_data_hdbscan['frame1']['T0_tool1_clusters_x1'] = [60.0]
 reduced_data_hdbscan['frame1']['T0_tool1_clusters_y1'] = [60.0]
 reduced_data_hdbscan['frame1']['T0_tool1_clusters_x2'] = [60.0]
 reduced_data_hdbscan['frame1']['T0_tool1_clusters_y2'] = [60.0]
+reduced_data_hdbscan['frame1']['T0_tool1_n_classifications'] = [5]
+reduced_data_hdbscan['frame1']['T0_tool1_shape'] = ['line']
 
 TestShapeReducerLineHdbscan = ReducerTest(
     shape_reducer_hdbscan,
@@ -332,4 +348,86 @@ TestShapeReducerLineHdbscanSymmetric = ReducerTest(
         'allow_single_cluster': True
     },
     test_name='TestShapeReducerLineHdbscanSymmetric'
+)
+
+data_collab_true = [
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'line',
+        'toolIndex': 0,
+        'frame': 0,
+        'markID': 'consensus_0',
+        'toolType': 'freehandLine',
+        'pathX1': 0.0,
+        'pathY1': 0.0,
+        'pathX2': 50.0,
+        'pathY2': 60.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'line',
+        'toolIndex': 0,
+        'frame': 0,
+        'markID': 'consensus_1',
+        'toolType': 'freehandLine',
+        'pathX1': 100.0,
+        'pathY1': 100.0,
+        'pathX2': 10.0,
+        'pathY2': 20.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'line',
+        'toolIndex': 1,
+        'frame': 0,
+        'markID': 'consensus_0',
+        'toolType': 'freehandLine',
+        'pathX1': 0.0,
+        'pathY1': 100.0,
+        'pathX2': 10.0,
+        'pathY2': 50.0
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.4,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'line',
+        'toolIndex': 1,
+        'frame': 0,
+        'markID': 'consensus_1',
+        'toolType': 'freehandLine',
+        'pathX1': 100.0,
+        'pathY1': 0.0,
+        'pathX2': 50.0,
+        'pathY2': 10.0
+    }
+]
+
+TestShapeReducerLineCollabTrue = CollabTest(
+    shape_reducer_dbscan,
+    extracted_data,
+    data_collab_true,
+    'Test data is correct when collab: True',
+    kwargs={
+        'eps': 5,
+        'min_samples': 2,
+        'shape': 'line',
+        'collab': True
+    },
+    network_kwargs=kwargs_extra_data,
+    test_name='TestShapeReducerLineCollabTrue'
 )

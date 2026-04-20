@@ -1,7 +1,7 @@
 from panoptes_aggregation.reducers.shape_reducer_dbscan import process_data as process_data_dbscan, shape_reducer_dbscan
 from panoptes_aggregation.reducers.shape_reducer_hdbscan import process_data as process_data_hdbscan, shape_reducer_hdbscan
 from panoptes_aggregation.reducers.shape_reducer_optics import process_data as process_data_optics, shape_reducer_optics
-from .base_test_class import ReducerTest
+from .base_test_class import ReducerTest, CollabTest
 
 
 extracted_data = [
@@ -138,6 +138,7 @@ processed_data = {
         ]
     },
     'shape': 'temporalRotateRectangle',
+    'n_classifications': 10,
     'symmetric': False
 }
 
@@ -146,6 +147,10 @@ reduced_data_dbscan = {
         'T0_toolIndex0_cluster_labels': [0, 0, 0, 1, 2, 2, 2, 1, 1, -1],
         'T0_toolIndex0_clusters_angle': [10.0, 110.0, 10.0],
         'T0_toolIndex0_clusters_count': [3, 3, 3],
+        'T0_toolIndex0_n_classifications': [10, 10, 10],
+        'T0_toolIndex0_shape': ['temporalRotateRectangle',
+                                'temporalRotateRectangle',
+                                'temporalRotateRectangle'],
         'T0_toolIndex0_clusters_displayTime': [0.1, 0.7, 0.9],
         'T0_toolIndex0_clusters_height': [61.0, 98.5, 54.5],
         'T0_toolIndex0_clusters_sigma': [0.4, 0.7, 0.4],
@@ -185,6 +190,10 @@ reduced_data_optics = {
         'T0_toolIndex0_cluster_labels': [0, 0, 0, 2, 1, 1, 1, 2, 2, -1],
         'T0_toolIndex0_clusters_angle': [10.0, 10.0, 110.0],
         'T0_toolIndex0_clusters_count': [3, 3, 3],
+        'T0_toolIndex0_n_classifications': [10, 10, 10],
+        'T0_toolIndex0_shape': ['temporalRotateRectangle',
+                                'temporalRotateRectangle',
+                                'temporalRotateRectangle'],
         'T0_toolIndex0_clusters_displayTime': [0.1, 0.9, 0.7],
         'T0_toolIndex0_clusters_height': [61.0, 54.5, 98.5],
         'T0_toolIndex0_clusters_sigma': [0.4, 0.4, 0.7],
@@ -225,6 +234,10 @@ reduced_data_hdbscan = {
         'T0_toolIndex0_cluster_probabilities': [1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 0.9, 1.0, 0.3],
         'T0_toolIndex0_clusters_angle': [110.0, 100.1, 10.0],
         'T0_toolIndex0_clusters_count': [3, 4, 3],
+        'T0_toolIndex0_n_classifications': [10, 10, 10],
+        'T0_toolIndex0_shape': ['temporalRotateRectangle',
+                                'temporalRotateRectangle',
+                                'temporalRotateRectangle'],
         'T0_toolIndex0_clusters_displayTime': [0.7, 0.1, 0.9],
         'T0_toolIndex0_clusters_height': [98.5, 137.8, 54.5],
         'T0_toolIndex0_clusters_sigma': [0.7, 0.7, 0.4],
@@ -259,4 +272,77 @@ TestShapeReducerTemporalRotateRectangleHdbscan = ReducerTest(
     },
     test_name='TestShapeReducerTemporalRotateRectangleHdbscan',
     round=1,
+)
+
+data_collab_true = [
+    {
+        'min_threshold': 0,
+        'threshold': 0.3,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'temporalRotateRectangle',
+        'toolIndex': 0,
+        'frame': 0,
+        'markID': 'consensus_0',
+        'toolType': 'freehandLine',
+        'angle': 10.0,
+        'displayTime': 0.1,
+        'height': 61.0,
+        'width': 137.5,
+        'x_center': 502.9,
+        'y_center': 504.3
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.3,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'temporalRotateRectangle',
+        'toolIndex': 0,
+        'frame': 0,
+        'markID': 'consensus_1',
+        'toolType': 'freehandLine',
+        'angle': 10.0,
+        'displayTime': 0.9,
+        'height': 54.5,
+        'width': 136.1,
+        'x_center': 522.3,
+        'y_center': 508.1
+    },
+    {
+        'min_threshold': 0,
+        'threshold': 0.3,
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'temporalRotateRectangle',
+        'toolIndex': 0,
+        'frame': 0,
+        'markID': 'consensus_2',
+        'toolType': 'freehandLine',
+        'angle': 110.0,
+        'displayTime': 0.7,
+        'height': 98.5,
+        'width': 143.3,
+        'x_center': 358.1,
+        'y_center': 584.7
+    }
+]
+
+TestShapeReducerTemporalRotateRectangleCollabTrue = CollabTest(
+    shape_reducer_optics,
+    extracted_data,
+    data_collab_true,
+    'Test data is correct when collab: True',
+    kwargs={
+        'min_samples': 2,
+        'metric_type': 'IoU',
+        'eps_t': 0.5,
+        'shape': 'temporalRotateRectangle',
+        'collab': True
+    },
+    network_kwargs=kwargs_extra_data,
+    test_name='TestShapeReducerTemporalRotateRectangleCollabTrue'
 )
