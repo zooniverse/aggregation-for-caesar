@@ -19,26 +19,16 @@ classification = {
     "metadata": {"species_whitelist": "AGOUTI, PECCARYCOLLARED"},
 }
 
-expected = [
-    {"choice": "agouti", "answers_howmany": {"1": 1}, "in_whitelist": True},
-    {
-        "choice": "peccarycollared",
-        "answers_howmany": {"3": 1},
-        "answers_whatdoing": {"standing": 1, "sleeping": 1},
-        "in_whitelist": True,
-    },
-    {"choice": "nothinghere", "in_whitelist": False},
-]
+expected = {"in_whitelist": 1, "not_in_whitelist": 1}
 
 
-TestSurveyWhitelist = ExtractorTest(
-    extractors.survey_whitelist_extractor,
+TestWhitelistCount = ExtractorTest(
+    extractors.whitelist_count_extractor,
     classification,
     expected,
-    "Test survey whitelist",
-    blank_extract=[],
-    test_type="assertCountEqual",
-    test_name="TestSurveyWhitelist",
+    "Test whitelist count",
+    blank_extract={},
+    test_name="TestWhitelistCount",
     kwargs={
         "path": "$.metadata.species_whitelist",
     },
