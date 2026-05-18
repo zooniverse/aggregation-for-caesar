@@ -6,16 +6,14 @@ panoptes survey tasks, and match those choices against a whitelist in the
 subject metadata.
 """
 
-from .survey_extractor import survey_extractor
 from .pluck_and_split_extractor import pluck_and_split_extractor
 from .extractor_wrapper import extractor_wrapper
 from slugify import slugify
 
 
 @extractor_wrapper()
-def survey_whitelist_extractor(classification, **kwargs):
-    """Extract annotations from a survey task into a list, matching choices
-    against a list plucked from the subject data.
+def whitelist_count_extractor(classification, **kwargs):
+    """Extract whether survey choices match a subject metadata whitelist.
 
     Parameters
     ----------
@@ -25,10 +23,11 @@ def survey_whitelist_extractor(classification, **kwargs):
 
     Returns
     -------
-    extraction : list
-        A list of dicts each with `choice`, `answers`, and `in_whitelist`
-        as keys.  Each `choice` made in an annotation is extacted to a
-        different element of the list.
+    extraction : dict
+        A dict shaped like a question extraction, suitable for reduction with
+        the question reducer. If any selected survey choice is in the
+        whitelist, the dict contains ``in_whitelist``. If any selected survey
+        choice is not in the whitelist, the dict contains ``not_in_whitelist``.
 
     Examples
     --------
@@ -37,8 +36,8 @@ def survey_whitelist_extractor(classification, **kwargs):
                 [{'choice': 'AGOUTI', 'answers': {'HOWMANY': '1'}}]
             }
         ]}
-    >>> survey_extractor(classification)
-    [{'choice': 'agouti','answers_howmany': {'1': 1}, 'in_whitelist': true}]
+    >>> whitelist_count_extractor(classification)
+    {'in_whitelist': 1}
     """
     # We are already inside extractor_wrapper here, so annotations have been
     # normalized to a plain list. Call the underlying extractor functions
@@ -47,9 +46,15 @@ def survey_whitelist_extractor(classification, **kwargs):
     if isinstance(whitelist, str):
         whitelist = [whitelist]
     whitelist = {slugify(choice.strip(), separator="-") for choice in whitelist}
-    survey = survey_extractor._original(classification, **kwargs)
 
-    for extract in survey:
-        extract["in_whitelist"] = extract.get("choice") in whitelist
+    extraction = {}
+    if len(classification["annotations"]) > 0:
+        annotation = classification["annotations"][0]
+        for value in annotation["value"]:
+            choice = slugify(value["choice"], separator="-")
+            if choice in whitelist:
+                extraction["in_whitelist"] = 1
+            else:
+                extraction["not_in_whitelist"] = 1
 
-    return survey
+    return extraction
