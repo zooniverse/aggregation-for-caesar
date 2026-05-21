@@ -11,7 +11,7 @@ def subtask_wrapper(func):
         classifier_version = version.parse(classification_metadata.get('classifier_version', '1.0'))
         details_functions = kwargs.pop('details', None)
         if classifier_version >= version.parse('2.0'):
-            # split drawing annotaitons from subtask annotations
+            # split drawing annotations from subtask annotations
             data_drawing = {'annotations': []}
             data_subtask = {}
             for annotation in data['annotations']:
