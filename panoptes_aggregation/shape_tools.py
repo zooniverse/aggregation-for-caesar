@@ -20,5 +20,8 @@ SHAPE_LUT_FEM = {
     'line': ['x1', 'y1', 'x2', 'y2'],
     'point': ['x', 'y'],
     'rectangle': ['x_center', 'y_center', 'width', 'height'],
-    'rotateRectangle': ['x_center', 'y_center', 'width', 'height', 'angle']
+    'rotateRectangle': ['x_center', 'y_center', 'width', 'height', 'angle'],
+    'graph2dRangeX': ['x', 'width'],
+    'temporalRotateRectangle': ['x_center', 'y_center', 'width', 'height', 'angle', 'displayTime'],
+    'temporalPoint': ['x', 'y', 'displayTime']
 }

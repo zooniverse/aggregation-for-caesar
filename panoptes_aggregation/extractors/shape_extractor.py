@@ -37,8 +37,9 @@ def shape_extractor(classification, **kwargs):
     if 'shape' not in kwargs:
         raise KeyError('`shape` must be provided as a keyword')
     shape = kwargs['shape']
-    if shape not in SHAPE_LUT:
-        raise KeyError('`shape` must be one of {0}'.format(list(SHAPE_LUT.keys())))
+    if (shape not in SHAPE_LUT) and (shape not in SHAPE_LUT_FEM):
+        all_keys = list(set(SHAPE_LUT.keys()).union(set(SHAPE_LUT_FEM.keys())))
+        raise KeyError('`shape` must be one of {0}'.format(all_keys))
     for annotation in classification['annotations']:
         task_key = annotation['task']
         for value in annotation['value']:

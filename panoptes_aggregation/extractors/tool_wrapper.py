@@ -11,7 +11,7 @@ def tool_wrapper(func):
                 # default it to `drawing` as there will be only
                 # drawing tasks in it
                 task_type = annotation.get('taskType', 'drawing')
-                if task_type == 'drawing':
+                if task_type in ['drawing', 'dataVisAnnotation']:
                     new_value = []
                     for v in annotation['value']:
                         # v1 classifier
