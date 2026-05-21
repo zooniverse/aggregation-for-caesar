@@ -116,38 +116,39 @@ classification_v2 = {
     'annotations': [
         {
             'task': 'T0',
+            'taskType': 'drawing',
             'value': [
                 {
                     'toolIndex': 0,
+                    'toolType': 'circle',
                     'frame': 0,
                     'x_center': 0,
                     'y_center': 5,
-                    'r': 20,
-                    'angle': 30
+                    'r': 20
                 },
                 {
                     'toolIndex': 0,
+                    'toolType': 'circle',
                     'frame': 0,
                     'x_center': 10,
                     'y_center': 15,
-                    'r': 30,
-                    'angle': 40
+                    'r': 30
                 },
                 {
                     'toolIndex': 1,
+                    'toolType': 'circle',
                     'frame': 0,
                     'x_center': 20,
                     'y_center': 25,
-                    'r': 40,
-                    'angle': 50
+                    'r': 40
                 },
                 {
                     'toolIndex': 0,
+                    'toolType': 'circle',
                     'frame': 1,
                     'x_center': 30,
                     'y_center': 35,
-                    'r': 50,
-                    'angle': 60
+                    'r': 50
                 }
             ]
         }

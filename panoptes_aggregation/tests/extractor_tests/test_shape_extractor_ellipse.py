@@ -131,9 +131,11 @@ classification_v2 = {
     'annotations': [
         {
             'task': 'T0',
+            'taskType': 'drawing',
             'value': [
                 {
                     'toolIndex': 0,
+                    'toolType': 'ellipse',
                     'frame': 0,
                     'x_center': 0,
                     'y_center': 5,
@@ -143,6 +145,7 @@ classification_v2 = {
                 },
                 {
                     'toolIndex': 0,
+                    'toolType': 'ellipse',
                     'frame': 0,
                     'x_center': 10,
                     'y_center': 15,
@@ -152,6 +155,7 @@ classification_v2 = {
                 },
                 {
                     'toolIndex': 1,
+                    'toolType': 'ellipse',
                     'frame': 0,
                     'x_center': 20,
                     'y_center': 25,
@@ -161,6 +165,7 @@ classification_v2 = {
                 },
                 {
                     'toolIndex': 0,
+                    'toolType': 'ellipse',
                     'frame': 1,
                     'x_center': 30,
                     'y_center': 35,
@@ -203,7 +208,7 @@ TestShapeEllipse_v2 = ExtractorTest(
     extractors.shape_extractor,
     classification_v2,
     expected_v2,
-    'Test shape ellipse',
+    'Test shape ellipse V2',
     kwargs={'shape': 'ellipse'},
     test_name='TestShapeEllipse_v2'
 )
@@ -212,7 +217,7 @@ TestShapeEllipseTask_v2 = ExtractorTest(
     extractors.shape_extractor,
     classification_v2,
     expected_v2,
-    'Test shape ellipse with task specified',
+    'Test shape ellipse V2 with task specified',
     kwargs={
         'shape': 'ellipse',
         'task': 'T0'
@@ -224,7 +229,7 @@ TestShapeEllipseAllTools_v2 = ExtractorTest(
     extractors.shape_extractor,
     classification_v2,
     expected_v2,
-    'Test shape ellipse with all tools specified',
+    'Test shape ellipse V2 with all tools specified',
     kwargs={
         'shape': 'ellipse',
         'task': 'T0',
@@ -249,7 +254,7 @@ TestShapeEllipseOneTool_v2 = ExtractorTest(
     extractors.shape_extractor,
     classification_v2,
     expected_v2_0,
-    'Test shape ellipse with one tool specified',
+    'Test shape ellipse V2 with one tool specified',
     kwargs={
         'shape': 'ellipse',
         'task': 'T0',
