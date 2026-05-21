@@ -126,3 +126,134 @@ TestShapeEllipseOneTool = ExtractorTest(
     },
     test_name='TestShapeEllipseOneTool'
 )
+
+classification_v2 = {
+    'annotations': [
+        {
+            'task': 'T0',
+            'value': [
+                {
+                    'toolIndex': 0,
+                    'frame': 0,
+                    'x_center': 0,
+                    'y_center': 5,
+                    'rx': 20,
+                    'ry': 15,
+                    'angle': 30
+                },
+                {
+                    'toolIndex': 0,
+                    'frame': 0,
+                    'x_center': 10,
+                    'y_center': 15,
+                    'rx': 30,
+                    'ry': 25,
+                    'angle': 40
+                },
+                {
+                    'toolIndex': 1,
+                    'frame': 0,
+                    'x_center': 20,
+                    'y_center': 25,
+                    'rx': 40,
+                    'ry': 35,
+                    'angle': 50
+                },
+                {
+                    'toolIndex': 0,
+                    'frame': 1,
+                    'x_center': 30,
+                    'y_center': 35,
+                    'rx': 50,
+                    'ry': 45,
+                    'angle': 60
+                }
+            ]
+        }
+    ],
+    'metadata': {
+        'classifier_version': '2.0'
+    }
+}
+
+expected_v2 = {
+    'classifier_version': '2.0',
+    'frame0': {
+        'T0_toolIndex0_x_center': [0, 10],
+        'T0_toolIndex0_y_center': [5, 15],
+        'T0_toolIndex0_rx': [20, 30],
+        'T0_toolIndex0_ry': [15, 25],
+        'T0_toolIndex0_angle': [30, 40],
+        'T0_toolIndex1_x_center': [20],
+        'T0_toolIndex1_y_center': [25],
+        'T0_toolIndex1_rx': [40],
+        'T0_toolIndex1_ry': [35],
+        'T0_toolIndex1_angle': [50]
+    },
+    'frame1': {
+        'T0_toolIndex0_x_center': [30],
+        'T0_toolIndex0_y_center': [35],
+        'T0_toolIndex0_rx': [50],
+        'T0_toolIndex0_ry': [45],
+        'T0_toolIndex0_angle': [60]
+    }
+}
+
+TestShapeEllipse_v2 = ExtractorTest(
+    extractors.shape_extractor,
+    classification_v2,
+    expected_v2,
+    'Test shape ellipse',
+    kwargs={'shape': 'ellipse'},
+    test_name='TestShapeEllipse_v2'
+)
+
+TestShapeEllipseTask_v2 = ExtractorTest(
+    extractors.shape_extractor,
+    classification_v2,
+    expected_v2,
+    'Test shape ellipse with task specified',
+    kwargs={
+        'shape': 'ellipse',
+        'task': 'T0'
+    },
+    test_name='TestShapeEllipseTask_v2'
+)
+
+TestShapeEllipseAllTools_v2 = ExtractorTest(
+    extractors.shape_extractor,
+    classification_v2,
+    expected_v2,
+    'Test shape ellipse with all tools specified',
+    kwargs={
+        'shape': 'ellipse',
+        'task': 'T0',
+        'tools': [0, 1]
+    },
+    test_name='TestShapeEllipseAllTools_v2'
+)
+
+expected_v2_0 = {
+    'classifier_version': '2.0',
+    'frame0': {
+        'T0_toolIndex0_x_center': expected_v2['frame0']['T0_toolIndex0_x_center'],
+        'T0_toolIndex0_y_center': expected_v2['frame0']['T0_toolIndex0_y_center'],
+        'T0_toolIndex0_rx': expected_v2['frame0']['T0_toolIndex0_rx'],
+        'T0_toolIndex0_ry': expected_v2['frame0']['T0_toolIndex0_ry'],
+        'T0_toolIndex0_angle': expected_v2['frame0']['T0_toolIndex0_angle']
+    },
+    'frame1': expected_v2['frame1']
+}
+
+TestShapeEllipseOneTool_v2 = ExtractorTest(
+    extractors.shape_extractor,
+    classification_v2,
+    expected_v2_0,
+    'Test shape ellipse with one tool specified',
+    kwargs={
+        'shape': 'ellipse',
+        'task': 'T0',
+        'tools': [0]
+    },
+    test_name='TestShapeEllipseOneTool_v2'
+)
