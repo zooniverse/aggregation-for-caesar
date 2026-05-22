@@ -379,7 +379,7 @@ def average_shape_IoU(params_list, shape, eps_t=None, estimate=False, classifier
         distance_matrix = numpy.zeros((N, N))
         for i in range(N):
             for j in range(i + 1, N):
-                distance = IoU_metric(params_list[i], params_list[j], shape=shape, eps_t=eps_t, classifier_version=classifier_version)
+                distance = IoU_metric(params_list[i], params_list[j], shape=shape, eps_t=eps_t, classifier_version=str(classifier_version))
                 distance_matrix[i, j] = distance
                 distance_matrix[j, i] = distance
         sum_square_distance = numpy.sum(distance_matrix**2, axis=1)
