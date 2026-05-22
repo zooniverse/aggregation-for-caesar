@@ -165,7 +165,7 @@ keywords = {
     'T5': {'dot_freq': 'word'}
 }
 extractor_config = {
-    'point_extractor_by_frame': [
+    'shape_extractor_point': [
         {
             'task': 'T0',
             'tools': [0, 2],
@@ -175,7 +175,8 @@ extractor_config = {
                     'question_extractor',
                     None
                 ]
-            }
+            },
+            'shape': 'point'
         }
     ],
     'shape_extractor_line': [
@@ -242,15 +243,6 @@ reducer_config = [
     {'poly_line_text_reducer': {
         'dot_freq': 'word'
     }},
-    {'point_reducer_dbscan': {
-        'details': {
-            'T0_tool2': [
-                'question_reducer',
-                'question_reducer',
-                None
-            ]
-        }
-    }},
     {'poly_line_text_reducer': {
         'dot_freq': 'line'
     }},
@@ -258,6 +250,16 @@ reducer_config = [
     {'question_reducer': {}},
     {'shape_reducer_dbscan': {
         'shape': 'line'
+    }},
+        {'shape_reducer_dbscan': {
+        'shape': 'point',
+        'details': {
+            'T0_tool2': [
+                'question_reducer',
+                'question_reducer',
+                None
+            ]
+        }
     }},
     {'shape_reducer_dbscan': {
         'shape': 'rectangle'
