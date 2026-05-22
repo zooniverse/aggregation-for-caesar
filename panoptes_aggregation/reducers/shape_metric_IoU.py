@@ -23,6 +23,9 @@ VALID_IOU_SHAPES = [
     'triangle'
 ]
 
+V1 = version.parse('1.0')
+V2 = version.parse('2.0')
+
 
 def tupleize(func):
     def wrapper(params, shape, **kwargs):
@@ -32,7 +35,7 @@ def tupleize(func):
 
 @tupleize
 @lru_cache(maxsize=100)
-def panoptes_to_geometry(params, shape, classifier_version=version.parse('1.0')):
+def panoptes_to_geometry(params, shape, classifier_version=V1):
     '''Convert shapes created with the Panoptes Front End (PFE) to shapely
     geometry objects.
 
@@ -59,7 +62,7 @@ def panoptes_to_geometry(params, shape, classifier_version=version.parse('1.0'))
         The Shapely geometry object for the shape
     '''
     if shape == 'rectangle':
-        if classifier_version == version.parse('1.0'):
+        if classifier_version == V1:
             x, y, width, height = params
         else:
             x_center, y_center, width, height = params
@@ -68,7 +71,7 @@ def panoptes_to_geometry(params, shape, classifier_version=version.parse('1.0'))
         rectangle = shapely.geometry.box(x, y, x + width, y + height)
         return rectangle
     elif shape == 'rotateRectangle':
-        if classifier_version == version.parse('1.0'):
+        if classifier_version == V1:
             x, y, width, height, angle = params
         else:
             x_center, y_center, width, height, angle = params
@@ -98,7 +101,7 @@ def panoptes_to_geometry(params, shape, classifier_version=version.parse('1.0'))
         return circle
     elif shape == 'ellipse':
         x, y, rx, ry, angle = params
-        if classifier_version == version.parse('1.0'):
+        if classifier_version == V1:
             angle = -angle
         ellipse = shapely.geometry.Point(x, y).buffer(1)
         ellipse = shapely.affinity.scale(ellipse, rx, ry)
@@ -176,7 +179,7 @@ def IoU_metric(params1, params2, shape, eps_t=None, classifier_version='1.0'):
     return 1 - intersection / union
 
 
-def average_bounds(params_list, shape, classifier_version=version.parse('1.0')):
+def average_bounds(params_list, shape, classifier_version=V1):
     '''Find the bounding box for the average shape for each of the shapes
     parameters.
 
@@ -235,7 +238,7 @@ def average_bounds(params_list, shape, classifier_version=version.parse('1.0')):
     return bound
 
 
-def scale_shape(params, shape, gamma, classifier_version=version.parse('1.0')):
+def scale_shape(params, shape, gamma, classifier_version=V1):
     '''Scale a given shape about its center by the given scale factor
 
     Parameters
@@ -258,7 +261,7 @@ def scale_shape(params, shape, gamma, classifier_version=version.parse('1.0')):
     '''
     # uniform scaling of each shape about its center
     if shape == 'rectangle':
-        if classifier_version == version.parse('1.0'):
+        if classifier_version == V1:
             return [
                 # upper left corner moves
                 params[0] + (params[2] * (1 - gamma) / 2),
@@ -277,7 +280,7 @@ def scale_shape(params, shape, gamma, classifier_version=version.parse('1.0')):
                 gamma * params[3]
             ]
     elif shape == 'rotateRectangle':
-        if classifier_version == version.parse('1.0'):
+        if classifier_version == V1:
             return [
                 # upper left corner moves
                 params[0] + (params[2] * (1 - gamma) / 2),
@@ -364,7 +367,7 @@ def average_shape_IoU(params_list, shape, eps_t=None, estimate=False, classifier
     classifier_version : str
         The version of classifier used to make the classifications, either `"1.0"` for PFE or `"2.0"`
         for FEM, default is "1.0"
-        
+
     Returns
     -------
     average_shape : list

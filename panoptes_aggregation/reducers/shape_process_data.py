@@ -43,7 +43,7 @@ def process_data(data, shape=None, symmetric=False):
         'shape': shape,
         'symmetric': symmetric
     }
-    classifier_versions = np.array([version.parse(d.pop('classifier_version', '1.0')) for d in data])
+    classifier_versions = np.array([version.parse(d.get('classifier_version', '1.0')) for d in data])
     mixed = False
     if all(classifier_versions == version.parse('1.0')):
         output_classifier_version = '1.0'

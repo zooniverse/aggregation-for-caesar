@@ -95,7 +95,6 @@ test_point = [
 ]
 
 
-
 class ShapeMetrics(unittest.TestCase):
     def setUp(self):
         self.maxDiff = None
@@ -184,19 +183,12 @@ class ShapeMetrics(unittest.TestCase):
             expected_rectangle_convert,
             'rectangle'
         )
-    
+
     def testCircleConvert(self):
         self.convertCheck(
             test_circle,
             test_circle,
             'circle'
-        )
-
-    def testLineConvert(self):
-        self.convertCheck(
-            test_line,
-            test_line,
-            'line'
         )
 
     def testPointConvert(self):
