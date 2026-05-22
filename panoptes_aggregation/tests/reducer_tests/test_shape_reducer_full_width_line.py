@@ -48,6 +48,7 @@ kwargs_extra_data = {
 processed_data = {
     'shape': 'fullWidthLine',
     'symmetric': False,
+    'classifier_version': '1.0',
     'frame0': {
         'T0_tool0': [
             (0.0),
