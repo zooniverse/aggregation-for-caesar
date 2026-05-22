@@ -11,10 +11,11 @@ from sklearn.cluster import OPTICS
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
-from ..shape_tools import SHAPE_LUT
+from ..shape_tools import SHAPE_LUT, SHAPE_LUT_FEM
 from .shape_process_data import process_data, DEFAULTS_PROCESS
 from .shape_metric import get_shape_metric_and_avg
 from .shape_metric_IoU import IoU_metric, average_shape_IoU
+from packaging import version
 
 
 warnings.filterwarnings("ignore", category=RuntimeWarning, module='sklearn.cluster')
@@ -80,7 +81,11 @@ def shape_reducer_optics(data_by_tool, **kwargs):
     shape = data_by_tool.pop('shape')
     eps_t = kwargs.pop('eps_t', None)
     estimate_average = kwargs.pop('estimate_average', DEFAULTS['estimate_average']['default'])
-    shape_params = SHAPE_LUT[shape]
+    classifier_version = version.parse(data_by_tool.pop('classifier_version'))
+    if classifier_version == version.parse('1.0'):
+        shape_params = SHAPE_LUT[shape]
+    elif classifier_version >= version.parse('2.0'):
+        shape_params = SHAPE_LUT_FEM[shape]
     metric_type = kwargs.pop('metric_type', 'euclidean').lower()
     symmetric = data_by_tool.pop('symmetric')
     if metric_type == 'euclidean':
@@ -88,7 +93,7 @@ def shape_reducer_optics(data_by_tool, **kwargs):
         kwargs['metric'] = metric
     elif metric_type == 'iou':
         kwargs['metric'] = IoU_metric
-        kwargs['metric_params'] = {'shape': shape, 'eps_t': eps_t}
+        kwargs['metric_params'] = {'shape': shape, 'eps_t': eps_t, 'classifier_version': str(classifier_version)}
         avg = average_shape_IoU
     else:
         raise ValueError('metric_type must be either "euclidean" or "IoU".')
@@ -119,7 +124,7 @@ def shape_reducer_optics(data_by_tool, **kwargs):
                         if metric_type == 'euclidean':
                             k_loc = avg(loc[idx])
                         elif metric_type == 'iou':
-                            k_loc, sigma = avg(loc[idx], shape, eps_t, estimate=estimate_average)
+                            k_loc, sigma = avg(loc[idx], shape, eps_t, estimate=estimate_average, classifier_version=str(classifier_version))
                             clusters[frame].setdefault('{0}_clusters_sigma'.format(tool), []).append(float(sigma))
                         for pdx, param in enumerate(shape_params):
                             clusters[frame].setdefault('{0}_clusters_{1}'.format(tool, param), []).append(float(k_loc[pdx]))

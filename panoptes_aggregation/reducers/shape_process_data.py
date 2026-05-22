@@ -1,5 +1,6 @@
-from ..shape_tools import SHAPE_LUT
-from .shape_normalization import SHAPE_NORMALIZATION
+from ..shape_tools import SHAPE_LUT, SHAPE_LUT_FEM
+from .shape_normalization import SHAPE_NORMALIZATION, SHAPE_VERSION_CONVERT
+from packaging import version
 
 import numpy as np
 import re
@@ -36,12 +37,21 @@ def process_data(data, shape=None, symmetric=False):
         raise KeyError('`shape` must be provided as a keyword')
     if shape not in SHAPE_LUT:
         raise KeyError('`shape` must be one of {0}'.format(list(SHAPE_LUT.keys())))
-    shape_params = SHAPE_LUT[shape]
     unique_frames = set(sum([[k for k in d.keys() if k.startswith('frame')] for d in data], []))
     data_by_tool = {
         'shape': shape,
         'symmetric': symmetric
     }
+    classifier_versions = np.array([version.parse(d.pop('classifier_version', '1.0')) for d in data])
+    mixed = False
+    if all(classifier_versions == version.parse('1.0')):
+        output_classifier_version = '1.0'
+    elif all(classifier_versions >= version.parse('2.0')):
+        output_classifier_version = str(classifier_versions.max())
+    else:
+        mixed = True
+        output_classifier_version = str(classifier_versions.max())
+    data_by_tool['classifier_version'] = output_classifier_version
 
     pattern = r'(T[0-9]+)_(tool[Index]*[0-9]+)'
 
@@ -50,12 +60,19 @@ def process_data(data, shape=None, symmetric=False):
         unique_tools = set(sum([["_".join(re.findall(pattern, k)[0]) for k in d.get(frame, {}).keys()] for d in data], []))
         for tool in unique_tools:
             for d in data:
+                classifier_version = version.parse(d.pop('classifier_version', '1.0'))
+                if classifier_version == version.parse('1.0'):
+                    shape_params = SHAPE_LUT[shape]
+                elif classifier_version >= version.parse('2.0'):
+                    shape_params = SHAPE_LUT_FEM[shape]
                 if frame in d:
                     data_by_tool[frame].setdefault(tool, [])
                     keys = ['{0}_{1}'.format(tool, param) for param in shape_params]
                     if np.all([k in d[frame] for k in keys]):
                         params_list = list(zip(*(d[frame][k] for k in keys)))
                         if symmetric and shape in SHAPE_NORMALIZATION:
-                            params_list = [SHAPE_NORMALIZATION[shape](p) for p in params_list]
+                            params_list = [SHAPE_NORMALIZATION[shape](p, classifier_version=str(classifier_version)) for p in params_list]
+                        if mixed and classifier_version == version.parse('1.0') and shape in SHAPE_VERSION_CONVERT:
+                            params_list = [SHAPE_VERSION_CONVERT[shape](p) for p in params_list]
                         data_by_tool[frame][tool] += params_list
     return data_by_tool
