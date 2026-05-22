@@ -251,7 +251,7 @@ reducer_config = [
     {'shape_reducer_dbscan': {
         'shape': 'line'
     }},
-        {'shape_reducer_dbscan': {
+    {'shape_reducer_dbscan': {
         'shape': 'point',
         'details': {
             'T0_tool2': [
