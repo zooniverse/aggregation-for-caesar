@@ -59,8 +59,8 @@ def process_data(data, shape=None, symmetric=False):
         data_by_tool[frame] = {}
         unique_tools = set(sum([["_".join(re.findall(pattern, k)[0]) for k in d.get(frame, {}).keys()] for d in data], []))
         for tool in unique_tools:
-            for d in data:
-                classifier_version = version.parse(d.pop('classifier_version', '1.0'))
+            for idx, d in enumerate(data):
+                classifier_version = classifier_versions[idx]
                 if classifier_version == version.parse('1.0'):
                     shape_params = SHAPE_LUT[shape]
                 elif classifier_version >= version.parse('2.0'):
