@@ -1,6 +1,7 @@
 SHAPE_LUT = {
     'circle': ['x', 'y', 'r'],
-    'column': ['x', 'width'],
+    'column': ['x', 'width'],  # could use either graph2dRangeX or column
+    'graph2dRangeX': ['x', 'width'],  # could use either graph2dRangeX or column
     'ellipse': ['x', 'y', 'rx', 'ry', 'angle'],
     'fullWidthLine': ['y'],
     'fullHeightLine': ['x'],
