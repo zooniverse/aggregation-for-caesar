@@ -211,7 +211,10 @@ def average_bounds(params_list, shape, classifier_version=version.parse('1.0')):
     dy = by[1] - by[0]
     # bound is a list of tuples giving (min, max) values for each parameters of the shape
     bound = [bx, by]
-    if shape in ['rectangle', 'rotateRectangle', 'temporalRotateRectangle', 'column', 'graph2dRangeX', 'ellipse']:
+    if shape in ['column', 'graph2dRangeX']:
+        # this is data, set min width range to be 1e-3 * width of bounding box
+        bound = [bx, (1e-3 * dx, dx)]
+    elif shape in ['rectangle', 'rotateRectangle', 'temporalRotateRectangle', 'ellipse']:
         # bound on width or radius_x, min set to 1 pixel
         bound.append((1, dx))
         # bound on height or radius_y, min set to 1 pixel

@@ -26,6 +26,26 @@ class TestIoUMetric(unittest.TestCase):
         )
         self.assertEqual(result, expected)
 
+    def test_panoptes_to_geometry_column_v2(self):
+        '''Test panoptes_to_geometry with column V2.0'''
+        expected = shapely.geometry.box(13.5, 0, 14.5, 1)
+        result = IoU.panoptes_to_geometry(
+            [14.0, 1.0],
+            'column',
+            classifier_version=version.parse('2.0')
+        )
+        self.assertEqual(result, expected)
+
+    def test_panoptes_to_geometry_graph2dRangeX_v2(self):
+        '''Test panoptes_to_geometry with graph2dRangeX V2.0'''
+        expected = shapely.geometry.box(13.5, 0, 14.5, 1)
+        result = IoU.panoptes_to_geometry(
+            [14.0, 1.0],
+            'graph2dRangeX',
+            classifier_version=version.parse('2.0')
+        )
+        self.assertEqual(result, expected)
+
     def test_panoptes_to_geometry_rot_rect(self):
         '''Test panoptes_to_geometry with rotating rectangle'''
         expected = shapely.geometry.box(3, 5, 8, 8)
@@ -182,6 +202,42 @@ class TestIoUMetric(unittest.TestCase):
         result = IoU.average_bounds(
             params_list,
             'rectangle',
+            classifier_version=version.parse('2.0')
+        )
+        self.assertEqual(result, expected)
+
+    def test_average_bounds_column_v2(self):
+        '''Test finding the average bounds for rectangles V2.0'''
+        params_list = [
+            [14, 1],
+            [13, 2],
+            [12, 1]
+        ]
+        expected = [
+            (11.5, 14.5),
+            (0.003, 3),
+        ]
+        result = IoU.average_bounds(
+            params_list,
+            'column',
+            classifier_version=version.parse('2.0')
+        )
+        self.assertEqual(result, expected)
+
+    def test_average_bounds_graph2dRangeX_v2(self):
+        '''Test finding the average bounds for rectangles V2.0'''
+        params_list = [
+            [14, 1],
+            [13, 2],
+            [12, 1]
+        ]
+        expected = [
+            (11.5, 14.5),
+            (0.003, 3),
+        ]
+        result = IoU.average_bounds(
+            params_list,
+            'graph2dRangeX',
             classifier_version=version.parse('2.0')
         )
         self.assertEqual(result, expected)
@@ -351,6 +407,9 @@ class TestIoUMetric(unittest.TestCase):
             'rotateRectangle',
             'circle',
             'ellipse',
+            'temporalRotateRectangle',
+            'column',
+            'graph2dRangeX'
         ]
         gamma = 2
         params = [
@@ -358,12 +417,16 @@ class TestIoUMetric(unittest.TestCase):
             [11, 12, 2, 4, 45],
             [5, 5, 2],
             [10, 10, 3, 2, 30],
+            [10, 10, 2, 4, 45, 0.5],
+            [14, 1]
         ]
         expectations = [
             [11, 12, 4, 8],
             [11, 12, 4, 8, 45],
             [5, 5, 4],
             [10, 10, 6, 4, 30],
+            [10, 10, 4, 8, 45, 0.5],
+            [14, 2]
         ]
         for shape, param, expected in zip(shapes, params, expectations):
             with self.subTest(shape=shape, params=params):
