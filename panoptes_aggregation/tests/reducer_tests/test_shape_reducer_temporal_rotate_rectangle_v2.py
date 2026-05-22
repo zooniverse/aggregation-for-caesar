@@ -6,6 +6,7 @@ from .base_test_class import ReducerTest
 
 extracted_data = [
     {
+        'classifier_version': '2.0',
         "frame0": {
             "T0_toolIndex0_angle": [10.0],
             "T0_toolIndex0_displayTime": [0.1],
@@ -16,6 +17,7 @@ extracted_data = [
         }
     },
     {
+        'classifier_version': '2.0',
         "frame0": {
             "T0_toolIndex0_angle": [12.0],
             "T0_toolIndex0_displayTime": [0.1],
@@ -26,6 +28,7 @@ extracted_data = [
         }
     },
     {
+        'classifier_version': '2.0',
         "frame0": {
             "T0_toolIndex0_angle": [15.0],
             "T0_toolIndex0_displayTime": [0.1],
@@ -36,6 +39,7 @@ extracted_data = [
         }
     },
     {
+        'classifier_version': '2.0',
         "frame0": {
             "T0_toolIndex0_angle": [30.0],
             "T0_toolIndex0_displayTime": [0.7],
@@ -46,6 +50,7 @@ extracted_data = [
         }
     },
     {
+        'classifier_version': '2.0',
         "frame0": {
             "T0_toolIndex0_angle": [10.0],
             "T0_toolIndex0_displayTime": [0.9],
@@ -56,6 +61,7 @@ extracted_data = [
         }
     },
     {
+        'classifier_version': '2.0',
         "frame0": {
             "T0_toolIndex0_angle": [10.0],
             "T0_toolIndex0_displayTime": [1.0],
@@ -66,6 +72,7 @@ extracted_data = [
         }
     },
     {
+        'classifier_version': '2.0',
         "frame0": {
             "T0_toolIndex0_angle": [12.0],
             "T0_toolIndex0_displayTime": [0.9],
@@ -76,6 +83,7 @@ extracted_data = [
         }
     },
     {
+        'classifier_version': '2.0',
         "frame0": {
             "T0_toolIndex0_angle": [25.0],
             "T0_toolIndex0_displayTime": [0.6],
@@ -86,6 +94,7 @@ extracted_data = [
         }
     },
     {
+        'classifier_version': '2.0',
         "frame0": {
             "T0_toolIndex0_angle": [20.0],
             "T0_toolIndex0_displayTime": [0.9],
@@ -96,6 +105,7 @@ extracted_data = [
         }
     },
     {
+        'classifier_version': '2.0',
         'frame0': {
             'T0_toolIndex0_angle': [50],
             'T0_toolIndex0_displayTime': [0.5],
@@ -139,7 +149,7 @@ processed_data = {
     },
     'shape': 'temporalRotateRectangle',
     'symmetric': False,
-    'classifier_version': '1.0',
+    'classifier_version': '2.0',
 }
 
 reduced_data_dbscan = {
@@ -162,13 +172,13 @@ reduced_data_dbscan = {
     }
 }
 
-TestShapeReducerTemporalRotateRectangleDbscan = ReducerTest(
+TestShapeReducerTemporalRotateRectangleDbscan_v2 = ReducerTest(
     shape_reducer_dbscan,
     process_data_dbscan,
     extracted_data,
     processed_data,
     reduced_data_dbscan,
-    'Test shape temporalRotateRectangle reducer with DBSCAN',
+    'Test shape temporalRotateRectangle V2.0 reducer with DBSCAN',
     network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'temporalRotateRectangle'},
     kwargs={
@@ -177,7 +187,7 @@ TestShapeReducerTemporalRotateRectangleDbscan = ReducerTest(
         'eps_t': 0.5,
         'metric_type': 'IoU',
     },
-    test_name='TestShapeReducerTemporalRotateRectangleDbscan',
+    test_name='TestShapeReducerTemporalRotateRectangleDbscan_v2',
     round=1
 )
 
@@ -202,13 +212,13 @@ reduced_data_optics = {
 }
 
 
-TestShapeReducerTemporalRotateRectangleOptics = ReducerTest(
+TestShapeReducerTemporalRotateRectangleOptics_v2 = ReducerTest(
     shape_reducer_optics,
     process_data_optics,
     extracted_data,
     processed_data,
     reduced_data_optics,
-    'Test shape temporalRotateRectangle reducer with OPTICS',
+    'Test shape temporalRotateRectangle V2.0 reducer with OPTICS',
     network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'temporalRotateRectangle'},
     kwargs={
@@ -216,7 +226,7 @@ TestShapeReducerTemporalRotateRectangleOptics = ReducerTest(
         'metric_type': 'IoU',
         'eps_t': 0.5
     },
-    test_name='TestShapeReducerTemporalRotateRectangleOptics',
+    test_name='TestShapeReducerTemporalRotateRectangleOptics_v2',
     round=1
 )
 
@@ -242,13 +252,13 @@ reduced_data_hdbscan = {
 }
 
 
-TestShapeReducerTemporalRotateRectangleHdbscan = ReducerTest(
+TestShapeReducerTemporalRotateRectangleHdbscan_v2 = ReducerTest(
     shape_reducer_hdbscan,
     process_data_hdbscan,
     extracted_data,
     processed_data,
     reduced_data_hdbscan,
-    'Test shape temporalRotateRectangle reducer with HDBSCAN',
+    'Test shape temporalRotateRectangle V2.0 reducer with HDBSCAN',
     network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'temporalRotateRectangle'},
     kwargs={
@@ -258,6 +268,6 @@ TestShapeReducerTemporalRotateRectangleHdbscan = ReducerTest(
         'min_samples': 1,
         'eps_t': 0.5
     },
-    test_name='TestShapeReducerTemporalRotateRectangleHdbscan',
+    test_name='TestShapeReducerTemporalRotateRectangleHdbscan_v2',
     round=1,
 )
