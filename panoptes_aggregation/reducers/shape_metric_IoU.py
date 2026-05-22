@@ -12,6 +12,18 @@ from functools import lru_cache
 from packaging import version
 
 
+VALID_IOU_SHAPES = [
+    'rectangle',
+    'rotateRectangle',
+    'temporalRotateRectangle',
+    'column',
+    'graph2dRangeX',
+    'circle',
+    'ellipse',
+    'triangle'
+]
+
+
 def tupleize(func):
     def wrapper(params, shape, **kwargs):
         return func(tuple(params), shape, **kwargs)
@@ -72,6 +84,13 @@ def panoptes_to_geometry(params, shape, classifier_version=version.parse('1.0'))
         rot_rectangle = shapely.geometry.box(x, y, x + width, y + height)
         rot_rectangle = shapely.affinity.rotate(rot_rectangle, angle)
         return rot_rectangle
+    elif (shape == 'column') or (shape == 'graph2dRangeX'):
+        x_center, width = params
+        x = x_center - 0.5 * width
+        # the column tool is technically a line
+        # making it a box of height 1 make the IoU metric work as expected
+        column = shapely.geometry.box(x, 0, x + width, 1)
+        return column
     elif shape == 'circle':
         # same for all classifier_version
         x, y, r = params
@@ -97,7 +116,7 @@ def panoptes_to_geometry(params, shape, classifier_version=version.parse('1.0'))
         triangle = shapely.affinity.translate(triangle, xoff=x, yoff=y)
         return triangle
     else:
-        raise ValueError('The IoU metric only works with the following shapes: rectangle, rotateing rectangle, circle, ellipse, or triangle')
+        raise ValueError(f'The IoU metric only works with the following shapes: {VALID_IOU_SHAPES}')
 
 
 def IoU_metric(params1, params2, shape, eps_t=None, classifier_version='1.0'):
@@ -190,9 +209,9 @@ def average_bounds(params_list, shape, classifier_version=version.parse('1.0')):
     dx = bx[1] - bx[0]
     # height of geo
     dy = by[1] - by[0]
-    # bound is a list of tuples giving (min, max) values for each paramters of the shape
+    # bound is a list of tuples giving (min, max) values for each parameters of the shape
     bound = [bx, by]
-    if shape in ['rectangle', 'rotateRectangle', 'temporalRotateRectangle', 'ellipse']:
+    if shape in ['rectangle', 'rotateRectangle', 'temporalRotateRectangle', 'column', 'graph2dRangeX', 'ellipse']:
         # bound on width or radius_x, min set to 1 pixel
         bound.append((1, dx))
         # bound on height or radius_y, min set to 1 pixel
@@ -269,7 +288,7 @@ def scale_shape(params, shape, gamma, classifier_version=version.parse('1.0')):
         else:
             return [
                 # center point does not change
-                params[0] ,
+                params[0],
                 params[1],
                 # width and height scale
                 gamma * params[2],
@@ -289,6 +308,11 @@ def scale_shape(params, shape, gamma, classifier_version=version.parse('1.0')):
             params[4],
             # time does not change
             params[5]
+        ]
+    elif (shape == 'column') or (shape == 'graph2dRangeX'):
+        return [
+            params[0],
+            gamma * params[1]
         ]
     elif shape == 'circle':
         return [
@@ -317,7 +341,7 @@ def scale_shape(params, shape, gamma, classifier_version=version.parse('1.0')):
             params[3]
         ]
     else:
-        raise ValueError('The IoU metric only works with the following shapes: rectangle, rotateing rectangle, circle, ellipse, or triangle')
+        raise ValueError(f'The IoU metric only works with the following shapes: {VALID_IOU_SHAPES}')
 
 
 def average_shape_IoU(params_list, shape, eps_t=None, estimate=False, classifier_version='1.0'):
