@@ -21,7 +21,8 @@ SHAPE_LUT_FEM = {
     'point': ['x', 'y'],
     'rectangle': ['x_center', 'y_center', 'width', 'height'],
     'rotateRectangle': ['x_center', 'y_center', 'width', 'height', 'angle'],
-    'graph2dRangeX': ['x', 'width'],
+    'graph2dRangeX': ['x', 'width'],  # could use either graph2dRangeX or column
+    'column': ['x', 'width'],  # could use either graph2dRangeX or column
     'temporalRotateRectangle': ['x_center', 'y_center', 'width', 'height', 'angle', 'displayTime'],
     'temporalPoint': ['x', 'y', 'displayTime']
 }

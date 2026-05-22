@@ -176,16 +176,25 @@ expected_v2 = {
     }
 }
 
-TestShapeColumn_v2 = ExtractorTest(
+TestShapeGraph2dRangeX_v2 = ExtractorTest(
     extractors.shape_extractor,
     classification_v2,
     expected_v2,
     'Test shape graph2dRangeX',
     kwargs={'shape': 'graph2dRangeX'},
+    test_name='TestShapeGraph2dRangeX_v2'
+)
+
+TestShapeColumn_v2 = ExtractorTest(
+    extractors.shape_extractor,
+    classification_v2,
+    expected_v2,
+    'Test shape column V2',
+    kwargs={'shape': 'column'},
     test_name='TestShapeColumn_v2'
 )
 
-TestShapeColumnTask_v2 = ExtractorTest(
+TestShapeGraph2dRangeXTask_v2 = ExtractorTest(
     extractors.shape_extractor,
     classification_v2,
     expected_v2,
@@ -194,16 +203,41 @@ TestShapeColumnTask_v2 = ExtractorTest(
         'shape': 'graph2dRangeX',
         'task': 'T0'
     },
+    test_name='TestShapeGraph2dRangeXTask_v2'
+)
+
+TestShapeColumnTask_v2 = ExtractorTest(
+    extractors.shape_extractor,
+    classification_v2,
+    expected_v2,
+    'Test shape  column V2 with task specified',
+    kwargs={
+        'shape': 'column',
+        'task': 'T0'
+    },
     test_name='TestShapeColumnTask_v2'
 )
 
-TestShapeColumnAllTools_v2 = ExtractorTest(
+TestShapeGraph2dRangeXAllTools_v2 = ExtractorTest(
     extractors.shape_extractor,
     classification_v2,
     expected_v2,
     'Test shape graph2dRangeX with all tools specified',
     kwargs={
         'shape': 'graph2dRangeX',
+        'task': 'T0',
+        'tools': [0, 1]
+    },
+    test_name='TestShapeGraph2dRangeXAllTools_v2'
+)
+
+TestShapeColumnAllTools_v2 = ExtractorTest(
+    extractors.shape_extractor,
+    classification_v2,
+    expected_v2,
+    'Test shape  column V2 with all tools specified',
+    kwargs={
+        'shape': 'column',
         'task': 'T0',
         'tools': [0, 1]
     },
@@ -218,13 +252,26 @@ expected_v2_0 = {
     }
 }
 
-TestShapeColumnOneTool_v2 = ExtractorTest(
+TestShapeGraph2dRangeXOneTool_v2 = ExtractorTest(
     extractors.shape_extractor,
     classification_v2,
     expected_v2_0,
     'Test shape graph2dRangeX with one tool specified',
     kwargs={
         'shape': 'graph2dRangeX',
+        'task': 'T0',
+        'tools': [0]
+    },
+    test_name='TestShapeGraph2dRangeXOneTool_v2'
+)
+
+TestShapeColumnOneTool_v2 = ExtractorTest(
+    extractors.shape_extractor,
+    classification_v2,
+    expected_v2_0,
+    'Test shape  column V2 with one tool specified',
+    kwargs={
+        'shape': 'column',
         'task': 'T0',
         'tools': [0]
     },
