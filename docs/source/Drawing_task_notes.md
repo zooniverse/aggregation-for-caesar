@@ -193,8 +193,8 @@ Next let's look at the output of the a typical shape extractor from our example 
         "T0_tool0_width": [5, 50],
         "T0_tool0_height": [10, 100],
         "T0_tool0_details": [
-            [{0: 1}, {1: 1}],
-            [{1: 1}, {2: 1}]
+            [{"0": 1}, {"1": 1}],
+            [{"1": 1}, {"2": 1}]
         ],
         "T0_tool1_x": [500],
         "T0_tool1_y": [500],
@@ -218,8 +218,8 @@ Note: the question extractor provides a "counter" mapping that says how many tim
         "T0_toolIndex0_y_center": [5, 155],
         "T0_toolIndex0_width": [5, 50],
         "T0_toolIndex0_height": [10, 100],
-        "T0_toolIndex0_subtask0": [{0: 1}, {1: 1}],
-        "T0_toolIndex0_subtask1": [{1: 1}, {2: 1}],
+        "T0_toolIndex0_subtask0": [{"0": 1}, {"1": 1}],
+        "T0_toolIndex0_subtask1": [{"1": 1}, {"2": 1}],
         "T0_toolIndex1_x_center": [505],
         "T0_toolIndex1_y_center": [510],
         "T0_toolIndex1_width": [10],

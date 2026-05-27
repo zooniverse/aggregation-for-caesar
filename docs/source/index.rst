@@ -20,6 +20,7 @@ Welcome to panoptes_aggregation's documentation
    :caption: Guides:
 
    How_Clustering_Works
+   Drawing_task_notes
    Polygon data - extraction and reduction
    Gravity_Spy
 
