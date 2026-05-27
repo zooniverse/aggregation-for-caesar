@@ -60,6 +60,10 @@ def subtask_wrapper(func):
                 for annotation in data_drawing['annotations']:
                     task_key = annotation['task']
                     for vdx, value in enumerate(annotation['value']):
+                        # if no tools are specified the 'markIndex' key is not set
+                        # in this case the annotations have not been filtered so
+                        # vdx is the correct value
+                        markIndex = value.get('markIndex', vdx)
                         frame = 'frame{0}'.format(value['frame'])
                         for detail in value['details']:
                             subtask = detail['task']
@@ -68,9 +72,13 @@ def subtask_wrapper(func):
                                 output[frame].setdefault(subtask_key, [])
                                 if details_functions_v2[subtask_key] in extractors.extractors:
                                     extractor = extractors.extractors[details_functions_v2[subtask_key]]
-                                    subtask_annotation = {'annotations': {
-                                        subtask_key: [data_subtask[(subtask, vdx)]]
-                                    }}
+                                    try:
+                                        subtask_annotation = {'annotations': {
+                                            subtask_key: [data_subtask[(subtask, markIndex)]]
+                                        }}
+                                    except:
+                                        print(value)
+                                        raise
                                     detail_extract = extractor(subtask_annotation, no_version=True)
                                     output[frame][subtask_key].append(detail_extract)
                                 else:

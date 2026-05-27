@@ -153,8 +153,8 @@ A full list of each parameter for each shape tool for PFE classifications is sto
 ## Extraction process
 
 The drawing extractors use two common wrappers
-- `@subtask_wrapper`: provides code to extract the subtasks. This must be applied to the extractor *first* (decorator at the bottom of the stack) so that `markIndex` is applied correctly for FEM classifications.  The classifier version is added to the extract if it is v2.0 or higher.
-- `@tool_wrapper`: provides code for filtering the `annotations` list to only include classifications from a specified drawing tool index.  Subtasks are not filtered by this wrapper, it is assumed the details mapping provided as a keyword has already been filtered to the specified tool index(s).
+- `@subtask_wrapper`: provides code to extract the subtasks. This must be applied to the extractor *first* (decorator at the bottom of the stack) so that `markIndex` is applied correctly for FEM classifications.  Also adds the classifier version is added to the extract if it is v2.0 or higher.
+- `@tool_wrapper`: provides code for filtering the `annotations` list to only include classifications from a specified drawing tool index.  Correctly tracks "markIndex" if a tool is filtered out.  Subtasks are not filtered by this wrapper, it is assumed the details mapping provided as a keyword has already been filtered to the specified tool index(s).
 
 To extract subtasks a mapping needs to be provided as a keyword that identifies what extractor should be used.  This mapping can be provide in one of two ways, the first was originally developed for PFE and the second was developed for FEM.  As one workflow can potentially have *both* PFE and FEM classifications, the code will automatically convert this mapping between its two styles as needed inside the `subtask_wrapper`.  As a result *either* style can be used without issue regardless of what version classification is passed in. 
 
