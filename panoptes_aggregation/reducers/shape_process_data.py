@@ -60,6 +60,10 @@ def process_data(data, shape=None, symmetric=False):
         data_by_tool[frame] = {}
         unique_tools = set(sum([["_".join(re.findall(pattern, k)[0]) for k in d.get(frame, {}).keys()] for d in data], []))
         for tool in unique_tools:
+            tool_out = tool
+            if mixed and ('Index' not in tool):
+                # to gracefully handel mixed v1 and v2 need to specify output labels correctly
+                tool_out = tool.replace('tool', 'toolIndex')
             for idx, d in enumerate(data):
                 classifier_version = classifier_versions[idx]
                 if classifier_version == version.parse('1.0'):
@@ -67,13 +71,13 @@ def process_data(data, shape=None, symmetric=False):
                 elif classifier_version >= version.parse('2.0'):
                     shape_params = SHAPE_LUT_FEM[shape]
                 if frame in d:
-                    data_by_tool[frame].setdefault(tool, [])
                     keys = ['{0}_{1}'.format(tool, param) for param in shape_params]
+                    data_by_tool[frame].setdefault(tool_out, [])
                     if np.all([k in d[frame] for k in keys]):
                         params_list = list(zip(*(d[frame][k] for k in keys)))
                         if symmetric and shape in SHAPE_NORMALIZATION:
                             params_list = [SHAPE_NORMALIZATION[shape](p, classifier_version=str(classifier_version)) for p in params_list]
                         if mixed and classifier_version == version.parse('1.0') and shape in SHAPE_VERSION_CONVERT:
                             params_list = [SHAPE_VERSION_CONVERT[shape](p) for p in params_list]
-                        data_by_tool[frame][tool] += params_list
+                        data_by_tool[frame][tool_out] += params_list
     return data_by_tool

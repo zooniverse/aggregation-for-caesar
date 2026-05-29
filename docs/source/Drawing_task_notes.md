@@ -152,9 +152,12 @@ A full list of each parameter for each shape tool for PFE classifications is sto
 
 ## Extraction process
 
-The drawing extractors use two common wrappers
+The drawing extractors use three common wrappers
 - `@subtask_wrapper`: provides code to extract the subtasks. This must be applied to the extractor *first* (decorator at the bottom of the stack) so that `markIndex` is applied correctly for FEM classifications.  Also adds the classifier version is added to the extract if it is v2.0 or higher.
 - `@tool_wrapper`: provides code for filtering the `annotations` list to only include classifications from a specified drawing tool index.  Correctly tracks "markIndex" if a tool is filtered out.  Subtasks are not filtered by this wrapper, it is assumed the details mapping provided as a keyword has already been filtered to the specified tool index(s).
+- `@extractor_wrapper`: provides code common to all extractors that detects if an extractor is being called in either "offline" or "online" mode and grabs the augments and keywords from the appropriate place before calling the extractor function.  This is also where the "pluckfield" extractor is called if its keywords are set.  Must be applied to the extractor *last* (decorator at the top of the stack).
+
+Note: The above wrappers are all in the `panoptes_aggregation.extractors` subfolder.
 
 To extract subtasks a mapping needs to be provided as a keyword that identifies what extractor should be used.  This mapping can be provide in one of two ways, the first was originally developed for PFE and the second was developed for FEM.  As one workflow can potentially have *both* PFE and FEM classifications, the code will automatically convert this mapping between its two styles as needed inside the `subtask_wrapper`.  As a result *either* style can be used without issue regardless of what version classification is passed in. 
 
@@ -229,3 +232,405 @@ Note: the question extractor provides a "counter" mapping that says how many tim
 ```
 
 The difference to before are the addition of `"classifier_version": "2.0"` to indicate what version the extract shape is takeing, and flattening the outer-most list what was the `details` section into keys for each subtask.
+
+## Reduction process
+
+The reduction process of drawing tasks follows these steps:
+1. process the data into a more convenient data format
+2. identify clusters in the drawn shapes
+3. reduce any subtasks for each identified cluster
+
+As before these steps are applied using python decorators.
+- `@subtask_wrapper`: provides code to reduce the subtasks based on the results of the clustering code. This must be applied to the reducer *first* (decorator at the bottom of the stack). Also adds the classifier version is added to the extract if it is v2.0 or higher.
+- `@reducer_wrapper`: provides code common to all reducers that detects if an reducer is being called in either "offline" or "online" mode and grabs the augments and keywords from the appropriate place, apply the data processing function, and call the reduction function on the result  Must be applied to the reducer *last* (decorator at the top of the stack).
+
+Note: The above wrappers are all in the `panoptes_aggregation.reducers` subfolder.
+
+### Details mapping
+
+The format for passing in the subtask mapping to reducers is an identical format to the mapping used for extractors:
+
+```python
+details = {
+    'T0_tool0': ['question_reducer', 'question_reducer']
+}
+```
+
+or 
+
+```python
+details = {
+    'T0_toolIndex0_subtask0': 'question_reducer',
+    'T0_toolIndex0_subtask1': 'question_reducer'
+}
+```
+
+Either format will work regardless of the classifier version.
+
+## Reducer output
+
+The first step of the reduction process is clustering the drawn shapes together, there are various algorithms for doing this that are covered in more detail in the "How Clustering Works" notes.  For these notes it does not matter how the clustering is done as they all produce similar outputs.
+
+### PFE
+
+We will assume we have two v1.0 extracts we would like to reduce:
+
+```json
+[{
+    "frame0": {
+        "T0_tool0_x": [0, 100],
+        "T0_tool0_y": [0, 105],
+        "T0_tool0_width": [5, 50],
+        "T0_tool0_height": [10, 100],
+        "T0_tool0_details": [
+            [{"0": 1}, {"1": 1}],
+            [{"1": 1}, {"2": 1}]
+        ],
+        "T0_tool1_x": [500],
+        "T0_tool1_y": [500],
+        "T0_tool1_width": [10],
+        "T0_tool1_height": [20]
+    }
+}, {
+    "frame0": {
+        "T0_tool0_x": [0, 100],
+        "T0_tool0_y": [0, 105],
+        "T0_tool0_width": [5, 50],
+        "T0_tool0_height": [10, 100],
+        "T0_tool0_details": [
+            [{"1": 1}, {"1": 1}],
+            [{"0": 1}, {"2": 1}]
+        ]
+    }
+}]
+```
+
+All of the shape clustering reduces use the same `process_data` function, this takes in the extract and rearranges the parameters into a list of tuples, one item per drawn shape, sorted by frame, task, and tool.  This also tracks some metadata that is passed into the clustering code.
+
+The processed data from the above input would be:
+
+```python
+{
+    'shape': 'rectangle',
+    'symmetric': False,
+    'classifier_version': '1.0',
+    'frame0': {
+        'T0_tool0': [
+            (0, 0, 5, 10),
+            (100, 105, 50, 100),
+            (0, 0, 5, 10),
+            (100, 105, 50, 100),
+        ],
+        'T0_tool1': [
+            (500, 500, 10, 20)
+        ]
+    }
+}
+```
+
+Note: this output is only passed around inside the python code, so it does not need to follow JSON syntax.
+
+We can see that the `classifier_version` is passed along with the `shape` and `symmetric` keywords (both provided as inputs to the reducer function).  At this stage none of the subtask information is being passed into the reducer as it will be processed *after* the clustering is finished.
+
+After clustering alone the output will look like:
+
+```json
+{
+    "frame0": {
+        "T0_tool0_rectangle_x": [0, 100, 0, 100],
+        "T0_tool0_rectangle_y": [0, 105, 0, 105],
+        "T0_tool0_rectangle_width": [5, 50, 5, 50],
+        "T0_tool0_rectangle_height": [10, 100, 10, 100],
+        "T0_tool0_cluster_labels": [0, 1, 0, 1],
+
+        "T0_tool0_clusters_count": [2, 2],
+        "T0_tool0_clusters_x": [0, 100],
+        "T0_tool0_clusters_y": [0, 105],
+        "T0_tool0_clusters_width": [5, 50],
+        "T0_tool0_clusters_height": [10, 100],
+
+        "T0_tool1_rectangle_x": [500],
+        "T0_tool1_rectangle_y": [500],
+        "T0_tool1_rectangle_width": [10],
+        "T0_tool1_rectangle_height": [20],
+        "T0_tool1_cluster_labels": [-1],
+    }
+}
+```
+
+This data structure stores the original extracts as a list for each parameter along side the labels saying what cluster those points belong to.  This is provided here because the order the extractions appear are not guaranteed to be the sam when run in only mode through Caesar.  Any points that are marked as outliers and not belonging to a cluster are given a label of `-1` (`T0_tool1` in the example above).  For any clusters that are found and count for the number of shape in the clusters along side the average values for the parameters within the cluster are provided.
+
+With the clusters defined the `subtask_wrapper` can not run the reducers for *each cluster found* and append it to the output.
+
+```json
+{
+    "frame0": {
+        "T0_tool0_rectangle_x": [0, 100, 0, 100],
+        "T0_tool0_rectangle_y": [0, 105, 0, 105],
+        "T0_tool0_rectangle_width": [5, 50, 5, 50],
+        "T0_tool0_rectangle_height": [10, 100, 10, 100],
+        "T0_tool0_cluster_labels": [0, 1, 0, 1],
+
+        "T0_tool0_details": [
+            [{"0": 1}, {"1": 1}],
+            [{"1": 1}, {"2": 1}],
+            [{"1": 1}, {"1": 1}],
+            [{"0": 1}, {"2": 1}]
+        ],
+
+        "T0_tool0_clusters_count": [2, 2],
+        "T0_tool0_clusters_x": [0, 100],
+        "T0_tool0_clusters_y": [0, 105],
+        "T0_tool0_clusters_width": [5, 50],
+        "T0_tool0_clusters_height": [10, 100],
+
+        "T0_tool0_clusters_details": [
+            [{"0": 1, "1": 1}, {"1": 2}],
+            [{"0": 1, "1": 1}, {"2": 2}]
+        ],
+
+        "T0_tool1_rectangle_x": [500],
+        "T0_tool1_rectangle_y": [500],
+        "T0_tool1_rectangle_width": [10],
+        "T0_tool1_rectangle_height": [20],
+        "T0_tool1_cluster_labels": [-1],
+    }
+}
+```
+
+The direct extracts are provided as a list-of-lists (`T0_tool0_details`) and the reductions within each cluster are provided as a list-of-lists  (`T0_tool0_clusters_details`).
+
+### FEM
+
+We will assume we have two v2.0 extracts we would like to reduce:
+
+```json
+[{
+    "classifier_version": "2.0",
+    "frame0": {
+        "T0_toolIndex0_x_center": [2.5, 125],
+        "T0_toolIndex0_y_center": [5, 155],
+        "T0_toolIndex0_width": [5, 50],
+        "T0_toolIndex0_height": [10, 100],
+        "T0_toolIndex0_subtask0": [{"0": 1}, {"1": 1}],
+        "T0_toolIndex0_subtask1": [{"1": 1}, {"2": 1}],
+        "T0_toolIndex1_x_center": [505],
+        "T0_toolIndex1_y_center": [510],
+        "T0_toolIndex1_width": [10],
+        "T0_toolIndex1_height": [20]
+    }
+}, {
+    "classifier_version": "2.0",
+    "frame0": {
+        "T0_toolIndex0_x_center": [2.5, 125],
+        "T0_toolIndex0_y_center": [5, 155],
+        "T0_toolIndex0_width": [5, 50],
+        "T0_toolIndex0_height": [10, 100],
+        "T0_toolIndex0_subtask0": [{"1": 1}, {"0": 1}],
+        "T0_toolIndex0_subtask1": [{"1": 1}, {"2": 1}],
+    }
+}]
+```
+
+The processed data would be:
+
+```python
+{
+    'shape': 'rectangle',
+    'symmetric': False,
+    'classifier_version': '2.0',
+    'frame0': {
+        'T0_toolIndex0': [
+            (2.5, 5, 5, 10),
+            (125, 155, 50, 100),
+            (2.5, 5, 5, 10),
+            (125, 155, 50, 100),
+        ],
+        'T0_toolIndex1': [
+            (505, 510, 10, 20)
+        ]
+    }
+}
+```
+
+The clustering before the subtask wrapper:
+
+```json
+{
+    "frame0": {
+        "T0_toolIndex0_rectangle_x_center": [2.5, 125, 2.5, 125],
+        "T0_toolIndex0_rectangle_y_center": [5, 155, 5, 155],
+        "T0_toolIndex0_rectangle_width": [5, 50, 5, 50],
+        "T0_toolIndex0_rectangle_height": [10, 100, 10, 100],
+        "T0_toolIndex0_cluster_labels": [0, 1, 0, 1],
+
+        "T0_toolIndex0_clusters_count": [2, 2],
+        "T0_toolIndex0_clusters_x_center": [2.5, 125],
+        "T0_toolIndex0_clusters_y_center": [5, 155],
+        "T0_toolIndex0_clusters_width": [5, 50],
+        "T0_toolIndex0_clusters_height": [10, 100],
+
+        "T0_toolIndex1_rectangle_x_center": [505],
+        "T0_toolIndex1_rectangle_y_center": [510],
+        "T0_toolIndex1_rectangle_width": [10],
+        "T0_toolIndex1_rectangle_height": [20],
+        "T0_toolIndex1_cluster_labels": [-1],
+    }
+}
+```
+
+And with the subtask added in:
+
+```json
+{
+    "classifier_version": "2.0",
+    "frame0": {
+        "T0_toolIndex0_rectangle_x_center": [2.5, 125, 2.5, 125],
+        "T0_toolIndex0_rectangle_y_center": [5, 155, 5, 155],
+        "T0_toolIndex0_rectangle_width": [5, 50, 5, 50],
+        "T0_toolIndex0_rectangle_height": [10, 100, 10, 100],
+        "T0_toolIndex0_cluster_labels": [0, 1, 0, 1],
+
+        "T0_toolIndex0_subtask0": [
+            {"0": 1},
+            {"1": 1},
+            {"1": 1},
+            {"0": 1},
+        ],
+        "T0_toolIndex0_subtask1": [
+            {"1": 1},
+            {"2": 1},
+            {"1": 1},
+            {"2": 1}
+        ],
+
+        "T0_toolIndex0_clusters_count": [2, 2],
+        "T0_toolIndex0_clusters_x_center": [2.5, 125],
+        "T0_toolIndex0_clusters_y_center": [5, 155],
+        "T0_toolIndex0_clusters_width": [5, 50],
+        "T0_toolIndex0_clusters_height": [10, 100],
+
+        "T0_toolIndex0_subtask0_clusters": [
+            {"0": 1, "1": 1},
+            {"0": 1, "1": 1}
+        ],
+        "T0_toolIndex0_subtask1_clusters": [
+            {"1": 2},
+            {"2": 2}
+        ],
+
+        "T0_toolIndex1_rectangle_x_center": [505],
+        "T0_toolIndex1_rectangle_y_center": [510],
+        "T0_toolIndex1_rectangle_width": [10],
+        "T0_toolIndex1_rectangle_height": [20],
+        "T0_toolIndex1_cluster_labels": [-1],
+    }
+}
+```
+
+As with the extractor subtask wrapper, the main difference between the v1.0 and v2.0 outputs is a flattening of the list-of-lists.
+
+### Mixed PFE and FEM
+
+The final case we need to look as is when there is a mix of classifier versions 1.0 and 2.0 being passed into the reducer.  Internally the aggregation code will convert the 1.0 extracts to 2.0 extracts and proceed with the 2.0 code from that point.
+
+Let's look at the input:
+
+```json
+[{
+    "frame0": {
+        "T0_tool0_x": [0, 100],
+        "T0_tool0_y": [0, 105],
+        "T0_tool0_width": [5, 50],
+        "T0_tool0_height": [10, 100],
+        "T0_tool0_details": [
+            [{"0": 1}, {"1": 1}],
+            [{"1": 1}, {"2": 1}]
+        ],
+        "T0_tool1_x": [500],
+        "T0_tool1_y": [500],
+        "T0_tool1_width": [10],
+        "T0_tool1_height": [20]
+    }
+}, {
+    "classifier_version": "2.0",
+    "frame0": {
+        "T0_toolIndex0_x_center": [2.5, 125],
+        "T0_toolIndex0_y_center": [5, 155],
+        "T0_toolIndex0_width": [5, 50],
+        "T0_toolIndex0_height": [10, 100],
+        "T0_toolIndex0_subtask0": [{"1": 1}, {"0": 1}],
+        "T0_toolIndex0_subtask1": [{"1": 1}, {"2": 1}],
+    }
+}]
+```
+
+The process data function will detect there is a mix of classifier versions and will convert the parameter of the v1.0 shapes to those of v2.0 (e.g. in this case `x` -> `x_center` and `y`->`y_center`).  The conversion code is located in `panoptes_aggregation.reducers.shape_normalization.SHAPE_VERSION_CONVERT`.
+
+```python
+{
+    'shape': 'rectangle',
+    'symmetric': False,
+    'classifier_version': '2.0',
+    'frame0': {
+        'T0_toolIndex0': [
+            (2.5, 5, 5, 10),
+            (125, 155, 50, 100),
+            (2.5, 5, 5, 10),
+            (125, 155, 50, 100),
+        ],
+        'T0_toolIndex1': [
+            (505, 510, 10, 20)
+        ]
+    }
+}
+```
+
+From this point the processed data looks identical to when all extracts were v2.0, this means the clustering result is also identical before the subtask wrapper is called.  Internally the subtask wrapper will convert the v1.0 `T0_tool0_details` into the v2.0 flattened format before running.  This conversion is done by the `panoptes_aggregation.details_convert.details_extract_flatten` function.  This conversion means that the results will look identical to the FEM case above:
+
+```json
+{
+    "classifier_version": "2.0",
+    "frame0": {
+        "T0_toolIndex0_rectangle_x_center": [2.5, 125, 2.5, 125],
+        "T0_toolIndex0_rectangle_y_center": [5, 155, 5, 155],
+        "T0_toolIndex0_rectangle_width": [5, 50, 5, 50],
+        "T0_toolIndex0_rectangle_height": [10, 100, 10, 100],
+        "T0_toolIndex0_cluster_labels": [0, 1, 0, 1],
+
+        "T0_toolIndex0_subtask0": [
+            {"0": 1},
+            {"1": 1},
+            {"1": 1},
+            {"0": 1},
+        ],
+        "T0_toolIndex0_subtask1": [
+            {"1": 1},
+            {"2": 1},
+            {"1": 1},
+            {"2": 1}
+        ],
+
+        "T0_toolIndex0_clusters_count": [2, 2],
+        "T0_toolIndex0_clusters_x_center": [2.5, 125],
+        "T0_toolIndex0_clusters_y_center": [5, 155],
+        "T0_toolIndex0_clusters_width": [5, 50],
+        "T0_toolIndex0_clusters_height": [10, 100],
+
+        "T0_toolIndex0_subtask0_clusters": [
+            {"0": 1, "1": 1},
+            {"0": 1, "1": 1}
+        ],
+        "T0_toolIndex0_subtask1_clusters": [
+            {"1": 2},
+            {"2": 2}
+        ],
+
+        "T0_toolIndex1_rectangle_x_center": [505],
+        "T0_toolIndex1_rectangle_y_center": [510],
+        "T0_toolIndex1_rectangle_width": [10],
+        "T0_toolIndex1_rectangle_height": [20],
+        "T0_toolIndex1_cluster_labels": [-1],
+    }
+}
+```

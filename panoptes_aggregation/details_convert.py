@@ -43,3 +43,24 @@ def details_unflatten(details):
         sorted_value = sorted(value, key=lambda x: x[0])
         details_unflatten[key] = [x[1] for x in sorted_value]
     return details_unflatten
+
+
+def details_extract_flatten(details):
+    """
+    Convert the details keys in one frame of a shape extract from classifier
+    1.0 to 2.0 format.  Because a single workflow can have a mix of 1.0 and
+    2.0 classifications this is needed to unify them before reduction.
+    """
+    details_flatten = {}
+    for key, value in details.items():
+        if key.endswith('details'):
+            names = key.split('_')
+            task = names[0]
+            toolIndex = names[1][4:]
+            for row in value:
+                for subtaskIndex, item in enumerate(row):
+                    details_key = f'{task}_toolIndex{toolIndex}_subtask{subtaskIndex}'
+                    details_flatten.setdefault(details_key, []).append(item)
+        else:
+            details_flatten[key] = value
+    return details_flatten
