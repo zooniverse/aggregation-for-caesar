@@ -29,7 +29,8 @@ DEFAULTS = {
     'leaf_size': {'default': 30, 'type': int},
     'p': {'default': 2, 'type': float},
     'metric_type': {'default': 'euclidean', 'type': str},
-    'estimate_average': {'default': False, 'type': bool}
+    'estimate_average': {'default': False, 'type': bool},
+    'use_v1_keys': {'default': False, 'type': bool}
 }
 
 
@@ -78,6 +79,7 @@ def shape_reducer_optics(data_by_tool, **kwargs):
 
         * `tool*_clusters_sigma` : The standard deviation of the average shape under the IoU metric
     '''
+    _ = kwargs.pop('use_v1_keys', False)
     shape = data_by_tool.pop('shape')
     eps_t = kwargs.pop('eps_t', None)
     estimate_average = kwargs.pop('estimate_average', DEFAULTS['estimate_average']['default'])

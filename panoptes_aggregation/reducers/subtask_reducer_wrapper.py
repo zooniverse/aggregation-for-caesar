@@ -18,6 +18,7 @@ def subtask_wrapper(func):
         # data_in is the list of original extracts
         # data is the `processed` data_in
         data_in = kwargs.pop('data_in', None)
+        use_v1_keys = kwargs.get('use_v1_keys', False)
         output = func(data, **kwargs)
         try:
             if details_functions is not None:
@@ -73,9 +74,12 @@ def subtask_wrapper(func):
                                     output[frame_key][k] += frame[k]
                                     user_ids_per_subtask[frame_key][k] += [user_id[edx]] * len(frame[k])
                     for frame_key, frame in output.items():
-                        unique_tools = set(['_'.join(k.split('_')[:2]) for k in frame.keys()])
+                        unique_tools = set(['_'.join(k.split('_')[:2]) for k in frame.keys() if ('subtask' not in k) and ('details' not in k)])
                         for tool in unique_tools:
-                            subtasks = [k for k in details_functions_v2.keys() if k.startswith(tool)]
+                            tool_out = tool
+                            if use_v1_keys:
+                                tool_out = tool.replace('tool', 'toolIndex')
+                            subtasks = [k for k in details_functions_v2.keys() if k.startswith(tool_out)]
                             for subtask in subtasks:
                                 cluster_labels = np.array(frame['{0}_cluster_labels'.format(tool)])
                                 subtask_array = np.array(frame[subtask])

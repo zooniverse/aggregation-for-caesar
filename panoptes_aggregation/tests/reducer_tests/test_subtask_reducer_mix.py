@@ -1,5 +1,8 @@
 from panoptes_aggregation.reducers.shape_reducer_dbscan import shape_reducer_dbscan
+from panoptes_aggregation.reducers.shape_reducer_hdbscan import shape_reducer_hdbscan
+from panoptes_aggregation.reducers.shape_reducer_optics import shape_reducer_optics
 from .base_test_class import ReducerTestNoProcessing
+import copy
 
 
 extracted_data = [{
@@ -81,11 +84,11 @@ reduced_data = {
     }
 }
 
-TestSubtaskReducerMix = ReducerTestNoProcessing(
+TestSubtaskReducerMixDBSCAN = ReducerTestNoProcessing(
     shape_reducer_dbscan,
     extracted_data,
     reduced_data,
-    'Test subtask reducer with classifier mixed classifier versions',
+    'Test subtask reducer with mixed classifier versions with DBSCAN',
     network_kwargs=kwargs_extra_data,
     kwargs={
         'shape': 'rectangle',
@@ -96,14 +99,53 @@ TestSubtaskReducerMix = ReducerTestNoProcessing(
             'T0_toolIndex0_subtask1': 'question_reducer'
         }
     },
-    test_name='TestSubtaskReducerMix'
+    test_name='TestSubtaskReducerMixDBSCAN'
+)
+
+TestSubtaskReducerMixOptics = ReducerTestNoProcessing(
+    shape_reducer_optics,
+    extracted_data,
+    reduced_data,
+    'Test subtask reducer with mixed classifier versions with OPTICS',
+    network_kwargs=kwargs_extra_data,
+    kwargs={
+        'shape': 'rectangle',
+        'min_samples': 2,
+        'details': {
+            'T0_toolIndex0_subtask0': 'question_reducer',
+            'T0_toolIndex0_subtask1': 'question_reducer'
+        }
+    },
+    test_name='TestSubtaskReducerMixOptics'
+)
+
+reduced_data_hdbscan = copy.deepcopy(reduced_data)
+reduced_data_hdbscan['frame0']['T0_toolIndex0_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
+reduced_data_hdbscan['frame0']['T0_toolIndex1_cluster_probabilities'] = [0]
+
+TestSubtaskReducerMixHDBSCAN = ReducerTestNoProcessing(
+    shape_reducer_hdbscan,
+    extracted_data,
+    reduced_data_hdbscan,
+    'Test subtask reducer with mixed classifier versions with HDBSCAN',
+    network_kwargs=kwargs_extra_data,
+    kwargs={
+        'shape': 'rectangle',
+        'min_cluster_size': 2,
+        'min_samples': 2,
+        'details': {
+            'T0_toolIndex0_subtask0': 'question_reducer',
+            'T0_toolIndex0_subtask1': 'question_reducer'
+        }
+    },
+    test_name='TestSubtaskReducerMixHDBSCAN'
 )
 
 TestSubtaskReducerMixV1Config = ReducerTestNoProcessing(
     shape_reducer_dbscan,
     extracted_data,
     reduced_data,
-    'Test subtask reducer with classifier mixed classifier versions and v1.0 details config',
+    'Test subtask reducer with mixed classifier versions and v1.0 details config',
     network_kwargs=kwargs_extra_data,
     kwargs={
         'shape': 'rectangle',

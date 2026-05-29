@@ -40,6 +40,7 @@ def shape_extractor(classification, **kwargs):
     if (shape not in SHAPE_LUT) and (shape not in SHAPE_LUT_FEM):
         all_keys = list(set(SHAPE_LUT.keys()).union(set(SHAPE_LUT_FEM.keys())))
         raise KeyError('`shape` must be one of {0}'.format(all_keys))
+    use_v1_keys = kwargs.get('use_v1_keys', False)
     for annotation in classification['annotations']:
         task_key = annotation['task']
         for value in annotation['value']:
@@ -51,7 +52,10 @@ def shape_extractor(classification, **kwargs):
             elif 'toolIndex' in value:
                 # classifier v2.0
                 tool_index = value['toolIndex']
-                key = '{0}_toolIndex{1}'.format(task_key, tool_index)
+                if use_v1_keys:
+                    key = '{0}_tool{1}'.format(task_key, tool_index)
+                else:
+                    key = '{0}_toolIndex{1}'.format(task_key, tool_index)
                 shape_params = SHAPE_LUT_FEM[shape]
             else:
                 raise KeyError('Neither `tool` or `toolIndex` are in the annotation')

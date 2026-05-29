@@ -7,11 +7,12 @@ import re
 
 DEFAULTS_PROCESS = {
     'shape': {'default': None, 'type': str},
-    'symmetric': {'default': False, 'type': bool}
+    'symmetric': {'default': False, 'type': bool},
+    'use_v1_keys': {'default': False, 'type': bool}
 }
 
 
-def process_data(data, shape=None, symmetric=False):
+def process_data(data, shape=None, symmetric=False, use_v1_keys=False):
     '''Process a list of extractions into lists of `x` and `y` sorted by `tool`
 
     Parameters
@@ -58,10 +59,13 @@ def process_data(data, shape=None, symmetric=False):
 
     for frame in unique_frames:
         data_by_tool[frame] = {}
-        unique_tools = set(sum([["_".join(re.findall(pattern, k)[0]) for k in d.get(frame, {}).keys()] for d in data], []))
+        unique_tools = set(sum(
+            [["_".join(re.findall(pattern, k)[0]) for k in d.get(frame, {}).keys() if ('subtask' not in k) and ('details' not in k)] for d in data],
+            []
+        ))
         for tool in unique_tools:
             tool_out = tool
-            if mixed and ('Index' not in tool):
+            if mixed and ('Index' not in tool) and not use_v1_keys:
                 # to gracefully handel mixed v1 and v2 need to specify output labels correctly
                 tool_out = tool.replace('tool', 'toolIndex')
             for idx, d in enumerate(data):

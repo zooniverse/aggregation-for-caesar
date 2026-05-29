@@ -99,7 +99,7 @@ In 2026 the front-end monorepo (FEM) became the default classification type on t
                 "width": 50,
                 "height": 100,
                 "details": [
-                    {"task": "T0.0.0"}
+                    {"task": "T0.0.0"},
                     {"task": "T0.0.1"}
                 ]
             },
