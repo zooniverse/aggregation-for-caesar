@@ -61,7 +61,7 @@ classification = {
         "taskType": "single",
         "markIndex": 1,
         "value": 2
-    }], 
+    }],
     "metadata": {
         "classifier_version": "2.0"
     }
