@@ -1,6 +1,7 @@
 import unittest
 from panoptes_aggregation.details_convert import details_flatten, details_unflatten
 
+
 flat_example = {
     'T0_toolIndex0_subtask1': 'dropdown_extractor',
     'T0_toolIndex0_subtask0': 'question_extractor',
@@ -31,7 +32,7 @@ class TestDetailsConvert(unittest.TestCase):
     def test_flatten_no_op(self):
         '''Test v2.0 to v2.0 details config conversion'''
         result = details_flatten(flat_example)
-        self.assertDictEqual(result, flat_example)   
+        self.assertDictEqual(result, flat_example)
 
     def test_unflatten(self):
         '''Test v2.0 to v1.0 details config conversion'''
