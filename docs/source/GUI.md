@@ -58,18 +58,18 @@ The `extract` tab will extract your data into one flat `csv` file for each task 
 Before starting let's take a closer look at the extractor configuration file `Extractor_config_workflow_6465_V52.yaml`:
 ```yaml
 extractor_config:
-    point_extractor_by_frame:
+    question_extractor:
+    -   task: T1
+    shape_extractor_point:
     -   details:
-            T0_tool3:
-            - question_extractor
+            T0_toolIndex3_subtask0: question_extractor
+        shape: point
         task: T0
         tools:
         - 0
         - 1
         - 2
         - 3
-    question_extractor:
-    -   task: T1
     shortcut_extractor:
     -   task: T6
 workflow_id: 6465
@@ -87,7 +87,7 @@ This extractor configuration file can be used along with the classification data
 
 This creates three `csv` files (one for each extractor listed in the config file):
  - `question_extractor_example.csv`
- - `point_extractor_by_frame_example.csv`
+ - `shape_extractor_point_example.csv`
  - `shortcut_extractor_example.csv`
 
 Click the `Edit` button to go back to the previous screen.
@@ -100,35 +100,35 @@ Note: this only works for some task types, see the [documentation](https://aggre
 The `reduce` tab will reduce the extracts by `subject_id` into a consensus aggregation.
 
 ### Example: Penguin Watch
-For this example we will do the point clustering for the task `T0`.  Let's take a look at the default config file for that reducer `Reducer_config_workflow_6465_V52.76_point_extractor_by_frame.yaml`:
+For this example we will do the point clustering for the task `T0`.  Let's take a look at the default config file for that reducer `Reducer_config_workflow_6465_V52.76_shape_extractor_point.yaml`:
 ```yaml
 reducer_config:
-    point_reducer_dbscan:
+    shape_reducer_dbscan:
         details:
-            T0_tool3:
-            - question_reducer
+            T0_toolIndex3_subtask0: question_reducer
+        shape: point
 ```
 
-As we can see, the default reducer is `point_reducer_dbscan` and the only keyword specified is the only associated with the sub-task of `tool3`.  To get better results we will add some clustering keywords to the configuration of `DBSCAN`:
+As we can see, the default reducer is `point_reducer_dbscan` and the only keyword specified is the only associated with the sub-task of `toolIndex3`.  To get better results we will add some clustering keywords to the configuration of `DBSCAN`:
 ```yaml
 reducer_config:
-    point_reducer_dbscan:
+    shape_reducer_dbscan:
+        details:
+            T0_toolIndex3_subtask0: question_reducer
+        shape: point
         eps: 5
         min_samples: 3
-        details:
-            T0_tool3:
-            - question_reducer
 ```
 
 But for this project there is a large amount of depth-of-field in the images, leading to a non-constant density of point clusters across the images (more dense in the background of the image and less dense in the foreground).  This means that `HDBSCAN` will work better:
 ```yaml
 reducer_config:
-    point_reducer_hdbscan:
+    shape_reducer_hdbscan:
+        details:
+            T0_toolIndex3_subtask0: question_reducer
+        shape: point
         min_cluster_size: 4
         min_samples: 3
-        details:
-            T0_tool3:
-            - question_reducer
 ```
 
 Point the GUI to the extraction file and the configuration file to reduce the data:
@@ -138,7 +138,7 @@ Point the GUI to the extraction file and the configuration file to reduce the da
 ![GUI config](_static/gui_reducer_output.png)
 
 This will create one file:
- - `point_reducer_hdbscan_example.csv`: The clustered data points for task `T0`
+ - `shape_reducer_hdbscan_example.csv`: The clustered data points for task `T0`
 
 ---
 
@@ -149,7 +149,7 @@ import pandas
 from panoptes_aggregation.csv_utils import unjson_dataframe
 
 # the `data.*` columns are read in as strings instead of arrays
-data = pandas.read_csv('point_reducer_hdbscan_example.csv')
+data = pandas.read_csv('shape_reducer_hdbscan_example.csv')
 
 # use unjson_dataframe to convert them to lists
 # all values are updated in place leaving null values untouched
