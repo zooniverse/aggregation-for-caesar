@@ -27,7 +27,8 @@ type_to_extractor = {
     'freehandLine': 'polygon_extractor',
     'polygon': 'polygon_extractor',
     'bezier': 'bezier_extractor',
-    'text': 'text_extractor'
+    'text': 'text_extractor',
+    'transcription': 'line_text_extractor'
 }
 
 standard_reducers = {
@@ -87,46 +88,33 @@ def workflow_extractor_config(tasks, keywords={}, use_v1_subtask_config=False):
                 **task_keywords
             }
             for tdx, tool in enumerate(task['tools']):
-                if ((tool['type'] == 'polygon')
-                   and (len(tool['details']) == 1)
-                   and (tool['details'][0]['type'] == 'text')):
-                    # this is very ugly but I can't think of a better way to auto detect this
-                    extractor_key = 'poly_line_text_extractor'
+                # typical text subtasks are handled normally
+                # only use the special extractors if the task type is `transcription`
+                default_config['details'] = {}
+                if tool['type'] in type_to_extractor:
+                    extractor_key = type_to_extractor[tool['type']]
+                    shape = None
+                    if extractor_key == 'shape_extractor':
+                        extractor_key = '{0}_{1}'.format(extractor_key, tool['type'])
+                        shape = tool['type']
                     task_config.setdefault(extractor_key, copy.deepcopy(default_config))
-                    del task_config[extractor_key]['tools']
-                elif ((tool['type'] == 'line')
-                     and (len(tool['details']) == 1)
-                     and (tool['details'][0]['type'] == 'text')):
-                    # this is very ugly but I can't think of a better way to auto detect this
-                    extractor_key = 'line_text_extractor'
-                    task_config.setdefault(extractor_key, copy.deepcopy(default_config))
-                    del task_config[extractor_key]['tools']
-                else:
-                    default_config['details'] = {}
-                    if tool['type'] in type_to_extractor:
-                        extractor_key = type_to_extractor[tool['type']]
-                        shape = None
-                        if extractor_key == 'shape_extractor':
-                            extractor_key = '{0}_{1}'.format(extractor_key, tool['type'])
-                            shape = tool['type']
-                        task_config.setdefault(extractor_key, copy.deepcopy(default_config))
-                        task_config[extractor_key]['tools'].append(tdx)
-                        if shape is not None:
-                            task_config[extractor_key]['shape'] = shape
-                        detail_key = '{0}_tool{1}'.format(task_key, tdx)
-                        if len(tool['details']) > 0:
-                            details_functions = []
-                            for detail in tool['details']:
-                                if detail['type'] in type_to_extractor:
-                                    details_functions.append(type_to_extractor[detail['type']])
-                                else:
-                                    details_functions.append(None)
-                            if not use_v1_subtask_config:
-                                # convert from v1 subtask config to v2 subtask config
-                                details_functions = details_flatten({detail_key: details_functions})
-                                task_config[extractor_key]['details'] = details_functions
+                    task_config[extractor_key]['tools'].append(tdx)
+                    if shape is not None:
+                        task_config[extractor_key]['shape'] = shape
+                    detail_key = '{0}_tool{1}'.format(task_key, tdx)
+                    if len(tool['details']) > 0:
+                        details_functions = []
+                        for detail in tool['details']:
+                            if detail['type'] in type_to_extractor:
+                                details_functions.append(type_to_extractor[detail['type']])
                             else:
-                                task_config[extractor_key]['details'][detail_key] = details_functions
+                                details_functions.append(None)
+                        if not use_v1_subtask_config:
+                            # convert from v1 subtask config to v2 subtask config
+                            details_functions = details_flatten({detail_key: details_functions})
+                            task_config[extractor_key]['details'] = details_functions
+                        else:
+                            task_config[extractor_key]['details'][detail_key] = details_functions
             for key, value in task_config.items():
                 extractor_config[key].append(value)
         elif task['type'] in type_to_extractor:
