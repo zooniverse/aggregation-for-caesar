@@ -109,7 +109,7 @@ reducer_config:
         shape: point
 ```
 
-As we can see, the default reducer is `point_reducer_dbscan` and the only keyword specified is the only associated with the sub-task of `toolIndex3`.  To get better results we will add some clustering keywords to the configuration of `DBSCAN`:
+As we can see, the default reducer is `shape_reducer_dbscan` and the two keywords specified are the one associated with the sub-task of `toolIndex3` and the one indicating the `shape`.  To get better results we will add some clustering keywords to the configuration of `DBSCAN`:
 ```yaml
 reducer_config:
     shape_reducer_dbscan:
