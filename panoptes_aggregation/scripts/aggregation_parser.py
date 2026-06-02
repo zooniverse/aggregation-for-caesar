@@ -107,6 +107,11 @@ def main(args=None):
         type=str
     )
     config_keywords.add_argument(
+        "--use_v1_subtask_config",
+        help="Use old style subtask configuration for extractors and reducers.  The only difference is how this shows up in the configuration files, the old style is a list-of-lists, the new style is a flat dictionary.  Both styles are valid and will produce the same results.",
+        action="store_true"
+    )
+    config_keywords.add_argument(
         "-k",
         "--keywords",
         help="keywords to be passed into the configuration of a task in the form of a json string, e.g. \'{\"T0\": {\"dot_freq\": \"line\"} }\'\n(note: double quotes must be used inside the brackets)",
@@ -298,7 +303,8 @@ def main(args=None):
             max_version=args.max_version,
             keywords=args.keywords,
             output_dir=args.dir,
-            verbose=args.verbose
+            verbose=args.verbose,
+            use_v1_subtask_config=args.use_v1_subtask_config
         )
     elif args.subparser == 'extract':
         panoptes_aggregation.scripts.extract_csv(

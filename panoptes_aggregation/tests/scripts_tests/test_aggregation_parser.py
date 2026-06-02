@@ -19,7 +19,8 @@ class TestAggregationParser(unittest.TestCase):
             min_version=None,
             max_version=None,
             output_dir=os.getcwd(),
-            verbose=False
+            verbose=False,
+            use_v1_subtask_config=False
         )
 
     @patch('panoptes_aggregation.scripts.aggregation_parser.argparse.FileType')
