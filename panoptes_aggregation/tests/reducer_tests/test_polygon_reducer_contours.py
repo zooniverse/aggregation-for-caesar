@@ -18,6 +18,7 @@ the reducer can reduce mutiple tools for a single task.
 extracted_data = [
     {
         'frame0': {
+            'T0_tool0_shape': 'freehandLine',
             'T0_tool0_pathX': [
                 [
                     -0.011871167727739784,
@@ -74,6 +75,7 @@ extracted_data = [
                     2.2716019279274726
                 ]
             ],
+            'T0_tool1_shape': 'freehandLine',
             'T0_tool1_pathX': [
                 [
                     -0.011871167727739784,
@@ -105,6 +107,7 @@ extracted_data = [
     },
     {
         'frame0': {
+            'T0_tool0_shape': 'freehandLine',
             'T0_tool0_pathX': [
                 [
                     -0.49223768418803526,
@@ -163,6 +166,7 @@ extracted_data = [
                     2.3322557650241134
                 ]
             ],
+            'T0_tool1_shape': 'freehandLine',
             'T0_tool1_pathX': [
                 [
                     -0.49223768418803526,
@@ -192,6 +196,7 @@ extracted_data = [
     },
     {
         'frame0': {
+            'T0_tool0_shape': 'freehandLine',
             'T0_tool0_pathX': [
                 [
                     -0.15554523195117093,
@@ -258,6 +263,7 @@ extracted_data = [
                     2.3692156886043496
                 ]
             ],
+            'T0_tool1_shape': 'freehandLine',
             'T0_tool1_pathX': [
                 [
                     -0.15554523195117093,
@@ -287,6 +293,7 @@ extracted_data = [
     },
     {
         'frame0': {
+            'T0_tool0_shape': 'freehandLine',
             'T0_tool0_pathX': [
                 [
                     -0.5708915716746895,
@@ -358,6 +365,8 @@ kwargs_extra_data = {
 # Ideally the comparison between the result and expectation would be done with
 # shape.equal(), but that is awkward to implement, so doing it brute force here
 processed_data = {
+    'shape': 'freehandLine',
+    'n_classifications': 4,
     'frame0': {
         'T0_tool0': {
             'X': [
@@ -448,8 +457,7 @@ processed_data = {
                     ]).T),
                     'gold_standard': False
                 }
-            ],
-            'n_classifications': 4
+            ]
         },
         'T0_tool1': {
             'X': [
@@ -477,8 +485,7 @@ processed_data = {
                     ]).T),
                     'gold_standard': False
                 }
-            ],
-            'n_classifications': 4
+            ]
         }
     }
 }
@@ -1519,6 +1526,7 @@ TestPolygonTReducerIntersectionContoursRasterisation = ReducerTest(
 extracted_data_no_overall_intersection = [
     {
         'frame0': {
+            'T0_tool0_shape': 'freehandLine',
             'T0_tool0_pathX': [
                 [
                     0.21554927386591496,
@@ -1542,6 +1550,7 @@ extracted_data_no_overall_intersection = [
     },
     {
         'frame0': {
+            'T0_tool0_shape': 'freehandLine',
             'T0_tool0_pathX': [
                 [
                     0.3693081708169513,
@@ -1575,6 +1584,7 @@ extracted_data_no_overall_intersection = [
     },
     {
         'frame0': {
+            'T0_tool0_shape': 'freehandLine',
             'T0_tool0_pathX': [
                 [
                     0.09127357717866474,
@@ -1617,6 +1627,8 @@ kwargs_extra_data_no_overall_intersection = {
 }
 
 processed_data_no_overall_intersection = {
+    'shape': 'freehandLine',
+    'n_classifications': 3,
     'frame0': {
         'T0_tool0': {
             'X': [
@@ -1644,8 +1656,7 @@ processed_data_no_overall_intersection = {
                     ]).T),
                     'gold_standard': False
                 }
-            ],
-            'n_classifications': 3
+            ]
         }
     }
 }
@@ -1854,6 +1865,7 @@ TestPolygonTReducerIntersectionContoursClusterOfOne = ReducerTest(
 # This is not realistic data, just the simplest possible cluster of 10
 classification_square = {
     'frame0': {
+        'T0_tool0_shape': 'freehandLine',
         'T0_tool0_pathX': [
             [
                 0,
@@ -1899,6 +1911,8 @@ processed_data_10_identical_squares_dictionary = {
 }
 
 processed_data_10_identical_squares = {
+    'shape': 'freehandLine',
+    'n_classifications': 10,
     'frame0': {
         'T0_tool0': {
             'X': [
@@ -1913,8 +1927,7 @@ processed_data_10_identical_squares = {
                 [8, 8],
                 [9, 9]
             ],
-            'data': [processed_data_10_identical_squares_dictionary for i in range(10)],
-            'n_classifications': 10
+            'data': [processed_data_10_identical_squares_dictionary for i in range(10)]
         }
     }
 }
