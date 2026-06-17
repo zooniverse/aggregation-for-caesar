@@ -70,6 +70,7 @@ processed_data = {
     'shape': 'line',
     'symmetric': False,
     'classifier_version': '1.0',
+    'n_classifications': 5,
     'frame0': {
         'T0_tool0': [
             (0.0, 0.0, 50.0, 60.0),
@@ -176,6 +177,7 @@ processed_data_symmetric = {
     'shape': 'line',
     'symmetric': True,
     'classifier_version': '1.0',
+    'n_classifications': 5,
     'frame0': {
         'T0_tool0': [
             (0.0, 0.0, 50.0, 60.0),
