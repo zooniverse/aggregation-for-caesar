@@ -87,6 +87,7 @@ classification = {
 
 expected = {
     'frame0': {
+        'T0_tool0_shape': 'bezier',
         'T0_tool0_pathX': [
             [
                 -0.3290185032381231,

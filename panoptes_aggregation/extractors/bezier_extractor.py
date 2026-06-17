@@ -85,4 +85,5 @@ def bezier_extractor(classification, **kwargs):
                 y = bezier_curve[:, 1].tolist()
                 extract[frame].setdefault('{0}_{1}'.format(key, 'pathX'), []).append(x)
                 extract[frame].setdefault('{0}_{1}'.format(key, 'pathY'), []).append(y)
+                extract[frame][f'{key}_shape'] = 'bezier'
     return extract
