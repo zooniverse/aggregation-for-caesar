@@ -81,6 +81,7 @@ processed_data = {
     'shape': 'ellipse',
     'symmetric': False,
     'classifier_version': '2.0',
+    'n_classifications': 5,
     'frame0': {
         'T0_toolIndex0': [
             (0.0, 0.0, 50.0, 60.0, 179.0),
@@ -207,4 +208,134 @@ TestShapeReducerEllipseHdbscan_v2 = ReducerTest(
         'allow_single_cluster': True
     },
     test_name='TestShapeReducerEllipseHdbscan_v2'
+)
+
+data_collab = [
+    {
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'drawing',
+        'toolIndex': 0,
+        'frame': 0,
+        'markId': 'collab_frame0_T0_toolIndex0_0',
+        'toolType': 'ellipse',
+        'x_center': 0.0,
+        'y_center': 0.0,
+        'rx': 50.0,
+        'ry': 60.0,
+        'angle': 180.0
+    }, {
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'drawing',
+        'toolIndex': 0,
+        'frame': 0,
+        'markId': 'collab_frame0_T0_toolIndex0_1',
+        'toolType': 'ellipse',
+        'x_center': 100.0,
+        'y_center': 100.0,
+        'rx': 10.0,
+        'ry': 20.0,
+        'angle': 180.0
+    }, {
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'drawing',
+        'toolIndex': 1,
+        'frame': 0,
+        'markId': 'collab_frame0_T0_toolIndex1_0',
+        'toolType': 'ellipse',
+        'x_center': 0.0,
+        'y_center': 100.0,
+        'rx': 10.0,
+        'ry': 50.0,
+        'angle': 180.0
+    }, {
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'drawing',
+        'toolIndex': 1,
+        'frame': 0,
+        'markId': 'collab_frame0_T0_toolIndex1_1',
+        'toolType': 'ellipse',
+        'x_center': 100.0,
+        'y_center': 0.0,
+        'rx': 50.0,
+        'ry': 10.0,
+        'angle': 180.0
+    }, {
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'drawing',
+        'toolIndex': 1,
+        'frame': 1,
+        'markId': 'collab_frame1_T0_toolIndex1_0',
+        'toolType': 'ellipse',
+        'x_center': 50.0,
+        'y_center': 50.0,
+        'rx': 50.0,
+        'ry': 50.0,
+        'angle': 50.0
+    }
+]
+
+reduced_data_collab = copy.deepcopy(reduced_data)
+reduced_data_collab['data'] = data_collab
+reduced_data_hdbscan_collab = copy.deepcopy(reduced_data_hdbscan)
+reduced_data_hdbscan_collab['data'] = data_collab
+
+TestShapeReducerEllipse_v2_collab = ReducerTest(
+    shape_reducer_dbscan,
+    process_data_dbscan,
+    extracted_data,
+    processed_data,
+    reduced_data_collab,
+    'Test shape ellipse V2.0 reducer with DBSCAN with collab',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'ellipse'},
+    kwargs={
+        'eps': 5,
+        'min_samples': 2,
+        'collab': True
+    },
+    test_name='TestShapeReducerEllipse_v2_collab'
+)
+
+TestShapeReducerEllipseOptics_v2_collab = ReducerTest(
+    shape_reducer_optics,
+    process_data_optics,
+    extracted_data,
+    processed_data,
+    reduced_data_collab,
+    'Test shape ellipse V2.0 reducer with OPTICS with collab',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'ellipse'},
+    kwargs={
+        'min_samples': 2,
+        'collab': True
+    },
+    test_name='TestShapeReducerEllipseOptics_v2_collab'
+)
+
+TestShapeReducerEllipseHdbscan_v2_collab = ReducerTest(
+    shape_reducer_hdbscan,
+    process_data_hdbscan,
+    extracted_data,
+    processed_data,
+    reduced_data_hdbscan_collab,
+    'Test shape ellipse V2.0 reducer with HDBSCAN with collab',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'ellipse'},
+    kwargs={
+        'min_cluster_size': 2,
+        'min_samples': 1,
+        'allow_single_cluster': True,
+        'collab': True
+    },
+    test_name='TestShapeReducerEllipseHdbscan_v2_collab'
 )
