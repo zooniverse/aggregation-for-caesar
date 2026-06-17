@@ -1,8 +1,10 @@
 from panoptes_aggregation.reducers.shape_reducer_dbscan import process_data as process_data_dbscan, shape_reducer_dbscan
-from panoptes_aggregation.reducers.shape_reducer_hdbscan import process_data as process_data_hdbscan, shape_reducer_hdbscan
-from panoptes_aggregation.reducers.shape_reducer_optics import process_data as process_data_optics, shape_reducer_optics
 from .base_test_class import ReducerTest
 import copy
+
+# specific collab wrapper tests, use circle as example
+# the same wrapper applies to all shapes, no need to test
+# these parts elsewhere
 
 extracted_data = [
     {
@@ -128,65 +130,10 @@ reduced_data = {
     }
 }
 
-TestShapeReducerCircle_v2 = ReducerTest(
-    shape_reducer_dbscan,
-    process_data_dbscan,
-    extracted_data,
-    processed_data,
-    reduced_data,
-    'Test shape circle V2.0 reducer with DBSCAN',
-    network_kwargs=kwargs_extra_data,
-    pkwargs={'shape': 'circle'},
-    kwargs={
-        'eps': 5,
-        'min_samples': 2
-    },
-    test_name='TestShapeReducerCircle_v2'
-)
-
-TestShapeReducerCircleOptics_v2 = ReducerTest(
-    shape_reducer_optics,
-    process_data_optics,
-    extracted_data,
-    processed_data,
-    reduced_data,
-    'Test shape circle V2.0 reducer with OPTICS',
-    network_kwargs=kwargs_extra_data,
-    pkwargs={'shape': 'circle'},
-    kwargs={
-        'min_samples': 2
-    },
-    test_name='TestShapeReducerCircleOptics_v2'
-)
-
-reduced_data_hdbscan = copy.deepcopy(reduced_data)
-reduced_data_hdbscan['frame0']['T0_toolIndex0_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
-reduced_data_hdbscan['frame0']['T0_toolIndex1_cluster_probabilities'] = [1.0, 1.0, 1.0, 1.0]
-reduced_data_hdbscan['frame1']['T0_toolIndex0_cluster_probabilities'] = [0.0]
-reduced_data_hdbscan['frame1']['T0_toolIndex1_cluster_probabilities'] = [1.0, 1.0]
-
-TestShapeReducerCircleHdbscan_v2 = ReducerTest(
-    shape_reducer_hdbscan,
-    process_data_hdbscan,
-    extracted_data,
-    processed_data,
-    reduced_data_hdbscan,
-    'Test shape circle V2.0 reducer with HDBSCAN',
-    network_kwargs=kwargs_extra_data,
-    pkwargs={'shape': 'circle'},
-    kwargs={
-        'min_cluster_size': 2,
-        'min_samples': 1,
-        'allow_single_cluster': True
-    },
-    test_name='TestShapeReducerCircleHdbscan_v2'
-)
-
-
-data_collab = [
+data_collab_s1_t1 = [
     {
-        'stepKey': 'S0',
-        'taskIndex': 0,
+        'stepKey': 'S1',
+        'taskIndex': 1,
         'taskKey': 'T0',
         'taskType': 'drawing',
         'toolIndex': 0,
@@ -197,8 +144,8 @@ data_collab = [
         'y_center': 0.0,
         'r': 50.0
     }, {
-        'stepKey': 'S0',
-        'taskIndex': 0,
+        'stepKey': 'S1',
+        'taskIndex': 1,
         'taskKey': 'T0',
         'taskType': 'drawing',
         'toolIndex': 0,
@@ -209,8 +156,8 @@ data_collab = [
         'y_center': 100.0,
         'r': 10.0
     }, {
-        'stepKey': 'S0',
-        'taskIndex': 0,
+        'stepKey': 'S1',
+        'taskIndex': 1,
         'taskKey': 'T0',
         'taskType': 'drawing',
         'toolIndex': 1,
@@ -221,8 +168,8 @@ data_collab = [
         'y_center': 100.0,
         'r': 10.0
     }, {
-        'stepKey': 'S0',
-        'taskIndex': 0,
+        'stepKey': 'S1',
+        'taskIndex': 1,
         'taskKey': 'T0',
         'taskType': 'drawing',
         'toolIndex': 1,
@@ -233,8 +180,8 @@ data_collab = [
         'y_center': 0.0,
         'r': 50.0
     }, {
-        'stepKey': 'S0',
-        'taskIndex': 0,
+        'stepKey': 'S1',
+        'taskIndex': 1,
         'taskKey': 'T0',
         'taskType': 'drawing',
         'toolIndex': 1,
@@ -247,58 +194,45 @@ data_collab = [
     }
 ]
 
-reduced_data_collab = copy.deepcopy(reduced_data)
-reduced_data_collab['data'] = data_collab
-reduced_data_hdbscan_collab = copy.deepcopy(reduced_data_hdbscan)
-reduced_data_hdbscan_collab['data'] = data_collab
+reduced_data_collab_s1_t1 = copy.deepcopy(reduced_data)
+reduced_data_collab_s1_t1['data'] = data_collab_s1_t1
 
-TestShapeReducerCircle_v2_colab = ReducerTest(
+TestShapeReducerCircle_v2_colab_2 = ReducerTest(
     shape_reducer_dbscan,
     process_data_dbscan,
     extracted_data,
     processed_data,
-    reduced_data_collab,
-    'Test shape circle V2.0 reducer with DBSCAN and collab',
+    reduced_data_collab_s1_t1,
+    'Test shape circle V2.0 reducer with DBSCAN and non default collab',
     network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'circle'},
     kwargs={
         'eps': 5,
         'min_samples': 2,
-        'collab': True
+        'collab': True,
+        'step_key': 'S1',
+        'task_index': 1
     },
-    test_name='TestShapeReducerCircle_v2_collab'
+    test_name='TestShapeReducerCircle_v2_collab_2'
 )
 
-TestShapeReducerCircleOptics_v2_collab = ReducerTest(
-    shape_reducer_optics,
-    process_data_optics,
+reduced_data_collab_threshold = copy.deepcopy(reduced_data)
+reduced_data_collab_threshold['data'] = []
+
+TestShapeReducerCircle_v2_colab_3 = ReducerTest(
+    shape_reducer_dbscan,
+    process_data_dbscan,
     extracted_data,
     processed_data,
-    reduced_data_collab,
-    'Test shape circle V2.0 reducer with OPTICS and collab',
+    reduced_data_collab_threshold,
+    'Test shape circle V2.0 reducer with DBSCAN and high collab threshold',
     network_kwargs=kwargs_extra_data,
     pkwargs={'shape': 'circle'},
     kwargs={
+        'eps': 5,
         'min_samples': 2,
-        'collab': True
+        'collab': True,
+        'min_threshold': 0.5
     },
-    test_name='TestShapeReducerCircleOptics_v2_collab'
-)
-
-TestShapeReducerCircleHdbscan_v2_collab = ReducerTest(
-    shape_reducer_hdbscan,
-    process_data_hdbscan,
-    extracted_data,
-    processed_data,
-    reduced_data_hdbscan_collab,
-    'Test shape circle V2.0 reducer with HDBSCAN and collab',
-    network_kwargs=kwargs_extra_data,
-    pkwargs={'shape': 'circle'},
-    kwargs={
-        'min_cluster_size': 2,
-        'min_samples': 1,
-        'allow_single_cluster': True,
-        'collab': True
-    },
-    test_name='TestShapeReducerCircleHdbscan_v2_collab'
+    test_name='TestShapeReducerCircle_v2_collab_3'
 )

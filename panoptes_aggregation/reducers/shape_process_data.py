@@ -42,7 +42,8 @@ def process_data(data, shape=None, symmetric=False, use_v1_keys=False):
     unique_frames = set(sum([[k for k in d.keys() if k.startswith('frame')] for d in data], []))
     data_by_tool = {
         'shape': shape,
-        'symmetric': symmetric
+        'symmetric': symmetric,
+        'n_classifications': len(data)
     }
     classifier_versions = np.array([version.parse(d.get('classifier_version', '1.0')) for d in data])
     mixed = False

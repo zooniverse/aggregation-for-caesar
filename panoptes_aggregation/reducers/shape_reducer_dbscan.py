@@ -9,6 +9,7 @@ from sklearn.cluster import DBSCAN
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
+from .collab_wrapper import collab_wrapper
 from ..shape_tools import SHAPE_LUT, SHAPE_LUT_FEM
 from .shape_process_data import process_data, DEFAULTS_PROCESS
 from .shape_metric import get_shape_metric_and_avg
@@ -25,7 +26,11 @@ DEFAULTS = {
     'p': {'default': None, 'type': float},
     'metric_type': {'default': 'euclidean', 'type': str},
     'estimate_average': {'default': False, 'type': bool},
-    'use_v1_keys': {'default': False, 'type': bool}
+    'use_v1_keys': {'default': False, 'type': bool},
+    'collab': {'default': False, 'type': bool},
+    'step_key': {'default': 'S0', 'type': str},
+    'task_index': {'default': 0, 'type': int},
+    'min_threshold': {'default': 0, 'type': float}
 }
 
 
@@ -35,6 +40,7 @@ DEFAULTS = {
     defaults_process=DEFAULTS_PROCESS,
     user_id=True
 )
+@collab_wrapper
 @subtask_wrapper
 def shape_reducer_dbscan(data_by_tool, **kwargs):
     '''Cluster a shape by tool using DBSCAN
