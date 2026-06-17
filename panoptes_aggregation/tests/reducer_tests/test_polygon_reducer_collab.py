@@ -1305,7 +1305,7 @@ data_polygon = [
             {'x': 5.449443973123015, 'y': 3.9704107662937083},
             {'x': 5.410841064166533, 'y': 3.9331323704395342},
             {'x': 5.4309639338338815, 'y': 3.819009905536562}
-    ]
+        ]
     },
     {
         'stepKey': 'S0',
@@ -1392,7 +1392,7 @@ TestPolygonReducer_collab = ReducerTest(
     test_name='TestPolygonReducer_collab'
 )
 
-extracted_data_mixed= [
+extracted_data_mixed = [
     {
         'classifier_version': 2.0,
         'frame0': {

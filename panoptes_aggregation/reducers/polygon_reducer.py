@@ -24,7 +24,6 @@ from .polygon_reducer_utils import (
     IoU_cluster_mean_distance
 )
 import shapely
-import re
 
 
 DEFAULTS = {
