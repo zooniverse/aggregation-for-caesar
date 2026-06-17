@@ -13,6 +13,7 @@ import numpy as np
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
 from .subtask_reducer_wrapper import subtask_wrapper
+from .collab_wrapper import collab_wrapper
 from .polygon_reducer_utils import (
     IoU_metric_polygon,
     cluster_average_last,
@@ -23,6 +24,7 @@ from .polygon_reducer_utils import (
     IoU_cluster_mean_distance
 )
 import shapely
+import re
 
 
 DEFAULTS = {
@@ -32,7 +34,6 @@ DEFAULTS = {
     'collab': {'default': False, 'type': bool},
     'step_key': {'default': 'S0', 'type': str},
     'task_index': {'default': 0, 'type': int},
-    'tool_type': {'default': 'freehandLine', 'type': str},
     'min_threshold': {'default': 0, 'type': float}
 }
 
@@ -61,14 +62,21 @@ def process_data(data):
         `{'polygon': shapely.geometry.polygon.Polygon, 'gold_standard': bool}`.
     '''
     unique_frames = set(sum([[k for k in d.keys() if k.startswith('frame')] for d in data], []))
-    data_by_tool = {}
+    data_by_tool = {
+        'n_classifications': len(data)
+    }
     row_ct = {}
     user_ct = 0
+    shapes = []
+    # pattern = r'(T[0-9]+)_(tool[Index]*[0-9]+)'
     for frame in unique_frames:
         row_ct.setdefault(frame, {})
         data_by_tool[frame] = {}
-        unique_tools = set(sum([['_'.join(k.split('_')[:-1]) for k in d.get(frame, {}).keys()] for d in data], []))
-        n_classifications_frame = len(data)
+        # filter out subtasks
+        unique_tools = set(sum(
+            [['_'.join(k.split('_')[:-1]) for k in d.get(frame, {}).keys() if ('subtask' not in k) and ('details' not in k)] for d in data],
+            []
+        ))
         for tool in unique_tools:
             # gold standard is not a tool
             if tool == 'gold':
@@ -76,8 +84,9 @@ def process_data(data):
 
             for user_ct, d in enumerate(data):
                 if frame in d:
+                    if f'{tool}_shape' in d[frame]:
+                        shapes.append(d[frame][f'{tool}_shape'])
                     data_by_tool[frame].setdefault(tool, {'X': [], 'data': []})
-                    data_by_tool[frame][tool]['n_classifications'] = n_classifications_frame
                     if ('{0}_pathX'.format(tool) in d[frame]) and ('{0}_pathY'.format(tool) in d[frame]):
                         value = d[frame]
                         row_ct[frame].setdefault(tool, 0)
@@ -105,41 +114,14 @@ def process_data(data):
                                 })
                                 data_by_tool[frame][tool]['X'].append([row_ct[frame][tool], user_ct])
                                 row_ct[frame][tool] += 1
+    # needed for the collab wrapper and only works if every shape is the same
+    unique_shapes = list(set(shapes))
+    if len(unique_shapes) == 1:
+        data_by_tool['shape'] = unique_shapes[0]
+    else:
+        # passing `None` as the shape will turn off the collab wrapper internally
+        data_by_tool['shape'] = None
     return data_by_tool
-
-
-def get_annotations(tool, frame, average_polygon, step_key, task_index, tool_type, count):
-    # classifier v2.0
-    if 'toolIndex' in tool:
-        tool_split = tool.split("_toolIndex")
-        task_key = tool_split[0]
-        tool_index = tool_split[1]
-    # classifier v1.0
-    elif 'tool' in tool:
-        tool_split = tool.split("_tool")
-        task_key = tool_split[0]
-        tool_index = tool_split[1]
-
-    frame_split = frame.split("frame")
-    frame_num = frame_split[1]
-
-    x = average_polygon[:, 0].tolist()
-    y = average_polygon[:, 1].tolist()
-
-    annotations = {
-        'stepKey': step_key,
-        'taskIndex': task_index,
-        'taskKey': task_key,
-        'taskType': 'drawing',
-        'toolIndex': int(tool_index),
-        'frame': int(frame_num),
-        'markID': f'consensus_{count}',
-        'toolType': tool_type,
-        'pathX': x,
-        'pathY': y
-    }
-
-    return annotations
 
 
 @reducer_wrapper(
@@ -149,6 +131,7 @@ def get_annotations(tool, frame, average_polygon, step_key, task_index, tool_typ
     created_at=True,
     output_kwargs=True
 )
+@collab_wrapper
 @subtask_wrapper
 def polygon_reducer(data_by_tool, **kwargs_dbscan):
     '''Cluster a polygon/freehand/Bezier tools using DBSCAN.
@@ -170,7 +153,6 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
         * `collab` : A boolean indicating whether the data column is included in the output. Defaults to False.
         * 'step_key' : Identifies the step key. Defaults to 'S0'.
         * 'task_index' : The task index. Defaults to 0.
-        * 'tool_type' : The tool used to create the polygons. Defaults to 'freehandLine'.
         * 'min_threshold' : If the threshold value for a cluster is less than min_threshold, it is not added to the dictionary. Defaults to 0.
 
     Returns
@@ -184,16 +166,9 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
         * `tool*_clusters_y` : A list of the y values of each cluster
         * `tool*_consensus` : A list of the overall consensus of each cluster. A value of 1 is perfect agreement, a value of 0 is complete disagreement. This is found by subtracting`IoU_cluster_mean_distance` from 1
         * `data` : Contains the consensus polygons in the original classification format, which is included in the output if `collab` is set to True. For use with the Zooniverse front-end.
-        * `threshold` : For each cluster, the threshold is the number of items in the cluster divided by the total number of classifications.
 
     '''
-
-    collab = kwargs_dbscan.pop('collab', False)
-    step_key = kwargs_dbscan.pop('step_key', 'S0')
-    task_index = kwargs_dbscan.pop('task_index', 0)
-    tool_type = kwargs_dbscan.pop('tool_type', 'freehandLine')
-    min_threshold = kwargs_dbscan.pop('min_threshold', 0)
-
+    _ = data_by_tool.pop('shape', None)
     average_type = kwargs_dbscan.pop('average_type', 'median')
     if average_type == "intersection":
         avg = cluster_average_intersection
@@ -210,7 +185,6 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
     created_at = np.array(kwargs_dbscan.pop('created_at'))
 
     clusters = OrderedDict()
-    count = 0
     for frame, frame_data in sorted(data_by_tool.items()):
         clusters[frame] = OrderedDict()
         for tool, value in sorted(frame_data.items()):
@@ -232,16 +206,13 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                 # Update the cluster labels of polygons
                 clusters[frame]['{0}_cluster_labels'.format(tool)] = labels_array.tolist()
                 # Create a list of when the different polygons were created, assuming the order X matches the order of created_at_array.
-                # The cteaed_at list originally provided is when all of the classifications per user were added
+                # The created_at list originally provided is when all of the classifications per user were added
                 created_at_full_array = np.array([created_at[int(user_id)] for user_id in X[:, 1]])
 
                 # Looping through each cluster
                 for label in set(labels_array):
                     if label > -1:
                         cdx = labels_array == label
-                        cluster_items = int(cdx.sum())
-                        n_classifications = value.get('n_classifications')
-                        threshold = cluster_items / n_classifications
                         kwargs_cluster = {}
                         kwargs_cluster['created_at'] = created_at_full_array[cdx]
                         # The distance matrix is used to find the consensus and is sometimes used in the average
@@ -259,20 +230,13 @@ def polygon_reducer(data_by_tool, **kwargs_dbscan):
                             # exterior makes sure you ignore any interior holes
                             average_polygon = np.array(list(cluster_average.exterior.coords))
 
-                        if threshold > min_threshold:
+                        # if threshold > min_threshold:
                             # Add to the dictionary
 
-                            # number of points in the cluster
-                            clusters[frame].setdefault('{0}_clusters_count'.format(tool), []).append(int(cdx.sum()))
-                            clusters.setdefault('threshold', []).append(threshold)
-                            clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
-                            clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
-                            clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
-
-                            if collab:
-                                annotations = get_annotations(tool, frame, average_polygon, step_key, task_index, tool_type, count)
-                                count += 1
-                                # Add to dictionary
-                                clusters.setdefault('data', []).append(annotations)
+                        # number of points in the cluster
+                        clusters[frame].setdefault('{0}_clusters_count'.format(tool), []).append(int(cdx.sum()))
+                        clusters[frame].setdefault('{0}_clusters_x'.format(tool), []).append(average_polygon[:, 0].tolist())
+                        clusters[frame].setdefault('{0}_clusters_y'.format(tool), []).append(average_polygon[:, 1].tolist())
+                        clusters[frame].setdefault('{0}_consensus'.format(tool), []).append(consensus)
 
     return OrderedDict(sorted(clusters.items()))
