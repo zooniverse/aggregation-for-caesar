@@ -60,6 +60,7 @@ processed_data = {
     'shape': 'column',
     'symmetric': False,
     'classifier_version': '2.0',
+    'n_classifications': 5,
     'frame0': {
         'T0_toolIndex0': [
             (0.0, 0.0),
@@ -251,4 +252,178 @@ TestShapeReducerGraph2dRangeXHdbscan_v2 = ReducerTest(
         'allow_single_cluster': True
     },
     test_name='TestShapeReducerGraph2dRangeXHdbscan_v2'
+)
+
+data_collab = [
+    {
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'drawing',
+        'toolIndex': 0,
+        'frame': 0,
+        'markId': 'collab_frame0_T0_toolIndex0_0',
+        'toolType': 'graph2dRangeX',
+        'x': 0.0,
+        'width': 0.0
+    }, {
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'drawing',
+        'toolIndex': 0,
+        'frame': 0,
+        'markId': 'collab_frame0_T0_toolIndex0_1',
+        'toolType': 'graph2dRangeX',
+        'x': 100.0,
+        'width': 100.0
+    }, {
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'drawing',
+        'toolIndex': 1,
+        'frame': 0,
+        'markId': 'collab_frame0_T0_toolIndex1_0',
+        'toolType': 'graph2dRangeX',
+        'x': 0.0,
+        'width': 100.0
+    }, {
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'drawing',
+        'toolIndex': 1,
+        'frame': 0,
+        'markId': 'collab_frame0_T0_toolIndex1_1',
+        'toolType': 'graph2dRangeX',
+        'x': 100.0,
+        'width': 0.0
+    }, {
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'drawing',
+        'toolIndex': 1,
+        'frame': 1,
+        'markId': 'collab_frame1_T0_toolIndex1_0',
+        'toolType': 'graph2dRangeX',
+        'x': 50.0,
+        'width': 50.0
+    }
+]
+
+reduced_data_collab = copy.deepcopy(reduced_data)
+reduced_data_collab['data'] = data_collab
+
+reduced_data_graph2dRangeX_collab = copy.deepcopy(reduced_data_graph2dRangeX)
+reduced_data_graph2dRangeX_collab['data'] = data_collab
+
+reduced_data_hdbscan_collab = copy.deepcopy(reduced_data_hdbscan)
+reduced_data_hdbscan_collab['data'] = data_collab
+
+reduced_data_hdbscan_graph2dRangeX_collab = copy.deepcopy(reduced_data_hdbscan_graph2dRangeX)
+reduced_data_hdbscan_graph2dRangeX_collab['data'] = data_collab
+
+
+TestShapeReducerColumn_v2_collab = ReducerTest(
+    shape_reducer_dbscan,
+    process_data_dbscan,
+    extracted_data,
+    processed_data,
+    reduced_data_collab,
+    'Test shape column V2.0 reducer with DBSCAN with collab',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'column'},
+    kwargs={
+        'eps': 5,
+        'min_samples': 2,
+        'collab': True
+    },
+    test_name='TestShapeReducerColumn_v2_collab'
+)
+
+TestShapeReducerGraph2dRangeX_v2_collab = ReducerTest(
+    shape_reducer_dbscan,
+    process_data_dbscan,
+    extracted_data,
+    processed_data_graph2dRangeX,
+    reduced_data_graph2dRangeX_collab,
+    'Test shape graph2dRangeX reducer with DBSCAN with collab',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'graph2dRangeX'},
+    kwargs={
+        'eps': 5,
+        'min_samples': 2,
+        'collab': True
+    },
+    test_name='TestShapeReducerGraph2dRangeX_v2_collab'
+)
+
+TestShapeReducerColumnOptics_v2_collab = ReducerTest(
+    shape_reducer_optics,
+    process_data_optics,
+    extracted_data,
+    processed_data,
+    reduced_data_collab,
+    'Test shape column V2.0 reducer with OPTICS with collab',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'column'},
+    kwargs={
+        'min_samples': 2,
+        'collab': True
+    },
+    test_name='TestShapeReducerColumnOptics_v2_collab'
+)
+
+TestShapeReducerGraph2dRangeXOptics_v2_collab = ReducerTest(
+    shape_reducer_optics,
+    process_data_optics,
+    extracted_data,
+    processed_data_graph2dRangeX,
+    reduced_data_graph2dRangeX_collab,
+    'Test shape graph2dRangeX reducer with OPTICS with collab',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'graph2dRangeX'},
+    kwargs={
+        'min_samples': 2,
+        'collab': True
+    },
+    test_name='TestShapeReducerGraph2dRangeXOptics_v2_collab'
+)
+
+TestShapeReducerColumnHdbscan_v2_collab = ReducerTest(
+    shape_reducer_hdbscan,
+    process_data_hdbscan,
+    extracted_data,
+    processed_data,
+    reduced_data_hdbscan_collab,
+    'Test shape column V2.0 reducer with HDBSCAN with collab',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'column'},
+    kwargs={
+        'min_cluster_size': 2,
+        'min_samples': 1,
+        'allow_single_cluster': True,
+        'collab': True
+    },
+    test_name='TestShapeReducerColumnHdbscan_v2_collab'
+)
+
+TestShapeReducerGraph2dRangeXHdbscan_v2_collab = ReducerTest(
+    shape_reducer_hdbscan,
+    process_data_hdbscan,
+    extracted_data,
+    processed_data_graph2dRangeX,
+    reduced_data_hdbscan_graph2dRangeX_collab,
+    'Test shape graph2dRangeX reducer with HDBSCAN with collab',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'graph2dRangeX'},
+    kwargs={
+        'min_cluster_size': 2,
+        'min_samples': 1,
+        'allow_single_cluster': True,
+        'collab': True
+    },
+    test_name='TestShapeReducerGraph2dRangeXHdbscan_v2_collab'
 )
