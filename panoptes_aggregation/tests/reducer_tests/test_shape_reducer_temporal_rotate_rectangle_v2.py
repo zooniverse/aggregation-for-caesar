@@ -2,7 +2,7 @@ from panoptes_aggregation.reducers.shape_reducer_dbscan import process_data as p
 from panoptes_aggregation.reducers.shape_reducer_hdbscan import process_data as process_data_hdbscan, shape_reducer_hdbscan
 from panoptes_aggregation.reducers.shape_reducer_optics import process_data as process_data_optics, shape_reducer_optics
 from .base_test_class import ReducerTest
-
+import copy
 
 extracted_data = [
     {
@@ -150,6 +150,7 @@ processed_data = {
     'shape': 'temporalRotateRectangle',
     'symmetric': False,
     'classifier_version': '2.0',
+    'n_classifications': 10
 }
 
 reduced_data_dbscan = {
@@ -270,4 +271,76 @@ TestShapeReducerTemporalRotateRectangleHdbscan_v2 = ReducerTest(
     },
     test_name='TestShapeReducerTemporalRotateRectangleHdbscan_v2',
     round=1,
+)
+
+data_collab = [
+    {
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'drawing',
+        'toolIndex': 0,
+        'frame': 0,
+        'markId': 'collab_frame0_T0_toolIndex0_0',
+        'toolType': 'temporalRotateRectangle',
+        'x_center': 502.9,
+        'y_center': 504.3,
+        'width': 137.5,
+        'height': 61.0,
+        'angle': 10.0,
+        'displayTime': 0.1
+    }, {
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'drawing',
+        'toolIndex': 0,
+        'frame': 0,
+        'markId': 'collab_frame0_T0_toolIndex0_1',
+        'toolType': 'temporalRotateRectangle',
+        'x_center': 358.1,
+        'y_center': 584.7,
+        'width': 143.3,
+        'height': 98.5,
+        'angle': 110.0,
+        'displayTime': 0.7
+    }, {
+        'stepKey': 'S0',
+        'taskIndex': 0,
+        'taskKey': 'T0',
+        'taskType': 'drawing',
+        'toolIndex': 0,
+        'frame': 0,
+        'markId': 'collab_frame0_T0_toolIndex0_2',
+        'toolType': 'temporalRotateRectangle',
+        'x_center': 522.3,
+        'y_center': 508.1,
+        'width': 136.1,
+        'height': 54.5,
+        'angle': 10.0,
+        'displayTime': 0.9
+    }
+]
+
+reduced_data_dbscan_collab = copy.deepcopy(reduced_data_dbscan)
+reduced_data_dbscan_collab['data'] = data_collab
+
+TestShapeReducerTemporalRotateRectangleDbscan_v2_collab = ReducerTest(
+    shape_reducer_dbscan,
+    process_data_dbscan,
+    extracted_data,
+    processed_data,
+    reduced_data_dbscan_collab,
+    'Test shape temporalRotateRectangle V2.0 reducer with DBSCAN with collab',
+    network_kwargs=kwargs_extra_data,
+    pkwargs={'shape': 'temporalRotateRectangle'},
+    kwargs={
+        'eps': 0.8,
+        'min_samples': 2,
+        'eps_t': 0.5,
+        'metric_type': 'IoU',
+        'collab': True
+    },
+    test_name='TestShapeReducerTemporalRotateRectangleDbscan_v2_collab',
+    round=1
 )
