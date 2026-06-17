@@ -12,11 +12,18 @@ from sklearn.cluster import DBSCAN
 import numpy as np
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
-from .polygon_reducer_utils import IoU_metric_polygon, cluster_average_last, \
-    cluster_average_intersection, cluster_average_union, \
-    cluster_average_median, IoU_distance_matrix_of_cluster, \
+from .subtask_reducer_wrapper import subtask_wrapper
+from .polygon_reducer_utils import (
+    IoU_metric_polygon,
+    cluster_average_last,
+    cluster_average_intersection,
+    cluster_average_union,
+    cluster_average_median,
+    IoU_distance_matrix_of_cluster,
     IoU_cluster_mean_distance
+)
 import shapely
+
 
 DEFAULTS = {
     'min_samples': {'default': 2, 'type': int},
@@ -142,6 +149,7 @@ def get_annotations(tool, frame, average_polygon, step_key, task_index, tool_typ
     created_at=True,
     output_kwargs=True
 )
+@subtask_wrapper
 def polygon_reducer(data_by_tool, **kwargs_dbscan):
     '''Cluster a polygon/freehand/Bezier tools using DBSCAN.
 
