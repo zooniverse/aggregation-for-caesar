@@ -26,6 +26,7 @@ Welcome to panoptes_aggregation's documentation
 .. toctree::
    :maxdepth: 2
    :caption: Technical notes:
+
    Drawing_task_notes
    Gravity_Spy
 

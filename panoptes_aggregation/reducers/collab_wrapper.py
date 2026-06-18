@@ -17,14 +17,13 @@ def collab_wrapper(func):
         min_threshold = kwargs.pop('min_threshold', 0)
 
         # data is the `processed` data
-        tool_type = data['shape']
+        tool_type = data.get('shape', None)
         if tool_type == 'column':
             # ensure the FEM tool name is used
             tool_type = 'graph2dRangeX'
         # remove n_classifications from the processed data
         # as it is not expected for the reducers
-        n_classifications = data.pop('n_classifications')
-        print(n_classifications)
+        n_classifications = data.pop('n_classifications', 1)
 
         # call the original function with the collab keywords stripped off
         reduced_data = func(data, **kwargs)
