@@ -242,6 +242,7 @@ The reduction process of drawing tasks follows these steps:
 
 As before these steps are applied using python decorators.
 - `@subtask_wrapper`: provides code to reduce the subtasks based on the results of the clustering code. This must be applied to the reducer *first* (decorator at the bottom of the stack). Also adds the classifier version is added to the extract if it is v2.0 or higher.
+- `@collab_wrapper`: provides code to pass back the identified clusters to the Zooniverse frontend in a way that will show them to the next volunteer to see the subject.  This needs the `CaesarDataFetching` admin flag to be turn on for the project to work.
 - `@reducer_wrapper`: provides code common to all reducers that detects if an reducer is being called in either "offline" or "online" mode and grabs the augments and keywords from the appropriate place, apply the data processing function, and call the reduction function on the result  Must be applied to the reducer *last* (decorator at the top of the stack).
 
 Note: The above wrappers are all in the `panoptes_aggregation.reducers` subfolder.
@@ -634,3 +635,83 @@ From this point the processed data looks identical to when all extracts were v2.
     }
 }
 ```
+
+## Collaborative drawing tasks
+
+With the transcription task the Zooniverse added the ability to create collaborative workflows, and more recently added the ability for kind of workflow to work with any of the FEM drawing tasks.  For this to work the `CaesarDataFetching` admin flag needs to be turned on at the Zooniverse project level.  To use the feature the reducer needs to place within the `"data"` key of the JSON the identified clusters in the format of an FEM classification payload.  This re-formatting is handled by the `collab_wrapper` when the `collab=True` keyword is set.
+
+This wrapper adds several new keywords that can be passed into the drawing reducers:
+- `collab`: When set to `True` the identified clusters are turned back into FEM annotations.  These will be shown to the next volunteer who sees the subject as a starting point.
+- `step_key`: On FEM workflows have a concept of "steps" that can made up of one or several "tasks".  If your drawing task is the first question of your workflow this will be "S0".
+- `task_index`: If a step is made up of several tasks (e.g. via the combo task), this value indicates what the index of the drawing task is.  This will typically be `0`.
+- `min_threshold`: The ratio of the number of volunteers who have identified a cluster and the total number of volunteers who have classified the subject is the "threshold" value for the cluster.  Only clusters that have a threshold value above this minimum will be shown to the next volunteer.  Defaults to `0` (e.g. all clusters always shown).
+
+In the above example if `collab=True` the result would be:
+
+```json
+{
+    "classifier_version": "2.0",
+    "frame0": {
+        "T0_toolIndex0_rectangle_x_center": [2.5, 125, 2.5, 125],
+        "T0_toolIndex0_rectangle_y_center": [5, 155, 5, 155],
+        "T0_toolIndex0_rectangle_width": [5, 50, 5, 50],
+        "T0_toolIndex0_rectangle_height": [10, 100, 10, 100],
+        "T0_toolIndex0_cluster_labels": [0, 1, 0, 1],
+
+        "T0_toolIndex0_clusters_count": [2, 2],
+        "T0_toolIndex0_clusters_x_center": [2.5, 125],
+        "T0_toolIndex0_clusters_y_center": [5, 155],
+        "T0_toolIndex0_clusters_width": [5, 50],
+        "T0_toolIndex0_clusters_height": [10, 100],
+
+        "T0_toolIndex1_rectangle_x_center": [505],
+        "T0_toolIndex1_rectangle_y_center": [510],
+        "T0_toolIndex1_rectangle_width": [10],
+        "T0_toolIndex1_rectangle_height": [20],
+        "T0_toolIndex1_cluster_labels": [-1],
+    },
+
+    "data": [
+        {
+            "stepKey": "S0",
+            "taskIndex": 0,
+            "taskKey": "T0",
+            "taskType": "drawing",
+            "toolIndex": 0,
+            "frame": 0,
+            "markId": "collab_frame0_T0_toolIndex0_0",
+            "toolType": "rectangle",
+            "x_center": 2.5,
+            "y_center": 5,
+            "width": 5,
+            "height": 10
+        },
+        {
+            "stepKey": "S0",
+            "taskIndex": 0,
+            "taskKey": "T0",
+            "taskType": "drawing",
+            "toolIndex": 0,
+            "frame": 0,
+            "markId": "collab_frame0_T0_toolIndex0_1",
+            "toolType": "rectangle",
+            "x_center": 125,
+            "y_center": 155,
+            "width": 50,
+            "height": 100
+        }
+    ]
+}
+```
+
+The next time a volunteer viewed the subject above it would be populated with two rectangles drawn with the first tool of the drawing task.
+
+Note: The `markID` must be unique for each item in the returned list. 
+
+### Limitations
+
+There are a few limitations to how collaborative drawing tasks work:
+- All drawing tools must be the same shape.  This comes down to restrictions in how panoptes_aggregation can only reduce one shape at a time and how `CaesarDataFetching` can only grab data from one reducer.
+- The Caesar reducer must have the key `machineLearnt` and must have "Pubic Extracts" and "Public Reductions" turned on.
+- The workflow must have "Enable Caesar Data Fetching" turned on in its settings.
+- No subtasks should be associated with the collaborative drawing task.  While this technically possible it would require any subtask reducers to calculate a valid consensus value, this is something many of the reducer don't do (e.g. the question reducer gives counts for each answer).  This is currently outside the scope of this feature.
