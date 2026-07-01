@@ -126,7 +126,7 @@ def process_data(data):
 @reducer_wrapper(
     process_data=process_data,
     defaults_data=DEFAULTS,
-    user_id=False,
+    user_id=True,
     created_at=True,
     output_kwargs=True
 )

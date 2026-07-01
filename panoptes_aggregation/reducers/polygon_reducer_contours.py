@@ -13,6 +13,7 @@ from sklearn.cluster import DBSCAN
 import numpy as np
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
+from .subtask_reducer_wrapper import subtask_wrapper
 from .polygon_reducer_utils import IoU_metric_polygon, \
     IoU_distance_matrix_of_cluster, IoU_cluster_mean_distance, \
     cluster_average_intersection_contours, \
@@ -28,10 +29,11 @@ DEFAULTS = {
 @reducer_wrapper(
     process_data=process_data,
     defaults_data=DEFAULTS,
-    user_id=False,
+    user_id=True,
     created_at=True,
     output_kwargs=True
 )
+@subtask_wrapper
 def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
     '''Cluster a polygon/freehand/Bezier tools using DBSCAN, then find the
     contours of this cluster.

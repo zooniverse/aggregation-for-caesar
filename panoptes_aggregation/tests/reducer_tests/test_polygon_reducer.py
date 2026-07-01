@@ -355,6 +355,12 @@ extracted_data = [
 ]
 
 kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4
+    ],
     'created_at': [
         '2025-01-21 10:46:20 UTC',
         '2025-01-25 11:46:20 UTC',
@@ -618,6 +624,12 @@ reduced_data_last = {
 }
 
 kwargs_extra_data_time_format = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4
+    ],
     'created_at': [
         '2025-10-14T12:47:55.154Z',
         '2025-10-14T12:47:57.154Z',
@@ -1908,6 +1920,12 @@ extracted_data_no_overall_intersection = [
 ]
 
 kwargs_extra_data_no_overall_intersection = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4
+    ],
     'created_at': [
         '2025-01-21 10:46:20 UTC',
         '2025-01-25 11:46:20 UTC',

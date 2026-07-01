@@ -8,7 +8,7 @@ import copy
 
 extracted_data_freehand = [
     {
-        'classifier_version': 2.0,
+        'classifier_version': '2.0',
         'frame0': {
             'T0_toolIndex0_shape': 'freehandLine',
             'T0_toolIndex0_pathX': [
@@ -98,7 +98,7 @@ extracted_data_freehand = [
         }
     },
     {
-        'classifier_version': 2.0,
+        'classifier_version': '2.0',
         'frame0': {
             'T0_toolIndex0_shape': 'freehandLine',
             'T0_toolIndex0_pathX': [
@@ -188,7 +188,7 @@ extracted_data_freehand = [
         }
     },
     {
-        'classifier_version': 2.0,
+        'classifier_version': '2.0',
         'frame0': {
             'T0_toolIndex0_shape': 'freehandLine',
             'T0_toolIndex0_pathX': [
@@ -286,7 +286,7 @@ extracted_data_freehand = [
         }
     },
     {
-        'classifier_version': 2.0,
+        'classifier_version': '2.0',
         'frame0': {
             'T0_toolIndex0_shape': 'freehandLine',
             'T0_toolIndex0_pathX': [
@@ -350,6 +350,12 @@ extracted_data_freehand = [
 ]
 
 kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4
+    ],
     'created_at': [
         '2025-01-21 10:46:20 UTC',
         '2025-01-25 11:46:20 UTC',
@@ -902,7 +908,7 @@ TestFreehandReducer_collab = ReducerTest(
 
 extracted_data_polygon = [
     {
-        'classifier_version': 2.0,
+        'classifier_version': '2.0',
         'frame0': {
             'T0_toolIndex0_shape': 'polygon',
             'T0_toolIndex0_pathX': [
@@ -992,7 +998,7 @@ extracted_data_polygon = [
         }
     },
     {
-        'classifier_version': 2.0,
+        'classifier_version': '2.0',
         'frame0': {
             'T0_toolIndex0_shape': 'polygon',
             'T0_toolIndex0_pathX': [
@@ -1082,7 +1088,7 @@ extracted_data_polygon = [
         }
     },
     {
-        'classifier_version': 2.0,
+        'classifier_version': '2.0',
         'frame0': {
             'T0_toolIndex0_shape': 'polygon',
             'T0_toolIndex0_pathX': [
@@ -1180,7 +1186,7 @@ extracted_data_polygon = [
         }
     },
     {
-        'classifier_version': 2.0,
+        'classifier_version': '2.0',
         'frame0': {
             'T0_toolIndex0_shape': 'polygon',
             'T0_toolIndex0_pathX': [
@@ -1394,7 +1400,7 @@ TestPolygonReducer_collab = ReducerTest(
 
 extracted_data_mixed = [
     {
-        'classifier_version': 2.0,
+        'classifier_version': '2.0',
         'frame0': {
             'T0_toolIndex0_shape': 'freehandLine',
             'T0_toolIndex0_pathX': [
@@ -1484,7 +1490,7 @@ extracted_data_mixed = [
         }
     },
     {
-        'classifier_version': 2.0,
+        'classifier_version': '2.0',
         'frame0': {
             'T0_toolIndex0_shape': 'freehandLine',
             'T0_toolIndex0_pathX': [
@@ -1574,7 +1580,7 @@ extracted_data_mixed = [
         }
     },
     {
-        'classifier_version': 2.0,
+        'classifier_version': '2.0',
         'frame0': {
             'T0_toolIndex0_shape': 'freehandLine',
             'T0_toolIndex0_pathX': [
@@ -1672,7 +1678,7 @@ extracted_data_mixed = [
         }
     },
     {
-        'classifier_version': 2.0,
+        'classifier_version': '2.0',
         'frame0': {
             'T0_toolIndex0_shape': 'freehandLine',
             'T0_toolIndex0_pathX': [

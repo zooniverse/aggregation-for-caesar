@@ -354,6 +354,12 @@ extracted_data = [
 ]
 
 kwargs_extra_data = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4
+    ],
     'created_at': [
         '2025-01-21 10:46:20 UTC',
         '2025-01-25 11:46:20 UTC',
@@ -1619,6 +1625,12 @@ extracted_data_no_overall_intersection = [
 ]
 
 kwargs_extra_data_no_overall_intersection = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4
+    ],
     'created_at': [
         '2025-01-21 10:46:20 UTC',
         '2025-01-25 11:46:20 UTC',
@@ -1891,6 +1903,18 @@ classification_square = {
 extracted_data_10_identical_squares = [classification_square for i in range(10)]
 
 kwargs_extra_data_10_identical_squares = {
+    'user_id': [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+    ],
     'created_at': [
         '2025-01-21 10:46:20 UTC',
         '2025-01-21 10:46:21 UTC',
