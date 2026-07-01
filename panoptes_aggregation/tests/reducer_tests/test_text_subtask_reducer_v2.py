@@ -5,9 +5,9 @@ extracted_data = [
     {
         'classifier_version': '2.0',
         'frame0': {
-            'T0_tool0_x': [0.0, 100.0],
-            'T0_tool0_y': [0.0, 100.0],
-            'T0_tool0_subtask0': [
+            'T0_toolIndex0_x': [0.0, 100.0],
+            'T0_toolIndex0_y': [0.0, 100.0],
+            'T0_toolIndex0_subtask0': [
                 {
                     'text': 'this is some test text',
                     'gold_standard': True
@@ -23,9 +23,9 @@ extracted_data = [
     {
         'classifier_version': '2.0',
         'frame0': {
-            'T0_tool0_x': [0.0, 100.0],
-            'T0_tool0_y': [0.0, 100.0],
-            'T0_tool0_subtask0': [
+            'T0_toolIndex0_x': [0.0, 100.0],
+            'T0_toolIndex0_y': [0.0, 100.0],
+            'T0_toolIndex0_subtask0': [
                 {
                     'text': 'this is some text text',
                     'gold_standard': False
@@ -50,13 +50,13 @@ kwargs_extra_data = {
 reduced_data = {
     'classifier_version': '2.0',
     'frame0': {
-        'T0_tool0_point_x': [0.0, 100.0, 0.0, 100.0],
-        'T0_tool0_point_y': [0.0, 100.0, 0.0, 100.0],
-        'T0_tool0_cluster_labels': [0, 1, 0, 1],
-        'T0_tool0_clusters_count': [2, 2],
-        'T0_tool0_clusters_x': [0.0, 100.0],
-        'T0_tool0_clusters_y': [0.0, 100.0],
-        'T0_tool0_subtask0': [
+        'T0_toolIndex0_point_x': [0.0, 100.0, 0.0, 100.0],
+        'T0_toolIndex0_point_y': [0.0, 100.0, 0.0, 100.0],
+        'T0_toolIndex0_cluster_labels': [0, 1, 0, 1],
+        'T0_toolIndex0_clusters_count': [2, 2],
+        'T0_toolIndex0_clusters_x': [0.0, 100.0],
+        'T0_toolIndex0_clusters_y': [0.0, 100.0],
+        'T0_toolIndex0_subtask0': [
             {
                 'text': 'this is some test text',
                 'gold_standard': True
@@ -74,7 +74,7 @@ reduced_data = {
                 'gold_standard': False
             }
         ],
-        'T0_tool0_subtask0_clusters': [
+        'T0_toolIndex0_subtask0_clusters': [
             {
                 'aligned_text': [
                     ['this', 'this'],
@@ -115,7 +115,7 @@ TestTextSubtaskReducerV2 = ReducerTestNoProcessing(
         'eps': 5,
         'min_samples': 2,
         'details': {
-            'T0_tool0_subtask0': 'text_reducer'
+            'T0_toolIndex0_subtask0': 'text_reducer'
         }
     },
     test_name='TestTextSubtaskReducerV2'

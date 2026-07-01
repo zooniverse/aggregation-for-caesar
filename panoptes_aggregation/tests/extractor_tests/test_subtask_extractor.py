@@ -127,6 +127,22 @@ TestSubtask = ExtractorTest(
     test_name='TestSubtask'
 )
 
+TestSubtask_v2 = ExtractorTest(
+    extractors.rectangle_extractor,
+    classification,
+    expected,
+    'Test subtask extraction with v2.0 config',
+    kwargs={
+        'details': {
+            'T0_toolIndex0_subtask0': 'question_extractor',
+            'T0_toolIndex0_subtask1': 'question_extractor',
+            'T0_toolIndex0_subtask2': 'dropdown_extractor',
+            'T0_toolIndex0_subtask3': None
+        }
+    },
+    test_name='TestSubtask_v2'
+)
+
 TestSubtaskTask = ExtractorTest(
     extractors.rectangle_extractor,
     classification,

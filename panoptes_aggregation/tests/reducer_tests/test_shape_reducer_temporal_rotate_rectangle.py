@@ -138,7 +138,9 @@ processed_data = {
         ]
     },
     'shape': 'temporalRotateRectangle',
-    'symmetric': False
+    'symmetric': False,
+    'classifier_version': '1.0',
+    'n_classifications': 10
 }
 
 reduced_data_dbscan = {

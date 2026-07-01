@@ -13,6 +13,7 @@ from sklearn.cluster import DBSCAN
 import numpy as np
 from collections import OrderedDict
 from .reducer_wrapper import reducer_wrapper
+from .subtask_reducer_wrapper import subtask_wrapper
 from .polygon_reducer_utils import IoU_metric_polygon, \
     IoU_distance_matrix_of_cluster, IoU_cluster_mean_distance, \
     cluster_average_intersection_contours, \
@@ -28,10 +29,11 @@ DEFAULTS = {
 @reducer_wrapper(
     process_data=process_data,
     defaults_data=DEFAULTS,
-    user_id=False,
+    user_id=True,
     created_at=True,
     output_kwargs=True
 )
+@subtask_wrapper
 def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
     '''Cluster a polygon/freehand/Bezier tools using DBSCAN, then find the
     contours of this cluster.
@@ -85,6 +87,8 @@ def polygon_reducer_contours(data_by_tool, **kwargs_dbscan):
         * `tool*_contours_y` : A list of the y values of each contour
         * `tool*_consensus` : A list of the the overall consensus of each cluster. A value of 1 is perfect agreement, a value of 0 is complete disagreement. This is found by subtracting`IoU_cluster_mean_distance` from 1
     '''
+    _ = data_by_tool.pop('shape', None)
+    _ = data_by_tool.pop('n_classifications', 1)
     min_samples = max(1, kwargs_dbscan.pop('min_samples', 2))
     rasterisation = kwargs_dbscan.pop('rasterisation', 'auto')
     smoothing = kwargs_dbscan.pop('rasterisation', 'minimal_sides')

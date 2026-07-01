@@ -9,17 +9,33 @@ import shapely.affinity
 import scipy.optimize
 import numpy
 from functools import lru_cache
+from packaging import version
+
+
+VALID_IOU_SHAPES = [
+    'rectangle',
+    'rotateRectangle',
+    'temporalRotateRectangle',
+    'column',
+    'graph2dRangeX',
+    'circle',
+    'ellipse',
+    'triangle'
+]
+
+V1 = version.parse('1.0')
+V2 = version.parse('2.0')
 
 
 def tupleize(func):
-    def wrapper(params, shape):
-        return func(tuple(params), shape)
+    def wrapper(params, shape, **kwargs):
+        return func(tuple(params), shape, **kwargs)
     return wrapper
 
 
 @tupleize
 @lru_cache(maxsize=100)
-def panoptes_to_geometry(params, shape):
+def panoptes_to_geometry(params, shape, classifier_version=V1):
     '''Convert shapes created with the Panoptes Front End (PFE) to shapely
     geometry objects.
 
@@ -36,37 +52,63 @@ def panoptes_to_geometry(params, shape):
         * ellipse
         * triangle
 
+    classifier_version : packaging.version
+        The version of classifier used to make the classifications, either `1.0` for PFE or `2.0`
+        for FEM, default is `packaging.version.parse('1.0')`
+
     Returns
     -------
     geometry : shapely.geometry
         The Shapely geometry object for the shape
     '''
     if shape == 'rectangle':
-        x, y, width, height = params
+        if classifier_version == V1:
+            x, y, width, height = params
+        else:
+            x_center, y_center, width, height = params
+            x = x_center - 0.5 * width
+            y = y_center - 0.5 * height
         rectangle = shapely.geometry.box(x, y, x + width, y + height)
         return rectangle
     elif shape == 'rotateRectangle':
-        x, y, width, height, angle = params
+        if classifier_version == V1:
+            x, y, width, height, angle = params
+        else:
+            x_center, y_center, width, height, angle = params
+            x = x_center - 0.5 * width
+            y = y_center - 0.5 * height
         rot_rectangle = shapely.geometry.box(x, y, x + width, y + height)
         rot_rectangle = shapely.affinity.rotate(rot_rectangle, angle)
         return rot_rectangle
     elif shape == 'temporalRotateRectangle':
+        # only defined for classifier_version = 2
         xc, yc, width, height, angle, _ = params
         x, y = xc - 0.5 * width, yc - 0.5 * height
         rot_rectangle = shapely.geometry.box(x, y, x + width, y + height)
         rot_rectangle = shapely.affinity.rotate(rot_rectangle, angle)
         return rot_rectangle
+    elif (shape == 'column') or (shape == 'graph2dRangeX'):
+        x_center, width = params
+        x = x_center - 0.5 * width
+        # the column tool is technically a line
+        # making it a box of height 1 make the IoU metric work as expected
+        column = shapely.geometry.box(x, 0, x + width, 1)
+        return column
     elif shape == 'circle':
+        # same for all classifier_version
         x, y, r = params
         circle = shapely.geometry.Point(x, y).buffer(r)
         return circle
     elif shape == 'ellipse':
         x, y, rx, ry, angle = params
+        if classifier_version == V1:
+            angle = -angle
         ellipse = shapely.geometry.Point(x, y).buffer(1)
         ellipse = shapely.affinity.scale(ellipse, rx, ry)
-        ellipse = shapely.affinity.rotate(ellipse, -angle)
+        ellipse = shapely.affinity.rotate(ellipse, angle)
         return ellipse
     elif shape == 'triangle':
+        # only defined for classifier_version = 1
         x, y, r, angle = params
         triangle = shapely.geometry.Polygon([
             [0, -r],
@@ -77,10 +119,10 @@ def panoptes_to_geometry(params, shape):
         triangle = shapely.affinity.translate(triangle, xoff=x, yoff=y)
         return triangle
     else:
-        raise ValueError('The IoU metric only works with the following shapes: rectangle, rotateing rectangle, circle, ellipse, or triangle')
+        raise ValueError(f'The IoU metric only works with the following shapes: {VALID_IOU_SHAPES}')
 
 
-def IoU_metric(params1, params2, shape, eps_t=None):
+def IoU_metric(params1, params2, shape, eps_t=None, classifier_version='1.0'):
     '''Find the Intersection of Union distance between two shapes.
 
     Parameters
@@ -95,6 +137,9 @@ def IoU_metric(params1, params2, shape, eps_t=None):
     eps_t : float
         For temporal tools, this defines the temporal width of the rectangle.
         Two shapes are connected if the displayTime parameters are within eps_t.
+    classifier_version : str
+        The version of classifier used to make the classifications, either `"1.0"` for PFE or `"2.0"`
+        for FEM, default is "1.0"
 
     Returns
     -------
@@ -103,8 +148,9 @@ def IoU_metric(params1, params2, shape, eps_t=None):
         1 means the shapes don't overlap, values in the middle mean partial
         overlap.
     '''
-    geo1 = panoptes_to_geometry(params1, shape)
-    geo2 = panoptes_to_geometry(params2, shape)
+    classifier_version = version.parse(classifier_version)
+    geo1 = panoptes_to_geometry(params1, shape, classifier_version=classifier_version)
+    geo2 = panoptes_to_geometry(params2, shape, classifier_version=classifier_version)
     intersection = 0
     if geo1.intersects(geo2):
         intersection = geo1.intersection(geo2).area
@@ -115,8 +161,8 @@ def IoU_metric(params1, params2, shape, eps_t=None):
         # centered at (t - eps_t / 2, 0.5) and calculate the intersection in time
         time_params1 = (params1[-1] - eps_t, 0, eps_t, 1)
         time_params2 = (params2[-1] - eps_t, 0, eps_t, 1)
-        time_geo1 = panoptes_to_geometry(time_params1, 'rectangle')
-        time_geo2 = panoptes_to_geometry(time_params2, 'rectangle')
+        time_geo1 = panoptes_to_geometry(time_params1, 'rectangle', classifier_version=classifier_version)
+        time_geo2 = panoptes_to_geometry(time_params2, 'rectangle', classifier_version=classifier_version)
         time_intersection = 0
         if time_geo1.intersects(time_geo2):
             time_intersection = time_geo1.intersection(time_geo2).area
@@ -133,7 +179,7 @@ def IoU_metric(params1, params2, shape, eps_t=None):
     return 1 - intersection / union
 
 
-def average_bounds(params_list, shape):
+def average_bounds(params_list, shape, classifier_version=V1):
     '''Find the bounding box for the average shape for each of the shapes
     parameters.
 
@@ -144,6 +190,9 @@ def average_bounds(params_list, shape):
     shape : string
         The shape these parameters belong to (see :meth:`panoptes_to_geometry` for
         supported shapes)
+    classifier_version : packaging.version
+        The version of classifier used to make the classifications, either `1.0` for PFE or `2.0`
+        for FEM, default is `packaging.version.parse('1.0')`
 
     Returns
     -------
@@ -151,10 +200,10 @@ def average_bounds(params_list, shape):
         This is a list of tuples giving the min and max bounds for
         each shape parameter.
     '''
-    geo = panoptes_to_geometry(params_list[0], shape)
+    geo = panoptes_to_geometry(params_list[0], shape, classifier_version=classifier_version)
     # Use the union of all shapes to find the bounding box
     for params in params_list[1:]:
-        geo = geo.union(panoptes_to_geometry(params, shape))
+        geo = geo.union(panoptes_to_geometry(params, shape, classifier_version=classifier_version))
     # bound on x
     bx = (geo.bounds[0], geo.bounds[2])
     # bound on y
@@ -163,9 +212,12 @@ def average_bounds(params_list, shape):
     dx = bx[1] - bx[0]
     # height of geo
     dy = by[1] - by[0]
-    # bound is a list of tuples giving (min, max) values for each paramters of the shape
+    # bound is a list of tuples giving (min, max) values for each parameters of the shape
     bound = [bx, by]
-    if shape in ['rectangle', 'rotateRectangle', 'temporalRotateRectangle', 'ellipse']:
+    if shape in ['column', 'graph2dRangeX']:
+        # this is data, set min width range to be 1e-3 * width of bounding box
+        bound = [bx, (1e-3 * dx, dx)]
+    elif shape in ['rectangle', 'rotateRectangle', 'temporalRotateRectangle', 'ellipse']:
         # bound on width or radius_x, min set to 1 pixel
         bound.append((1, dx))
         # bound on height or radius_y, min set to 1 pixel
@@ -186,7 +238,7 @@ def average_bounds(params_list, shape):
     return bound
 
 
-def scale_shape(params, shape, gamma):
+def scale_shape(params, shape, gamma, classifier_version=V1):
     '''Scale a given shape about its center by the given scale factor
 
     Parameters
@@ -198,6 +250,9 @@ def scale_shape(params, shape, gamma):
         supported shapes)
     gamma : float
         The scaling factor to use
+    classifier_version : packaging.version
+        The version of classifier used to make the classifications, either `1.0` for PFE or `2.0`
+        for FEM, default is `packaging.version.parse('1.0')`
 
     Returns
     -------
@@ -206,25 +261,47 @@ def scale_shape(params, shape, gamma):
     '''
     # uniform scaling of each shape about its center
     if shape == 'rectangle':
-        return [
-            # upper left corner moves
-            params[0] + (params[2] * (1 - gamma) / 2),
-            params[1] + (params[3] * (1 - gamma) / 2),
-            # width and height scale
-            gamma * params[2],
-            gamma * params[3]
-        ]
+        if classifier_version == V1:
+            return [
+                # upper left corner moves
+                params[0] + (params[2] * (1 - gamma) / 2),
+                params[1] + (params[3] * (1 - gamma) / 2),
+                # width and height scale
+                gamma * params[2],
+                gamma * params[3]
+            ]
+        else:
+            return [
+                # center point does not change
+                params[0],
+                params[1],
+                # width and height scale
+                gamma * params[2],
+                gamma * params[3]
+            ]
     elif shape == 'rotateRectangle':
-        return [
-            # upper left corner moves
-            params[0] + (params[2] * (1 - gamma) / 2),
-            params[1] + (params[3] * (1 - gamma) / 2),
-            # width and height scale
-            gamma * params[2],
-            gamma * params[3],
-            # angle does not change
-            params[4]
-        ]
+        if classifier_version == V1:
+            return [
+                # upper left corner moves
+                params[0] + (params[2] * (1 - gamma) / 2),
+                params[1] + (params[3] * (1 - gamma) / 2),
+                # width and height scale
+                gamma * params[2],
+                gamma * params[3],
+                # angle does not change
+                params[4]
+            ]
+        else:
+            return [
+                # center point does not change
+                params[0],
+                params[1],
+                # width and height scale
+                gamma * params[2],
+                gamma * params[3],
+                # angle does not change
+                params[4]
+            ]
     elif shape == 'temporalRotateRectangle':
         return [
             # center point does not change
@@ -237,6 +314,11 @@ def scale_shape(params, shape, gamma):
             params[4],
             # time does not change
             params[5]
+        ]
+    elif (shape == 'column') or (shape == 'graph2dRangeX'):
+        return [
+            params[0],
+            gamma * params[1]
         ]
     elif shape == 'circle':
         return [
@@ -265,10 +347,10 @@ def scale_shape(params, shape, gamma):
             params[3]
         ]
     else:
-        raise ValueError('The IoU metric only works with the following shapes: rectangle, rotateing rectangle, circle, ellipse, or triangle')
+        raise ValueError(f'The IoU metric only works with the following shapes: {VALID_IOU_SHAPES}')
 
 
-def average_shape_IoU(params_list, shape, eps_t=None, estimate=False):
+def average_shape_IoU(params_list, shape, eps_t=None, estimate=False, classifier_version='1.0'):
     '''Find the average shape and standard deviation from a list of parameters with respect
     to the IoU metric.
 
@@ -282,6 +364,9 @@ def average_shape_IoU(params_list, shape, eps_t=None, estimate=False):
     estimate : bool (optional)
         Estimate the average and sigma by the most representative shape from the cluster,
         this is significantly faster to compute than the true average, False by default.
+    classifier_version : str
+        The version of classifier used to make the classifications, either `"1.0"` for PFE or `"2.0"`
+        for FEM, default is "1.0"
 
     Returns
     -------
@@ -291,12 +376,13 @@ def average_shape_IoU(params_list, shape, eps_t=None, estimate=False):
     sigma : float
         The standard deviation of the input shapes with respect to the IoU metric
     '''
+    classifier_version = version.parse(classifier_version)
     if estimate:
         N = len(params_list)
         distance_matrix = numpy.zeros((N, N))
         for i in range(N):
             for j in range(i + 1, N):
-                distance = IoU_metric(params_list[i], params_list[j], shape=shape, eps_t=eps_t)
+                distance = IoU_metric(params_list[i], params_list[j], shape=shape, eps_t=eps_t, classifier_version=str(classifier_version))
                 distance_matrix[i, j] = distance
                 distance_matrix[j, i] = distance
         sum_square_distance = numpy.sum(distance_matrix**2, axis=1)
@@ -304,18 +390,18 @@ def average_shape_IoU(params_list, shape, eps_t=None, estimate=False):
         sigma = numpy.sqrt(sum_square_distance[mdx] / max((N - 1), 1))
         return params_list[mdx], sigma
     else:
-        geo_list = [panoptes_to_geometry(p, shape) for p in params_list]
+        geo_list = [panoptes_to_geometry(p, shape, classifier_version=classifier_version) for p in params_list]
         if 'temporal' in shape:
-            time_geo_list = [panoptes_to_geometry((params[-1] - eps_t, 0, eps_t, 1), 'rectangle')
+            time_geo_list = [panoptes_to_geometry((params[-1] - eps_t, 0, eps_t, 1), 'rectangle', classifier_version=classifier_version)
                             for params in params_list]
             geo_areas = numpy.array([geo_item.area for geo_item in geo_list])
 
         def sum_distance(x):
-            geo = panoptes_to_geometry(x, shape)
+            geo = panoptes_to_geometry(x, shape, classifier_version=classifier_version)
             intersections = shapely.intersection(geo, geo_list)
             intersections = numpy.array([inter.area for inter in intersections])
             if 'temporal' in shape:
-                time_geo = panoptes_to_geometry((x[-1] - eps_t, 0, eps_t, 1), 'rectangle')
+                time_geo = panoptes_to_geometry((x[-1] - eps_t, 0, eps_t, 1), 'rectangle', classifier_version=classifier_version)
                 time_intersections = shapely.intersection(time_geo, time_geo_list)
                 time_intersections = numpy.array([inter.area for inter in time_intersections])
                 intersections = intersections * time_intersections
@@ -330,26 +416,29 @@ def average_shape_IoU(params_list, shape, eps_t=None, estimate=False):
         m = scipy.optimize.direct(
             sum_distance,
             locally_biased=False,
-            bounds=average_bounds(params_list, shape)
+            bounds=average_bounds(params_list, shape, classifier_version=classifier_version)
         )
         # find the 1-sigma value
         sigma = numpy.sqrt(m.fun / max((len(params_list) - 1), 1))
         return list(m.x), sigma
 
 
-def sigma_shape(params, shape, sigma):
+def sigma_shape(params, shape, sigma, classifier_version='1.0'):
     '''Return the plus and minus one sigma shape given the starting parameters
     and sigma value.
 
     Parameters
     ----------
     params : list
-        A list of the parameters for the shape (as defined by PFE)
+        A list of the parameters for the shape (as defined by PFE or FEM)
     shape : string
         The name of the shape these parameters belong to (see :meth:`panoptes_to_geometry` for
         supported shapes)
     sigma : float
         The standard deviation used to scale up and down the input shape
+    classifier_version : str
+        The version of classifier used to make the classifications, either `"1.0"` for PFE or `"2.0"`
+        for FEM, default is "1.0"
 
     Returns
     -------
@@ -358,7 +447,8 @@ def sigma_shape(params, shape, sigma):
     minus_sigma : list
         A list of shape parameters for the 1-sigma scaled down average
     '''
+    classifier_version = version.parse(classifier_version)
     gamma = numpy.sqrt(1 - sigma)
-    plus_sigma = scale_shape(params, shape, 1 / gamma)
-    minus_sigma = scale_shape(params, shape, gamma)
+    plus_sigma = scale_shape(params, shape, 1 / gamma, classifier_version=classifier_version)
+    minus_sigma = scale_shape(params, shape, gamma, classifier_version=classifier_version)
     return plus_sigma, minus_sigma

@@ -27,7 +27,8 @@ def config_workflow(
     max_version=None,
     keywords={},
     output_dir=None,
-    verbose=False
+    verbose=False,
+    use_v1_subtask_config=False
 ):
     workflow_csv = get_file_instance(workflow_csv)
     with workflow_csv as workflow_csv_in:
@@ -76,7 +77,7 @@ def config_workflow(
         warnings.warn('A workflow range was specified, configuration is based on {0}'.format(configure_version))
     workflow = workflows[wdx].iloc[configure_version_loc]
     workflow_tasks = json.loads(workflow.tasks)
-    extractor_config = workflow_extractor_config(workflow_tasks, keywords=keywords)
+    extractor_config = workflow_extractor_config(workflow_tasks, keywords=keywords, use_v1_subtask_config=use_v1_subtask_config)
     config = {
         'workflow_id': workflow_id,
         'workflow_version': workflow_version,
@@ -91,7 +92,7 @@ def config_workflow(
         print('Saving Extractor config to:\n{0}'.format(filename))
         print()
     # configure the reducers
-    reducer_config_list = workflow_reducer_config(extractor_config)
+    reducer_config_list = workflow_reducer_config(extractor_config, use_v1_subtask_config=use_v1_subtask_config)
     task_set = set({})
     for extractor, reducer in zip(sorted(extractor_config.keys()), reducer_config_list):
         reducer_config = {

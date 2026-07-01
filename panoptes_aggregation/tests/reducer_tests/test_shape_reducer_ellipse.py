@@ -76,6 +76,8 @@ kwargs_extra_data = {
 processed_data = {
     'shape': 'ellipse',
     'symmetric': False,
+    'classifier_version': '1.0',
+    'n_classifications': 5,
     'frame0': {
         'T0_tool0': [
             (0.0, 0.0, 50.0, 60.0, 179.0),
