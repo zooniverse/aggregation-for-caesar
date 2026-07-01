@@ -248,6 +248,8 @@ As before some of these steps are applied using python decorators.
 
 Note: The above wrappers are all in the `panoptes_aggregation.reducers` subfolder.
 
+Note: If the `@subtask_wrapper` is used the `@reducer_wrapper` must have `user_id=True` set.  The user IDs are needed for the subtask wrapper.
+
 ### Details mapping
 
 The format for passing in the subtask mapping to reducers is an identical format to the mapping used for extractors:
