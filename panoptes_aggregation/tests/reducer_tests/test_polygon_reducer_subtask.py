@@ -1,9 +1,5 @@
-from panoptes_aggregation.reducers.polygon_reducer import process_data, \
-    polygon_reducer
+from panoptes_aggregation.reducers.polygon_reducer import polygon_reducer
 from .base_test_class import ReducerTestNoProcessing
-import numpy as np
-import shapely
-import copy
 
 
 extracted_data_freehand = [
