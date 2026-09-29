@@ -11,14 +11,17 @@ def tool_wrapper(func):
                 # default it to `drawing` as there will be only
                 # drawing tasks in it
                 task_type = annotation.get('taskType', 'drawing')
-                if task_type == 'drawing':
+                if task_type in ['drawing', 'dataVisAnnotation']:
                     new_value = []
-                    for v in annotation['value']:
+                    for markIndex, v in enumerate(annotation['value']):
                         # v1 classifier
                         if ('tool' in v) and (v['tool'] in tools):
                             new_value.append(v)
                         # v2 classifier
                         if ('toolIndex' in v) and (v['toolIndex'] in tools):
+                            # If a tool is filtered out keep track of what
+                            # markIndex it has in the original list
+                            v['markIndex'] = markIndex
                             new_value.append(v)
                     annotation['value'] = new_value
         return func(data, **kwargs)

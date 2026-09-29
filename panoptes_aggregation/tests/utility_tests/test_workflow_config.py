@@ -160,12 +160,9 @@ tasks = {
         'instruction': 'T8.instruction'
     }
 }
-keywords = {
-    'T4': {'dot_freq': 'line'},
-    'T5': {'dot_freq': 'word'}
-}
+
 extractor_config = {
-    'point_extractor_by_frame': [
+    'shape_extractor_point': [
         {
             'task': 'T0',
             'tools': [0, 2],
@@ -175,7 +172,8 @@ extractor_config = {
                     'question_extractor',
                     None
                 ]
-            }
+            },
+            'shape': 'point'
         }
     ],
     'shape_extractor_line': [
@@ -184,6 +182,16 @@ extractor_config = {
             'tools': [1],
             'details': {},
             'shape': 'line'
+        },
+        {
+            'task': 'T5',
+            'tools': [0],
+            'details': {
+                'T5_tool0': [
+                    'text_extractor'
+                ]
+            },
+            'shape': 'line'
         }
     ],
     'polygon_extractor': [
@@ -191,6 +199,15 @@ extractor_config = {
             'task': 'T0',
             'tools': [3, 5],
             'details': {}
+        },
+        {
+            'task': 'T4',
+            'tools': [0],
+            'details': {
+                'T4_tool0': [
+                    'text_extractor'
+                ]
+            }
         }
     ],
     'shape_extractor_rectangle': [
@@ -218,17 +235,77 @@ extractor_config = {
     'survey_extractor': [
         {'task': 'T3'}
     ],
-    'poly_line_text_extractor': [
+    'slider_extractor': [
+        {'task': 'T7'}
+    ],
+    'text_extractor': [
+        {'task': 'T8'}
+    ]
+}
+
+extractor_config_v2 = {
+    'shape_extractor_point': [
         {
-            'task': 'T4',
-            'dot_freq': 'line'
+            'task': 'T0',
+            'tools': [0, 2],
+            'details': {
+                'T0_toolIndex2_subtask0': 'question_extractor',
+                'T0_toolIndex2_subtask1': 'question_extractor',
+                'T0_toolIndex2_subtask2': None
+            },
+            'shape': 'point'
         }
     ],
-    'line_text_extractor': [
+    'shape_extractor_line': [
+        {
+            'task': 'T0',
+            'tools': [1],
+            'details': {},
+            'shape': 'line'
+        },
         {
             'task': 'T5',
-            'dot_freq': 'word'
+            'tools': [0],
+            'details': {'T5_toolIndex0_subtask0': 'text_extractor'},
+            'shape': 'line'
         }
+    ],
+    'polygon_extractor': [
+        {
+            'task': 'T0',
+            'tools': [3, 5],
+            'details': {}
+        },
+        {
+            'task': 'T4',
+            'tools': [0],
+            'details': {'T4_toolIndex0_subtask0': 'text_extractor'}
+        }
+    ],
+    'shape_extractor_rectangle': [
+        {
+            'task': 'T0',
+            'tools': [4],
+            'details': {},
+            'shape': 'rectangle'
+        }
+    ],
+    'bezier_extractor': [
+        {
+            'task': 'T0',
+            'tools': [6],
+            'details': {}
+        }
+    ],
+    'question_extractor': [
+        {'task': 'T1'},
+        {'task': 'T2'}
+    ],
+    'shortcut_extractor': [
+        {'task': 'T6'}
+    ],
+    'survey_extractor': [
+        {'task': 'T3'}
     ],
     'slider_extractor': [
         {'task': 'T7'}
@@ -237,12 +314,27 @@ extractor_config = {
         {'task': 'T8'}
     ]
 }
+
 reducer_config = [
     {'polygon_reducer': {}},
-    {'poly_line_text_reducer': {
-        'dot_freq': 'word'
+    {'polygon_reducer': {
+        'details': {
+            'T4_tool0': [
+                'text_reducer'
+            ]
+        }
     }},
-    {'point_reducer_dbscan': {
+    {'question_reducer': {}},
+    {'shape_reducer_dbscan': {
+        'shape': 'line',
+        'details': {
+            'T5_tool0': [
+                'text_reducer'
+            ]
+        }
+    }},
+    {'shape_reducer_dbscan': {
+        'shape': 'point',
         'details': {
             'T0_tool2': [
                 'question_reducer',
@@ -251,13 +343,30 @@ reducer_config = [
             ]
         }
     }},
-    {'poly_line_text_reducer': {
-        'dot_freq': 'line'
+    {'shape_reducer_dbscan': {
+        'shape': 'rectangle'
     }},
+    {'shortcut_reducer': {}},
+    {'slider_reducer': {}},
+    {'survey_reducer': {}},
+    {'text_reducer': {}}
+]
+
+reducer_config_v2 = [
     {'polygon_reducer': {}},
+    {'polygon_reducer': {'details': {'T4_toolIndex0_subtask0': 'text_reducer'}}},
     {'question_reducer': {}},
     {'shape_reducer_dbscan': {
-        'shape': 'line'
+        'shape': 'line',
+        'details': {'T5_toolIndex0_subtask0': 'text_reducer'}
+    }},
+    {'shape_reducer_dbscan': {
+        'shape': 'point',
+        'details': {
+            'T0_toolIndex2_subtask0': 'question_reducer',
+            'T0_toolIndex2_subtask1': 'question_reducer',
+            'T0_toolIndex2_subtask2': None,
+        }
     }},
     {'shape_reducer_dbscan': {
         'shape': 'rectangle'
@@ -318,7 +427,11 @@ class TestWorkflowExtractorConfig(unittest.TestCase):
 
     def test_config(self):
         '''Test workflow extractor auto config'''
-        self.base(tasks, extractor_config, keywords=keywords)
+        self.base(tasks, extractor_config, use_v1_subtask_config=True)
+
+    def test_config_v2(self):
+        '''Test workflow extractor auto config v2 subtask details'''
+        self.base(tasks, extractor_config_v2)
 
     def test_config_sw(self):
         '''Test workflow extractor auto config for SW'''
@@ -330,14 +443,22 @@ class TestWorkflowExtractorConfig(unittest.TestCase):
 
 
 class TestWorkflowReducerConfig(unittest.TestCase):
-    def base(self, extractor_config, reducer_config):
+    def base(self, extractor_config, reducer_config, **kwargs):
         self.maxDiff = None
-        result = workflow_reducer_config(extractor_config)
+        result = workflow_reducer_config(extractor_config, **kwargs)
         self.assertEqual(result, reducer_config)
 
     def test_config(self):
         '''Test workflow reducer auto config'''
-        self.base(extractor_config, reducer_config)
+        self.base(extractor_config, reducer_config, use_v1_subtask_config=True)
+
+    def test_config_v2(self):
+        '''Test workflow reducer auto config v2 subtask details'''
+        self.base(extractor_config_v2, reducer_config_v2)
+
+    def test_config_v2_old_input(self):
+        '''Test workflow reducer auto config v2 subtask details but v1 style input'''
+        self.base(extractor_config, reducer_config_v2)
 
     def test_config_sw(self):
         '''Test workflow reducer auto config for SW'''
@@ -346,7 +467,3 @@ class TestWorkflowReducerConfig(unittest.TestCase):
     def test_config_at(self):
         '''Test workflow reducer auto config for AT'''
         self.base(extractor_config_at, reducer_config_at)
-
-
-if __name__ == '__main__':
-    unittest.main()

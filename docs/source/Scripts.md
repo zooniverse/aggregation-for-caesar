@@ -18,7 +18,7 @@ This [zip folder](_static/Penguin-Watch-Example-data-dumps.zip) contains these f
 ## Scripts
 All scripts are packaged under a single name `panoptes_aggregation`.  Under this command there are three sub-commands `config`, `extract`, and `reduce`. A description of these commands can be found using:
 ```bash
-panoptes_aggregation -h config
+panoptes_aggregation -h
 ```
 giving:
 ```bash
@@ -28,12 +28,10 @@ Aggregate panoptes data files
 
 positional arguments:
   {config,extract,reduce}
-    config              Make configuration files for panoptes data extraction
-                        and reduction based on a workflow export
-    extract             Extract data from panoptes classifications based on
-                        the workflow
-    reduce              reduce data from panoptes classifications based on the
-                        extracted data
+    config              Make configuration files for panoptes data extraction and reduction based
+                        on a workflow export
+    extract             Extract data from panoptes classifications based on the workflow
+    reduce              reduce data from panoptes classifications based on the extracted data
 
 options:
   -h, --help            show this help message and exit
@@ -48,14 +46,12 @@ panoptes_aggregation config -h
 ```
 giving:
 ```bash
-usage: panoptes_aggregation config [-h] [-d DIR] [-v VERSION]
-                                   [--min_version MIN_VERSION]
-                                   [--max_version MAX_VERSION] [-k KEYWORDS]
-                                   [-vv]
+usage: panoptes_aggregation config [-h] [-d DIR] [-v VERSION] [--min_version MIN_VERSION]
+                                   [--max_version MAX_VERSION] [--use_v1_subtask_config]
+                                   [-k KEYWORDS] [-vv]
                                    workflow_csv workflow_id
 
-Make configuration files for panoptes data extraction and reduction based on a
-workflow export
+Make configuration files for panoptes data extraction and reduction based on a workflow export
 
 options:
   -h, --help            show this help message and exit
@@ -66,41 +62,41 @@ Load Workflow Files:
   workflow_csv          The csv file containing the workflow data
 
 Workflow ID and version numbers:
-  Enter the workflow ID, major version number, and minor version number
+  Enter the workflow ID with a version number or version range
 
   workflow_id           the workflow ID you would like to extract
-  -v VERSION, --version VERSION
-                        The workflow version to extract. If only a major
-                        version is given (e.g. -v 3) all minor versions will
-                        be extracted at once. If a minor version is provided
-                        (e.g. -v 3.14) only that specific version will be
-                        extracted.
+  -v, --version VERSION
+                        The workflow version to extract. If only a major version is given (e.g. -v
+                        3) all minor versions will be extracted at once. If a minor version is
+                        provided (e.g. -v 3.14) only that specific version will be extracted.
   --min_version MIN_VERSION
-                        The minimum workflow version to extract (inclusive).
-                        This can be provided as either a major version (e.g.
-                        --min_version 3) or a major version with a minor
-                        version (e.g. --min_version 3.14). If this flag is
-                        provided the --version flag will be ignored.
+                        The minimum workflow version to extract (inclusive). This can be provided
+                        as either a major version (e.g. --min_version 3) or a major version with a
+                        minor version (e.g. --min_version 3.14). If this flag is provided the
+                        --version flag will be ignored.
   --max_version MAX_VERSION
-                        The maximum workflow version to extract (inclusive).
-                        This can be provided as either a major version (e.g.
-                        --max_version 3) or a major version with a minor
-                        version (e.g. --max_version 3.14). If this flag is
-                        provided the --version flag will be ignored.
+                        The maximum workflow version to extract (inclusive). This can be provided
+                        as either a major version (e.g. --max_version 3) or a major version with a
+                        minor version (e.g. --max_version 3.14). If this flag is provided the
+                        --version flag will be ignored.
 
 Other keywords:
   Additional keywords to be passed into the configuration files
 
-  -k KEYWORDS, --keywords KEYWORDS
-                        keywords to be passed into the configuration of a task
-                        in the form of a json string, e.g. '{"T0":
-                        {"dot_freq": "line"} }' (note: double quotes must be
-                        used inside the brackets)
+  --use_v1_subtask_config
+                        Use old style subtask configuration for extractors and reducers. The only
+                        difference is how this shows up in the configuration files, the old style
+                        is a list-of-lists, the new style is a flat dictionary. Both styles are
+                        valid and will produce the same results.
+  -k, --keywords KEYWORDS
+                        keywords to be passed into the configuration of a task in the form of a
+                        json string, e.g. '{"T0": {"dot_freq": "line"} }' (note: double quotes
+                        must be used inside the brackets)
 
 Save Config Files:
   The directory to save the configuration files to
 
-  -d DIR, --dir DIR     The directory to save the configuration files to
+  -d, --dir DIR         The directory to save the configuration files to
 
 Other options:
   -vv, --verbose        increase output verbosity
@@ -169,8 +165,7 @@ panoptes_aggregation extract -h
 ```
 giving:
 ```bash
-usage: panoptes_aggregation extract [-h] [-d DIR] [-o OUTPUT] [-O]
-                                    [-c CPU_COUNT] [-vv]
+usage: panoptes_aggregation extract [-h] [-d DIR] [-o OUTPUT] [-O] [-c CPU_COUNT] [-vv] [-hb]
                                     classification_csv extractor_config
 
 Extract data from panoptes classifications based on the workflow
@@ -179,21 +174,17 @@ options:
   -h, --help            show this help message and exit
 
 Load classification and configuration files:
-  classification_csv    The classification csv file containing the panoptes
-                        data dump
+  classification_csv    The classification csv file containing the panoptes data dump
   extractor_config      The extractor configuration configuration file
 
 What directory and base name should be used for the extractions:
-  -d DIR, --dir DIR     The directory to save the extraction file(s) to
-  -o OUTPUT, --output OUTPUT
-                        The base name for output csv file to store the
-                        extractions (one file will be created for each
-                        extractor used)
+  -d, --dir DIR         The directory to save the extraction file(s) to
+  -o, --output OUTPUT   The base name for output csv file to store the extractions (one file will
+                        be created for each extractor used)
 
 Other options:
-  -O, --order           Arrange the data columns in alphabetical order before
-                        saving
-  -c CPU_COUNT, --cpu_count CPU_COUNT
+  -O, --order           Arrange the data columns in alphabetical order before saving
+  -c, --cpu_count CPU_COUNT
                         How many cpu cores to use during extraction
   -vv, --verbose        increase output verbosity
   -hb, --hide_bar       hide the progress bar
@@ -203,26 +194,26 @@ Other options:
 Before starting let's take a closer look at the extractor configuration file `Extractor_config_workflow_6465_V52.76.yaml`:
 ```yaml
 extractor_config:
-    point_extractor_by_frame:
+    question_extractor:
+    -   task: T1
+    shape_extractor_point:
     -   details:
-            T0_tool3:
-            - question_extractor
+            T0_toolIndex3_subtask0: question_extractor
+        shape: point
         task: T0
         tools:
         - 0
         - 1
         - 2
         - 3
-    question_extractor:
-    -   task: T1
     shortcut_extractor:
     -   task: T6
 workflow_id: 6465
 workflow_version: '52.76'
 ```
-This shows the basic setup for what extractor will be used for each task.  From this configuration we can see that the point extractor will be used for each of the tools in task `T0`, `tool3` of that task will have the question extractor run on its sub-task, and a question extractor will be used for tasks `T1` and `T4`. Task `T6` is the shortcut task.  If any of these extractions are not desired they can be deleted from this file before running the extractor.  In this case task `T4` was on the original workflow but was never used on the final project, I have already removed it from the configuration above.
+This shows the basic setup for what extractor will be used for each task.  From this configuration we can see that the point extractor will be used for each of the tools in task `T0`, `toolIndex3` of that task will have the question extractor run on its sub-task, and a question extractor will be used for tasks `T1` and `T4`. Task `T6` is the shortcut task.  If any of these extractions are not desired they can be deleted from this file before running the extractor.  In this case task `T4` was on the original workflow but was never used on the final project, I have already removed it from the configuration above.
 
-Note: If a workflow contains any task types that don't have extractors or reducers they will not show up in this config file.
+Note: If a workflow contains any task types that don't have extractors or reducers defined form them they will not show up in this config file.
 
 To make the extractions, run the following command:
 
@@ -232,7 +223,7 @@ panoptes_aggregation extract penguin-watch-classifications-trim.csv Extractor_co
 
 This creates three `csv` files (one for each extractor listed in the config file):
  - `question_extractor_example.csv`
- - `point_extractor_by_frame_example.csv`
+ - `shape_extractor_point_example.csv`
  - `shortcut_extractor_example.csv`
 
 ---
@@ -247,8 +238,8 @@ panoptes_aggregation reduce -h
 giving:
 
 ```bash
-usage: panoptes_aggregation reduce [-h] [-F {first,last,all}] [-O]
-                                   [-c CPU_COUNT] [-d DIR] [-o OUTPUT] [-s]
+usage: panoptes_aggregation reduce [-h] [-F {first,last,all}] [-O] [-c CPU_COUNT] [-hb] [-d DIR]
+                                   [-o OUTPUT] [-s]
                                    extracted_csv reducer_config
 
 reduce data from panoptes classifications based on the extracted data
@@ -261,63 +252,59 @@ Load extraction and configuration files:
   reducer_config        The reducer configuration file
 
 What directory and base name should be used for the reductions:
-  -d DIR, --dir DIR     The directory to save the reduction file to
-  -o OUTPUT, --output OUTPUT
-                        The base name for output csv file to store the
-                        reductions
-  -s, --stream          Stream output to csv after each reduction (this is
-                        slower but is resumable)
+  -d, --dir DIR         The directory to save the reduction file to
+  -o, --output OUTPUT   The base name for output csv file to store the reductions
+  -s, --stream          Stream output to csv after each reduction (this is slower but is
+                        resumable)
 
 Reducer options:
-  -F {first,last,all}, --filter {first,last,all}
-                        How to filter a user making multiple classifications
-                        for one subject
-  -O, --order           Arrange the data columns in alphabetical order before
-                        saving
-  -c CPU_COUNT, --cpu_count CPU_COUNT
+  -F, --filter {first,last,all}
+                        How to filter a user making multiple classifications for one subject
+  -O, --order           Arrange the data columns in alphabetical order before saving
+  -c, --cpu_count CPU_COUNT
                         How many cpu cores to use during reduction
   -hb, --hide_bar       hide the progress bar
 ```
 
 ### Example: Penguin Watch
-For this example we will do the point clustering for the task `T0`.  Let's take a look at the default config file for that reducer `Reducer_config_workflow_6465_V52.76_point_extractor_by_frame.yaml`:
+For this example we will do the point clustering for the task `T0`.  Let's take a look at the default config file for that reducer `Reducer_config_workflow_6465_V52.76_shape_extractor_point.yaml`:
 ```yaml
 reducer_config:
-    point_reducer_dbscan:
+    shape_reducer_dbscan:
         details:
-            T0_tool3:
-            - question_reducer
+            T0_toolIndex3_subtask0: question_reducer
+        shape: point
 ```
 
-As we can see, the default reducer is `point_reducer_dbscan` and the only keyword specified is the only one associated with the sub-task of `tool3`.  To get better results we will add some clustering keywords to the configuration of `DBSCAN`:
+As we can see, the default reducer is `shape_reducer_dbscan` and the two keywords specified are the one associated with the sub-task of `toolIndex3` and the one indicating the `shape`.  To get better results we will add some clustering keywords to the configuration of `DBSCAN`:
 ```yaml
 reducer_config:
-    point_reducer_dbscan:
+    shape_reducer_dbscan:
+        details:
+            T0_toolIndex3_subtask0: question_reducer
+        shape: point
         eps: 5
         min_samples: 3
-        details:
-            T0_tool3:
-            - question_reducer
 ```
 
 But for this project there is a large amount of depth-of-field in the images, leading to a non-constant density of point clusters across the images (more dense in the background of the image and less dense in the foreground).  This means that `HDBSCAN` will work better:
 ```yaml
 reducer_config:
-    point_reducer_hdbscan:
+    shape_reducer_hdbscan:
+        details:
+            T0_toolIndex3_subtask0: question_reducer
+        shape: point
         min_cluster_size: 4
         min_samples: 3
-        details:
-            T0_tool3:
-            - question_reducer
 ```
 
 Now that it is set up we can run:
 ```bash
-panoptes_aggregation reduce point_extractor_by_frame_example.csv Reducer_config_workflow_6465_V52.76_point_extractor_by_frame.yaml -o example
+panoptes_aggregation reduce shape_extractor_point_example.csv Reducer_config_workflow_6465_V52.76_shape_extractor_point.yaml -o example
 ```
 
 to run the reduction. This will create one file:
- - `point_reducer_hdbscan_example.csv`: The clustered data points for task `T0`
+ - `shape_reducer_hdbscan_example.csv`: The clustered data points for task `T0`
 
 ---
 
@@ -328,7 +315,7 @@ import pandas
 from panoptes_aggregation.csv_utils import unjson_dataframe
 
 # the `data.*` columns are read in as strings instead of arrays
-data = pandas.read_csv('point_reducer_hdbscan_example.csv')
+data = pandas.read_csv('shape_reducer_hdbscan_example.csv')
 
 # use unjson_dataframe to convert them to lists
 # all values are updated in place leaving null values untouched

@@ -155,6 +155,27 @@ TestSubtaskV2 = ExtractorTest(
     test_name='TestSubtaskV2'
 )
 
+TestSubtaskV2_v1 = ExtractorTest(
+    extractors.shape_extractor,
+    classification,
+    expected,
+    'Test subtask v2.0 extraction with v1.0 config',
+    kwargs={
+        'shape': 'point',
+        'details': {
+            'T0_tool0': [
+                'question_extractor',
+                'dropdown_extractor'
+            ],
+            'T0_tool1': [
+                'question_extractor',
+                'dropdown_extractor'
+            ]
+        }
+    },
+    test_name='TestSubtaskV2_v1'
+)
+
 TestSubtaskV2Task = ExtractorTest(
     extractors.shape_extractor,
     classification,
@@ -236,6 +257,42 @@ TestSubtaskV2OneTool = ExtractorTest(
     },
     test_name='TestSubtaskV2OneTool'
 )
+
+expected_1 = {
+    'classifier_version': '2.0',
+    'frame0': {
+        'T0_toolIndex1_x': [404.61279296875],
+        'T0_toolIndex1_y': [583.4398803710938],
+        'T0_toolIndex1_subtask0': [
+            {'1': 1}
+        ],
+        'T0_toolIndex1_subtask1': [
+            {'value': [
+                {'option-3': 1},
+                {'option-4': 1},
+                {'option-5': 1}
+            ]}
+        ]
+    }
+}
+
+
+TestSubtaskV2OneTool2 = ExtractorTest(
+    extractors.shape_extractor,
+    classification,
+    expected_1,
+    'Test subtask v2.0 extraction with other one tool specified',
+    kwargs={
+        'tools': [1],
+        'shape': 'point',
+        'details': {
+            'T0_toolIndex1_subtask0': 'question_extractor',
+            'T0_toolIndex1_subtask1': 'dropdown_extractor'
+        }
+    },
+    test_name='TestSubtaskV2OneTool2'
+)
+
 
 expected_no_sub = {
     'classifier_version': '2.0',

@@ -38,6 +38,11 @@ def reduce_csv(
             encoding='utf-8'
         )
 
+    if 'data.classifier_version' in extracted:
+        # ensure this column is formatted as a string
+        # this works for the moment since 1.0 and 2.0 are the only options
+        # this would fail to tell the difference between say 2.1 and 2.10
+        extracted['data.classifier_version'] = extracted['data.classifier_version'].astype(str)
     reducer_config = get_file_instance(reducer_config)
     with reducer_config as config:
         config_yaml = yaml.load(config, Loader=yaml.SafeLoader)

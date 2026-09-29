@@ -27,13 +27,9 @@ This decorator removes the boiler plate code that goes along with making a extra
  - filter the classifications using the `task` and `tools` keywords passed into the extractor
  - add the aggregation version number to the final extract
 
-#### The `@subtask_extractor_wrapper` decorator
-This decorator removes the boiler plate code that goes along with extracting subtask data from drawing tasks.  This decorator looks for the `details` keyword passed into the extractor function and will apply the specified extractor the the proper subtask data and return the extracts as a list in the same order the subtask presented them.
+#### Drawing tasks
 
-Note: It is assumed that the first level of the extracted dictionary refers to the subject's frame index (e.g. `frame0` or `frame1`) even when the subject only has one frame.
-
-#### The `@tool_wrapper` decorator
-This decorator removes the boiler plate code for filtering classifications based on the `tools` keyword.  This makes it so each tool for a drawing task can have extractors set up independently.
+See the "Drawing task code architecture notes" for further details about the `@subtask_extractor_wrapper` and `@tool_wrapper` decorators.
 
 ### 2. Create the route to the extractor
 The routes are automatically constructed using the `extractors` dictionary in the `__init__.py` file:
@@ -79,10 +75,9 @@ This decorator removes the boiler plate needed to set up a reducer function to w
  - Remove the `aggregation_version` keyword from each extract so it is not passed into the reducer function
  - Add the `aggregation_version` keyword to the final reduction dictionary
 
-#### The `@subtask_reducer_wrapper` decorator
-This decorator removes the boiler plate code that goes along with reducing subtask data from drawing tasks.  This decorator looks for the `details` keyword passed into the reducer function and will apply the specified reducer the the proper subtask data within each *cluster* found on the subject and returns the reductions as a list in the same order the subtask presented them.
+#### Drawing tasks
 
-Note: It is assumed that the first level of the reduced dictionary refers to the subject's frame index (e.g. `frame0` or `frame1`) even when the subject only has one frame.
+See the "Drawing task code architecture notes" for further details about the `@subtask_reducer_wrapper` decorator.
 
 ### 2. Create the route to the reducer
 The routes are automatically constructed using the `reducers` dictionary in the `__init__.py` file:

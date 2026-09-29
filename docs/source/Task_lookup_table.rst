@@ -6,65 +6,71 @@ Here is a list of the Panoptes task types that are currently supported and what 
 Basic task types
 ----------------
 
-+--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| Task Type          | Extractor                                                            | Reducer                                                                               |
-+====================+======================================================================+=======================================================================================+
-| Single Question    | :mod:`panoptes_aggregation.extractors.question_extractor`            | :mod:`panoptes_aggregation.reducers.question_reducer`                                 |
-+--------------------+                                                                      |                                                                                       |
-| Multiple Question  |                                                                      |                                                                                       |
-+--------------------+                                                                      |                                                                                       |
-| Shortcut           |                                                                      |                                                                                       |
-+--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| Dropdown           | :mod:`panoptes_aggregation.extractors.dropdown_extractor`            | :mod:`panoptes_aggregation.reducers.dropdown_reducer`                                 |
-+--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| Slider             | :mod:`panoptes_aggregation.extractors.slider_extractor`              | :mod:`panoptes_aggregation.reducers.slider_reducer`                                   |
-+--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| Survey             | :mod:`panoptes_aggregation.extractors.survey_extractor`              | :mod:`panoptes_aggregation.reducers.survey_reducer`                                   |
-+--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| Point              | :mod:`panoptes_aggregation.extractors.point_extractor_by_frame`      | :mod:`panoptes_aggregation.reducers.point_reducer_dbscan` (includes cov information)  |
-|                    |                                                                      +---------------------------------------------------------------------------------------+
-|                    |                                                                      | :mod:`panoptes_aggregation.reducers.point_reducer_hdbscan` (includes cov information) |
-|                    +----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-|                    | :mod:`panoptes_aggregation.extractors.shape_extractor`               | :mod:`panoptes_aggregation.reducers.shape_reducer_dbscan` (no cov information)        |
-|                    |                                                                      +---------------------------------------------------------------------------------------+
-|                    |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_optics` (no cov information)        |
-|                    |                                                                      +---------------------------------------------------------------------------------------+
-|                    |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_hdbscan` (no cov information)       |
-|                    +----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-|                    | :mod:`panoptes_aggregation.extractors.point_extractor` (depreciated) | :mod:`panoptes_aggregation.reducers.point_reducer` (depreciated)                      |
-+--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| Rectangle          | :mod:`panoptes_aggregation.extractors.rectangle_extractor`           | :mod:`panoptes_aggregation.reducers.rectangle_reducer`                                |
-|                    +----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-|                    | :mod:`panoptes_aggregation.extractors.shape_extractor`               | :mod:`panoptes_aggregation.reducers.shape_reducer_dbscan`                             |
-|                    |                                                                      +---------------------------------------------------------------------------------------+
-|                    |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_optics`                             |
-|                    |                                                                      +---------------------------------------------------------------------------------------+
-|                    |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_hdbscan`                            |
-+--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| Circle             | :mod:`panoptes_aggregation.extractors.shape_extractor`               | :mod:`panoptes_aggregation.reducers.shape_reducer_dbscan`                             |
-+--------------------+                                                                      |                                                                                       |
-| Column             |                                                                      |                                                                                       |
-+--------------------+                                                                      |                                                                                       |
-| Full Width Line    |                                                                      +---------------------------------------------------------------------------------------+
-+--------------------+                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_optics`                             |
-| Full Height Line   |                                                                      |                                                                                       |
-+--------------------+                                                                      |                                                                                       |
-| Line               |                                                                      |                                                                                       |
-+--------------------+                                                                      |                                                                                       |
-| Rotating Rectangle |                                                                      +---------------------------------------------------------------------------------------+
-+--------------------+                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_hdbscan`                            |
-| Triangle           |                                                                      |                                                                                       |
-+--------------------+                                                                      |                                                                                       |
-| Fan                |                                                                      |                                                                                       |
-+--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| Polygon            | :mod:`panoptes_aggregation.extractors.polygon_extractor`             | :mod:`panoptes_aggregation.reducers.polygon_reducer` (shapes will be closed)          |
-+--------------------+                                                                      |                                                                                       |
-| Freehand           |                                                                      |                                                                                       |
-+--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| Bezier             | :mod:`panoptes_aggregation.extractors.bezier_extractor`              | :mod:`panoptes_aggregation.reducers.polygon_reducer` (shapes will be closed)          |
-+--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| Text               | :mod:`panoptes_aggregation.extractors.text_extractor`                | :mod:`panoptes_aggregation.reducers.text_reducer`                                     |
-+--------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
++---------------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Task Type                 | Extractor                                                            | Reducer                                                                               |
++===========================+======================================================================+=======================================================================================+
+| Single Question           | :mod:`panoptes_aggregation.extractors.question_extractor`            | :mod:`panoptes_aggregation.reducers.question_reducer`                                 |
++---------------------------+                                                                      |                                                                                       |
+| Multiple Question         |                                                                      |                                                                                       |
++---------------------------+                                                                      |                                                                                       |
+| Shortcut                  |                                                                      |                                                                                       |
++---------------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Dropdown                  | :mod:`panoptes_aggregation.extractors.dropdown_extractor`            | :mod:`panoptes_aggregation.reducers.dropdown_reducer`                                 |
++---------------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Slider                    | :mod:`panoptes_aggregation.extractors.slider_extractor`              | :mod:`panoptes_aggregation.reducers.slider_reducer`                                   |
++---------------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Survey                    | :mod:`panoptes_aggregation.extractors.survey_extractor`              | :mod:`panoptes_aggregation.reducers.survey_reducer`                                   |
++---------------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Point                     | :mod:`panoptes_aggregation.extractors.point_extractor_by_frame`      | :mod:`panoptes_aggregation.reducers.point_reducer_dbscan` (includes cov information)  |
+|                           |                                                                      +---------------------------------------------------------------------------------------+
+|                           |                                                                      | :mod:`panoptes_aggregation.reducers.point_reducer_hdbscan` (includes cov information) |
+|                           +----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+|                           | :mod:`panoptes_aggregation.extractors.shape_extractor`               | :mod:`panoptes_aggregation.reducers.shape_reducer_dbscan` (no cov information)        |
+|                           |                                                                      +---------------------------------------------------------------------------------------+
+|                           |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_optics` (no cov information)        |
+|                           |                                                                      +---------------------------------------------------------------------------------------+
+|                           |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_hdbscan` (no cov information)       |
+|                           +----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+|                           | :mod:`panoptes_aggregation.extractors.point_extractor` (depreciated) | :mod:`panoptes_aggregation.reducers.point_reducer` (depreciated)                      |
++---------------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Rectangle                 | :mod:`panoptes_aggregation.extractors.rectangle_extractor`           | :mod:`panoptes_aggregation.reducers.rectangle_reducer`                                |
+|                           +----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+|                           | :mod:`panoptes_aggregation.extractors.shape_extractor`               | :mod:`panoptes_aggregation.reducers.shape_reducer_dbscan`                             |
+|                           |                                                                      +---------------------------------------------------------------------------------------+
+|                           |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_optics`                             |
+|                           |                                                                      +---------------------------------------------------------------------------------------+
+|                           |                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_hdbscan`                            |
++---------------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Circle                    | :mod:`panoptes_aggregation.extractors.shape_extractor`               | :mod:`panoptes_aggregation.reducers.shape_reducer_dbscan`                             |
++---------------------------+                                                                      |                                                                                       |
+| Column                    |                                                                      |                                                                                       |
++---------------------------+                                                                      |                                                                                       |
+| graph2dRangeX             |                                                                      |                                                                                       |
++---------------------------+                                                                      |                                                                                       |
+| Full Width Line           |                                                                      +---------------------------------------------------------------------------------------+
++---------------------------+                                                                      | :mod:`panoptes_aggregation.reducers.shape_reducer_optics`                             |
+| Full Height Line          |                                                                      |                                                                                       |
++---------------------------+                                                                      |                                                                                       |
+| Line                      |                                                                      |                                                                                       |
++---------------------------+                                                                      |                                                                                       |
+| Rotating Rectangle        |                                                                      +---------------------------------------------------------------------------------------+
++---------------------------+                                                                      |  :mod:`panoptes_aggregation.reducers.shape_reducer_hdbscan`                           |
+| Temporal Rotate Rectangle |                                                                      |                                                                                       |
++---------------------------+                                                                      |                                                                                       |
+| Temporal Point            |                                                                      |                                                                                       |
++---------------------------+                                                                      |                                                                                       |
+| Triangle                  |                                                                      |                                                                                       |
++---------------------------+                                                                      |                                                                                       |
+| Fan                       |                                                                      |                                                                                       |
++---------------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Polygon                   | :mod:`panoptes_aggregation.extractors.polygon_extractor`             | :mod:`panoptes_aggregation.reducers.polygon_reducer` (shapes will be closed)          |
++---------------------------+                                                                      |                                                                                       |
+| Freehand                  |                                                                      |                                                                                       |
++---------------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Bezier                    | :mod:`panoptes_aggregation.extractors.bezier_extractor`              | :mod:`panoptes_aggregation.reducers.polygon_reducer` (shapes will be closed)          |
++---------------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Text                      | :mod:`panoptes_aggregation.extractors.text_extractor`                | :mod:`panoptes_aggregation.reducers.text_reducer`                                     |
++---------------------------+----------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 
 -----
 

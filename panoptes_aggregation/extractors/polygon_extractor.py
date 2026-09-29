@@ -58,9 +58,11 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
                 for point in points:
                     x.append(point["x"])
                     y.append(point["y"])
+                shape = 'polygon'
             elif 'pathX' in value.keys():  # If data in new format
                 x = value["pathX"]
                 y = value["pathY"]
+                shape = 'freehandLine'
             else:
                 raise Exception('Unknown data format for polygon data')
             # Only include extracts with data
@@ -68,4 +70,5 @@ def polygon_extractor(classification, gold_standard=False, **kwargs):
                 extract[frame].setdefault('{0}_{1}'.format(key, 'pathX'), []).append(x)
                 extract[frame].setdefault('{0}_{1}'.format(key, 'pathY'), []).append(y)
                 extract[frame]['gold_standard'] = gold_standard
+                extract[frame][f'{key}_shape'] = shape
     return extract

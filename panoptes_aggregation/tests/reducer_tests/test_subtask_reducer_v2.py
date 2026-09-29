@@ -234,7 +234,7 @@ TestSubtaskReducerV2NoDetails = ReducerTestNoProcessing(
     reducers.shape_reducer_dbscan,
     extracted_data,
     reduced_data_no_details,
-    'Test subtask reducer with classifier v2 extracts',
+    'Test subtask reducer with classifier v2 extracts with no details',
     network_kwargs=kwargs_extra_data,
     kwargs={
         'shape': 'point',
